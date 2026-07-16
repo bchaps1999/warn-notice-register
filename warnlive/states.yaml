@@ -1,0 +1,679 @@
+# WARN state registry — one entry per jurisdiction (47 portal + 4 records-request).
+# Seeded from docs/WARN_State_Portal_Catalog.xlsx.
+#
+# Fields:
+#   source: upstream (warn-scraper) | patched (our fetch/patches override) |
+#           custom (our fetch/custom adapter) | manual (records-request only)
+#   status: unverified | active | broken | manual_only
+#     Human-edited. Verification results only *recommend* transitions.
+#     Only `active` states' data enters exports; scheduled runs skip broken/manual.
+#   tier: easy | medium | hard  (scrape difficulty, from the portal catalog)
+#   cadence: daily | weekly     (which scheduled workflow runs it)
+#   needs_browser: scraper needs headless Chrome/Xvfb
+#   min_rows: verification threshold on all-time raw rows
+#   staleness_days: max age of newest notice_date before freshness warns; null = archival/annual source
+#   expected_columns: raw CSV header snapshot; null until first verified fetch
+#   notes: quirks, upstream issue links
+
+al:
+  name: Alabama
+  source: upstream
+  status: unverified
+  tier: easy
+  cadence: weekly
+  needs_browser: false
+  min_rows: 50
+  staleness_days: 180
+  expected_columns: null
+  source_url: https://www.madeinalabama.com/warn-list/
+  notes: "CSV posted directly on site. Upstream issue #676 (flaky); reworked with niquests."
+
+ak:
+  name: Alaska
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 10
+  staleness_days: 365
+  expected_columns: null
+  source_url: https://jobs.alaska.gov/RR/WARN_notices.htm
+  notes: "Single HTML table. Upstream issue #732."
+
+az:
+  name: Arizona
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 100
+  staleness_days: 120
+  expected_columns: null
+  source_url: https://www.azjobconnection.gov/search/warn_lookups
+  notes: "AJLA job-center platform (shared with DE, KS, ME, VT)."
+
+ar:
+  name: Arkansas
+  source: manual
+  status: manual_only
+  tier: null
+  cadence: null
+  needs_browser: false
+  min_rows: 0
+  staleness_days: null
+  expected_columns: null
+  source_url: null
+  notes: "Records request only; no public portal."
+
+ca:
+  name: California
+  source: upstream
+  status: unverified
+  tier: hard
+  cadence: daily
+  needs_browser: false
+  min_rows: 500
+  staleness_days: 45
+  expected_columns: null
+  source_url: https://edd.ca.gov/en/Jobs_and_Training/Layoff_Services_WARN
+  notes: "Current-year Excel + historical PDFs; layout varies year to year."
+
+co:
+  name: Colorado
+  source: upstream
+  status: unverified
+  tier: easy
+  cadence: daily
+  needs_browser: false
+  min_rows: 100
+  staleness_days: 60
+  expected_columns: null
+  source_url: https://cdle.colorado.gov/employers/layoff-separations/layoff-warn-list
+  notes: "Public Google Sheet. Upstream issue #714 (inefficiency, not breakage)."
+
+ct:
+  name: Connecticut
+  source: upstream
+  status: unverified
+  tier: easy
+  cadence: weekly
+  needs_browser: false
+  min_rows: 100
+  staleness_days: 90
+  expected_columns: null
+  source_url: https://dolpublicdocumentlibrary.ct.gov/CsblrCategory?prefix=%2Frapid_response%2Fwarn_documents
+  notes: "Paginated JSON endpoint."
+
+dc:
+  name: District of Columbia
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 20
+  staleness_days: 180
+  expected_columns: null
+  source_url: https://does.dc.gov/page/industry-closings-and-layoffs-warn-notifications
+  notes: "HTML page per year; some years archived."
+
+de:
+  name: Delaware
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 20
+  staleness_days: 180
+  expected_columns: null
+  source_url: https://joblink.delaware.gov/search/warn_lookups
+  notes: "AJLA job-center platform."
+
+fl:
+  name: Florida
+  source: upstream
+  status: unverified
+  tier: hard
+  cadence: daily
+  needs_browser: false
+  min_rows: 500
+  staleness_days: 45
+  expected_columns: null
+  source_url: https://reactwarn.floridajobs.org/WarnList/
+  notes: "HTML list + per-notice PDFs. Upstream issue #719; ongoing browser-detection workarounds."
+
+ga:
+  name: Georgia
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 100
+  staleness_days: 120
+  expected_columns: null
+  source_url: https://www.tcsg.edu/warn-public-view/
+  notes: "TCSG WordPress admin-ajax endpoint. Upstream issue #717 (frequent failures)."
+
+hi:
+  name: Hawaii
+  source: upstream
+  status: unverified
+  tier: hard
+  cadence: weekly
+  needs_browser: false
+  min_rows: 20
+  staleness_days: 180
+  expected_columns: null
+  source_url: https://labor.hawaii.gov/wdc/real-time-warn-updates/
+  notes: "HTML page linking PDFs; fragile, scraper falls back to Google cache."
+
+id:
+  name: Idaho
+  source: upstream
+  status: unverified
+  tier: hard
+  cadence: weekly
+  needs_browser: false
+  min_rows: 10
+  staleness_days: null
+  expected_columns: null
+  source_url: https://www.labor.idaho.gov/businesss/layoff-assistance/
+  notes: "PDF report, periodic updates."
+
+il:
+  name: Illinois
+  source: upstream
+  status: unverified
+  tier: easy
+  cadence: daily
+  needs_browser: false
+  min_rows: 200
+  staleness_days: 60
+  expected_columns: null
+  source_url: https://apps.illinoisworknet.com/iebs/api/public/export
+  notes: "Clean public REST export endpoint."
+
+in:
+  name: Indiana
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 100
+  staleness_days: 120
+  expected_columns: null
+  source_url: https://www.in.gov/dwd/warn-notices/current-warn-notices/
+  notes: "Straightforward HTML table."
+
+ia:
+  name: Iowa
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 50
+  staleness_days: 180
+  expected_columns: null
+  source_url: https://workforce.iowa.gov/employers/business-resources/warn
+  notes: "Mix of page table and Excel downloads."
+
+ks:
+  name: Kansas
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 20
+  staleness_days: 180
+  expected_columns: null
+  source_url: https://www.kansasworks.com/search/warn_lookups
+  notes: "AJLA job-center platform."
+
+ky:
+  name: Kentucky
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 100
+  staleness_days: 120
+  expected_columns: null
+  source_url: https://kcc.ky.gov/employer/Pages/Business-Downsizing-Assistance---WARN.aspx
+  notes: "Monthly .xls files to enumerate and merge."
+
+la:
+  name: Louisiana
+  source: upstream
+  status: unverified
+  tier: hard
+  cadence: weekly
+  needs_browser: false
+  min_rows: 50
+  staleness_days: null
+  expected_columns: null
+  source_url: https://www.laworks.net/Downloads/Downloads_WFD.asp
+  notes: "Annual PDF per year. Upstream issues #753/#783; may need ZYTE_API_KEY."
+
+ma:
+  name: Massachusetts
+  source: custom
+  status: unverified
+  tier: medium
+  cadence: daily
+  needs_browser: false
+  min_rows: 50
+  staleness_days: 30
+  expected_columns: null
+  source_url: https://www.mass.gov/info-details/worker-adjustment-and-retraining-notification-act-warn-layoff-and-closure-updates
+  notes: "NOT in warn-scraper (PR #787 in flight upstream). Weekly HTML/PDF regional reports."
+
+md:
+  name: Maryland
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 100
+  staleness_days: 120
+  expected_columns: null
+  source_url: https://www.dllr.state.md.us/employment/warn.shtml
+  notes: "Per-year HTML tables. Upstream issue #785."
+
+me:
+  name: Maine
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 20
+  staleness_days: 180
+  expected_columns: null
+  source_url: https://joblink.maine.gov/search/warn_lookups
+  notes: "AJLA job-center platform."
+
+mi:
+  name: Michigan
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 100
+  staleness_days: 90
+  expected_columns: null
+  source_url: https://www.michigan.gov/leo/bureaus-agencies/wd/data-public-notices/warn-notices
+  notes: "Sitecore (sxa) search API returns JSON."
+
+mn:
+  name: Minnesota
+  source: custom
+  status: unverified
+  tier: medium
+  cadence: daily
+  needs_browser: false
+  min_rows: 50
+  staleness_days: 60
+  expected_columns: null
+  source_url: https://mn.gov/deed/business/layoff-resources/warn-archive/
+  notes: "NOT in warn-scraper. WARN archive HTML page."
+
+mo:
+  name: Missouri
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 100
+  staleness_days: 120
+  expected_columns: null
+  source_url: https://jobs.mo.gov/warn/
+  notes: "Clean per-year HTML tables."
+
+ms:
+  name: Mississippi
+  source: upstream
+  status: unverified
+  tier: hard
+  cadence: weekly
+  needs_browser: false
+  min_rows: 20
+  staleness_days: 365
+  expected_columns: null
+  source_url: https://mdes.ms.gov/information-center/warn-information/
+  notes: "PDFs only. Upstream issue #784 (PDF parsing)."
+
+mt:
+  name: Montana
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 10
+  staleness_days: 365
+  expected_columns: null
+  source_url: https://wsd.dli.mt.gov/wioa/related-links/warn-notice-page
+  notes: "Excel download(s)."
+
+ne:
+  name: Nebraska
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 20
+  staleness_days: 180
+  expected_columns: null
+  source_url: https://dol.nebraska.gov/ReemploymentServices/LayoffServices/LayoffsAndDownsizingWARN
+  notes: "Year-parameterized HTML data endpoints."
+
+nv:
+  name: Nevada
+  source: custom
+  status: unverified
+  tier: hard
+  cadence: daily
+  needs_browser: false
+  min_rows: 50
+  staleness_days: 90
+  expected_columns: null
+  source_url: https://detr.nv.gov/Page/WARN
+  notes: "NOT in warn-scraper. Master PDF list mixing WARN and non-WARN."
+
+nh:
+  name: New Hampshire
+  source: manual
+  status: manual_only
+  tier: null
+  cadence: null
+  needs_browser: false
+  min_rows: 0
+  staleness_days: null
+  expected_columns: null
+  source_url: null
+  notes: "Records request only; no public portal."
+
+nj:
+  name: New Jersey
+  source: upstream
+  status: unverified
+  tier: easy
+  cadence: daily
+  needs_browser: false
+  min_rows: 200
+  staleness_days: 60
+  expected_columns: null
+  source_url: https://www.nj.gov/labor/employer-services/warn/
+  notes: "Single consolidated xlsx archive."
+
+nm:
+  name: New Mexico
+  source: upstream
+  status: unverified
+  tier: hard
+  cadence: weekly
+  needs_browser: false
+  min_rows: 10
+  staleness_days: 365
+  expected_columns: null
+  source_url: https://www.dws.state.nm.us/Rapid-Response
+  notes: "PDF report."
+
+ny:
+  name: New York
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: daily
+  needs_browser: false
+  min_rows: 500
+  staleness_days: 45
+  expected_columns: null
+  source_url: https://dol.ny.gov/warn-dashboard
+  notes: "Tableau Public viz -> CSV. Repeated 2025-26 breakage upstream (issue #778)."
+
+nc:
+  name: North Carolina
+  source: custom
+  status: unverified
+  tier: medium
+  cadence: daily
+  needs_browser: false
+  min_rows: 50
+  staleness_days: 90
+  expected_columns: null
+  source_url: https://www.commerce.nc.gov/data-tools-reports/labor-market-data-tools/workforce-warn-reports
+  notes: "NOT in warn-scraper. LEAD analytics dashboard + reports."
+
+nd:
+  name: North Dakota
+  source: upstream
+  status: unverified
+  tier: hard
+  cadence: weekly
+  needs_browser: false
+  min_rows: 10
+  staleness_days: null
+  expected_columns: null
+  source_url: https://www.jobsnd.com/documents
+  notes: "Single cumulative PDF (2015-present). Scraper added upstream 2026."
+
+oh:
+  name: Ohio
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: daily
+  needs_browser: false
+  min_rows: 200
+  staleness_days: 60
+  expected_columns: null
+  source_url: https://jfs.ohio.gov/job-services-and-unemployment/job-services/job-programs-and-services/submit-a-warn-notice/current-public-notices-of-layoffs-and-closures
+  notes: "HTML list; page URL moves periodically. Historical CSV mirror exists."
+
+ok:
+  name: Oklahoma
+  source: upstream
+  status: unverified
+  tier: hard
+  cadence: weekly
+  needs_browser: false
+  min_rows: 20
+  staleness_days: 180
+  expected_columns: null
+  source_url: https://www.employoklahoma.gov/Participants/s/warnnotices
+  notes: "Salesforce Community; replicates Aura/Apex JSON POST."
+
+or:
+  name: Oregon
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 100
+  staleness_days: 120
+  expected_columns: null
+  source_url: https://ccwd.hecc.oregon.gov/Layoff/WARN
+  notes: "/Download endpoint returning Excel."
+
+pa:
+  name: Pennsylvania
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 200
+  staleness_days: 90
+  expected_columns: null
+  source_url: https://www.pa.gov/agencies/dli/programs-services/workforce-development-home/warn-requirements/warn-notices
+  notes: "HTML tables; recently migrated to pa.gov domain."
+
+ri:
+  name: Rhode Island
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 20
+  staleness_days: 180
+  expected_columns: null
+  source_url: https://dlt.ri.gov/employers/worker-adjustment-and-retraining-notification-warn
+  notes: "Excel workbook(s)."
+
+sc:
+  name: South Carolina
+  source: upstream
+  status: unverified
+  tier: hard
+  cadence: weekly
+  needs_browser: false
+  min_rows: 50
+  staleness_days: 120
+  expected_columns: null
+  source_url: https://scworks.org/employer/employer-programs/at-risk-of-closing/layoff-notification-reports
+  notes: "HTML list -> monthly PDF reports."
+
+sd:
+  name: South Dakota
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 10
+  staleness_days: 365
+  expected_columns: null
+  source_url: https://dlr.sd.gov/workforce_services/businesses/warn_notices.aspx
+  notes: "Simple HTML table."
+
+tn:
+  name: Tennessee
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 100
+  staleness_days: 120
+  expected_columns: null
+  source_url: https://www.tn.gov/workforce/general-resources/major-publications0/major-publications-redirect/reports.html
+  notes: "Reports page; historical CSV mirror."
+
+tx:
+  name: Texas
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: daily
+  needs_browser: false
+  min_rows: 500
+  staleness_days: 45
+  expected_columns: null
+  source_url: https://www.twc.texas.gov/data-reports/warn-notice
+  notes: "Intermittent Cloudflare blocking (upstream #767); may need ZYTE_API_KEY."
+
+ut:
+  name: Utah
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 50
+  staleness_days: 180
+  expected_columns: null
+  source_url: https://jobs.utah.gov/employer/business/warnnotices.html
+  notes: "Simple HTML table."
+
+va:
+  name: Virginia
+  source: upstream
+  status: unverified
+  tier: hard
+  cadence: weekly
+  needs_browser: true
+  min_rows: 200
+  staleness_days: 90
+  expected_columns: null
+  source_url: https://www.virginiaworks.gov/warn-notices/
+  notes: "CSV endpoint behind anti-bot; upstream scraper uses selenium + stealthenium."
+
+vt:
+  name: Vermont
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 20
+  staleness_days: 180
+  expected_columns: null
+  source_url: https://www.vermontjoblink.com/search/warn_lookups
+  notes: "AJLA job-center platform."
+
+wa:
+  name: Washington
+  source: upstream
+  status: unverified
+  tier: hard
+  cadence: daily
+  needs_browser: false
+  min_rows: 200
+  staleness_days: 60
+  expected_columns: null
+  source_url: https://esd.wa.gov/about-employees/WARN
+  notes: "ASP.NET viewstate form on fortress.wa.gov. Upstream issue #780."
+
+wv:
+  name: West Virginia
+  source: manual
+  status: manual_only
+  tier: null
+  cadence: null
+  needs_browser: false
+  min_rows: 0
+  staleness_days: null
+  expected_columns: null
+  source_url: null
+  notes: "No consistent public list; FOIA-based."
+
+wi:
+  name: Wisconsin
+  source: upstream
+  status: unverified
+  tier: medium
+  cadence: weekly
+  needs_browser: false
+  min_rows: 100
+  staleness_days: 90
+  expected_columns: null
+  source_url: https://dwd.wisconsin.gov/dislocatedworker/warn/
+  notes: "Per-year HTML backed by Google Sheets API. Upstream issue #718."
+
+wy:
+  name: Wyoming
+  source: manual
+  status: manual_only
+  tier: null
+  cadence: null
+  needs_browser: false
+  min_rows: 0
+  staleness_days: null
+  expected_columns: null
+  source_url: null
+  notes: "No public list; obtained via records request."

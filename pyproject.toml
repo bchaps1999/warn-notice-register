@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "warn-live"
+version = "0.1.0"
+description = "Consolidated, normalized, deduplicated WARN Act layoff-notice dataset, refreshed automatically"
+requires-python = ">=3.11"
+# The warn-scraper / warn-transformer git dependencies live in requirements.txt:
+# warn-scraper's setup.py imports jinja2/us/warn at build time without declaring
+# them as build requirements, so it must be installed with --no-build-isolation
+# after its dependencies are already present. See requirements.txt install order.
+dependencies = [
+    "click",
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+warnlive = "warnlive.cli:cli"
+
+[tool.setuptools.packages.find]
+include = ["warnlive*"]
+
+[tool.setuptools.package-data]
+warnlive = ["states.yaml", "store/schema.sql"]

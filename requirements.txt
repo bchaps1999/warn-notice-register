@@ -1,0 +1,34 @@
+# Install in two steps (see install.sh):
+#   pip install -r requirements.txt
+#   pip install --no-build-isolation -r requirements-git.txt
+# warn-scraper's setup.py imports jinja2, us, and the warn package itself at
+# build time, so its deps must be present before it is installed.
+
+# warn-scraper runtime + build-time deps
+jinja2
+us
+setuptools-scm
+setuptools
+bln
+click
+beautifulsoup4
+html5lib
+pdfplumber
+requests
+openpyxl
+pyopenssl
+retry2
+selenium
+stealthenium
+tenacity
+xlrd
+xvfbwrapper
+webdriver-manager
+
+# warn-transformer deps
+marshmallow
+jellyfish
+
+# warnlive deps
+pyyaml
+pytest
