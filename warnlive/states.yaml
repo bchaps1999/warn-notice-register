@@ -31,26 +31,26 @@ al:
 ak:
   name: Alaska
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 10
   staleness_days: 365
-  expected_columns: null
+  expected_columns: [Company, Location, Notice Date, Layoff Date, Employees Affected, Notes]
   source_url: https://jobs.alaska.gov/RR/WARN_notices.htm
   notes: "Single HTML table. Upstream issue #732."
 
 az:
   name: Arizona
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 100
   staleness_days: 120
-  expected_columns: null
+  expected_columns: [employer, notice_date, number_of_employees_affected, warn_type, city, zip, lwib_area, address, record_number, detail_page_url]
   source_url: https://www.azjobconnection.gov/search/warn_lookups
   notes: "AJLA job-center platform (shared with DE, KS, ME, VT)."
 
@@ -114,26 +114,26 @@ ct:
 dc:
   name: District of Columbia
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 20
   staleness_days: 180
-  expected_columns: null
+  expected_columns: [Notice Date, Organization Name, Number toEmployees Affected, Effective Layoff Date, Code Type]
   source_url: https://does.dc.gov/page/industry-closings-and-layoffs-warn-notifications
   notes: "HTML page per year; some years archived."
 
 de:
   name: Delaware
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 20
   staleness_days: 180
-  expected_columns: null
+  expected_columns: [employer, notice_date, number_of_employees_affected, warn_type, city, zip, lwib_area, address, record_number, detail_page_url]
   source_url: https://joblink.delaware.gov/search/warn_lookups
   notes: "AJLA job-center platform."
 
@@ -211,52 +211,52 @@ il:
 in:
   name: Indiana
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 100
   staleness_days: 120
-  expected_columns: null
+  expected_columns: [Company, City, Affected Workers, Notice Date, LO/CL Date, NAICS, Description of Work/Industry, Notice Type, ""]
   source_url: https://www.in.gov/dwd/warn-notices/current-warn-notices/
   notes: "Straightforward HTML table."
 
 ia:
   name: Iowa
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 50
   staleness_days: 180
-  expected_columns: null
+  expected_columns: [Company, Address Line 1, City, County, St, ZIP, Notice Type, "Emp #", Notice Date, Layoff Date, Local Workforce Area, Industry]
   source_url: https://workforce.iowa.gov/employers/business-resources/warn
   notes: "Mix of page table and Excel downloads."
 
 ks:
   name: Kansas
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 20
   staleness_days: 180
-  expected_columns: null
+  expected_columns: [employer, notice_date, number_of_employees_affected, warn_type, city, zip, lwib_area, address, record_number, detail_page_url]
   source_url: https://www.kansasworks.com/search/warn_lookups
   notes: "AJLA job-center platform."
 
 ky:
   name: Kentucky
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 100
   staleness_days: 120
-  expected_columns: null
+  expected_columns: [company, source, notice_number, closure_or_layoff, county, date_received, NAICS, notice_url, employees, date_effective, trade, union_affected, region, address, comments, congressional, contact, industry, neg, union]
   source_url: https://kcc.ky.gov/employer/Pages/Business-Downsizing-Assistance---WARN.aspx
   notes: "Monthly .xls files to enumerate and merge."
 
@@ -302,26 +302,26 @@ md:
 me:
   name: Maine
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
-  min_rows: 20
+  min_rows: 5
   staleness_days: 180
-  expected_columns: null
+  expected_columns: [employer, notice_date, number_of_employees_affected, warn_type, city, zip, lwib_area, address, record_number, detail_page_url]
   source_url: https://joblink.maine.gov/search/warn_lookups
   notes: "AJLA job-center platform."
 
 mi:
   name: Michigan
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 100
   staleness_days: 90
-  expected_columns: null
+  expected_columns: [company, link, address, county, action, reason, date_start, jobs, extras, titles, city, date_close, includes]
   source_url: https://www.michigan.gov/leo/bureaus-agencies/wd/data-public-notices/warn-notices
   notes: "Sitecore (sxa) search API returns JSON."
 
@@ -341,7 +341,7 @@ mn:
 mo:
   name: Missouri
   source: upstream
-  status: unverified
+  status: broken
   tier: medium
   cadence: weekly
   needs_browser: false
@@ -349,7 +349,7 @@ mo:
   staleness_days: 120
   expected_columns: null
   source_url: https://jobs.mo.gov/warn/
-  notes: "Clean per-year HTML tables."
+  notes: "Clean per-year HTML tables, but site is behind Incapsula bot protection; needs a browser-based patch (Phase 4)."
 
 ms:
   name: Mississippi
@@ -367,26 +367,26 @@ ms:
 mt:
   name: Montana
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 10
   staleness_days: 365
-  expected_columns: null
+  expected_columns: [Year, Date of Notice, Name of Company, County, Industry, Date of Impact, Number of Employees Affected]
   source_url: https://wsd.dli.mt.gov/wioa/related-links/warn-notice-page
   notes: "Excel download(s)."
 
 ne:
   name: Nebraska
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 20
   staleness_days: 180
-  expected_columns: null
+  expected_columns: [Date, Company, Type, Jobs Affected, City, Location]
   source_url: https://dol.nebraska.gov/ReemploymentServices/LayoffServices/LayoffsAndDownsizingWARN
   notes: "Year-parameterized HTML data endpoints."
 
@@ -483,14 +483,14 @@ nd:
 
 oh:
   name: Ohio
-  source: upstream
-  status: unverified
+  source: patched
+  status: active
   tier: medium
   cadence: daily
   needs_browser: false
   min_rows: 200
   staleness_days: 60
-  expected_columns: null
+  expected_columns: [Company, Date Received, URL, City/County, Layoff/Closure, Potential Number Affected, Layoff Date(s), Phone Number, Union, Notice ID]
   source_url: https://jfs.ohio.gov/job-services-and-unemployment/job-services/job-programs-and-services/submit-a-warn-notice/current-public-notices-of-layoffs-and-closures
   notes: "HTML list; page URL moves periodically. Historical CSV mirror exists."
 
@@ -510,39 +510,39 @@ ok:
 or:
   name: Oregon
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 100
   staleness_days: 120
-  expected_columns: null
+  expected_columns: ["WARN#", Company Name, Location, Layoff Date, Laid Off, Layoff Type, Received Date]
   source_url: https://ccwd.hecc.oregon.gov/Layoff/WARN
   notes: "/Download endpoint returning Excel."
 
 pa:
   name: Pennsylvania
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 200
   staleness_days: 90
-  expected_columns: null
+  expected_columns: [company, addressfull, county, jobs, date_effective, closure_or_layoff]
   source_url: https://www.pa.gov/agencies/dli/programs-services/workforce-development-home/warn-requirements/warn-notices
   notes: "HTML tables; recently migrated to pa.gov domain."
 
 ri:
   name: Rhode Island
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 20
   staleness_days: 180
-  expected_columns: null
+  expected_columns: [WARN Date, Date Received, Company Name, Location of Layoffs, Number Affected, Effective Date, Closing Yes/No, Union Yes/No, Union Address]
   source_url: https://dlt.ri.gov/employers/worker-adjustment-and-retraining-notification-warn
   notes: "Excel workbook(s)."
 
@@ -562,52 +562,52 @@ sc:
 sd:
   name: South Dakota
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 10
   staleness_days: 365
-  expected_columns: null
+  expected_columns: [Company, Location, Date Received, Employees Affected]
   source_url: https://dlr.sd.gov/workforce_services/businesses/warn_notices.aspx
   notes: "Simple HTML table."
 
 tn:
   name: Tennessee
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 100
   staleness_days: 120
-  expected_columns: null
+  expected_columns: [Notice Date, Effective Date, Received Date, Company, City, County, No. Of Employees, Layoff/Closure, Notice ID]
   source_url: https://www.tn.gov/workforce/general-resources/major-publications0/major-publications-redirect/reports.html
   notes: "Reports page; historical CSV mirror."
 
 tx:
   name: Texas
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: daily
   needs_browser: false
   min_rows: 500
   staleness_days: 45
-  expected_columns: null
+  expected_columns: [NOTICE_DATE, JOB_SITE_NAME, COUNTY_NAME, WDA_NAME, TOTAL_LAYOFF_NUMBER, LayOff_Date, WFDD_RECEIVED_DATE, CITY_NAME, "", ""]
   source_url: https://www.twc.texas.gov/data-reports/warn-notice
   notes: "Intermittent Cloudflare blocking (upstream #767); may need ZYTE_API_KEY."
 
 ut:
   name: Utah
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 50
   staleness_days: 180
-  expected_columns: null
+  expected_columns: [Date of Notice, Company Name, Location, Affected Workers]
   source_url: https://jobs.utah.gov/employer/business/warnnotices.html
   notes: "Simple HTML table."
 
@@ -627,13 +627,13 @@ va:
 vt:
   name: Vermont
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 20
   staleness_days: 180
-  expected_columns: null
+  expected_columns: [employer, notice_date, number_of_employees_affected, warn_type, city, zip, lwib_area, address, record_number, detail_page_url]
   source_url: https://www.vermontjoblink.com/search/warn_lookups
   notes: "AJLA job-center platform."
 

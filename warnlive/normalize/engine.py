@@ -80,7 +80,12 @@ def _to_canonical(validated: dict, raw_row: dict, source_url: str | None) -> dic
         "is_amendment": int(bool(validated.get("is_amendment"))),
         "source_url": source_url,
         "source_notice_id": validated.get("hash_id"),
-        "raw_extra": json.dumps(raw_row, sort_keys=True, ensure_ascii=False),
+        # DictReader can emit a None key (extra cells beyond the header)
+        "raw_extra": json.dumps(
+            {(k if k is not None else "_restkey"): v for k, v in raw_row.items()},
+            sort_keys=True,
+            ensure_ascii=False,
+        ),
     }
     rec["dedupe_key"] = _dedupe_key(rec)
     rec["raw_record_hash"] = _record_hash(rec)

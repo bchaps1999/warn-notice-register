@@ -5,7 +5,7 @@
     "source": "upstream",
     "notices": 1032,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:15:36Z",
+    "latest_run": "2026-07-16T19:22:44Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -52,33 +52,121 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:15:36Z",
+    "last_success": "2026-07-16T19:22:44Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "AK": {
     "name": "Alaska",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 66,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:44Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/ak.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "66 raw rows (min 10)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/66 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "66/66 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/66 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-07-06 is 10d old (max 365d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "0/66 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:44Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "AZ": {
     "name": "Arizona",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 189,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:44Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/az.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "208 raw rows (min 100)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/208 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "208/208 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/208 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-07-09 is 7d old (max 120d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "19/208 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:44Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -114,7 +202,7 @@
     "source": "upstream",
     "notices": 827,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:15:36Z",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -161,7 +249,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:15:36Z",
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -171,7 +259,7 @@
     "source": "upstream",
     "notices": 28,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:15:36Z",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -218,33 +306,121 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:15:36Z",
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "DC": {
     "name": "District of Columbia",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 140,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/dc.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "140 raw rows (min 20)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/140 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "140/140 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/140 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-05-01 is 76d old (max 180d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "0/140 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "DE": {
     "name": "Delaware",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 46,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/de.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "46 raw rows (min 20)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/46 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "46/46 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/46 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-06-29 is 17d old (max 180d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "0/46 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -306,7 +482,7 @@
     "source": "upstream",
     "notices": 4863,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:15:37Z",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -353,59 +529,235 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:15:37Z",
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "IN": {
     "name": "Indiana",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 1011,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/in.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "1013 raw rows (min 100)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/1013 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "1013/1013 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/1013 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-06-30 is 16d old (max 120d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "2/1013 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "IA": {
     "name": "Iowa",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 384,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/ia.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "415 raw rows (min 50)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/415 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "415/415 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/415 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-07-10 is 6d old (max 180d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "31/415 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "KS": {
     "name": "Kansas",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 196,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/ks.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "206 raw rows (min 20)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/206 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "206/206 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/206 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-05-01 is 76d old (max 180d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "10/206 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "KY": {
     "name": "Kentucky",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 776,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/ky.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "828 raw rows (min 100)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/828 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "828/828 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "5/560 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-08-30 is -45d old (max 120d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "52/828 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -450,27 +802,105 @@
   },
   "ME": {
     "name": "Maine",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 9,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/me.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "9 raw rows (min 5)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/9 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "9/9 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/9 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-06-02 is 44d old (max 180d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "0/9 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "MI": {
     "name": "Michigan",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 101,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/mi.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "104 raw rows (min 100)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/104 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "104/104 records have an employer name"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "3/104 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -489,7 +919,7 @@
   },
   "MO": {
     "name": "Missouri",
-    "registry_status": "unverified",
+    "registry_status": "broken",
     "source": "upstream",
     "notices": 0,
     "latest_verdict": null,
@@ -515,27 +945,115 @@
   },
   "MT": {
     "name": "Montana",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 43,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/mt.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "44 raw rows (min 10)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/44 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "44/44 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/44 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-03-30 is 108d old (max 365d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "1/44 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "NE": {
     "name": "Nebraska",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 933,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/ne.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "959 raw rows (min 20)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/959 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "959/959 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/959 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-06-26 is 20d old (max 180d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "26/959 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -571,7 +1089,7 @@
     "source": "upstream",
     "notices": 2079,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:15:37Z",
+    "latest_run": "2026-07-16T19:22:45Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -608,7 +1126,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:15:37Z",
+    "last_success": "2026-07-16T19:22:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -666,14 +1184,58 @@
   },
   "OH": {
     "name": "Ohio",
-    "registry_status": "unverified",
-    "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "registry_status": "active",
+    "source": "patched",
+    "notices": 784,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:46Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/oh.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "796 raw rows (min 200)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/796 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "796/796 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/796 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-07-06 is 10d old (max 60d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "12/796 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:46Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -692,40 +1254,152 @@
   },
   "OR": {
     "name": "Oregon",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 1187,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:46Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/or.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "1352 raw rows (min 100)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/1352 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "1352/1352 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/1352 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-06-26 is 20d old (max 120d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "165/1352 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:46Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "PA": {
     "name": "Pennsylvania",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 291,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:46Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/pa.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "295 raw rows (min 200)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/295 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "295/295 records have an employer name"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "4/295 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:46Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "RI": {
     "name": "Rhode Island",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 114,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:46Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/ri.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "126 raw rows (min 20)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/126 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "126/126 records have an employer name"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "12/126 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:46Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -744,53 +1418,229 @@
   },
   "SD": {
     "name": "South Dakota",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 79,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:46Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/sd.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "79 raw rows (min 10)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/79 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "79/79 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/79 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-06-29 is 17d old (max 365d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "0/79 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:46Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "TN": {
     "name": "Tennessee",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 1054,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:46Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/tn.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "1057 raw rows (min 100)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/1057 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "1057/1057 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/1057 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-07-13 is 3d old (max 120d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "3/1057 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:46Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "TX": {
     "name": "Texas",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 7316,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:46Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/tx.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "7569 raw rows (min 500)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/7569 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "7569/7569 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/7569 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-07-10 is 6d old (max 45d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "253/7569 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:46Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
   "UT": {
     "name": "Utah",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 280,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:46Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/ut.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "280 raw rows (min 50)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/280 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "280/280 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "1/280 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-10-30 is -106d old (max 180d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "0/280 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:46Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -809,14 +1659,58 @@
   },
   "VT": {
     "name": "Vermont",
-    "registry_status": "unverified",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 0,
-    "latest_verdict": null,
-    "latest_run": null,
+    "notices": 29,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:22:46Z",
     "latest_error": null,
-    "latest_checks": null,
-    "last_success": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/vt.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "29 raw rows (min 20)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/29 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "29/29 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/29 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-06-17 is 29d old (max 180d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "0/29 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:22:46Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
