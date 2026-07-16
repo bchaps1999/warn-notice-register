@@ -1,4 +1,5 @@
 state,employer_name,location,notice_date,effective_date,employees_affected,layoff_type,is_temporary,is_amendment,is_amended,current_version,source_url,source_notice_id,dedupe_key,first_seen,last_seen
+MS,,,,,,unknown,,0,0,1,https://mdes.ms.gov/information-center/warn-information/,c347924df93ccf64dc93c35d3ccaa08a61b171963111e14fc3f3152f,7eea0ae105cf99383142d29157ace737c201c8a9,2026-07-16,2026-07-16
 MS,Milwaukee Tool Clinton (Hinds),,2013-02-13,2023-03-30,150,closure,,0,0,1,https://mdes.ms.gov/information-center/warn-information/,6bc2c3ab923bd51bdf7b2080fcdca6e3d6d3f6cbac9e51c21f186b30,74b0c9aaee842967bc9fcab0fcb20cda44c999c8,2026-07-16,2026-07-16
 MS,"Thrive South, LLC Pearl (Rankin)",,2020-03-18,2020-03-18,1,unknown,,0,0,1,https://mdes.ms.gov/information-center/warn-information/,4a3ba018e9dd5efa0cee2c5aeb728ff63ee03fd807e08d36836b6bbb,c8351e270c1c766a3ebc26a8837b6daeeb7df957,2026-07-16,2026-07-16
 MS,Emerald Home New Albany (Union),,2020-07-09,2020-09-08,9,closure,,0,0,1,https://mdes.ms.gov/information-center/warn-information/,306124d552a5c05810b96e2d72d33f064164fc4a60e58e078f75cb21,fb924807ee30b4e770002cd965d2f7cfbc184f99,2026-07-16,2026-07-16
