@@ -132,9 +132,11 @@ def _top_employers(rows, since: str | None, limit: int) -> list[dict]:
 
 
 def _today(notices) -> str:
-    """Anchor 'trailing N months' windows to the newest notice date so builds
-    are deterministic over a fixed DB (no wall-clock in the data itself)."""
-    dates = [n["notice_date"] for n in notices if n["notice_date"]]
+    """Anchor 'trailing N months' windows to the newest notice date, clamped
+    to the build date — a handful of source typos carry far-future notice
+    dates and would otherwise drag every trailing window into the future."""
+    build_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    dates = [n["notice_date"] for n in notices if n["notice_date"] and n["notice_date"] <= build_date]
     return max(dates) if dates else "1970-01-01"
 
 
@@ -175,13 +177,13 @@ def _build_national(notices, prefix_len: int) -> dict:
     dated = [n for n in notices if n["notice_date"]]
 
     biggest_recent = sorted(
-        (n for n in dated if n["notice_date"] >= recent_cut),
+        (n for n in dated if recent_cut <= n["notice_date"] <= anchor),
         key=lambda n: -(n["employees_affected"] or 0),
     )[:50]
 
     state_agg: dict[str, dict] = {}
     for n in dated:
-        if n["notice_date"] < t12:
+        if not (t12 <= n["notice_date"] <= anchor):
             continue
         e = state_agg.setdefault(n["state"], {"state": n["state"], "notices": 0, "workers": 0})
         e["notices"] += 1

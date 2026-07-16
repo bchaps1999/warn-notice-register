@@ -1,0 +1,33 @@
+name: Deploy site (code changes)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "warnlive/store/site_export.py"
+      - ".github/actions/deploy-site/**"
+      - ".github/workflows/deploy-site.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: ./install.sh
+      - name: Unpack database
+        run: gunzip -kf data/warn.sqlite.gz
+      - uses: ./.github/actions/deploy-site
+        with:
+          cloudflare-api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

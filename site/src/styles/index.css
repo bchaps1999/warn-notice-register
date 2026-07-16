@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ————— Design tokens: "Federal Register, modernized" ————— */
+:root {
+  --color-bg: #faf7f0;
+  --color-surface: #fffdf6;
+  --color-ink: #1c1a17;
+  --color-ink-muted: #6b6459;
+  --color-ink-faint: #97907f;
+  --color-rule: #ddd5c4;
+  --color-rule-strong: #1c1a17;
+  --color-oxide: #8c2f1b;
+  --color-federal: #28425f;
+  /* chart palette — validated light-mode categorical */
+  --chart-closure: #a83e20;
+  --chart-layoff: #2f6bb0;
+  --chart-unknown: #9c7a2e;
+  --chart-grid: #e7dfcd;
+}
+.dark {
+  --color-bg: #14130f;
+  --color-surface: #1c1a15;
+  --color-ink: #ece7dc;
+  --color-ink-muted: #a99f8d;
+  --color-ink-faint: #7a7263;
+  --color-rule: #3a362c;
+  --color-rule-strong: #ece7dc;
+  --color-oxide: #d96a48;
+  --color-federal: #9db8d4;
+  /* chart palette — validated dark-mode categorical */
+  --chart-closure: #d96a48;
+  --chart-layoff: #5a92cf;
+  --chart-unknown: #b58e3b;
+  --chart-grid: #2b281f;
+}
+
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-ink: var(--color-ink);
+  --color-ink-muted: var(--color-ink-muted);
+  --color-ink-faint: var(--color-ink-faint);
+  --color-rule: var(--color-rule);
+  --color-rule-strong: var(--color-rule-strong);
+  --color-oxide: var(--color-oxide);
+  --color-federal: var(--color-federal);
+  --font-display: "Fraunces Variable", Georgia, serif;
+  --font-serif: "Source Serif 4 Variable", Georgia, serif;
+  --font-ui: "Inter Variable", system-ui, sans-serif;
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-serif);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* tabular numerals for data */
+.tabular {
+  font-family: var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* letterspaced small caps for section labels */
+.smallcaps {
+  font-family: var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+}
+
+/* double rule — the Federal Register masthead signature */
+.double-rule {
+  border-top: 3px solid var(--color-rule-strong);
+  position: relative;
+}
+.double-rule::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--color-rule-strong);
+}
