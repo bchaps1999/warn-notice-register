@@ -5,7 +5,7 @@
     "source": "upstream",
     "notices": 1032,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:18Z",
+    "latest_run": "2026-07-16T19:50:26Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -13,7 +13,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/al.csv"
+          "detail": "workdir/raw/al.csv"
         },
         {
           "name": "row_count",
@@ -52,7 +52,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:18Z",
+    "last_success": "2026-07-16T19:50:26Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -62,7 +62,7 @@
     "source": "upstream",
     "notices": 66,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:18Z",
+    "latest_run": "2026-07-16T19:50:21Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -70,7 +70,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/ak.csv"
+          "detail": "workdir/raw/ak.csv"
         },
         {
           "name": "row_count",
@@ -109,7 +109,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:18Z",
+    "last_success": "2026-07-16T19:50:21Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -117,9 +117,9 @@
     "name": "Arizona",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 729,
+    "notices": 865,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:18Z",
+    "latest_run": "2026-07-16T19:51:31Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -127,12 +127,12 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/az.csv"
+          "detail": "workdir/raw/az.csv"
         },
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "658 raw rows (min 100)"
+          "detail": "351 raw rows (min 100)"
         },
         {
           "name": "schema_drift",
@@ -142,31 +142,31 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/658 rows failed to normalize"
+          "detail": "0/351 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "658/658 records have an employer name"
+          "detail": "351/351 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/658 notice_dates outside 1988..2026-08-15"
+          "detail": "0/351 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-06-29 is 17d old (max 120d)"
+          "detail": "newest notice_date 2026-07-09 is 7d old (max 120d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "25/658 records share a dedupe key"
+          "detail": "2/351 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:18Z",
+    "last_success": "2026-07-16T19:51:31Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -189,7 +189,7 @@
     "source": "upstream",
     "notices": 14159,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:19Z",
+    "latest_run": "2026-07-16T19:52:59Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -197,12 +197,12 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/ca.csv"
+          "detail": "workdir/raw/ca.csv"
         },
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "17253 raw rows (min 500)"
+          "detail": "17268 raw rows (min 500)"
         },
         {
           "name": "schema_drift",
@@ -212,31 +212,31 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/17253 rows failed to normalize"
+          "detail": "0/17268 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "17253/17253 records have an employer name"
+          "detail": "17268/17268 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/17253 notice_dates outside 1988..2026-08-15"
+          "detail": "0/17268 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-07 is 9d old (max 45d)"
+          "detail": "newest notice_date 2026-07-15 is 1d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "3109/17253 records share a dedupe key"
+          "detail": "3109/17268 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:19Z",
+    "last_success": "2026-07-16T19:52:59Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -246,7 +246,7 @@
     "source": "upstream",
     "notices": 827,
     "latest_verdict": "degraded",
-    "latest_run": "2026-07-16T19:48:19Z",
+    "latest_run": "2026-07-16T19:53:11Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -254,7 +254,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/co.csv"
+          "detail": "workdir/raw/co.csv"
         },
         {
           "name": "row_count",
@@ -264,7 +264,7 @@
         {
           "name": "schema_drift",
           "outcome": "warn",
-          "detail": "header drifted: ['location', 'naics', 'notice_date', 'occupations', 'furloughs', 'workforce_area', 'at_the_location', 'fein', 'reduced_hours', 'permanent_job_losses', 'notes', 'company', 'jobs', 'total_notified', 'end_date', 'temporary_job_losses', 'contact', 'received_date', 'begin_date', 'workforce_region', 'dropdown', 'email', 'reason', 'phone', 'letter']"
+          "detail": "header drifted: ['jobs', 'location', 'total_notified', 'permanent_job_losses', 'at_the_location', 'naics', 'company', 'notes', 'workforce_area', 'phone', 'reason', 'workforce_region', 'begin_date', 'furloughs', 'occupations', 'notice_date', 'reduced_hours', 'fein', 'end_date', 'contact', 'received_date', 'email', 'letter', 'dropdown', 'temporary_job_losses']"
         },
         {
           "name": "parse_failures",
@@ -293,7 +293,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:19Z",
+    "last_success": "2026-07-16T19:53:11Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -303,7 +303,7 @@
     "source": "upstream",
     "notices": 28,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:19Z",
+    "latest_run": "2026-07-16T19:53:12Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -311,7 +311,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/ct.csv"
+          "detail": "workdir/raw/ct.csv"
         },
         {
           "name": "row_count",
@@ -350,7 +350,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:19Z",
+    "last_success": "2026-07-16T19:53:12Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -360,7 +360,7 @@
     "source": "upstream",
     "notices": 140,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:19Z",
+    "latest_run": "2026-07-16T19:53:15Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -368,7 +368,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/dc.csv"
+          "detail": "workdir/raw/dc.csv"
         },
         {
           "name": "row_count",
@@ -407,7 +407,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:19Z",
+    "last_success": "2026-07-16T19:53:15Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -417,7 +417,7 @@
     "source": "upstream",
     "notices": 102,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:19Z",
+    "latest_run": "2026-07-16T19:53:33Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -425,12 +425,12 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/de.csv"
+          "detail": "workdir/raw/de.csv"
         },
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "107 raw rows (min 20)"
+          "detail": "79 raw rows (min 20)"
         },
         {
           "name": "schema_drift",
@@ -440,17 +440,17 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/107 rows failed to normalize"
+          "detail": "0/79 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "107/107 records have an employer name"
+          "detail": "79/79 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/107 notice_dates outside 1988..2026-08-15"
+          "detail": "0/79 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
@@ -460,11 +460,11 @@
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "6/107 records share a dedupe key"
+          "detail": "5/79 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:19Z",
+    "last_success": "2026-07-16T19:53:33Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -473,56 +473,21 @@
     "registry_status": "active",
     "source": "upstream",
     "notices": 2789,
-    "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:20Z",
-    "latest_error": null,
+    "latest_verdict": "failed",
+    "latest_run": "2026-07-16T19:53:33Z",
+    "latest_error": "ModuleNotFoundError: No module named 'pyquery'",
     "latest_checks": {
-      "verdict": "ok",
+      "verdict": "failed",
       "checks": [
         {
           "name": "fetch_ok",
-          "outcome": "pass",
-          "detail": "workdir/backfill/raw/fl.csv"
-        },
-        {
-          "name": "row_count",
-          "outcome": "pass",
-          "detail": "3230 raw rows (min 500)"
-        },
-        {
-          "name": "schema_drift",
-          "outcome": "pass",
-          "detail": "header matches snapshot"
-        },
-        {
-          "name": "parse_failures",
-          "outcome": "pass",
-          "detail": "0/3230 rows failed to normalize"
-        },
-        {
-          "name": "employer_coverage",
-          "outcome": "pass",
-          "detail": "3230/3230 records have an employer name"
-        },
-        {
-          "name": "date_sanity",
-          "outcome": "pass",
-          "detail": "0/3230 notice_dates outside 1988..2026-08-15"
-        },
-        {
-          "name": "freshness",
-          "outcome": "pass",
-          "detail": "newest notice_date 2026-07-16 is 0d old (max 45d)"
-        },
-        {
-          "name": "dedupe_sanity",
-          "outcome": "pass",
-          "detail": "442/3230 records share a dedupe key"
+          "outcome": "fail",
+          "detail": "ModuleNotFoundError: No module named 'pyquery'"
         }
       ]
     },
     "last_success": "2026-07-16T19:48:20Z",
-    "consecutive_failures": 0,
+    "consecutive_failures": 1,
     "recommend_broken": false
   },
   "GA": {
@@ -544,7 +509,7 @@
     "source": "upstream",
     "notices": 462,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:20Z",
+    "latest_run": "2026-07-16T19:53:58Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -552,7 +517,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/hi.csv"
+          "detail": "workdir/raw/hi.csv"
         },
         {
           "name": "row_count",
@@ -591,7 +556,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:20Z",
+    "last_success": "2026-07-16T19:53:58Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -601,7 +566,7 @@
     "source": "upstream",
     "notices": 193,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:20Z",
+    "latest_run": "2026-07-16T19:54:02Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -609,7 +574,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/id.csv"
+          "detail": "workdir/raw/id.csv"
         },
         {
           "name": "row_count",
@@ -643,7 +608,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:20Z",
+    "last_success": "2026-07-16T19:54:02Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -653,7 +618,7 @@
     "source": "upstream",
     "notices": 4863,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:20Z",
+    "latest_run": "2026-07-16T19:54:22Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -661,7 +626,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/il.csv"
+          "detail": "workdir/raw/il.csv"
         },
         {
           "name": "row_count",
@@ -700,7 +665,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:20Z",
+    "last_success": "2026-07-16T19:54:22Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -710,7 +675,7 @@
     "source": "upstream",
     "notices": 1011,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:20Z",
+    "latest_run": "2026-07-16T19:54:23Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -718,7 +683,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/in.csv"
+          "detail": "workdir/raw/in.csv"
         },
         {
           "name": "row_count",
@@ -757,7 +722,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:20Z",
+    "last_success": "2026-07-16T19:54:23Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -767,7 +732,7 @@
     "source": "upstream",
     "notices": 384,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:20Z",
+    "latest_run": "2026-07-16T19:53:59Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -775,7 +740,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/ia.csv"
+          "detail": "workdir/raw/ia.csv"
         },
         {
           "name": "row_count",
@@ -814,7 +779,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:20Z",
+    "last_success": "2026-07-16T19:53:59Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -822,9 +787,9 @@
     "name": "Kansas",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 2212,
+    "notices": 2498,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T19:55:47Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -832,12 +797,12 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/ks.csv"
+          "detail": "workdir/raw/ks.csv"
         },
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "2126 raw rows (min 20)"
+          "detail": "445 raw rows (min 20)"
         },
         {
           "name": "schema_drift",
@@ -847,17 +812,17 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/2126 rows failed to normalize"
+          "detail": "0/445 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "2126/2126 records have an employer name"
+          "detail": "445/445 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/2126 notice_dates outside 1988..2026-08-15"
+          "detail": "0/445 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
@@ -867,11 +832,11 @@
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "55/2126 records share a dedupe key"
+          "detail": "7/445 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T19:55:47Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -880,56 +845,21 @@
     "registry_status": "active",
     "source": "upstream",
     "notices": 776,
-    "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
-    "latest_error": null,
+    "latest_verdict": "failed",
+    "latest_run": "2026-07-16T19:55:47Z",
+    "latest_error": "ModuleNotFoundError: No module named 'pyquery'",
     "latest_checks": {
-      "verdict": "ok",
+      "verdict": "failed",
       "checks": [
         {
           "name": "fetch_ok",
-          "outcome": "pass",
-          "detail": "workdir/backfill/raw/ky.csv"
-        },
-        {
-          "name": "row_count",
-          "outcome": "pass",
-          "detail": "828 raw rows (min 100)"
-        },
-        {
-          "name": "schema_drift",
-          "outcome": "pass",
-          "detail": "header matches snapshot"
-        },
-        {
-          "name": "parse_failures",
-          "outcome": "pass",
-          "detail": "0/828 rows failed to normalize"
-        },
-        {
-          "name": "employer_coverage",
-          "outcome": "pass",
-          "detail": "828/828 records have an employer name"
-        },
-        {
-          "name": "date_sanity",
-          "outcome": "pass",
-          "detail": "5/560 notice_dates outside 1988..2026-08-15"
-        },
-        {
-          "name": "freshness",
-          "outcome": "pass",
-          "detail": "newest notice_date 2026-08-30 is -45d old (max 120d)"
-        },
-        {
-          "name": "dedupe_sanity",
-          "outcome": "pass",
-          "detail": "52/828 records share a dedupe key"
+          "outcome": "fail",
+          "detail": "ModuleNotFoundError: No module named 'pyquery'"
         }
       ]
     },
     "last_success": "2026-07-16T19:48:21Z",
-    "consecutive_failures": 0,
+    "consecutive_failures": 1,
     "recommend_broken": false
   },
   "LA": {
@@ -951,7 +881,7 @@
     "source": "custom",
     "notices": 377,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:36:08Z",
+    "latest_run": "2026-07-16T19:55:49Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -998,7 +928,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:36:08Z",
+    "last_success": "2026-07-16T19:55:49Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1008,7 +938,7 @@
     "source": "upstream",
     "notices": 1398,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T19:56:31Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1016,7 +946,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/md.csv"
+          "detail": "workdir/raw/md.csv"
         },
         {
           "name": "row_count",
@@ -1055,7 +985,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T19:56:31Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1063,9 +993,9 @@
     "name": "Maine",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 404,
+    "notices": 417,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T19:56:40Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1073,12 +1003,12 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/me.csv"
+          "detail": "workdir/raw/me.csv"
         },
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "414 raw rows (min 5)"
+          "detail": "34 raw rows (min 5)"
         },
         {
           "name": "schema_drift",
@@ -1088,17 +1018,17 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/414 rows failed to normalize"
+          "detail": "0/34 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "414/414 records have an employer name"
+          "detail": "34/34 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/414 notice_dates outside 1988..2026-08-15"
+          "detail": "0/34 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
@@ -1108,11 +1038,11 @@
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "10/414 records share a dedupe key"
+          "detail": "3/34 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T19:56:40Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1121,46 +1051,21 @@
     "registry_status": "active",
     "source": "upstream",
     "notices": 101,
-    "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
-    "latest_error": null,
+    "latest_verdict": "failed",
+    "latest_run": "2026-07-16T19:56:40Z",
+    "latest_error": "ModuleNotFoundError: No module named 'pyquery'",
     "latest_checks": {
-      "verdict": "ok",
+      "verdict": "failed",
       "checks": [
         {
           "name": "fetch_ok",
-          "outcome": "pass",
-          "detail": "workdir/backfill/raw/mi.csv"
-        },
-        {
-          "name": "row_count",
-          "outcome": "pass",
-          "detail": "104 raw rows (min 100)"
-        },
-        {
-          "name": "schema_drift",
-          "outcome": "pass",
-          "detail": "header matches snapshot"
-        },
-        {
-          "name": "parse_failures",
-          "outcome": "pass",
-          "detail": "0/104 rows failed to normalize"
-        },
-        {
-          "name": "employer_coverage",
-          "outcome": "pass",
-          "detail": "104/104 records have an employer name"
-        },
-        {
-          "name": "dedupe_sanity",
-          "outcome": "pass",
-          "detail": "3/104 records share a dedupe key"
+          "outcome": "fail",
+          "detail": "ModuleNotFoundError: No module named 'pyquery'"
         }
       ]
     },
     "last_success": "2026-07-16T19:48:21Z",
-    "consecutive_failures": 0,
+    "consecutive_failures": 1,
     "recommend_broken": false
   },
   "MN": {
@@ -1169,7 +1074,7 @@
     "source": "custom",
     "notices": 969,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:36:09Z",
+    "latest_run": "2026-07-16T19:57:38Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1216,7 +1121,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:36:09Z",
+    "last_success": "2026-07-16T19:57:38Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1238,56 +1143,21 @@
     "registry_status": "active",
     "source": "upstream",
     "notices": 143,
-    "latest_verdict": "degraded",
-    "latest_run": "2026-07-16T19:48:21Z",
-    "latest_error": null,
+    "latest_verdict": "failed",
+    "latest_run": "2026-07-16T19:57:38Z",
+    "latest_error": "ModuleNotFoundError: No module named 'pyquery'",
     "latest_checks": {
-      "verdict": "degraded",
+      "verdict": "failed",
       "checks": [
         {
           "name": "fetch_ok",
-          "outcome": "pass",
-          "detail": "workdir/backfill/raw/ms.csv"
-        },
-        {
-          "name": "row_count",
-          "outcome": "pass",
-          "detail": "147 raw rows (min 20)"
-        },
-        {
-          "name": "schema_drift",
-          "outcome": "warn",
-          "detail": "header drifted: ['date_notice', 'company', 'workforce_area', 'event_number', 'naics', 'action_type', 'affected', 'date_effective', 'reason', '12/16/2020', 'Neovia Logistics Services, LLC Southaven (DeSoto)', 'Delta', 'RR-MS- 2020-0013', '333999 \u2013 All Other Miscellaneous General Purpose Machinery Manufacturing', 'Layoff', '80', '01/31/2021', 'WARN \u2013 Layoff - change in ownership. RR \u2013 provided by email due to COVID - 19', 'blank_entry', 'city', 'county', '_int_raw_fields', '_int_accuracy', '_int_pdf_filename', '_int_page', '_int_table_number', '_int_data_items']"
-        },
-        {
-          "name": "parse_failures",
-          "outcome": "pass",
-          "detail": "0/147 rows failed to normalize"
-        },
-        {
-          "name": "employer_coverage",
-          "outcome": "pass",
-          "detail": "146/147 records have an employer name"
-        },
-        {
-          "name": "date_sanity",
-          "outcome": "pass",
-          "detail": "0/146 notice_dates outside 1988..2026-08-15"
-        },
-        {
-          "name": "freshness",
-          "outcome": "pass",
-          "detail": "newest notice_date 2026-05-11 is 66d old (max 365d)"
-        },
-        {
-          "name": "dedupe_sanity",
-          "outcome": "pass",
-          "detail": "6/147 records share a dedupe key"
+          "outcome": "fail",
+          "detail": "ModuleNotFoundError: No module named 'pyquery'"
         }
       ]
     },
     "last_success": "2026-07-16T19:48:21Z",
-    "consecutive_failures": 0,
+    "consecutive_failures": 1,
     "recommend_broken": false
   },
   "MT": {
@@ -1296,7 +1166,7 @@
     "source": "upstream",
     "notices": 43,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T19:57:40Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1304,7 +1174,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/mt.csv"
+          "detail": "workdir/raw/mt.csv"
         },
         {
           "name": "row_count",
@@ -1343,7 +1213,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T19:57:40Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1353,7 +1223,7 @@
     "source": "upstream",
     "notices": 959,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T19:57:45Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1361,12 +1231,12 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/ne.csv"
+          "detail": "workdir/raw/ne.csv"
         },
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "991 raw rows (min 20)"
+          "detail": "959 raw rows (min 20)"
         },
         {
           "name": "schema_drift",
@@ -1376,17 +1246,17 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/991 rows failed to normalize"
+          "detail": "0/959 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "991/991 records have an employer name"
+          "detail": "959/959 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/991 notice_dates outside 1988..2026-08-15"
+          "detail": "0/959 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
@@ -1396,11 +1266,11 @@
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "32/991 records share a dedupe key"
+          "detail": "26/959 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T19:57:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1410,7 +1280,7 @@
     "source": "custom",
     "notices": 157,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:36:09Z",
+    "latest_run": "2026-07-16T19:58:02Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1457,7 +1327,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:36:09Z",
+    "last_success": "2026-07-16T19:58:02Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1480,7 +1350,7 @@
     "source": "upstream",
     "notices": 2079,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T19:57:46Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1488,7 +1358,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/nj.csv"
+          "detail": "workdir/raw/nj.csv"
         },
         {
           "name": "row_count",
@@ -1517,7 +1387,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T19:57:46Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1526,21 +1396,56 @@
     "registry_status": "active",
     "source": "patched",
     "notices": 115,
-    "latest_verdict": "failed",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:57:56Z",
     "latest_error": null,
     "latest_checks": {
-      "verdict": "failed",
+      "verdict": "ok",
       "checks": [
         {
           "name": "fetch_ok",
-          "outcome": "fail",
-          "detail": "raw file missing or empty: workdir/backfill/raw/nm.csv"
+          "outcome": "pass",
+          "detail": "workdir/raw/nm.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "119 raw rows (min 10)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "1/119 rows failed to normalize; e.g. KeyError: 'July - August 2026'"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "118/118 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/117 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-04-27 is 80d old (max 365d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "3/118 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:45:39Z",
-    "consecutive_failures": 1,
+    "last_success": "2026-07-16T19:57:56Z",
+    "consecutive_failures": 0,
     "recommend_broken": false
   },
   "NY": {
@@ -1549,7 +1454,7 @@
     "source": "upstream",
     "notices": 168,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T19:58:05Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1557,7 +1462,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/ny.csv"
+          "detail": "workdir/raw/ny.csv"
         },
         {
           "name": "row_count",
@@ -1596,7 +1501,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T19:58:05Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1606,7 +1511,7 @@
     "source": "custom",
     "notices": 53,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:36:09Z",
+    "latest_run": "2026-07-16T19:57:40Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1653,7 +1558,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:36:09Z",
+    "last_success": "2026-07-16T19:57:40Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1663,7 +1568,7 @@
     "source": "upstream",
     "notices": 54,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T19:57:40Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1671,7 +1576,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/nd.csv"
+          "detail": "workdir/raw/nd.csv"
         },
         {
           "name": "row_count",
@@ -1705,7 +1610,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T19:57:40Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1714,56 +1619,56 @@
     "registry_status": "active",
     "source": "patched",
     "notices": 784,
-    "latest_verdict": "failed",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:58:05Z",
     "latest_error": null,
     "latest_checks": {
-      "verdict": "failed",
+      "verdict": "ok",
       "checks": [
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/oh.csv"
+          "detail": "workdir/raw/oh.csv"
         },
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "797 raw rows (min 200)"
+          "detail": "796 raw rows (min 200)"
         },
         {
           "name": "schema_drift",
-          "outcome": "warn",
-          "detail": "header drifted: ['13.00%', '12.50%', '', '14.50%', '14.00%', '11.00%', '12.00%', '10.50%', 'Company', 'Date Received', 'City/County', 'Potential Number Affected', 'Layoff Date(s)', 'Phone Number', 'Union', 'Notice ID']"
+          "outcome": "pass",
+          "detail": "header matches snapshot"
         },
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/797 rows failed to normalize"
+          "detail": "0/796 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
-          "outcome": "fail",
-          "detail": "740/797 records have an employer name"
+          "outcome": "pass",
+          "detail": "796/796 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/740 notice_dates outside 1988..2026-08-15"
+          "detail": "0/796 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
-          "outcome": "warn",
-          "detail": "newest notice_date 2022-12-30 is 1294d old (max 60d)"
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-07-06 is 10d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "68/797 records share a dedupe key"
+          "detail": "12/796 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:22:46Z",
-    "consecutive_failures": 1,
+    "last_success": "2026-07-16T19:58:05Z",
+    "consecutive_failures": 0,
     "recommend_broken": false
   },
   "OK": {
@@ -1772,7 +1677,7 @@
     "source": "upstream",
     "notices": 200,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T19:58:06Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1780,7 +1685,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/ok.csv"
+          "detail": "workdir/raw/ok.csv"
         },
         {
           "name": "row_count",
@@ -1819,7 +1724,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T19:58:06Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1829,7 +1734,7 @@
     "source": "upstream",
     "notices": 1187,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T19:58:35Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1837,7 +1742,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/or.csv"
+          "detail": "workdir/raw/or.csv"
         },
         {
           "name": "row_count",
@@ -1876,7 +1781,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T19:58:35Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1886,7 +1791,7 @@
     "source": "upstream",
     "notices": 291,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T19:58:35Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1894,7 +1799,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/pa.csv"
+          "detail": "workdir/raw/pa.csv"
         },
         {
           "name": "row_count",
@@ -1923,7 +1828,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T19:58:35Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1933,7 +1838,7 @@
     "source": "upstream",
     "notices": 114,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T19:58:35Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1941,7 +1846,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/ri.csv"
+          "detail": "workdir/raw/ri.csv"
         },
         {
           "name": "row_count",
@@ -1970,7 +1875,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T19:58:35Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1980,7 +1885,7 @@
     "source": "upstream",
     "notices": 591,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:22Z",
+    "latest_run": "2026-07-16T19:58:45Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1988,7 +1893,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/sc.csv"
+          "detail": "workdir/raw/sc.csv"
         },
         {
           "name": "row_count",
@@ -2027,7 +1932,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:22Z",
+    "last_success": "2026-07-16T19:58:45Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2037,7 +1942,7 @@
     "source": "upstream",
     "notices": 79,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:22Z",
+    "latest_run": "2026-07-16T19:58:47Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2045,7 +1950,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/sd.csv"
+          "detail": "workdir/raw/sd.csv"
         },
         {
           "name": "row_count",
@@ -2084,7 +1989,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:22Z",
+    "last_success": "2026-07-16T19:58:47Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2094,7 +1999,7 @@
     "source": "upstream",
     "notices": 1054,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:22Z",
+    "latest_run": "2026-07-16T19:59:35Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2102,7 +2007,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/tn.csv"
+          "detail": "workdir/raw/tn.csv"
         },
         {
           "name": "row_count",
@@ -2141,7 +2046,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:22Z",
+    "last_success": "2026-07-16T19:59:35Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2150,56 +2055,21 @@
     "registry_status": "active",
     "source": "upstream",
     "notices": 7316,
-    "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:22Z",
-    "latest_error": null,
+    "latest_verdict": "failed",
+    "latest_run": "2026-07-16T19:59:38Z",
+    "latest_error": "Exception: Scraper isn't scraping.",
     "latest_checks": {
-      "verdict": "ok",
+      "verdict": "failed",
       "checks": [
         {
           "name": "fetch_ok",
-          "outcome": "pass",
-          "detail": "workdir/backfill/raw/tx.csv"
-        },
-        {
-          "name": "row_count",
-          "outcome": "pass",
-          "detail": "7567 raw rows (min 500)"
-        },
-        {
-          "name": "schema_drift",
-          "outcome": "pass",
-          "detail": "header matches snapshot"
-        },
-        {
-          "name": "parse_failures",
-          "outcome": "pass",
-          "detail": "0/7567 rows failed to normalize"
-        },
-        {
-          "name": "employer_coverage",
-          "outcome": "pass",
-          "detail": "7567/7567 records have an employer name"
-        },
-        {
-          "name": "date_sanity",
-          "outcome": "pass",
-          "detail": "0/7567 notice_dates outside 1988..2026-08-15"
-        },
-        {
-          "name": "freshness",
-          "outcome": "pass",
-          "detail": "newest notice_date 2026-07-06 is 10d old (max 45d)"
-        },
-        {
-          "name": "dedupe_sanity",
-          "outcome": "pass",
-          "detail": "253/7567 records share a dedupe key"
+          "outcome": "fail",
+          "detail": "Exception: Scraper isn't scraping."
         }
       ]
     },
     "last_success": "2026-07-16T19:48:22Z",
-    "consecutive_failures": 0,
+    "consecutive_failures": 1,
     "recommend_broken": false
   },
   "UT": {
@@ -2208,7 +2078,7 @@
     "source": "upstream",
     "notices": 280,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:22Z",
+    "latest_run": "2026-07-16T19:59:38Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2216,7 +2086,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/ut.csv"
+          "detail": "workdir/raw/ut.csv"
         },
         {
           "name": "row_count",
@@ -2255,7 +2125,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:22Z",
+    "last_success": "2026-07-16T19:59:38Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2278,7 +2148,7 @@
     "source": "upstream",
     "notices": 323,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:22Z",
+    "latest_run": "2026-07-16T19:59:59Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2286,12 +2156,12 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/vt.csv"
+          "detail": "workdir/raw/vt.csv"
         },
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "329 raw rows (min 20)"
+          "detail": "63 raw rows (min 20)"
         },
         {
           "name": "schema_drift",
@@ -2301,17 +2171,17 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/329 rows failed to normalize"
+          "detail": "0/63 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "329/329 records have an employer name"
+          "detail": "63/63 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/329 notice_dates outside 1988..2026-08-15"
+          "detail": "0/63 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
@@ -2321,11 +2191,11 @@
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "6/329 records share a dedupe key"
+          "detail": "1/63 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:22Z",
+    "last_success": "2026-07-16T19:59:59Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2335,7 +2205,7 @@
     "source": "upstream",
     "notices": 1460,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:23Z",
+    "latest_run": "2026-07-16T20:00:10Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2343,7 +2213,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/wa.csv"
+          "detail": "workdir/raw/wa.csv"
         },
         {
           "name": "row_count",
@@ -2382,7 +2252,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:23Z",
+    "last_success": "2026-07-16T20:00:10Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2404,21 +2274,21 @@
     "registry_status": "active",
     "source": "upstream",
     "notices": 1002,
-    "latest_verdict": "degraded",
-    "latest_run": "2026-07-16T19:48:23Z",
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T20:00:12Z",
     "latest_error": null,
     "latest_checks": {
-      "verdict": "degraded",
+      "verdict": "ok",
       "checks": [
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/backfill/raw/wi.csv"
+          "detail": "workdir/raw/wi.csv"
         },
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "1255 raw rows (min 100)"
+          "detail": "626 raw rows (min 100)"
         },
         {
           "name": "schema_drift",
@@ -2428,17 +2298,17 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/1255 rows failed to normalize"
+          "detail": "0/626 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "1255/1255 records have an employer name"
+          "detail": "626/626 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/1255 notice_dates outside 1988..2026-08-15"
+          "detail": "0/626 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
@@ -2447,12 +2317,12 @@
         },
         {
           "name": "dedupe_sanity",
-          "outcome": "warn",
-          "detail": "253/1255 records share a dedupe key"
+          "outcome": "pass",
+          "detail": "5/626 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:23Z",
+    "last_success": "2026-07-16T20:00:12Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
