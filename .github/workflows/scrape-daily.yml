@@ -1,0 +1,50 @@
+name: Daily scrape (high-volume states)
+
+on:
+  schedule:
+    - cron: "0 9 * * 1-6" # daily except Sunday (the weekly full sweep covers it)
+  workflow_dispatch:
+
+concurrency:
+  group: scrape
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: ./install.sh
+      - name: Scrape active daily states
+        env:
+          ZYTE_API_KEY: ${{ secrets.ZYTE_API_KEY }}
+        run: .venv/bin/warnlive scrape --cadence daily --trigger scheduled
+      - name: Commit data
+        run: |
+          git config user.name "warn-live bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No data changes."
+          else
+            git commit -m "Daily scrape $(date -u +%F)"
+            git pull --rebase origin main
+            git push
+          fi
+      - name: Upload raw scrapes + logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-${{ github.run_id }}
+          path: workdir/raw/
+          retention-days: 14
+          if-no-files-found: ignore
