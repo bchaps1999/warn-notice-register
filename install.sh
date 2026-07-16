@@ -16,7 +16,7 @@ PYTHON="${PYTHON:-python3}"
 if [ ! -d .venv ]; then
   "$PYTHON" -m venv .venv
 fi
-PIP=.venv/bin/pip
+PIP="$PWD/.venv/bin/pip"
 
 $PIP install --quiet --upgrade pip
 $PIP install --quiet -r requirements.txt
