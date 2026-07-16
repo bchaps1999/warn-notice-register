@@ -22,7 +22,7 @@ import sqlite3
 import urllib.request
 from pathlib import Path
 
-from warnlive.normalize.engine import _dedupe_key, _record_hash
+from warnlive.normalize.engine import _clean_text, _dedupe_key, _record_hash
 from warnlive.registry import Registry
 
 INTEGRATED_URL = (
@@ -46,10 +46,12 @@ def to_canonical(row: dict, source_url: str | None) -> dict:
     is_closure = {"True": True, "False": False}.get(row.get("is_closure"), None)
     is_temporary = {"True": 1, "False": 0}.get(row.get("is_temporary"), None)
     jobs = row.get("jobs") or None
+    if jobs == "0":
+        jobs = None
     rec = {
         "state": row["postal_code"].upper(),
-        "employer_name": row.get("company") or None,
-        "location": row.get("location") or None,
+        "employer_name": _clean_text(row.get("company")),
+        "location": _clean_text(row.get("location")),
         "notice_date": row.get("notice_date") or None,
         "effective_date": row.get("effective_date") or None,
         "employees_affected": int(jobs) if jobs else None,
@@ -96,5 +98,8 @@ def older_rows_by_state(
             if not date or (cutoff and date >= cutoff):
                 continue
             cfg = registry[postal.lower()]
-            out.setdefault(postal, []).append(to_canonical(row, cfg.source_url))
+            rec = to_canonical(row, cfg.source_url)
+            if rec["employer_name"] is None:
+                continue
+            out.setdefault(postal, []).append(rec)
     return out

@@ -5,7 +5,7 @@
     "source": "upstream",
     "notices": 1032,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:18Z",
+    "latest_run": "2026-07-16T20:13:53Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -52,7 +52,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:18Z",
+    "last_success": "2026-07-16T20:13:53Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -62,7 +62,7 @@
     "source": "upstream",
     "notices": 66,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:18Z",
+    "latest_run": "2026-07-16T20:13:53Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -109,7 +109,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:18Z",
+    "last_success": "2026-07-16T20:13:53Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -119,7 +119,7 @@
     "source": "upstream",
     "notices": 729,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:18Z",
+    "latest_run": "2026-07-16T20:13:53Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -166,7 +166,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:18Z",
+    "last_success": "2026-07-16T20:13:53Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -189,7 +189,7 @@
     "source": "upstream",
     "notices": 14159,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:19Z",
+    "latest_run": "2026-07-16T20:13:55Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -202,7 +202,7 @@
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "17253 raw rows (min 500)"
+          "detail": "17268 raw rows (min 500)"
         },
         {
           "name": "schema_drift",
@@ -212,31 +212,31 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/17253 rows failed to normalize"
+          "detail": "0/17268 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "17253/17253 records have an employer name"
+          "detail": "17268/17268 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/17253 notice_dates outside 1988..2026-08-15"
+          "detail": "0/17268 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-07 is 9d old (max 45d)"
+          "detail": "newest notice_date 2026-07-15 is 1d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "3109/17253 records share a dedupe key"
+          "detail": "3109/17268 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:19Z",
+    "last_success": "2026-07-16T20:13:55Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -246,7 +246,7 @@
     "source": "upstream",
     "notices": 828,
     "latest_verdict": "degraded",
-    "latest_run": "2026-07-16T19:48:19Z",
+    "latest_run": "2026-07-16T20:13:55Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -293,7 +293,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:19Z",
+    "last_success": "2026-07-16T20:13:55Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -303,7 +303,7 @@
     "source": "upstream",
     "notices": 656,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:19Z",
+    "latest_run": "2026-07-16T20:13:55Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -350,7 +350,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:19Z",
+    "last_success": "2026-07-16T20:13:55Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -360,7 +360,7 @@
     "source": "upstream",
     "notices": 167,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:19Z",
+    "latest_run": "2026-07-16T20:13:55Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -407,7 +407,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:19Z",
+    "last_success": "2026-07-16T20:13:55Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -417,7 +417,7 @@
     "source": "upstream",
     "notices": 102,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:19Z",
+    "latest_run": "2026-07-16T20:13:55Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -464,7 +464,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:19Z",
+    "last_success": "2026-07-16T20:13:55Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -474,7 +474,7 @@
     "source": "upstream",
     "notices": 2789,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:20Z",
+    "latest_run": "2026-07-16T20:13:55Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -487,7 +487,7 @@
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "3230 raw rows (min 500)"
+          "detail": "3231 raw rows (min 500)"
         },
         {
           "name": "schema_drift",
@@ -497,17 +497,17 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/3230 rows failed to normalize"
+          "detail": "0/3231 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "3230/3230 records have an employer name"
+          "detail": "3231/3231 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/3230 notice_dates outside 1988..2026-08-15"
+          "detail": "0/3231 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
@@ -517,11 +517,11 @@
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "442/3230 records share a dedupe key"
+          "detail": "442/3231 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:20Z",
+    "last_success": "2026-07-16T20:13:55Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -542,9 +542,9 @@
     "name": "Hawaii",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 462,
+    "notices": 452,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:20Z",
+    "latest_run": "2026-07-16T20:13:55Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -567,17 +567,17 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/471 rows failed to normalize"
+          "detail": "18/471 rows failed to normalize; e.g. row has no employer name"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "453/471 records have an employer name"
+          "detail": "453/453 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/464 notice_dates outside 1988..2026-08-15"
+          "detail": "0/453 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
@@ -587,11 +587,11 @@
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "9/471 records share a dedupe key"
+          "detail": "1/453 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:20Z",
+    "last_success": "2026-07-16T20:13:55Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -601,7 +601,7 @@
     "source": "upstream",
     "notices": 193,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:20Z",
+    "latest_run": "2026-07-16T20:13:56Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -643,7 +643,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:20Z",
+    "last_success": "2026-07-16T20:13:56Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -653,7 +653,7 @@
     "source": "upstream",
     "notices": 4863,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:20Z",
+    "latest_run": "2026-07-16T20:13:56Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -700,7 +700,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:20Z",
+    "last_success": "2026-07-16T20:13:56Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -710,7 +710,7 @@
     "source": "upstream",
     "notices": 1011,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:20Z",
+    "latest_run": "2026-07-16T20:13:56Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -757,7 +757,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:20Z",
+    "last_success": "2026-07-16T20:13:56Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -767,7 +767,7 @@
     "source": "upstream",
     "notices": 384,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:20Z",
+    "latest_run": "2026-07-16T20:13:56Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -814,7 +814,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:20Z",
+    "last_success": "2026-07-16T20:13:56Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -824,7 +824,7 @@
     "source": "upstream",
     "notices": 2212,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:56Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -871,7 +871,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:56Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -879,9 +879,9 @@
     "name": "Kentucky",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 1008,
+    "notices": 806,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -914,21 +914,21 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "5/560 notice_dates outside 1988..2026-08-15"
+          "detail": "0/819 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-08-30 is -45d old (max 120d)"
+          "detail": "newest notice_date 2026-06-30 is 16d old (max 120d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "52/828 records share a dedupe key"
+          "detail": "22/828 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -936,7 +936,7 @@
     "name": "Louisiana",
     "registry_status": "broken",
     "source": "upstream",
-    "notices": 630,
+    "notices": 628,
     "latest_verdict": null,
     "latest_run": null,
     "latest_error": null,
@@ -951,7 +951,7 @@
     "source": "custom",
     "notices": 377,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:36:08Z",
+    "latest_run": "2026-07-16T20:13:30Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -998,7 +998,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:36:08Z",
+    "last_success": "2026-07-16T20:13:30Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1008,7 +1008,7 @@
     "source": "upstream",
     "notices": 1398,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1055,7 +1055,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1065,7 +1065,7 @@
     "source": "upstream",
     "notices": 404,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1112,7 +1112,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1122,7 +1122,7 @@
     "source": "upstream",
     "notices": 887,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1159,7 +1159,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1167,9 +1167,9 @@
     "name": "Minnesota",
     "registry_status": "active",
     "source": "custom",
-    "notices": 969,
+    "notices": 966,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:36:09Z",
+    "latest_run": "2026-07-16T20:13:30Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1216,7 +1216,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:36:09Z",
+    "last_success": "2026-07-16T20:13:30Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1237,9 +1237,9 @@
     "name": "Mississippi",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 143,
+    "notices": 142,
     "latest_verdict": "degraded",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -1262,12 +1262,12 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/147 rows failed to normalize"
+          "detail": "1/147 rows failed to normalize; e.g. row has no employer name"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "146/147 records have an employer name"
+          "detail": "146/146 records have an employer name"
         },
         {
           "name": "date_sanity",
@@ -1282,11 +1282,11 @@
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "6/147 records share a dedupe key"
+          "detail": "6/146 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1296,7 +1296,7 @@
     "source": "upstream",
     "notices": 43,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1343,7 +1343,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1353,7 +1353,7 @@
     "source": "upstream",
     "notices": 959,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1400,7 +1400,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1410,7 +1410,7 @@
     "source": "custom",
     "notices": 296,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T20:02:38Z",
+    "latest_run": "2026-07-16T20:13:31Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1457,7 +1457,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T20:02:38Z",
+    "last_success": "2026-07-16T20:13:31Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1478,9 +1478,9 @@
     "name": "New Jersey",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 2079,
+    "notices": 2078,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1503,21 +1503,21 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "1/2355 rows failed to normalize; e.g. KeyError: '7/27/26 - 8/31/26'"
+          "detail": "2/2355 rows failed to normalize; e.g. KeyError: '7/27/26 - 8/31/26'"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "2353/2354 records have an employer name"
+          "detail": "2353/2353 records have an employer name"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "275/2354 records share a dedupe key"
+          "detail": "275/2353 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1527,7 +1527,7 @@
     "source": "patched",
     "notices": 115,
     "latest_verdict": "failed",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "failed",
@@ -1539,7 +1539,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:45:39Z",
+    "last_success": "2026-07-16T20:13:31Z",
     "consecutive_failures": 1,
     "recommend_broken": false
   },
@@ -1549,7 +1549,7 @@
     "source": "upstream",
     "notices": 5382,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1596,7 +1596,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1604,9 +1604,9 @@
     "name": "North Carolina",
     "registry_status": "active",
     "source": "custom",
-    "notices": 968,
+    "notices": 967,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T20:06:16Z",
+    "latest_run": "2026-07-16T20:13:30Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1629,12 +1629,12 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/1157 rows failed to normalize"
+          "detail": "3/1157 rows failed to normalize; e.g. row has no employer name"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "1154/1157 records have an employer name"
+          "detail": "1154/1154 records have an employer name"
         },
         {
           "name": "date_sanity",
@@ -1649,11 +1649,11 @@
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "189/1157 records share a dedupe key"
+          "detail": "187/1154 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T20:06:16Z",
+    "last_success": "2026-07-16T20:13:30Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1663,7 +1663,7 @@
     "source": "upstream",
     "notices": 54,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1705,7 +1705,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1714,11 +1714,11 @@
     "registry_status": "active",
     "source": "patched",
     "notices": 963,
-    "latest_verdict": "failed",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_verdict": "degraded",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
-      "verdict": "failed",
+      "verdict": "degraded",
       "checks": [
         {
           "name": "fetch_ok",
@@ -1738,12 +1738,12 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/797 rows failed to normalize"
+          "detail": "57/797 rows failed to normalize; e.g. row has no employer name"
         },
         {
           "name": "employer_coverage",
-          "outcome": "fail",
-          "detail": "740/797 records have an employer name"
+          "outcome": "pass",
+          "detail": "740/740 records have an employer name"
         },
         {
           "name": "date_sanity",
@@ -1758,12 +1758,12 @@
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "68/797 records share a dedupe key"
+          "detail": "12/740 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:22:46Z",
-    "consecutive_failures": 1,
+    "last_success": "2026-07-16T20:13:57Z",
+    "consecutive_failures": 0,
     "recommend_broken": false
   },
   "OK": {
@@ -1772,7 +1772,7 @@
     "source": "upstream",
     "notices": 233,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1819,7 +1819,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1829,7 +1829,7 @@
     "source": "upstream",
     "notices": 1187,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1876,7 +1876,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1886,7 +1886,7 @@
     "source": "upstream",
     "notices": 291,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1923,7 +1923,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1933,7 +1933,7 @@
     "source": "upstream",
     "notices": 114,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:21Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1970,7 +1970,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:21Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1980,7 +1980,7 @@
     "source": "upstream",
     "notices": 610,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:22Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2027,7 +2027,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:22Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2037,7 +2037,7 @@
     "source": "upstream",
     "notices": 79,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:22Z",
+    "latest_run": "2026-07-16T20:13:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2084,7 +2084,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:22Z",
+    "last_success": "2026-07-16T20:13:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2092,9 +2092,9 @@
     "name": "Tennessee",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 1054,
+    "notices": 1051,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:22Z",
+    "latest_run": "2026-07-16T20:13:58Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2117,17 +2117,17 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/1057 rows failed to normalize"
+          "detail": "3/1057 rows failed to normalize; e.g. row has no employer name"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "1057/1057 records have an employer name"
+          "detail": "1054/1054 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/1057 notice_dates outside 1988..2026-08-15"
+          "detail": "0/1054 notice_dates outside 1988..2026-08-15"
         },
         {
           "name": "freshness",
@@ -2137,11 +2137,11 @@
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "3/1057 records share a dedupe key"
+          "detail": "3/1054 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:22Z",
+    "last_success": "2026-07-16T20:13:58Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2151,7 +2151,7 @@
     "source": "upstream",
     "notices": 7316,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:22Z",
+    "latest_run": "2026-07-16T20:13:58Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2198,7 +2198,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:22Z",
+    "last_success": "2026-07-16T20:13:58Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2208,7 +2208,7 @@
     "source": "upstream",
     "notices": 280,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:22Z",
+    "latest_run": "2026-07-16T20:13:58Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2255,7 +2255,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:22Z",
+    "last_success": "2026-07-16T20:13:58Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2263,9 +2263,9 @@
     "name": "Virginia",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 2141,
+    "notices": 1114,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T20:04:17Z",
+    "latest_run": "2026-07-16T20:13:58Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2312,7 +2312,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T20:04:17Z",
+    "last_success": "2026-07-16T20:13:58Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2322,7 +2322,7 @@
     "source": "upstream",
     "notices": 323,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:22Z",
+    "latest_run": "2026-07-16T20:13:58Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2369,7 +2369,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:22Z",
+    "last_success": "2026-07-16T20:13:58Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2379,7 +2379,7 @@
     "source": "upstream",
     "notices": 1460,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-16T19:48:23Z",
+    "latest_run": "2026-07-16T20:13:59Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2426,7 +2426,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:23Z",
+    "last_success": "2026-07-16T20:13:59Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2449,7 +2449,7 @@
     "source": "upstream",
     "notices": 1002,
     "latest_verdict": "degraded",
-    "latest_run": "2026-07-16T19:48:23Z",
+    "latest_run": "2026-07-16T20:13:59Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -2496,7 +2496,7 @@
         }
       ]
     },
-    "last_success": "2026-07-16T19:48:23Z",
+    "last_success": "2026-07-16T20:13:59Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },

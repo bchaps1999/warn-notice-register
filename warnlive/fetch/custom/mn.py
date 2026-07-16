@@ -238,7 +238,7 @@ def _merge_continuations(rows: list[dict]) -> list[dict]:
         # A "(Grand) Totals (N records)" summary line can share a baseline
         # with the final data row; strip it out of the name cell.
         name = re.sub(
-            r"\s*(Grand\s+)?Totals?\s*\(\d+\s+records\).*$",
+            r"\s*(Grand\s+)?Totals?\s*\(\d+\s+reco.*$",
             "",
             row.get("Layoff Name", ""),
         )

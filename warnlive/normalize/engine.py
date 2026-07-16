@@ -58,7 +58,13 @@ def normalize_file(postal: str, input_dir: Path, source_url: str | None) -> Norm
             if len(result.failure_examples) < 5:
                 result.failure_examples.append(f"{type(e).__name__}: {e}")
             continue
-        result.records.append(_to_canonical(validated, row, source_url))
+        rec = _to_canonical(validated, row, source_url)
+        if rec["employer_name"] is None:
+            result.failed_rows += 1
+            if len(result.failure_examples) < 5:
+                result.failure_examples.append("row has no employer name")
+            continue
+        result.records.append(rec)
     return result
 
 
@@ -66,17 +72,25 @@ def _to_canonical(validated: dict, raw_row: dict, source_url: str | None) -> dic
     state = validated["postal_code"].upper()
     notice_date = _iso(validated.get("notice_date"))
     is_closure = validated.get("is_closure")
+    layoff_type = (
+        "closure" if is_closure else "mass_layoff" if is_closure is False else "unknown"
+    )
+    if layoff_type == "unknown":
+        layoff_type = _classify_from_raw(raw_row) or "unknown"
+    is_temporary = _to_int(validated.get("is_temporary"))
+    if is_temporary is None:
+        is_temporary = _temporary_from_raw(raw_row)
+    # A reported count of 0 means "not reported", not zero workers.
+    jobs = validated.get("jobs") or None
     rec = {
         "state": state,
-        "employer_name": validated.get("company"),
-        "location": validated.get("location"),
+        "employer_name": _clean_text(validated.get("company")),
+        "location": _clean_text(validated.get("location")),
         "notice_date": notice_date,
         "effective_date": _iso(validated.get("effective_date")),
-        "employees_affected": validated.get("jobs"),
-        "layoff_type": (
-            "closure" if is_closure else "mass_layoff" if is_closure is False else "unknown"
-        ),
-        "is_temporary": _to_int(validated.get("is_temporary")),
+        "employees_affected": jobs,
+        "layoff_type": layoff_type,
+        "is_temporary": is_temporary,
         "is_amendment": int(bool(validated.get("is_amendment"))),
         "source_url": source_url,
         "source_notice_id": validated.get("hash_id"),
@@ -109,6 +123,58 @@ def _record_hash(rec: dict) -> str:
 
     payload = json.dumps({f: rec[f] for f in VERSIONED_FIELDS}, sort_keys=True)
     return hashlib.sha1(payload.encode("utf-8")).hexdigest()
+
+
+_JUNK_VALUES = {"", ".", "-", "n/a", "na", "none", "unknown", "tbd"}
+
+
+def _clean_text(value: str | None) -> str | None:
+    """Display-value hygiene: normalize NBSP and whitespace, strip, and null
+    out placeholder junk. (Distinct from _fold, which is key-only.)"""
+    if value is None:
+        return None
+    v = _WS.sub(" ", value.replace("\xa0", " ")).strip()
+    return None if v.lower() in _JUNK_VALUES else v
+
+
+def _type_columns(raw_row: dict):
+    """Yield values of raw columns that plausibly carry the layoff/closure
+    type, across the naming conventions states actually use."""
+    for k, v in raw_row.items():
+        if not k or not isinstance(v, str) or not v:
+            continue
+        kl = k.lower()
+        if (
+            "closure" in kl
+            or kl in ("action_type", "warn_type", "type")
+            or ("type" in kl and ("layoff" in kl or "notice" in kl or "action" in kl))
+        ):
+            yield v.lower()
+
+
+def _classify_from_raw(raw_row: dict) -> str | None:
+    """Fallback layoff_type when a state's transformer doesn't classify:
+    read the type column most states publish (preserved in raw_extra)."""
+    for v in _type_columns(raw_row):
+        if "clos" in v:
+            return "closure"
+        if any(t in v for t in ("layoff", "lay-off", "lay off", "reduction", "downsiz")):
+            return "mass_layoff"
+    return None
+
+
+def _temporary_from_raw(raw_row: dict) -> int | None:
+    for k, v in raw_row.items():
+        if not k or not isinstance(v, str) or not v:
+            continue
+        kl = k.lower()
+        if "temporar" in kl or "permanent" in kl or ("type" in kl and "layoff" in kl):
+            vl = v.lower()
+            if "temp" in vl:
+                return 1
+            if "perman" in vl:
+                return 0
+    return None
 
 
 _SUFFIXES = re.compile(
