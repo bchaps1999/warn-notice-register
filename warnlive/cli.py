@@ -110,6 +110,45 @@ def verify(state: str, workdir: Path, use_cache: bool) -> None:
 
 
 @cli.command()
+@click.argument("states", nargs=-1)
+@click.option("--workdir", type=click.Path(path_type=Path), default=Path("workdir/backfill"))
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
+def backfill(states, workdir: Path, db_path: Path, data_dir: Path) -> None:
+    """Ingest historical data from warn-github-flow branches for STATES
+    (default: all active states)."""
+    from warnlive.backfill import github_flow
+
+    registry = load_registry()
+    if states:
+        configs = registry.for_run(states=list(states))
+    else:
+        configs = [c for c in registry.all() if c.status == "active"]
+
+    raw_dir = Path(workdir) / "raw"
+    downloaded = []
+    for cfg in configs:
+        if github_flow.download_state(cfg.postal, raw_dir) is not None:
+            downloaded.append(cfg)
+        else:
+            click.echo(f"{cfg.postal.upper()}: no upstream history, skipped")
+    if not downloaded:
+        click.echo("Nothing to backfill.", err=True)
+        sys.exit(1)
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    report = pipeline.run_states(
+        conn, registry, downloaded, workdir,
+        trigger="backfill", use_cache=True,
+    )
+    active = [c.postal for c in registry.all() if c.status == "active"]
+    export_csvs(conn, Path(data_dir) / "exports", active)
+    write_health(conn, registry, Path(data_dir) / "health")
+    _print_report(report)
+
+
+@cli.command()
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
 def export(db_path: Path, data_dir: Path) -> None:
