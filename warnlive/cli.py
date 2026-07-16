@@ -150,6 +150,40 @@ def backfill(states, workdir: Path, db_path: Path, data_dir: Path) -> None:
     _print_report(report)
 
 
+@cli.command("backfill-bln")
+@click.argument("states", nargs=-1)
+@click.option("--workdir", type=click.Path(path_type=Path), default=Path("workdir/backfill"))
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
+def backfill_bln(states, workdir: Path, db_path: Path, data_dir: Path) -> None:
+    """Deep-history backfill from BLN's accumulated integrated dataset,
+    ingesting only rows older than each state's current oldest notice."""
+    from warnlive.backfill import bln_integrated
+    from warnlive.store.dedupe import ingest
+
+    registry = load_registry()
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+
+    csv_path = bln_integrated.download(Path(workdir))
+    per_state = bln_integrated.older_rows_by_state(
+        csv_path, conn, registry, list(states) or None
+    )
+    if not per_state:
+        click.echo("Nothing older than existing data — no rows to ingest.")
+        return
+    from warnlive.pipeline import now_utc
+
+    for postal in sorted(per_state):
+        stats = ingest(conn, per_state[postal], observed_at=now_utc()[:10])
+        click.echo(f"{postal}: +{stats.new} new, {stats.unchanged} already present")
+
+    active = [c.postal for c in registry.all() if c.status == "active"]
+    export_csvs(conn, Path(data_dir) / "exports", active)
+    write_health(conn, registry, Path(data_dir) / "health")
+    _compress_db(db_path)
+
+
 @cli.command()
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)

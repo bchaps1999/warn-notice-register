@@ -84,16 +84,32 @@ def parse_pdf(path: Path) -> list[dict]:
         for page in pdf.pages:
             tables = page.find_tables()
             if not tables:
+                rows.extend(_parse_unruled_page(page))
                 continue
+            # Early years (2017-2020) rule every row: extract directly.
+            extracted = tables[0].extract()
+            if len(extracted) > 1 and extracted[0] and (extracted[0][0] or "").strip() == "Received Date":
+                n = len(extracted[0])
+                if n in (len(COLUMNS) - 1, len(COLUMNS)):
+                    for raw in extracted[1:]:
+                        row = dict(zip(COLUMNS[:n], ((c or "").strip() for c in raw)))
+                        row.setdefault("Notification", "WARN")
+                        if row["Employer"] or row["Received Date"]:
+                            rows.append(row)
+                    continue
             header = tables[0]
             # Column boundaries: unique x-edges of the ruled header cells.
+            # Files through 2022 are WARN-only and lack the Notification
+            # column (7 columns); 2023+ mix WARN/Non-WARN (8 columns).
             edges = sorted({round(x, 1) for cell in header.cells for x in (cell[0], cell[2])})
-            if len(edges) != len(COLUMNS) + 1:
+            n_cols = len(edges) - 1
+            if n_cols not in (len(COLUMNS) - 1, len(COLUMNS)):
                 logger.warning(
-                    "NV %s: header has %d column edges, expected %d — skipping page",
-                    path.name, len(edges), len(COLUMNS) + 1,
+                    "NV %s: header has %d columns, expected %d or %d — skipping page",
+                    path.name, n_cols, len(COLUMNS) - 1, len(COLUMNS),
                 )
                 continue
+            labels = COLUMNS[:n_cols]
             bottom = header.bbox[3]
 
             # Group chars below the header into lines, then bucket by column.
@@ -107,22 +123,76 @@ def parse_pdf(path: Path) -> list[dict]:
                 lines.setdefault(key if key is not None else ch["top"], []).append(ch)
 
             for top in sorted(lines):
-                cells = [""] * len(COLUMNS)
-                last_x1 = [0.0] * len(COLUMNS)
+                cells = [""] * len(labels)
+                last_x1 = [0.0] * len(labels)
                 for ch in sorted(lines[top], key=lambda c: c["x0"]):
                     idx = max(
-                        i for i in range(len(COLUMNS)) if ch["x0"] >= edges[i] - 2
+                        i for i in range(len(labels)) if ch["x0"] >= edges[i] - 2
                     )
-                    idx = min(idx, len(COLUMNS) - 1)
+                    idx = min(idx, len(labels) - 1)
                     if cells[idx] and ch["x0"] - last_x1[idx] > 1:
                         cells[idx] += " "
                     cells[idx] += ch["text"]
                     last_x1[idx] = ch["x1"]
                 cells = [c.strip() for c in cells]
-                row = dict(zip(COLUMNS, cells))
+                row = dict(zip(labels, cells))
                 # Keep only real data rows; drops sidebar/footnote text.
-                if row["Notification"].lower().replace("-", "") in ("warn", "nonwarn") and (
-                    row["Employer"] or row["Received Date"]
-                ):
+                if "Notification" in row:
+                    is_data = row["Notification"].lower().replace("-", "") in ("warn", "nonwarn")
+                else:
+                    # WARN-only era: no trailing marker column; require a
+                    # date-shaped Received/Effective cell instead.
+                    row["Notification"] = "WARN"
+                    is_data = bool(
+                        re.match(r"\d{1,2}/\d{1,2}/\d{2,4}", row["Received Date"])
+                        or re.match(r"\d{1,2}/\d{1,2}/\d{2,4}", row["Effective Date"])
+                    )
+                if is_data and (row["Employer"] or row["Received Date"]):
                     rows.append(row)
+    return rows
+
+
+def _parse_unruled_page(page) -> list[dict]:
+    """Fallback for years with no ruled elements at all (2021): derive
+    column starts from the header words, then char-bucket the data lines."""
+    words = page.extract_words()
+    anchor = next((w for w in words if w["text"] == "Employer"), None)
+    if anchor is None:
+        return []
+    band = [w for w in words if abs(w["top"] - anchor["top"]) < 14]
+    starts: list[float] = []
+    for w in sorted(band, key=lambda w: w["x0"]):
+        if w["text"] in ("Received", "Effective", "Type", "Affected", "Employer", "City", "County", "Notification"):
+            starts.append(w["x0"])
+    if len(starts) < 6:
+        return []
+    labels = COLUMNS[: len(starts)]
+    bottom = max(w["bottom"] for w in band)
+
+    lines: dict[float, list] = {}
+    for ch in page.chars:
+        if ch["top"] <= bottom:
+            continue
+        key = next((k for k in lines if abs(k - ch["top"]) <= LINE_TOLERANCE), None)
+        lines.setdefault(key if key is not None else ch["top"], []).append(ch)
+
+    rows = []
+    for top in sorted(lines):
+        cells = [""] * len(labels)
+        last_x1 = [0.0] * len(labels)
+        for ch in sorted(lines[top], key=lambda c: c["x0"]):
+            idx = 0
+            for i, s in enumerate(starts):
+                if ch["x0"] >= s - 2:
+                    idx = i
+            if cells[idx] and ch["x0"] - last_x1[idx] > 1:
+                cells[idx] += " "
+            cells[idx] += ch["text"]
+            last_x1[idx] = ch["x1"]
+        row = dict(zip(labels, (c.strip() for c in cells)))
+        row.setdefault("Notification", "WARN")
+        if re.match(r"\d{1,2}/\d{1,2}/\d{2,4}", row.get("Received Date", "")) or re.match(
+            r"\d{1,2}/\d{1,2}/\d{2,4}", row.get("Effective Date", "")
+        ):
+            rows.append(row)
     return rows

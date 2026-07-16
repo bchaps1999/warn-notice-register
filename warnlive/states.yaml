@@ -153,7 +153,7 @@ fl:
 ga:
   name: Georgia
   source: upstream
-  status: unverified
+  status: broken
   tier: medium
   cadence: weekly
   needs_browser: false
@@ -161,7 +161,7 @@ ga:
   staleness_days: 120
   expected_columns: null
   source_url: https://www.tcsg.edu/warn-public-view/
-  notes: "TCSG WordPress admin-ajax endpoint. Upstream issue #717. tcsg.edu times out from residential IPs (2026-07); try from CI before promoting."
+  notes: "TCSG WordPress admin-ajax endpoint. BROKEN: tcsg.edu times out from both residential and GitHub IPs (2026-07). Upstream issue #717. History present via BLN backfill; retry periodically."
 
 hi:
   name: Hawaii
@@ -614,15 +614,15 @@ ut:
 va:
   name: Virginia
   source: upstream
-  status: unverified
+  status: active
   tier: hard
   cadence: weekly
   needs_browser: true
   min_rows: 200
   staleness_days: 90
-  expected_columns: null
+  expected_columns: [Company, Notice Date, Impact Date, Employees Affected, Location, Contact Person, Notice Type, Collective Bargaining Unit]
   source_url: https://www.virginiaworks.gov/warn-notices/
-  notes: "CSV endpoint behind anti-bot; upstream scraper needs selenium + Xvfb (Linux only) - verify on CI, then promote."
+  notes: "CSV endpoint behind anti-bot; selenium + Xvfb, so runs on CI only (verified there 2026-07-16, 1119 rows). Header snapshot from BLN raw copy."
 
 vt:
   name: Vermont
