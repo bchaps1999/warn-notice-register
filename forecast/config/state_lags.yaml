@@ -1,9 +1,0 @@
-# Per-state WARN reporting-lag quantiles (days between notice filing and the
-# notice becoming visible on the state portal / to our scraper).
-# These are PRIOR assumptions until real vintage history accrues; regenerate
-# with LagModel.from_observed once first_seen history exists.
-default:
-  0.1: 3
-  0.5: 7
-  0.9: 21
-states: {}
