@@ -30,6 +30,8 @@ jobs:
         env:
           ZYTE_API_KEY: ${{ secrets.ZYTE_API_KEY }}
         run: .venv/bin/warnlive scrape --cadence daily --trigger scheduled
+      - name: Detect revisions/duplicates
+        run: .venv/bin/warnlive dupes
       - name: Commit data
         run: |
           git config user.name "warn-live bot"

@@ -14,7 +14,9 @@ deduplicates and version-tracks notices, and commits the results here:
 - `data/warn.sqlite.gz` — the full database, gzipped (notices, versions, run telemetry)
 - `data/exports/warn_notices.csv` — one row per notice, all active states
 - `data/exports/states/{xx}.csv` — per-state cuts
+- `data/exports/notice_links.csv` — detected revision/duplicate links between notices
 - `data/health/health.md` — per-state pipeline health, updated every run
+- `data/health/dupes_review.csv` — gray-zone duplicate candidates for human review
 
 ## Data dictionary (`warn_notices.csv`)
 
@@ -58,6 +60,15 @@ fetch (per state)  ->  normalize  ->  verify  ->  ingest (SQLite)  ->  export
   success, row counts, header-drift against a snapshot, parse-failure rate,
   employer coverage, date sanity, freshness, duplicate-key rate. A state that
   fails does not ingest; the health report says why.
+- **Revision/duplicate links**: beyond the exact dedupe key, `warnlive dupes`
+  links notices that are revisions or likely duplicates of one another —
+  name markers ("(Amended)", "2nd notice"), source-declared amendments,
+  same-employer refilings within 45 days at the same location, and fuzzy
+  spelling variants — scored with location, effective-date, and headcount
+  evidence. Notices are **linked, never merged**: `notice_links` in SQLite,
+  `notice_links.csv` in exports. Names with conflicting site identifiers
+  (store numbers, warehouse codes, roman numerals) are never linked, and
+  gray-zone pairs go to `dupes_review.csv` instead of the table.
 - **Registry**: `warnlive/states.yaml` is the single source of truth for each
   state's adapter, thresholds, cadence, and human-controlled status
   (`unverified` → `active` / `broken`). Only active states enter exports.

@@ -6,7 +6,7 @@ import sqlite3
 from pathlib import Path
 
 SCHEMA_PATH = Path(__file__).parent / "schema.sql"
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2  # v2: notice_links table
 
 DEFAULT_DB_PATH = Path("data/warn.sqlite")
 
@@ -26,9 +26,13 @@ def init_db(conn: sqlite3.Connection) -> None:
     row = conn.execute("SELECT version FROM schema_version").fetchone()
     if row is None:
         conn.execute("INSERT INTO schema_version (version) VALUES (?)", (SCHEMA_VERSION,))
-    elif row["version"] != SCHEMA_VERSION:
+    elif row["version"] < SCHEMA_VERSION:
+        # All additions so far are IF-NOT-EXISTS DDL, so re-running
+        # schema.sql (above) IS the migration; just stamp the version.
+        conn.execute("UPDATE schema_version SET version = ?", (SCHEMA_VERSION,))
+    elif row["version"] > SCHEMA_VERSION:
         raise RuntimeError(
-            f"Database schema version {row['version']} != code version {SCHEMA_VERSION}; "
-            "write a migration before proceeding."
+            f"Database schema version {row['version']} is newer than code "
+            f"version {SCHEMA_VERSION}; refusing to write."
         )
     conn.commit()

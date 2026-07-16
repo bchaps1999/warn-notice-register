@@ -18,6 +18,7 @@ in a few calls; not implemented until a key exists.
 from __future__ import annotations
 
 import hashlib
+import subprocess
 import io
 import time
 from datetime import date, datetime, timedelta
@@ -31,8 +32,8 @@ USER_AGENT = "warn-live-uiforecast/0.1 (research; contact repo owner)"
 
 
 def _cache_path(cache_dir: Path, series_id: str, asof: date) -> Path:
-    key = hashlib.sha1(f"{series_id}|{asof.isoformat()}".encode()).hexdigest()[:16]
-    return cache_dir / f"{series_id}_{asof.isoformat()}_{key}.csv"
+    # plain naming so shell scripts can pre-populate the cache
+    return cache_dir / f"{series_id}_{asof.isoformat()}.csv"
 
 
 def fetch_vintage_csv(
@@ -48,22 +49,31 @@ def fetch_vintage_csv(
     path = _cache_path(cache_dir, series_id, asof)
     if path.exists():
         return path.read_text()
-    sess = session or requests.Session()
+    # NOTE: python-requests reliably times out against alfred.stlouisfed.org
+    # (TLS-fingerprint filtering, most likely) while curl succeeds -- so the
+    # actual HTTP call shells out to curl. `session` is accepted for API
+    # compatibility but unused.
+    url = f"{BASE_URL}?id={series_id}&vintage_date={asof.isoformat()}"
     last_err: Exception | None = None
+    text = ""
     for attempt in range(4):
         try:
-            resp = sess.get(
-                BASE_URL,
-                params={"id": series_id, "vintage_date": asof.isoformat()},
-                headers={"User-Agent": USER_AGENT},
-                timeout=timeout,
+            proc = subprocess.run(
+                ["curl", "-sf", "--http1.1", "--max-time", str(timeout),
+                 "-A", USER_AGENT, url],
+                capture_output=True,
+                text=True,
+                timeout=timeout + 10,
             )
-            resp.raise_for_status()
-            text = resp.text
-            break
-        except (requests.RequestException, OSError) as err:  # retry transient
+            if proc.returncode == 0 and proc.stdout:
+                text = proc.stdout
+                break
+            last_err = RuntimeError(
+                f"curl exit {proc.returncode}: {proc.stderr[:200]}"
+            )
+        except subprocess.TimeoutExpired as err:
             last_err = err
-            time.sleep(5 * (attempt + 1))
+        time.sleep(5 * (attempt + 1))
     else:
         raise RuntimeError(f"ALFRED fetch failed for {series_id}@{asof}") from last_err
     if not text.startswith("observation_date"):

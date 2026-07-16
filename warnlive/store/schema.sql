@@ -55,4 +55,19 @@ CREATE TABLE IF NOT EXISTS state_runs (
 );
 CREATE INDEX IF NOT EXISTS idx_state_runs_state ON state_runs(state, id);
 
+-- Revision/duplicate links between notices. Linking is additive and
+-- auditable: notices are never merged or deleted by detection.
+CREATE TABLE IF NOT EXISTS notice_links (
+    id INTEGER PRIMARY KEY,
+    notice_id INTEGER NOT NULL REFERENCES notices(id),   -- the later/derived filing
+    related_id INTEGER NOT NULL REFERENCES notices(id),  -- the earlier/base filing
+    kind TEXT NOT NULL,                    -- amendment_of | possible_duplicate
+    score REAL NOT NULL,                   -- 0..1 confidence
+    method TEXT NOT NULL,                  -- marker | declared | amendment | fuzzy
+    detail TEXT,
+    created_at TEXT NOT NULL,
+    UNIQUE(notice_id, related_id, kind)
+);
+CREATE INDEX IF NOT EXISTS idx_links_notice ON notice_links(notice_id);
+
 CREATE TABLE IF NOT EXISTS schema_version (version INTEGER NOT NULL);

@@ -57,6 +57,83 @@ def ingest_targets(start, end) -> None:
     click.echo(f"Wrote {vint_dir}/targets.parquet ({len(targets)} weeks)")
 
 
+@main.command("backtest")
+@click.option("--start", type=click.DateTime(["%Y-%m-%d"]), default="2017-01-01",
+              help="first target week")
+@click.option("--end", type=click.DateTime(["%Y-%m-%d"]), default=None)
+@click.option("--lag-q", "lag_qs", type=float, multiple=True, default=(0.5,),
+              help="WARN visibility lag quantiles (repeatable)")
+@click.option("--with-warn/--no-warn", default=True)
+@click.option("--run-id", default=None)
+def backtest(start, end, lag_qs, with_warn, run_id) -> None:
+    """Rolling-origin backtest: baselines (+ AggADL when --with-warn)."""
+    from datetime import date as _date
+
+    import pandas as pd
+
+    from uiforecast.eval.harness import (
+        BacktestConfig,
+        WarnAsOfAggregator,
+        run_backtest,
+    )
+    from uiforecast.models.baselines import ARNSA, RandomWalkSA, SeasonalNaiveNSA
+    from uiforecast.models.gate import AggADL, evaluate_gate
+    from uiforecast.panel.asof import AsOfStore
+    from uiforecast.panel.lags import LagModel
+    from uiforecast.report.backtest_report import write_report
+
+    vint = DATA_DIR / "vintages"
+    icsa = pd.read_parquet(vint / "icsa_vintages.parquet")
+    icnsa = pd.read_parquet(vint / "icnsa_vintages.parquet")
+    factors = pd.read_parquet(vint / "factors.parquet")
+    targets = pd.read_parquet(vint / "targets.parquet")
+
+    start_d = start.date()
+    end_d = end.date() if end else pd.Timestamp(targets.index.max()).date()
+    run_id = run_id or f"bt_{start_d}_{end_d}_{'warn' if with_warn else 'base'}"
+
+    results_by_q: dict[float, pd.DataFrame] = {}
+    gate_by_q: dict[float, dict] = {}
+    for lag_q in lag_qs:
+        click.echo(f"=== lag_q={lag_q} ===")
+        warn_agg = None
+        if with_warn:
+            lm = LagModel.from_yaml(FORECAST_ROOT / "config" / "state_lags.yaml")
+            store = AsOfStore(
+                sqlite_path=FORECAST_ROOT.parent / "data" / "warn.sqlite",
+                lag_model=lm,
+            )
+            warn_agg = WarnAsOfAggregator(
+                store, lag_q, panel_start=_date(2013, 1, 1),
+                balanced_window=(start_d, end_d),
+            )
+            click.echo(f"balanced states ({len(warn_agg.states)}): {warn_agg.states}")
+        factories = [RandomWalkSA, SeasonalNaiveNSA, ARNSA]
+        if with_warn:
+            factories.append(AggADL)
+        cfg = BacktestConfig(
+            origin_start=start_d, origin_end=end_d, lag_q=lag_q,
+            model_factories=factories,
+            db_path=DATA_DIR / "runs" / "forecast.sqlite",
+            run_id=f"{run_id}_q{lag_q}",
+        )
+        results = run_backtest(cfg, icsa, icnsa, factors, targets, warn_agg)
+        results_by_q[lag_q] = results
+        n_err = results["error"].notna().sum()
+        click.echo(f"rows={len(results)} errors={n_err}")
+        if with_warn and "agg_adl" in results["model"].values:
+            flow = (
+                results[results["model"] == "agg_adl"]
+                .set_index("target_week")["warn_eff_sm"]
+            )
+            gate_by_q[lag_q] = evaluate_gate(results, event_flow=flow)
+    report = write_report(
+        results_by_q, FORECAST_ROOT / "reports", run_id,
+        gate_results=gate_by_q or None,
+    )
+    click.echo(f"report: {report}")
+
+
 @main.command("targets")
 @click.option("--tail", type=int, default=12)
 def show_targets(tail: int) -> None:

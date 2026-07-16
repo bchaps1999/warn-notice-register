@@ -202,6 +202,29 @@ def export(db_path: Path, data_dir: Path) -> None:
 
 @cli.command()
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
+def dupes(db_path: Path, data_dir: Path) -> None:
+    """Detect revision/duplicate links between notices (link, never merge).
+
+    Rebuilds the notice_links table, exports notice_links.csv, and writes
+    gray-zone candidate pairs to health/dupes_review.csv for human review.
+    """
+    from warnlive.store import links as links_mod
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    stats = links_mod.rebuild(
+        conn, review_path=Path(data_dir) / "health" / "dupes_review.csv"
+    )
+    n = links_mod.export_links_csv(conn, Path(data_dir) / "exports" / "notice_links.csv")
+    _compress_db(db_path)
+    click.echo(f"{stats['links']} links ({n} exported), {stats['review']} pairs for review")
+    for key, count in stats["by_kind_method"].items():
+        click.echo(f"  {key}: {count}")
+
+
+@cli.command()
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--gh-issues", is_flag=True,
               help="Open a GitHub issue per newly-failing active state and close on recovery (needs gh CLI or GH_TOKEN in CI).")
 def report(db_path: Path, gh_issues: bool) -> None:
