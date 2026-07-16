@@ -80,6 +80,7 @@ def scrape(states, cadence, include_unverified, smoke, use_cache, workdir, db_pa
         active = [c.postal for c in registry.all() if c.status == "active"]
         export_csvs(conn, Path(data_dir) / "exports", active)
         write_health(conn, registry, Path(data_dir) / "health")
+        _compress_db(db_path)
 
     _print_report(report)
     # Exit nonzero only if EVERY state failed (systemic problem);
@@ -145,6 +146,7 @@ def backfill(states, workdir: Path, db_path: Path, data_dir: Path) -> None:
     active = [c.postal for c in registry.all() if c.status == "active"]
     export_csvs(conn, Path(data_dir) / "exports", active)
     write_health(conn, registry, Path(data_dir) / "health")
+    _compress_db(db_path)
     _print_report(report)
 
 
@@ -159,8 +161,83 @@ def export(db_path: Path, data_dir: Path) -> None:
     active = [c.postal for c in registry.all() if c.status == "active"]
     counts = export_csvs(conn, Path(data_dir) / "exports", active)
     write_health(conn, registry, Path(data_dir) / "health")
+    _compress_db(db_path)
     for path, n in counts.items():
         click.echo(f"{path}: {n} rows")
+
+
+@cli.command()
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--gh-issues", is_flag=True,
+              help="Open a GitHub issue per newly-failing active state and close on recovery (needs gh CLI or GH_TOKEN in CI).")
+def report(db_path: Path, gh_issues: bool) -> None:
+    """Print per-state health; optionally sync GitHub issues."""
+    import json as json_mod
+    import subprocess
+
+    registry = load_registry()
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    status = write_health(conn, registry, DEFAULT_DATA_DIR / "health")
+
+    failing = {
+        postal: s
+        for postal, s in status.items()
+        if s["registry_status"] == "active" and s["consecutive_failures"] >= 1
+    }
+    for postal, s in sorted(status.items()):
+        if s["latest_verdict"]:
+            click.echo(
+                f"{postal}: {s['latest_verdict']} (streak {s['consecutive_failures']})"
+            )
+    if not gh_issues:
+        return
+
+    def gh(*args: str) -> str:
+        return subprocess.run(
+            ["gh", *args], check=True, capture_output=True, text=True
+        ).stdout
+
+    open_issues = {}
+    for issue in json_mod.loads(
+        gh("issue", "list", "--label", "state-health", "--state", "open",
+           "--json", "number,title")
+    ):
+        open_issues[issue["title"]] = issue["number"]
+
+    for postal, s in failing.items():
+        title = f"[health] {postal} failing"
+        if title in open_issues:
+            continue
+        body = (
+            f"State {postal} ({s['name']}) has failed {s['consecutive_failures']} "
+            f"consecutive run(s).\n\nLatest error: {s['latest_error'] or 'see checks'}\n\n"
+            f"Checks: ```json\n{json_mod.dumps(s['latest_checks'], indent=2)}\n```\n"
+            + ("\nRecommend flipping status to `broken` in states.yaml.\n"
+               if s["recommend_broken"] else "")
+        )
+        gh("issue", "create", "--title", title, "--body", body, "--label", "state-health")
+        click.echo(f"opened issue: {title}")
+
+    for title, number in open_issues.items():
+        postal = title.removeprefix("[health] ").removesuffix(" failing")
+        s = status.get(postal)
+        if s and s["latest_verdict"] in ("ok", "degraded"):
+            gh("issue", "close", str(number), "--comment",
+               f"{postal} recovered: latest run verdict is {s['latest_verdict']}.")
+            click.echo(f"closed issue: {title}")
+
+
+def _compress_db(db_path: Path) -> None:
+    """Refresh the committed gzip copy of the database (the raw sqlite file
+    exceeds GitHub's file-size comfort zone and is gitignored)."""
+    import gzip
+    import shutil
+
+    if not Path(db_path).exists():
+        return
+    with open(db_path, "rb") as src, gzip.open(f"{db_path}.gz", "wb", compresslevel=9) as dst:
+        shutil.copyfileobj(src, dst)
 
 
 def _print_report(report: pipeline.RunReport) -> None:

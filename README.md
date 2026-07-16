@@ -11,7 +11,7 @@ is no national feed. This pipeline scrapes every state that publishes online,
 normalizes each state's idiosyncratic format into one canonical schema,
 deduplicates and version-tracks notices, and commits the results here:
 
-- `data/warn.sqlite` — the full database (notices, versions, run telemetry)
+- `data/warn.sqlite.gz` — the full database, gzipped (notices, versions, run telemetry)
 - `data/exports/warn_notices.csv` — one row per notice, all active states
 - `data/exports/states/{xx}.csv` — per-state cuts
 - `data/health/health.md` — per-state pipeline health, updated every run

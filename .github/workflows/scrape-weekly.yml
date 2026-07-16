@@ -24,6 +24,11 @@ jobs:
           python-version: "3.12"
       - name: Install
         run: ./install.sh
+      - name: Install browser deps (VA needs selenium + Xvfb)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb
+      - uses: browser-actions/setup-chrome@v1
+      - name: Unpack database
+        run: '[ -f data/warn.sqlite.gz ] && gunzip -kf data/warn.sqlite.gz || true'
       - name: Scrape all active states
         env:
           ZYTE_API_KEY: ${{ secrets.ZYTE_API_KEY }}
@@ -40,6 +45,13 @@ jobs:
             git pull --rebase origin main
             git push
           fi
+      - name: Sync health issues
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create state-health --force --color D93F0B --description "Per-state scrape health" || true
+          .venv/bin/warnlive report --gh-issues || true
       - name: Upload raw scrapes + logs
         if: always()
         uses: actions/upload-artifact@v4

@@ -24,6 +24,8 @@ jobs:
           python-version: "3.12"
       - name: Install
         run: ./install.sh
+      - name: Unpack database
+        run: '[ -f data/warn.sqlite.gz ] && gunzip -kf data/warn.sqlite.gz || true'
       - name: Scrape active daily states
         env:
           ZYTE_API_KEY: ${{ secrets.ZYTE_API_KEY }}
@@ -40,6 +42,13 @@ jobs:
             git pull --rebase origin main
             git push
           fi
+      - name: Sync health issues
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create state-health --force --color D93F0B --description "Per-state scrape health" || true
+          .venv/bin/warnlive report --gh-issues || true
       - name: Upload raw scrapes + logs
         if: always()
         uses: actions/upload-artifact@v4

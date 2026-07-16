@@ -5,3 +5,7 @@ __pycache__/
 # Raw scrape output and cache are workflow artifacts, never committed
 workdir/
 .warn-scraper/
+# The live DB stays local; the repo tracks the gzipped copy
+data/warn.sqlite
+data/warn.sqlite-wal
+data/warn.sqlite-shm
