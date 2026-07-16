@@ -70,13 +70,13 @@ ar:
 ca:
   name: California
   source: upstream
-  status: unverified
+  status: active
   tier: hard
   cadence: daily
   needs_browser: false
   min_rows: 500
   staleness_days: 45
-  expected_columns: null
+  expected_columns: [notice_date, effective_date, received_date, company, city, num_employees, layoff_or_closure, county, address, source_file]
   source_url: https://edd.ca.gov/en/Jobs_and_Training/Layoff_Services_WARN
   notes: "Current-year Excel + historical PDFs; layout varies year to year."
 
@@ -140,13 +140,13 @@ de:
 fl:
   name: Florida
   source: upstream
-  status: unverified
+  status: active
   tier: hard
   cadence: daily
   needs_browser: false
   min_rows: 500
   staleness_days: 45
-  expected_columns: null
+  expected_columns: [Company Name, State Notification Date, Layoff Date, Employees Affected, Industry]
   source_url: https://reactwarn.floridajobs.org/WarnList/
   notes: "HTML list + per-notice PDFs. Upstream issue #719; ongoing browser-detection workarounds."
 
@@ -161,31 +161,31 @@ ga:
   staleness_days: 120
   expected_columns: null
   source_url: https://www.tcsg.edu/warn-public-view/
-  notes: "TCSG WordPress admin-ajax endpoint. Upstream issue #717 (frequent failures)."
+  notes: "TCSG WordPress admin-ajax endpoint. Upstream issue #717. tcsg.edu times out from residential IPs (2026-07); try from CI before promoting."
 
 hi:
   name: Hawaii
   source: upstream
-  status: unverified
+  status: active
   tier: hard
   cadence: weekly
   needs_browser: false
   min_rows: 20
   staleness_days: 180
-  expected_columns: null
+  expected_columns: [Company, Date, PDF url, location, jobs]
   source_url: https://labor.hawaii.gov/wdc/real-time-warn-updates/
   notes: "HTML page linking PDFs; fragile, scraper falls back to Google cache."
 
 id:
   name: Idaho
   source: upstream
-  status: unverified
+  status: active
   tier: hard
   cadence: weekly
   needs_browser: false
   min_rows: 10
   staleness_days: null
-  expected_columns: null
+  expected_columns: [Date of Letter, Updates, Company, Address, City, State, Zip, No. of Employees Affected, Effective or Commencing Date]
   source_url: https://www.labor.idaho.gov/businesss/layoff-assistance/
   notes: "PDF report, periodic updates."
 
@@ -263,7 +263,7 @@ ky:
 la:
   name: Louisiana
   source: upstream
-  status: unverified
+  status: broken
   tier: hard
   cadence: weekly
   needs_browser: false
@@ -271,7 +271,7 @@ la:
   staleness_days: null
   expected_columns: null
   source_url: https://www.laworks.net/Downloads/Downloads_WFD.asp
-  notes: "Annual PDF per year. Upstream issues #753/#783; may need ZYTE_API_KEY."
+  notes: "Annual PDF per year. BROKEN without ZYTE_API_KEY (upstream #753/#783 route via Zyte); revisit if a key is added."
 
 ma:
   name: Massachusetts
@@ -289,13 +289,13 @@ ma:
 md:
   name: Maryland
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 100
   staleness_days: 120
-  expected_columns: null
+  expected_columns: [Notice Date, NAICS Code, Company, Location, Local Area, Total Employees, Effective Date, Type]
   source_url: https://www.dllr.state.md.us/employment/warn.shtml
   notes: "Per-year HTML tables. Upstream issue #785."
 
@@ -354,13 +354,13 @@ mo:
 ms:
   name: Mississippi
   source: upstream
-  status: unverified
+  status: active
   tier: hard
   cadence: weekly
   needs_browser: false
   min_rows: 20
   staleness_days: 365
-  expected_columns: null
+  expected_columns: [date_notice, company, workforce_area, event_number, naics, action_type, affected, date_effective, reason, blank_entry, city, county, _int_raw_fields, _int_accuracy, _int_pdf_filename, _int_page, _int_table_number, _int_data_items]
   source_url: https://mdes.ms.gov/information-center/warn-information/
   notes: "PDFs only. Upstream issue #784 (PDF parsing)."
 
@@ -431,29 +431,29 @@ nj:
 
 nm:
   name: New Mexico
-  source: upstream
-  status: unverified
+  source: patched
+  status: active
   tier: hard
   cadence: weekly
   needs_browser: false
   min_rows: 10
   staleness_days: 365
-  expected_columns: null
+  expected_columns: [NOTICE DATE, JOB SITE NAME, COUNTY NAME, WDA NAME, TOTAL LAYOFF NUMBER, LAYOFF DATE, RECEIVED DATE, CITY NAME]
   source_url: https://www.dws.state.nm.us/Rapid-Response
-  notes: "PDF report."
+  notes: "PDF report. Patched: site moved to dws.nm.gov (old host WAF-rejects and upstream writes 0 rows)."
 
 ny:
   name: New York
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: daily
   needs_browser: false
-  min_rows: 500
+  min_rows: 100
   staleness_days: 45
-  expected_columns: null
+  expected_columns: [Business Legal Name, Date Layoff/Closure Starts, "Date of WARN Notice ", "Date Posted  ", Impacted Site Address, Impacted Site County, "Layoff or Closure?", "Permanent or Temporary Layoff?", "Reason for Layoff/Closure   ", Index, "Number of Affected Workers ", "Number of Affected Workers "]
   source_url: https://dol.ny.gov/warn-dashboard
-  notes: "Tableau Public viz -> CSV. Repeated 2025-26 breakage upstream (issue #778)."
+  notes: "Tableau Public viz -> CSV; live view is current-year only (~170 rows), history via backfill. Upstream issue #778. Custom NY transformer adds site address to dedupe key."
 
 nc:
   name: North Carolina
@@ -471,13 +471,13 @@ nc:
 nd:
   name: North Dakota
   source: upstream
-  status: unverified
+  status: active
   tier: hard
   cadence: weekly
   needs_browser: false
   min_rows: 10
   staleness_days: null
-  expected_columns: null
+  expected_columns: [Company Name, Location, WARN Dated, Date of Layoff/Closure, Number Laid Off/Affected, Notes]
   source_url: https://www.jobsnd.com/documents
   notes: "Single cumulative PDF (2015-present). Scraper added upstream 2026."
 
@@ -497,13 +497,13 @@ oh:
 ok:
   name: Oklahoma
   source: upstream
-  status: unverified
+  status: active
   tier: hard
   cadence: weekly
   needs_browser: false
   min_rows: 20
   staleness_days: 180
-  expected_columns: null
+  expected_columns: [id, closure_type, notice_date, city, company_name, zip_code, record_type_id, workforce_board, jobs]
   source_url: https://www.employoklahoma.gov/Participants/s/warnnotices
   notes: "Salesforce Community; replicates Aura/Apex JSON POST."
 
@@ -549,13 +549,13 @@ ri:
 sc:
   name: South Carolina
   source: upstream
-  status: unverified
+  status: active
   tier: hard
   cadence: weekly
   needs_browser: false
   min_rows: 50
   staleness_days: 120
-  expected_columns: null
+  expected_columns: [company, location, date, jobs, naics, source]
   source_url: https://scworks.org/employer/employer-programs/at-risk-of-closing/layoff-notification-reports
   notes: "HTML list -> monthly PDF reports."
 
@@ -622,7 +622,7 @@ va:
   staleness_days: 90
   expected_columns: null
   source_url: https://www.virginiaworks.gov/warn-notices/
-  notes: "CSV endpoint behind anti-bot; upstream scraper uses selenium + stealthenium."
+  notes: "CSV endpoint behind anti-bot; upstream scraper needs selenium + Xvfb (Linux only) - verify on CI, then promote."
 
 vt:
   name: Vermont
@@ -640,13 +640,13 @@ vt:
 wa:
   name: Washington
   source: upstream
-  status: unverified
+  status: active
   tier: hard
   cadence: daily
   needs_browser: false
   min_rows: 200
   staleness_days: 60
-  expected_columns: null
+  expected_columns: [Company, Location, Layoff Start Date, "# of Workers", Closure Layoff, Type of Layoff, Received Date, Notice]
   source_url: https://esd.wa.gov/about-employees/WARN
   notes: "ASP.NET viewstate form on fortress.wa.gov. Upstream issue #780."
 
@@ -666,13 +666,13 @@ wv:
 wi:
   name: Wisconsin
   source: upstream
-  status: unverified
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 100
   staleness_days: 90
-  expected_columns: null
+  expected_columns: [Company, City, Affected Workers, Notice Received, Original Notice Type / Update Type, Layoff Begin Date, NAICS Description, CountyWorkforce Development Area]
   source_url: https://dwd.wisconsin.gov/dislocatedworker/warn/
   notes: "Per-year HTML backed by Google Sheets API. Upstream issue #718."
 
