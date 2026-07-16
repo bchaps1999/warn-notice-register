@@ -130,12 +130,34 @@ def _parse_archive_pdf(path: Path) -> list[dict]:
                 for raw in table.extract():
                     cells = [" ".join((c or "").split()) for c in raw]
                     cells = [c for i, c in enumerate(cells) if not (i in (0, len(cells) - 1) and not c)]
-                    if "Warn Number" in cells:
-                        header = cells
+                    if "Warn Number" in cells or "WARN No." in cells:
+                        # The 2016-2021 vintage uses different labels; map
+                        # them onto the modern CSV names.
+                        header = [
+                            {
+                                "County/Parish": "County",
+                                "WARN No.": "Warn Number",
+                                "Notice Date": "Date of Notice",
+                                "Received Date": "Date Received by NC",
+                                "Company": "WARN Notice: WARN Notice Name",
+                                "Layoff/Closure": "WARN notice type",
+                                "Layoff/ Closure": "WARN notice type",
+                                "No. Of Employees": "Number affected at this location",
+                                "Address": "Address 1",
+                            }.get(c, c)
+                            for c in cells
+                        ]
                         continue
                     if header is None or not any(cells):
                         continue
                     row = dict(zip(header, cells))
+                    # Old vintage packs "Layoff Permanent" / "Closure Permanent"
+                    # into one cell; split into type + permanence.
+                    combined = row.get("WARN notice type", "")
+                    if "Type of layoff or closure" not in row and combined:
+                        parts = combined.replace("/", " ").split()
+                        row["WARN notice type"] = parts[0] if parts else ""
+                        row["Type of layoff or closure"] = " ".join(parts[1:])
                     if row.get("Warn Number", "").strip().isdigit():
                         rows.append(
                             {
