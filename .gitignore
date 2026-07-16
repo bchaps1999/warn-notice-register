@@ -9,3 +9,5 @@ workdir/
 data/warn.sqlite
 data/warn.sqlite-wal
 data/warn.sqlite-shm
+.env
+site/public/data/
