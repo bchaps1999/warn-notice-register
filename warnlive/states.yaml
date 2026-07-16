@@ -276,13 +276,13 @@ la:
 ma:
   name: Massachusetts
   source: custom
-  status: unverified
+  status: active
   tier: medium
   cadence: daily
   needs_browser: false
   min_rows: 50
   staleness_days: 30
-  expected_columns: null
+  expected_columns: [RECEIVED, EMPLOYER, CITY/TOWN, REGION, DATE(S) OF LAYOFFS, "# EMPLOYEES IMPACTED"]
   source_url: https://www.mass.gov/info-details/worker-adjustment-and-retraining-notification-act-warn-layoff-and-closure-updates
   notes: "NOT in warn-scraper (PR #787 in flight upstream). Weekly HTML/PDF regional reports."
 
@@ -328,13 +328,13 @@ mi:
 mn:
   name: Minnesota
   source: custom
-  status: unverified
+  status: active
   tier: medium
   cadence: daily
   needs_browser: false
   min_rows: 50
   staleness_days: 60
-  expected_columns: null
+  expected_columns: [RR Start Date, Layoff Name, City, Industry, Layoff Start, WARN Act, WARN Received, Layoff Type, Layoff Status, TAA Related, Affected Workers, Layoff Count, source_file]
   source_url: https://mn.gov/deed/business/layoff-resources/warn-archive/
   notes: "NOT in warn-scraper. WARN archive HTML page."
 
@@ -393,13 +393,13 @@ ne:
 nv:
   name: Nevada
   source: custom
-  status: unverified
+  status: active
   tier: hard
   cadence: daily
   needs_browser: false
   min_rows: 50
   staleness_days: 90
-  expected_columns: null
+  expected_columns: [Received Date, Effective Date, Type, Affected Total, Employer, City, County, Notification]
   source_url: https://detr.nv.gov/Page/WARN
   notes: "NOT in warn-scraper. Master PDF list mixing WARN and non-WARN."
 
@@ -458,13 +458,13 @@ ny:
 nc:
   name: North Carolina
   source: custom
-  status: unverified
+  status: active
   tier: medium
   cadence: daily
   needs_browser: false
   min_rows: 50
   staleness_days: 90
-  expected_columns: null
+  expected_columns: [County, Warn Number, Date of Notice, Date Received by NC, Effective Date, "WARN Notice: WARN Notice Name", WARN notice type, Type of layoff or closure, Number affected at this location, Address 1, City]
   source_url: https://www.commerce.nc.gov/data-tools-reports/labor-market-data-tools/workforce-warn-reports
   notes: "NOT in warn-scraper. LEAD analytics dashboard + reports."
 
