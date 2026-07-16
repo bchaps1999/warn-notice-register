@@ -1,0 +1,875 @@
+{
+  "AL": {
+    "name": "Alabama",
+    "registry_status": "active",
+    "source": "upstream",
+    "notices": 1032,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:15:36Z",
+    "latest_error": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/al.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "1065 raw rows (min 500)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/1065 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "1065/1065 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/1065 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-06-11 is 35d old (max 180d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "33/1065 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:15:36Z",
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "AK": {
+    "name": "Alaska",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "AZ": {
+    "name": "Arizona",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "AR": {
+    "name": "Arkansas",
+    "registry_status": "manual_only",
+    "source": "manual",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "CA": {
+    "name": "California",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "CO": {
+    "name": "Colorado",
+    "registry_status": "active",
+    "source": "upstream",
+    "notices": 827,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:15:36Z",
+    "latest_error": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/co.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "854 raw rows (min 500)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/854 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "854/854 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/843 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-07-14 is 2d old (max 60d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "27/854 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:15:36Z",
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "CT": {
+    "name": "Connecticut",
+    "registry_status": "active",
+    "source": "upstream",
+    "notices": 28,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:15:36Z",
+    "latest_error": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/ct.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "28 raw rows (min 15)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/28 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "28/28 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/28 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-06-26 is 20d old (max 90d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "0/28 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:15:36Z",
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "DC": {
+    "name": "District of Columbia",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "DE": {
+    "name": "Delaware",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "FL": {
+    "name": "Florida",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "GA": {
+    "name": "Georgia",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "HI": {
+    "name": "Hawaii",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "ID": {
+    "name": "Idaho",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "IL": {
+    "name": "Illinois",
+    "registry_status": "active",
+    "source": "upstream",
+    "notices": 4863,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:15:37Z",
+    "latest_error": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/il.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "4871 raw rows (min 2000)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/4871 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "4871/4871 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "1/4871 notice_dates outside 1988..2026-08-15"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-07-14 is 2d old (max 60d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "8/4871 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:15:37Z",
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "IN": {
+    "name": "Indiana",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "IA": {
+    "name": "Iowa",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "KS": {
+    "name": "Kansas",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "KY": {
+    "name": "Kentucky",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "LA": {
+    "name": "Louisiana",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "MA": {
+    "name": "Massachusetts",
+    "registry_status": "unverified",
+    "source": "custom",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "MD": {
+    "name": "Maryland",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "ME": {
+    "name": "Maine",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "MI": {
+    "name": "Michigan",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "MN": {
+    "name": "Minnesota",
+    "registry_status": "unverified",
+    "source": "custom",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "MO": {
+    "name": "Missouri",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "MS": {
+    "name": "Mississippi",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "MT": {
+    "name": "Montana",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "NE": {
+    "name": "Nebraska",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "NV": {
+    "name": "Nevada",
+    "registry_status": "unverified",
+    "source": "custom",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "NH": {
+    "name": "New Hampshire",
+    "registry_status": "manual_only",
+    "source": "manual",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "NJ": {
+    "name": "New Jersey",
+    "registry_status": "active",
+    "source": "upstream",
+    "notices": 2079,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-16T19:15:37Z",
+    "latest_error": null,
+    "latest_checks": {
+      "verdict": "ok",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "pass",
+          "detail": "workdir/raw/nj.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "2355 raw rows (min 1000)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "1/2355 rows failed to normalize; e.g. KeyError: '7/27/26 - 8/31/26'"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "2353/2354 records have an employer name"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "275/2354 records share a dedupe key"
+        }
+      ]
+    },
+    "last_success": "2026-07-16T19:15:37Z",
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "NM": {
+    "name": "New Mexico",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "NY": {
+    "name": "New York",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "NC": {
+    "name": "North Carolina",
+    "registry_status": "unverified",
+    "source": "custom",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "ND": {
+    "name": "North Dakota",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "OH": {
+    "name": "Ohio",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "OK": {
+    "name": "Oklahoma",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "OR": {
+    "name": "Oregon",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "PA": {
+    "name": "Pennsylvania",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "RI": {
+    "name": "Rhode Island",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "SC": {
+    "name": "South Carolina",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "SD": {
+    "name": "South Dakota",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "TN": {
+    "name": "Tennessee",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "TX": {
+    "name": "Texas",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "UT": {
+    "name": "Utah",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "VA": {
+    "name": "Virginia",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "VT": {
+    "name": "Vermont",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "WA": {
+    "name": "Washington",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "WV": {
+    "name": "West Virginia",
+    "registry_status": "manual_only",
+    "source": "manual",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "WI": {
+    "name": "Wisconsin",
+    "registry_status": "unverified",
+    "source": "upstream",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "WY": {
+    "name": "Wyoming",
+    "registry_status": "manual_only",
+    "source": "manual",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  }
+}

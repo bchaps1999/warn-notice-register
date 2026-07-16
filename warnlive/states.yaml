@@ -18,13 +18,13 @@
 al:
   name: Alabama
   source: upstream
-  status: unverified
+  status: active
   tier: easy
   cadence: weekly
   needs_browser: false
-  min_rows: 50
+  min_rows: 500
   staleness_days: 180
-  expected_columns: null
+  expected_columns: [action_type, date_notice, date_action, company, location, affected, _id1, _id2]
   source_url: https://www.madeinalabama.com/warn-list/
   notes: "CSV posted directly on site. Upstream issue #676 (flaky); reworked with niquests."
 
@@ -83,28 +83,33 @@ ca:
 co:
   name: Colorado
   source: upstream
-  status: unverified
+  status: active
   tier: easy
   cadence: daily
   needs_browser: false
-  min_rows: 100
+  min_rows: 500
   staleness_days: 60
-  expected_columns: null
+  expected_columns: [fein, naics, permanent_job_losses, location, notice_date, begin_date,
+    at_the_location, reduced_hours, letter, workforce_region, dropdown, phone, reason,
+    company, jobs, end_date, contact, notes, furloughs, workforce_area, email,
+    total_notified, occupations, received_date, temporary_job_losses]
   source_url: https://cdle.colorado.gov/employers/layoff-separations/layoff-warn-list
   notes: "Public Google Sheet. Upstream issue #714 (inefficiency, not breakage)."
 
 ct:
   name: Connecticut
   source: upstream
-  status: unverified
+  status: active
   tier: easy
   cadence: weekly
   needs_browser: false
-  min_rows: 100
+  min_rows: 15
   staleness_days: 90
-  expected_columns: null
+  expected_columns: [blobToken, name, modifiedDate, warn_document_date, warn_document_received_date,
+    affected_company, number_of_impacted_workers, layoff_locations, layoff_dates,
+    closing_dates, union, union_address, title]
   source_url: https://dolpublicdocumentlibrary.ct.gov/CsblrCategory?prefix=%2Frapid_response%2Fwarn_documents
-  notes: "Paginated JSON endpoint."
+  notes: "Paginated JSON endpoint. Live fetch returns current listings only (~30 rows); history via backfill."
 
 dc:
   name: District of Columbia
@@ -187,13 +192,19 @@ id:
 il:
   name: Illinois
   source: upstream
-  status: unverified
+  status: active
   tier: easy
   cadence: daily
   needs_browser: false
-  min_rows: 200
+  min_rows: 2000
   staleness_days: 60
-  expected_columns: null
+  expected_columns: [Location Name, Doing Business As Name, Location Address, Location City,
+    Location State, Location Zipcode, County, "LWIA #", LWIA, Layoff Type, WARN Notice,
+    Trade, Petition Date, Determination, Impact Date, CertificationDate, Exp/Term Date,
+    ATAA Certified, Causes, Reason, Status, Report Source, Industry, NAICS Codes, IEBS Id,
+    "Approximate Total # of Full-Time Employees", Expected Layoff, Revised Layoff,
+    Initial Date Reported, Last Report Date, "Notification Date(s)", Unions Involved,
+    Unions, Has public layoff assistance web page]
   source_url: https://apps.illinoisworknet.com/iebs/api/public/export
   notes: "Clean public REST export endpoint."
 
@@ -408,13 +419,13 @@ nh:
 nj:
   name: New Jersey
   source: upstream
-  status: unverified
+  status: active
   tier: easy
   cadence: daily
   needs_browser: false
-  min_rows: 200
+  min_rows: 1000
   staleness_days: 60
-  expected_columns: null
+  expected_columns: [Company, City, Month Posted, Effective Date, Workforce Affected]
   source_url: https://www.nj.gov/labor/employer-services/warn/
   notes: "Single consolidated xlsx archive."
 

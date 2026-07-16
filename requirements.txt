@@ -24,6 +24,8 @@ tenacity
 xlrd
 xvfbwrapper
 webdriver-manager
+# used by upstream main (tx/al reworks) but not yet declared in its pyproject
+niquests[utls]
 
 # warn-transformer deps
 marshmallow

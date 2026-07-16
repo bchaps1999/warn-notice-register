@@ -1,0 +1,55 @@
+# WARN pipeline health
+
+| State | Registry | Latest run | Verdict | Notices | Fail streak | Notes |
+|---|---|---|---|---|---|---|
+| AK | unverified | — | — — | 0 | 0 |  |
+| AL | active | 2026-07-16T19:15:36Z | ✅ ok | 1032 | 0 |  |
+| AR | manual_only | — | — — | 0 | 0 |  |
+| AZ | unverified | — | — — | 0 | 0 |  |
+| CA | unverified | — | — — | 0 | 0 |  |
+| CO | active | 2026-07-16T19:15:36Z | ✅ ok | 827 | 0 |  |
+| CT | active | 2026-07-16T19:15:36Z | ✅ ok | 28 | 0 |  |
+| DC | unverified | — | — — | 0 | 0 |  |
+| DE | unverified | — | — — | 0 | 0 |  |
+| FL | unverified | — | — — | 0 | 0 |  |
+| GA | unverified | — | — — | 0 | 0 |  |
+| HI | unverified | — | — — | 0 | 0 |  |
+| IA | unverified | — | — — | 0 | 0 |  |
+| ID | unverified | — | — — | 0 | 0 |  |
+| IL | active | 2026-07-16T19:15:37Z | ✅ ok | 4863 | 0 |  |
+| IN | unverified | — | — — | 0 | 0 |  |
+| KS | unverified | — | — — | 0 | 0 |  |
+| KY | unverified | — | — — | 0 | 0 |  |
+| LA | unverified | — | — — | 0 | 0 |  |
+| MA | unverified | — | — — | 0 | 0 |  |
+| MD | unverified | — | — — | 0 | 0 |  |
+| ME | unverified | — | — — | 0 | 0 |  |
+| MI | unverified | — | — — | 0 | 0 |  |
+| MN | unverified | — | — — | 0 | 0 |  |
+| MO | unverified | — | — — | 0 | 0 |  |
+| MS | unverified | — | — — | 0 | 0 |  |
+| MT | unverified | — | — — | 0 | 0 |  |
+| NC | unverified | — | — — | 0 | 0 |  |
+| ND | unverified | — | — — | 0 | 0 |  |
+| NE | unverified | — | — — | 0 | 0 |  |
+| NH | manual_only | — | — — | 0 | 0 |  |
+| NJ | active | 2026-07-16T19:15:37Z | ✅ ok | 2079 | 0 |  |
+| NM | unverified | — | — — | 0 | 0 |  |
+| NV | unverified | — | — — | 0 | 0 |  |
+| NY | unverified | — | — — | 0 | 0 |  |
+| OH | unverified | — | — — | 0 | 0 |  |
+| OK | unverified | — | — — | 0 | 0 |  |
+| OR | unverified | — | — — | 0 | 0 |  |
+| PA | unverified | — | — — | 0 | 0 |  |
+| RI | unverified | — | — — | 0 | 0 |  |
+| SC | unverified | — | — — | 0 | 0 |  |
+| SD | unverified | — | — — | 0 | 0 |  |
+| TN | unverified | — | — — | 0 | 0 |  |
+| TX | unverified | — | — — | 0 | 0 |  |
+| UT | unverified | — | — — | 0 | 0 |  |
+| VA | unverified | — | — — | 0 | 0 |  |
+| VT | unverified | — | — — | 0 | 0 |  |
+| WA | unverified | — | — — | 0 | 0 |  |
+| WI | unverified | — | — — | 0 | 0 |  |
+| WV | manual_only | — | — — | 0 | 0 |  |
+| WY | manual_only | — | — — | 0 | 0 |  |
