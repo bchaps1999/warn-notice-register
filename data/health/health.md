@@ -2,54 +2,54 @@
 
 | State | Registry | Latest run | Verdict | Notices | Fail streak | Notes |
 |---|---|---|---|---|---|---|
-| AK | active | 2026-07-16T20:13:53Z | ✅ ok | 66 | 0 |  |
-| AL | active | 2026-07-16T20:13:53Z | ✅ ok | 1032 | 0 |  |
+| AK | active | 2026-07-19T08:06:57Z | ✅ ok | 66 | 0 |  |
+| AL | active | 2026-07-19T08:07:03Z | ✅ ok | 1033 | 0 |  |
 | AR | manual_only | — | — — | 0 | 0 |  |
-| AZ | active | 2026-07-16T20:13:53Z | ✅ ok | 729 | 0 |  |
-| CA | active | 2026-07-18T10:19:42Z | ✅ ok | 14159 | 0 |  |
-| CO | active | 2026-07-18T10:19:53Z | 🟡 degraded | 828 | 0 | schema_drift |
-| CT | active | 2026-07-16T20:13:55Z | ✅ ok | 656 | 0 |  |
-| DC | active | 2026-07-16T20:13:55Z | ✅ ok | 167 | 0 |  |
-| DE | active | 2026-07-16T20:13:55Z | ✅ ok | 102 | 0 |  |
-| FL | active | 2026-07-18T10:19:53Z | ❌ failed | 2789 | 2 | ModuleNotFoundError: No module named 'pyquery' |
+| AZ | active | 2026-07-19T08:11:55Z | ✅ ok | 965 | 0 |  |
+| CA | active | 2026-07-19T08:13:51Z | ✅ ok | 14159 | 0 |  |
+| CO | active | 2026-07-19T08:14:01Z | 🟡 degraded | 828 | 0 | schema_drift |
+| CT | active | 2026-07-19T08:14:02Z | ✅ ok | 656 | 0 |  |
+| DC | active | 2026-07-19T08:14:06Z | ✅ ok | 168 | 0 |  |
+| DE | active | 2026-07-19T08:14:42Z | ✅ ok | 102 | 0 |  |
+| FL | active | 2026-07-19T08:14:42Z | ❌ failed | 2789 | 3 | **recommend marking broken** (3 consecutive failures) |
 | GA | broken | — | — — | 0 | 0 |  |
-| HI | active | 2026-07-16T20:13:55Z | ✅ ok | 452 | 0 |  |
-| IA | active | 2026-07-16T20:13:56Z | ✅ ok | 384 | 0 |  |
-| ID | active | 2026-07-16T20:13:56Z | ✅ ok | 193 | 0 |  |
-| IL | active | 2026-07-18T10:20:14Z | ✅ ok | 4864 | 0 |  |
-| IN | active | 2026-07-16T20:13:56Z | ✅ ok | 1011 | 0 |  |
-| KS | active | 2026-07-16T20:13:56Z | ✅ ok | 2212 | 0 |  |
-| KY | active | 2026-07-16T20:13:57Z | ✅ ok | 806 | 0 |  |
+| HI | active | 2026-07-19T08:15:07Z | ✅ ok | 452 | 0 |  |
+| IA | active | 2026-07-19T08:15:08Z | ✅ ok | 386 | 0 |  |
+| ID | active | 2026-07-19T08:15:11Z | ✅ ok | 193 | 0 |  |
+| IL | active | 2026-07-19T08:15:32Z | ✅ ok | 4864 | 0 |  |
+| IN | active | 2026-07-19T08:15:33Z | ✅ ok | 1011 | 0 |  |
+| KS | active | 2026-07-19T08:19:36Z | ✅ ok | 2638 | 0 |  |
+| KY | active | 2026-07-19T08:19:36Z | ❌ failed | 806 | 1 | ModuleNotFoundError: No module named 'pyquery' |
 | LA | broken | — | — — | 628 | 0 |  |
-| MA | active | 2026-07-18T10:20:15Z | ✅ ok | 379 | 0 |  |
-| MD | active | 2026-07-16T20:13:57Z | ✅ ok | 1398 | 0 |  |
-| ME | active | 2026-07-16T20:13:57Z | ✅ ok | 404 | 0 |  |
-| MI | active | 2026-07-16T20:13:57Z | ✅ ok | 887 | 0 |  |
-| MN | active | 2026-07-18T10:21:17Z | ✅ ok | 968 | 0 |  |
+| MA | active | 2026-07-19T08:19:39Z | ✅ ok | 379 | 0 |  |
+| MD | active | 2026-07-19T08:20:21Z | ✅ ok | 1398 | 0 |  |
+| ME | active | 2026-07-19T08:20:54Z | ✅ ok | 417 | 0 |  |
+| MI | active | 2026-07-19T08:20:54Z | ❌ failed | 887 | 1 | ModuleNotFoundError: No module named 'pyquery' |
+| MN | active | 2026-07-19T08:22:03Z | ✅ ok | 968 | 0 |  |
 | MO | broken | — | — — | 514 | 0 |  |
-| MS | active | 2026-07-16T20:13:57Z | 🟡 degraded | 142 | 0 | schema_drift |
-| MT | active | 2026-07-16T20:13:57Z | ✅ ok | 43 | 0 |  |
-| NC | active | 2026-07-18T10:21:43Z | ✅ ok | 967 | 0 |  |
-| ND | active | 2026-07-16T20:13:57Z | ✅ ok | 54 | 0 |  |
-| NE | active | 2026-07-16T20:13:57Z | ✅ ok | 959 | 0 |  |
+| MS | active | 2026-07-19T08:22:03Z | ❌ failed | 142 | 1 | ModuleNotFoundError: No module named 'pyquery' |
+| MT | active | 2026-07-19T08:22:04Z | ✅ ok | 43 | 0 |  |
+| NC | active | 2026-07-19T08:22:28Z | ✅ ok | 967 | 0 |  |
+| ND | active | 2026-07-19T08:22:29Z | ✅ ok | 54 | 0 |  |
+| NE | active | 2026-07-19T08:22:37Z | ✅ ok | 959 | 0 |  |
 | NH | manual_only | — | — — | 0 | 0 |  |
-| NJ | active | 2026-07-18T10:21:44Z | ✅ ok | 2078 | 0 |  |
-| NM | active | 2026-07-16T20:13:57Z | ❌ failed | 115 | 1 | fetch_ok |
-| NV | active | 2026-07-18T10:21:50Z | ✅ ok | 296 | 0 |  |
-| NY | active | 2026-07-18T10:21:52Z | 🟡 degraded | 5388 | 0 | freshness |
-| OH | active | 2026-07-18T10:21:53Z | ✅ ok | 963 | 0 |  |
-| OK | active | 2026-07-16T20:13:57Z | ✅ ok | 233 | 0 |  |
-| OR | active | 2026-07-16T20:13:57Z | ✅ ok | 1187 | 0 |  |
-| PA | active | 2026-07-16T20:13:57Z | ✅ ok | 291 | 0 |  |
-| RI | active | 2026-07-16T20:13:57Z | ✅ ok | 114 | 0 |  |
-| SC | active | 2026-07-16T20:13:57Z | ✅ ok | 610 | 0 |  |
-| SD | active | 2026-07-16T20:13:57Z | ✅ ok | 79 | 0 |  |
-| TN | active | 2026-07-16T20:13:58Z | ✅ ok | 1051 | 0 |  |
-| TX | active | 2026-07-18T10:21:56Z | ❌ failed | 7316 | 2 | Exception: Scraper isn't scraping. |
-| UT | active | 2026-07-16T20:13:58Z | ✅ ok | 280 | 0 |  |
-| VA | active | 2026-07-16T20:13:58Z | ✅ ok | 1114 | 0 |  |
-| VT | active | 2026-07-16T20:13:58Z | ✅ ok | 323 | 0 |  |
-| WA | active | 2026-07-18T10:22:11Z | ✅ ok | 1461 | 0 |  |
-| WI | active | 2026-07-16T20:13:59Z | 🟡 degraded | 1002 | 0 | dedupe_sanity |
+| NJ | active | 2026-07-19T08:22:38Z | ✅ ok | 2078 | 0 |  |
+| NM | active | 2026-07-19T08:22:45Z | ✅ ok | 115 | 0 |  |
+| NV | active | 2026-07-19T08:22:49Z | ✅ ok | 296 | 0 |  |
+| NY | active | 2026-07-19T08:22:52Z | 🟡 degraded | 5388 | 0 | freshness |
+| OH | active | 2026-07-19T08:22:53Z | ✅ ok | 963 | 0 |  |
+| OK | active | 2026-07-19T08:22:54Z | ✅ ok | 233 | 0 |  |
+| OR | active | 2026-07-19T08:23:23Z | ✅ ok | 1187 | 0 |  |
+| PA | active | 2026-07-19T08:23:24Z | ✅ ok | 291 | 0 |  |
+| RI | active | 2026-07-19T08:23:25Z | ✅ ok | 114 | 0 |  |
+| SC | active | 2026-07-19T08:23:38Z | ✅ ok | 610 | 0 |  |
+| SD | active | 2026-07-19T08:23:38Z | ✅ ok | 79 | 0 |  |
+| TN | active | 2026-07-19T08:24:27Z | ✅ ok | 1051 | 0 |  |
+| TX | active | 2026-07-19T08:24:30Z | ❌ failed | 7316 | 3 | **recommend marking broken** (3 consecutive failures) |
+| UT | active | 2026-07-19T08:24:30Z | ✅ ok | 280 | 0 |  |
+| VA | active | 2026-07-19T08:26:27Z | ✅ ok | 1114 | 0 |  |
+| VT | active | 2026-07-19T08:25:05Z | ✅ ok | 323 | 0 |  |
+| WA | active | 2026-07-19T08:25:16Z | ✅ ok | 1461 | 0 |  |
+| WI | active | 2026-07-19T08:25:19Z | ✅ ok | 1002 | 0 |  |
 | WV | manual_only | — | — — | 0 | 0 |  |
 | WY | manual_only | — | — — | 0 | 0 |  |

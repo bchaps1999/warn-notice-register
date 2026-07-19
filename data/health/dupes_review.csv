@@ -1768,6 +1768,7 @@ NY,2020-04-22,Visionworks (Mid-Hudson Region),Visionworks (Western Region),,0.89
 NY,2020-03-30,"WeWork Companies, Inc. (Avenue of the Americas)","WeWork Companies, Inc. (Broad St.)",New York,0.895,1,149,59046,59047
 NY,2020-03-29,Major Food Group (MFG) dba Parm Upper West LLC,Major Food Group (MFG) Highline Restaurant LLC,New York,0.895,48,73,59087,59088
 NY,2020-03-02,"HSBC Bank USA , N.A.","HSBC Bank USA , N.A.(1545 Flatbush Avenue)",Brooklyn,0.895,2,1,59772,59775
+AZ,2023-06-30,Sunrun (19th Ave. Phoenix),Sunrun (Sweetwater Ave. Phoenix),Phoenix,0.895,75,117,61829,61830
 CA,2025-11-03,CommUnify - Chestnut Office,CommUnify - JC Washington Center,,0.894,11,3,1859,1867
 CA,2025-11-03,CommUnify - Filmore Center,CommUnify - Los Adobes Center,,0.894,4,1,1860,1869
 CA,2025-11-03,CommUnify - Oak Valley Center,CommUnify - Coronel Center,,0.894,1,1,1863,1878
@@ -1885,7 +1886,7 @@ TX,2020-03-31,Justin Brands-El Paso,Justin Brands--Gateway W,El Paso,0.892,179,6
 TX,2015-09-01,ConocoPhillips-Barker Cypress,ConocoPhillips-Post Oak,Houston,0.892,50,50,45538,45539
 TX,2018-03-27,Baker Metal Products-Merrell Rd.,Baker Metal Products-Willowbook,Dallas,0.892,22,2,46158,46159
 TX,2018-11-30,El Paso Specialty Hospital-Wound Care,El Paso Specialty Physicians Group-Remcon,El Paso,0.892,7,14,46281,46283
-VT,2015-01-07,J. C. Penney,JC Penney,00 - Vermont Workforce Investment Area,0.892,30,35,46732,46734
+VT,2015-01-07,J. C. Penney,JC Penney,00 - Vermont Workforce Investment Area,0.892,30,,46732,46734
 MI,2024-03-11,TRI STAR MOLDING INC,"TriStar Molding, Inc.",Marcellus,0.892,32,32,55076,55082
 NY,2020-06-10,Hyatt Corporation dba Park South,Hyatt Corporation dba Andaz Wall Street,New York,0.892,57,114,58293,58295
 NY,2020-04-22,Visionworks (Finger Lakes Region),Visionworks (Southern Region),,0.892,44,47,58557,58572
