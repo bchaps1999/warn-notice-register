@@ -1,10 +1,12 @@
 // Data files are immutable per deploy; cache fetched JSON for the session.
 const cache = new Map<string, Promise<unknown>>();
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+
 export function fetchJson<T>(path: string): Promise<T> {
   let hit = cache.get(path);
   if (!hit) {
-    hit = fetch(path).then((r) => {
+    hit = fetch(BASE + path).then((r) => {
       if (!r.ok) throw new Error(`${r.status} loading ${path}`);
       return r.json();
     });
