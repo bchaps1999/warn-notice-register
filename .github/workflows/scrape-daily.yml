@@ -12,6 +12,8 @@ concurrency:
 permissions:
   contents: write
   issues: write
+  pages: write
+  id-token: write
 
 jobs:
   scrape:
@@ -45,9 +47,6 @@ jobs:
             git push
           fi
       - uses: ./.github/actions/deploy-site
-        with:
-          cloudflare-api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          cloudflare-account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       - name: Sync health issues
         if: always()
         env:

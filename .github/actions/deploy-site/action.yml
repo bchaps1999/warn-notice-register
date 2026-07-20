@@ -1,11 +1,10 @@
 name: Build and deploy site
-description: Build site data JSON from the DB, build the SPA, deploy to Cloudflare Pages
+description: Build site data JSON from the DB, build the SPA, deploy to GitHub Pages
 
-inputs:
-  cloudflare-api-token:
-    required: true
-  cloudflare-account-id:
-    required: true
+outputs:
+  page_url:
+    description: URL of the deployed GitHub Pages site
+    value: ${{ steps.deployment.outputs.page_url }}
 
 runs:
   using: composite
@@ -20,15 +19,19 @@ runs:
       run: .venv/bin/warnlive build-site --out site/public/data
     - name: Build site
       shell: bash
-      run: cd site && npm ci && npm run build
-    - name: Deploy to Cloudflare Pages
-      shell: bash
       env:
-        CLOUDFLARE_API_TOKEN: ${{ inputs.cloudflare-api-token }}
-        CLOUDFLARE_ACCOUNT_ID: ${{ inputs.cloudflare-account-id }}
+        SITE_BASE: /warn-live/
       run: |
-        if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
-          echo "CLOUDFLARE_API_TOKEN secret not set — skipping deploy."
-          exit 0
-        fi
-        cd site && npx wrangler@4 pages deploy dist --project-name warn-live --branch main
+        cd site && npm ci && npm run build
+        cp dist/index.html dist/404.html  # SPA fallback for deep links on Pages
+    - name: Configure Pages
+      uses: actions/configure-pages@v5
+      with:
+        enablement: true
+    - name: Upload Pages artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: site/dist
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4

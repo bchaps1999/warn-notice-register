@@ -18,14 +18,16 @@ npm run dev
 
 ## Deploys
 
+Deployed to GitHub Pages at https://bchaps1999.github.io/warn-live/ (public,
+even though the repo is private).
+
 - Scheduled scrapes (daily/weekly) rebuild the data and deploy automatically
-  via `.github/actions/deploy-site` → `wrangler pages deploy`.
+  via `.github/actions/deploy-site` (configure-pages → upload-pages-artifact →
+  deploy-pages; no secrets needed).
 - Pushing changes under `site/**` triggers `.github/workflows/deploy-site.yml`,
   which rebuilds from the last committed database.
-- One-time setup: `wrangler login && npx wrangler pages project create warn-live`,
-  then add `CLOUDFLARE_API_TOKEN` (Pages:Edit) and `CLOUDFLARE_ACCOUNT_ID`
-  as GitHub Actions secrets. Until the secrets exist, CI builds the site but
-  skips the deploy step.
+- CI builds with `SITE_BASE=/warn-live/` (Vite `base`); local dev serves at `/`.
+  `dist/index.html` is copied to `404.html` so deep links work on Pages.
 
 ## Data contract
 
