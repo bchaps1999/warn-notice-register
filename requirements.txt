@@ -26,6 +26,9 @@ xvfbwrapper
 webdriver-manager
 # used by upstream main (tx/al reworks) but not yet declared in its pyproject
 niquests[utls]
+# undeclared upstream deps: pyquery (ky/mi/fl), camelot (la/ms PDF tables)
+pyquery
+camelot-py
 
 # warn-transformer deps
 marshmallow
