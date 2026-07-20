@@ -18,7 +18,7 @@ npm run dev
 
 ## Deploys
 
-Deployed to GitHub Pages at https://bchaps1999.github.io/warn-live/ (public,
+Deployed to GitHub Pages at https://bchaps1999.github.io/warn-notice-register/ (public,
 even though the repo is private).
 
 - Scheduled scrapes (daily/weekly) rebuild the data and deploy automatically
@@ -26,7 +26,7 @@ even though the repo is private).
   deploy-pages; no secrets needed).
 - Pushing changes under `site/**` triggers `.github/workflows/deploy-site.yml`,
   which rebuilds from the last committed database.
-- CI builds with `SITE_BASE=/warn-live/` (Vite `base`); local dev serves at `/`.
+- CI builds with `SITE_BASE=/warn-notice-register/` (Vite `base`); local dev serves at `/`.
   `dist/index.html` is copied to `404.html` so deep links work on Pages.
 
 ## Data contract

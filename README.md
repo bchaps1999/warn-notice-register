@@ -1,4 +1,4 @@
-# warn-live
+# WARN Notice Register
 
 A consolidated, normalized, deduplicated dataset of WARN Act layoff notices,
 refreshed automatically from ~47 state portals.

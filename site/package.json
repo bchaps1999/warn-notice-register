@@ -26,7 +26,7 @@
     "vite": "^8.1.5",
     "vitest": "^4.1.10"
   },
-  "name": "warn-live-site",
+  "name": "warn-notice-register-site",
   "private": true,
   "version": "0.1.0",
   "type": "module",

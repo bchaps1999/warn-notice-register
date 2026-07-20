@@ -20,7 +20,7 @@ runs:
     - name: Build site
       shell: bash
       env:
-        SITE_BASE: /warn-live/
+        SITE_BASE: /warn-notice-register/
       run: |
         cd site && npm ci && npm run build
         cp dist/index.html dist/404.html  # SPA fallback for deep links on Pages
