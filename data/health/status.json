@@ -189,7 +189,7 @@
     "source": "upstream",
     "notices": 14159,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-20T11:45:16Z",
+    "latest_run": "2026-07-21T11:09:00Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -222,12 +222,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/17268 notice_dates outside 1988..2026-08-19"
+          "detail": "0/17268 notice_dates outside 1988..2026-08-20"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-15 is 5d old (max 45d)"
+          "detail": "newest notice_date 2026-07-15 is 6d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
@@ -236,7 +236,7 @@
         }
       ]
     },
-    "last_success": "2026-07-20T11:45:16Z",
+    "last_success": "2026-07-21T11:09:00Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -244,9 +244,9 @@
     "name": "Colorado",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 828,
+    "notices": 829,
     "latest_verdict": "degraded",
-    "latest_run": "2026-07-20T11:45:28Z",
+    "latest_run": "2026-07-21T11:09:12Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -259,41 +259,41 @@
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "854 raw rows (min 500)"
+          "detail": "855 raw rows (min 500)"
         },
         {
           "name": "schema_drift",
           "outcome": "warn",
-          "detail": "header drifted: ['furloughs', 'total_notified', 'at_the_location', 'contact', 'temporary_job_losses', 'notes', 'reason', 'end_date', 'company', 'letter', 'received_date', 'begin_date', 'notice_date', 'dropdown', 'phone', 'fein', 'jobs', 'reduced_hours', 'workforce_region', 'permanent_job_losses', 'workforce_area', 'naics', 'occupations', 'location', 'email']"
+          "detail": "header drifted: ['workforce_area', 'permanent_job_losses', 'location', 'received_date', 'notice_date', 'jobs', 'notes', 'occupations', 'temporary_job_losses', 'fein', 'workforce_region', 'end_date', 'letter', 'naics', 'furloughs', 'begin_date', 'company', 'contact', 'phone', 'reduced_hours', 'total_notified', 'reason', 'dropdown', 'email', 'at_the_location']"
         },
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/854 rows failed to normalize"
+          "detail": "0/855 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "854/854 records have an employer name"
+          "detail": "855/855 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/843 notice_dates outside 1988..2026-08-19"
+          "detail": "0/844 notice_dates outside 1988..2026-08-20"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-14 is 6d old (max 60d)"
+          "detail": "newest notice_date 2026-07-20 is 1d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "27/854 records share a dedupe key"
+          "detail": "27/855 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-20T11:45:28Z",
+    "last_success": "2026-07-21T11:09:12Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -472,23 +472,58 @@
     "name": "Florida",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 2789,
-    "latest_verdict": "failed",
-    "latest_run": "2026-07-20T11:45:28Z",
-    "latest_error": "ModuleNotFoundError: No module named 'pyquery'",
+    "notices": 2792,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-21T11:16:59Z",
+    "latest_error": null,
     "latest_checks": {
-      "verdict": "failed",
+      "verdict": "ok",
       "checks": [
         {
           "name": "fetch_ok",
-          "outcome": "fail",
-          "detail": "ModuleNotFoundError: No module named 'pyquery'"
+          "outcome": "pass",
+          "detail": "workdir/raw/fl.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "3236 raw rows (min 500)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/3236 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "3236/3236 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/3236 notice_dates outside 1988..2026-08-20"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-07-20 is 1d old (max 45d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "445/3236 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T20:13:55Z",
-    "consecutive_failures": 4,
-    "recommend_broken": true
+    "last_success": "2026-07-21T11:16:59Z",
+    "consecutive_failures": 0,
+    "recommend_broken": false
   },
   "GA": {
     "name": "Georgia",
@@ -618,7 +653,7 @@
     "source": "upstream",
     "notices": 4864,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-20T11:45:49Z",
+    "latest_run": "2026-07-21T11:17:20Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -651,12 +686,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "1/4872 notice_dates outside 1988..2026-08-19"
+          "detail": "1/4872 notice_dates outside 1988..2026-08-20"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-15 is 5d old (max 60d)"
+          "detail": "newest notice_date 2026-07-15 is 6d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -665,7 +700,7 @@
         }
       ]
     },
-    "last_success": "2026-07-20T11:45:49Z",
+    "last_success": "2026-07-21T11:17:20Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -881,7 +916,7 @@
     "source": "custom",
     "notices": 379,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-20T11:45:51Z",
+    "latest_run": "2026-07-21T11:17:22Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -914,12 +949,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/374 notice_dates outside 1988..2026-08-19"
+          "detail": "0/374 notice_dates outside 1988..2026-08-20"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-15 is 5d old (max 30d)"
+          "detail": "newest notice_date 2026-07-15 is 6d old (max 30d)"
         },
         {
           "name": "dedupe_sanity",
@@ -928,7 +963,7 @@
         }
       ]
     },
-    "last_success": "2026-07-20T11:45:51Z",
+    "last_success": "2026-07-21T11:17:22Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1074,7 +1109,7 @@
     "source": "custom",
     "notices": 968,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-20T11:46:49Z",
+    "latest_run": "2026-07-21T11:18:30Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1107,12 +1142,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "2/335 notice_dates outside 1988..2026-08-19"
+          "detail": "2/335 notice_dates outside 1988..2026-08-20"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-09-01 is -43d old (max 60d)"
+          "detail": "newest notice_date 2026-09-01 is -42d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -1121,7 +1156,7 @@
         }
       ]
     },
-    "last_success": "2026-07-20T11:46:49Z",
+    "last_success": "2026-07-21T11:18:30Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1280,7 +1315,7 @@
     "source": "custom",
     "notices": 296,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-20T11:47:17Z",
+    "latest_run": "2026-07-21T11:19:04Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1313,12 +1348,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/296 notice_dates outside 1988..2026-08-19"
+          "detail": "0/296 notice_dates outside 1988..2026-08-20"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-06-29 is 21d old (max 90d)"
+          "detail": "newest notice_date 2026-06-29 is 22d old (max 90d)"
         },
         {
           "name": "dedupe_sanity",
@@ -1327,7 +1362,7 @@
         }
       ]
     },
-    "last_success": "2026-07-20T11:47:17Z",
+    "last_success": "2026-07-21T11:19:04Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1348,9 +1383,9 @@
     "name": "New Jersey",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 2078,
+    "notices": 2079,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-20T11:47:11Z",
+    "latest_run": "2026-07-21T11:18:58Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1373,21 +1408,21 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "3/2357 rows failed to normalize; e.g. KeyError: '7/27/26 - 8/31/26'"
+          "detail": "2/2357 rows failed to normalize; e.g. KeyError: '7/27/26 - 8/31/26'"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "2354/2354 records have an employer name"
+          "detail": "2355/2355 records have an employer name"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "276/2354 records share a dedupe key"
+          "detail": "276/2355 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-20T11:47:11Z",
+    "last_success": "2026-07-21T11:18:58Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1454,7 +1489,7 @@
     "source": "upstream",
     "notices": 5388,
     "latest_verdict": "degraded",
-    "latest_run": "2026-07-20T11:47:20Z",
+    "latest_run": "2026-07-21T11:19:08Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -1487,12 +1522,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/174 notice_dates outside 1988..2026-08-19"
+          "detail": "0/174 notice_dates outside 1988..2026-08-20"
         },
         {
           "name": "freshness",
           "outcome": "warn",
-          "detail": "newest notice_date 2026-06-02 is 48d old (max 45d)"
+          "detail": "newest notice_date 2026-06-02 is 49d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
@@ -1501,7 +1536,7 @@
         }
       ]
     },
-    "last_success": "2026-07-20T11:47:20Z",
+    "last_success": "2026-07-21T11:19:08Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1511,7 +1546,7 @@
     "source": "custom",
     "notices": 967,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-20T11:47:10Z",
+    "latest_run": "2026-07-21T11:18:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1544,12 +1579,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/969 notice_dates outside 1988..2026-08-19"
+          "detail": "0/969 notice_dates outside 1988..2026-08-20"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-06 is 14d old (max 90d)"
+          "detail": "newest notice_date 2026-07-06 is 15d old (max 90d)"
         },
         {
           "name": "dedupe_sanity",
@@ -1558,7 +1593,7 @@
         }
       ]
     },
-    "last_success": "2026-07-20T11:47:10Z",
+    "last_success": "2026-07-21T11:18:57Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1620,7 +1655,7 @@
     "source": "patched",
     "notices": 963,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-20T11:47:20Z",
+    "latest_run": "2026-07-21T11:19:09Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1653,12 +1688,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/796 notice_dates outside 1988..2026-08-19"
+          "detail": "0/796 notice_dates outside 1988..2026-08-20"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-06 is 14d old (max 60d)"
+          "detail": "newest notice_date 2026-07-06 is 15d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -1667,7 +1702,7 @@
         }
       ]
     },
-    "last_success": "2026-07-20T11:47:20Z",
+    "last_success": "2026-07-21T11:19:09Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2056,7 +2091,7 @@
     "source": "upstream",
     "notices": 7316,
     "latest_verdict": "failed",
-    "latest_run": "2026-07-20T11:47:23Z",
+    "latest_run": "2026-07-21T11:19:11Z",
     "latest_error": "Exception: Scraper isn't scraping.",
     "latest_checks": {
       "verdict": "failed",
@@ -2069,7 +2104,7 @@
       ]
     },
     "last_success": "2026-07-16T20:13:58Z",
-    "consecutive_failures": 4,
+    "consecutive_failures": 5,
     "recommend_broken": true
   },
   "UT": {
@@ -2249,7 +2284,7 @@
     "source": "upstream",
     "notices": 1461,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-20T11:47:37Z",
+    "latest_run": "2026-07-21T11:19:23Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2282,12 +2317,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "8/1483 notice_dates outside 1988..2026-08-19"
+          "detail": "8/1483 notice_dates outside 1988..2026-08-20"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-12-31 is -164d old (max 60d)"
+          "detail": "newest notice_date 2026-12-31 is -163d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -2296,7 +2331,7 @@
         }
       ]
     },
-    "last_success": "2026-07-20T11:47:37Z",
+    "last_success": "2026-07-21T11:19:23Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
