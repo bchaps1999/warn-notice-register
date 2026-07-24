@@ -1,14 +1,17 @@
 """Texas — patched from upstream warn-scraper tx.py.
 
-The TWC index page (twc.texas.gov/data-reports/warn-notice) is
-intermittently blocked from GitHub runner IPs (Cloudflare; upstream #767),
-which makes link discovery return zero spreadsheet links and the upstream
-scraper raise. But the yearly workbook URLs are predictable
-(warn-act-listings-{year}-twc.xlsx) and the assets themselves have not been
-blocked — same situation as MN, where only the HTML is fenced off. So:
-try upstream-style discovery first, and when it yields nothing, probe the
-constructed per-year URLs directly. Downloads are validated as real
-xlsx (zip magic) so a challenge page can't masquerade as a workbook.
+twc.texas.gov sits behind AWS WAF (CloudFront), which serves GitHub runner
+IPs a JavaScript challenge (HTTP 202, window.awsWafCookie) on every path —
+index page and xlsx assets alike — so the upstream scraper fails with
+"Scraper isn't scraping" on CI (7 straight days as of 2026-07-23; upstream
+#767 blamed Cloudflare, but the probe workflow showed AWS WAF).
+
+Strategy: try plain HTTP first (fine from residential IPs). When discovery
+yields no links, load the index page in headless Chrome — the browser
+passes the WAF challenge automatically — then copy the aws-waf-token
+cookies and user agent into the HTTP session for the workbook downloads.
+Downloads are validated as real xlsx (zip magic) so a challenge page can
+never masquerade as a workbook.
 """
 
 from __future__ import annotations
@@ -18,7 +21,7 @@ import random
 import re
 from datetime import date
 from pathlib import Path
-from time import sleep
+from time import sleep, time
 
 import niquests as requests
 from bs4 import BeautifulSoup
@@ -31,15 +34,16 @@ logger = logging.getLogger(__name__)
 
 INDEX_URL = "https://www.twc.texas.gov/data-reports/warn-notice"
 ASSET_ROOT = "https://www.twc.texas.gov"
+HREF_PATTERN = re.compile(r"^/sites/default/files/oei/docs/warn-act-listings-")
 # Years covered by the yearly workbooks; earlier years come from the BLN
-# historical file. Upstream keeps 2019+, but the index currently lists
-# 2020+ with a -twc suffix; older names lacked it, so probe both.
+# historical file. Upstream keeps 2019+, though the index lists 2020+ now.
 FIRST_YEAR = 2019
 HISTORICAL_URL = (
     "https://storage.googleapis.com/bln-data-public/warn-layoffs/tx_historical.xlsx"
 )
 
 XLSX_MAGIC = b"PK\x03\x04"
+WAF_CHALLENGE_MARKER = b"awsWafCookie"
 
 
 def scrape(
@@ -49,14 +53,19 @@ def scrape(
     cache = Cache(cache_dir)
     session = requests.Session()
 
-    hrefs = _discover_links(session, cache)
+    hrefs = _discover_links(_plain_fetch(session, cache))
+    if not hrefs:
+        logger.warning(
+            "TX index page yielded no spreadsheet links (AWS WAF challenge "
+            "likely); retrying via headless Chrome."
+        )
+        hrefs = _discover_links(_browser_fetch(session, cache))
+
     if hrefs:
         candidates = [(_get_year(h), [f"{ASSET_ROOT}{h}"]) for h in hrefs]
     else:
-        logger.warning(
-            "TX index page yielded no spreadsheet links (likely blocked); "
-            "falling back to constructed per-year URLs."
-        )
+        # Last resort: the yearly URLs are predictable.
+        logger.warning("TX: no links even via browser; probing constructed URLs.")
         candidates = [
             (
                 year,
@@ -85,9 +94,7 @@ def scrape(
         workbooks += 1
 
     if workbooks == 0:
-        raise Exception(
-            "TX: no yearly workbooks retrievable via discovery or constructed URLs."
-        )
+        raise Exception("TX: no yearly workbooks retrievable (WAF-blocked?).")
 
     # Workbooks vary in trailing empty columns; strip them from the header so
     # the emitted CSV header doesn't depend on which year came first.
@@ -119,29 +126,80 @@ def scrape(
     return data_path
 
 
+def _plain_fetch(session: requests.Session, cache: Cache) -> str:
+    """Fetch the index page with plain HTTP; returns '' on failure."""
+    try:
+        page = session.get(INDEX_URL, timeout=60)
+        logger.debug("TX index page status %s", page.status_code)
+    except Exception as exc:
+        logger.warning("TX index page fetch failed: %s", exc)
+        return ""
+    cache.write("tx/source.html", page.text)
+    return page.text
+
+
+def _browser_fetch(session: requests.Session, cache: Cache) -> str:
+    """Load the index in headless Chrome to pass the AWS WAF challenge.
+
+    Returns the rendered HTML and, as a side effect, copies the WAF cookies
+    and matching user agent into ``session`` so asset downloads pass too.
+    Returns '' if selenium/Chrome is unavailable or the challenge doesn't
+    clear.
+    """
+    try:
+        from selenium import webdriver
+        from selenium.webdriver.chrome.options import Options as ChromeOptions
+    except ImportError:
+        logger.warning("TX: selenium not installed; cannot run browser fallback.")
+        return ""
+
+    options = ChromeOptions()
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    try:
+        driver = webdriver.Chrome(options=options)
+    except Exception as exc:
+        logger.warning("TX: could not start Chrome (%s).", exc)
+        return ""
+
+    try:
+        driver.set_page_load_timeout(60)
+        driver.get(INDEX_URL)
+        # AWS WAF solves its challenge and reloads; poll for real content.
+        deadline = time() + 45
+        html = driver.page_source
+        while "warn-act-listings-" not in html and time() < deadline:
+            sleep(2)
+            html = driver.page_source
+        cache.write("tx/source.html", html)
+        for c in driver.get_cookies():
+            session.cookies.set(c["name"], c["value"], domain=c.get("domain"))
+        ua = driver.execute_script("return navigator.userAgent")
+        session.headers["User-Agent"] = ua  # WAF token is fingerprint-bound
+        if "warn-act-listings-" not in html:
+            logger.warning("TX: WAF challenge did not clear within 45s.")
+            return ""
+        return html
+    finally:
+        driver.quit()
+
+
+def _discover_links(html: str) -> list[str]:
+    """Extract yearly-workbook hrefs from index HTML; [] when none."""
+    if not html:
+        return []
+    soup = BeautifulSoup(html, "html5lib")
+    hrefs = [a.get("href") for a in soup.find_all("a", href=HREF_PATTERN)]
+    return [h for h in hrefs if _get_year(h) >= FIRST_YEAR]
+
+
 def _get_year(url: str) -> int:
     """Plucks the year from a workbook URL (upstream logic)."""
     m = re.match(r".*-(\d{4})(.*)$", url, re.I)
     assert m is not None
     return int(m.group(1)[-4:])
-
-
-def _discover_links(session: requests.Session, cache: Cache) -> list[str]:
-    """Upstream-style link discovery; returns [] instead of raising."""
-    try:
-        page = session.get(INDEX_URL, timeout=60)
-        logger.debug("TX index page status %s", page.status_code)
-        html = page.text
-    except Exception as exc:  # blocked/reset — the fallback handles it
-        logger.warning("TX index page fetch failed: %s", exc)
-        return []
-    cache.write("tx/source.html", html)
-    soup = BeautifulSoup(html, "html5lib")
-    link_list = soup.find_all(
-        "a", href=re.compile("^/sites/default/files/oei/docs/warn-act-listings-")
-    )
-    hrefs = [link.get("href") for link in link_list]
-    return [h for h in hrefs if _get_year(h) >= FIRST_YEAR]
 
 
 def _download_year(
@@ -156,8 +214,10 @@ def _download_year(
             continue
         sleep(random.uniform(2, 4))
         if r.status_code != 200 or not r.content.startswith(XLSX_MAGIC):
+            challenged = WAF_CHALLENGE_MARKER in (r.content or b"")[:2000]
             logger.info(
-                "TX %s: %s -> status %s, not a workbook", year, url, r.status_code
+                "TX %s: %s -> status %s%s, not a workbook",
+                year, url, r.status_code, " (WAF challenge)" if challenged else "",
             )
             continue
         excel_path = cache_dir / f"tx/{year}.xlsx"

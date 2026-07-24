@@ -26,6 +26,7 @@ jobs:
           python-version: "3.12"
       - name: Install
         run: ./install.sh
+      - uses: browser-actions/setup-chrome@v1 # TX needs headless Chrome for the AWS WAF challenge
       - name: Unpack database
         run: '[ -f data/warn.sqlite.gz ] && gunzip -kf data/warn.sqlite.gz || true'
       - name: Scrape active daily states
