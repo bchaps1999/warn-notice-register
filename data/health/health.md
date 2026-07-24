@@ -45,7 +45,7 @@
 | SC | active | 2026-07-19T08:23:38Z | ✅ ok | 610 | 0 |  |
 | SD | active | 2026-07-19T08:23:38Z | ✅ ok | 79 | 0 |  |
 | TN | active | 2026-07-19T08:24:27Z | ✅ ok | 1051 | 0 |  |
-| TX | active | 2026-07-23T11:20:02Z | ❌ failed | 7316 | 7 | **recommend marking broken** (7 consecutive failures) |
+| TX | active | 2026-07-24T01:09:02Z | ✅ ok | 7319 | 0 |  |
 | UT | active | 2026-07-19T08:24:30Z | ✅ ok | 280 | 0 |  |
 | VA | active | 2026-07-19T08:26:27Z | ✅ ok | 1114 | 0 |  |
 | VT | active | 2026-07-19T08:25:05Z | ✅ ok | 323 | 0 |  |
