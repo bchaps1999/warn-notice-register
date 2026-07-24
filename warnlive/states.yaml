@@ -587,16 +587,16 @@ tn:
 
 tx:
   name: Texas
-  source: upstream
+  source: patched
   status: active
   tier: medium
   cadence: daily
   needs_browser: false
   min_rows: 500
   staleness_days: 45
-  expected_columns: [NOTICE_DATE, JOB_SITE_NAME, COUNTY_NAME, WDA_NAME, TOTAL_LAYOFF_NUMBER, LayOff_Date, WFDD_RECEIVED_DATE, CITY_NAME, "", ""]
+  expected_columns: [NOTICE_DATE, JOB_SITE_NAME, COUNTY_NAME, WDA_NAME, TOTAL_LAYOFF_NUMBER, LayOff_Date, WFDD_RECEIVED_DATE, CITY_NAME]
   source_url: https://www.twc.texas.gov/data-reports/warn-notice
-  notes: "Intermittent Cloudflare blocking (upstream #767); may need ZYTE_API_KEY."
+  notes: "Index page intermittently Cloudflare-blocked from CI (upstream #767); patch falls back to constructed per-year xlsx URLs."
 
 ut:
   name: Utah
