@@ -1,0 +1,63 @@
+# Temporary diagnostic — probe TWC's anti-bot behavior from a GitHub runner
+# to pick the right TX fetch strategy. Delete once TX is fixed.
+name: Probe TX (diagnostic)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet 'niquests[utls]' requests
+      - uses: browser-actions/setup-chrome@v1
+      - name: Probe HTTP strategies
+        run: |
+          python - <<'EOF'
+          import niquests, requests
+
+          INDEX = "https://www.twc.texas.gov/data-reports/warn-notice"
+          ASSET = "https://www.twc.texas.gov/sites/default/files/oei/docs/warn-act-listings-2026-twc.xlsx"
+          UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
+
+          def show(tag, r):
+              body = r.content[:400]
+              print(f"--- {tag}: status={r.status_code} len={len(r.content)}")
+              for h in ("server", "x-cdn", "via", "cf-ray", "x-iinfo", "set-cookie"):
+                  if r.headers.get(h):
+                      print(f"    {h}: {r.headers[h][:120]}")
+              print(f"    magic={body[:8]!r}")
+              if not body.startswith(b"PK"):
+                  print("    body snippet:", body[:300])
+
+          s = niquests.Session()
+          show("niquests default: index", s.get(INDEX, timeout=30))
+          show("niquests default: asset (same session)", s.get(ASSET, timeout=30))
+          show("niquests default: asset + referer",
+               s.get(ASSET, timeout=30, headers={"Referer": INDEX}))
+
+          s2 = niquests.Session()
+          show("niquests browser-UA: index", s2.get(INDEX, timeout=30, headers={"User-Agent": UA}))
+          show("niquests browser-UA: asset", s2.get(ASSET, timeout=30, headers={"User-Agent": UA}))
+
+          s3 = requests.Session()
+          show("requests default: asset", s3.get(ASSET, timeout=30))
+          EOF
+      - name: Probe headless Chrome
+        run: |
+          CHROME=$(command -v chrome || command -v google-chrome || command -v chromium)
+          echo "using $CHROME"
+          $CHROME --headless=new --disable-gpu --dump-dom --virtual-time-budget=15000 \
+            "https://www.twc.texas.gov/data-reports/warn-notice" 2>/dev/null > /tmp/tx.html || true
+          echo "dom length: $(wc -c < /tmp/tx.html)"
+          grep -c "warn-act-listings-" /tmp/tx.html && echo "LINKS FOUND via Chrome" || echo "no links via Chrome"
+          grep -io "<title>[^<]*" /tmp/tx.html | head -1
