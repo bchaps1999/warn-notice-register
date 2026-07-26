@@ -19,15 +19,15 @@
 | IL | active | 2026-07-23T11:18:00Z | ✅ ok | 4865 | 0 |  |
 | IN | active | 2026-07-19T08:15:33Z | ✅ ok | 1011 | 0 |  |
 | KS | active | 2026-07-19T08:19:36Z | ✅ ok | 2638 | 0 |  |
-| KY | active | 2026-07-19T08:19:36Z | ❌ failed | 806 | 1 | ModuleNotFoundError: No module named 'pyquery' |
-| LA | broken | — | — — | 628 | 0 |  |
+| KY | active | 2026-07-26T15:29:12Z | ✅ ok | 806 | 0 |  |
+| LA | archive | — | — — | 628 | 0 |  |
 | MA | active | 2026-07-23T11:18:02Z | ✅ ok | 379 | 0 |  |
 | MD | active | 2026-07-19T08:20:21Z | ✅ ok | 1398 | 0 |  |
 | ME | active | 2026-07-19T08:20:54Z | ✅ ok | 417 | 0 |  |
-| MI | active | 2026-07-19T08:20:54Z | ❌ failed | 887 | 1 | ModuleNotFoundError: No module named 'pyquery' |
+| MI | active | 2026-07-26T15:29:13Z | ✅ ok | 896 | 0 |  |
 | MN | active | 2026-07-23T11:19:20Z | ✅ ok | 968 | 0 |  |
-| MO | broken | — | — — | 514 | 0 |  |
-| MS | active | 2026-07-19T08:22:03Z | ❌ failed | 142 | 1 | ModuleNotFoundError: No module named 'pyquery' |
+| MO | archive | — | — — | 514 | 0 |  |
+| MS | active | 2026-07-26T15:29:35Z | ✅ ok | 142 | 0 |  |
 | MT | active | 2026-07-19T08:22:04Z | ✅ ok | 43 | 0 |  |
 | NC | active | 2026-07-23T11:19:49Z | ✅ ok | 967 | 0 |  |
 | ND | active | 2026-07-19T08:22:29Z | ✅ ok | 54 | 0 |  |
@@ -45,7 +45,7 @@
 | SC | active | 2026-07-19T08:23:38Z | ✅ ok | 610 | 0 |  |
 | SD | active | 2026-07-19T08:23:38Z | ✅ ok | 79 | 0 |  |
 | TN | active | 2026-07-19T08:24:27Z | ✅ ok | 1051 | 0 |  |
-| TX | active | 2026-07-24T01:09:02Z | ✅ ok | 7319 | 0 |  |
+| TX | active | 2026-07-23T11:20:02Z | ❌ failed | 7316 | 7 | **recommend marking broken** (7 consecutive failures) |
 | UT | active | 2026-07-19T08:24:30Z | ✅ ok | 280 | 0 |  |
 | VA | active | 2026-07-19T08:26:27Z | ✅ ok | 1114 | 0 |  |
 | VT | active | 2026-07-19T08:25:05Z | ✅ ok | 323 | 0 |  |

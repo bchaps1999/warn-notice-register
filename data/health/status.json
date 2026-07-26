@@ -880,26 +880,61 @@
     "registry_status": "active",
     "source": "upstream",
     "notices": 806,
-    "latest_verdict": "failed",
-    "latest_run": "2026-07-19T08:19:36Z",
-    "latest_error": "ModuleNotFoundError: No module named 'pyquery'",
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-26T15:29:12Z",
+    "latest_error": null,
     "latest_checks": {
-      "verdict": "failed",
+      "verdict": "ok",
       "checks": [
         {
           "name": "fetch_ok",
-          "outcome": "fail",
-          "detail": "ModuleNotFoundError: No module named 'pyquery'"
+          "outcome": "pass",
+          "detail": "workdir/raw/ky.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "828 raw rows (min 100)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/828 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "828/828 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/819 notice_dates outside 1988..2026-08-25"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-06-30 is 26d old (max 120d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "22/828 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T20:13:57Z",
-    "consecutive_failures": 1,
+    "last_success": "2026-07-26T15:29:12Z",
+    "consecutive_failures": 0,
     "recommend_broken": false
   },
   "LA": {
     "name": "Louisiana",
-    "registry_status": "broken",
+    "registry_status": "archive",
     "source": "upstream",
     "notices": 628,
     "latest_verdict": null,
@@ -1085,22 +1120,47 @@
     "name": "Michigan",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 887,
-    "latest_verdict": "failed",
-    "latest_run": "2026-07-19T08:20:54Z",
-    "latest_error": "ModuleNotFoundError: No module named 'pyquery'",
+    "notices": 896,
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-26T15:29:13Z",
+    "latest_error": null,
     "latest_checks": {
-      "verdict": "failed",
+      "verdict": "ok",
       "checks": [
         {
           "name": "fetch_ok",
-          "outcome": "fail",
-          "detail": "ModuleNotFoundError: No module named 'pyquery'"
+          "outcome": "pass",
+          "detail": "workdir/raw/mi.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "107 raw rows (min 100)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/107 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "107/107 records have an employer name"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "4/107 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T20:13:57Z",
-    "consecutive_failures": 1,
+    "last_success": "2026-07-26T15:29:13Z",
+    "consecutive_failures": 0,
     "recommend_broken": false
   },
   "MN": {
@@ -1162,7 +1222,7 @@
   },
   "MO": {
     "name": "Missouri",
-    "registry_status": "broken",
+    "registry_status": "archive",
     "source": "upstream",
     "notices": 514,
     "latest_verdict": null,
@@ -1178,21 +1238,56 @@
     "registry_status": "active",
     "source": "upstream",
     "notices": 142,
-    "latest_verdict": "failed",
-    "latest_run": "2026-07-19T08:22:03Z",
-    "latest_error": "ModuleNotFoundError: No module named 'pyquery'",
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-26T15:29:35Z",
+    "latest_error": null,
     "latest_checks": {
-      "verdict": "failed",
+      "verdict": "ok",
       "checks": [
         {
           "name": "fetch_ok",
-          "outcome": "fail",
-          "detail": "ModuleNotFoundError: No module named 'pyquery'"
+          "outcome": "pass",
+          "detail": "workdir/raw/ms.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "148 raw rows (min 20)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/148 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "148/148 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/148 notice_dates outside 1988..2026-08-25"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-05-11 is 76d old (max 365d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "6/148 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-16T20:13:57Z",
-    "consecutive_failures": 1,
+    "last_success": "2026-07-26T15:29:35Z",
+    "consecutive_failures": 0,
     "recommend_broken": false
   },
   "MT": {
@@ -2089,58 +2184,23 @@
     "name": "Texas",
     "registry_status": "active",
     "source": "patched",
-    "notices": 7319,
-    "latest_verdict": "ok",
-    "latest_run": "2026-07-24T01:09:02Z",
-    "latest_error": null,
+    "notices": 7316,
+    "latest_verdict": "failed",
+    "latest_run": "2026-07-23T11:20:02Z",
+    "latest_error": "Exception: Scraper isn't scraping.",
     "latest_checks": {
-      "verdict": "ok",
+      "verdict": "failed",
       "checks": [
         {
           "name": "fetch_ok",
-          "outcome": "pass",
-          "detail": "workdir/raw/tx.csv"
-        },
-        {
-          "name": "row_count",
-          "outcome": "pass",
-          "detail": "7572 raw rows (min 500)"
-        },
-        {
-          "name": "schema_drift",
-          "outcome": "pass",
-          "detail": "header matches snapshot"
-        },
-        {
-          "name": "parse_failures",
-          "outcome": "pass",
-          "detail": "0/7572 rows failed to normalize"
-        },
-        {
-          "name": "employer_coverage",
-          "outcome": "pass",
-          "detail": "7572/7572 records have an employer name"
-        },
-        {
-          "name": "date_sanity",
-          "outcome": "pass",
-          "detail": "0/7572 notice_dates outside 1988..2026-08-23"
-        },
-        {
-          "name": "freshness",
-          "outcome": "pass",
-          "detail": "newest notice_date 2026-07-22 is 2d old (max 45d)"
-        },
-        {
-          "name": "dedupe_sanity",
-          "outcome": "pass",
-          "detail": "253/7572 records share a dedupe key"
+          "outcome": "fail",
+          "detail": "Exception: Scraper isn't scraping."
         }
       ]
     },
-    "last_success": "2026-07-24T01:09:02Z",
-    "consecutive_failures": 0,
-    "recommend_broken": false
+    "last_success": "2026-07-16T20:13:58Z",
+    "consecutive_failures": 7,
+    "recommend_broken": true
   },
   "UT": {
     "name": "Utah",

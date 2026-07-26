@@ -18,6 +18,12 @@ DEFAULT_WORKDIR = Path("workdir")
 DEFAULT_DATA_DIR = Path("data")
 
 
+def _exportable(registry) -> list[str]:
+    """States whose held rows enter exports: active plus archive (fetch
+    broken but data retained)."""
+    return [c.postal for c in registry.all() if c.status in ("active", "archive")]
+
+
 @click.group()
 @click.option("-v", "--verbose", is_flag=True)
 def cli(verbose: bool) -> None:
@@ -77,8 +83,7 @@ def scrape(states, cadence, include_unverified, smoke, use_cache, workdir, db_pa
     )
 
     if conn is not None:
-        active = [c.postal for c in registry.all() if c.status == "active"]
-        export_csvs(conn, Path(data_dir) / "exports", active)
+        export_csvs(conn, Path(data_dir) / "exports", _exportable(registry))
         write_health(conn, registry, Path(data_dir) / "health")
         _compress_db(db_path)
 
@@ -143,8 +148,7 @@ def backfill(states, workdir: Path, db_path: Path, data_dir: Path) -> None:
         conn, registry, downloaded, workdir,
         trigger="backfill", use_cache=True,
     )
-    active = [c.postal for c in registry.all() if c.status == "active"]
-    export_csvs(conn, Path(data_dir) / "exports", active)
+    export_csvs(conn, Path(data_dir) / "exports", _exportable(registry))
     write_health(conn, registry, Path(data_dir) / "health")
     _compress_db(db_path)
     _print_report(report)
@@ -178,8 +182,7 @@ def backfill_bln(states, workdir: Path, db_path: Path, data_dir: Path) -> None:
         stats = ingest(conn, per_state[postal], observed_at=now_utc()[:10])
         click.echo(f"{postal}: +{stats.new} new, {stats.unchanged} already present")
 
-    active = [c.postal for c in registry.all() if c.status == "active"]
-    export_csvs(conn, Path(data_dir) / "exports", active)
+    export_csvs(conn, Path(data_dir) / "exports", _exportable(registry))
     write_health(conn, registry, Path(data_dir) / "health")
     _compress_db(db_path)
 
@@ -192,8 +195,7 @@ def export(db_path: Path, data_dir: Path) -> None:
     registry = load_registry()
     conn = db_mod.connect(db_path)
     db_mod.init_db(conn)
-    active = [c.postal for c in registry.all() if c.status == "active"]
-    counts = export_csvs(conn, Path(data_dir) / "exports", active)
+    counts = export_csvs(conn, Path(data_dir) / "exports", _exportable(registry))
     write_health(conn, registry, Path(data_dir) / "health")
     _compress_db(db_path)
     for path, n in counts.items():

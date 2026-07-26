@@ -10,7 +10,7 @@ import yaml
 REGISTRY_PATH = Path(__file__).parent / "states.yaml"
 
 SOURCES = {"upstream", "patched", "custom", "manual"}
-STATUSES = {"unverified", "active", "broken", "manual_only"}
+STATUSES = {"unverified", "active", "broken", "manual_only", "archive"}
 TIERS = {"easy", "medium", "hard", None}
 CADENCES = {"daily", "weekly", None}
 

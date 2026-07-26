@@ -4,9 +4,10 @@
 # Fields:
 #   source: upstream (warn-scraper) | patched (our fetch/patches override) |
 #           custom (our fetch/custom adapter) | manual (records-request only)
-#   status: unverified | active | broken | manual_only
+#   status: unverified | active | broken | manual_only | archive
 #     Human-edited. Verification results only *recommend* transitions.
-#     Only `active` states' data enters exports; scheduled runs skip broken/manual.
+#     `active` and `archive` states' data enters exports; scheduled runs skip
+#     everything but active (archive = fetch broken but held rows still export).
 #   tier: easy | medium | hard  (scrape difficulty, from the portal catalog)
 #   cadence: daily | weekly     (which scheduled workflow runs it)
 #   needs_browser: scraper needs headless Chrome/Xvfb
@@ -263,7 +264,7 @@ ky:
 la:
   name: Louisiana
   source: upstream
-  status: broken
+  status: archive
   tier: hard
   cadence: weekly
   needs_browser: false
@@ -271,7 +272,7 @@ la:
   staleness_days: null
   expected_columns: null
   source_url: https://www.laworks.net/Downloads/Downloads_WFD.asp
-  notes: "Annual PDF per year. BROKEN without ZYTE_API_KEY (upstream #753/#783 route via Zyte); revisit if a key is added."
+  notes: "Annual PDF per year. Fetch BROKEN without ZYTE_API_KEY (upstream #753/#783 route via Zyte); held rows export. Revisit if a key is added."
 
 ma:
   name: Massachusetts
@@ -341,7 +342,7 @@ mn:
 mo:
   name: Missouri
   source: upstream
-  status: broken
+  status: archive
   tier: medium
   cadence: weekly
   needs_browser: false
@@ -349,7 +350,7 @@ mo:
   staleness_days: 120
   expected_columns: null
   source_url: https://jobs.mo.gov/warn/
-  notes: "Clean per-year HTML tables, but site is behind Incapsula bot protection; needs a browser-based patch (Phase 4)."
+  notes: "Clean per-year HTML tables, but site is behind Incapsula bot protection; needs a browser-based patch. Held rows export."
 
 ms:
   name: Mississippi
