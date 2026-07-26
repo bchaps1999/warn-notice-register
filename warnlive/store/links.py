@@ -210,7 +210,26 @@ def detect(conn: sqlite3.Connection) -> tuple[list[Link], list[dict]]:
                     add(n, o, "possible_duplicate", score * 0.85, "amendment",
                         f"refiled {gap}d later, location score {loc:.2f}")
 
-    # 4. fuzzy spelling variants: block by (state, notice_date, location fold)
+    # 4. dated/undated twins: the same filing seen through two sources, one
+    # of which never carried a notice date (NJ/PA/RI-style backfills where
+    # only effective_date survives). Same employer, identical effective date.
+    for group in by_employer.values():
+        undated = [n for n in group if not n.notice_date and n.effective_date]
+        if not undated:
+            continue
+        dated = [n for n in group if n.notice_date and n.effective_date]
+        for u in undated:
+            for d in dated:
+                if u.effective_date != d.effective_date or _digit_conflict(u, d):
+                    continue
+                loc = _loc_score(u, d)
+                if loc < 0.4:
+                    continue
+                add(d, u, "possible_duplicate",
+                    0.6 + 0.25 * loc + 0.15 * _jobs_score(u, d), "dated-twin",
+                    f"same effective date, one side undated, loc {loc:.2f}")
+
+    # 5. fuzzy spelling variants: block by (state, notice_date, location fold)
     by_day_loc: dict[tuple, list[Notice]] = {}
     for n in notices:
         if n.notice_date:

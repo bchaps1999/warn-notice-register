@@ -1478,9 +1478,9 @@
     "name": "New Jersey",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 2080,
+    "notices": 2414,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-23T11:19:51Z",
+    "latest_run": "2026-07-26T15:39:25Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1511,13 +1511,23 @@
           "detail": "2357/2357 records have an employer name"
         },
         {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "1/2345 notice_dates outside 1988..2026-08-25"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-11-01 is -98d old (max 60d)"
+        },
+        {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "277/2357 records share a dedupe key"
+          "detail": "86/2357 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-23T11:19:51Z",
+    "last_success": "2026-07-26T15:39:25Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -1919,7 +1929,7 @@
     "name": "Pennsylvania",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 291,
+    "notices": 294,
     "latest_verdict": "ok",
     "latest_run": "2026-07-19T08:23:24Z",
     "latest_error": null,
@@ -1966,9 +1976,9 @@
     "name": "Rhode Island",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 114,
+    "notices": 135,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-19T08:23:25Z",
+    "latest_run": "2026-07-26T15:39:25Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1991,21 +2001,31 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/126 rows failed to normalize"
+          "detail": "1/126 rows failed to normalize; e.g. KeyError: '5/4/204'"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "126/126 records have an employer name"
+          "detail": "125/125 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/125 notice_dates outside 1988..2026-08-25"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-06-26 is 30d old (max 180d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "12/126 records share a dedupe key"
+          "detail": "0/125 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-19T08:23:25Z",
+    "last_success": "2026-07-26T15:39:25Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },

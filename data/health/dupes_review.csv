@@ -45,6 +45,7 @@ CA,2022-04-29,First Baptist Head Start-Fairgrounds Center,First Baptist Head Sta
 CA,2020-04-09,"FM Restaurants HQ, LLC dba Chevy's","FM Restaurants HQ, LLC",Milpitas,0.929,108,108,8283,8453
 CA,2020-03-24,Bill Wright Toyota,Bill Wright Toyota (Service),Bakersfield,0.929,95,55,8519,8520
 CA,2014-11-04,Warner Bros. Entertainment,Warner Bros. Home Entertainment,Burbank,0.929,13,46,15002,15003
+NJ,2020-03-01,JACK DANIELS MOTORS K,JACK DANIELS OF USR,upper saddle River,0.929,15,26,32617,32618
 TX,2025-05-21,Child Care Associates (Diamond Road),Child Care Associates (Everman),Fort Worth,0.929,13,9,39387,39393
 TX,2024-06-04,99 Cents Only Store LLC (North Freeway),99 Cents Only Store LLC (Jones Road),Houston,0.929,20,20,39636,39644
 TX,2024-06-04,99 Cents Only Store LLC (North Freeway),99 Cents Only Store LLC (Gessner),Houston,0.929,20,20,39636,39647
@@ -283,6 +284,7 @@ CA,2020-04-15,Neighborhood Healthcare - Prenatal Location,Neighborhood Healthcar
 CA,2020-03-27,Angels Baseball LP,Angels Baseball LP Operations,Anaheim,0.924,1,1,5877,5914
 HI,2020-03-31,Meadow Gold Dairies Kailua-Kona,Meadow Gold Dairies Lihue,,0.924,,,19339,19340
 MA,2026-07-09,"SDH Education East, LLC (aka Sodexo at Bentley University)","SDH Education East, LLC (aka Sodexo)","Waltham, MA, Metro Southwest",0.924,173,173,27554,61693
+NJ,2020-03-01,JACK DANIELS OF USR,JACK DANIELS MOTORS,UPPER SADDLE RIVER,0.924,26,101,32618,70962
 OR,2021-07-30,First Transit - Portland,First Transit - Multnomah,Portland,0.924,170,127,36047,36048
 TX,2024-08-08,ABM Texas (TCC Northwest),ABM Texas (TCC Trinity),Fort Worth,0.924,23,23,39573,39576
 TX,2024-06-04,99 Cents Only Store LLC (Stella Link),99 Cents Only Store LLC (Almeda Genoa),Houston,0.924,20,20,39633,39649
@@ -344,6 +346,7 @@ CA,2020-04-15,Neighborhood Healthcare-Grand Location,Neighborhood Healthcare - I
 CA,2020-03-23,"Highgate Hotels, L.P. Hotel Diva","Highgate Hotels, L.P. dba Hotel Whitcomb",San Francisco,0.923,41,31,11191,11342
 HI,2020-08-24,Four Seasons Resort Hualalai,Four Seasons Resort Maui at Wailea,,0.923,,,19471,19472
 IN,2012-05-04,Hostess Brands Notice for Merrillville,Hostess Brands Notice for Vincennes,Merrillville,0.923,23,14,25878,25886
+NJ,2019-12-01,Barneys New York Lyndhurst,Barneys New York,Lyndhurst,0.923,215,263,32884,70984
 OR,2020-06-12,Kimpton Hotel Monaco Portland,Kimpton Hotel Vintage Portland,Portland,0.923,147,94,36101,36103
 TX,2025-09-30,Urban Alchemy (Arch Shelter),Urban Alchemy (8th Street Shelter),Austin,0.923,55,54,39266,39268
 TX,2025-07-31,"Southwest Key Programs, Inc. (Casa Houston Reliant)","Southwest Key Programs, Inc. (Houston HQ)",Houston,0.923,211,11,39308,39309
@@ -438,6 +441,7 @@ CA,2020-04-15,Neighborhood Healthcare - Pharmacy Location,Neighborhood Healthcar
 CA,2020-04-15,Neighborhood Healthcare - Prenatal Location,Neighborhood Healthcare - Chablis Location,Escondido,0.921,1,1,8277,8279
 CA,2020-03-25,Walters & Wolf Interiors,Walters & Wolf Precast,Fremont,0.921,142,66,8573,8574
 CA,2020-03-23,The Cheesecake Factory Incorporated dba North Restaurants LLC dba North Italia,The Cheesecake Factory dba North Restaurants LLC dba North Italia San Diego,San Diego,0.921,115,86,11009,11010
+NJ,2020-11-01,Hackensack Meridian Health,Hackensack Meridian Health - Long Term Care,Edison,0.921,754,181,32792,32793
 TN,2020-06-11,"Marriott Hotel Services, Inc., dba The Inn at Opryland","Marriott Hotel Services, Inc., dba General Jackson",Davidson County,0.921,107,104,38320,38323
 TX,2025-07-31,"Equus Workforce Solutions-Alpha Rd.(Arbor E&T, LLC)","Equus Workforce Solutions-Buckner Blvd.(Arbor E&T, LLC)",Dallas,0.921,17,16,39303,39305
 TX,2025-05-21,Child Care Associates (Meachum),Child Care Associates (Rosedale V),Fort Worth,0.921,15,16,39384,39386
@@ -849,6 +853,7 @@ CA,2021-12-16,Wyndham Hotels & Resorts dba La Quinta Sacramento- Rancho Cordova 
 CA,2022-04-29,First Baptist Head Start-Administration Office,First Baptist Head Start-Odessa Center,,0.914,13,3,5594,5600
 CA,2020-11-09,Hyatt Corporation dba Hyatt Regency San Francisco,Hyatt Corporation dba Grand Hyatt at SFO,San Francisco,0.914,1,8,6966,6967
 CA,2020-06-08,"L.A. Live Properties, LLC","L.A. Live Theater, LLC",Los Angeles,0.914,2,6,7831,7832
+NJ,2004-06-01,MEDCO HEALTH SOLUTION,MEDCO HEALTH,PARSIPPANY,0.914,461,246,34203,34204
 TX,2025-07-10,International Paper Company(N. Closner Blvd.),International Paper Company(W. Chaplin),Edinburg,0.914,66,66,39328,39329
 TX,2025-05-21,Child Care Associates (Tucker),Child Care Associates (Arlington 2),Arlington,0.914,7,22,39380,39391
 TX,2024-06-04,99 Cents Only Store LLC (Stella Link),99 Cents Only Store LLC (North Freeway),Houston,0.914,20,20,39633,39636
@@ -1359,6 +1364,7 @@ CA,2020-03-27,ZIP RECRUITER,"ZipRecruiter, Inc.",Santa Monica,0.904,118,99,8419,
 CA,2020-03-26,Homewood Suites Redondo Beach,Homewood Suites-Redondo Beach Facility,Redondo Beach,0.904,30,30,8594,10947
 CA,2014-11-04,Warner Bros. Distributing,Warner Bros. Pictures,Burbank,0.904,17,1,15000,15005
 IA,2026-04-14,Appliance Plus Cellular Inc,Appliance Plus,Oelwein,0.904,4,4,19746,68501
+NJ,2015-05-01,Middlesex Avenue Haulage LLC,"Middlesex Avenue Logistics, LLC",Carteret,0.904,45,364,33114,33115
 TX,2025-07-31,"Equus Workforce Solutions-Camp Wisdom (Arbor E&T, LLC)","Equus Workforce Solutions-Buckner Blvd.(Arbor E&T, LLC)",Dallas,0.904,1,16,39298,39305
 TX,2025-05-21,Child Care Associates (Carson),Child Care Associates(North Fort Worth),Fort Worth,0.904,14,16,39383,39389
 TX,2025-05-21,Child Care Associates (Meachum),Child Care Associates (Diamond Road),Fort Worth,0.904,15,13,39384,39387
@@ -1458,6 +1464,7 @@ CA,2020-03-23,Azul Hospitality - PH LLC dba Comfort Inn & Suites San Diego Zoo &
 CO,2023-02-27,Telluride Sports Main Street,Telluride Sports - The Peaks,,0.902,,,15632,15633
 IN,2009-03-25,Fort Wayne Foundry (Lima Road Division),Fort Wayne Foundry (Machining Division),Fort Wayne,0.902,174,52,26071,26072
 MS,2022-07-01,McKesson Corporation – South Jackson Richland (Rankin),McKesson Corporation – Jackson Ridgeland (Madison),,0.902,26,31,30079,30080
+NJ,2020-09-01,"Briad Lodging Group Branchburg II, LLC","Briad Lodging Group TPS, LLC",Branchburg,0.902,11,11,32754,32755
 TX,2025-10-02,Southwest Key Programs-Casa Quetzal,Southwest Key Programs-Houston Headquarters,Houston,0.902,3,10,39257,39261
 TX,2024-06-04,99 Cents Only Store LLC (Lawndale),99 Cents Only Store LLC (Sam Houston Pkwy),Houston,0.902,20,20,39639,39645
 TX,2024-06-04,99 Cents Only Store LLC (Easttex Frwy),99 Cents Only Store LLC (Almeda Genoa),Houston,0.902,20,20,39640,39649
@@ -2203,6 +2210,7 @@ CO,2023-02-27,Telluride Sports - Gondola Plaza,Telluride Sports - The Peaks,,0.8
 FL,2017-02-28,Broadband,Broadband Interactive,Statewide,0.886,129,129,19031,19268
 IN,2016-07-15,Indianapolis Haulage,Indianapolis Logistics,Indianapolis & Yorktown,0.886,51,135,25683,25684
 NE,2016-12-11,K-Mart Kearney,K-Mart,Kearney,0.886,35,35,31600,31601
+NJ,2025-10-01,Optum Care,Optum Services,"Eden Prairie, Minnesota (Offices throughout NJ)",0.886,390,49,32316,32318
 TX,2025-05-21,Child Care Associates(North Fort Worth),Child Care Associates (Blanche),Fort Worth,0.886,16,17,39389,39390
 TX,2020-11-24,Compass Group Eurest - American Blvd.,Compass Group Eurest - One Transformation Way,Fort Worth,0.886,2,4,40212,40213
 TX,2020-07-02,Brident-Edgebrook Dr,Brident-Greens Rd,Houston,0.886,2,1,40358,40362
@@ -2274,6 +2282,7 @@ CA,2020-03-30,"Irvine Park Concessions, Inc.","Irvine Park Rentals, Inc.",Orange
 CA,2014-11-04,Warner Bros. International Television,Warner Bros. Technical Operations,Burbank,0.884,9,11,15004,15007
 CA,2014-11-04,Warner Bros. International Television,Warner Bros. Worldwide Television,Burbank,0.884,9,5,15004,15010
 MA,2023-04-24,"Community Healthlink, Inc. Thayer PASSages(""PASSages"")","Community Healthlink, Inc. Transitional Support Services (""TSS"")","Worcester, West",0.884,21,18,27287,27288
+NJ,2015-05-01,Blair Road Haulage LLC,Blair Road Logistics LLC,Avenel,0.884,22,85,33110,33111
 OR,2019-11-13,NORPAC FOODS - Salem Repack,NORPAC FOODS INC - Brooks Plant,Salem,0.884,458,466,36213,36214
 TX,2026-03-04,"First Brands Group, LLC(Billy Mitchell)","First Brands Group, LLC. (Titan Dist. Center)",Brownsville,0.884,345,183,39176,39177
 TX,2025-05-28,Texana Center Russeff Filed Home,Texana Center Dovecoft Group Home,Rosenberg,0.884,5,6,39371,39372
@@ -2329,6 +2338,7 @@ CA,2023-01-05,Cue Health - Nancy Ridge,Cue Health - Waples,,0.883,39,161,4845,48
 CA,2020-03-25,"Park Hyatt Aviara Resort, Golf Club & Spa",Park Hyatt Aviara,Carlsbad,0.883,507,496,11134,11484
 CA,2020-03-24,Crews dba Breeze,Crews dba Lemonade,Los Angeles,0.883,9,44,10916,10922
 IN,2013-10-31,"Peabody Indiana Services, LLC","Peabody Midwest Management Services, LLC",Cannelburg,0.883,86,3,25793,25794
+NJ,2020-08-01,HMSHost -Starbucks Terminal C,HMSHost Corporation -Starbucks,Newark,0.883,223,223,32741,32743
 OH,2017-02-27,LGSTX Cargo Services Inc,LGSTX Services Inc,Wilmington/Clinton,0.883,296,37,35591,35592
 TX,2020-07-02,Brident-E. Fwy,Brident-W. Bellfort Ave,Houston,0.883,2,5,40359,40366
 TX,2006-08-09,SERCO - Northside Workforce Center,SERCO - Resource Connection Wkfc Center,Ft. Worth,0.883,16,21,43351,43354

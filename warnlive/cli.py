@@ -219,6 +219,121 @@ def export(db_path: Path, data_dir: Path) -> None:
         click.echo(f"{path}: {n} rows")
 
 
+@cli.command("repair-dates")
+@click.argument("states", nargs=-1, required=True)
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--dry-run", is_flag=True, help="Report what would change without writing.")
+def repair_dates(states, db_path: Path, dry_run: bool) -> None:
+    """Re-derive null notice_dates for STATES from stored raw fields.
+
+    For each null-notice_date row, re-runs the state's (fixed) transformer
+    date logic against the raw_extra preserved in its current version, then
+    updates notice_date AND dedupe_key together (the key hashes the date, so
+    fixing one without the other would duplicate the state on next scrape).
+    If the recomputed key collides with an existing notice, the row is left
+    untouched and linked as a possible_duplicate instead (link, never merge).
+    """
+    import json as json_mod
+
+    from warnlive.normalize.engine import _dedupe_key, _record_hash, get_transformer_class
+    from warnlive.pipeline import now_utc
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    now = now_utc()
+
+    for state in states:
+        postal = state.upper()
+        cls = get_transformer_class(postal)
+        transformer = cls.__new__(cls)  # date logic only; skip raw-file loading
+        date_field = cls.fields.get("notice_date")
+        if date_field is None:
+            click.echo(f"{postal}: transformer maps no notice_date; skipping")
+            continue
+
+        rows = conn.execute(
+            """SELECT n.id, n.dedupe_key, n.state, n.employer_name, n.location,
+                      n.current_version, v.fields_json
+               FROM notices n JOIN notice_versions v
+                 ON v.notice_id = n.id AND v.version = n.current_version
+               WHERE n.state = ? AND n.notice_date IS NULL""",
+            (postal,),
+        ).fetchall()
+
+        repaired = collided = unparsed = 0
+        for row in rows:
+            fields = json_mod.loads(row["fields_json"])
+            try:
+                raw = json_mod.loads(fields.get("raw_extra") or "{}")
+            except (TypeError, ValueError):
+                raw = {}
+            try:
+                value = raw[date_field] if isinstance(date_field, str) else date_field(raw)
+                parsed = transformer.transform_date(value) if value else None
+            except Exception:  # noqa: BLE001 — unparseable raw stays null
+                parsed = None
+            if parsed is None:
+                unparsed += 1
+                continue
+            # transform_date returns a datetime, date, or preformatted string
+            notice_date = (parsed if isinstance(parsed, str) else parsed.isoformat())[:10]
+
+            new_key = _dedupe_key(
+                {
+                    "state": row["state"],
+                    "employer_name": row["employer_name"],
+                    "notice_date": notice_date,
+                    "location": row["location"],
+                }
+            )
+            existing = conn.execute(
+                "SELECT id FROM notices WHERE dedupe_key = ? AND id != ?",
+                (new_key, row["id"]),
+            ).fetchone()
+            if existing is not None:
+                collided += 1
+                if not dry_run:
+                    conn.execute(
+                        """INSERT OR IGNORE INTO notice_links
+                             (notice_id, related_id, kind, score, method, detail, created_at)
+                           VALUES (?, ?, 'possible_duplicate', 0.9, 'date-repair',
+                                   'repaired date collides with existing key', ?)""",
+                        (row["id"], existing["id"], now),
+                    )
+                continue
+
+            repaired += 1
+            if dry_run:
+                continue
+            fields["notice_date"] = notice_date
+            fields["dedupe_key"] = new_key
+            fields["raw_record_hash"] = _record_hash(fields)
+            conn.execute(
+                """UPDATE notices SET notice_date = ?, dedupe_key = ?,
+                     current_version = current_version + 1, is_amended = 1 WHERE id = ?""",
+                (notice_date, new_key, row["id"]),
+            )
+            conn.execute(
+                """INSERT INTO notice_versions
+                     (notice_id, version, raw_record_hash, fields_json, observed_at)
+                   VALUES (?, ?, ?, ?, ?)""",
+                (
+                    row["id"],
+                    row["current_version"] + 1,
+                    fields["raw_record_hash"],
+                    json_mod.dumps(fields, sort_keys=True, ensure_ascii=False),
+                    now,
+                ),
+            )
+        if not dry_run:
+            conn.commit()
+        label = "would repair" if dry_run else "repaired"
+        click.echo(
+            f"{postal}: {label} {repaired}, collisions linked {collided}, "
+            f"unparseable {unparsed} (of {len(rows)} null-date rows)"
+        )
+
+
 @cli.command()
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
