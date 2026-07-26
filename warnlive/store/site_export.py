@@ -57,6 +57,7 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
     from warnlive.enrich.annotate import Annotator
 
     annotator = Annotator()
+    annotator.prime(conn)
     for n in notices:
         n.update(
             annotator.annotate(

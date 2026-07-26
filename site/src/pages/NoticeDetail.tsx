@@ -71,7 +71,7 @@ export function NoticeDetailPage() {
         </Row>
       </dl>
 
-      {(n.cik || n.ein || n.lei || n.wikidata_qid) && (
+      {(n.cik || n.ein || n.lei || n.wikidata_qid || n.parent_company) && (
         <>
           <SectionHeading>
             {n.cik ? "Public company" : n.ein ? "Nonprofit organization" : "Company identity"}
@@ -132,7 +132,26 @@ export function NoticeDetailPage() {
                 </a>
               </Row>
             )}
-            {n.parent_company && <Row label="Parent company">{n.parent_company}</Row>}
+            {n.parent_company && (
+              <Row label="Parent company">
+                {n.parent_cik ? (
+                  <a
+                    href={`https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${n.parent_cik}&type=&dateb=&owner=include&count=40`}
+                    className="underline hover:text-ink"
+                    target="_blank" rel="noreferrer"
+                  >
+                    {n.parent_company}
+                  </a>
+                ) : (
+                  n.parent_company
+                )}
+                {n.parent_cik && (
+                  <span className="text-ink-faint text-xs ml-2">
+                    listed this employer as a subsidiary
+                  </span>
+                )}
+              </Row>
+            )}
             {n.wikidata_qid && (
               <Row label="Wikidata">
                 <a
@@ -144,11 +163,13 @@ export function NoticeDetailPage() {
                 </a>
               </Row>
             )}
-            <Row label="Name match">
-              <span className="tabular text-xs">
-                {n.cik_match ?? `${n.wikidata_match} (wikidata)`}
-              </span>
-            </Row>
+            {(n.cik_match || n.wikidata_match) && (
+              <Row label="Name match">
+                <span className="tabular text-xs">
+                  {n.cik_match ?? `${n.wikidata_match} (wikidata)`}
+                </span>
+              </Row>
+            )}
           </dl>
         </>
       )}

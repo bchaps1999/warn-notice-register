@@ -60,6 +60,7 @@ def export_csvs(
     from warnlive.enrich.annotate import FIELDS as DERIVED_COLUMNS, Annotator
 
     annotator = Annotator()
+    annotator.prime(conn)
     header = EXPORT_COLUMNS[:2] + DERIVED_COLUMNS + EXPORT_COLUMNS[2:]
     date_idx = EXPORT_COLUMNS.index("notice_date")
     eff_idx = EXPORT_COLUMNS.index("effective_date")

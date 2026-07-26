@@ -437,6 +437,35 @@ def nonprofit_refresh(db_path: Path) -> None:
     click.echo(f"{nonprofits.PATH}: {n} employers matched to an EIN")
 
 
+@cli.command("identity-review")
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--top", "limit", default=3000,
+              help="How many unidentified employers to collect candidates for.")
+def identity_review(db_path: Path, limit: int) -> None:
+    """Write the near-miss identity candidates the matcher refused, ranked
+    by workers affected, for later adjudication. Decisions go back in
+    data/reference/identity_overrides.csv and outrank automatic matching."""
+    from warnlive.enrich import review
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    n = review.build(conn, limit=limit)
+    click.echo(f"{review.REVIEW_PATH}: {n} candidate rows")
+
+
+@cli.command("subsidiary-refresh")
+@click.option("--limit", type=int, default=None,
+              help="Crawl at most this many registrants, then stop (resumable).")
+def subsidiary_refresh(limit: int | None) -> None:
+    """Build the subsidiary -> parent index from SEC Exhibit 21 filings.
+    Long-running and resumable; re-run until no registrants remain.
+    Needs SEC_EDGAR_UA."""
+    from warnlive.enrich import subsidiaries
+
+    n = subsidiaries.refresh(limit=limit)
+    click.echo(f"{subsidiaries.PATH}: {n} subsidiary names")
+
+
 @cli.command("gleif-refresh")
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--top", "top_n", default=3000, help="How many top CIK-less employers to look up.")
@@ -457,6 +486,8 @@ def wikidata_refresh() -> None:
     company and industry labels; one bulk SPARQL query."""
     from warnlive.enrich import wikidata
 
+    classes = wikidata.refresh_org_classes()
+    click.echo(f"{wikidata.ORG_CLASSES_PATH}: {classes} organization classes")
     n = wikidata.refresh()
     click.echo(f"{wikidata.ORGS_PATH}: {n} CIK-keyed entities")
 
@@ -464,14 +495,20 @@ def wikidata_refresh() -> None:
 @cli.command("wikidata-labels")
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--top", "top_n", default=1500, help="How many top CIK-less employers to look up.")
-def wikidata_labels(db_path: Path, top_n: int) -> None:
+@click.option(
+    "--retry-misses",
+    is_flag=True,
+    help="Re-probe names previously recorded as misses (needed after the "
+    "match gates change; a miss records the gates, not the name).",
+)
+def wikidata_labels(db_path: Path, top_n: int, retry_misses: bool) -> None:
     """Resolve top CIK-less employers to Wikidata via exact-unique label
     matching (incremental; misses are recorded and not retried)."""
     from warnlive.enrich import wikidata
 
     conn = db_mod.connect(db_path)
     db_mod.init_db(conn)
-    n = wikidata.label_refresh(conn, top_n=top_n)
+    n = wikidata.label_refresh(conn, top_n=top_n, retry_misses=retry_misses)
     click.echo(f"{wikidata.LABELS_PATH}: {n} matched")
 
 

@@ -60,6 +60,9 @@ SIC_PATH = Path("data/reference/edgar_sic.csv.gz")
 SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik:010d}.json"
 
 FUZZY_MIN = 0.95
+# Similar enough to be worth a second look, not enough to match on: these
+# are collected as candidates for later adjudication, never auto-applied.
+FUZZY_REVIEW_MIN = 0.90
 TOKEN_MIN = 0.90  # typos score ~0.91 ("helthcare"), word swaps <=0.87 ("hacker"/"baker")
 MIN_FUZZY_LEN = 8
 YEAR_TOLERANCE = 2
@@ -381,6 +384,74 @@ class Matcher:
             for cik, ticker in self._era_ciks(cand, year)
             if ticker
         }
+
+    def ticker_for(self, cik: int) -> str | None:
+        """The ticker recorded for a CIK under any of its names."""
+        for entries in self.by_name.values():
+            for entry_cik, _, _, ticker in entries:
+                if entry_cik == cik and ticker:
+                    return ticker
+        return None
+
+    def candidates(self, employer_name: str | None, year: int | None) -> list[dict]:
+        """Registrants this name plausibly means, when nothing was matched.
+
+        Every rule in match() ends in a yes or a no, and a no throws away
+        what it saw. This recovers it: the registrants a rule considered
+        and the gate that stopped it, so a near-miss can be adjudicated
+        later rather than silently lost. Returns nothing for names that
+        matched — those need no review — and never influences matching.
+        """
+        norm = normalized_employer(employer_name)
+        if not norm or self.match(employer_name, year) is not None:
+            return []
+
+        out: list[dict] = []
+
+        def add(cik, ticker, name, rejected_by, note=""):
+            out.append({
+                "cik": cik, "ticker": ticker or "", "candidate_name": name,
+                "rejected_by": rejected_by, "note": note,
+            })
+
+        weak = self._is_weak_word(norm, year)
+        for cik, ticker in self._era_ciks(norm, year):
+            add(cik, ticker, norm,
+                "weak-word" if weak else "ambiguous-exact",
+                "name is a common word" if weak
+                else "several registrants share this name in this era")
+
+        for cand in self._extensions(norm):
+            for cik, ticker in self._era_ciks(cand, year):
+                if ticker:
+                    add(cik, ticker, cand, "ambiguous-extension",
+                        "one of several listed companies extending the name")
+
+        # A name whose only exact holder predates it — the direction the
+        # era rule refuses, since EDGAR cannot see before 1993.
+        entries = self.by_name.get(norm, ())
+        if year is not None and len({c for c, _, _, _ in entries}) == 1:
+            cik, first_year, last_year, ticker = entries[0]
+            if year < first_year:
+                add(cik, ticker, norm, "pre-era",
+                    f"registrant filed under this name {first_year}-{last_year}")
+
+        if len(norm) >= MIN_FUZZY_LEN:
+            for cand in self.by_first_token.get(norm.split(" ", 1)[0], ()):
+                jw = jellyfish.jaro_winkler_similarity(norm, cand)
+                if jw < FUZZY_REVIEW_MIN or cand == norm:
+                    continue
+                compatible = _tokens_compatible(norm, cand)
+                for cik, ticker in self._era_ciks(cand, year):
+                    add(cik, ticker, cand,
+                        "near-spelling" if compatible else "incompatible-tokens",
+                        f"jaro-winkler {jw:.3f}")
+
+        # Same registrant reached by several routes is still one candidate.
+        best: dict[int, dict] = {}
+        for row in out:
+            best.setdefault(row["cik"], row)
+        return list(best.values())
 
     def match(self, employer_name: str | None, year: int | None):
         """Return (cik, ticker, method) or None."""

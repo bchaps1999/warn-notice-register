@@ -46,17 +46,20 @@ GROUP BY ?item ?cik ?itemLabel
 """
 
 
-def refresh(out_path: Path = ORGS_PATH) -> int:
-    query = urllib.parse.urlencode({"query": SPARQL, "format": "json"})
+def _sparql(query: str) -> list[dict]:
+    """Run one WDQS query and return its result bindings."""
+    url = f"{WDQS_URL}?" + urllib.parse.urlencode({"query": query, "format": "json"})
     req = urllib.request.Request(
-        f"{WDQS_URL}?{query}",
+        url,
         headers={"User-Agent": USER_AGENT, "Accept": "application/sparql-results+json"},
     )
     with urllib.request.urlopen(req, timeout=300) as resp:
-        data = json.loads(resp.read())
+        return json.loads(resp.read())["results"]["bindings"]
 
+
+def refresh(out_path: Path = ORGS_PATH) -> int:
     rows = []
-    for b in data["results"]["bindings"]:
+    for b in _sparql(SPARQL):
         cik = b["cik"]["value"].strip()
         if not cik.isdigit():
             continue
@@ -108,27 +111,49 @@ def load_orgs(path: Path = ORGS_PATH) -> dict[int, dict]:
 LABELS_PATH = Path("data/reference/wikidata_labels.csv.gz")
 API_URL = "https://www.wikidata.org/w/api.php"
 
-# P31 values accepted as "an organization that could file a WARN notice".
-_ORG_CLASSES = {
+# What counts as "an organization that could file a WARN notice" is not a
+# list anyone can write by hand: Wikidata types Cessna as an aerospace
+# manufacturer, Chicago Public Schools as a school district, First Transit
+# as a bus company. Enumerating a dozen classes rejected all three even
+# though their names matched exactly. So the whitelist is derived instead —
+# every transitive subclass of "organization" (Q43229), fetched once — which
+# admits those while still excluding brands, people, and article subjects.
+ORG_CLASSES_PATH = Path("data/reference/wikidata_org_classes.csv.gz")
+ORG_CLASS_ROOT = "Q43229"
+ORG_CLASS_SPARQL = "SELECT ?c WHERE { ?c wdt:P279* wd:%s }" % ORG_CLASS_ROOT
+
+# Used only if the derived file is missing, so a fresh checkout still runs.
+_ORG_CLASSES_FALLBACK = {
     "Q4830453",  # business
-    "Q6881511",  # enterprise
     "Q783794",   # company
     "Q891723",   # public company
-    "Q5621421",  # private company... (privately held company)
     "Q167037",   # corporation
-    "Q658255",   # subsidiary
     "Q163740",   # nonprofit organization
-    "Q16917",    # hospital
-    "Q3918",     # university
-    "Q23002054", # private not-for-profit educational institution
-    "Q507619",   # retail chain
-    "Q18558685", # supermarket chain
-    "Q46970",    # airline
-    "Q22687",    # bank
-    "Q187939",   # manufacturer
-    "Q1589009",  # privately held company
     "Q43229",    # organization
 }
+
+
+def refresh_org_classes(out_path: Path = ORG_CLASSES_PATH) -> int:
+    """Fetch every subclass of "organization" into the reference file."""
+    bindings = _sparql(ORG_CLASS_SPARQL)
+    qids = sorted(
+        {b["c"]["value"].rsplit("/", 1)[-1] for b in bindings},
+        key=lambda q: int(q[1:]),
+    )
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with gzip.open(out_path, "wt", newline="") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(["qid"])
+        writer.writerows([[q] for q in qids])
+    logger.info("Wikidata org classes: %d -> %s", len(qids), out_path)
+    return len(qids)
+
+
+def load_org_classes(path: Path = ORG_CLASSES_PATH) -> set[str]:
+    if not path.exists():
+        return set(_ORG_CLASSES_FALLBACK)
+    with gzip.open(path, "rt") as fh:
+        return {row["qid"] for row in csv.DictReader(fh)}
 
 
 def _api(params: dict) -> dict:
@@ -143,14 +168,19 @@ def _api(params: dict) -> dict:
         return json.loads(resp.read())
 
 
-def label_refresh(conn, top_n: int = 1500, out_path: Path = LABELS_PATH) -> int:
+def label_refresh(
+    conn, top_n: int = 1500, out_path: Path = LABELS_PATH, retry_misses: bool = False
+) -> int:
     """Resolve the top CIK-less employers to Wikidata via exact-unique
     label matching. Incremental: names already in the reference (matched
-    or recorded as misses) are not re-queried."""
+    or recorded as misses) are not re-queried — pass retry_misses after
+    changing the gates, since a recorded miss reflects the gates in force
+    when it was recorded, not the name's true absence from Wikidata."""
     from warnlive.enrich.edgar import REFERENCE_PATH, Matcher
     from warnlive.normalize.engine import normalized_employer
 
     matcher = Matcher() if REFERENCE_PATH.exists() else None
+    org_classes = load_org_classes()
 
     # Top unmatched employers by workers affected.
     agg: dict[str, dict] = {}
@@ -171,6 +201,8 @@ def label_refresh(conn, top_n: int = 1500, out_path: Path = LABELS_PATH) -> int:
     if out_path.exists():
         with gzip.open(out_path, "rt") as fh:
             for row in csv.DictReader(fh):
+                if retry_misses and not row["qid"]:
+                    continue
                 known[row["normalized_name"]] = row
 
     fetched = 0
@@ -200,7 +232,7 @@ def label_refresh(conn, top_n: int = 1500, out_path: Path = LABELS_PATH) -> int:
                         for c in claims.get("P31", [])
                         if c.get("mainsnak", {}).get("snaktype") == "value"
                     }
-                    if not (p31 & _ORG_CLASSES):
+                    if not (p31 & org_classes):
                         continue
                     survivors.append((qid, claims))
             if len(survivors) == 1:

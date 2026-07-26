@@ -122,3 +122,116 @@ def test_matcher_rejects_common_word_names(tmp_path):
     rows += [(f"american {i}", 900000 + i, 2000, 2026, "") for i in range(60)]
     m = _matcher(tmp_path, rows)
     assert m.match("American", 2010) is None
+
+
+def test_annotator_inherits_industry_across_an_employers_notices(tmp_path):
+    """States publish an industry on some of an employer's filings and not
+    others; the industry belongs to the employer, not the filing."""
+    import json
+    import sqlite3
+
+    from warnlive.enrich.annotate import Annotator
+    from warnlive.store import db as db_mod
+
+    conn = db_mod.connect(tmp_path / "t.sqlite")
+    db_mod.init_db(conn)
+    for i, raw in enumerate([{"NAICS Code": "722310"}, {}]):
+        conn.execute(
+            "INSERT INTO notices (dedupe_key, state, employer_name, notice_date, "
+            "layoff_type, current_version, first_seen, last_seen) "
+            "VALUES (?,?,?,?,?,1,?,?)",
+            (f"k{i}", "WI", "Acme Catering", "2020-01-01", "closure", "2020", "2020"),
+        )
+        conn.execute(
+            "INSERT INTO notice_versions (notice_id, version, raw_record_hash, "
+            "fields_json, observed_at) VALUES (?,1,?,?,?)",
+            (conn.execute("SELECT last_insert_rowid()").fetchone()[0], f"h{i}",
+             json.dumps({"raw_extra": json.dumps(raw)}), "2020"),
+        )
+    conn.commit()
+
+    a = Annotator()
+    assert a.annotate("Acme Catering", "2020-01-01", json.dumps(
+        {"raw_extra": json.dumps({})})) [ "naics"] is None
+    a.prime(conn)
+    got = a.annotate("Acme Catering", "2020-01-01", json.dumps({"raw_extra": "{}"}))
+    assert (got["naics"], got["naics_basis"]) == ("722310", "employer")
+
+
+def test_annotator_leaves_conflicting_industries_alone(tmp_path):
+    """Disagreement means a misparse or a diversified filer; neither is
+    resolved by picking one code arbitrarily."""
+    import json
+
+    from warnlive.enrich.annotate import Annotator
+    from warnlive.store import db as db_mod
+
+    conn = db_mod.connect(tmp_path / "t.sqlite")
+    db_mod.init_db(conn)
+    for i, code in enumerate(["722310", "541511"]):
+        conn.execute(
+            "INSERT INTO notices (dedupe_key, state, employer_name, notice_date, "
+            "layoff_type, current_version, first_seen, last_seen) "
+            "VALUES (?,?,?,?,?,1,?,?)",
+            (f"k{i}", "WI", "Acme", "2020-01-01", "closure", "2020", "2020"),
+        )
+        conn.execute(
+            "INSERT INTO notice_versions (notice_id, version, raw_record_hash, "
+            "fields_json, observed_at) VALUES (?,1,?,?,?)",
+            (conn.execute("SELECT last_insert_rowid()").fetchone()[0], f"h{i}",
+             json.dumps({"raw_extra": json.dumps({"NAICS Code": code})}), "2020"),
+        )
+    conn.commit()
+
+    a = Annotator()
+    a.prime(conn)
+    assert a.annotate("Acme", "2020-01-01", json.dumps({"raw_extra": "{}"}))["naics"] is None
+
+
+def test_matcher_reports_candidates_only_when_it_declined(tmp_path):
+    """A near-miss the gates refused is recorded for adjudication; a name
+    that matched needs no second opinion."""
+    m = _matcher(tmp_path, [
+        ("j c penney", 77182, 1994, 2020, ""),
+        ("j c penney", 1166126, 2002, 2026, ""),
+        ("boeing", 12927, 1994, 2026, "BA"),
+    ])
+    assert m.match("J.C. Penney", 2017) is None
+    found = m.candidates("J.C. Penney", 2017)
+    assert {c["cik"] for c in found} == {77182, 1166126}
+    assert {c["rejected_by"] for c in found} == {"ambiguous-exact"}
+    assert m.candidates("Boeing", 2017) == []  # matched, nothing to review
+
+
+def test_matcher_reports_pre_era_candidate(tmp_path):
+    """The backward direction the era rule refuses is exactly the case a
+    human should look at, not a case to guess."""
+    m = _matcher(tmp_path, [("midway airlines", 946323, 1997, 2006, "")])
+    assert m.match("Midway Airlines", 1991) is None
+    found = m.candidates("Midway Airlines", 1991)
+    assert [c["rejected_by"] for c in found] == ["pre-era"]
+
+
+def test_adjudicated_identity_outranks_automatic_matching(tmp_path):
+    """An override is a decision made from evidence the matcher cannot
+    see, so it wins — and says so in identity_source."""
+    import csv
+
+    from warnlive.enrich import review
+    from warnlive.enrich.annotate import Annotator
+
+    path = tmp_path / "identity_overrides.csv"
+    with open(path, "w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=review.OVERRIDE_FIELDS)
+        w.writeheader()
+        w.writerow({"normalized_name": "j c penney", "cik": "1166126",
+                    "decided_by": "test", "decided_at": "2026-07-26",
+                    "note": "the operating company named on the notice"})
+
+    a = Annotator()
+    a.overrides = review.load_overrides(path)
+    got = a.annotate("J.C. Penney Corporation, Inc.", "2017-01-01", None)
+    assert got["cik"] == 1166126
+    assert got["cik_match"] == "override"
+    assert got["identity_source"] == "override"
+    assert got["employer_key"] == "cik:1166126"

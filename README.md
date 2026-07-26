@@ -107,6 +107,7 @@ warnlive edgar-refresh       # SEC name -> CIK, era-aware (needs SEC_EDGAR_UA)
 warnlive edgar-sic-refresh   # SIC industry per matched CIK (needs SEC_EDGAR_UA)
 warnlive nonprofit-refresh   # IRS EIN + NTEE code for exempt organizations
 warnlive gleif-refresh       # Legal Entity Identifiers for private companies
+warnlive subsidiary-refresh  # subsidiary -> parent, from 10-K Exhibit 21
 warnlive wikidata-refresh    # Wikidata entities keyed by CIK
 warnlive wikidata-labels     # Wikidata for CIK-less employers, exact labels
 ```
@@ -119,3 +120,24 @@ normalization, a corroborating attribute where one exists (filing era for
 CIKs, state for EINs), and a single surviving candidate. Ambiguity
 matches nothing — a missing identifier costs only enrichment, while a
 wrong one silently poisons every join made against it.
+
+A refusal is not always an absence, though: often a rule saw a plausible
+registrant and lacked a tiebreaker. `warnlive identity-review` writes
+those near-misses to `data/health/identity_review.csv` — the candidate,
+its filing era, the gate that rejected it, and how many workers ride on
+the answer — for a human or a model to adjudicate from the same facts.
+
+Decisions come back in `data/reference/identity_overrides.csv`:
+
+| Column | Meaning |
+|---|---|
+| `normalized_name` | The employer name as normalized (the review file's first column) |
+| `cik` / `ein` / `lei` / `wikidata_qid` | Whichever identifiers were decided |
+| `decided_by` | Who or what decided (a person, a model, a ticket) |
+| `decided_at` | When |
+| `note` | Why — the evidence that settled it |
+
+Overrides outrank every automatic tier and are reported as
+`identity_source=override` in exports, so an adjudication can always be
+audited or revoked. Nothing in the pipeline writes this file; no
+adjudication is ever inferred.

@@ -153,6 +153,7 @@ export interface NoticeDetail {
   wikidata_qid: string | null;
   wikidata_match: string | null;
   parent_company: string | null;
+  parent_cik: number | null;
   employer_key: string;
   industry: string | null;
   naics: string | null;
