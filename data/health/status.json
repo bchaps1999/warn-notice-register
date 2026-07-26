@@ -2558,7 +2558,7 @@
     "name": "Wisconsin",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 3544,
+    "notices": 3664,
     "latest_verdict": "ok",
     "latest_run": "2026-07-19T08:25:19Z",
     "latest_error": null,

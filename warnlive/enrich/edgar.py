@@ -281,6 +281,107 @@ class Matcher:
             out = [(c, t) for c, y0, _, t in self.by_name.get(name, ()) if y0 == FIRST_YEAR]
         return out
 
+    # Two ways the reference shows that a one-word name is an ordinary word
+    # rather than an identity: several listed companies build their names on
+    # it ("United", "General"), or a great many registrants of any kind do
+    # ("Bridge" heads 280 reference names, "Commerce" 111, "Advance" 71).
+    # Coined names sit far below both: Chipotle heads 1, ChargePoint 2,
+    # Arista 16, Goodyear 22.
+    GENERIC_EXTENSIONS = 3
+    COMMON_TOKEN_NAMES = 40
+
+    def _is_weak_word(self, name: str, year: int | None) -> bool:
+        """True if a one-word name is too common to identify a company.
+
+        Some shell registers under the bare word — there is a filer named
+        exactly "American" — and a WARN notice from an employer called
+        "American" means no such thing. Multi-word names are never treated
+        this way; distinctiveness comes from the combination.
+        """
+        if " " in name:
+            return False
+        return (
+            len(self.by_first_token.get(name, ())) >= self.COMMON_TOKEN_NAMES
+            or len(self._listed_extensions(name, year)) >= self.GENERIC_EXTENSIONS
+        )
+
+    def _post_era_cik(self, name: str, year: int | None):
+        """The company a name belonged to after it stopped being filed under.
+
+        A registrant that went private or was acquired keeps its identity:
+        David's Bridal deregistered in 2007 and still filed WARN notices in
+        2023. Relaxing the era window forward is safe because a later
+        company that took the name over would appear in the reference with
+        its own era, breaking the single-CIK requirement below.
+
+        Relaxing backward is not safe and is not done — EDGAR begins in
+        1993, so a name with no earlier entry may simply predate the index.
+        Midway Airlines of Chicago failed in 1991; the reference knows only
+        the unrelated North Carolina airline that took the name in 1997.
+        """
+        entries = self.by_name.get(name, ())
+        if year is None or len({c for c, _, _, _ in entries}) != 1:
+            return None
+        cik, _, last_year, ticker = entries[0]
+        return (cik, ticker, "exact:post-era") if year > last_year else None
+
+    # Generic tokens a registrant's legal name carries and a WARN filing
+    # drops: "Amazon" for AMAZON COM, "TeleTech" for TELETECH HOLDINGS.
+    # Deliberately short — anything descriptive ("Cessna" vs "Cessna Tina")
+    # would match unrelated entities, most of them individuals.
+    _SUFFIX_TOKENS = frozenset(
+        {"com", "holdings", "holding", "group", "industries", "international",
+         "enterprises", "worldwide", "brands", "technologies", "stores"}
+    )
+
+    # Shorter than the fuzzy threshold: this rule needs the whole name to
+    # match exactly, so it tolerates "Amazon" where fuzzy spelling cannot.
+    # Still long enough to keep initialisms ("UPS", "AMC") out.
+    MIN_SUFFIX_LEN = 6
+
+    def _suffix_cik(self, name: str, year: int | None):
+        """One candidate that is the name plus a single generic token."""
+        if len(name) < self.MIN_SUFFIX_LEN:
+            return None
+        candidates: dict[int, str] = {}
+        for cand in self._extensions(name):
+            tail = cand[len(name) + 1:]
+            if tail not in self._SUFFIX_TOKENS:
+                continue
+            for cik, ticker in self._era_ciks(cand, year):
+                candidates[cik] = ticker
+        if len(candidates) != 1:
+            return None
+        cik, ticker = next(iter(candidates.items()))
+        return (cik, ticker, "suffix")
+
+    def _extensions(self, name: str):
+        """Reference names that begin with this name plus more words."""
+        for cand in self.by_first_token.get(name.split(" ", 1)[0], ()):
+            if cand.startswith(name + " "):
+                yield cand
+
+    def _listed_extensions(self, name: str, year: int | None) -> dict[int, str]:
+        """Listed registrants whose names extend this one, by CIK.
+
+        A notice says "Capital One" or "Peloton"; the SEC knows them as
+        CAPITAL ONE FINANCIAL and PELOTON INTERACTIVE, while the bare names
+        belong to a 2005 securitization vehicle and an unrelated 2023
+        filer. Requiring a ticker is what separates the operating company
+        from the shells: only one entity in a corporate family is listed,
+        so this stays unique where a plain prefix search would not.
+
+        More than one result is itself informative — it means the name is a
+        common word ("United", "Delta") rather than a company's, so the
+        weaker rules must not guess at it either.
+        """
+        return {
+            cik: ticker
+            for cand in self._extensions(name)
+            for cik, ticker in self._era_ciks(cand, year)
+            if ticker
+        }
+
     def match(self, employer_name: str | None, year: int | None):
         """Return (cik, ticker, method) or None."""
         norm = normalized_employer(employer_name)
@@ -291,11 +392,51 @@ class Matcher:
             return self._cache[key]
         result = None
 
+        weak = self._is_weak_word(norm, year)
         exact = self._era_ciks(norm, year)
-        if len({c for c, _ in exact}) == 1:
+        if len({c for c, _ in exact}) == 1 and (exact[0][1] or not weak):
+            # A listed registrant may legitimately be named for a common
+            # word (Apple); an unlisted one of the same name is a shell.
             cik, ticker = exact[0]
             result = (cik, ticker, "exact")
-        elif not exact and len(norm) >= MIN_FUZZY_LEN:
+        elif exact:
+            # Several registrants share the name in this era — a holding
+            # company and its financing subsidiary, or an operating company
+            # and its post-reorganization successor. If exactly one is
+            # listed, that is the company the notice means (ARAMARK's 2014
+            # notices belong to ARMK, not the pre-IPO shell).
+            listed = {c for c, t in exact if t}
+            if len(listed) == 1:
+                cik = next(iter(listed))
+                result = (cik, dict(exact)[cik], "exact:listed")
+        elif not weak and len(norm) >= self.MIN_SUFFIX_LEN:
+            # No in-era registrant holds the name exactly. A live listed
+            # company outranks a dormant exact namesake: "Capital One" means
+            # COF, not the 2005 vehicle registered under the bare name.
+            listed_ext = self._listed_extensions(norm, year)
+            if len(listed_ext) == 1:
+                cik, ticker = next(iter(listed_ext.items()))
+                result = (cik, ticker, "listed-extension")
+            elif listed_ext:
+                # Several listed companies extend the name (AMAZON COM and
+                # AMAZON HOLDCO). One that adds only a generic word is the
+                # same company under its legal name; anything else is a
+                # different company that happens to share a first word.
+                narrowed = {
+                    cik: tk for cik, tk in listed_ext.items()
+                    if any(
+                        cand[len(norm) + 1:] in self._SUFFIX_TOKENS
+                        and cik in dict(self._era_ciks(cand, year))
+                        for cand in self._extensions(norm)
+                    )
+                }
+                if len(narrowed) == 1:
+                    cik, ticker = next(iter(narrowed.items()))
+                    result = (cik, ticker, "listed-extension")
+            else:
+                result = self._suffix_cik(norm, year) or self._post_era_cik(norm, year)
+
+        if result is None and not exact and len(norm) >= MIN_FUZZY_LEN:
             first = norm.split(" ", 1)[0]
             candidates: dict[int, tuple[float, str]] = {}
             for cand in self.by_first_token.get(first, ()):

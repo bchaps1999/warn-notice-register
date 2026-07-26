@@ -199,7 +199,9 @@ _WS = re.compile(r"\s+")
 def normalized_employer(value: str | None) -> str | None:
     """Standardized employer name for cross-notice/cross-state matching:
     legal suffixes stripped via cleanco's curated list (applied twice for
-    nested forms like 'X, LLC, Inc.'), lowercased, punctuation collapsed.
+    nested forms like 'X, LLC, Inc.'), lowercased, punctuation collapsed,
+    leading article dropped — states file "The Boeing Company" where the
+    SEC registers "BOEING CO", and the article carries no identity.
     Display names stay untouched — this is a derived matching column."""
     if not value:
         return None
@@ -209,7 +211,10 @@ def normalized_employer(value: str | None) -> str | None:
     for _ in range(2):
         v = basename(v)
     v = _NON_ALNUM.sub(" ", v.lower())
-    return _WS.sub(" ", v).strip() or None
+    v = _WS.sub(" ", v).strip()
+    if v.startswith("the ") and len(v) > 4:
+        v = v[4:]
+    return v or None
 
 
 def _fold(value: str | None) -> str:

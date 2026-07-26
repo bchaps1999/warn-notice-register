@@ -475,7 +475,7 @@ NY,2019-03-13,Instacart (at Whole Foods Market) Columbus Circle,Instacart (at Wh
 NY,2019-02-28,Kuni's Corporation d/b/a Ikinari Steak (37 West 46th St),Kuni's Corporation d/b/a Ikinari Steak (Bleecker),New York,0.921,9,10,60242,60244
 NY,2018-06-01,Cardinal McCloskey Community Services - Head Start Programs (St. Anthony),Cardinal McCloskey Community Services - Head Start Programs (Courtland Ave. - Child Development Center),Bronx,0.921,29,29,60564,60568
 KY,2020-03-20,Communicare Services - Radcliff,Communicare Services - Brandenburg,Hardin,0.921,17,14,67353,67355
-WI,2007-09-19,"Franchise Foodservice, Inc.","Franchise Foodservice Transportation, Inc.",39402.0,0.921,60,65,75427,75428
+WI,2007-09-19,"Franchise Foodservice, Inc.","Franchise Foodservice Transportation, Inc.",Oak Creek,0.921,60,65,90247,90248
 CA,2025-10-13,Blue shield of California 601,"Blue Shield of California, Building B",,0.92,31,24,1668,1670
 CA,2025-11-03,CommUnify - Maple Center,CommUnify - Adam Center,,0.92,3,4,1862,1864
 CA,2025-11-03,CommUnify - Westgate Center,CommUnify - Goleta Center,,0.92,7,2,1873,1880
@@ -1162,7 +1162,6 @@ NY,2019-03-13,Instacart (at Whole Foods Market) Greenwich Street,Instacart (at W
 NY,2018-03-30,The Mandell School (West Village),The Mandell School (Lincoln Square),New York,0.908,14,20,60647,60649
 NY,2017-05-01,IPRO Client Site (Western),IPRO Client Site (Holland),Albany,0.908,2,5,61017,61019
 IL,2023-06-14,United States Marine Corps,United States Army,"IL Statewide Event Springfield, IL 62701",0.908,,,68548,68549
-WI,2013-10-11,Saint Clare Hospital,Saint Mary's Hospital,41617.0,0.908,2,38,76160,76162
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Fremont Physical Therapy & Hand Therapy),Agile Physical Therapy (Sutter Health Sunnyvale Center 401 Physical Therapy),,0.907,24,16,1592,1595
 CA,2025-10-23,"Applied Materials, Inc. (3225 Oakmead Village Dr)","Applied Materials, Inc. (Remote)",,0.907,16,15,1732,1743
 CA,2025-10-31,Ceryx Management LLC (Vermont),Ceryx Management LLC (7226 S. Figueroa),,0.907,8,12,1898,1902
@@ -1998,7 +1997,7 @@ NY,2020-01-13,"Opening Ceremony, LLC (Centre Street)","Opening Ceremony, LLC (Br
 NY,2019-11-22,"WeWork Companies, Inc. (Greenwich St.)","WeWork Companies, Inc. (125 Maiden Ln)",New York,0.891,14,4,59941,59949
 NY,2019-03-13,Instacart (at Whole Foods Market) Columbus Circle,Instacart (at Whole Foods Market) (95 East Houston Street),New York,0.891,32,21,60214,60215
 NY,2016-11-14,Yeshiva University - Israel Henry Beren Campus,Yeshiva University - Wilf Campus,New York,0.891,4,36,61171,61173
-WI,2008-06-02,"ThyssenKrupp Drauz Nethelfer NA, Inc.","ThyssenKrupp Krause, Inc.",39721.0,0.891,120,42,75519,75520
+WI,2008-06-02,"ThyssenKrupp Drauz Nethelfer NA, Inc.","ThyssenKrupp Krause, Inc.",Janesville,0.891,120,42,90343,90344
 CA,2025-11-03,CommUnify - Cuyama Center,CommUnify - Goleta Center,,0.89,2,2,1874,1880
 CA,2026-03-12,Total Storage Solutions (El Monte Stor It Now),Total Storage Solutions (All Size Laguna Niguel),,0.89,3,3,2248,2252
 CA,2026-03-12,Total Storage Solutions (Studebaker Self Storage),Total Storage Solutions (Sun City Mini Storage),,0.89,3,3,2249,2260
