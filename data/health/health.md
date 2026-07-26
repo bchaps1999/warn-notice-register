@@ -12,7 +12,7 @@
 | DC | active | 2026-07-19T08:14:06Z | ✅ ok | 168 | 0 |  |
 | DE | active | 2026-07-19T08:14:42Z | ✅ ok | 102 | 0 |  |
 | FL | active | 2026-07-23T11:17:38Z | ✅ ok | 5373 | 0 |  |
-| GA | archive | 2026-07-26T16:04:31Z | ❌ failed | 4151 | 2 | ConnectTimeout: HTTPSConnectionPool(host='www.tcsg.edu', port=443): Max retries exceeded with url: /warn-public-view/ (C |
+| GA | active | 2026-07-26T18:30:32Z | 🟡 degraded | 4152 | 0 | schema_drift |
 | HI | active | 2026-07-19T08:15:07Z | ✅ ok | 453 | 0 |  |
 | IA | active | 2026-07-19T08:15:08Z | ✅ ok | 952 | 0 |  |
 | ID | active | 2026-07-19T08:15:11Z | ✅ ok | 193 | 0 |  |

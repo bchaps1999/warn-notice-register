@@ -50,17 +50,37 @@ def export_csvs(
             params,
         ).fetchall()
 
-    # normalized_name is derived at export time (cleanco suffix stripping),
-    # inserted right after employer_name; the DB keeps only source values.
-    header = EXPORT_COLUMNS[:2] + ["normalized_name"] + EXPORT_COLUMNS[2:]
+    # Derived columns, inserted right after employer_name; the DB keeps only
+    # source values. normalized_name: cleanco suffix stripping. cik/ticker/
+    # cik_match: era-aware EDGAR match (empty when the reference file is
+    # absent — run `warnlive edgar-refresh` to build it).
+    matcher = None
+    from warnlive.enrich.edgar import REFERENCE_PATH, Matcher
+
+    if REFERENCE_PATH.exists():
+        matcher = Matcher()
+
+    header = (EXPORT_COLUMNS[:2]
+              + ["normalized_name", "cik", "ticker", "cik_match"]
+              + EXPORT_COLUMNS[2:])
+    date_idx = EXPORT_COLUMNS.index("notice_date")
+    eff_idx = EXPORT_COLUMNS.index("effective_date")
+
+    def derived(r: sqlite3.Row) -> tuple:
+        cik = ticker = method = ""
+        if matcher is not None:
+            date = r[date_idx] or r[eff_idx]
+            hit = matcher.match(r[1], int(date[:4]) if date else None)
+            if hit:
+                cik, ticker, method = hit
+        return (r[0], r[1], normalized_employer(r[1]), cik, ticker, method,
+                *tuple(r)[2:])
 
     def write(path: Path, rows: list[sqlite3.Row]) -> None:
         with open(path, "w", newline="") as fh:
             writer = csv.writer(fh)
             writer.writerow(header)
-            writer.writerows(
-                [(r[0], r[1], normalized_employer(r[1]), *tuple(r)[2:]) for r in rows]
-            )
+            writer.writerows([derived(r) for r in rows])
         counts[str(path)] = len(rows)
 
     if active_upper:

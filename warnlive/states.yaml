@@ -154,7 +154,7 @@ fl:
 ga:
   name: Georgia
   source: upstream
-  status: archive
+  status: active
   tier: medium
   cadence: weekly
   needs_browser: false
@@ -162,7 +162,7 @@ ga:
   staleness_days: 120
   expected_columns: null
   source_url: https://www.tcsg.edu/warn-public-view/
-  notes: "TCSG WordPress admin-ajax endpoint. Fetch BROKEN: tcsg.edu times out from both residential and GitHub IPs (2026-07). Upstream issue #717. History ingested via BLN gap-fill (2026-07-26); held rows export. Retry fetch periodically."
+  notes: "TCSG WordPress admin-ajax endpoint. Host is flaky (times out some days; upstream #717); our patch retries and skips failing detail pages, so coverage self-heals across runs. History via BLN gap-fill 2026-07-26."
 
 hi:
   name: Hawaii

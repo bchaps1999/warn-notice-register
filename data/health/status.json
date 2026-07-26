@@ -527,24 +527,49 @@
   },
   "GA": {
     "name": "Georgia",
-    "registry_status": "archive",
+    "registry_status": "active",
     "source": "upstream",
-    "notices": 4151,
-    "latest_verdict": "failed",
-    "latest_run": "2026-07-26T16:04:31Z",
-    "latest_error": "ConnectTimeout: HTTPSConnectionPool(host='www.tcsg.edu', port=443): Max retries exceeded with url: /warn-public-view/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x106485e50>, 'Connection to www.tcsg.edu timed out. (connect timeout=120)'))",
+    "notices": 4152,
+    "latest_verdict": "degraded",
+    "latest_run": "2026-07-26T18:30:32Z",
+    "latest_error": null,
     "latest_checks": {
-      "verdict": "failed",
+      "verdict": "degraded",
       "checks": [
         {
           "name": "fetch_ok",
-          "outcome": "fail",
-          "detail": "ConnectTimeout: HTTPSConnectionPool(host='www.tcsg.edu', port=443): Max retries exceeded with url: /warn-public-view/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x106485e50>, 'Connection to www.tcsg.edu timed out. (connect timeout=120)'))"
+          "outcome": "pass",
+          "detail": "workdir/raw/ga.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "4688 raw rows (min 100)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "warn",
+          "detail": "no expected_columns snapshot yet; observed: ['GA WARN ID', 'Company Name', 'NAICS', 'Contact Job Title', 'Phone', 'Zip Code', 'County', 'Company Address', 'Alternate Contact Person', 'Alternate Contact Job Title', 'Contact Person', 'Trade Affected Layoff or Closure', 'Type of Layoff or Closure', 'Number of Expected Dates Associated with WARN Event', 'Alternate Phone', 'First Date of Separation', 'Second Date of Separation', 'Number of Locations Associated with WARN Event', 'First Location Address', 'Total Employees at Worksite', 'Number of Employees Affected', 'Number of Employees Affected.', 'Number of Employees Affected..', 'Number of Employees Affected...', 'Number of Employees Affected....', 'Number of Employees Affected.....', 'Number of Employees Affected......', 'Are any Employees Represented by a Union Affected?', 'Upload any Pertinent Documentation, if Necessary', 'Additional Comments/Questions for WARN Staff', 'Submitter Name', 'WARN Notice Selection', 'Submitter Title', 'Submitter Phone Number', 'Total Number of Affected Employees', 'County (if not in Georgia)', 'Third Date of Separation', 'Event Type', 'Fourth Date of Separation', 'Second Location Address', 'Third Location Address', 'Fourth Location Address', 'Fifth Location Address', 'Additional Comments', 'Fifth Date of Separation', 'Sixth Date of Separation', 'Sixth Location Address', 'LWDA']"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/4688 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "4688/4688 records have an employer name"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "593/4688 records share a dedupe key"
         }
       ]
     },
-    "last_success": null,
-    "consecutive_failures": 2,
+    "last_success": "2026-07-26T18:30:32Z",
+    "consecutive_failures": 0,
     "recommend_broken": false
   },
   "HI": {

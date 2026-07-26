@@ -373,6 +373,17 @@ def repair_dates(states, db_path: Path, dry_run: bool) -> None:
         )
 
 
+@cli.command("edgar-refresh")
+@click.option("--workdir", type=click.Path(path_type=Path), default=Path("workdir/backfill"))
+def edgar_refresh(workdir: Path) -> None:
+    """Rebuild the EDGAR (name, CIK, era, ticker) reference file from the
+    quarterly full indexes (1993-present; cached, ~130 small files)."""
+    from warnlive.enrich import edgar
+
+    n = edgar.refresh(Path(workdir) / "cache")
+    click.echo(f"{edgar.REFERENCE_PATH}: {n} (name, cik) rows")
+
+
 @cli.command("clean-text")
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--dry-run", is_flag=True, help="Report what would change without writing.")

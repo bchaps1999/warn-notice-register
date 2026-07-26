@@ -92,3 +92,10 @@ Scheduled runs: `.github/workflows/scrape-daily.yml` (high-volume states) and
 `scrape-weekly.yml` (full sweep, Sundays). Optional secret `ZYTE_API_KEY`
 enables the Zyte proxy for states behind aggressive bot protection (LA, TX
 fallback, MA fallback).
+
+`warnlive edgar-refresh` (manual, occasional) rebuilds the SEC EDGAR
+name→CIK reference used to derive the export's `cik`/`ticker`/`cik_match`
+columns. It requires `SEC_EDGAR_UA` set to a declared user agent per SEC
+fair-access policy, e.g. `SEC_EDGAR_UA="Your Name you@example.com"`.
+Scheduled runs never contact the SEC — they read the committed reference
+file at `data/reference/edgar_names.csv.gz`.
