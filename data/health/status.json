@@ -1670,7 +1670,7 @@
     "name": "New York",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 5396,
+    "notices": 6335,
     "latest_verdict": "ok",
     "latest_run": "2026-07-23T11:19:58Z",
     "latest_error": null,

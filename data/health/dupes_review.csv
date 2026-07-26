@@ -109,6 +109,7 @@ NY,2016-06-22,New York Life Insurance Company - Technology Operations,New York L
 NY,2016-04-26,Restaurant Associates @ Equinox 1 Park,Restaurant Associates @ Equinox Columbus,New York,0.928,6,8,61324,61327
 NY,2016-04-26,Restaurant Associates @ Equinox Printing,Restaurant Associates @ Equinox 53rd Street,New York,0.928,10,2,61328,61331
 OK,2002-02-12,Siemens Health Services,Siemans Health Services,,0.928,34,34,68250,68251
+NY,2014-03-17,"1 Prospect Park,","1 Prospect Park, ALF LLC.",Kings,0.928,68,68,88290,88292
 CA,2025-10-23,"Applied Materials, Inc. (3050 Bowers Ave)","Applied Materials, Inc. (Remote)",,0.927,38,15,1729,1743
 CA,2025-10-23,"Applied Materials, Inc. (3100 Bowers Ave)","Applied Materials, Inc. (Remote)",,0.927,21,15,1730,1743
 CA,2025-11-03,CommUnify - Filmore Center,CommUnify - Los Padres Center,,0.927,4,4,1860,1870
@@ -239,7 +240,6 @@ CA,2020-04-08,Restec Contractors Inc. at SFO ITB A&G,Restec Contractors Inc. at 
 CA,2015-05-28,"Campesinos Unidos, Inc. - Claudio","Campesinos Unidos, Inc. - Head Start",El Centro,0.925,13,12,15387,15388
 CO,2020-05-04,Breckenridge Ski Resort,Breckenridge SSBRK,Rural Resort,0.925,24,55,15809,15810
 HI,2020-03-31,Meadow Gold Dairies Honolulu,Meadow Gold Dairies Maui,,0.925,,,19338,19341
-OH,2026-03-06,Saks & Company LLC Beachwood,Saks &amp; Company LLC Beachwood,Beachwood/Cuyahoga,0.925,70,70,34863,70426
 TX,2025-07-31,"Equus Workforce Solutions-Camp Wisdom (Arbor E&T, LLC)","Equus Workforce Solutions-Malcolm X Blvd.(Arbor E&T, LLC)",Dallas,0.925,1,16,39298,39304
 TX,2024-11-19,Advanced Auto Parts (Mccart Ave.),Advanced Auto Parts (Camp Bowie),Fort Worth,0.925,9,11,39504,39506
 TX,2024-06-04,99 Cents Only Store LLC (W. Greens Rd),99 Cents Only Store LLC (North Freeway),Houston,0.925,20,20,39635,39636
@@ -306,6 +306,7 @@ NY,2018-10-24,"Fedcap Rehabilitation Services, Inc. (WeCARE Program) (NarcoFreed
 NY,2016-06-22,New York Life Insurance Company - Finance Operations,New York Life Insurance Company - Information Technology Operations,New York,0.924,7,20,61271,61272
 NY,2016-04-26,Restaurant Associates @ Equinox 53rd Street,Restaurant Associates @ Equinox Brookfield,New York,0.924,2,5,61331,61335
 CO,2023-02-27,SSI Venture/Aspen Sports (Aggregated),SSI Venture/Aspen Sport,RR (Aspen),0.924,69,4,68464,68465
+NY,2010-01-11,"Foot Locker Retail, Inc. Office","Foot Locker Retail, Inc. Office (Lady Foot Locker)",New York,0.924,42,42,88041,88043
 CA,2025-10-08,Ballast Point Brewing Company - Miramar Location,Ballast Point Brewing Company - Little Italy Location,,0.923,29,8,1660,1661
 CA,2025-10-31,Ceryx Management LLC (Sepulveda),Ceryx Management LLC (Figueroa),,0.923,4,8,1897,1899
 CA,2025-11-03,CommUnify - Maple Center,CommUnify - Goleta Center,,0.923,3,2,1862,1880
@@ -390,7 +391,6 @@ CA,2021-12-16,Wyndham Hotels & Resorts dba La Quinta Orange County Airport with 
 CA,2021-12-16,Wyndham Hotels & Resorts dba La Quinta Sacramento- Rancho Cordova with L.Q. Management LLC,Wyndham Hotels & Resorts dba La Quinta San Diego- Vista with L.Q. Management LLC,,0.922,20,20,5449,5454
 CA,2022-04-29,First Baptist Head Start-East Leland Center,First Baptist Head Start-Lido Square Center,,0.922,11,5,5595,5597
 CA,2020-04-15,Neighborhood Healthcare-Grand Location,Neighborhood Healthcare - Finance Location,Escondido,0.922,1,6,8273,8281
-CA,2020-07-10,Buckhorn Caf&eacute; Inc.,Buckhorn Cafe Inc.,Winters,0.922,82,29,5823,5824
 CO,2023-08-07,DePuy Spine Limited Partnership (Johnson & Johnson),Dupuy Spine Limited Partnership (Johnson & Johnson),Arapahoe/Douglas,0.922,10,10,15666,68460
 FL,2017-05-30,Wexford Health,"Wexford Health Sources,",Statewide,0.922,540,540,18979,19255
 IN,2013-09-30,Indiana University HealthAffected Positions,Indiana University Health PhysiciansAffected Positions,Indianapolis,0.922,617,14,25800,25801
@@ -441,6 +441,7 @@ CA,2020-04-15,Neighborhood Healthcare - Pharmacy Location,Neighborhood Healthcar
 CA,2020-04-15,Neighborhood Healthcare - Prenatal Location,Neighborhood Healthcare - Chablis Location,Escondido,0.921,1,1,8277,8279
 CA,2020-03-25,Walters & Wolf Interiors,Walters & Wolf Precast,Fremont,0.921,142,66,8573,8574
 CA,2020-03-23,The Cheesecake Factory Incorporated dba North Restaurants LLC dba North Italia,The Cheesecake Factory dba North Restaurants LLC dba North Italia San Diego,San Diego,0.921,115,86,11009,11010
+CA,2020-01-13,"Smithfield Packaged Meatd Corp. (""the Company"")",Smithfield Packaged Meats Corp.,San Jose,0.921,139,139,11704,11721
 NJ,2020-11-01,Hackensack Meridian Health,Hackensack Meridian Health - Long Term Care,Edison,0.921,754,181,32792,32793
 TN,2020-06-11,"Marriott Hotel Services, Inc., dba The Inn at Opryland","Marriott Hotel Services, Inc., dba General Jackson",Davidson County,0.921,107,104,38320,38323
 TX,2025-07-31,"Equus Workforce Solutions-Alpha Rd.(Arbor E&T, LLC)","Equus Workforce Solutions-Buckner Blvd.(Arbor E&T, LLC)",Dallas,0.921,17,16,39303,39305
@@ -661,6 +662,7 @@ NY,2016-04-26,Restaurant Associates @ Equinox Columbus,Restaurant Associates @ E
 NY,2016-04-26,Restaurant Associates @ Equinox Columbus,Restaurant Associates @ Equinox 54th Street,New York,0.918,8,7,61327,61332
 NY,2016-04-26,Restaurant Associates @ Equinox Columbus,Restaurant Associates @ Equinox 74th Street,New York,0.918,8,7,61327,61333
 NY,2016-04-26,Restaurant Associates @ Equinox Columbus,Restaurant Associates @ Equinox 85th Street,New York,0.918,8,3,61327,61334
+MA,2020-06-08,"SW Hotels & Resorts WW, LLC (Sheraton Boston Hotel)","SW Hotels & Resorts WW, LLC (W Boston Hotel and Residences)",Boston,0.918,548,183,87552,87557
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Dublin Physical & Hand Therapy),Agile Physical Therapy (Sutter Health Sunnyvale Center 401 Physical Therapy),,0.917,7,16,1591,1595
 CA,2025-11-03,CommUnify - I Center,CommUnify - Maple Center,,0.917,6,3,1861,1862
 CA,2025-11-03,CommUnify - Maple Center,CommUnify - Los Adobes Center,,0.917,3,1,1862,1869
@@ -804,7 +806,6 @@ CA,2020-04-09,"CV Automotive Group, Inc. dba Ford of Chula Vista","CVK Automotiv
 CA,2020-04-06,Residence Inn by Marriott San Diego Downtown Gaslamp,Residence Inn by Marriott San Diego/Mission Valley,San Diego,0.915,29,16,9954,10118
 CA,2015-03-19,Keck Medicine of USC-Soto Street,Keck Medicine of USC-USC Norris,Los Angeles,0.915,24,3,15263,15264
 HI,2020-09-03,"FOH Hospitality, LLC; Westin Nanea Ocean Resort & Villas","FOH Hospitality, LLC; Westin Princeville Ocean Resort",,0.915,,,19495,19498
-OH,2026-02-10,Saks & Company LLC Columbus,Saks &amp; Company LLC Columbus,Columbus/Franklin,0.915,41,41,34874,70427
 TX,2020-04-28,Enterprise Holdings-Airport,Enterprise Holdings-Eastern St,San Antonio,0.915,135,146,40451,40452
 TX,2010-01-12,Radiology Associates - AMI - Medical Center,Radiology Associates - AMI - Southside,San Antonio,0.915,11,11,44396,44399
 TX,2010-01-12,Radiology Associates - AMI - Stone Oak,Radiology Associates - AMI - Village Drive,San Antonio,0.915,11,11,44397,44402
@@ -864,7 +865,6 @@ TX,2020-03-27,Paper Source,Paper Source-Cole Ave,Dallas,0.914,11,10,40815,40818
 TX,2020-03-25,Quick Weight Loss Centers - Cinco Ranch,Quick Weight Loss Centers - FM 1960,Houston,0.914,4,4,41029,41031
 TX,2013-08-12,SER Jobs for Progress-S. Flores St.,SER Jobs for Progress-Dolorosa,San Antonio,0.914,27,,45121,45122
 TX,2017-07-20,"BeautiControl, Inc-Plano Pkwy","BeautiControl, Inc.",Carrollton,0.914,64,77,46004,46005
-WI,2025-09-05,"Air Wisconsin Airlines LLC (MKE Hangar)<br/></a><a><em style=""font-size:80%; text-decoration:none !important; color:#000"">* The company provided a separate communication with the breakdown of the number affected at each site.</em>","Air Wisconsin Airlines LLC (MKE)<br/></a><a><em style=""font-size:80%; text-decoration:none !important; color:#000"">* The company provided a separate communication with the breakdown of the number affected at each site.</em>",Milwaukee,0.914,30,84,48777,48778
 CT,2021-01-29,"Phelps Dodge Industries, Inc.",Phelps Dodge Industries (Updated Notice),Norwich,0.914,1,1,53746,53992
 NY,2019-03-13,Instacart (at Whole Foods Market) Greenwich Street,Instacart (at Whole Foods Market) (95 East Houston Street),New York,0.914,26,21,60213,60215
 CA,2025-07-14,"Blue Shield of California - Town Center, Building C",Blue Shield of California - Lodi,,0.913,6,2,1383,1389
@@ -970,7 +970,6 @@ CA,2026-06-25,Adventist Health St. Helena,Adventist Health Twin Cities,,0.911,3,
 CA,2026-06-25,Adventist Health St. Helena,Adventist Health Simi Valley,,0.911,3,7,2656,2663
 CA,2025-04-09,"Right at School, LLC (Dover Elementary","Right at School, LLC (Nelda Mundy Elementary)",,0.911,16,5,3220,3226
 CA,2025-06-02,Kaiser Foundation Hospitals - Berkeley,Kaiser Foundation Hospitals - 99 S Oakland Ave,,0.911,4,5,3427,3435
-CA,2023-04-25,"David&rsquo;s Bridal, LLC","David's Bridal, LLC",,0.911,29,18,3532,3534
 CA,2022-11-15,Silicon Valley TMS of San Jose,Silicon Valley TMS of Corte Madera,,0.911,14,3,4761,4763
 CA,2023-01-05,Cue Health - Waples,Cue Health - Vista,,0.911,161,63,4847,4849
 CA,2023-01-05,Cue Health - Waples II,Cue Health - Vista,,0.911,4,63,4848,4849
@@ -1257,7 +1256,6 @@ CA,2021-12-16,Wyndham Hotels & Resorts dba La Quinta Irvine Spectrum with L.Q. M
 CA,2021-12-16,Wyndham Hotels & Resorts dba La Quinta Fremont with L.Q. Management,Wyndham Hotels & Resorts dba La Quinta San Diego- Chula Vista with L.Q. Management LLC,,0.906,13,28,5446,5453
 CA,2021-12-16,Wyndham Hotels & Resorts dba La Quinta Los Angeles- LAX Airport with L.Q. Management LLC,Wyndham Hotels & Resorts dba La Quinta Sacramento- Downtown with L.Q. Management LLC,,0.906,61,20,5448,5450
 CA,2021-12-16,Wyndham Hotels & Resorts dba La Quinta Ontario Airport with L.Q. Management LLC,Wyndham Hotels & Resorts dba La Quinta San Francisco Airport North,,0.906,25,27,5451,5455
-CA,2020-04-07,Simmzy's LLC,Simmzy&rsquo;s LLC,Burbank,0.906,59,59,8386,9678
 CA,2020-03-28,"EVANS HOTELS, LLC DBA BAHIA RESORT HOTEL","EVANS HOTELS, LLC DBA CATAMARAN RESORT HOTEL AND SPA",San Diego,0.906,244,312,10740,10741
 CA,2014-10-21,Fallbrook Hospital,Fallbrook Hospital Skilled Nursing,Fallbrook,0.906,269,96,14964,14965
 CO,2024-07-08,Sodexo - St. Francis Interquest,Sodexo - St. Francis Medical Center,Pikes Peak,0.906,7,48,15583,15584
@@ -1428,6 +1426,8 @@ NY,2020-06-09,"Century 21 Department Stores, LLC (Downtown Manhattan Store)","Ce
 KY,2018-12-24,K&T SWITCHING SERVICE -Fern Valley Road,K&T SWITCHING SERVICE -Chamberlain Lane,Jefferson County - Louisville,0.903,52,38,67401,67402
 OK,2002-02-11,Dana Corporation,Dana Corporation / Wix Division,05 - CentralRegion,0.903,200,181,68252,68253
 KY,2015-12-31,Armstrong Coal-Parkway Preparation Plant- Central City,Armstrong Coal-Parkway Mine- Central City,Muhlenberg,0.903,6,52,69595,69596
+MA,2020-06-08,"SW Hotels & Resorts WW, LLC (The Westin Copley Place Hotel)","SW Hotels & Resorts WW, LLC (W Boston Hotel and Residences)",Boston,0.903,348,183,87553,87557
+NY,2014-03-17,"1 Prospect Park Residence, LLC.","1 Prospect Park,",Kings,0.903,68,68,88271,88290
 AL,2026-02-05,Tiffin Motorhomes Incorporated,Tiffin Motor Homes Inc,Winfield,0.902,139,140,80,68331
 AL,2005-12-13,RUSSELL CORP. (PLANT #7-BLEACHERY),RUSSELL CORP. (ALEX CITY),Alexander City,0.902,180,747,783,784
 CA,2025-07-14,Blue Shield of California - Oakland,"Blue Shield of California - Town Center, Building C",,0.902,70,6,1382,1383
@@ -1485,6 +1485,8 @@ NY,2020-01-03,Catholic Guardian Services (225th Street),Catholic Guardian Servic
 NY,2019-03-13,Instacart (at Whole Foods Market) Columbus Circle,Instacart (at Whole Foods Market) (E. 57th Street),New York,0.902,32,13,60214,60220
 NY,2016-09-16,"Catholic Charities Neighborhood Services, Inc. (Behavioral Health Care Coordination DOHMH Program)","Catholic Charities Neighborhood Services, Inc. (World of Work Program)",Brooklyn,0.902,1,1,61202,61203
 FL,2001-01-17,"Montgomery Ward Distribution Facility 1820 Massaro Boulevard Tampa, FL 33619","Montgomery Ward Product Service Facility 1820 Massaro Boulevard Tampa, FL 33619",,0.902,78,81,72001,72002
+MA,2020-03-16,Wagamama USA LLC - Prudential Center,Wagamama USA LLC - Quincy Market,Boston,0.902,63,34,87499,87500
+MA,2020-06-08,"SW Hotels & Resorts WW, LLC (Sheraton Boston Hotel)","SW Hotels & Resorts WW, LLC (The Westin Copley Place Hotel)",Boston,0.902,548,348,87552,87553
 CA,2025-09-08,Kaiser Foundation Hospitals-Antioch,Kaiser Foundation Hospitals - 74 N. Pasadena,,0.901,1,2,1553,1556
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Fremont Physical Therapy & Hand Therapy),Agile Physical Therapy (Sutter Health Sunnyvale Physical Therapy 1085),,0.901,24,23,1592,1594
 CA,2025-09-12,Agile Physical Therapy (Sutter Health San Carlos Physical Therapy & Hand Therapy),Agile Physical Therapy (Sutter Health Sunnyvale Center (301) Physical Therapy),,0.901,19,4,1593,1596
@@ -1535,6 +1537,7 @@ MO,2020-04-09,Asbury Automotive Group - Plaza BMW Creve Coeur,Asbury Automotive 
 NY,2020-04-22,Visionworks (North Country Region),Visionworks (Southern Region),,0.901,18,47,58566,58572
 NY,2020-03-30,The Marlow Collective dba Achilles Heel,The Marlow Collective dba Marlow & Sons,Brooklyn,0.901,14,26,59048,59069
 NY,2020-03-13,"WeWork Companies, Inc. (Broad Street)","WeWork Companies, Inc. (Avenue of the Americas)",New York,0.901,3,3,59749,59750
+NY,2014-10-23,"vente-privee USA Brands, Inc.","vente-privee USA, LLC",New York,0.901,36,97,88458,88459
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Sunnyvale Physical Therapy 1085),Agile Physical Therapy (Sutter Health Palo Alto Physical Therapy & Hand Therapy),,0.9,23,30,1594,1598
 CA,2025-10-31,Ceryx Management LLC (Sepulveda),Ceryx Management LLC (7226 S. Figueroa),,0.9,4,12,1897,1902
 CA,2025-10-31,Ceryx Management LLC (Sepulveda),Ceryx Management LLC (7310 S. Figueroa),,0.9,4,9,1897,1903
@@ -1587,6 +1590,7 @@ NY,2020-03-20,"Sobaya Restaurant, Inc dba Rai Rai Ken","Sobaya Restaurant Inc., 
 NY,2020-01-03,Catholic Guardian Services (Payson Ave.),Catholic Guardian Services (34 W Central Harlem),New York,0.9,30,2,59885,59894
 KY,2018-09-27,Dormakaba,dormakaba USA Inc.,Fayette,0.9,58,58,67536,67594
 OK,2001-10-01,Wellcore America,WellCore,05 - CentralRegion,0.9,50,32,68265,68266
+NY,2014-03-17,"1 Prospect Park Residence, LLC.","1 Prospect Park, ALF LLC.",Kings,0.9,68,68,88271,88292
 CA,2025-07-10,Intel Corporation (Robert Noyce),Intel Corporation (SC-11),,0.899,203,5,1374,1378
 CA,2025-07-10,Intel Corporation (Robert Noyce),Intel Corporation (SC-12),,0.899,203,55,1374,1379
 CA,2025-08-15,Adventist Health Glendale,Adventist Health Simi Valley,,0.899,58,1,1480,1483
@@ -1627,7 +1631,6 @@ CA,2023-09-11,Noble House Home Furnishing LLC Superior HQ,Noble House Home Furni
 CA,2024-05-01,Cue Health Inc. Moda North,Cue Health Inc. Vista,,0.899,2,15,4367,4372
 CA,2020-04-20,"Hoehn Motors, Inc DBA Audi Carlsbad","Hoehn Motors, Inc., dba Hoehn Acura",Carlsbad,0.899,53,386,8156,8644
 CA,2020-04-08,Restec Contractors Inc. at ISI Core Shell,Restec Contractors Inc. at Facebook SUN101 HVAC,Sunnyvale,0.899,4,1,9350,9352
-CA,2020-01-13,Smithfield Packaged Meatd Corp. (&quot;the Company&quot;),Smithfield Packaged Meats Corp.,San Jose,0.899,139,139,11704,11721
 CO,2023-02-27,Telluride Sports - Franz Klammer,Telluride Sports - The Peaks,,0.899,,,15630,15633
 OR,2020-03-25,Deschutes Brewery Public Rooms,Deschutes Brewery - HQ,Bend,0.899,248,89,36176,36177
 TX,2025-05-21,Child Care Associates (Reagan),Child Care Associates(North Fort Worth),Fort Worth,0.899,14,16,39385,39389
@@ -1684,6 +1687,7 @@ WI,2016-05-19,Anchor Bank FSB - East Towne Blvd.,Anchor Bank FSB - City View Dr.
 NY,2020-03-17,Manhasset Restaurant LLC dba Cipollini,Manhasset Restaurant LLC dbaToku Modern Asian,Manhasset,0.898,76,89,59634,59647
 KY,2023-07-25,Wellmore Energy Company LLC - Laboratory Department,Wellmore Energy Company LLC - Black Watch #8 Prep Plant,Pike,0.898,2,1,67233,67234
 FL,1998-06-03,"The Hertz Corp (Miami) 2150 N.E 7th Ave Dania, FL 33004","The Hertz Corp.(Westpalm Bch.) 2150 N.E. 7th Ave Dania, FL 33004",,0.898,39,38,71462,71463
+NY,2014-03-31,Empire State Bus Corp.,"Empire State Escorts, Inc.",Kings,0.898,9,1,88295,88296
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Sunnyvale Center 401 Physical Therapy),Agile Physical Therapy (Sutter Health Palo Alto Physical Therapy & Hand Therapy),,0.897,16,30,1595,1598
 CA,2025-10-31,Ceryx Management LLC (Vermont),Ceryx Management LLC (1540 S St. Andrews),,0.897,8,18,1898,1906
 CA,2026-03-12,Total Storage Solutions (Best RV & Self Storage),Total Storage Solutions (El Monte Stor It Now),,0.897,3,3,2246,2248
@@ -2067,6 +2071,7 @@ CA,2020-04-20,"Hoehn Motors, Inc DBA Audi Carlsbad","Hoehn Motors, Inc DBA Hoehn
 FL,2020-04-17,Miller’s Ale House,"Miller's Ale House, Inc. - Orlando",ORLANDO,0.889,106,144,17760,17771
 HI,2022-08-03,McDonald’s Laie,McDonald’s Temple Valley,,0.889,,,19604,19605
 MN,2020-03-17,Two Bettys Lake St 2020,Two Bettys Minnehaha 2020,Minneapolis,0.889,78,71,29165,29166
+OH,2026-01-06,Double Tree Cleveland,Double Tree Cleveland Crescent Hotels & Resorts,Cleveland/Cuyahoga,0.889,66,66,34886,70436
 TX,2025-05-21,Child Care Associates(North Fort Worth),Child Care Associates (JA Hargrave),Fort Worth,0.889,16,19,39389,39392
 TX,2022-11-16,"Meta Platforms, Inc. (Mcallen Pass)","Meta Platforms, Inc.(W,6th)",Austin,0.889,11,50,39962,39963
 TX,2020-11-24,Compass Group Eurest - One Transformation Way,Compass Group Eurest,Fort Worth,0.889,4,32,40213,40214
@@ -2180,6 +2185,7 @@ NY,2020-04-22,Visionworks (Capital Region),Visionworks (Western Region),,0.887,9
 NY,2020-04-08,"B.R. Guest Parent Holdings, LLC dba Bill's Bar & Burger - Downtown","B.R. Guest Parent Holdings, LLC dba Atlantic Grill - Lincoln Center West NY",New York,0.887,100,110,58769,58776
 IL,2023-06-14,United States Navy,United States Coast Guard,"IL Statewide Event Springfield, IL 62701",0.887,,,68550,68551
 FL,1998-06-03,"The Hertz Corp (Fort Lauderdale) 2150 N. E. 7th Ave Dania, FL 33004","The Hertz Corp (Miami) 2150 N.E 7th Ave Dania, FL 33004",,0.887,35,39,71461,71462
+MA,2020-03-16,Wagamama USA LLC - 100 Northern Ave,Wagamama USA LLC - Prudential Center,Boston,0.887,45,63,87498,87499
 CA,2025-10-31,Ceryx Management LLC (Blackstone),Ceryx Management LLC (1904 E 113th),,0.886,39,1,1896,1908
 CA,2025-10-31,Ceryx Management LLC (Hoover),Ceryx Management LLC (1540 S St. Andrews),,0.886,3,18,1900,1906
 CA,2025-11-03,CommUnify - I Center,CommUnify - Jardin de Suenos,,0.886,6,6,1861,1875
@@ -2344,6 +2350,7 @@ CA,2024-05-01,Cue Health Inc. Moda West,Cue Health Inc. Nancy Ridge II,,0.883,4,
 CA,2023-01-05,Cue Health - Moda North II,Cue Health - Nancy Ridge,,0.883,8,39,4843,4845
 CA,2023-01-05,Cue Health - Nancy Ridge,Cue Health - Waples,,0.883,39,161,4845,4847
 CA,2020-03-25,"Park Hyatt Aviara Resort, Golf Club & Spa",Park Hyatt Aviara,Carlsbad,0.883,507,496,11134,11484
+CA,2020-04-17,Dick's Sporting Goods Store #1049,"Dick’s Sporting Goods, Inc.",Santa Rosa,0.883,37,37,9233,9427
 CA,2020-03-24,Crews dba Breeze,Crews dba Lemonade,Los Angeles,0.883,9,44,10916,10922
 IN,2013-10-31,"Peabody Indiana Services, LLC","Peabody Midwest Management Services, LLC",Cannelburg,0.883,86,3,25793,25794
 NJ,2020-08-01,HMSHost -Starbucks Terminal C,HMSHost Corporation -Starbucks,Newark,0.883,223,223,32741,32743
@@ -2358,6 +2365,7 @@ NY,2019-10-31,Eastman Kodak Company (Kodak Office),Eastman Kodak Company (Eastma
 NY,2019-01-31,Eastman Kodak Company (Eastman Business Park),Eastman Kodak Company (Kodak Office),Rochester,0.883,2,1,60290,60291
 NY,2017-02-16,Eastman Kodak Company (Kodak Office),Eastman Kodak Company (Eastman Business Park),Rochester,0.883,3,1,61102,61103
 NY,2016-06-13,Eastman Kodak Company (Kodak Office),Eastman Kodak Company (Eastman Business Park),Rochester,0.883,2,2,61285,61286
+MA,2020-03-16,Wagamama USA LLC - 100 Northern Ave,Wagamama USA LLC - Quincy Market,Boston,0.883,45,34,87498,87500
 AL,2007-05-29,WESTPOINT HOME-OPELIKA FINISHING PLANT,WESTPOINT HOME-GRIFFTEX CHEMICAL PLANT,Opelika,0.882,350,13,218,219
 CA,2025-11-03,CommUnify - I Center,CommUnify - Chapel Office,,0.882,6,13,1861,1866
 CA,2025-11-03,CommUnify - Alvin Center,CommUnify - Los Padres Center,,0.882,6,4,1865,1870
@@ -2383,7 +2391,6 @@ CA,2020-03-24,Crews dba Breeze,Crews dba Jersey Mike's,Los Angeles,0.882,9,28,10
 CA,2020-03-21,DeLuca Associates Inc. at Kerasotes Santa Clara County,DeLuca Associates Inc. at AMC Mercado 20,Santa Clara,0.882,16,13,10766,10767
 CA,2014-11-04,Warner Bros. Burbank Television,Warner Bros. Pictures,Burbank,0.882,6,1,14998,15005
 IL,2008-09-12,Syncreon (formerly TDS/US Automotive Logistics),Syncreon-US Automotive (formerly TDS/US Automotive Logistics),"2924 E. 126th Street Chicago, IL 60633-1133",0.882,68,68,23253,69065
-OH,2026-01-06,Double Tree Cleveland,Double Tree Cleveland Crescent Hotels &amp; Resorts,Cleveland/Cuyahoga,0.882,66,66,34886,70436
 SC,2020-04-03,Asbury Automotive Groupdba Lexus of Greenville,Asbury Automotive GroupCrown Nissan,Greenville,0.882,23,23,37660,37662
 TX,2025-05-21,Child Care Associates (Morris Foundation),Child Care Associates (JA Hargrave),Fort Worth,0.882,17,19,39388,39392
 TX,2020-08-27,Marriott Rivercenter Hotel,Marriott Riverwalk,San Antonio,0.882,237,45,40306,40307
