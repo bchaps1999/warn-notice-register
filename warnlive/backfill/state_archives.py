@@ -503,7 +503,11 @@ def fetch_ny(cache_dir: Path) -> list[dict]:
             continue
         county = (fields.get("County") or "").split("|")[0].strip()
         classification = (fields.get("Classification") or "").lower()
-        jobs = re.sub(r"[^\d]", "", fields.get("Number Affected", ""))
+        # First number token only — these pages sometimes run several fields
+        # onto one line, and stripping non-digits would concatenate them all
+        # into absurd counts.
+        jobs_m = re.search(r"\d{1,6}", fields.get("Number Affected", "").replace(",", ""))
+        jobs = jobs_m.group(0) if jobs_m else ""
         records.append(
             _canonical(
                 {
