@@ -4924,6 +4924,9 @@ amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing Commer
 amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing Commercial Airplane Group,1999-07-12,Boeing Commercial Airplane Group,1999-06-14,dd233d4a1207f4a846ec845eb5b6ad82940a4dd4,cac881abec60273259ecf5bb009f376af49c28c3
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing Commercial Airplane Group,1999-07-12,Boeing Commercial Airplane Group,1999-06-14,dd233d4a1207f4a846ec845eb5b6ad82940a4dd4,896529e37611a2a3adb96b38389d3b20bbaf2b79
 amendment_of,0.925,amendment,"refiled 32d later, same location",KS,Boeing,1999-10-05,Boeing Company,1999-09-03,dfe59613e9b45719b57a618fb4b2aca37c0988a6,86998ac18130f1cb367eb58dc50710ea5aad6c9e
+amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Boeing,1999-10-05,Boeing Company,1999-09-03,dfe59613e9b45719b57a618fb4b2aca37c0988a6,cd6b4475fb82867f0852f50b6d544ae6824443f6
+amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Boeing,1999-10-05,Boeing Company,1999-09-03,6f46b35daa3ca43526b2dc691e05d3207dfdbe4f,86998ac18130f1cb367eb58dc50710ea5aad6c9e
+amendment_of,0.925,amendment,"refiled 32d later, same location",KS,Boeing,1999-10-05,Boeing Company,1999-09-03,6f46b35daa3ca43526b2dc691e05d3207dfdbe4f,cd6b4475fb82867f0852f50b6d544ae6824443f6
 amendment_of,0.925,amendment,"refiled 34d later, same location",KS,Boeing,2000-01-17,Boeing,1999-12-14,bfbe2bd3d9fe63840e9243186a8ae83f1ca2a23d,f68b56d61c8051651fbe2d1713841dc80c4e0085
 amendment_of,0.925,amendment,"refiled 14d later, same location",KS,Eaton Corporation,2001-04-17,Eaton Corporation,2001-04-03,e44c3eccc91fee1f601f8dfce3b038f019406e67,550a8308d3baa0e77b7b32cf3c57631f4a30e73e
 amendment_of,0.915,amendment,"refiled 7d later, same location",KS,Northern Reflections,2001-04-25,Northern Reflections,2001-04-18,83e97f23a791be0a9c184a364cb5f0d2f6a4ae68,e31217e5972ab6a3efc448fd007907731a330ac7
@@ -4950,56 +4953,146 @@ amendment_of,0.925,amendment,"refiled 17d later, same location",KS,Raytheon Airc
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,The Boeing Company,2002-07-22,The Boeing Company,2002-06-24,ff55590304c3b968968c8ab696461d5c10f7f768,65a1aff0d47879d25f39104ce061f534e5d27f91
 amendment_of,0.883,amendment,"refiled 28d later, same location",KS,The Boeing Company,2002-07-22,The Boeing Company,2002-06-24,ff55590304c3b968968c8ab696461d5c10f7f768,780304befc4eac0dc0f70d5484816535314a8363
 amendment_of,0.925,amendment,"refiled 40d later, same location",KS,Bank of America,2002-07-23,Bank of America,2002-06-13,09252c881c67f4b757a8ce5079a2a78b2079e0cb,d4f02e545ca4626c4c2f3e411bc957b01a5d89cc
+amendment_of,0.883,amendment,"refiled 40d later, same location",KS,Bank of America,2002-07-23,Bank of America,2002-06-13,09252c881c67f4b757a8ce5079a2a78b2079e0cb,70bae34cf75b84c571904eead3ea84cab42a20ef
 amendment_of,0.883,amendment,"refiled 40d later, same location",KS,Bank of America,2002-07-23,Bank of America,2002-06-13,c421af9dc7b932b3f6e6b45e1ad84e222cfdfe98,d4f02e545ca4626c4c2f3e411bc957b01a5d89cc
+amendment_of,0.925,amendment,"refiled 40d later, same location",KS,Bank of America,2002-07-23,Bank of America,2002-06-13,c421af9dc7b932b3f6e6b45e1ad84e222cfdfe98,70bae34cf75b84c571904eead3ea84cab42a20ef
 amendment_of,0.925,amendment,"refiled 42d later, same location",KS,Bombardier Learjet,2002-07-31,Bombardier Learjet,2002-06-19,99114cbe29a5d6bc970b780a236b612d0e03781b,6cc2fb08df46b17dd74141284e2d4f81970de8f5
 amendment_of,0.925,amendment,"refiled 18d later, same location",KS,The Boeing Company,2002-08-09,The Boeing Company,2002-07-22,dad36cfcbfdfb4a4f2b9ddb90de858d7ffb20b56,ff55590304c3b968968c8ab696461d5c10f7f768
+amendment_of,0.883,amendment,"refiled 18d later, same location",KS,The Boeing Company,2002-08-09,The Boeing Company,2002-07-22,28fab71cac867798a97e858a8bc4572d0e898b18,ff55590304c3b968968c8ab696461d5c10f7f768
 amendment_of,0.925,amendment,"refiled 22d later, same location",KS,Bombardier Learjet,2002-08-22,Bombardier Learjet,2002-07-31,29b71797de3b05e6e41da2cbe3d8ba347dadbc03,99114cbe29a5d6bc970b780a236b612d0e03781b
 amendment_of,0.925,amendment,"refiled 35d later, same location",KS,The Boeing Company,2002-08-26,The Boeing Company,2002-07-22,1cb4c12b2c5287a46f0ff1d672079a63aa9e1f11,ff55590304c3b968968c8ab696461d5c10f7f768
 amendment_of,0.925,amendment,"refiled 17d later, same location",KS,The Boeing Company,2002-08-26,The Boeing Company,2002-08-09,1cb4c12b2c5287a46f0ff1d672079a63aa9e1f11,dad36cfcbfdfb4a4f2b9ddb90de858d7ffb20b56
+amendment_of,0.883,amendment,"refiled 17d later, same location",KS,The Boeing Company,2002-08-26,The Boeing Company,2002-08-09,1cb4c12b2c5287a46f0ff1d672079a63aa9e1f11,28fab71cac867798a97e858a8bc4572d0e898b18
+amendment_of,0.883,amendment,"refiled 35d later, same location",KS,The Boeing Company,2002-08-26,The Boeing Company,2002-07-22,0c2324bff697da91ae9bd2b1437a86d13ae018d3,ff55590304c3b968968c8ab696461d5c10f7f768
+amendment_of,0.883,amendment,"refiled 17d later, same location",KS,The Boeing Company,2002-08-26,The Boeing Company,2002-08-09,0c2324bff697da91ae9bd2b1437a86d13ae018d3,dad36cfcbfdfb4a4f2b9ddb90de858d7ffb20b56
+amendment_of,0.925,amendment,"refiled 17d later, same location",KS,The Boeing Company,2002-08-26,The Boeing Company,2002-08-09,0c2324bff697da91ae9bd2b1437a86d13ae018d3,28fab71cac867798a97e858a8bc4572d0e898b18
 amendment_of,0.912,amendment,"refiled 5d later, same location",KS,Consolidated Freightways,2002-09-03,Consolidated Freightways,2002-08-29,182db70474135ae6966307dce180e153392dd4a6,c29c11f6de84af5115173b95df350044a6c86e05
 amendment_of,0.915,amendment,"refiled 44d later, same location",KS,Suntron,2002-09-20,Suntron,2002-08-07,830c9fdbe8df8c96e1d946d012929e40d6fe291f,4fa3cb0c16c7a4d6ff55900cb2e7ec38e7918ded
 amendment_of,0.925,amendment,"refiled 45d later, same location",KS,The Boeing Company,2002-09-23,The Boeing Company,2002-08-09,5f4d9f793a9d83cc445084c3a28ad3b0f47d5da4,dad36cfcbfdfb4a4f2b9ddb90de858d7ffb20b56
+amendment_of,0.883,amendment,"refiled 45d later, same location",KS,The Boeing Company,2002-09-23,The Boeing Company,2002-08-09,5f4d9f793a9d83cc445084c3a28ad3b0f47d5da4,28fab71cac867798a97e858a8bc4572d0e898b18
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,The Boeing Company,2002-09-23,The Boeing Company,2002-08-26,5f4d9f793a9d83cc445084c3a28ad3b0f47d5da4,1cb4c12b2c5287a46f0ff1d672079a63aa9e1f11
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,The Boeing Company,2002-09-23,The Boeing Company,2002-08-26,5f4d9f793a9d83cc445084c3a28ad3b0f47d5da4,0c2324bff697da91ae9bd2b1437a86d13ae018d3
+amendment_of,0.883,amendment,"refiled 45d later, same location",KS,The Boeing Company,2002-09-23,The Boeing Company,2002-08-09,6451ae74f212933ae944408d6b3e3c798b7a36d0,dad36cfcbfdfb4a4f2b9ddb90de858d7ffb20b56
+amendment_of,0.925,amendment,"refiled 45d later, same location",KS,The Boeing Company,2002-09-23,The Boeing Company,2002-08-09,6451ae74f212933ae944408d6b3e3c798b7a36d0,28fab71cac867798a97e858a8bc4572d0e898b18
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,The Boeing Company,2002-09-23,The Boeing Company,2002-08-26,6451ae74f212933ae944408d6b3e3c798b7a36d0,1cb4c12b2c5287a46f0ff1d672079a63aa9e1f11
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,The Boeing Company,2002-09-23,The Boeing Company,2002-08-26,6451ae74f212933ae944408d6b3e3c798b7a36d0,0c2324bff697da91ae9bd2b1437a86d13ae018d3
 amendment_of,0.925,amendment,"refiled 42d later, same location",KS,Bombardier/Learjet,2002-10-03,Bombardier Learjet,2002-08-22,7e9e32000ca5189ac38f92f2c2cf4e65b406a7cd,29b71797de3b05e6e41da2cbe3d8ba347dadbc03
+amendment_of,0.883,amendment,"refiled 42d later, same location",KS,Bombardier/Learjet,2002-10-03,Bombardier Learjet,2002-08-22,59da070583594794bb209d1a95b08346352fa43e,29b71797de3b05e6e41da2cbe3d8ba347dadbc03
 amendment_of,0.925,amendment,"refiled 43d later, same location",KS,Bombardier/Learjet,2002-10-04,Bombardier Learjet,2002-08-22,6704a7aa1abb3431baaaa54e3b7ba5a09fc27fee,29b71797de3b05e6e41da2cbe3d8ba347dadbc03
 amendment_of,0.925,amendment,"refiled 1d later, same location",KS,Bombardier/Learjet,2002-10-04,Bombardier/Learjet,2002-10-03,6704a7aa1abb3431baaaa54e3b7ba5a09fc27fee,7e9e32000ca5189ac38f92f2c2cf4e65b406a7cd
+amendment_of,0.883,amendment,"refiled 1d later, same location",KS,Bombardier/Learjet,2002-10-04,Bombardier/Learjet,2002-10-03,6704a7aa1abb3431baaaa54e3b7ba5a09fc27fee,59da070583594794bb209d1a95b08346352fa43e
+amendment_of,0.883,amendment,"refiled 43d later, same location",KS,Bombardier/Learjet,2002-10-04,Bombardier Learjet,2002-08-22,efe601c855f6fee4e8f3f9ee4e45535d2cadb884,29b71797de3b05e6e41da2cbe3d8ba347dadbc03
+amendment_of,0.883,amendment,"refiled 1d later, same location",KS,Bombardier/Learjet,2002-10-04,Bombardier/Learjet,2002-10-03,efe601c855f6fee4e8f3f9ee4e45535d2cadb884,7e9e32000ca5189ac38f92f2c2cf4e65b406a7cd
+amendment_of,0.925,amendment,"refiled 1d later, same location",KS,Bombardier/Learjet,2002-10-04,Bombardier/Learjet,2002-10-03,efe601c855f6fee4e8f3f9ee4e45535d2cadb884,59da070583594794bb209d1a95b08346352fa43e
 amendment_of,0.925,amendment,"refiled 7d later, same location",KS,Bombardier/Learjet,2002-10-10,Bombardier/Learjet,2002-10-03,db17dec3a85e5f64bdaf4795a7fa82ebbcf6607d,7e9e32000ca5189ac38f92f2c2cf4e65b406a7cd
+amendment_of,0.883,amendment,"refiled 7d later, same location",KS,Bombardier/Learjet,2002-10-10,Bombardier/Learjet,2002-10-03,db17dec3a85e5f64bdaf4795a7fa82ebbcf6607d,59da070583594794bb209d1a95b08346352fa43e
 amendment_of,0.925,amendment,"refiled 6d later, same location",KS,Bombardier/Learjet,2002-10-10,Bombardier/Learjet,2002-10-04,db17dec3a85e5f64bdaf4795a7fa82ebbcf6607d,6704a7aa1abb3431baaaa54e3b7ba5a09fc27fee
+amendment_of,0.883,amendment,"refiled 6d later, same location",KS,Bombardier/Learjet,2002-10-10,Bombardier/Learjet,2002-10-04,db17dec3a85e5f64bdaf4795a7fa82ebbcf6607d,efe601c855f6fee4e8f3f9ee4e45535d2cadb884
+amendment_of,0.883,amendment,"refiled 7d later, same location",KS,Bombardier/Learjet,2002-10-10,Bombardier/Learjet,2002-10-03,acf1afef7e39c05d50d1817f243248bf63beb68d,7e9e32000ca5189ac38f92f2c2cf4e65b406a7cd
+amendment_of,0.925,amendment,"refiled 7d later, same location",KS,Bombardier/Learjet,2002-10-10,Bombardier/Learjet,2002-10-03,acf1afef7e39c05d50d1817f243248bf63beb68d,59da070583594794bb209d1a95b08346352fa43e
+amendment_of,0.883,amendment,"refiled 6d later, same location",KS,Bombardier/Learjet,2002-10-10,Bombardier/Learjet,2002-10-04,acf1afef7e39c05d50d1817f243248bf63beb68d,6704a7aa1abb3431baaaa54e3b7ba5a09fc27fee
+amendment_of,0.925,amendment,"refiled 6d later, same location",KS,Bombardier/Learjet,2002-10-10,Bombardier/Learjet,2002-10-04,acf1afef7e39c05d50d1817f243248bf63beb68d,efe601c855f6fee4e8f3f9ee4e45535d2cadb884
 amendment_of,0.925,amendment,"refiled 20d later, same location",KS,Bombardier/Learjet,2002-10-23,Bombardier/Learjet,2002-10-03,dec36129276ed09d7c4c19a85c69d57c626b0987,7e9e32000ca5189ac38f92f2c2cf4e65b406a7cd
+amendment_of,0.883,amendment,"refiled 20d later, same location",KS,Bombardier/Learjet,2002-10-23,Bombardier/Learjet,2002-10-03,dec36129276ed09d7c4c19a85c69d57c626b0987,59da070583594794bb209d1a95b08346352fa43e
 amendment_of,0.925,amendment,"refiled 19d later, same location",KS,Bombardier/Learjet,2002-10-23,Bombardier/Learjet,2002-10-04,dec36129276ed09d7c4c19a85c69d57c626b0987,6704a7aa1abb3431baaaa54e3b7ba5a09fc27fee
+amendment_of,0.883,amendment,"refiled 19d later, same location",KS,Bombardier/Learjet,2002-10-23,Bombardier/Learjet,2002-10-04,dec36129276ed09d7c4c19a85c69d57c626b0987,efe601c855f6fee4e8f3f9ee4e45535d2cadb884
 amendment_of,0.925,amendment,"refiled 13d later, same location",KS,Bombardier/Learjet,2002-10-23,Bombardier/Learjet,2002-10-10,dec36129276ed09d7c4c19a85c69d57c626b0987,db17dec3a85e5f64bdaf4795a7fa82ebbcf6607d
+amendment_of,0.883,amendment,"refiled 13d later, same location",KS,Bombardier/Learjet,2002-10-23,Bombardier/Learjet,2002-10-10,dec36129276ed09d7c4c19a85c69d57c626b0987,acf1afef7e39c05d50d1817f243248bf63beb68d
+amendment_of,0.883,amendment,"refiled 20d later, same location",KS,Bombardier/Learjet,2002-10-23,Bombardier/Learjet,2002-10-03,ecb930339a0707a423271e96eb189aad9f035ee5,7e9e32000ca5189ac38f92f2c2cf4e65b406a7cd
+amendment_of,0.925,amendment,"refiled 20d later, same location",KS,Bombardier/Learjet,2002-10-23,Bombardier/Learjet,2002-10-03,ecb930339a0707a423271e96eb189aad9f035ee5,59da070583594794bb209d1a95b08346352fa43e
+amendment_of,0.883,amendment,"refiled 19d later, same location",KS,Bombardier/Learjet,2002-10-23,Bombardier/Learjet,2002-10-04,ecb930339a0707a423271e96eb189aad9f035ee5,6704a7aa1abb3431baaaa54e3b7ba5a09fc27fee
+amendment_of,0.925,amendment,"refiled 19d later, same location",KS,Bombardier/Learjet,2002-10-23,Bombardier/Learjet,2002-10-04,ecb930339a0707a423271e96eb189aad9f035ee5,efe601c855f6fee4e8f3f9ee4e45535d2cadb884
+amendment_of,0.883,amendment,"refiled 13d later, same location",KS,Bombardier/Learjet,2002-10-23,Bombardier/Learjet,2002-10-10,ecb930339a0707a423271e96eb189aad9f035ee5,db17dec3a85e5f64bdaf4795a7fa82ebbcf6607d
+amendment_of,0.925,amendment,"refiled 13d later, same location",KS,Bombardier/Learjet,2002-10-23,Bombardier/Learjet,2002-10-10,ecb930339a0707a423271e96eb189aad9f035ee5,acf1afef7e39c05d50d1817f243248bf63beb68d
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,EnerSys Inc.,2002-10-24,Enersys,2002-09-26,7e9e9993a6f6b2a087a77822adce13f7e2e0ae00,9ea0237523bd7c82b88b0dd43c33d00a092c4ffd
 amendment_of,0.925,amendment,"refiled 26d later, same location",KS,Lucent Technologies,2002-10-30,Lucent Technologies,2002-10-04,c599c6198556d6c7b46bd6b80be8cb80d5bc24dd,583132e579c20f5c7f41de6f3219e52b1e61b65c
+amendment_of,0.882,amendment,"refiled 26d later, same location",KS,Lucent Technologies,2002-10-30,Lucent Technologies,2002-10-04,d4afe8053e037e6152c9462d6889ae352e9d39a2,583132e579c20f5c7f41de6f3219e52b1e61b65c
 amendment_of,0.925,amendment,"refiled 20d later, same location",KS,Raytheon Aircraft,2002-10-30,Raytheon Aircraft,2002-10-10,36ce152234b29a02203bc765c6556593853da1a9,165bfb4eaf2d3b7e385e9a8684dba85fd4ea409c
 amendment_of,0.925,amendment,"refiled 33d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-03,b3c69cd8d18411eade462e54ced2444218378796,7e9e32000ca5189ac38f92f2c2cf4e65b406a7cd
+amendment_of,0.883,amendment,"refiled 33d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-03,b3c69cd8d18411eade462e54ced2444218378796,59da070583594794bb209d1a95b08346352fa43e
 amendment_of,0.925,amendment,"refiled 32d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-04,b3c69cd8d18411eade462e54ced2444218378796,6704a7aa1abb3431baaaa54e3b7ba5a09fc27fee
+amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-04,b3c69cd8d18411eade462e54ced2444218378796,efe601c855f6fee4e8f3f9ee4e45535d2cadb884
 amendment_of,0.925,amendment,"refiled 26d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-10,b3c69cd8d18411eade462e54ced2444218378796,db17dec3a85e5f64bdaf4795a7fa82ebbcf6607d
+amendment_of,0.883,amendment,"refiled 26d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-10,b3c69cd8d18411eade462e54ced2444218378796,acf1afef7e39c05d50d1817f243248bf63beb68d
 amendment_of,0.925,amendment,"refiled 13d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-23,b3c69cd8d18411eade462e54ced2444218378796,dec36129276ed09d7c4c19a85c69d57c626b0987
+amendment_of,0.883,amendment,"refiled 13d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-23,b3c69cd8d18411eade462e54ced2444218378796,ecb930339a0707a423271e96eb189aad9f035ee5
+amendment_of,0.883,amendment,"refiled 33d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-03,5fb245763d4f104e105211859f9925f8ba4d1b6e,7e9e32000ca5189ac38f92f2c2cf4e65b406a7cd
+amendment_of,0.925,amendment,"refiled 33d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-03,5fb245763d4f104e105211859f9925f8ba4d1b6e,59da070583594794bb209d1a95b08346352fa43e
+amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-04,5fb245763d4f104e105211859f9925f8ba4d1b6e,6704a7aa1abb3431baaaa54e3b7ba5a09fc27fee
+amendment_of,0.925,amendment,"refiled 32d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-04,5fb245763d4f104e105211859f9925f8ba4d1b6e,efe601c855f6fee4e8f3f9ee4e45535d2cadb884
+amendment_of,0.883,amendment,"refiled 26d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-10,5fb245763d4f104e105211859f9925f8ba4d1b6e,db17dec3a85e5f64bdaf4795a7fa82ebbcf6607d
+amendment_of,0.925,amendment,"refiled 26d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-10,5fb245763d4f104e105211859f9925f8ba4d1b6e,acf1afef7e39c05d50d1817f243248bf63beb68d
+amendment_of,0.883,amendment,"refiled 13d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-23,5fb245763d4f104e105211859f9925f8ba4d1b6e,dec36129276ed09d7c4c19a85c69d57c626b0987
+amendment_of,0.925,amendment,"refiled 13d later, same location",KS,Bombardier/Learjet,2002-11-05,Bombardier/Learjet,2002-10-23,5fb245763d4f104e105211859f9925f8ba4d1b6e,ecb930339a0707a423271e96eb189aad9f035ee5
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Raytheon Aircraft,2002-11-07,Raytheon Aircraft,2002-10-10,d4fd549560861f7a71a9c1212dd29387bc01dbf4,165bfb4eaf2d3b7e385e9a8684dba85fd4ea409c
 amendment_of,0.925,amendment,"refiled 8d later, same location",KS,Raytheon Aircraft,2002-11-07,Raytheon Aircraft,2002-10-30,d4fd549560861f7a71a9c1212dd29387bc01dbf4,36ce152234b29a02203bc765c6556593853da1a9
 amendment_of,0.925,amendment,"refiled 26d later, same location",KS,Gibson's Discount Center,2002-11-11,Gibson's Discount Center,2002-10-16,766e8ebde2390226e8d579e2836d6af779bc25c2,b8ca5585a95ba270de87f8f34274d5906aaf4fb5
 possible_duplicate,0.931,fuzzy,"jw=0.931 ""Gibson's Discount Center"" ~ 'Gibsons Discount Center - Ulysses'",KS,Gibsons Discount Center - Ulysses,2002-11-11,Gibson's Discount Center,2002-11-11,d16e95c9e632b0a360d1285c9ade7538910aa2f3,766e8ebde2390226e8d579e2836d6af779bc25c2
 amendment_of,0.925,amendment,"refiled 40d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-03,5145ac3ea08c4b98689111065b0767689e555933,7e9e32000ca5189ac38f92f2c2cf4e65b406a7cd
+amendment_of,0.883,amendment,"refiled 40d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-03,5145ac3ea08c4b98689111065b0767689e555933,59da070583594794bb209d1a95b08346352fa43e
 amendment_of,0.925,amendment,"refiled 39d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-04,5145ac3ea08c4b98689111065b0767689e555933,6704a7aa1abb3431baaaa54e3b7ba5a09fc27fee
+amendment_of,0.883,amendment,"refiled 39d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-04,5145ac3ea08c4b98689111065b0767689e555933,efe601c855f6fee4e8f3f9ee4e45535d2cadb884
 amendment_of,0.925,amendment,"refiled 33d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-10,5145ac3ea08c4b98689111065b0767689e555933,db17dec3a85e5f64bdaf4795a7fa82ebbcf6607d
+amendment_of,0.883,amendment,"refiled 33d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-10,5145ac3ea08c4b98689111065b0767689e555933,acf1afef7e39c05d50d1817f243248bf63beb68d
 amendment_of,0.925,amendment,"refiled 20d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-23,5145ac3ea08c4b98689111065b0767689e555933,dec36129276ed09d7c4c19a85c69d57c626b0987
+amendment_of,0.883,amendment,"refiled 20d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-23,5145ac3ea08c4b98689111065b0767689e555933,ecb930339a0707a423271e96eb189aad9f035ee5
 amendment_of,0.925,amendment,"refiled 7d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-11-05,5145ac3ea08c4b98689111065b0767689e555933,b3c69cd8d18411eade462e54ced2444218378796
+amendment_of,0.883,amendment,"refiled 7d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-11-05,5145ac3ea08c4b98689111065b0767689e555933,5fb245763d4f104e105211859f9925f8ba4d1b6e
+amendment_of,0.883,amendment,"refiled 40d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-03,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb,7e9e32000ca5189ac38f92f2c2cf4e65b406a7cd
+amendment_of,0.925,amendment,"refiled 40d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-03,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb,59da070583594794bb209d1a95b08346352fa43e
+amendment_of,0.883,amendment,"refiled 39d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-04,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb,6704a7aa1abb3431baaaa54e3b7ba5a09fc27fee
+amendment_of,0.925,amendment,"refiled 39d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-04,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb,efe601c855f6fee4e8f3f9ee4e45535d2cadb884
+amendment_of,0.883,amendment,"refiled 33d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-10,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb,db17dec3a85e5f64bdaf4795a7fa82ebbcf6607d
+amendment_of,0.925,amendment,"refiled 33d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-10,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb,acf1afef7e39c05d50d1817f243248bf63beb68d
+amendment_of,0.883,amendment,"refiled 20d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-23,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb,dec36129276ed09d7c4c19a85c69d57c626b0987
+amendment_of,0.925,amendment,"refiled 20d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-10-23,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb,ecb930339a0707a423271e96eb189aad9f035ee5
+amendment_of,0.883,amendment,"refiled 7d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-11-05,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb,b3c69cd8d18411eade462e54ced2444218378796
+amendment_of,0.925,amendment,"refiled 7d later, same location",KS,Bombardier/Learjet,2002-11-12,Bombardier/Learjet,2002-11-05,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb,5fb245763d4f104e105211859f9925f8ba4d1b6e
 amendment_of,0.925,amendment,"refiled 45d later, same location",KS,Lucent Technologies,2002-11-18,Lucent Technologies,2002-10-04,533100170a69a0f50826a730e0bfaaee8a247263,583132e579c20f5c7f41de6f3219e52b1e61b65c
 amendment_of,0.925,amendment,"refiled 19d later, same location",KS,Lucent Technologies,2002-11-18,Lucent Technologies,2002-10-30,533100170a69a0f50826a730e0bfaaee8a247263,c599c6198556d6c7b46bd6b80be8cb80d5bc24dd
+amendment_of,0.882,amendment,"refiled 19d later, same location",KS,Lucent Technologies,2002-11-18,Lucent Technologies,2002-10-30,533100170a69a0f50826a730e0bfaaee8a247263,d4afe8053e037e6152c9462d6889ae352e9d39a2
+amendment_of,0.882,amendment,"refiled 45d later, same location",KS,Lucent Technologies,2002-11-18,Lucent Technologies,2002-10-04,12a27fa115a10770204229ec81c268bd0d2eb08b,583132e579c20f5c7f41de6f3219e52b1e61b65c
+amendment_of,0.882,amendment,"refiled 19d later, same location",KS,Lucent Technologies,2002-11-18,Lucent Technologies,2002-10-30,12a27fa115a10770204229ec81c268bd0d2eb08b,c599c6198556d6c7b46bd6b80be8cb80d5bc24dd
+amendment_of,0.925,amendment,"refiled 19d later, same location",KS,Lucent Technologies,2002-11-18,Lucent Technologies,2002-10-30,12a27fa115a10770204229ec81c268bd0d2eb08b,d4afe8053e037e6152c9462d6889ae352e9d39a2
 amendment_of,0.925,amendment,"refiled 43d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-10-10,dd41bb6a0ea20ed9fd97ceddf450f884851a8f07,db17dec3a85e5f64bdaf4795a7fa82ebbcf6607d
+amendment_of,0.883,amendment,"refiled 43d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-10-10,dd41bb6a0ea20ed9fd97ceddf450f884851a8f07,acf1afef7e39c05d50d1817f243248bf63beb68d
 amendment_of,0.925,amendment,"refiled 30d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-10-23,dd41bb6a0ea20ed9fd97ceddf450f884851a8f07,dec36129276ed09d7c4c19a85c69d57c626b0987
+amendment_of,0.883,amendment,"refiled 30d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-10-23,dd41bb6a0ea20ed9fd97ceddf450f884851a8f07,ecb930339a0707a423271e96eb189aad9f035ee5
 amendment_of,0.925,amendment,"refiled 17d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-11-05,dd41bb6a0ea20ed9fd97ceddf450f884851a8f07,b3c69cd8d18411eade462e54ced2444218378796
+amendment_of,0.883,amendment,"refiled 17d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-11-05,dd41bb6a0ea20ed9fd97ceddf450f884851a8f07,5fb245763d4f104e105211859f9925f8ba4d1b6e
 amendment_of,0.925,amendment,"refiled 10d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-11-12,dd41bb6a0ea20ed9fd97ceddf450f884851a8f07,5145ac3ea08c4b98689111065b0767689e555933
+amendment_of,0.883,amendment,"refiled 10d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-11-12,dd41bb6a0ea20ed9fd97ceddf450f884851a8f07,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb
+amendment_of,0.883,amendment,"refiled 43d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-10-10,ce40ff4bf7c12c264aa09407607fdc3bb8306ef5,db17dec3a85e5f64bdaf4795a7fa82ebbcf6607d
+amendment_of,0.925,amendment,"refiled 43d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-10-10,ce40ff4bf7c12c264aa09407607fdc3bb8306ef5,acf1afef7e39c05d50d1817f243248bf63beb68d
+amendment_of,0.883,amendment,"refiled 30d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-10-23,ce40ff4bf7c12c264aa09407607fdc3bb8306ef5,dec36129276ed09d7c4c19a85c69d57c626b0987
+amendment_of,0.925,amendment,"refiled 30d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-10-23,ce40ff4bf7c12c264aa09407607fdc3bb8306ef5,ecb930339a0707a423271e96eb189aad9f035ee5
+amendment_of,0.883,amendment,"refiled 17d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-11-05,ce40ff4bf7c12c264aa09407607fdc3bb8306ef5,b3c69cd8d18411eade462e54ced2444218378796
+amendment_of,0.925,amendment,"refiled 17d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-11-05,ce40ff4bf7c12c264aa09407607fdc3bb8306ef5,5fb245763d4f104e105211859f9925f8ba4d1b6e
+amendment_of,0.883,amendment,"refiled 10d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-11-12,ce40ff4bf7c12c264aa09407607fdc3bb8306ef5,5145ac3ea08c4b98689111065b0767689e555933
+amendment_of,0.925,amendment,"refiled 10d later, same location",KS,Bombardier/Learjet,2002-11-22,Bombardier/Learjet,2002-11-12,ce40ff4bf7c12c264aa09407607fdc3bb8306ef5,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb
 amendment_of,0.925,amendment,"refiled 43d later, same location",KS,Raytheon Aircraft,2002-11-22,Raytheon Aircraft,2002-10-10,ef134b8d1be5361c54a0599caeafc0999a46a7b2,165bfb4eaf2d3b7e385e9a8684dba85fd4ea409c
 amendment_of,0.925,amendment,"refiled 23d later, same location",KS,Raytheon Aircraft,2002-11-22,Raytheon Aircraft,2002-10-30,ef134b8d1be5361c54a0599caeafc0999a46a7b2,36ce152234b29a02203bc765c6556593853da1a9
 amendment_of,0.925,amendment,"refiled 15d later, same location",KS,Raytheon Aircraft,2002-11-22,Raytheon Aircraft,2002-11-07,ef134b8d1be5361c54a0599caeafc0999a46a7b2,d4fd549560861f7a71a9c1212dd29387bc01dbf4
 amendment_of,0.925,amendment,"refiled 45d later, same location",KS,Bombardier/Learjet,2002-12-20,Bombardier/Learjet,2002-11-05,dec51f78b6dadb27a9eaf77af4b4a72ea4f9cbff,b3c69cd8d18411eade462e54ced2444218378796
+amendment_of,0.883,amendment,"refiled 45d later, same location",KS,Bombardier/Learjet,2002-12-20,Bombardier/Learjet,2002-11-05,dec51f78b6dadb27a9eaf77af4b4a72ea4f9cbff,5fb245763d4f104e105211859f9925f8ba4d1b6e
 amendment_of,0.925,amendment,"refiled 38d later, same location",KS,Bombardier/Learjet,2002-12-20,Bombardier/Learjet,2002-11-12,dec51f78b6dadb27a9eaf77af4b4a72ea4f9cbff,5145ac3ea08c4b98689111065b0767689e555933
+amendment_of,0.883,amendment,"refiled 38d later, same location",KS,Bombardier/Learjet,2002-12-20,Bombardier/Learjet,2002-11-12,dec51f78b6dadb27a9eaf77af4b4a72ea4f9cbff,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Bombardier/Learjet,2002-12-20,Bombardier/Learjet,2002-11-22,dec51f78b6dadb27a9eaf77af4b4a72ea4f9cbff,dd41bb6a0ea20ed9fd97ceddf450f884851a8f07
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Bombardier/Learjet,2002-12-20,Bombardier/Learjet,2002-11-22,dec51f78b6dadb27a9eaf77af4b4a72ea4f9cbff,ce40ff4bf7c12c264aa09407607fdc3bb8306ef5
+amendment_of,0.883,amendment,"refiled 45d later, same location",KS,Bombardier/Learjet,2002-12-20,Bombardier/Learjet,2002-11-05,a35d47bb7e40e54eb177eba06ca5a6395e97f47f,b3c69cd8d18411eade462e54ced2444218378796
+amendment_of,0.925,amendment,"refiled 45d later, same location",KS,Bombardier/Learjet,2002-12-20,Bombardier/Learjet,2002-11-05,a35d47bb7e40e54eb177eba06ca5a6395e97f47f,5fb245763d4f104e105211859f9925f8ba4d1b6e
+amendment_of,0.883,amendment,"refiled 38d later, same location",KS,Bombardier/Learjet,2002-12-20,Bombardier/Learjet,2002-11-12,a35d47bb7e40e54eb177eba06ca5a6395e97f47f,5145ac3ea08c4b98689111065b0767689e555933
+amendment_of,0.925,amendment,"refiled 38d later, same location",KS,Bombardier/Learjet,2002-12-20,Bombardier/Learjet,2002-11-12,a35d47bb7e40e54eb177eba06ca5a6395e97f47f,2fdff8c0eb1fe5af1e669717c31b69e54cb750fb
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Bombardier/Learjet,2002-12-20,Bombardier/Learjet,2002-11-22,a35d47bb7e40e54eb177eba06ca5a6395e97f47f,dd41bb6a0ea20ed9fd97ceddf450f884851a8f07
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Bombardier/Learjet,2002-12-20,Bombardier/Learjet,2002-11-22,a35d47bb7e40e54eb177eba06ca5a6395e97f47f,ce40ff4bf7c12c264aa09407607fdc3bb8306ef5
 amendment_of,0.925,amendment,"refiled 32d later, same location",KS,Boeing,2003-01-20,Boeing Company,2002-12-19,e769a1060f8aa87a17c9be9e80715b273290c6d3,f03d602edcbf5569c40877c148e7b3bf12af44e1
+amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Boeing,2003-01-20,Boeing Company,2002-12-19,e769a1060f8aa87a17c9be9e80715b273290c6d3,12439efbb7afdb810bb35bc3d04405a95772b0b6
 amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Boeing,2003-01-20,Boeing Company,2002-12-19,15c3bd110da9fffc01df61bae4dc2c715898d49d,f03d602edcbf5569c40877c148e7b3bf12af44e1
+amendment_of,0.925,amendment,"refiled 32d later, same location",KS,Boeing,2003-01-20,Boeing Company,2002-12-19,15c3bd110da9fffc01df61bae4dc2c715898d49d,12439efbb7afdb810bb35bc3d04405a95772b0b6
 amendment_of,0.925,amendment,"refiled 41d later, same location",KS,Bombardier/Learjet,2003-01-30,Bombardier/Learjet,2002-12-20,990223c4ba0095d02b44138315f1061661e0a684,dec51f78b6dadb27a9eaf77af4b4a72ea4f9cbff
+amendment_of,0.883,amendment,"refiled 41d later, same location",KS,Bombardier/Learjet,2003-01-30,Bombardier/Learjet,2002-12-20,990223c4ba0095d02b44138315f1061661e0a684,a35d47bb7e40e54eb177eba06ca5a6395e97f47f
 amendment_of,0.883,amendment,"refiled 41d later, same location",KS,Bombardier/Learjet,2003-01-30,Bombardier/Learjet,2002-12-20,d46eb1f33e5dfc70d2ad9c48f67f20c3125447ff,dec51f78b6dadb27a9eaf77af4b4a72ea4f9cbff
+amendment_of,0.925,amendment,"refiled 41d later, same location",KS,Bombardier/Learjet,2003-01-30,Bombardier/Learjet,2002-12-20,d46eb1f33e5dfc70d2ad9c48f67f20c3125447ff,a35d47bb7e40e54eb177eba06ca5a6395e97f47f
 amendment_of,0.925,amendment,"refiled 16d later, same location",KS,Raytheon Aircraft,2003-02-07,Raytheon AIrcraft,2003-01-22,e792e63d0beab2cb522bd8500a504dae33bf3d93,8f0e3d944912d0404fc61567d2ed18acb36c44b1
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing Company,2003-02-17,Boeing,2003-01-20,cd9bfe68c998cbd84c47b29457503ec3fe072de2,e769a1060f8aa87a17c9be9e80715b273290c6d3
 amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing Company,2003-02-17,Boeing,2003-01-20,cd9bfe68c998cbd84c47b29457503ec3fe072de2,15c3bd110da9fffc01df61bae4dc2c715898d49d
@@ -5020,59 +5113,183 @@ amendment_of,0.925,amendment,"refiled 14d later, same location",KS,Lucent Techno
 amendment_of,0.915,amendment,"refiled 43d later, same location",KS,Raytheon,2003-03-11,Raytheon,2003-01-27,0589de5433bc512da4e53060f58a5c95c97c2fa8,fc5e2a2d9f98266df3cd496cb4c8d0cdf0e3c93b
 amendment_of,0.925,amendment,"refiled 35d later, same location",KS,Boeing Company,2003-03-24,Boeing Company,2003-02-17,1a01dfc8f00653e7f6a1a79239a670768c8cc5b0,cd9bfe68c998cbd84c47b29457503ec3fe072de2
 amendment_of,0.883,amendment,"refiled 35d later, same location",KS,Boeing Company,2003-03-24,Boeing Company,2003-02-17,1a01dfc8f00653e7f6a1a79239a670768c8cc5b0,e25fe0c1313da31f536ccf6cf06d8d2afa846e4b
+amendment_of,0.883,amendment,"refiled 35d later, same location",KS,Boeing Company,2003-03-24,Boeing Company,2003-02-17,db8591493eab05cc9e6ec51abae34700e4453bfe,cd9bfe68c998cbd84c47b29457503ec3fe072de2
+amendment_of,0.925,amendment,"refiled 35d later, same location",KS,Boeing Company,2003-03-24,Boeing Company,2003-02-17,db8591493eab05cc9e6ec51abae34700e4453bfe,e25fe0c1313da31f536ccf6cf06d8d2afa846e4b
 amendment_of,0.925,amendment,"refiled 42d later, same location",KS,Lucent Technologies,2003-03-25,Lucent Technologies,2003-02-11,bdc6ac699057295144cfdcbb0d7186cc2991b345,5852b24667651f0f9cba16f48619a025f2a194ae
 amendment_of,0.882,amendment,"refiled 42d later, same location",KS,Lucent Technologies,2003-03-25,Lucent Technologies,2003-02-11,bdc6ac699057295144cfdcbb0d7186cc2991b345,08dad8ab9d222e5994dd900eb4790d204e406407
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Lucent Technologies,2003-03-25,Lucent Technologies,2003-02-25,bdc6ac699057295144cfdcbb0d7186cc2991b345,99eb2cd9538141244d05451b47d088fd5093676e
 amendment_of,0.882,amendment,"refiled 28d later, same location",KS,Lucent Technologies,2003-03-25,Lucent Technologies,2003-02-25,bdc6ac699057295144cfdcbb0d7186cc2991b345,5fd77dff8271fd549d0e06647303d0d6d0938066
 amendment_of,0.925,amendment,"refiled 14d later, same location",KS,Lucent Technologies,2003-03-25,Lucent Technologies,2003-03-11,bdc6ac699057295144cfdcbb0d7186cc2991b345,b26411ef327f7f283bcccd957c42a0b2ef2a31bc
 amendment_of,0.882,amendment,"refiled 14d later, same location",KS,Lucent Technologies,2003-03-25,Lucent Technologies,2003-03-11,bdc6ac699057295144cfdcbb0d7186cc2991b345,f5818d63d13716bb0828e3bb904d4a1e44a666ac
+amendment_of,0.882,amendment,"refiled 42d later, same location",KS,Lucent Technologies,2003-03-25,Lucent Technologies,2003-02-11,f405d00206eb56efcdf8eb51a1915c9fd62dc800,5852b24667651f0f9cba16f48619a025f2a194ae
+amendment_of,0.925,amendment,"refiled 42d later, same location",KS,Lucent Technologies,2003-03-25,Lucent Technologies,2003-02-11,f405d00206eb56efcdf8eb51a1915c9fd62dc800,08dad8ab9d222e5994dd900eb4790d204e406407
+amendment_of,0.882,amendment,"refiled 28d later, same location",KS,Lucent Technologies,2003-03-25,Lucent Technologies,2003-02-25,f405d00206eb56efcdf8eb51a1915c9fd62dc800,99eb2cd9538141244d05451b47d088fd5093676e
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Lucent Technologies,2003-03-25,Lucent Technologies,2003-02-25,f405d00206eb56efcdf8eb51a1915c9fd62dc800,5fd77dff8271fd549d0e06647303d0d6d0938066
+amendment_of,0.882,amendment,"refiled 14d later, same location",KS,Lucent Technologies,2003-03-25,Lucent Technologies,2003-03-11,f405d00206eb56efcdf8eb51a1915c9fd62dc800,b26411ef327f7f283bcccd957c42a0b2ef2a31bc
+amendment_of,0.925,amendment,"refiled 14d later, same location",KS,Lucent Technologies,2003-03-25,Lucent Technologies,2003-03-11,f405d00206eb56efcdf8eb51a1915c9fd62dc800,f5818d63d13716bb0828e3bb904d4a1e44a666ac
 amendment_of,0.925,amendment,"refiled 43d later, same location",KS,Lucent Technologies,2003-04-09,Lucent Technologies,2003-02-25,b2eac4af650885831a98fa95619b42b0efde60c4,99eb2cd9538141244d05451b47d088fd5093676e
 amendment_of,0.882,amendment,"refiled 43d later, same location",KS,Lucent Technologies,2003-04-09,Lucent Technologies,2003-02-25,b2eac4af650885831a98fa95619b42b0efde60c4,5fd77dff8271fd549d0e06647303d0d6d0938066
 amendment_of,0.925,amendment,"refiled 29d later, same location",KS,Lucent Technologies,2003-04-09,Lucent Technologies,2003-03-11,b2eac4af650885831a98fa95619b42b0efde60c4,b26411ef327f7f283bcccd957c42a0b2ef2a31bc
 amendment_of,0.882,amendment,"refiled 29d later, same location",KS,Lucent Technologies,2003-04-09,Lucent Technologies,2003-03-11,b2eac4af650885831a98fa95619b42b0efde60c4,f5818d63d13716bb0828e3bb904d4a1e44a666ac
 amendment_of,0.925,amendment,"refiled 15d later, same location",KS,Lucent Technologies,2003-04-09,Lucent Technologies,2003-03-25,b2eac4af650885831a98fa95619b42b0efde60c4,bdc6ac699057295144cfdcbb0d7186cc2991b345
+amendment_of,0.882,amendment,"refiled 15d later, same location",KS,Lucent Technologies,2003-04-09,Lucent Technologies,2003-03-25,b2eac4af650885831a98fa95619b42b0efde60c4,f405d00206eb56efcdf8eb51a1915c9fd62dc800
+amendment_of,0.882,amendment,"refiled 43d later, same location",KS,Lucent Technologies,2003-04-09,Lucent Technologies,2003-02-25,5bf059a235ee4b04ce34ff1b212919b4c75fac94,99eb2cd9538141244d05451b47d088fd5093676e
+amendment_of,0.925,amendment,"refiled 43d later, same location",KS,Lucent Technologies,2003-04-09,Lucent Technologies,2003-02-25,5bf059a235ee4b04ce34ff1b212919b4c75fac94,5fd77dff8271fd549d0e06647303d0d6d0938066
+amendment_of,0.882,amendment,"refiled 29d later, same location",KS,Lucent Technologies,2003-04-09,Lucent Technologies,2003-03-11,5bf059a235ee4b04ce34ff1b212919b4c75fac94,b26411ef327f7f283bcccd957c42a0b2ef2a31bc
+amendment_of,0.925,amendment,"refiled 29d later, same location",KS,Lucent Technologies,2003-04-09,Lucent Technologies,2003-03-11,5bf059a235ee4b04ce34ff1b212919b4c75fac94,f5818d63d13716bb0828e3bb904d4a1e44a666ac
+amendment_of,0.882,amendment,"refiled 15d later, same location",KS,Lucent Technologies,2003-04-09,Lucent Technologies,2003-03-25,5bf059a235ee4b04ce34ff1b212919b4c75fac94,bdc6ac699057295144cfdcbb0d7186cc2991b345
+amendment_of,0.925,amendment,"refiled 15d later, same location",KS,Lucent Technologies,2003-04-09,Lucent Technologies,2003-03-25,5bf059a235ee4b04ce34ff1b212919b4c75fac94,f405d00206eb56efcdf8eb51a1915c9fd62dc800
 amendment_of,0.925,amendment,"refiled 7d later, same location",KS,Raytheon Aircraft,2003-04-09,Raytheon Aircraft,2003-04-02,e1d8bcaf10bd373739ced8a52017a76bb961a80d,d2ea116b7a1838965e16840012ff05f5029612e9
 amendment_of,0.925,amendment,"refiled 34d later, same location",KS,Cessna,2003-04-10,Cessna,2003-03-07,dfa683c5f89e9b34a46d7b3206a11dec51d96e52,e063ef3e9b73d4e2f5571ea9afc98d066039ed9d
+amendment_of,0.883,amendment,"refiled 34d later, same location",KS,Cessna,2003-04-10,Cessna,2003-03-07,dfa683c5f89e9b34a46d7b3206a11dec51d96e52,8d5a6421011e45ed844632fabe5c1ce293a67c66
+amendment_of,0.883,amendment,"refiled 34d later, same location",KS,Cessna,2003-04-10,Cessna,2003-03-07,55da5515e226294a13adaae2827909523c60f1d8,e063ef3e9b73d4e2f5571ea9afc98d066039ed9d
+amendment_of,0.925,amendment,"refiled 34d later, same location",KS,Cessna,2003-04-10,Cessna,2003-03-07,55da5515e226294a13adaae2827909523c60f1d8,8d5a6421011e45ed844632fabe5c1ce293a67c66
 amendment_of,0.925,amendment,"refiled 6d later, same location",KS,Teletech,2003-04-15,TeleTech,2003-04-09,a9123edd3018b064d7301e3d637c85bd188b49b6,e8bd085de5ccff0797688a513a358ecdcc1a437a
+amendment_of,0.882,amendment,"refiled 6d later, same location",KS,Teletech,2003-04-15,TeleTech,2003-04-09,a9123edd3018b064d7301e3d637c85bd188b49b6,a9ee25ec3254be7b2207b9838a8310aec6323696
+amendment_of,0.882,amendment,"refiled 6d later, same location",KS,Teletech,2003-04-15,TeleTech,2003-04-09,42408d122e9e53cf96ef1177f643785320753853,e8bd085de5ccff0797688a513a358ecdcc1a437a
+amendment_of,0.925,amendment,"refiled 6d later, same location",KS,Teletech,2003-04-15,TeleTech,2003-04-09,42408d122e9e53cf96ef1177f643785320753853,a9ee25ec3254be7b2207b9838a8310aec6323696
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2003-04-21,Boeing Company,2003-03-24,3a79bc85e0ba9b7d0d32a004633871dc46d27b36,1a01dfc8f00653e7f6a1a79239a670768c8cc5b0
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2003-04-21,Boeing Company,2003-03-24,3a79bc85e0ba9b7d0d32a004633871dc46d27b36,db8591493eab05cc9e6ec51abae34700e4453bfe
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2003-04-21,Boeing Company,2003-03-24,096fc9115c8c977ca94b4a4d91a285018198c063,1a01dfc8f00653e7f6a1a79239a670768c8cc5b0
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2003-04-21,Boeing Company,2003-03-24,096fc9115c8c977ca94b4a4d91a285018198c063,db8591493eab05cc9e6ec51abae34700e4453bfe
 amendment_of,0.925,amendment,"refiled 30d later, same location",KS,Teletech,2003-05-09,TeleTech,2003-04-09,4a1f92f8bd90dc490a9b69e6a136404766bdb51a,e8bd085de5ccff0797688a513a358ecdcc1a437a
+amendment_of,0.882,amendment,"refiled 30d later, same location",KS,Teletech,2003-05-09,TeleTech,2003-04-09,4a1f92f8bd90dc490a9b69e6a136404766bdb51a,a9ee25ec3254be7b2207b9838a8310aec6323696
 amendment_of,0.925,amendment,"refiled 24d later, same location",KS,Teletech,2003-05-09,Teletech,2003-04-15,4a1f92f8bd90dc490a9b69e6a136404766bdb51a,a9123edd3018b064d7301e3d637c85bd188b49b6
+amendment_of,0.882,amendment,"refiled 24d later, same location",KS,Teletech,2003-05-09,Teletech,2003-04-15,4a1f92f8bd90dc490a9b69e6a136404766bdb51a,42408d122e9e53cf96ef1177f643785320753853
+amendment_of,0.882,amendment,"refiled 30d later, same location",KS,Teletech,2003-05-09,TeleTech,2003-04-09,a12379a5dc6bbb7d2560753ff934250fa595bb4d,e8bd085de5ccff0797688a513a358ecdcc1a437a
+amendment_of,0.925,amendment,"refiled 30d later, same location",KS,Teletech,2003-05-09,TeleTech,2003-04-09,a12379a5dc6bbb7d2560753ff934250fa595bb4d,a9ee25ec3254be7b2207b9838a8310aec6323696
+amendment_of,0.882,amendment,"refiled 24d later, same location",KS,Teletech,2003-05-09,Teletech,2003-04-15,a12379a5dc6bbb7d2560753ff934250fa595bb4d,a9123edd3018b064d7301e3d637c85bd188b49b6
+amendment_of,0.925,amendment,"refiled 24d later, same location",KS,Teletech,2003-05-09,Teletech,2003-04-15,a12379a5dc6bbb7d2560753ff934250fa595bb4d,42408d122e9e53cf96ef1177f643785320753853
 amendment_of,0.925,amendment,"refiled 32d later, same location",KS,Boeing,2003-05-23,Boeing,2003-04-21,b5b84aa279a953f38db1d7d4039e3c2fa6304a8b,3a79bc85e0ba9b7d0d32a004633871dc46d27b36
+amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Boeing,2003-05-23,Boeing,2003-04-21,b5b84aa279a953f38db1d7d4039e3c2fa6304a8b,096fc9115c8c977ca94b4a4d91a285018198c063
+amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Boeing,2003-05-23,Boeing,2003-04-21,89f7cbdb4c459df42109b9c33a612b9c9ecacd50,3a79bc85e0ba9b7d0d32a004633871dc46d27b36
+amendment_of,0.925,amendment,"refiled 32d later, same location",KS,Boeing,2003-05-23,Boeing,2003-04-21,89f7cbdb4c459df42109b9c33a612b9c9ecacd50,096fc9115c8c977ca94b4a4d91a285018198c063
 amendment_of,0.925,amendment,"refiled 1d later, same location",KS,Raytheon Aircraft,2003-05-30,Raytheon Aircraft,2003-05-29,5b2ffac90c7b326286418bc3be736f7e01e4ad64,7062446450b286e93de8b7e2a9e60045b69bb24e
 amendment_of,0.925,amendment,"refiled 32d later, same location",KS,Learjet,2003-06-02,Learjet,2003-05-01,28712f44b1631db4a0cb459116cbc4614ab806a9,d9293a7f077811bbf52dbe9dc3d4e0fa9d661984
+amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Learjet,2003-06-02,Learjet,2003-05-01,28712f44b1631db4a0cb459116cbc4614ab806a9,9a1743ba18a1be21d17279511e595e3420b89957
+amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Learjet,2003-06-02,Learjet,2003-05-01,6bfd0f662271a8c5db6099ef90eca2db47be857e,d9293a7f077811bbf52dbe9dc3d4e0fa9d661984
+amendment_of,0.925,amendment,"refiled 32d later, same location",KS,Learjet,2003-06-02,Learjet,2003-05-01,6bfd0f662271a8c5db6099ef90eca2db47be857e,9a1743ba18a1be21d17279511e595e3420b89957
 amendment_of,0.925,amendment,"refiled 39d later, same location",KS,"Learjet, Inc.",2003-06-09,Learjet,2003-05-01,64da9407d98d811a334fe22363b3f914e8e24436,d9293a7f077811bbf52dbe9dc3d4e0fa9d661984
+amendment_of,0.883,amendment,"refiled 39d later, same location",KS,"Learjet, Inc.",2003-06-09,Learjet,2003-05-01,64da9407d98d811a334fe22363b3f914e8e24436,9a1743ba18a1be21d17279511e595e3420b89957
 amendment_of,0.925,amendment,"refiled 7d later, same location",KS,"Learjet, Inc.",2003-06-09,Learjet,2003-06-02,64da9407d98d811a334fe22363b3f914e8e24436,28712f44b1631db4a0cb459116cbc4614ab806a9
+amendment_of,0.883,amendment,"refiled 7d later, same location",KS,"Learjet, Inc.",2003-06-09,Learjet,2003-06-02,64da9407d98d811a334fe22363b3f914e8e24436,6bfd0f662271a8c5db6099ef90eca2db47be857e
+amendment_of,0.883,amendment,"refiled 39d later, same location",KS,"Learjet, Inc.",2003-06-09,Learjet,2003-05-01,b260e9fe23889caa7b5fedf94749ff37babba4b3,d9293a7f077811bbf52dbe9dc3d4e0fa9d661984
+amendment_of,0.925,amendment,"refiled 39d later, same location",KS,"Learjet, Inc.",2003-06-09,Learjet,2003-05-01,b260e9fe23889caa7b5fedf94749ff37babba4b3,9a1743ba18a1be21d17279511e595e3420b89957
+amendment_of,0.883,amendment,"refiled 7d later, same location",KS,"Learjet, Inc.",2003-06-09,Learjet,2003-06-02,b260e9fe23889caa7b5fedf94749ff37babba4b3,28712f44b1631db4a0cb459116cbc4614ab806a9
+amendment_of,0.925,amendment,"refiled 7d later, same location",KS,"Learjet, Inc.",2003-06-09,Learjet,2003-06-02,b260e9fe23889caa7b5fedf94749ff37babba4b3,6bfd0f662271a8c5db6099ef90eca2db47be857e
 amendment_of,0.925,amendment,"refiled 31d later, same location",KS,Boeing,2003-06-23,Boeing,2003-05-23,da450c5c5d0a00f9b9257e227472e35c2cd57922,b5b84aa279a953f38db1d7d4039e3c2fa6304a8b
+amendment_of,0.883,amendment,"refiled 31d later, same location",KS,Boeing,2003-06-23,Boeing,2003-05-23,da450c5c5d0a00f9b9257e227472e35c2cd57922,89f7cbdb4c459df42109b9c33a612b9c9ecacd50
+amendment_of,0.883,amendment,"refiled 31d later, same location",KS,Boeing,2003-06-23,Boeing,2003-05-23,77a981e644cac928987b0a8b7e86c344a7d17474,b5b84aa279a953f38db1d7d4039e3c2fa6304a8b
+amendment_of,0.925,amendment,"refiled 31d later, same location",KS,Boeing,2003-06-23,Boeing,2003-05-23,77a981e644cac928987b0a8b7e86c344a7d17474,89f7cbdb4c459df42109b9c33a612b9c9ecacd50
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2003-07-21,Boeing,2003-06-23,98f0a93eb2bc229df6be3bc53b93729b1ff96aad,da450c5c5d0a00f9b9257e227472e35c2cd57922
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2003-07-21,Boeing,2003-06-23,98f0a93eb2bc229df6be3bc53b93729b1ff96aad,77a981e644cac928987b0a8b7e86c344a7d17474
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2003-07-21,Boeing,2003-06-23,a25b9d02c54482f3e54188c0a799087313b09549,da450c5c5d0a00f9b9257e227472e35c2cd57922
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2003-07-21,Boeing,2003-06-23,a25b9d02c54482f3e54188c0a799087313b09549,77a981e644cac928987b0a8b7e86c344a7d17474
 amendment_of,0.925,amendment,"refiled 32d later, same location",KS,Boeing,2003-08-22,Boeing,2003-07-21,708b1d6e69fc8af654c6dac724b0b1df9560ec73,98f0a93eb2bc229df6be3bc53b93729b1ff96aad
+amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Boeing,2003-08-22,Boeing,2003-07-21,708b1d6e69fc8af654c6dac724b0b1df9560ec73,a25b9d02c54482f3e54188c0a799087313b09549
+amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Boeing,2003-08-22,Boeing,2003-07-21,467f90400997016da2af0b0ba04ad0bec1f8d9a8,98f0a93eb2bc229df6be3bc53b93729b1ff96aad
+amendment_of,0.925,amendment,"refiled 32d later, same location",KS,Boeing,2003-08-22,Boeing,2003-07-21,467f90400997016da2af0b0ba04ad0bec1f8d9a8,a25b9d02c54482f3e54188c0a799087313b09549
 amendment_of,0.925,amendment,"refiled 3d later, same location",KS,Tweco,2003-09-18,Tweco,2003-09-15,34a1284757a6f1395ccec711abab663611148476,4b8fc9ffcbf08f5c6bc010606d45413ed0837634
+amendment_of,0.883,amendment,"refiled 3d later, same location",KS,Tweco,2003-09-18,Tweco,2003-09-15,34a1284757a6f1395ccec711abab663611148476,b23c089002fc6e83c6397bf2e3965aef69f68d34
+amendment_of,0.883,amendment,"refiled 3d later, same location",KS,Tweco,2003-09-18,Tweco,2003-09-15,99c83d27b55eb774a71ca12a64f6665b9b13a0af,4b8fc9ffcbf08f5c6bc010606d45413ed0837634
+amendment_of,0.925,amendment,"refiled 3d later, same location",KS,Tweco,2003-09-18,Tweco,2003-09-15,99c83d27b55eb774a71ca12a64f6665b9b13a0af,b23c089002fc6e83c6397bf2e3965aef69f68d34
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2003-09-19,Boeing,2003-08-22,8d6133b341dac5e2d62333e3e1e9e3e3a26108a2,708b1d6e69fc8af654c6dac724b0b1df9560ec73
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2003-09-19,Boeing,2003-08-22,8d6133b341dac5e2d62333e3e1e9e3e3a26108a2,467f90400997016da2af0b0ba04ad0bec1f8d9a8
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2003-09-19,Boeing,2003-08-22,f079bae8f7f49822d29682b5f7e349709d430512,708b1d6e69fc8af654c6dac724b0b1df9560ec73
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2003-09-19,Boeing,2003-08-22,f079bae8f7f49822d29682b5f7e349709d430512,467f90400997016da2af0b0ba04ad0bec1f8d9a8
 amendment_of,0.925,amendment,"refiled 10d later, same location",KS,Tweco,2003-09-25,Tweco,2003-09-15,4fc2e379a4bfea9917e99d0cca244b8e3b4da7e2,4b8fc9ffcbf08f5c6bc010606d45413ed0837634
+amendment_of,0.883,amendment,"refiled 10d later, same location",KS,Tweco,2003-09-25,Tweco,2003-09-15,4fc2e379a4bfea9917e99d0cca244b8e3b4da7e2,b23c089002fc6e83c6397bf2e3965aef69f68d34
 amendment_of,0.925,amendment,"refiled 7d later, same location",KS,Tweco,2003-09-25,Tweco,2003-09-18,4fc2e379a4bfea9917e99d0cca244b8e3b4da7e2,34a1284757a6f1395ccec711abab663611148476
+amendment_of,0.883,amendment,"refiled 7d later, same location",KS,Tweco,2003-09-25,Tweco,2003-09-18,4fc2e379a4bfea9917e99d0cca244b8e3b4da7e2,99c83d27b55eb774a71ca12a64f6665b9b13a0af
+amendment_of,0.883,amendment,"refiled 10d later, same location",KS,Tweco,2003-09-25,Tweco,2003-09-15,285c45dfb1fbde3c44ebfe8318e92b4d12d5dd44,4b8fc9ffcbf08f5c6bc010606d45413ed0837634
+amendment_of,0.925,amendment,"refiled 10d later, same location",KS,Tweco,2003-09-25,Tweco,2003-09-15,285c45dfb1fbde3c44ebfe8318e92b4d12d5dd44,b23c089002fc6e83c6397bf2e3965aef69f68d34
+amendment_of,0.883,amendment,"refiled 7d later, same location",KS,Tweco,2003-09-25,Tweco,2003-09-18,285c45dfb1fbde3c44ebfe8318e92b4d12d5dd44,34a1284757a6f1395ccec711abab663611148476
+amendment_of,0.925,amendment,"refiled 7d later, same location",KS,Tweco,2003-09-25,Tweco,2003-09-18,285c45dfb1fbde3c44ebfe8318e92b4d12d5dd44,99c83d27b55eb774a71ca12a64f6665b9b13a0af
 amendment_of,0.925,amendment,"refiled 21d later, same location",KS,Boeing,2003-10-10,Boeing,2003-09-19,d889448c9356bae4053612461dcf0f9f0a6ad51e,8d6133b341dac5e2d62333e3e1e9e3e3a26108a2
+amendment_of,0.883,amendment,"refiled 21d later, same location",KS,Boeing,2003-10-10,Boeing,2003-09-19,d889448c9356bae4053612461dcf0f9f0a6ad51e,f079bae8f7f49822d29682b5f7e349709d430512
+amendment_of,0.883,amendment,"refiled 21d later, same location",KS,Boeing,2003-10-10,Boeing,2003-09-19,cd53afd55ec3012cf21f872897a97bdf78e8d662,8d6133b341dac5e2d62333e3e1e9e3e3a26108a2
+amendment_of,0.925,amendment,"refiled 21d later, same location",KS,Boeing,2003-10-10,Boeing,2003-09-19,cd53afd55ec3012cf21f872897a97bdf78e8d662,f079bae8f7f49822d29682b5f7e349709d430512
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Tweco,2003-10-13,Tweco,2003-09-15,da642c8bfdb8be15732d44edc2350aa004dc2446,4b8fc9ffcbf08f5c6bc010606d45413ed0837634
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Tweco,2003-10-13,Tweco,2003-09-15,da642c8bfdb8be15732d44edc2350aa004dc2446,b23c089002fc6e83c6397bf2e3965aef69f68d34
 amendment_of,0.925,amendment,"refiled 25d later, same location",KS,Tweco,2003-10-13,Tweco,2003-09-18,da642c8bfdb8be15732d44edc2350aa004dc2446,34a1284757a6f1395ccec711abab663611148476
+amendment_of,0.883,amendment,"refiled 25d later, same location",KS,Tweco,2003-10-13,Tweco,2003-09-18,da642c8bfdb8be15732d44edc2350aa004dc2446,99c83d27b55eb774a71ca12a64f6665b9b13a0af
 amendment_of,0.925,amendment,"refiled 18d later, same location",KS,Tweco,2003-10-13,Tweco,2003-09-25,da642c8bfdb8be15732d44edc2350aa004dc2446,4fc2e379a4bfea9917e99d0cca244b8e3b4da7e2
+amendment_of,0.883,amendment,"refiled 18d later, same location",KS,Tweco,2003-10-13,Tweco,2003-09-25,da642c8bfdb8be15732d44edc2350aa004dc2446,285c45dfb1fbde3c44ebfe8318e92b4d12d5dd44
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Tweco,2003-10-13,Tweco,2003-09-15,8de91f45a9607b7233d07400b81cf1df3163ba36,4b8fc9ffcbf08f5c6bc010606d45413ed0837634
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Tweco,2003-10-13,Tweco,2003-09-15,8de91f45a9607b7233d07400b81cf1df3163ba36,b23c089002fc6e83c6397bf2e3965aef69f68d34
+amendment_of,0.883,amendment,"refiled 25d later, same location",KS,Tweco,2003-10-13,Tweco,2003-09-18,8de91f45a9607b7233d07400b81cf1df3163ba36,34a1284757a6f1395ccec711abab663611148476
+amendment_of,0.925,amendment,"refiled 25d later, same location",KS,Tweco,2003-10-13,Tweco,2003-09-18,8de91f45a9607b7233d07400b81cf1df3163ba36,99c83d27b55eb774a71ca12a64f6665b9b13a0af
+amendment_of,0.883,amendment,"refiled 18d later, same location",KS,Tweco,2003-10-13,Tweco,2003-09-25,8de91f45a9607b7233d07400b81cf1df3163ba36,4fc2e379a4bfea9917e99d0cca244b8e3b4da7e2
+amendment_of,0.925,amendment,"refiled 18d later, same location",KS,Tweco,2003-10-13,Tweco,2003-09-25,8de91f45a9607b7233d07400b81cf1df3163ba36,285c45dfb1fbde3c44ebfe8318e92b4d12d5dd44
 amendment_of,0.925,amendment,"refiled 1d later, same location",KS,Farmland,2003-10-17,Farmland,2003-10-16,e0c463ff078a60146b7311fed61011a99aa77d17,d72f2007505fec8fb5eb172c0732a38c7227dd2d
 amendment_of,0.925,amendment,"refiled 34d later, same location",KS,Tweco,2003-10-19,Tweco,2003-09-15,36a56671352f070e311f48c90fa978a1d54b3048,4b8fc9ffcbf08f5c6bc010606d45413ed0837634
+amendment_of,0.883,amendment,"refiled 34d later, same location",KS,Tweco,2003-10-19,Tweco,2003-09-15,36a56671352f070e311f48c90fa978a1d54b3048,b23c089002fc6e83c6397bf2e3965aef69f68d34
 amendment_of,0.925,amendment,"refiled 31d later, same location",KS,Tweco,2003-10-19,Tweco,2003-09-18,36a56671352f070e311f48c90fa978a1d54b3048,34a1284757a6f1395ccec711abab663611148476
+amendment_of,0.883,amendment,"refiled 31d later, same location",KS,Tweco,2003-10-19,Tweco,2003-09-18,36a56671352f070e311f48c90fa978a1d54b3048,99c83d27b55eb774a71ca12a64f6665b9b13a0af
 amendment_of,0.925,amendment,"refiled 24d later, same location",KS,Tweco,2003-10-19,Tweco,2003-09-25,36a56671352f070e311f48c90fa978a1d54b3048,4fc2e379a4bfea9917e99d0cca244b8e3b4da7e2
+amendment_of,0.883,amendment,"refiled 24d later, same location",KS,Tweco,2003-10-19,Tweco,2003-09-25,36a56671352f070e311f48c90fa978a1d54b3048,285c45dfb1fbde3c44ebfe8318e92b4d12d5dd44
 amendment_of,0.925,amendment,"refiled 6d later, same location",KS,Tweco,2003-10-19,Tweco,2003-10-13,36a56671352f070e311f48c90fa978a1d54b3048,da642c8bfdb8be15732d44edc2350aa004dc2446
+amendment_of,0.883,amendment,"refiled 6d later, same location",KS,Tweco,2003-10-19,Tweco,2003-10-13,36a56671352f070e311f48c90fa978a1d54b3048,8de91f45a9607b7233d07400b81cf1df3163ba36
+amendment_of,0.883,amendment,"refiled 34d later, same location",KS,Tweco,2003-10-19,Tweco,2003-09-15,15df942ef18a3c675fba6c14fcaeee2d1e9637f6,4b8fc9ffcbf08f5c6bc010606d45413ed0837634
+amendment_of,0.925,amendment,"refiled 34d later, same location",KS,Tweco,2003-10-19,Tweco,2003-09-15,15df942ef18a3c675fba6c14fcaeee2d1e9637f6,b23c089002fc6e83c6397bf2e3965aef69f68d34
+amendment_of,0.883,amendment,"refiled 31d later, same location",KS,Tweco,2003-10-19,Tweco,2003-09-18,15df942ef18a3c675fba6c14fcaeee2d1e9637f6,34a1284757a6f1395ccec711abab663611148476
+amendment_of,0.925,amendment,"refiled 31d later, same location",KS,Tweco,2003-10-19,Tweco,2003-09-18,15df942ef18a3c675fba6c14fcaeee2d1e9637f6,99c83d27b55eb774a71ca12a64f6665b9b13a0af
+amendment_of,0.883,amendment,"refiled 24d later, same location",KS,Tweco,2003-10-19,Tweco,2003-09-25,15df942ef18a3c675fba6c14fcaeee2d1e9637f6,4fc2e379a4bfea9917e99d0cca244b8e3b4da7e2
+amendment_of,0.925,amendment,"refiled 24d later, same location",KS,Tweco,2003-10-19,Tweco,2003-09-25,15df942ef18a3c675fba6c14fcaeee2d1e9637f6,285c45dfb1fbde3c44ebfe8318e92b4d12d5dd44
+amendment_of,0.883,amendment,"refiled 6d later, same location",KS,Tweco,2003-10-19,Tweco,2003-10-13,15df942ef18a3c675fba6c14fcaeee2d1e9637f6,da642c8bfdb8be15732d44edc2350aa004dc2446
+amendment_of,0.925,amendment,"refiled 6d later, same location",KS,Tweco,2003-10-19,Tweco,2003-10-13,15df942ef18a3c675fba6c14fcaeee2d1e9637f6,8de91f45a9607b7233d07400b81cf1df3163ba36
 amendment_of,0.925,amendment,"refiled 35d later, same location",KS,Boeing,2003-10-24,Boeing,2003-09-19,8a10a4403c38c3f2f7e6ee6204ed7a4a7a24baa6,8d6133b341dac5e2d62333e3e1e9e3e3a26108a2
+amendment_of,0.883,amendment,"refiled 35d later, same location",KS,Boeing,2003-10-24,Boeing,2003-09-19,8a10a4403c38c3f2f7e6ee6204ed7a4a7a24baa6,f079bae8f7f49822d29682b5f7e349709d430512
 amendment_of,0.925,amendment,"refiled 14d later, same location",KS,Boeing,2003-10-24,Boeing,2003-10-10,8a10a4403c38c3f2f7e6ee6204ed7a4a7a24baa6,d889448c9356bae4053612461dcf0f9f0a6ad51e
+amendment_of,0.883,amendment,"refiled 14d later, same location",KS,Boeing,2003-10-24,Boeing,2003-10-10,8a10a4403c38c3f2f7e6ee6204ed7a4a7a24baa6,cd53afd55ec3012cf21f872897a97bdf78e8d662
+amendment_of,0.883,amendment,"refiled 35d later, same location",KS,Boeing,2003-10-24,Boeing,2003-09-19,fc9cd22f2962f414cbced7d8145c033f28218b94,8d6133b341dac5e2d62333e3e1e9e3e3a26108a2
+amendment_of,0.925,amendment,"refiled 35d later, same location",KS,Boeing,2003-10-24,Boeing,2003-09-19,fc9cd22f2962f414cbced7d8145c033f28218b94,f079bae8f7f49822d29682b5f7e349709d430512
+amendment_of,0.883,amendment,"refiled 14d later, same location",KS,Boeing,2003-10-24,Boeing,2003-10-10,fc9cd22f2962f414cbced7d8145c033f28218b94,d889448c9356bae4053612461dcf0f9f0a6ad51e
+amendment_of,0.925,amendment,"refiled 14d later, same location",KS,Boeing,2003-10-24,Boeing,2003-10-10,fc9cd22f2962f414cbced7d8145c033f28218b94,cd53afd55ec3012cf21f872897a97bdf78e8d662
 amendment_of,0.925,amendment,"refiled 42d later, same location",KS,Tweco,2003-11-06,Tweco,2003-09-25,8d2522b0f9d9693e5d9e1acfd57c9d4d03f8a0d8,4fc2e379a4bfea9917e99d0cca244b8e3b4da7e2
+amendment_of,0.883,amendment,"refiled 42d later, same location",KS,Tweco,2003-11-06,Tweco,2003-09-25,8d2522b0f9d9693e5d9e1acfd57c9d4d03f8a0d8,285c45dfb1fbde3c44ebfe8318e92b4d12d5dd44
 amendment_of,0.925,amendment,"refiled 24d later, same location",KS,Tweco,2003-11-06,Tweco,2003-10-13,8d2522b0f9d9693e5d9e1acfd57c9d4d03f8a0d8,da642c8bfdb8be15732d44edc2350aa004dc2446
+amendment_of,0.883,amendment,"refiled 24d later, same location",KS,Tweco,2003-11-06,Tweco,2003-10-13,8d2522b0f9d9693e5d9e1acfd57c9d4d03f8a0d8,8de91f45a9607b7233d07400b81cf1df3163ba36
 amendment_of,0.925,amendment,"refiled 18d later, same location",KS,Tweco,2003-11-06,Tweco,2003-10-19,8d2522b0f9d9693e5d9e1acfd57c9d4d03f8a0d8,36a56671352f070e311f48c90fa978a1d54b3048
+amendment_of,0.883,amendment,"refiled 18d later, same location",KS,Tweco,2003-11-06,Tweco,2003-10-19,8d2522b0f9d9693e5d9e1acfd57c9d4d03f8a0d8,15df942ef18a3c675fba6c14fcaeee2d1e9637f6
+amendment_of,0.883,amendment,"refiled 42d later, same location",KS,Tweco,2003-11-06,Tweco,2003-09-25,eacbe1b0fd89494596485d54e97a8bb5788a1af7,4fc2e379a4bfea9917e99d0cca244b8e3b4da7e2
+amendment_of,0.925,amendment,"refiled 42d later, same location",KS,Tweco,2003-11-06,Tweco,2003-09-25,eacbe1b0fd89494596485d54e97a8bb5788a1af7,285c45dfb1fbde3c44ebfe8318e92b4d12d5dd44
+amendment_of,0.883,amendment,"refiled 24d later, same location",KS,Tweco,2003-11-06,Tweco,2003-10-13,eacbe1b0fd89494596485d54e97a8bb5788a1af7,da642c8bfdb8be15732d44edc2350aa004dc2446
+amendment_of,0.925,amendment,"refiled 24d later, same location",KS,Tweco,2003-11-06,Tweco,2003-10-13,eacbe1b0fd89494596485d54e97a8bb5788a1af7,8de91f45a9607b7233d07400b81cf1df3163ba36
+amendment_of,0.883,amendment,"refiled 18d later, same location",KS,Tweco,2003-11-06,Tweco,2003-10-19,eacbe1b0fd89494596485d54e97a8bb5788a1af7,36a56671352f070e311f48c90fa978a1d54b3048
+amendment_of,0.925,amendment,"refiled 18d later, same location",KS,Tweco,2003-11-06,Tweco,2003-10-19,eacbe1b0fd89494596485d54e97a8bb5788a1af7,15df942ef18a3c675fba6c14fcaeee2d1e9637f6
 amendment_of,0.925,amendment,"refiled 42d later, same location",KS,Boeing,2003-11-21,Boeing,2003-10-10,6532bdf90e6954d8a43a62610e4eab433c72a229,d889448c9356bae4053612461dcf0f9f0a6ad51e
+amendment_of,0.883,amendment,"refiled 42d later, same location",KS,Boeing,2003-11-21,Boeing,2003-10-10,6532bdf90e6954d8a43a62610e4eab433c72a229,cd53afd55ec3012cf21f872897a97bdf78e8d662
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2003-11-21,Boeing,2003-10-24,6532bdf90e6954d8a43a62610e4eab433c72a229,8a10a4403c38c3f2f7e6ee6204ed7a4a7a24baa6
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2003-11-21,Boeing,2003-10-24,6532bdf90e6954d8a43a62610e4eab433c72a229,fc9cd22f2962f414cbced7d8145c033f28218b94
+amendment_of,0.883,amendment,"refiled 42d later, same location",KS,Boeing,2003-11-21,Boeing,2003-10-10,156bf01008e1efbdb8f9bc79d6d648393f404f8e,d889448c9356bae4053612461dcf0f9f0a6ad51e
+amendment_of,0.925,amendment,"refiled 42d later, same location",KS,Boeing,2003-11-21,Boeing,2003-10-10,156bf01008e1efbdb8f9bc79d6d648393f404f8e,cd53afd55ec3012cf21f872897a97bdf78e8d662
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2003-11-21,Boeing,2003-10-24,156bf01008e1efbdb8f9bc79d6d648393f404f8e,8a10a4403c38c3f2f7e6ee6204ed7a4a7a24baa6
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2003-11-21,Boeing,2003-10-24,156bf01008e1efbdb8f9bc79d6d648393f404f8e,fc9cd22f2962f414cbced7d8145c033f28218b94
 amendment_of,0.925,amendment,"refiled 11d later, same location",KS,Bombardier,2003-12-02,Bombardier,2003-11-21,2cf45b7508906c7dc67484048d529a113a0afec2,07ee5f4745c73e0c9d13ec393528b663f3dd04bd
+amendment_of,0.883,amendment,"refiled 11d later, same location",KS,Bombardier,2003-12-02,Bombardier,2003-11-21,2cf45b7508906c7dc67484048d529a113a0afec2,d2488a8346002fd14756c387d7fc1c46a5c6762a
+amendment_of,0.883,amendment,"refiled 11d later, same location",KS,Bombardier,2003-12-02,Bombardier,2003-11-21,160a279266dae983fff296c29cfcd3b8a30d8b05,07ee5f4745c73e0c9d13ec393528b663f3dd04bd
+amendment_of,0.925,amendment,"refiled 11d later, same location",KS,Bombardier,2003-12-02,Bombardier,2003-11-21,160a279266dae983fff296c29cfcd3b8a30d8b05,d2488a8346002fd14756c387d7fc1c46a5c6762a
 amendment_of,0.925,amendment,"refiled 17d later, same location",KS,Bombardier,2003-12-08,Bombardier,2003-11-21,adab796d70181d9154b2a983c3f7882d02ac6390,07ee5f4745c73e0c9d13ec393528b663f3dd04bd
+amendment_of,0.883,amendment,"refiled 17d later, same location",KS,Bombardier,2003-12-08,Bombardier,2003-11-21,adab796d70181d9154b2a983c3f7882d02ac6390,d2488a8346002fd14756c387d7fc1c46a5c6762a
 amendment_of,0.925,amendment,"refiled 6d later, same location",KS,Bombardier,2003-12-08,Bombardier,2003-12-02,adab796d70181d9154b2a983c3f7882d02ac6390,2cf45b7508906c7dc67484048d529a113a0afec2
+amendment_of,0.883,amendment,"refiled 6d later, same location",KS,Bombardier,2003-12-08,Bombardier,2003-12-02,adab796d70181d9154b2a983c3f7882d02ac6390,160a279266dae983fff296c29cfcd3b8a30d8b05
+amendment_of,0.883,amendment,"refiled 17d later, same location",KS,Bombardier,2003-12-08,Bombardier,2003-11-21,05d9bd23ccbd36c1c6c536f5f1f606762c13992b,07ee5f4745c73e0c9d13ec393528b663f3dd04bd
+amendment_of,0.925,amendment,"refiled 17d later, same location",KS,Bombardier,2003-12-08,Bombardier,2003-11-21,05d9bd23ccbd36c1c6c536f5f1f606762c13992b,d2488a8346002fd14756c387d7fc1c46a5c6762a
+amendment_of,0.883,amendment,"refiled 6d later, same location",KS,Bombardier,2003-12-08,Bombardier,2003-12-02,05d9bd23ccbd36c1c6c536f5f1f606762c13992b,2cf45b7508906c7dc67484048d529a113a0afec2
+amendment_of,0.925,amendment,"refiled 6d later, same location",KS,Bombardier,2003-12-08,Bombardier,2003-12-02,05d9bd23ccbd36c1c6c536f5f1f606762c13992b,160a279266dae983fff296c29cfcd3b8a30d8b05
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2003-12-19,Boeing,2003-11-21,d1a8ef86219e28b149b4f1d707a261380d8d840e,6532bdf90e6954d8a43a62610e4eab433c72a229
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2003-12-19,Boeing,2003-11-21,d1a8ef86219e28b149b4f1d707a261380d8d840e,156bf01008e1efbdb8f9bc79d6d648393f404f8e
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2003-12-19,Boeing,2003-11-21,460c339924504ffcc6d637f8b8e11e97de32e15b,6532bdf90e6954d8a43a62610e4eab433c72a229
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2003-12-19,Boeing,2003-11-21,460c339924504ffcc6d637f8b8e11e97de32e15b,156bf01008e1efbdb8f9bc79d6d648393f404f8e
 amendment_of,0.925,amendment,"refiled 36d later, same location",KS,Bombardier,2004-01-07,Bombardier,2003-12-02,2111eb683349e76b53fb851fe59d563ab6267343,2cf45b7508906c7dc67484048d529a113a0afec2
+amendment_of,0.883,amendment,"refiled 36d later, same location",KS,Bombardier,2004-01-07,Bombardier,2003-12-02,2111eb683349e76b53fb851fe59d563ab6267343,160a279266dae983fff296c29cfcd3b8a30d8b05
 amendment_of,0.925,amendment,"refiled 30d later, same location",KS,Bombardier,2004-01-07,Bombardier,2003-12-08,2111eb683349e76b53fb851fe59d563ab6267343,adab796d70181d9154b2a983c3f7882d02ac6390
+amendment_of,0.883,amendment,"refiled 30d later, same location",KS,Bombardier,2004-01-07,Bombardier,2003-12-08,2111eb683349e76b53fb851fe59d563ab6267343,05d9bd23ccbd36c1c6c536f5f1f606762c13992b
 amendment_of,0.883,amendment,"refiled 36d later, same location",KS,Bombardier,2004-01-07,Bombardier,2003-12-02,ff4220934b013d40391788db9eda89aef1c2d58c,2cf45b7508906c7dc67484048d529a113a0afec2
+amendment_of,0.925,amendment,"refiled 36d later, same location",KS,Bombardier,2004-01-07,Bombardier,2003-12-02,ff4220934b013d40391788db9eda89aef1c2d58c,160a279266dae983fff296c29cfcd3b8a30d8b05
 amendment_of,0.883,amendment,"refiled 30d later, same location",KS,Bombardier,2004-01-07,Bombardier,2003-12-08,ff4220934b013d40391788db9eda89aef1c2d58c,adab796d70181d9154b2a983c3f7882d02ac6390
+amendment_of,0.925,amendment,"refiled 30d later, same location",KS,Bombardier,2004-01-07,Bombardier,2003-12-08,ff4220934b013d40391788db9eda89aef1c2d58c,05d9bd23ccbd36c1c6c536f5f1f606762c13992b
 amendment_of,0.925,amendment,"refiled 7d later, same location",KS,Tweco,2004-01-13,Tweco,2004-01-06,ed26c50502137211a4b3ff166de97371c9056663,0801838effdf722b33b9b8a90b343abd0ae0b67b
 amendment_of,0.883,amendment,"refiled 7d later, same location",KS,Tweco,2004-01-13,Tweco,2004-01-06,ed26c50502137211a4b3ff166de97371c9056663,70981ed2094e1c69f6604faafbfb6e6f02e2403d
 amendment_of,0.883,amendment,"refiled 7d later, same location",KS,Tweco,2004-01-13,Tweco,2004-01-06,13c48a7c600a0b969232f3d7000b660256f6940e,0801838effdf722b33b9b8a90b343abd0ae0b67b
@@ -6257,28 +6474,80 @@ amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2013-1
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2013-12-20,Boeing,2013-11-22,19452db1a1ed72bdb3b21fabde57b90789d1b46d,2db94d144037ff9cdf01d727ba93494261862aa8
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2014-01-17,Boeing,2013-12-20,c13090d6a96014bad339e3a994032860a1f07509,2cbc4adbecf67ab1623b9c7d16526a67228bc6f3
 amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2014-01-17,Boeing,2013-12-20,c13090d6a96014bad339e3a994032860a1f07509,19452db1a1ed72bdb3b21fabde57b90789d1b46d
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2014-01-17,Boeing,2013-12-20,53ae10f18715f24a92f3af3e75daeb2de976d414,2cbc4adbecf67ab1623b9c7d16526a67228bc6f3
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2014-01-17,Boeing,2013-12-20,53ae10f18715f24a92f3af3e75daeb2de976d414,19452db1a1ed72bdb3b21fabde57b90789d1b46d
 amendment_of,0.925,amendment,"refiled 43d later, same location",KS,Boeing,2014-02-01,Boeing,2013-12-20,e0aed9f84125d3cae13913c1aa24ed7661305015,2cbc4adbecf67ab1623b9c7d16526a67228bc6f3
 amendment_of,0.883,amendment,"refiled 43d later, same location",KS,Boeing,2014-02-01,Boeing,2013-12-20,e0aed9f84125d3cae13913c1aa24ed7661305015,19452db1a1ed72bdb3b21fabde57b90789d1b46d
 amendment_of,0.925,amendment,"refiled 15d later, same location",KS,Boeing,2014-02-01,Boeing,2014-01-17,e0aed9f84125d3cae13913c1aa24ed7661305015,c13090d6a96014bad339e3a994032860a1f07509
+amendment_of,0.883,amendment,"refiled 15d later, same location",KS,Boeing,2014-02-01,Boeing,2014-01-17,e0aed9f84125d3cae13913c1aa24ed7661305015,53ae10f18715f24a92f3af3e75daeb2de976d414
+amendment_of,0.883,amendment,"refiled 43d later, same location",KS,Boeing,2014-02-01,Boeing,2013-12-20,2858f34d508f34b448a707fbb7957ab6ab184855,2cbc4adbecf67ab1623b9c7d16526a67228bc6f3
+amendment_of,0.925,amendment,"refiled 43d later, same location",KS,Boeing,2014-02-01,Boeing,2013-12-20,2858f34d508f34b448a707fbb7957ab6ab184855,19452db1a1ed72bdb3b21fabde57b90789d1b46d
+amendment_of,0.883,amendment,"refiled 15d later, same location",KS,Boeing,2014-02-01,Boeing,2014-01-17,2858f34d508f34b448a707fbb7957ab6ab184855,c13090d6a96014bad339e3a994032860a1f07509
+amendment_of,0.925,amendment,"refiled 15d later, same location",KS,Boeing,2014-02-01,Boeing,2014-01-17,2858f34d508f34b448a707fbb7957ab6ab184855,53ae10f18715f24a92f3af3e75daeb2de976d414
 amendment_of,0.925,amendment,"refiled 11d later, same location",KS,Center Industries,2014-02-03,Center Industries,2014-01-23,9d672bcb7a5cdde1cf305cdc3dd0889609717f30,695aba136484d4e801cb319af0673d3e07721bde
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2014-02-14,Boeing,2014-01-17,69916633750f5a658358fe7ed36cb72498df0ab6,c13090d6a96014bad339e3a994032860a1f07509
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2014-02-14,Boeing,2014-01-17,69916633750f5a658358fe7ed36cb72498df0ab6,53ae10f18715f24a92f3af3e75daeb2de976d414
 amendment_of,0.925,amendment,"refiled 13d later, same location",KS,Boeing,2014-02-14,Boeing,2014-02-01,69916633750f5a658358fe7ed36cb72498df0ab6,e0aed9f84125d3cae13913c1aa24ed7661305015
+amendment_of,0.883,amendment,"refiled 13d later, same location",KS,Boeing,2014-02-14,Boeing,2014-02-01,69916633750f5a658358fe7ed36cb72498df0ab6,2858f34d508f34b448a707fbb7957ab6ab184855
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2014-02-14,Boeing,2014-01-17,6eb95822f3de1260dba98bc2b272e2a7777edf99,c13090d6a96014bad339e3a994032860a1f07509
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2014-02-14,Boeing,2014-01-17,6eb95822f3de1260dba98bc2b272e2a7777edf99,53ae10f18715f24a92f3af3e75daeb2de976d414
+amendment_of,0.883,amendment,"refiled 13d later, same location",KS,Boeing,2014-02-14,Boeing,2014-02-01,6eb95822f3de1260dba98bc2b272e2a7777edf99,e0aed9f84125d3cae13913c1aa24ed7661305015
+amendment_of,0.925,amendment,"refiled 13d later, same location",KS,Boeing,2014-02-14,Boeing,2014-02-01,6eb95822f3de1260dba98bc2b272e2a7777edf99,2858f34d508f34b448a707fbb7957ab6ab184855
 amendment_of,0.925,amendment,"refiled 41d later, same location",KS,Atlas Aerospace,2014-02-27,Atlas Aerospace,2014-01-17,3d0e0abb7a3f17513f69bd97c99279c9ab006553,5960d9f690cf11edf8853d6c8b6fe880bb028779
 amendment_of,0.925,amendment,"refiled 35d later, same location",KS,Boeing,2014-03-21,Boeing,2014-02-14,39778887225d8f22066add9b05f2be4aeac0256f,69916633750f5a658358fe7ed36cb72498df0ab6
+amendment_of,0.883,amendment,"refiled 35d later, same location",KS,Boeing,2014-03-21,Boeing,2014-02-14,39778887225d8f22066add9b05f2be4aeac0256f,6eb95822f3de1260dba98bc2b272e2a7777edf99
+amendment_of,0.883,amendment,"refiled 35d later, same location",KS,Boeing,2014-03-21,Boeing,2014-02-14,fb1e2b8a62779897df9bffc0f8de0244f8e28d7c,69916633750f5a658358fe7ed36cb72498df0ab6
+amendment_of,0.925,amendment,"refiled 35d later, same location",KS,Boeing,2014-03-21,Boeing,2014-02-14,fb1e2b8a62779897df9bffc0f8de0244f8e28d7c,6eb95822f3de1260dba98bc2b272e2a7777edf99
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2014-04-18,Boeing,2014-03-21,69a14409d482104a47593ba1233915e2361c0677,39778887225d8f22066add9b05f2be4aeac0256f
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2014-04-18,Boeing,2014-03-21,69a14409d482104a47593ba1233915e2361c0677,fb1e2b8a62779897df9bffc0f8de0244f8e28d7c
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2014-04-18,Boeing,2014-03-21,6722ed13ac214fed3b9e2efad02cf0db6ca47bf2,39778887225d8f22066add9b05f2be4aeac0256f
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2014-04-18,Boeing,2014-03-21,6722ed13ac214fed3b9e2efad02cf0db6ca47bf2,fb1e2b8a62779897df9bffc0f8de0244f8e28d7c
 amendment_of,0.925,amendment,"refiled 35d later, same location",KS,Boeing,2014-05-23,Boeing,2014-04-18,0f90c961ea2fbb4b77ce8dc1a06f0fbc342d8e1e,69a14409d482104a47593ba1233915e2361c0677
+amendment_of,0.883,amendment,"refiled 35d later, same location",KS,Boeing,2014-05-23,Boeing,2014-04-18,0f90c961ea2fbb4b77ce8dc1a06f0fbc342d8e1e,6722ed13ac214fed3b9e2efad02cf0db6ca47bf2
+amendment_of,0.883,amendment,"refiled 35d later, same location",KS,Boeing,2014-05-23,Boeing,2014-04-18,8b877ab0ba3be3a5149ed1e100788310c4309460,69a14409d482104a47593ba1233915e2361c0677
+amendment_of,0.925,amendment,"refiled 35d later, same location",KS,Boeing,2014-05-23,Boeing,2014-04-18,8b877ab0ba3be3a5149ed1e100788310c4309460,6722ed13ac214fed3b9e2efad02cf0db6ca47bf2
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2014-06-20,Boeing,2014-05-23,aea9c485fec0785b70be55084faf9180ab8cb993,0f90c961ea2fbb4b77ce8dc1a06f0fbc342d8e1e
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2014-06-20,Boeing,2014-05-23,aea9c485fec0785b70be55084faf9180ab8cb993,8b877ab0ba3be3a5149ed1e100788310c4309460
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2014-06-20,Boeing,2014-05-23,770a8afb5f21a7ccb1ae9032afb69d91c28f823c,0f90c961ea2fbb4b77ce8dc1a06f0fbc342d8e1e
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2014-06-20,Boeing,2014-05-23,770a8afb5f21a7ccb1ae9032afb69d91c28f823c,8b877ab0ba3be3a5149ed1e100788310c4309460
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2014-07-18,Boeing,2014-06-20,c4ea851bc235c84327eb2be21fb54af08b22108c,aea9c485fec0785b70be55084faf9180ab8cb993
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2014-07-18,Boeing,2014-06-20,c4ea851bc235c84327eb2be21fb54af08b22108c,770a8afb5f21a7ccb1ae9032afb69d91c28f823c
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2014-07-18,Boeing,2014-06-20,daa5e978ed331c3ade34201620b961a72c652376,aea9c485fec0785b70be55084faf9180ab8cb993
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2014-07-18,Boeing,2014-06-20,daa5e978ed331c3ade34201620b961a72c652376,770a8afb5f21a7ccb1ae9032afb69d91c28f823c
 amendment_of,0.925,amendment,"refiled 35d later, same location",KS,Boeing,2014-08-22,Boeing,2014-07-18,b596862b641c7f29b3f0e42e567b3f2e3f8c95d7,c4ea851bc235c84327eb2be21fb54af08b22108c
+amendment_of,0.883,amendment,"refiled 35d later, same location",KS,Boeing,2014-08-22,Boeing,2014-07-18,b596862b641c7f29b3f0e42e567b3f2e3f8c95d7,daa5e978ed331c3ade34201620b961a72c652376
+amendment_of,0.883,amendment,"refiled 35d later, same location",KS,Boeing,2014-08-22,Boeing,2014-07-18,ba3d2f39e4c3637777bdf3e3c8bd3348d43e6b08,c4ea851bc235c84327eb2be21fb54af08b22108c
+amendment_of,0.925,amendment,"refiled 35d later, same location",KS,Boeing,2014-08-22,Boeing,2014-07-18,ba3d2f39e4c3637777bdf3e3c8bd3348d43e6b08,daa5e978ed331c3ade34201620b961a72c652376
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2014-09-19,Boeing,2014-08-22,db93b8208f77e39e546628168200072652dcff41,b596862b641c7f29b3f0e42e567b3f2e3f8c95d7
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2014-09-19,Boeing,2014-08-22,db93b8208f77e39e546628168200072652dcff41,ba3d2f39e4c3637777bdf3e3c8bd3348d43e6b08
+amendment_of,0.883,amendment,"refiled 28d later, same location",KS,Boeing,2014-09-19,Boeing,2014-08-22,dbc918ff0f3d489cb77ee0ab3f5c32385d521740,b596862b641c7f29b3f0e42e567b3f2e3f8c95d7
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Boeing,2014-09-19,Boeing,2014-08-22,dbc918ff0f3d489cb77ee0ab3f5c32385d521740,ba3d2f39e4c3637777bdf3e3c8bd3348d43e6b08
 amendment_of,0.925,amendment,"refiled 3d later, same location",KS,Agco,2014-09-25,Agco,2014-09-22,693652f7c2a58e9a77e577b0bc72a2057e7fa852,cb5fd3123610bf2273bc630365a0f451da219f44
 amendment_of,0.925,amendment,"refiled 9d later, same location",KS,Kansas Air National Guard,2014-10-01,Kansas Air National Guard,2014-09-22,b5a027e652f1bf6214c6f55c065ad3701d4b51a5,3a362fa1cbbabeed5675f7a13e694da583574551
 amendment_of,0.925,amendment,"refiled 21d later, same location",KS,Boeing,2014-10-10,Boeing,2014-09-19,7eda39935208104ebe358030150dae64a9d94204,db93b8208f77e39e546628168200072652dcff41
+amendment_of,0.883,amendment,"refiled 21d later, same location",KS,Boeing,2014-10-10,Boeing,2014-09-19,7eda39935208104ebe358030150dae64a9d94204,dbc918ff0f3d489cb77ee0ab3f5c32385d521740
+amendment_of,0.883,amendment,"refiled 21d later, same location",KS,Boeing,2014-10-10,Boeing,2014-09-19,06b71175aa1a7dbf12a350f3e474606d6c72d4fd,db93b8208f77e39e546628168200072652dcff41
+amendment_of,0.925,amendment,"refiled 21d later, same location",KS,Boeing,2014-10-10,Boeing,2014-09-19,06b71175aa1a7dbf12a350f3e474606d6c72d4fd,dbc918ff0f3d489cb77ee0ab3f5c32385d521740
 amendment_of,0.925,amendment,"refiled 42d later, same location",KS,Boeing,2014-10-31,Boeing,2014-09-19,92a19c0456fc0d0dc1a96cbe3150ee0dfa42a8f3,db93b8208f77e39e546628168200072652dcff41
+amendment_of,0.883,amendment,"refiled 42d later, same location",KS,Boeing,2014-10-31,Boeing,2014-09-19,92a19c0456fc0d0dc1a96cbe3150ee0dfa42a8f3,dbc918ff0f3d489cb77ee0ab3f5c32385d521740
 amendment_of,0.925,amendment,"refiled 21d later, same location",KS,Boeing,2014-10-31,Boeing,2014-10-10,92a19c0456fc0d0dc1a96cbe3150ee0dfa42a8f3,7eda39935208104ebe358030150dae64a9d94204
+amendment_of,0.883,amendment,"refiled 21d later, same location",KS,Boeing,2014-10-31,Boeing,2014-10-10,92a19c0456fc0d0dc1a96cbe3150ee0dfa42a8f3,06b71175aa1a7dbf12a350f3e474606d6c72d4fd
+amendment_of,0.883,amendment,"refiled 42d later, same location",KS,Boeing,2014-10-31,Boeing,2014-09-19,ac7673bfe56fd5a363d5ead58dfabe63891e9a72,db93b8208f77e39e546628168200072652dcff41
+amendment_of,0.925,amendment,"refiled 42d later, same location",KS,Boeing,2014-10-31,Boeing,2014-09-19,ac7673bfe56fd5a363d5ead58dfabe63891e9a72,dbc918ff0f3d489cb77ee0ab3f5c32385d521740
+amendment_of,0.883,amendment,"refiled 21d later, same location",KS,Boeing,2014-10-31,Boeing,2014-10-10,ac7673bfe56fd5a363d5ead58dfabe63891e9a72,7eda39935208104ebe358030150dae64a9d94204
+amendment_of,0.925,amendment,"refiled 21d later, same location",KS,Boeing,2014-10-31,Boeing,2014-10-10,ac7673bfe56fd5a363d5ead58dfabe63891e9a72,06b71175aa1a7dbf12a350f3e474606d6c72d4fd
 amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Sprint,2014-11-14,Sprint,2014-10-17,7a443399d90093d086e478dd96d7b4af0949d564,2d9240a8d45dd4d76ca2bea75c11ae0db2014db1
+amendment_of,0.882,amendment,"refiled 28d later, same location",KS,Sprint,2014-11-14,Sprint,2014-10-17,7a443399d90093d086e478dd96d7b4af0949d564,00f8cedcff56e21cb88b673c61b2ffcdcb1ff158
+amendment_of,0.882,amendment,"refiled 28d later, same location",KS,Sprint,2014-11-14,Sprint,2014-10-17,c1b1360ed6c7132ddaab493274fc9de9d319ea72,2d9240a8d45dd4d76ca2bea75c11ae0db2014db1
+amendment_of,0.925,amendment,"refiled 28d later, same location",KS,Sprint,2014-11-14,Sprint,2014-10-17,c1b1360ed6c7132ddaab493274fc9de9d319ea72,00f8cedcff56e21cb88b673c61b2ffcdcb1ff158
 amendment_of,0.925,amendment,"refiled 42d later, same location",KS,Boeing,2014-11-21,Boeing,2014-10-10,4735f67c67b6d4ef33411a6826942f523bd79fa7,7eda39935208104ebe358030150dae64a9d94204
+amendment_of,0.883,amendment,"refiled 42d later, same location",KS,Boeing,2014-11-21,Boeing,2014-10-10,4735f67c67b6d4ef33411a6826942f523bd79fa7,06b71175aa1a7dbf12a350f3e474606d6c72d4fd
 amendment_of,0.925,amendment,"refiled 21d later, same location",KS,Boeing,2014-11-21,Boeing,2014-10-31,4735f67c67b6d4ef33411a6826942f523bd79fa7,92a19c0456fc0d0dc1a96cbe3150ee0dfa42a8f3
+amendment_of,0.883,amendment,"refiled 21d later, same location",KS,Boeing,2014-11-21,Boeing,2014-10-31,4735f67c67b6d4ef33411a6826942f523bd79fa7,ac7673bfe56fd5a363d5ead58dfabe63891e9a72
+amendment_of,0.883,amendment,"refiled 42d later, same location",KS,Boeing,2014-11-21,Boeing,2014-10-10,2165ced89b698a70773066182a7a438ba5c6a84e,7eda39935208104ebe358030150dae64a9d94204
+amendment_of,0.925,amendment,"refiled 42d later, same location",KS,Boeing,2014-11-21,Boeing,2014-10-10,2165ced89b698a70773066182a7a438ba5c6a84e,06b71175aa1a7dbf12a350f3e474606d6c72d4fd
+amendment_of,0.883,amendment,"refiled 21d later, same location",KS,Boeing,2014-11-21,Boeing,2014-10-31,2165ced89b698a70773066182a7a438ba5c6a84e,92a19c0456fc0d0dc1a96cbe3150ee0dfa42a8f3
+amendment_of,0.925,amendment,"refiled 21d later, same location",KS,Boeing,2014-11-21,Boeing,2014-10-31,2165ced89b698a70773066182a7a438ba5c6a84e,ac7673bfe56fd5a363d5ead58dfabe63891e9a72
 amendment_of,0.925,amendment,"refiled 24d later, same location",KS,Lee Aerospace,2015-02-02,Lee Aerospace,2015-01-09,f635c86080b8013d92abe5dff386c5c3a99ffe15,9fde1eb29766ed125c6902cc8d2f60cd416b04ee
 amendment_of,0.925,amendment,"refiled 35d later, same location",KS,Boeing,2015-02-20,Boeing,2015-01-16,f04a2784fad5e6a0b80923ee01af88f2bebcefcb,810e331459db1796c2cc33bfc4df7e09ff25cae1
 amendment_of,0.883,amendment,"refiled 35d later, same location",KS,Boeing,2015-02-20,Boeing,2015-01-16,f04a2784fad5e6a0b80923ee01af88f2bebcefcb,f2bdf9b92695a29a46e864fdeac7335327ad9646
