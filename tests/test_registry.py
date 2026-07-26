@@ -3,9 +3,9 @@ from warnlive.registry import load_registry
 
 def test_registry_loads_and_validates():
     reg = load_registry()
-    assert len(reg.all()) == 51
+    assert len(reg.all()) == 52  # 50 states + DC + PR
     manual = [c for c in reg.all() if c.source == "manual"]
-    assert sorted(c.postal for c in manual) == ["ar", "nh", "wv", "wy"]
+    assert sorted(c.postal for c in manual) == ["ar", "nh", "pr", "wv", "wy"]
     custom = [c for c in reg.all() if c.source == "custom"]
     assert sorted(c.postal for c in custom) == ["ma", "mn", "nc", "nv"]
 
