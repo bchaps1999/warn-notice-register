@@ -37,3 +37,4 @@ jellyfish
 # warnlive deps
 pyyaml
 pytest
+cleanco

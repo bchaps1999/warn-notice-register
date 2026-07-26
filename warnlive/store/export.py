@@ -6,6 +6,8 @@ import csv
 import sqlite3
 from pathlib import Path
 
+from warnlive.normalize.engine import normalized_employer
+
 EXPORT_COLUMNS = [
     "state",
     "employer_name",
@@ -48,11 +50,17 @@ def export_csvs(
             params,
         ).fetchall()
 
+    # normalized_name is derived at export time (cleanco suffix stripping),
+    # inserted right after employer_name; the DB keeps only source values.
+    header = EXPORT_COLUMNS[:2] + ["normalized_name"] + EXPORT_COLUMNS[2:]
+
     def write(path: Path, rows: list[sqlite3.Row]) -> None:
         with open(path, "w", newline="") as fh:
             writer = csv.writer(fh)
-            writer.writerow(EXPORT_COLUMNS)
-            writer.writerows([tuple(r) for r in rows])
+            writer.writerow(header)
+            writer.writerows(
+                [(r[0], r[1], normalized_employer(r[1]), *tuple(r)[2:]) for r in rows]
+            )
         counts[str(path)] = len(rows)
 
     if active_upper:

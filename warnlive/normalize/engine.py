@@ -196,6 +196,22 @@ _NON_ALNUM = re.compile(r"[^a-z0-9 ]+")
 _WS = re.compile(r"\s+")
 
 
+def normalized_employer(value: str | None) -> str | None:
+    """Standardized employer name for cross-notice/cross-state matching:
+    legal suffixes stripped via cleanco's curated list (applied twice for
+    nested forms like 'X, LLC, Inc.'), lowercased, punctuation collapsed.
+    Display names stay untouched — this is a derived matching column."""
+    if not value:
+        return None
+    from cleanco import basename
+
+    v = value
+    for _ in range(2):
+        v = basename(v)
+    v = _NON_ALNUM.sub(" ", v.lower())
+    return _WS.sub(" ", v).strip() or None
+
+
 def _fold(value: str | None) -> str:
     """Normalize a name/location for the dedupe key only (never for display):
     lowercase, strip corporate suffixes and punctuation, collapse whitespace."""
