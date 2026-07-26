@@ -63,22 +63,24 @@ export function NoticeDetailPage() {
         </Row>
       </dl>
 
-      {n.cik && (
+      {(n.cik || n.wikidata_qid) && (
         <>
-          <SectionHeading>Public company</SectionHeading>
+          <SectionHeading>{n.cik ? "Public company" : "Company identity"}</SectionHeading>
           <dl className="grid grid-cols-[11rem_1fr] gap-y-2 text-sm">
-            <Row label="SEC CIK">
-              <a
-                href={`https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${n.cik}&type=&dateb=&owner=include&count=40`}
-                className="underline hover:text-ink tabular"
-                target="_blank" rel="noreferrer"
-              >
-                {String(n.cik).padStart(10, "0")}
-              </a>
-              <span className="text-ink-faint text-xs ml-2">
-                filing history around this notice
-              </span>
-            </Row>
+            {n.cik && (
+              <Row label="SEC CIK">
+                <a
+                  href={`https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${n.cik}&type=&dateb=&owner=include&count=40`}
+                  className="underline hover:text-ink tabular"
+                  target="_blank" rel="noreferrer"
+                >
+                  {String(n.cik).padStart(10, "0")}
+                </a>
+                <span className="text-ink-faint text-xs ml-2">
+                  filing history around this notice
+                </span>
+              </Row>
+            )}
             {n.ticker && (
               <Row label="Ticker">
                 <a
@@ -110,7 +112,9 @@ export function NoticeDetailPage() {
               </Row>
             )}
             <Row label="Name match">
-              <span className="tabular text-xs">{n.cik_match}</span>
+              <span className="tabular text-xs">
+                {n.cik_match ?? `${n.wikidata_match} (wikidata)`}
+              </span>
             </Row>
           </dl>
         </>

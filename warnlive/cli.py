@@ -407,6 +407,20 @@ def wikidata_refresh() -> None:
     click.echo(f"{wikidata.ORGS_PATH}: {n} CIK-keyed entities")
 
 
+@cli.command("wikidata-labels")
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--top", "top_n", default=1500, help="How many top CIK-less employers to look up.")
+def wikidata_labels(db_path: Path, top_n: int) -> None:
+    """Resolve top CIK-less employers to Wikidata via exact-unique label
+    matching (incremental; misses are recorded and not retried)."""
+    from warnlive.enrich import wikidata
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    n = wikidata.label_refresh(conn, top_n=top_n)
+    click.echo(f"{wikidata.LABELS_PATH}: {n} matched")
+
+
 @cli.command("clean-text")
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--dry-run", is_flag=True, help="Report what would change without writing.")

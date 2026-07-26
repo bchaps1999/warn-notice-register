@@ -124,6 +124,7 @@ export interface NoticeDetail {
   sic: string | null;
   sic_description: string | null;
   wikidata_qid: string | null;
+  wikidata_match: string | null;
   parent_company: string | null;
   industry: string | null;
   naics: string | null;
