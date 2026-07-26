@@ -474,6 +474,7 @@ NY,2019-03-13,Instacart (at Whole Foods Market) Columbus Circle,Instacart (at Wh
 NY,2019-02-28,Kuni's Corporation d/b/a Ikinari Steak (37 West 46th St),Kuni's Corporation d/b/a Ikinari Steak (Bleecker),New York,0.921,9,10,60242,60244
 NY,2018-06-01,Cardinal McCloskey Community Services - Head Start Programs (St. Anthony),Cardinal McCloskey Community Services - Head Start Programs (Courtland Ave. - Child Development Center),Bronx,0.921,29,29,60564,60568
 KY,2020-03-20,Communicare Services - Radcliff,Communicare Services - Brandenburg,Hardin,0.921,17,14,67353,67355
+WI,2007-09-19,"Franchise Foodservice, Inc.","Franchise Foodservice Transportation, Inc.",39402.0,0.921,60,65,75427,75428
 CA,2025-10-13,Blue shield of California 601,"Blue Shield of California, Building B",,0.92,31,24,1668,1670
 CA,2025-11-03,CommUnify - Maple Center,CommUnify - Adam Center,,0.92,3,4,1862,1864
 CA,2025-11-03,CommUnify - Westgate Center,CommUnify - Goleta Center,,0.92,7,2,1873,1880
@@ -1162,6 +1163,7 @@ NY,2019-03-13,Instacart (at Whole Foods Market) Greenwich Street,Instacart (at W
 NY,2018-03-30,The Mandell School (West Village),The Mandell School (Lincoln Square),New York,0.908,14,20,60647,60649
 NY,2017-05-01,IPRO Client Site (Western),IPRO Client Site (Holland),Albany,0.908,2,5,61017,61019
 IL,2023-06-14,United States Marine Corps,United States Army,"IL Statewide Event Springfield, IL 62701",0.908,,,68548,68549
+WI,2013-10-11,Saint Clare Hospital,Saint Mary's Hospital,41617.0,0.908,2,38,76160,76162
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Fremont Physical Therapy & Hand Therapy),Agile Physical Therapy (Sutter Health Sunnyvale Center 401 Physical Therapy),,0.907,24,16,1592,1595
 CA,2025-10-23,"Applied Materials, Inc. (3225 Oakmead Village Dr)","Applied Materials, Inc. (Remote)",,0.907,16,15,1732,1743
 CA,2025-10-31,Ceryx Management LLC (Vermont),Ceryx Management LLC (7226 S. Figueroa),,0.907,8,12,1898,1902
@@ -1482,6 +1484,7 @@ NY,2020-03-29,Major Food Group (MFG) - Parm Battery Park LLC,Major Food Group (M
 NY,2020-01-03,Catholic Guardian Services (225th Street),Catholic Guardian Services (Davidson Ave.),Bronx,0.902,12,12,59883,59886
 NY,2019-03-13,Instacart (at Whole Foods Market) Columbus Circle,Instacart (at Whole Foods Market) (E. 57th Street),New York,0.902,32,13,60214,60220
 NY,2016-09-16,"Catholic Charities Neighborhood Services, Inc. (Behavioral Health Care Coordination DOHMH Program)","Catholic Charities Neighborhood Services, Inc. (World of Work Program)",Brooklyn,0.902,1,1,61202,61203
+FL,2001-01-17,"Montgomery Ward Distribution Facility 1820 Massaro Boulevard Tampa, FL 33619","Montgomery Ward Product Service Facility 1820 Massaro Boulevard Tampa, FL 33619",,0.902,78,81,72001,72002
 CA,2025-09-08,Kaiser Foundation Hospitals-Antioch,Kaiser Foundation Hospitals - 74 N. Pasadena,,0.901,1,2,1553,1556
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Fremont Physical Therapy & Hand Therapy),Agile Physical Therapy (Sutter Health Sunnyvale Physical Therapy 1085),,0.901,24,23,1592,1594
 CA,2025-09-12,Agile Physical Therapy (Sutter Health San Carlos Physical Therapy & Hand Therapy),Agile Physical Therapy (Sutter Health Sunnyvale Center (301) Physical Therapy),,0.901,19,4,1593,1596
@@ -1680,6 +1683,7 @@ AZ,2019-12-30,Compass USA - St Mary' Hospital,Compass USA - Holy Cross,Tucson,0.
 WI,2016-05-19,Anchor Bank FSB - East Towne Blvd.,Anchor Bank FSB - City View Dr.,Madison,0.898,46,46,53601,53602
 NY,2020-03-17,Manhasset Restaurant LLC dba Cipollini,Manhasset Restaurant LLC dbaToku Modern Asian,Manhasset,0.898,76,89,59634,59647
 KY,2023-07-25,Wellmore Energy Company LLC - Laboratory Department,Wellmore Energy Company LLC - Black Watch #8 Prep Plant,Pike,0.898,2,1,67233,67234
+FL,1998-06-03,"The Hertz Corp (Miami) 2150 N.E 7th Ave Dania, FL 33004","The Hertz Corp.(Westpalm Bch.) 2150 N.E. 7th Ave Dania, FL 33004",,0.898,39,38,71462,71463
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Sunnyvale Center 401 Physical Therapy),Agile Physical Therapy (Sutter Health Palo Alto Physical Therapy & Hand Therapy),,0.897,16,30,1595,1598
 CA,2025-10-31,Ceryx Management LLC (Vermont),Ceryx Management LLC (1540 S St. Andrews),,0.897,8,18,1898,1906
 CA,2026-03-12,Total Storage Solutions (Best RV & Self Storage),Total Storage Solutions (El Monte Stor It Now),,0.897,3,3,2246,2248
@@ -1859,6 +1863,7 @@ NY,2020-02-04,Macy's Inc. (NYC Corporate Office) Penn Plaza,Macy's Inc. (NYC Cor
 NY,2019-03-13,Instacart (at Whole Foods Market) Columbus Circle,Instacart (at Whole Foods Market) (1551 3rd Avenue),New York,0.894,32,20,60214,60218
 NY,2017-08-16,"Lutech Resources, LLC at (Fitzpatrick Nuclear Station)","Lutech Resources, LLC at (Nine Mile Point Nuclear Station)",Oswego,0.894,93,91,60915,60916
 KY,2020-03-20,Communicare Services - Radcliff,Communicare Clinic - Radcliff,Hardin,0.894,17,17,67353,67357
+FL,2013-05-31,"The Inn at LaPosada 3600 Masterpiece Way Palm Beach Gardens, FL 33410","The Nursing Center at LaPosada 3600 Masterpiece Way Palm Beach Gardens, FL 33410",,0.894,37,96,73804,73805
 CA,2025-10-31,Ceryx Management LLC (Sepulveda),Ceryx Management LLC (1540 S St. Andrews),,0.893,4,18,1897,1906
 CA,2025-11-03,CommUnify - Adam Center,CommUnify - Maggie Espinoza Center,,0.893,4,5,1864,1876
 CA,2025-11-03,CommUnify - JC Washington Center,CommUnify - Goleta Center,,0.893,3,2,1867,1880
@@ -1989,6 +1994,7 @@ NY,2020-01-13,"Opening Ceremony, LLC (Centre Street)","Opening Ceremony, LLC (Br
 NY,2019-11-22,"WeWork Companies, Inc. (Greenwich St.)","WeWork Companies, Inc. (125 Maiden Ln)",New York,0.891,14,4,59941,59949
 NY,2019-03-13,Instacart (at Whole Foods Market) Columbus Circle,Instacart (at Whole Foods Market) (95 East Houston Street),New York,0.891,32,21,60214,60215
 NY,2016-11-14,Yeshiva University - Israel Henry Beren Campus,Yeshiva University - Wilf Campus,New York,0.891,4,36,61171,61173
+WI,2008-06-02,"ThyssenKrupp Drauz Nethelfer NA, Inc.","ThyssenKrupp Krause, Inc.",39721.0,0.891,120,42,75519,75520
 CA,2025-11-03,CommUnify - Cuyama Center,CommUnify - Goleta Center,,0.89,2,2,1874,1880
 CA,2026-03-12,Total Storage Solutions (El Monte Stor It Now),Total Storage Solutions (All Size Laguna Niguel),,0.89,3,3,2248,2252
 CA,2026-03-12,Total Storage Solutions (Studebaker Self Storage),Total Storage Solutions (Sun City Mini Storage),,0.89,3,3,2249,2260
@@ -2173,6 +2179,7 @@ NY,2020-04-22,Visionworks (North Country Region),Visionworks (New York City Regi
 NY,2020-04-22,Visionworks (Capital Region),Visionworks (Western Region),,0.887,91,40,58569,58573
 NY,2020-04-08,"B.R. Guest Parent Holdings, LLC dba Bill's Bar & Burger - Downtown","B.R. Guest Parent Holdings, LLC dba Atlantic Grill - Lincoln Center West NY",New York,0.887,100,110,58769,58776
 IL,2023-06-14,United States Navy,United States Coast Guard,"IL Statewide Event Springfield, IL 62701",0.887,,,68550,68551
+FL,1998-06-03,"The Hertz Corp (Fort Lauderdale) 2150 N. E. 7th Ave Dania, FL 33004","The Hertz Corp (Miami) 2150 N.E 7th Ave Dania, FL 33004",,0.887,35,39,71461,71462
 CA,2025-10-31,Ceryx Management LLC (Blackstone),Ceryx Management LLC (1904 E 113th),,0.886,39,1,1896,1908
 CA,2025-10-31,Ceryx Management LLC (Hoover),Ceryx Management LLC (1540 S St. Andrews),,0.886,3,18,1900,1906
 CA,2025-11-03,CommUnify - I Center,CommUnify - Jardin de Suenos,,0.886,6,6,1861,1875
@@ -2259,6 +2266,7 @@ NY,2020-05-21,"WeWork Companies, Inc. (115 Broadway, NY, NY 10006)","WeWork Comp
 NY,2020-04-22,Visionworks (Finger Lakes Region),Visionworks (New York City Region),,0.885,44,49,58557,58574
 NY,2017-08-07,"Aptim Services, LLC (@FitzPatrick Nuclear Station)","Aptim Services, LLC (@Nine Mile Point Nuclear Station)",Oswego,0.885,105,62,60922,60923
 KY,2023-09-10,Wellmore Energy Company LLC - Black Watch Shop and Central Warehouse Departments,Wellmore Energy Company LLC - Elk Creek,Pike,0.885,3,58,67221,67224
+NC,2015-12-16,Pate Dawson Company Goldsboro,Pate Dawson Company Statesville,,0.885,92,92,71264,71265
 CA,2025-11-03,CommUnify - Filmore Center,CommUnify - Chapel Office,,0.884,4,13,1860,1866
 CA,2025-11-03,CommUnify - Little Village Center,CommUnify - Sierra Madre Center,,0.884,8,5,1868,1872
 CA,2025-11-03,CommUnify - Little Village Center,CommUnify - Betty Sanchez Center,,0.884,8,1,1868,1877

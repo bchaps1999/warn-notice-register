@@ -219,6 +219,45 @@ def export(db_path: Path, data_dir: Path) -> None:
         click.echo(f"{path}: {n} rows")
 
 
+@cli.command("backfill-archives")
+@click.argument("states", nargs=-1)
+@click.option("--workdir", type=click.Path(path_type=Path), default=Path("workdir/backfill"))
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
+def backfill_archives(states, workdir: Path, db_path: Path, data_dir: Path) -> None:
+    """Ingest pre-portal history from official state archives (Wayback
+    captures of agency artifacts) for STATES (default: all with a fetcher).
+    Only fills months the state currently has no notices in."""
+    from warnlive.backfill import state_archives
+    from warnlive.pipeline import now_utc
+    from warnlive.store.dedupe import ingest
+
+    registry = load_registry()
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+
+    wanted = [s.upper() for s in states] if states else list(state_archives.FETCHERS)
+    unknown = [s for s in wanted if s not in state_archives.FETCHERS]
+    if unknown:
+        raise click.UsageError(
+            f"No archive fetcher for: {', '.join(unknown)} "
+            f"(available: {', '.join(sorted(state_archives.FETCHERS))})"
+        )
+
+    for postal in wanted:
+        records = state_archives.FETCHERS[postal](Path(workdir) / "cache")
+        eligible = state_archives.gap_filter(conn, postal, records)
+        stats = ingest(conn, eligible, observed_at=now_utc()[:10])
+        click.echo(
+            f"{postal}: {len(records)} archive rows, {len(eligible)} in empty "
+            f"months, +{stats.new} new"
+        )
+
+    export_csvs(conn, Path(data_dir) / "exports", _exportable(registry))
+    write_health(conn, registry, Path(data_dir) / "health")
+    _compress_db(db_path)
+
+
 @cli.command("repair-dates")
 @click.argument("states", nargs=-1, required=True)
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)

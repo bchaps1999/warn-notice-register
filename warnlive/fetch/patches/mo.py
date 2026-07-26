@@ -74,12 +74,17 @@ def _browser_get(driver_holder: list, url: str) -> str:
         driver_holder.append(driver)
     driver = driver_holder[0]
 
-    driver.get(url)
-    deadline = time() + 45
-    html = driver.page_source
-    while "<table" not in html and time() < deadline:
-        sleep(2)
+    # Two attempts: Incapsula sometimes serves a heavier challenge on the
+    # first load that clears on a fresh navigation.
+    for attempt in (1, 2):
+        driver.get(url)
+        deadline = time() + 75
         html = driver.page_source
-    if "<table" not in html:
-        raise Exception(f"MO: Incapsula challenge did not clear for {url}")
-    return html
+        while "<table" not in html and time() < deadline:
+            sleep(2)
+            html = driver.page_source
+        if "<table" in html:
+            return html
+        logger.warning("MO: challenge did not clear for %s (attempt %d)", url, attempt)
+        sleep(10)
+    raise Exception(f"MO: Incapsula challenge did not clear for {url}")

@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import csv
 import logging
+import re
 from datetime import date
 from io import StringIO
 from pathlib import Path
@@ -114,8 +115,75 @@ def _scrape_archives(cache: Cache) -> list[dict]:
                 continue
             pdf_path = cache.write_binary(name, rp.content)
         parsed = _parse_archive_pdf(pdf_path)
+        if not parsed:
+            # The 2014-2017 vintage has no ruled table — plain text columns.
+            parsed = _parse_text_archive_pdf(pdf_path)
         logger.debug("NC archive %s -> %d rows", name, len(parsed))
         rows.extend(parsed)
+    return rows
+
+
+_TEXT_COLUMNS = ["Notice", "Effective", "Company", "City", "#", "Layoff"]
+
+
+def _parse_text_archive_pdf(path: Path) -> list[dict]:
+    """Parse the 2014-2017 "WARN Notice - Summary Count" PDFs: no table
+    rulings, just left-aligned text columns. Column boundaries come from the
+    header labels' x positions; each word lands in the rightmost column
+    starting left of it."""
+    rows: list[dict] = []
+    edges: list[float] | None = None
+    with pdfplumber.open(path) as pdf:
+        for page in pdf.pages:
+            words = page.extract_words()
+            lines: dict[int, list] = {}
+            for w in words:
+                lines.setdefault(round(w["top"]), []).append(w)
+            for _, ws in sorted(lines.items()):
+                ws.sort(key=lambda w: w["x0"])
+                texts = [w["text"] for w in ws]
+                if texts[:2] == ["Notice", "Date"] and "Company" in texts:
+                    starts = {}
+                    for w in ws:
+                        if w["text"] in _TEXT_COLUMNS and w["text"] not in starts:
+                            starts[w["text"]] = w["x0"]
+                    if len(starts) == len(_TEXT_COLUMNS):
+                        edges = [starts[c] for c in _TEXT_COLUMNS]
+                    continue
+                if edges is None or not re.match(r"\d{2}/\d{2}/\d{4}", texts[0]):
+                    continue
+                cols: list[list[str]] = [[] for _ in edges]
+                for w in ws:
+                    idx = 0
+                    for i, e in enumerate(edges):
+                        if w["x0"] >= e - 4:
+                            idx = i
+                    cols[idx].append(w["text"])
+                notice_date, effective, company, city, jobs, kind = (
+                    " ".join(c) for c in cols
+                )
+                if not company:
+                    continue
+                # The type text starts left of its header label, so it lands
+                # in the jobs column; split digits from the rest.
+                m = re.match(r"^([\d,]*)\s*(.*)$", jobs)
+                jobs, kind = m.group(1), f"{m.group(2)} {kind}".strip()
+                type_parts = kind.replace("/", " ").split()
+                rows.append(
+                    {
+                        "County": "",
+                        "Warn Number": "",
+                        "Date of Notice": notice_date,
+                        "Date Received by NC": "",
+                        "Effective Date": effective,
+                        "WARN Notice: WARN Notice Name": company,
+                        "WARN notice type": type_parts[0] if type_parts else "",
+                        "Type of layoff or closure": " ".join(type_parts[1:]),
+                        "Number affected at this location": jobs.replace(",", ""),
+                        "Address 1": "",
+                        "City": city,
+                    }
+                )
     return rows
 
 

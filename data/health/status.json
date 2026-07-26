@@ -472,7 +472,7 @@
     "name": "Florida",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 2805,
+    "notices": 5373,
     "latest_verdict": "ok",
     "latest_run": "2026-07-23T11:17:38Z",
     "latest_error": null,
@@ -1234,22 +1234,57 @@
     "registry_status": "active",
     "source": "patched",
     "notices": 516,
-    "latest_verdict": "failed",
-    "latest_run": "2026-07-26T16:07:34Z",
-    "latest_error": "Exception: MO: Incapsula challenge did not clear for https://jobs.mo.gov/warn/2026",
+    "latest_verdict": "ok",
+    "latest_run": "2026-07-26T16:09:32Z",
+    "latest_error": null,
     "latest_checks": {
-      "verdict": "failed",
+      "verdict": "ok",
       "checks": [
         {
           "name": "fetch_ok",
-          "outcome": "fail",
-          "detail": "Exception: MO: Incapsula challenge did not clear for https://jobs.mo.gov/warn/2026"
+          "outcome": "pass",
+          "detail": "workdir/raw/mo.csv"
+        },
+        {
+          "name": "row_count",
+          "outcome": "pass",
+          "detail": "72 raw rows (min 50)"
+        },
+        {
+          "name": "schema_drift",
+          "outcome": "pass",
+          "detail": "header matches snapshot"
+        },
+        {
+          "name": "parse_failures",
+          "outcome": "pass",
+          "detail": "0/72 rows failed to normalize"
+        },
+        {
+          "name": "employer_coverage",
+          "outcome": "pass",
+          "detail": "72/72 records have an employer name"
+        },
+        {
+          "name": "date_sanity",
+          "outcome": "pass",
+          "detail": "0/72 notice_dates outside 1988..2026-08-25"
+        },
+        {
+          "name": "freshness",
+          "outcome": "pass",
+          "detail": "newest notice_date 2026-07-21 is 5d old (max 120d)"
+        },
+        {
+          "name": "dedupe_sanity",
+          "outcome": "pass",
+          "detail": "0/72 records share a dedupe key"
         }
       ]
     },
-    "last_success": null,
-    "consecutive_failures": 4,
-    "recommend_broken": true
+    "last_success": "2026-07-26T16:09:32Z",
+    "consecutive_failures": 0,
+    "recommend_broken": false
   },
   "MS": {
     "name": "Mississippi",
@@ -1667,9 +1702,9 @@
     "name": "North Carolina",
     "registry_status": "active",
     "source": "custom",
-    "notices": 967,
+    "notices": 1199,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-23T11:19:49Z",
+    "latest_run": "2026-07-26T16:12:09Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1682,7 +1717,7 @@
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "1157 raw rows (min 50)"
+          "detail": "1390 raw rows (min 50)"
         },
         {
           "name": "schema_drift",
@@ -1692,31 +1727,31 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "3/1157 rows failed to normalize; e.g. row has no employer name"
+          "detail": "3/1390 rows failed to normalize; e.g. row has no employer name"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "1154/1154 records have an employer name"
+          "detail": "1387/1387 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/969 notice_dates outside 1988..2026-08-22"
+          "detail": "0/1202 notice_dates outside 1988..2026-08-25"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-06 is 17d old (max 90d)"
+          "detail": "newest notice_date 2026-07-22 is 4d old (max 90d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "187/1154 records share a dedupe key"
+          "detail": "188/1387 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-23T11:19:49Z",
+    "last_success": "2026-07-26T16:12:09Z",
     "consecutive_failures": 0,
     "recommend_broken": false
   },
@@ -2498,7 +2533,7 @@
     "name": "Wisconsin",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 1013,
+    "notices": 3544,
     "latest_verdict": "ok",
     "latest_run": "2026-07-19T08:25:19Z",
     "latest_error": null,
