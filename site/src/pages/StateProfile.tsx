@@ -1,5 +1,6 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useStateData } from "../lib/hooks";
+import type { TopEmployer } from "../lib/types";
 import { date, num } from "../lib/format";
 import { StatTile } from "../components/ui/StatTile";
 import { SectionHeading } from "../components/ui/SectionHeading";
@@ -88,15 +89,19 @@ export function StateProfile() {
   );
 }
 
-function EmployerList({ rows }: { rows: { employer: string; notices: number; workers: number }[] }) {
+function EmployerList({ rows }: { rows: TopEmployer[] }) {
   if (rows.length === 0) return <p className="text-sm text-ink-faint font-serif">No data.</p>;
   return (
     <table className="w-full text-sm">
       <tbody>
         {rows.slice(0, 10).map((e, i) => (
-          <tr key={e.employer} className="border-b border-rule">
+          <tr key={e.key} className="border-b border-rule">
             <td className="tabular text-xs text-ink-faint py-1.5 pr-2 w-6">{i + 1}</td>
-            <td className="py-1.5 pr-3 font-serif">{e.employer}</td>
+            <td className="py-1.5 pr-3 font-serif">
+              <Link to={`/employers/${encodeURIComponent(e.key)}`} className="hover:underline">
+                {e.employer}
+              </Link>
+            </td>
             <td className="tabular text-right py-1.5">{num(e.workers)}</td>
           </tr>
         ))}

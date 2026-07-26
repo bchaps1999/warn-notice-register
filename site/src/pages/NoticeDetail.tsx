@@ -25,7 +25,15 @@ export function NoticeDetailPage() {
           {STATE_NAMES[n.state] ?? n.state}
         </Link>
       </p>
-      <h2 className="font-display text-3xl mt-1">{n.employer_name}</h2>
+      <h2 className="font-display text-3xl mt-1">
+        <Link
+          to={`/employers/${encodeURIComponent(n.employer_key)}`}
+          className="hover:underline"
+          title="All notices from this employer"
+        >
+          {n.employer_name}
+        </Link>
+      </h2>
       <div className="flex gap-2 mt-3">
         <Stamp tone={n.layoff_type}>{TYPE_LABEL[n.layoff_type]}</Stamp>
         {n.is_temporary === 1 && <Stamp>Temporary</Stamp>}

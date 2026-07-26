@@ -59,9 +59,13 @@ export function Dashboard() {
           <table className="w-full text-sm">
             <tbody>
               {national.top_employers_12mo.slice(0, 12).map((e, i) => (
-                <tr key={e.employer} className="border-b border-rule">
+                <tr key={e.key} className="border-b border-rule">
                   <td className="tabular text-xs text-ink-faint py-1.5 pr-2 w-6">{i + 1}</td>
-                  <td className="py-1.5 pr-3 font-serif">{e.employer}</td>
+                  <td className="py-1.5 pr-3 font-serif">
+                    <Link to={`/employers/${encodeURIComponent(e.key)}`} className="hover:underline">
+                      {e.employer}
+                    </Link>
+                  </td>
                   <td className="tabular text-right py-1.5">{num(e.workers)}</td>
                 </tr>
               ))}

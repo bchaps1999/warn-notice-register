@@ -33,10 +33,17 @@ export interface NoticeSummary {
   type: string;
 }
 
+export interface TopEmployer {
+  employer: string;
+  key: string;
+  notices: number;
+  workers: number;
+}
+
 export interface National {
   anchor_date: string;
   monthly: MonthPoint[];
-  top_employers_12mo: { employer: string; notices: number; workers: number }[];
+  top_employers_12mo: TopEmployer[];
   biggest_recent: NoticeSummary[];
   states_12mo: { state: string; notices: number; workers: number }[];
 }
@@ -60,8 +67,8 @@ export interface StateData {
   };
   coverage: { notices: number; earliest: string | null; latest: string | null };
   monthly: MonthPoint[];
-  top_employers: { employer: string; notices: number; workers: number }[];
-  top_employers_24mo: { employer: string; notices: number; workers: number }[];
+  top_employers: TopEmployer[];
+  top_employers_24mo: TopEmployer[];
   recent: NoticeSummary[];
 }
 
@@ -86,6 +93,21 @@ export const FLAG_AMENDMENT = 2;
 export const FLAG_AMENDED = 4;
 export const FLAG_HAS_LINKS = 8;
 export const FLAG_PUBLIC = 16;
+
+export interface EmployerDetail {
+  key: string;
+  label: string;
+  aliases: string[];
+  cik: number | null;
+  ticker: string | null;
+  wikidata_qid: string | null;
+  parent_company: string | null;
+  sic_description: string | null;
+  totals: { notices: number; workers: number; states: string[] };
+  first_date: string | null;
+  last_date: string | null;
+  notices: NoticeSummary[];
+}
 
 export interface NoticeVersion {
   version: number;
@@ -126,6 +148,7 @@ export interface NoticeDetail {
   wikidata_qid: string | null;
   wikidata_match: string | null;
   parent_company: string | null;
+  employer_key: string;
   industry: string | null;
   naics: string | null;
   naics_basis: string | null;

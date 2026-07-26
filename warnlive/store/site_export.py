@@ -95,6 +95,16 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
                 )
         if n["naics"] is None and n["sic"] in naics_by_sic:
             n["naics"], n["naics_basis"] = naics_by_sic[n["sic"]], "sic-crosswalk"
+        # Identity key for employer-level aggregation and /employers pages:
+        # strongest available identity wins (QID survives renames, CIK
+        # survives spelling, normalized name unifies variants).
+        if n["wikidata_qid"]:
+            n["employer_key"] = f"qid:{n['wikidata_qid']}"
+        elif n["cik"]:
+            n["employer_key"] = f"cik:{n['cik']}"
+        else:
+            norm = normalized_employer(n["employer_name"])
+            n["employer_key"] = f"n:{norm or n['employer_name'].lower()}"
     linked_ids = {
         r["notice_id"] for r in conn.execute("SELECT DISTINCT notice_id FROM notice_links")
     } | {
@@ -122,6 +132,10 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
 
     counts["index.json"] = _write(
         out_dir / "index.json", _build_index(notices, linked_ids, prefix_len)
+    )
+
+    counts["employers/* (256 shards)"] = _build_employer_shards(
+        notices, out_dir / "employers", prefix_len
     )
 
     shard_counts = _build_detail_shards(conn, notices, out_dir / "notices", prefix_len)
@@ -175,16 +189,26 @@ def _notice_summary(n, prefix_len: int) -> dict:
 
 
 def _top_employers(rows, since: str | None, limit: int) -> list[dict]:
+    """Aggregate by identity key (not raw spelling), labeled with the
+    group's most common raw name."""
     agg: dict[str, dict] = {}
     for n in rows:
         if since and (n["display_date"] or "") < since:
             continue
-        name = n["employer_name"]
-        e = agg.setdefault(name, {"employer": name, "notices": 0, "workers": 0})
+        e = agg.setdefault(
+            n["employer_key"],
+            {"key": n["employer_key"], "names": {}, "notices": 0, "workers": 0},
+        )
+        e["names"][n["employer_name"]] = e["names"].get(n["employer_name"], 0) + 1
         e["notices"] += 1
         e["workers"] += n["employees_affected"] or 0
-    ranked = sorted(agg.values(), key=lambda e: (-e["workers"], -e["notices"], e["employer"]))
-    return ranked[:limit]
+    out = []
+    for e in agg.values():
+        label = max(sorted(e["names"]), key=lambda k: e["names"][k])
+        out.append({"employer": label, "key": e["key"],
+                    "notices": e["notices"], "workers": e["workers"]})
+    out.sort(key=lambda e: (-e["workers"], -e["notices"], e["employer"]))
+    return out[:limit]
 
 
 def _today(notices) -> str:
@@ -313,6 +337,59 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
         cols["type"].append(type_idx[n["layoff_type"]])
         cols["flags"].append(flags)
     return {"states": states, "types": TYPES, "count": len(notices), "columns": cols}
+
+
+def _fnv_shard(key: str) -> str:
+    """FNV-1a low byte as 2-hex shard name; mirrored in the SPA's dataClient
+    so pages can locate an employer's shard without an index fetch."""
+    h = 2166136261
+    for b in key.encode("utf-8"):
+        h = ((h ^ b) * 16777619) & 0xFFFFFFFF
+    return f"{h & 0xFF:02x}"
+
+
+def _build_employer_shards(notices, out_dir: Path, prefix_len: int) -> int:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    groups: dict[str, list] = {}
+    for n in notices:
+        groups.setdefault(n["employer_key"], []).append(n)
+
+    shards: dict[str, dict] = {}
+    for key, rows in groups.items():
+        names: dict[str, int] = {}
+        for n in rows:
+            names[n["employer_name"]] = names.get(n["employer_name"], 0) + 1
+        label = max(sorted(names), key=lambda k: names[k])
+        first = rows[0]  # enrichment fields identical across the group's key
+        dated = sorted((n["display_date"] for n in rows if n["display_date"]))
+        summaries = sorted(
+            (_notice_summary(n, prefix_len) for n in rows),
+            key=lambda s: (s["notice_date"] or s["effective_date"] or "", s["key"]),
+            reverse=True,
+        )
+        shards.setdefault(_fnv_shard(key), {})[key] = {
+            "key": key,
+            "label": label,
+            "aliases": sorted(k for k in names if k != label)[:12],
+            "cik": first["cik"],
+            "ticker": first["ticker"],
+            "wikidata_qid": first["wikidata_qid"],
+            "parent_company": first["parent_company"],
+            "sic_description": first["sic_description"],
+            "totals": {
+                "notices": len(rows),
+                "workers": sum(n["employees_affected"] or 0 for n in rows),
+                "states": sorted({n["state"] for n in rows}),
+            },
+            "first_date": dated[0] if dated else None,
+            "last_date": dated[-1] if dated else None,
+            "notices": summaries,
+        }
+
+    total = 0
+    for pp in [f"{i:02x}" for i in range(256)]:
+        total += _write(out_dir / f"{pp}.json", shards.get(pp, {}))
+    return total
 
 
 def _build_detail_shards(conn, notices, out_dir: Path, prefix_len: int) -> int:

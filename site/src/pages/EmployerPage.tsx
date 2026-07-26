@@ -1,0 +1,71 @@
+import { useParams } from "react-router-dom";
+import { useEmployer } from "../lib/hooks";
+import { date, num } from "../lib/format";
+import { NoticeTable } from "../components/ui/NoticeTable";
+import { SectionHeading } from "../components/ui/SectionHeading";
+import { ErrorNote, Skeleton } from "../components/ui/Skeleton";
+import { StatTile } from "../components/ui/StatTile";
+import { NotFound } from "./NotFound";
+
+export function EmployerPage() {
+  const { key } = useParams();
+  const { data: e, error } = useEmployer(key ? decodeURIComponent(key) : undefined);
+  if (error === "Employer not found") return <NotFound />;
+  if (error) return <ErrorNote message={error} />;
+  if (!e) return <Skeleton lines={8} />;
+
+  return (
+    <div>
+      <p className="smallcaps text-[10px] text-ink-muted">Employer record</p>
+      <h2 className="font-display text-3xl mt-1">{e.label}</h2>
+      {e.aliases.length > 0 && (
+        <p className="text-xs text-ink-faint font-serif mt-1">
+          Also filed as: {e.aliases.join(" · ")}
+        </p>
+      )}
+      <p className="text-sm font-serif text-ink-muted mt-2">
+        {e.parent_company && <>Parent: <strong className="text-ink">{e.parent_company}</strong> · </>}
+        {e.sic_description && <>{e.sic_description} · </>}
+        {e.cik && (
+          <a
+            href={`https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${e.cik}&type=&dateb=&owner=include&count=40`}
+            className="underline hover:text-ink" target="_blank" rel="noreferrer"
+          >
+            SEC filings
+          </a>
+        )}
+        {e.cik && (e.ticker || e.wikidata_qid) && " · "}
+        {e.ticker && (
+          <a
+            href={`https://finance.yahoo.com/quote/${e.ticker}`}
+            className="underline hover:text-ink tabular" target="_blank" rel="noreferrer"
+          >
+            {e.ticker}
+          </a>
+        )}
+        {e.ticker && e.wikidata_qid && " · "}
+        {e.wikidata_qid && (
+          <a
+            href={`https://www.wikidata.org/wiki/${e.wikidata_qid}`}
+            className="underline hover:text-ink tabular" target="_blank" rel="noreferrer"
+          >
+            {e.wikidata_qid}
+          </a>
+        )}
+      </p>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-8">
+        <StatTile label="Notices on record" value={num(e.totals.notices)} />
+        <StatTile label="Workers affected" value={num(e.totals.workers)} />
+        <StatTile label="States" value={String(e.totals.states.length)}
+          sub={e.totals.states.slice(0, 6).join(" ") + (e.totals.states.length > 6 ? " …" : "")} />
+        <StatTile label="Records span"
+          value={e.first_date ? `${e.first_date.slice(0, 4)}–${e.last_date?.slice(0, 4)}` : "—"}
+          sub={e.last_date ? `latest ${date(e.last_date)}` : undefined} />
+      </div>
+
+      <SectionHeading>All notices</SectionHeading>
+      <NoticeTable notices={e.notices} />
+    </div>
+  );
+}

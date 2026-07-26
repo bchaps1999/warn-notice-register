@@ -17,3 +17,11 @@ export function fetchJson<T>(path: string): Promise<T> {
 }
 
 export const shardFor = (key: string) => `/data/notices/${key.slice(0, 2)}.json`;
+
+// FNV-1a low byte, mirroring the site exporter's employer sharding.
+export function employerShardFor(key: string): string {
+  let h = 2166136261;
+  const bytes = new TextEncoder().encode(key);
+  for (const b of bytes) h = Math.imul(h ^ b, 16777619) >>> 0;
+  return `/data/employers/${(h & 0xff).toString(16).padStart(2, "0")}.json`;
+}
