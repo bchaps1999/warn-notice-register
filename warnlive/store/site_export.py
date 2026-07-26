@@ -44,22 +44,33 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
     notices = [
         dict(r) | {"display_date": r["notice_date"] or r["effective_date"]}
         for r in conn.execute(
-            "SELECT * FROM notices ORDER BY state, notice_date, employer_name, dedupe_key"
+            "SELECT notices.*, "
+            "(SELECT v.fields_json FROM notice_versions v "
+            " WHERE v.notice_id = notices.id AND v.version = notices.current_version"
+            ") AS fields_json "
+            "FROM notices ORDER BY state, notice_date, employer_name, dedupe_key"
         )
     ]
 
-    # SEC EDGAR annotation (same Matcher as the CSV exports); flows into the
-    # detail shards via dict(n) and into index.json as FLAG_PUBLIC.
-    from warnlive.enrich.edgar import REFERENCE_PATH, Matcher
+    # Derived annotations (same logic as the CSV exports); they flow into
+    # the detail shards via dict(n), and CIK presence into FLAG_PUBLIC.
+    from warnlive.enrich.edgar import REFERENCE_PATH, Matcher, load_sic
+    from warnlive.enrich.industry import industry_from_fields_json
 
     matcher = Matcher() if REFERENCE_PATH.exists() else None
+    sic_by_cik = load_sic()
     for n in notices:
         n["cik"] = n["ticker"] = n["cik_match"] = None
+        n["sic"] = n["sic_description"] = None
+        n["industry"], n["naics"] = industry_from_fields_json(n.pop("fields_json"))
         if matcher is not None:
             d = n["display_date"]
             hit = matcher.match(n["employer_name"], int(d[:4]) if d else None)
             if hit:
                 n["cik"], n["ticker"], n["cik_match"] = hit[0], hit[1] or None, hit[2]
+                sic = sic_by_cik.get(n["cik"])
+                if sic:
+                    n["sic"], n["sic_description"] = sic[0] or None, sic[1] or None
     linked_ids = {
         r["notice_id"] for r in conn.execute("SELECT DISTINCT notice_id FROM notice_links")
     } | {

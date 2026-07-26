@@ -121,6 +121,10 @@ export interface NoticeDetail {
   cik: number | null;
   ticker: string | null;
   cik_match: string | null;
+  sic: string | null;
+  sic_description: string | null;
+  industry: string | null;
+  naics: string | null;
   first_seen: string;
   last_seen: string;
   versions: NoticeVersion[];

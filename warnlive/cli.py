@@ -384,6 +384,19 @@ def edgar_refresh(workdir: Path) -> None:
     click.echo(f"{edgar.REFERENCE_PATH}: {n} (name, cik) rows")
 
 
+@cli.command("edgar-sic-refresh")
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+def edgar_sic_refresh(db_path: Path) -> None:
+    """Fetch SIC industry codes for every CIK our notices match (one
+    submissions-API request per new CIK; incremental). Needs SEC_EDGAR_UA."""
+    from warnlive.enrich import edgar
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    n = edgar.sic_refresh(conn)
+    click.echo(f"{edgar.SIC_PATH}: {n} CIKs")
+
+
 @cli.command("clean-text")
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--dry-run", is_flag=True, help="Report what would change without writing.")

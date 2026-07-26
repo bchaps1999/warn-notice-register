@@ -56,6 +56,8 @@ UA_ENV = "SEC_EDGAR_UA"
 FIRST_YEAR = 1993
 
 REFERENCE_PATH = Path("data/reference/edgar_names.csv.gz")
+SIC_PATH = Path("data/reference/edgar_sic.csv.gz")
+SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik:010d}.json"
 
 FUZZY_MIN = 0.95
 TOKEN_MIN = 0.90  # typos score ~0.91 ("helthcare"), word swaps <=0.87 ("hacker"/"baker")
@@ -168,6 +170,58 @@ def _tokens_compatible(notice: str, candidate: str) -> bool:
         else:
             unpaired += 1
     return not remaining and unpaired <= 1
+
+
+def load_sic(path: Path = SIC_PATH) -> dict[int, tuple[str, str]]:
+    """cik -> (sic, sic_description); {} when the reference is absent."""
+    if not path.exists():
+        return {}
+    out: dict[int, tuple[str, str]] = {}
+    with gzip.open(path, "rt") as fh:
+        for row in csv.DictReader(fh):
+            out[int(row["cik"])] = (row["sic"], row["sic_description"])
+    return out
+
+
+def sic_refresh(conn, out_path: Path = SIC_PATH) -> int:
+    """Fetch SIC codes for every CIK our notices match, incrementally.
+
+    One submissions-API request per CIK not already in the reference;
+    already-known CIKs are never refetched (SIC codes are near-immutable).
+    """
+    matcher = Matcher()
+    known = load_sic(out_path)
+
+    ciks: set[int] = set()
+    for r in conn.execute(
+        "SELECT DISTINCT employer_name, "
+        "substr(COALESCE(notice_date, effective_date), 1, 4) AS y FROM notices"
+    ):
+        hit = matcher.match(r["employer_name"], int(r["y"]) if r["y"] else None)
+        if hit:
+            ciks.add(hit[0])
+    missing = sorted(ciks - set(known))
+    logger.info("EDGAR SIC: %d matched CIKs, %d to fetch", len(ciks), len(missing))
+
+    for i, cik in enumerate(missing, 1):
+        sleep(0.15)
+        try:
+            sub = json.loads(_get(SUBMISSIONS_URL.format(cik=cik)))
+        except Exception as exc:  # noqa: BLE001 — dead CIKs 404
+            logger.debug("EDGAR SIC: CIK %d unavailable (%s)", cik, exc)
+            continue
+        known[cik] = (str(sub.get("sic") or ""), str(sub.get("sicDescription") or ""))
+        if i % 250 == 0:
+            logger.info("EDGAR SIC: fetched %d/%d", i, len(missing))
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with gzip.open(out_path, "wt", newline="") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(["cik", "sic", "sic_description"])
+        for cik in sorted(known):
+            writer.writerow([cik, known[cik][0], known[cik][1]])
+    logger.info("EDGAR SIC reference: %d CIKs -> %s", len(known), out_path)
+    return len(known)
 
 
 class Matcher:

@@ -45,36 +45,46 @@ def export_csvs(
 
     def fetch(where: str, params: tuple) -> list[sqlite3.Row]:
         return conn.execute(
-            f"SELECT {', '.join(EXPORT_COLUMNS)} FROM notices WHERE {where} "
+            f"SELECT {', '.join(EXPORT_COLUMNS)}, "
+            "(SELECT v.fields_json FROM notice_versions v "
+            " WHERE v.notice_id = notices.id AND v.version = notices.current_version"
+            ") AS fields_json "
+            f"FROM notices WHERE {where} "
             "ORDER BY state, notice_date, employer_name, dedupe_key",
             params,
         ).fetchall()
 
     # Derived columns, inserted right after employer_name; the DB keeps only
     # source values. normalized_name: cleanco suffix stripping. cik/ticker/
-    # cik_match: era-aware EDGAR match (empty when the reference file is
-    # absent — run `warnlive edgar-refresh` to build it).
-    matcher = None
-    from warnlive.enrich.edgar import REFERENCE_PATH, Matcher
+    # cik_match: era-aware EDGAR match; sic/sic_description: EDGAR industry
+    # for matched CIKs. industry/naics: the source's own raw fields. The
+    # EDGAR columns are empty until the reference files are built
+    # (warnlive edgar-refresh / edgar-sic-refresh).
+    from warnlive.enrich.edgar import REFERENCE_PATH, Matcher, load_sic
+    from warnlive.enrich.industry import industry_from_fields_json
 
-    if REFERENCE_PATH.exists():
-        matcher = Matcher()
+    matcher = Matcher() if REFERENCE_PATH.exists() else None
+    sic_by_cik = load_sic()
 
     header = (EXPORT_COLUMNS[:2]
-              + ["normalized_name", "cik", "ticker", "cik_match"]
+              + ["normalized_name", "industry", "naics",
+                 "cik", "ticker", "cik_match", "sic", "sic_description"]
               + EXPORT_COLUMNS[2:])
     date_idx = EXPORT_COLUMNS.index("notice_date")
     eff_idx = EXPORT_COLUMNS.index("effective_date")
 
     def derived(r: sqlite3.Row) -> tuple:
-        cik = ticker = method = ""
+        cik = ticker = method = sic = sic_desc = ""
         if matcher is not None:
             date = r[date_idx] or r[eff_idx]
             hit = matcher.match(r[1], int(date[:4]) if date else None)
             if hit:
                 cik, ticker, method = hit
-        return (r[0], r[1], normalized_employer(r[1]), cik, ticker, method,
-                *tuple(r)[2:])
+                sic, sic_desc = sic_by_cik.get(cik, ("", ""))
+        industry, naics = industry_from_fields_json(r["fields_json"])
+        return (r[0], r[1], normalized_employer(r[1]), industry or "", naics or "",
+                cik, ticker, method, sic, sic_desc,
+                *tuple(r)[2:len(EXPORT_COLUMNS)])
 
     def write(path: Path, rows: list[sqlite3.Row]) -> None:
         with open(path, "w", newline="") as fh:

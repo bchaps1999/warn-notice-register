@@ -41,6 +41,12 @@ export function NoticeDetailPage() {
         <Row label="Workers affected">
           <span className="tabular">{num(n.employees_affected)}</span>
         </Row>
+        {(n.industry || n.naics) && (
+          <Row label="Industry (source)">
+            {n.industry ?? "—"}
+            {n.naics && <span className="tabular text-xs text-ink-muted ml-2">NAICS {n.naics}</span>}
+          </Row>
+        )}
         <Row label="First observed">{date(n.first_seen)}</Row>
         <Row label="Last seen at source">{date(n.last_seen)}</Row>
         <Row label="Source">
@@ -83,6 +89,12 @@ export function NoticeDetailPage() {
                   {n.ticker}
                 </a>
                 <span className="text-ink-faint text-xs ml-2">price chart</span>
+              </Row>
+            )}
+            {n.sic_description && (
+              <Row label="SIC industry">
+                {n.sic_description}
+                {n.sic && <span className="tabular text-xs text-ink-muted ml-2">SIC {n.sic}</span>}
               </Row>
             )}
             <Row label="Name match">
