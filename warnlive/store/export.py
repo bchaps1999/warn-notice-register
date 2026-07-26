@@ -61,13 +61,14 @@ def export_csvs(
     # EDGAR columns are empty until the reference files are built
     # (warnlive edgar-refresh / edgar-sic-refresh).
     from warnlive.enrich.edgar import REFERENCE_PATH, Matcher, load_sic
-    from warnlive.enrich.industry import industry_from_fields_json
+    from warnlive.enrich.industry import industry_from_fields_json, load_sic_naics
 
     matcher = Matcher() if REFERENCE_PATH.exists() else None
     sic_by_cik = load_sic()
+    naics_by_sic = load_sic_naics()
 
     header = (EXPORT_COLUMNS[:2]
-              + ["normalized_name", "industry", "naics",
+              + ["normalized_name", "industry", "naics", "naics_basis",
                  "cik", "ticker", "cik_match", "sic", "sic_description"]
               + EXPORT_COLUMNS[2:])
     date_idx = EXPORT_COLUMNS.index("notice_date")
@@ -81,8 +82,11 @@ def export_csvs(
             if hit:
                 cik, ticker, method = hit
                 sic, sic_desc = sic_by_cik.get(cik, ("", ""))
-        industry, naics = industry_from_fields_json(r["fields_json"])
-        return (r[0], r[1], normalized_employer(r[1]), industry or "", naics or "",
+        industry, naics, basis = industry_from_fields_json(r["fields_json"])
+        if naics is None and sic in naics_by_sic:
+            naics, basis = naics_by_sic[sic], "sic-crosswalk"
+        return (r[0], r[1], normalized_employer(r[1]), industry or "",
+                naics or "", basis or "",
                 cik, ticker, method, sic, sic_desc,
                 *tuple(r)[2:len(EXPORT_COLUMNS)])
 

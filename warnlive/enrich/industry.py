@@ -9,10 +9,26 @@ version, at export/site-build time — the DB keeps only source values.
 
 from __future__ import annotations
 
+import csv
+import gzip
 import json
 import re
+from pathlib import Path
 
 _CODE = re.compile(r"\d{2,6}")
+
+# Census 1987-SIC -> 1997-NAICS concordance, distilled: each SIC resolved
+# to the longest NAICS prefix its candidate mappings agree on (unique code,
+# else common prefix, else sector group like 31-33); ambiguous SICs are
+# omitted. Source: census.gov/naics/concordances/1987_SIC_to_1997_NAICS.xls
+SIC_NAICS_PATH = Path("data/reference/sic_naics.csv.gz")
+
+
+def load_sic_naics(path: Path = SIC_NAICS_PATH) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    with gzip.open(path, "rt") as fh:
+        return {r["sic"]: r["naics"] for r in csv.DictReader(fh)}
 
 # Official NAICS sector names -> 2-digit sector codes. FL/IA/MN publish
 # these labels verbatim; a handful of common variants are included. Used
@@ -60,15 +76,17 @@ def sector_from_text(industry: str | None) -> str | None:
     return _SECTOR_BY_NAME.get(_WS_RUN.sub(" ", industry).strip().lower())
 
 
-def extract_industry(raw: dict) -> tuple[str | None, str | None]:
-    """Return (industry_text, naics_code) from a source raw row.
+def extract_industry(raw: dict) -> tuple[str | None, str | None, str | None]:
+    """Return (industry_text, naics_code, naics_basis) from a source raw row.
 
     Keys containing "naics" yield the code (first 2-6 digit run; handles
     float-formatted spreadsheet values like "322233.0" and multi-code
     lists) unless they are descriptions ("NAICS Description"), which are
-    industry text. Keys containing "industry" yield the text.
+    industry text. Keys containing "industry" yield the text. Basis is
+    "source" for numeric codes, "sector-name" for codes derived from an
+    official sector label.
     """
-    industry = naics = None
+    industry = naics = basis = None
     for key, value in raw.items():
         text = str(value).strip()
         if not text or text.lower() in ("nan", "none", "n/a"):
@@ -81,22 +99,26 @@ def extract_industry(raw: dict) -> tuple[str | None, str | None]:
             elif naics is None:
                 m = _CODE.search(text)
                 if m:
-                    naics = m.group(0)
+                    naics, basis = m.group(0), "source"
         elif "industry" in kl and industry is None:
             industry = text
     if naics is None:
         naics = sector_from_text(industry)
-    return industry, naics
+        if naics:
+            basis = "sector-name"
+    return industry, naics, basis
 
 
-def industry_from_fields_json(fields_json: str | None) -> tuple[str | None, str | None]:
+def industry_from_fields_json(
+    fields_json: str | None,
+) -> tuple[str | None, str | None, str | None]:
     """extract_industry over a notice version's stored fields_json."""
     if not fields_json:
-        return None, None
+        return None, None, None
     try:
         raw = json.loads(json.loads(fields_json).get("raw_extra") or "{}")
     except (TypeError, ValueError):
-        return None, None
+        return None, None, None
     if not isinstance(raw, dict):
-        return None, None
+        return None, None, None
     return extract_industry(raw)

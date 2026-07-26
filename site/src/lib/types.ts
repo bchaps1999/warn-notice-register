@@ -125,6 +125,7 @@ export interface NoticeDetail {
   sic_description: string | null;
   industry: string | null;
   naics: string | null;
+  naics_basis: string | null;
   first_seen: string;
   last_seen: string;
   versions: NoticeVersion[];
