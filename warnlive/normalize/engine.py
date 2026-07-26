@@ -10,6 +10,7 @@ counted parse failure, not a crash.
 from __future__ import annotations
 
 import hashlib
+import html
 import json
 import re
 from dataclasses import dataclass, field
@@ -128,12 +129,23 @@ def _record_hash(rec: dict) -> str:
 _JUNK_VALUES = {"", ".", "-", "n/a", "na", "none", "unknown", "tbd"}
 
 
+_TAG = re.compile(r"<[a-zA-Z/!][^>]*>")
+
+
 def _clean_text(value: str | None) -> str | None:
     """Display-value hygiene: normalize NBSP and whitespace, strip, and null
-    out placeholder junk. (Distinct from _fold, which is key-only.)"""
+    out placeholder junk. (Distinct from _fold, which is key-only.)
+
+    Sources sometimes leak markup into name fields (e.g. WI rows arriving as
+    'Company<br/><em>* footnote…</em>'). When a real tag is present, the name
+    is the text before the first tag — everything after is display chrome.
+    HTML entities (&amp;, &quot;) are unescaped either way."""
     if value is None:
         return None
-    v = _WS.sub(" ", value.replace("\xa0", " ")).strip()
+    if _TAG.search(value):
+        value = value.split("<", 1)[0]
+    v = html.unescape(value)
+    v = _WS.sub(" ", v.replace("\xa0", " ")).strip()
     return None if v.lower() in _JUNK_VALUES else v
 
 

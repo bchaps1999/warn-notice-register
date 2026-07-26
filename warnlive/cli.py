@@ -373,6 +373,74 @@ def repair_dates(states, db_path: Path, dry_run: bool) -> None:
         )
 
 
+@cli.command("clean-text")
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--dry-run", is_flag=True, help="Report what would change without writing.")
+def clean_text(db_path: Path, dry_run: bool) -> None:
+    """Re-apply display-text hygiene (markup stripping, entity unescaping)
+    to employer_name/location of every notice, migrating dedupe keys in
+    lockstep. Collisions become links, never merges."""
+    from warnlive.normalize.engine import _clean_text as clean
+    from warnlive.normalize.engine import _dedupe_key
+    from warnlive.pipeline import now_utc
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    now = now_utc()
+
+    changed = collided = 0
+    rows = conn.execute(
+        "SELECT id, state, employer_name, location, notice_date, dedupe_key "
+        "FROM notices"
+    ).fetchall()
+    for row in rows:
+        employer = clean(row["employer_name"])
+        location = clean(row["location"])
+        if employer == row["employer_name"] and location == row["location"]:
+            continue
+        if employer is None:
+            continue  # never blank out a name during cleanup
+        new_key = _dedupe_key(
+            {
+                "state": row["state"],
+                "employer_name": employer,
+                "notice_date": row["notice_date"],
+                "location": location,
+            }
+        )
+        existing = conn.execute(
+            "SELECT id FROM notices WHERE dedupe_key = ? AND id != ?",
+            (new_key, row["id"]),
+        ).fetchone()
+        if existing is not None:
+            # A clean twin already owns the new key: keep this row's old key
+            # (future re-ingests of the dirty raw row still match it), clean
+            # the display fields anyway, and link the pair.
+            collided += 1
+            new_key = row["dedupe_key"]
+            if not dry_run:
+                conn.execute(
+                    """INSERT OR IGNORE INTO notice_links
+                         (notice_id, related_id, kind, score, method, detail, created_at)
+                       VALUES (?, ?, 'possible_duplicate', 0.9, 'text-cleanup',
+                               'cleaned name collides with existing key', ?)""",
+                    (row["id"], existing["id"], now),
+                )
+        else:
+            changed += 1
+        if not dry_run:
+            conn.execute(
+                "UPDATE notices SET employer_name = ?, location = ?, dedupe_key = ? "
+                "WHERE id = ?",
+                (employer, location, new_key, row["id"]),
+            )
+    if not dry_run:
+        conn.commit()
+        _compress_db(db_path)
+    label = "would clean" if dry_run else "cleaned"
+    click.echo(f"{label} {changed} rows, collisions linked {collided}")
+
+
 @cli.command()
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
