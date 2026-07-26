@@ -243,15 +243,20 @@ def fetch_fl(cache_dir: Path) -> list[dict]:
     records: list[dict] = []
     for year in FL_YEARS:
         if year == 1997:
-            captures = _wayback_captures(FL_1997_ORIGINAL)
-            url = captures[-1] if captures else None  # oldest = closest to 1997
+            urls = _wayback_captures(FL_1997_ORIGINAL)[::-1]  # oldest first
         else:
-            url = FL_URL.format(year=year, year_after=year + 1)
-        if url is None:
-            logger.warning("FL %s: no archived capture found", year)
-            continue
-        content = _download(url, cache_dir / "archives" / "fl" / f"{year}.html")
+            urls = [FL_URL.format(year=year, year_after=year + 1)]
+        content = url = None
+        dest = cache_dir / "archives" / "fl" / f"{year}.html"
+        for candidate in urls:
+            content = _download(candidate, dest)
+            if content is not None and b"COMPANY NAME" in content.upper():
+                url = candidate
+                break
+            dest.unlink(missing_ok=True)  # capture without the table
+            content = None
         if content is None:
+            logger.warning("FL %s: no usable archived capture", year)
             continue
         soup = BeautifulSoup(content.decode("latin-1", "replace"), "html5lib")
         table = None
@@ -373,7 +378,159 @@ def fetch_ca(cache_dir: Path) -> list[dict]:
     return records
 
 
-FETCHERS = {"WI": fetch_wi, "FL": fetch_fl, "CA": fetch_ca}
+# --- Massachusetts -----------------------------------------------------------
+
+# The only pre-2021 cumulative artifact Wayback holds: FY2020 (Jul 2019 -
+# Jun 2020), six regional sheets. Jul 2020 - Mar 2021 has no archived
+# artifact anywhere (weekly-report captures only begin late 2021).
+MA_FY2020_URL = (
+    "https://web.archive.org/web/20200828043125id_/"
+    "https://www.mass.gov/doc/warn-report-for-fy-2020/download"
+)
+
+
+def fetch_ma(cache_dir: Path) -> list[dict]:
+    content = _download(MA_FY2020_URL, cache_dir / "archives" / "ma" / "fy2020.xls")
+    if content is None or not content.startswith(XLS_MAGIC):
+        logger.warning("MA: FY2020 capture unavailable or not an xls")
+        return []
+    wb = xlrd.open_workbook(file_contents=content)
+    records: list[dict] = []
+
+    def cell_date(value) -> str | None:
+        if isinstance(value, float) and value > 10000:
+            return xlrd.xldate_as_datetime(value, wb.datemode).date().isoformat()
+        token = str(value).strip().split()[0].rstrip("/") if str(value).strip() else ""
+        return _fl_date(token)
+
+    for sheet in wb.sheets():
+        for r in range(sheet.nrows):
+            row = [sheet.cell_value(r, c) for c in range(sheet.ncols)]
+            notice_date = cell_date(row[0])
+            company = str(row[1]).strip()
+            if notice_date is None or not company or company == "Company Name":
+                continue
+            jobs = re.sub(r"[^\d]", "", str(row[4]).split(".")[0])
+            records.append(
+                _canonical(
+                    {
+                        "state": "MA",
+                        "employer_name": company,
+                        "location": str(row[2]).strip(),
+                        "notice_date": notice_date,
+                        "effective_date": cell_date(row[3]),
+                        "employees_affected": int(jobs) if jobs else None,
+                        "layoff_type": "unknown",
+                        "is_amendment": int(company.upper().startswith("UPDATED")),
+                        "source_url": MA_FY2020_URL,
+                    },
+                    {
+                        "region_sheet": sheet.name,
+                        "Date Received": str(row[0]),
+                        "Company Name": company,
+                        "City": str(row[2]),
+                        "Layoff Date": str(row[3]),
+                        "# Affected": str(row[4]),
+                    },
+                )
+            )
+    logger.info("MA FY2020: %d archive rows", len(records))
+    return records
+
+
+# --- New York ----------------------------------------------------------------
+
+# The pre-Tableau app served one page per notice (details.asp?id=N); Wayback
+# crawled it heavily in 2009-2015. Only captures crawled before 2016 are
+# fetched: later crawls hold notices the live data already covers, and ~1.8k
+# pages at 1/s is already a long polite crawl of archive.org.
+NY_DETAILS_PREFIX = "labor.ny.gov/app/warn/details.asp"
+NY_CAPTURE_CUTOFF = "2016"
+
+_NY_FIELD = re.compile(
+    r"^(Date of Notice|Control Number|Company|County|Number Affected|"
+    r"Layoff Date|Closing Date|Classification)\s*:\s*(.*)$"
+)
+
+
+def fetch_ny(cache_dir: Path) -> list[dict]:
+    import urllib.parse
+    import urllib.request
+
+    query = urllib.parse.urlencode(
+        {"url": f"{NY_DETAILS_PREFIX}*", "output": "json",
+         "filter": "statuscode:200", "collapse": "urlkey"}
+    )
+    req = urllib.request.Request(
+        f"{CDX_API}?{query}", headers={"User-Agent": "warn-live archive backfill"}
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            rows = json.loads(resp.read())[1:]
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("NY: CDX enumeration failed (%s)", exc)
+        return []
+
+    captures: dict[str, str] = {}
+    for r in rows:
+        ts, original = r[1], r[2]
+        if ts >= NY_CAPTURE_CUTOFF:
+            continue
+        m = re.search(r"[?&]id=(\d+)", original)
+        if m:
+            captures.setdefault(m.group(1), f"https://web.archive.org/web/{ts}id_/{original}")
+    logger.info("NY: %d archived detail pages to fetch", len(captures))
+
+    records: list[dict] = []
+    parsed = 0
+    for notice_id, url in sorted(captures.items(), key=lambda kv: int(kv[0])):
+        content = _download(url, cache_dir / "archives" / "ny" / f"{notice_id}.html")
+        if content is None:
+            continue
+        soup = BeautifulSoup(content.decode("utf-8", "replace"), "html5lib")
+        fields: dict[str, str] = {}
+        lines = soup.get_text("\n", strip=True).split("\n")
+        for i, line in enumerate(lines):
+            m = _NY_FIELD.match(line)
+            if m and m.group(1) not in fields:
+                fields[m.group(1)] = m.group(2).strip()
+                # Company name may sit on the line after the bare label
+                if m.group(1) == "Company" and not m.group(2).strip() and i + 1 < len(lines):
+                    fields["Company"] = lines[i + 1].strip()
+        company = fields.get("Company", "")
+        notice_date = _fl_date(fields.get("Date of Notice", ""))
+        if not company or notice_date is None:
+            continue
+        county = (fields.get("County") or "").split("|")[0].strip()
+        classification = (fields.get("Classification") or "").lower()
+        jobs = re.sub(r"[^\d]", "", fields.get("Number Affected", ""))
+        records.append(
+            _canonical(
+                {
+                    "state": "NY",
+                    "employer_name": company,
+                    "location": county or None,
+                    "notice_date": notice_date,
+                    "effective_date": _fl_date(fields.get("Layoff Date", ""))
+                    or _fl_date(fields.get("Closing Date", "")),
+                    "employees_affected": int(jobs) if jobs else None,
+                    "layoff_type": "closure" if "closing" in classification
+                    else "mass_layoff" if "layoff" in classification else "unknown",
+                    "source_url": url,
+                    "source_notice_id": fields.get("Control Number") or notice_id,
+                },
+                dict(fields, wayback_id=notice_id),
+            )
+        )
+        parsed += 1
+        if parsed % 200 == 0:
+            logger.info("NY: parsed %d detail pages", parsed)
+    logger.info("NY: %d archive rows", len(records))
+    return records
+
+
+FETCHERS = {"WI": fetch_wi, "FL": fetch_fl, "CA": fetch_ca, "MA": fetch_ma,
+            "NY": fetch_ny}
 
 
 def gap_filter(

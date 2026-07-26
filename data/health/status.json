@@ -958,7 +958,7 @@
     "name": "Massachusetts",
     "registry_status": "active",
     "source": "custom",
-    "notices": 380,
+    "notices": 553,
     "latest_verdict": "ok",
     "latest_run": "2026-07-23T11:18:02Z",
     "latest_error": null,
