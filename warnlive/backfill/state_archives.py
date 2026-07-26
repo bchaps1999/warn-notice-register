@@ -34,6 +34,7 @@ from time import sleep
 import xlrd
 from bs4 import BeautifulSoup
 
+from warnlive.enrich.industry import _NAICS_SECTORS
 from warnlive.normalize.engine import _clean_text, _dedupe_key, _record_hash
 
 logger = logging.getLogger("warnlive")
@@ -102,6 +103,38 @@ def _download(url: str, dest: Path) -> bytes | None:
 _WI_TYPE = {"clos": "closure", "layoff": "mass_layoff"}
 
 
+def _archived(
+    original_url: str, dest: Path, valid=None
+) -> tuple[bytes | None, str | None]:
+    """(bytes, capture URL) for an archived artifact, cache-first.
+
+    A cached artifact is served without touching the network — re-parses
+    (see refresh_raw) must not depend on archive.org being reachable. The
+    capture URL is cached alongside it, since it is the row's provenance.
+    Otherwise captures are tried newest-first until one passes `valid`,
+    which rejects Wayback's archived-404 and wrapper pages.
+    """
+    marker = dest.with_name(dest.name + ".url")
+    if dest.exists() and marker.exists():
+        content = dest.read_bytes()
+        if valid is None or valid(content):
+            return content, marker.read_text().strip()
+    for candidate in _wayback_captures(original_url):
+        content = _download(candidate, dest)
+        if content is not None and (valid is None or valid(content)):
+            marker.write_text(candidate)
+            return content, candidate
+        dest.unlink(missing_ok=True)
+    return None, None
+
+
+def _sheet_code(value) -> str | None:
+    """Industry code from a spreadsheet cell (floats render as '326199.0')."""
+    text = str(int(value)) if isinstance(value, float) and value > 0 else str(value)
+    m = re.search(r"\d{2,6}", text)
+    return m.group(0) if m else None
+
+
 def _wayback_captures(original_url: str) -> list[str]:
     """All 200-status capture URLs of original_url, newest first, as id_
     URLs (raw archived bytes, no Wayback HTML wrapper)."""
@@ -114,11 +147,19 @@ def _wayback_captures(original_url: str) -> list[str]:
     req = urllib.request.Request(
         f"{CDX_API}?{query}", headers={"User-Agent": "warn-live archive backfill"}
     )
-    try:
-        with urllib.request.urlopen(req, timeout=60) as resp:
-            rows = json.loads(resp.read())
-    except Exception as exc:  # noqa: BLE001
-        logger.warning("CDX lookup failed for %s (%s)", original_url, exc)
+    rows = None
+    for attempt in range(3):  # CDX times out sporadically under load
+        try:
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                rows = json.loads(resp.read())
+            break
+        except Exception as exc:  # noqa: BLE001
+            logger.warning(
+                "CDX lookup failed for %s (%s)%s",
+                original_url, exc, "; retrying" if attempt < 2 else "",
+            )
+            sleep(5)
+    if rows is None:
         return []
     return [
         f"https://web.archive.org/web/{r[1]}id_/{original_url}"
@@ -129,15 +170,11 @@ def _wayback_captures(original_url: str) -> list[str]:
 def fetch_wi(cache_dir: Path) -> list[dict]:
     records: list[dict] = []
     for year in WI_YEARS:
-        content = url = None
-        dest = cache_dir / "archives" / "wi" / f"{year}.xls"
-        for candidate in _wayback_captures(WI_ORIGINAL.format(year=year)):
-            content = _download(candidate, dest)
-            if content is not None and content.startswith(XLS_MAGIC):
-                url = candidate
-                break
-            dest.unlink(missing_ok=True)  # wrapper/error page, not the xls
-            content = None
+        content, url = _archived(
+            WI_ORIGINAL.format(year=year),
+            cache_dir / "archives" / "wi" / f"{year}.xls",
+            valid=lambda c: c.startswith(XLS_MAGIC),
+        )
         if content is None:
             logger.warning("WI %s: no usable archived xls found", year)
             continue
@@ -152,19 +189,21 @@ def fetch_wi(cache_dir: Path) -> list[dict]:
             values = [str(sheet.cell_value(r, c)).lower() for c in range(sheet.ncols)]
             if any("notice received" in v for v in values):
                 header_row = r
+                # Needle order matters twice over: "Schedule of Dislocations"
+                # contains "location", so it must be claimed first, and the
+                # first column matching a needle keeps it — 2014-2015 logs
+                # append an "Industry 2-Digit" column after "Industry".
                 for c, v in enumerate(values):
-                    if "notice received" in v:
-                        cols["date"] = c
-                    elif "company" in v:
-                        cols["company"] = c
-                    elif "location" in v:
-                        cols["location"] = c
-                    elif "type" in v:
-                        cols["type"] = c
-                    elif "affected" in v:
-                        cols["jobs"] = c
-                    elif "schedule" in v:
-                        cols["effective"] = c
+                    for name, needle in (
+                        ("date", "notice received"), ("company", "company"),
+                        ("effective", "schedule"), ("location", "location"),
+                        ("type", "type"), ("jobs", "affected"),
+                        ("naics", "naics"), ("industry", "industry"),
+                        ("county", "county"),
+                    ):
+                        if needle in v:
+                            cols.setdefault(name, c)
+                            break
                 break
         if header_row is None or "date" not in cols or "company" not in cols:
             logger.warning("WI %s: header row not found; layout changed?", year)
@@ -201,6 +240,19 @@ def fetch_wi(cache_dir: Path) -> list[dict]:
                 "# Affected": jobs,
                 "Schedule of Dislocations": str(eff),
             }
+            # The logs carry the state's own industry detail. Through 2001
+            # the "NAICS Code" column actually holds pre-conversion SIC
+            # codes; the extractor sorts that out by sector validity, so
+            # label the column by what it holds, not by its header.
+            for name, col in (("Industry", "industry"), ("County", "county")):
+                if col in cols:
+                    text = str(sheet.cell_value(r, cols[col])).strip()
+                    if text:
+                        raw[name] = text
+            if "naics" in cols:
+                code = _sheet_code(sheet.cell_value(r, cols["naics"]))
+                if code:
+                    raw["NAICS Code" if code[:2] in _NAICS_SECTORS else "SIC Code"] = code
             records.append(
                 _canonical(
                     {
@@ -543,6 +595,73 @@ def fetch_ny(cache_dir: Path) -> list[dict]:
 
 FETCHERS = {"WI": fetch_wi, "FL": fetch_fl, "CA": fetch_ca, "MA": fetch_ma,
             "NY": fetch_ny}
+
+
+def refresh_raw(conn: sqlite3.Connection, records: list[dict]) -> dict:
+    """Rewrite already-ingested rows' raw_extra from a re-parse.
+
+    When a parser learns to read columns it previously dropped (WI's
+    Industry/NAICS), the canonical fields are unchanged, so the version
+    hash — which covers only those fields — matches and a plain re-ingest
+    reports "unchanged" without storing the new detail. This updates
+    raw_extra on the current version in place: no version bump, and no
+    is_amended flag, because the source never amended anything.
+    """
+    updated = missing = 0
+    for rec in records:
+        row = conn.execute(
+            "SELECT v.rowid AS rowid, v.fields_json AS fields_json "
+            "FROM notices n JOIN notice_versions v "
+            "  ON v.notice_id = n.id AND v.version = n.current_version "
+            "WHERE n.dedupe_key = ?",
+            (rec["dedupe_key"],),
+        ).fetchone()
+        if row is None:
+            missing += 1
+            continue
+        fields = json.loads(row["fields_json"])
+        if fields.get("raw_extra") == rec["raw_extra"]:
+            continue
+        fields["raw_extra"] = rec["raw_extra"]
+        conn.execute(
+            "UPDATE notice_versions SET fields_json = ? WHERE rowid = ?",
+            (json.dumps(fields, sort_keys=True, ensure_ascii=False), row["rowid"]),
+        )
+        updated += 1
+    conn.commit()
+    return {"updated": updated, "not_in_db": missing}
+
+
+def drop_archive_rows(conn: sqlite3.Connection, state: str) -> int:
+    """Delete a state's archive-backfilled rows (Wayback source_url only).
+
+    For when a parser bug — not the source — produced bad rows: WI's
+    "Schedule of Dislocations" column matched a substring test for
+    "location", so its rows carried a date serial as their location and
+    the bad value went into their dedupe keys. Rows keyed on garbage can't
+    be matched and repaired in place, so they are dropped and re-ingested
+    from the cached artifacts. Live-scraped rows are never touched.
+    """
+    ids = [
+        r["id"]
+        for r in conn.execute(
+            "SELECT id FROM notices WHERE state = ? "
+            "AND source_url LIKE '%web.archive.org%'",
+            (state,),
+        )
+    ]
+    if not ids:
+        return 0
+    marks = ",".join("?" * len(ids))
+    conn.execute(
+        f"DELETE FROM notice_links WHERE notice_id IN ({marks}) "
+        f"OR related_id IN ({marks})",
+        ids * 2,
+    )
+    conn.execute(f"DELETE FROM notice_versions WHERE notice_id IN ({marks})", ids)
+    conn.execute(f"DELETE FROM notices WHERE id IN ({marks})", ids)
+    conn.commit()
+    return len(ids)
 
 
 def gap_filter(

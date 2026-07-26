@@ -93,9 +93,29 @@ Scheduled runs: `.github/workflows/scrape-daily.yml` (high-volume states) and
 enables the Zyte proxy for states behind aggressive bot protection (LA, TX
 fallback, MA fallback).
 
-`warnlive edgar-refresh` (manual, occasional) rebuilds the SEC EDGAR
-name→CIK reference used to derive the export's `cik`/`ticker`/`cik_match`
-columns. It requires `SEC_EDGAR_UA` set to a declared user agent per SEC
-fair-access policy, e.g. `SEC_EDGAR_UA="Your Name you@example.com"`.
-Scheduled runs never contact the SEC — they read the committed reference
-file at `data/reference/edgar_names.csv.gz`.
+### Employer identity and industry
+
+Exports carry derived columns the database never stores — identity (SEC
+CIK, IRS EIN, LEI, Wikidata QID), industry codes, and the `employer_key`
+that groups a company's notices across spelling variants. All of it comes
+from reference files under `data/reference`, rebuilt manually and
+committed; scheduled runs read them and contact no external service.
+`warnlive/enrich/annotate.py` is the single place the tiers combine.
+
+```
+warnlive edgar-refresh       # SEC name -> CIK, era-aware (needs SEC_EDGAR_UA)
+warnlive edgar-sic-refresh   # SIC industry per matched CIK (needs SEC_EDGAR_UA)
+warnlive nonprofit-refresh   # IRS EIN + NTEE code for exempt organizations
+warnlive gleif-refresh       # Legal Entity Identifiers for private companies
+warnlive wikidata-refresh    # Wikidata entities keyed by CIK
+warnlive wikidata-labels     # Wikidata for CIK-less employers, exact labels
+```
+
+The SEC commands require `SEC_EDGAR_UA` set to a declared user agent per
+SEC fair-access policy, e.g. `SEC_EDGAR_UA="Your Name you@example.com"`.
+
+Every name-based match is gated the same way: equality after
+normalization, a corroborating attribute where one exists (filing era for
+CIKs, state for EINs), and a single surviving candidate. Ambiguity
+matches nothing — a missing identifier costs only enrichment, while a
+wrong one silently poisons every join made against it.

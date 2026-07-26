@@ -100,6 +100,8 @@ export interface EmployerDetail {
   aliases: string[];
   cik: number | null;
   ticker: string | null;
+  ein: string | null;
+  lei: string | null;
   wikidata_qid: string | null;
   parent_company: string | null;
   sic_description: string | null;
@@ -145,6 +147,9 @@ export interface NoticeDetail {
   cik_match: string | null;
   sic: string | null;
   sic_description: string | null;
+  ein: string | null;
+  ntee: string | null;
+  lei: string | null;
   wikidata_qid: string | null;
   wikidata_match: string | null;
   parent_company: string | null;

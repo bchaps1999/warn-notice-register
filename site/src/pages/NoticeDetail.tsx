@@ -71,9 +71,11 @@ export function NoticeDetailPage() {
         </Row>
       </dl>
 
-      {(n.cik || n.wikidata_qid) && (
+      {(n.cik || n.ein || n.lei || n.wikidata_qid) && (
         <>
-          <SectionHeading>{n.cik ? "Public company" : "Company identity"}</SectionHeading>
+          <SectionHeading>
+            {n.cik ? "Public company" : n.ein ? "Nonprofit organization" : "Company identity"}
+          </SectionHeading>
           <dl className="grid grid-cols-[11rem_1fr] gap-y-2 text-sm">
             {n.cik && (
               <Row label="SEC CIK">
@@ -105,6 +107,29 @@ export function NoticeDetailPage() {
               <Row label="SIC industry">
                 {n.sic_description}
                 {n.sic && <span className="tabular text-xs text-ink-muted ml-2">SIC {n.sic}</span>}
+              </Row>
+            )}
+            {n.ein && (
+              <Row label="IRS EIN">
+                <a
+                  href={`https://projects.propublica.org/nonprofits/organizations/${n.ein}`}
+                  className="underline hover:text-ink tabular"
+                  target="_blank" rel="noreferrer"
+                >
+                  {n.ein}
+                </a>
+                <span className="text-ink-faint text-xs ml-2">Form 990 filings</span>
+              </Row>
+            )}
+            {n.lei && (
+              <Row label="Legal entity ID">
+                <a
+                  href={`https://search.gleif.org/#/record/${n.lei}`}
+                  className="underline hover:text-ink tabular"
+                  target="_blank" rel="noreferrer"
+                >
+                  {n.lei}
+                </a>
               </Row>
             )}
             {n.parent_company && <Row label="Parent company">{n.parent_company}</Row>}

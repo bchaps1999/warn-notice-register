@@ -13,9 +13,19 @@ import csv
 import gzip
 import json
 import re
+from functools import lru_cache
 from pathlib import Path
 
 _CODE = re.compile(r"\d{2,6}")
+
+# Valid NAICS sector prefixes. Sources sometimes label a pre-2002 SIC code
+# as "NAICS" (Wisconsin's 2001 log mixes both); a code whose first two
+# digits are not a sector is not NAICS, and a 4-digit one is almost always
+# SIC, which the concordance can still resolve.
+_NAICS_SECTORS = {
+    "11", "21", "22", "23", "31", "32", "33", "42", "44", "45", "48", "49",
+    "51", "52", "53", "54", "55", "56", "61", "62", "71", "72", "81", "92",
+}
 
 # Census 1987-SIC -> 1997-NAICS concordance, distilled: each SIC resolved
 # to the longest NAICS prefix its candidate mappings agree on (unique code,
@@ -24,6 +34,11 @@ _CODE = re.compile(r"\d{2,6}")
 SIC_NAICS_PATH = Path("data/reference/sic_naics.csv.gz")
 
 
+# "sic" as a standalone word: "SIC", "SIC Code" — never "music", "basic".
+_SIC_KEY = re.compile(r"\bsic\b")
+
+
+@lru_cache(maxsize=None)
 def load_sic_naics(path: Path = SIC_NAICS_PATH) -> dict[str, str]:
     if not path.exists():
         return {}
@@ -82,26 +97,40 @@ def extract_industry(raw: dict) -> tuple[str | None, str | None, str | None]:
     Keys containing "naics" yield the code (first 2-6 digit run; handles
     float-formatted spreadsheet values like "322233.0" and multi-code
     lists) unless they are descriptions ("NAICS Description"), which are
-    industry text. Keys containing "industry" yield the text. Basis is
-    "source" for numeric codes, "sector-name" for codes derived from an
-    official sector label.
+    industry text. Keys containing "sic" yield a code resolved through the
+    concordance. Keys containing "industry" yield the text. Basis is
+    "source" for numeric NAICS, "sic-crosswalk" for concordance results,
+    "sector-name" for codes derived from an official sector label.
     """
-    industry = naics = basis = None
+    industry = naics = basis = sic = None
     for key, value in raw.items():
         text = str(value).strip()
         if not text or text.lower() in ("nan", "none", "n/a"):
             continue
         kl = key.lower()
-        if "naics" in kl:
+        if "naics" in kl or _SIC_KEY.search(kl):
             if "description" in kl:
                 if industry is None:
                     industry = text
-            elif naics is None:
-                m = _CODE.search(text)
-                if m:
-                    naics, basis = m.group(0), "source"
+                continue
+            m = _CODE.search(text)
+            if not m:
+                continue
+            code = m.group(0)
+            if "naics" in kl and code[:2] in _NAICS_SECTORS:
+                if naics is None:
+                    naics, basis = code, "source"
+            elif sic is None and len(code) == 4:
+                # Only a full 4-digit code can be read as SIC: padding a
+                # short one ("79") into "0079" would hit an unrelated
+                # industry in the concordance.
+                sic = code
         elif "industry" in kl and industry is None:
             industry = text
+    if naics is None and sic is not None:
+        naics = load_sic_naics().get(sic)
+        if naics:
+            basis = "sic-crosswalk"
     if naics is None:
         naics = sector_from_text(industry)
         if naics:

@@ -6,8 +6,6 @@ import csv
 import sqlite3
 from pathlib import Path
 
-from warnlive.normalize.engine import normalized_employer
-
 EXPORT_COLUMNS = [
     "state",
     "employer_name",
@@ -55,54 +53,26 @@ def export_csvs(
         ).fetchall()
 
     # Derived columns, inserted right after employer_name; the DB keeps only
-    # source values. normalized_name: cleanco suffix stripping. cik/ticker/
-    # cik_match: era-aware EDGAR match; sic/sic_description: EDGAR industry
-    # for matched CIKs. industry/naics: the source's own raw fields. The
-    # EDGAR columns are empty until the reference files are built
-    # (warnlive edgar-refresh / edgar-sic-refresh).
-    from warnlive.enrich.edgar import REFERENCE_PATH, Matcher, load_sic
-    from warnlive.enrich.industry import industry_from_fields_json, load_sic_naics
+    # source values. They come from the reference files under
+    # data/reference and are empty until those are built (warnlive
+    # edgar-refresh, edgar-sic-refresh, nonprofit-refresh, gleif-refresh,
+    # wikidata-refresh); see warnlive.enrich.annotate.
+    from warnlive.enrich.annotate import FIELDS as DERIVED_COLUMNS, Annotator
 
-    from warnlive.enrich.wikidata import load_labels, load_orgs
-
-    matcher = Matcher() if REFERENCE_PATH.exists() else None
-    sic_by_cik = load_sic()
-    naics_by_sic = load_sic_naics()
-    wikidata_by_cik = load_orgs()
-    wikidata_by_name = load_labels()
-
-    header = (EXPORT_COLUMNS[:2]
-              + ["normalized_name", "industry", "naics", "naics_basis",
-                 "cik", "ticker", "cik_match", "sic", "sic_description",
-                 "wikidata_qid", "wikidata_match", "parent_company"]
-              + EXPORT_COLUMNS[2:])
+    annotator = Annotator()
+    header = EXPORT_COLUMNS[:2] + DERIVED_COLUMNS + EXPORT_COLUMNS[2:]
     date_idx = EXPORT_COLUMNS.index("notice_date")
     eff_idx = EXPORT_COLUMNS.index("effective_date")
 
     def derived(r: sqlite3.Row) -> tuple:
-        cik = ticker = method = sic = sic_desc = qid = wd_method = parent = ""
-        norm = normalized_employer(r[1])
-        if matcher is not None:
-            date = r[date_idx] or r[eff_idx]
-            hit = matcher.match(r[1], int(date[:4]) if date else None)
-            if hit:
-                cik, ticker, method = hit
-                sic, sic_desc = sic_by_cik.get(cik, ("", ""))
-                wd = wikidata_by_cik.get(cik)
-                if wd:
-                    qid, wd_method = wd["qid"], "cik"
-                    parent = wd["parents"].split("||")[0] if wd["parents"] else ""
-        if not qid and norm in wikidata_by_name:
-            wd = wikidata_by_name[norm]
-            qid, wd_method = wd["qid"], "label"
-            parent = wd["parents"].split("||")[0] if wd["parents"] else ""
-        industry, naics, basis = industry_from_fields_json(r["fields_json"])
-        if naics is None and sic in naics_by_sic:
-            naics, basis = naics_by_sic[sic], "sic-crosswalk"
-        return (r[0], r[1], norm, industry or "",
-                naics or "", basis or "",
-                cik, ticker, method, sic, sic_desc, qid, wd_method, parent,
-                *tuple(r)[2:len(EXPORT_COLUMNS)])
+        extra = annotator.annotate(
+            r[1], r[date_idx] or r[eff_idx], r["fields_json"]
+        )
+        return (
+            r[0], r[1],
+            *(extra[f] if extra[f] is not None else "" for f in DERIVED_COLUMNS),
+            *tuple(r)[2:len(EXPORT_COLUMNS)],
+        )
 
     def write(path: Path, rows: list[sqlite3.Row]) -> None:
         with open(path, "w", newline="") as fh:

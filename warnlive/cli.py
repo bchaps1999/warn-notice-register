@@ -224,7 +224,23 @@ def export(db_path: Path, data_dir: Path) -> None:
 @click.option("--workdir", type=click.Path(path_type=Path), default=Path("workdir/backfill"))
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
-def backfill_archives(states, workdir: Path, db_path: Path, data_dir: Path) -> None:
+@click.option(
+    "--refresh-raw",
+    is_flag=True,
+    help="Re-parse cached artifacts and update already-ingested rows' raw "
+    "fields (for parsers that learned to read new columns); ingests nothing.",
+)
+@click.option(
+    "--reingest",
+    is_flag=True,
+    help="Delete this state's archive-sourced rows and rebuild them from the "
+    "cached artifacts. For parser fixes that change dedupe keys, which cannot "
+    "be repaired in place. Live-scraped rows are never touched.",
+)
+def backfill_archives(
+    states, workdir: Path, db_path: Path, data_dir: Path,
+    refresh_raw: bool, reingest: bool,
+) -> None:
     """Ingest pre-portal history from official state archives (Wayback
     captures of agency artifacts) for STATES (default: all with a fetcher).
     Only fills months the state currently has no notices in."""
@@ -246,6 +262,17 @@ def backfill_archives(states, workdir: Path, db_path: Path, data_dir: Path) -> N
 
     for postal in wanted:
         records = state_archives.FETCHERS[postal](Path(workdir) / "cache")
+        if refresh_raw:
+            stats = state_archives.refresh_raw(conn, records)
+            click.echo(
+                f"{postal}: {len(records)} archive rows re-parsed, "
+                f"{stats['updated']} raw records refreshed, "
+                f"{stats['not_in_db']} not in db"
+            )
+            continue
+        if reingest:
+            dropped = state_archives.drop_archive_rows(conn, postal)
+            click.echo(f"{postal}: dropped {dropped} archive-sourced rows")
         eligible = state_archives.gap_filter(conn, postal, records)
         stats = ingest(conn, eligible, observed_at=now_utc()[:10])
         click.echo(
@@ -395,6 +422,33 @@ def edgar_sic_refresh(db_path: Path) -> None:
     db_mod.init_db(conn)
     n = edgar.sic_refresh(conn)
     click.echo(f"{edgar.SIC_PATH}: {n} CIKs")
+
+
+@cli.command("nonprofit-refresh")
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+def nonprofit_refresh(db_path: Path) -> None:
+    """Match CIK-less employers to IRS EINs and NTEE activity codes by
+    joining against the exempt-organization Business Master File."""
+    from warnlive.enrich import nonprofits
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    n = nonprofits.refresh(conn)
+    click.echo(f"{nonprofits.PATH}: {n} employers matched to an EIN")
+
+
+@cli.command("gleif-refresh")
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--top", "top_n", default=3000, help="How many top CIK-less employers to look up.")
+def gleif_refresh(db_path: Path, top_n: int) -> None:
+    """Resolve top CIK-less employers to Legal Entity Identifiers
+    (incremental; misses are recorded and not retried)."""
+    from warnlive.enrich import gleif
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    n = gleif.refresh(conn, top_n=top_n)
+    click.echo(f"{gleif.PATH}: {n} matched")
 
 
 @cli.command("wikidata-refresh")

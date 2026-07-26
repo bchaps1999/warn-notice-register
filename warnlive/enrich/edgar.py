@@ -94,8 +94,35 @@ def _get(url: str) -> bytes:
     return data
 
 
-def refresh(cache_dir: Path, out_path: Path = REFERENCE_PATH, last_year: int = 2026) -> int:
-    """Build the distilled (name, cik, years, ticker) reference file."""
+# EDGAR appends the state/country of incorporation to a registrant name
+# ("BANK OF AMERICA CORP /DE/", "WELLS FARGO & COMPANY/MN", "WALT DISNEY
+# CO/CA/TA/"). It is filing metadata, not part of the name, and leaving it
+# in blocks the exact match a notice for "Bank of America" should get.
+_EDGAR_SUFFIX = re.compile(r"\s*/[A-Za-z]{0,4}/?\s*$")
+
+
+def _edgar_name(raw: str) -> str:
+    """A registrant name with its incorporation markers stripped."""
+    name = raw.strip()
+    for _ in range(4):  # several can be chained
+        stripped = _EDGAR_SUFFIX.sub("", name)
+        if stripped == name:
+            break
+        name = stripped
+    return name or raw.strip()
+
+
+def refresh(
+    cache_dir: Path,
+    out_path: Path = REFERENCE_PATH,
+    last_year: int = 2026,
+    keep_cache: bool = False,
+) -> int:
+    """Build the distilled (name, cik, years, ticker) reference file.
+
+    The quarterly indexes total a few GB, so by default each is parsed and
+    deleted rather than cached; pass keep_cache to retain them.
+    """
     cache_dir = Path(cache_dir) / "edgar"
     cache_dir.mkdir(parents=True, exist_ok=True)
 
@@ -104,19 +131,23 @@ def refresh(cache_dir: Path, out_path: Path = REFERENCE_PATH, last_year: int = 2
     for year in range(FIRST_YEAR, last_year + 1):
         for q in (1, 2, 3, 4):
             dest = cache_dir / f"company_{year}_q{q}.idx"
+            fetched = False
             if not dest.exists():
                 try:
                     sleep(0.3)
                     dest.write_bytes(_get(INDEX_URL.format(year=year, q=q)))
+                    fetched = True
                 except Exception as exc:  # noqa: BLE001 — future quarters 404
                     logger.debug("EDGAR %s Q%s unavailable (%s)", year, q, exc)
                     continue
             for name, cik in _parse_idx(dest):
-                norm = normalized_employer(name)
+                norm = normalized_employer(_edgar_name(name))
                 if not norm:
                     continue
                 span = seen[norm].setdefault(cik, [year, year])
                 span[0], span[1] = min(span[0], year), max(span[1], year)
+            if fetched and not keep_cache:
+                dest.unlink(missing_ok=True)
         logger.info("EDGAR %s indexed (%d names so far)", year, len(seen))
 
     tickers: dict[int, str] = {}

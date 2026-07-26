@@ -54,57 +54,15 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
 
     # Derived annotations (same logic as the CSV exports); they flow into
     # the detail shards via dict(n), and CIK presence into FLAG_PUBLIC.
-    from warnlive.enrich.edgar import REFERENCE_PATH, Matcher, load_sic
-    from warnlive.enrich.industry import industry_from_fields_json, load_sic_naics
+    from warnlive.enrich.annotate import Annotator
 
-    from warnlive.enrich.wikidata import load_labels, load_orgs
-    from warnlive.normalize.engine import normalized_employer
-
-    matcher = Matcher() if REFERENCE_PATH.exists() else None
-    sic_by_cik = load_sic()
-    naics_by_sic = load_sic_naics()
-    wikidata_by_cik = load_orgs()
-    wikidata_by_name = load_labels()
+    annotator = Annotator()
     for n in notices:
-        n["cik"] = n["ticker"] = n["cik_match"] = None
-        n["sic"] = n["sic_description"] = None
-        n["wikidata_qid"] = n["wikidata_match"] = n["parent_company"] = None
-        n["industry"], n["naics"], n["naics_basis"] = industry_from_fields_json(
-            n.pop("fields_json")
+        n.update(
+            annotator.annotate(
+                n["employer_name"], n["display_date"], n.pop("fields_json")
+            )
         )
-        if matcher is not None:
-            d = n["display_date"]
-            hit = matcher.match(n["employer_name"], int(d[:4]) if d else None)
-            if hit:
-                n["cik"], n["ticker"], n["cik_match"] = hit[0], hit[1] or None, hit[2]
-                sic = sic_by_cik.get(n["cik"])
-                if sic:
-                    n["sic"], n["sic_description"] = sic[0] or None, sic[1] or None
-                wd = wikidata_by_cik.get(n["cik"])
-                if wd:
-                    n["wikidata_qid"], n["wikidata_match"] = wd["qid"], "cik"
-                    n["parent_company"] = (
-                        wd["parents"].split("||")[0] if wd["parents"] else None
-                    )
-        if not n["wikidata_qid"]:
-            wd = wikidata_by_name.get(normalized_employer(n["employer_name"]) or "")
-            if wd:
-                n["wikidata_qid"], n["wikidata_match"] = wd["qid"], "label"
-                n["parent_company"] = (
-                    wd["parents"].split("||")[0] if wd["parents"] else None
-                )
-        if n["naics"] is None and n["sic"] in naics_by_sic:
-            n["naics"], n["naics_basis"] = naics_by_sic[n["sic"]], "sic-crosswalk"
-        # Identity key for employer-level aggregation and /employers pages:
-        # strongest available identity wins (QID survives renames, CIK
-        # survives spelling, normalized name unifies variants).
-        if n["wikidata_qid"]:
-            n["employer_key"] = f"qid:{n['wikidata_qid']}"
-        elif n["cik"]:
-            n["employer_key"] = f"cik:{n['cik']}"
-        else:
-            norm = normalized_employer(n["employer_name"])
-            n["employer_key"] = f"n:{norm or n['employer_name'].lower()}"
     linked_ids = {
         r["notice_id"] for r in conn.execute("SELECT DISTINCT notice_id FROM notice_links")
     } | {
@@ -373,6 +331,8 @@ def _build_employer_shards(notices, out_dir: Path, prefix_len: int) -> int:
             "aliases": sorted(k for k in names if k != label)[:12],
             "cik": first["cik"],
             "ticker": first["ticker"],
+            "ein": first["ein"],
+            "lei": first["lei"],
             "wikidata_qid": first["wikidata_qid"],
             "parent_company": first["parent_company"],
             "sic_description": first["sic_description"],
