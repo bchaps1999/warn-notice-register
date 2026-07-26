@@ -63,31 +63,39 @@ def export_csvs(
     from warnlive.enrich.edgar import REFERENCE_PATH, Matcher, load_sic
     from warnlive.enrich.industry import industry_from_fields_json, load_sic_naics
 
+    from warnlive.enrich.wikidata import load_orgs
+
     matcher = Matcher() if REFERENCE_PATH.exists() else None
     sic_by_cik = load_sic()
     naics_by_sic = load_sic_naics()
+    wikidata_by_cik = load_orgs()
 
     header = (EXPORT_COLUMNS[:2]
               + ["normalized_name", "industry", "naics", "naics_basis",
-                 "cik", "ticker", "cik_match", "sic", "sic_description"]
+                 "cik", "ticker", "cik_match", "sic", "sic_description",
+                 "wikidata_qid", "parent_company"]
               + EXPORT_COLUMNS[2:])
     date_idx = EXPORT_COLUMNS.index("notice_date")
     eff_idx = EXPORT_COLUMNS.index("effective_date")
 
     def derived(r: sqlite3.Row) -> tuple:
-        cik = ticker = method = sic = sic_desc = ""
+        cik = ticker = method = sic = sic_desc = qid = parent = ""
         if matcher is not None:
             date = r[date_idx] or r[eff_idx]
             hit = matcher.match(r[1], int(date[:4]) if date else None)
             if hit:
                 cik, ticker, method = hit
                 sic, sic_desc = sic_by_cik.get(cik, ("", ""))
+                wd = wikidata_by_cik.get(cik)
+                if wd:
+                    qid = wd["qid"]
+                    parent = wd["parents"].split("||")[0] if wd["parents"] else ""
         industry, naics, basis = industry_from_fields_json(r["fields_json"])
         if naics is None and sic in naics_by_sic:
             naics, basis = naics_by_sic[sic], "sic-crosswalk"
         return (r[0], r[1], normalized_employer(r[1]), industry or "",
                 naics or "", basis or "",
-                cik, ticker, method, sic, sic_desc,
+                cik, ticker, method, sic, sic_desc, qid, parent,
                 *tuple(r)[2:len(EXPORT_COLUMNS)])
 
     def write(path: Path, rows: list[sqlite3.Row]) -> None:

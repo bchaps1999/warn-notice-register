@@ -97,6 +97,18 @@ export function NoticeDetailPage() {
                 {n.sic && <span className="tabular text-xs text-ink-muted ml-2">SIC {n.sic}</span>}
               </Row>
             )}
+            {n.parent_company && <Row label="Parent company">{n.parent_company}</Row>}
+            {n.wikidata_qid && (
+              <Row label="Wikidata">
+                <a
+                  href={`https://www.wikidata.org/wiki/${n.wikidata_qid}`}
+                  className="underline hover:text-ink tabular"
+                  target="_blank" rel="noreferrer"
+                >
+                  {n.wikidata_qid}
+                </a>
+              </Row>
+            )}
             <Row label="Name match">
               <span className="tabular text-xs">{n.cik_match}</span>
             </Row>

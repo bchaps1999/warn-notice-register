@@ -397,6 +397,16 @@ def edgar_sic_refresh(db_path: Path) -> None:
     click.echo(f"{edgar.SIC_PATH}: {n} CIKs")
 
 
+@cli.command("wikidata-refresh")
+def wikidata_refresh() -> None:
+    """Fetch all Wikidata entities carrying an SEC CIK (P5531) with parent
+    company and industry labels; one bulk SPARQL query."""
+    from warnlive.enrich import wikidata
+
+    n = wikidata.refresh()
+    click.echo(f"{wikidata.ORGS_PATH}: {n} CIK-keyed entities")
+
+
 @cli.command("clean-text")
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--dry-run", is_flag=True, help="Report what would change without writing.")

@@ -57,12 +57,16 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
     from warnlive.enrich.edgar import REFERENCE_PATH, Matcher, load_sic
     from warnlive.enrich.industry import industry_from_fields_json, load_sic_naics
 
+    from warnlive.enrich.wikidata import load_orgs
+
     matcher = Matcher() if REFERENCE_PATH.exists() else None
     sic_by_cik = load_sic()
     naics_by_sic = load_sic_naics()
+    wikidata_by_cik = load_orgs()
     for n in notices:
         n["cik"] = n["ticker"] = n["cik_match"] = None
         n["sic"] = n["sic_description"] = None
+        n["wikidata_qid"] = n["parent_company"] = None
         n["industry"], n["naics"], n["naics_basis"] = industry_from_fields_json(
             n.pop("fields_json")
         )
@@ -74,6 +78,12 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
                 sic = sic_by_cik.get(n["cik"])
                 if sic:
                     n["sic"], n["sic_description"] = sic[0] or None, sic[1] or None
+                wd = wikidata_by_cik.get(n["cik"])
+                if wd:
+                    n["wikidata_qid"] = wd["qid"]
+                    n["parent_company"] = (
+                        wd["parents"].split("||")[0] if wd["parents"] else None
+                    )
         if n["naics"] is None and n["sic"] in naics_by_sic:
             n["naics"], n["naics_basis"] = naics_by_sic[n["sic"]], "sic-crosswalk"
     linked_ids = {

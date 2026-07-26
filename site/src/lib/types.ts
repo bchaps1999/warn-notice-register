@@ -123,6 +123,8 @@ export interface NoticeDetail {
   cik_match: string | null;
   sic: string | null;
   sic_description: string | null;
+  wikidata_qid: string | null;
+  parent_company: string | null;
   industry: string | null;
   naics: string | null;
   naics_basis: string | null;
