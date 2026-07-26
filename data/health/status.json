@@ -530,12 +530,21 @@
     "registry_status": "archive",
     "source": "upstream",
     "notices": 4151,
-    "latest_verdict": null,
-    "latest_run": null,
-    "latest_error": null,
-    "latest_checks": null,
+    "latest_verdict": "failed",
+    "latest_run": "2026-07-26T16:04:31Z",
+    "latest_error": "ConnectTimeout: HTTPSConnectionPool(host='www.tcsg.edu', port=443): Max retries exceeded with url: /warn-public-view/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x106485e50>, 'Connection to www.tcsg.edu timed out. (connect timeout=120)'))",
+    "latest_checks": {
+      "verdict": "failed",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "fail",
+          "detail": "ConnectTimeout: HTTPSConnectionPool(host='www.tcsg.edu', port=443): Max retries exceeded with url: /warn-public-view/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x106485e50>, 'Connection to www.tcsg.edu timed out. (connect timeout=120)'))"
+        }
+      ]
+    },
     "last_success": null,
-    "consecutive_failures": 0,
+    "consecutive_failures": 2,
     "recommend_broken": false
   },
   "HI": {
@@ -1222,16 +1231,25 @@
   },
   "MO": {
     "name": "Missouri",
-    "registry_status": "archive",
-    "source": "upstream",
+    "registry_status": "active",
+    "source": "patched",
     "notices": 516,
-    "latest_verdict": null,
-    "latest_run": null,
-    "latest_error": null,
-    "latest_checks": null,
+    "latest_verdict": "failed",
+    "latest_run": "2026-07-26T16:07:34Z",
+    "latest_error": "Exception: MO: Incapsula challenge did not clear for https://jobs.mo.gov/warn/2026",
+    "latest_checks": {
+      "verdict": "failed",
+      "checks": [
+        {
+          "name": "fetch_ok",
+          "outcome": "fail",
+          "detail": "Exception: MO: Incapsula challenge did not clear for https://jobs.mo.gov/warn/2026"
+        }
+      ]
+    },
     "last_success": null,
-    "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_failures": 4,
+    "recommend_broken": true
   },
   "MS": {
     "name": "Mississippi",
@@ -1969,6 +1987,19 @@
       ]
     },
     "last_success": "2026-07-19T08:23:24Z",
+    "consecutive_failures": 0,
+    "recommend_broken": false
+  },
+  "PR": {
+    "name": "Puerto Rico",
+    "registry_status": "manual_only",
+    "source": "manual",
+    "notices": 0,
+    "latest_verdict": null,
+    "latest_run": null,
+    "latest_error": null,
+    "latest_checks": null,
+    "last_success": null,
     "consecutive_failures": 0,
     "recommend_broken": false
   },

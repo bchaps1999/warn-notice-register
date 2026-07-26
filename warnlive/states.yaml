@@ -1,4 +1,4 @@
-# WARN state registry — one entry per jurisdiction (47 portal + 4 records-request).
+# WARN state registry — one entry per jurisdiction (47 portal + 5 records-request).
 # Seeded from docs/WARN_State_Portal_Catalog.xlsx.
 #
 # Fields:
@@ -341,16 +341,19 @@ mn:
 
 mo:
   name: Missouri
-  source: upstream
-  status: archive
+  source: patched
+  status: active
   tier: medium
   cadence: weekly
-  needs_browser: false
-  min_rows: 100
+  needs_browser: true
+  min_rows: 50
   staleness_days: 120
-  expected_columns: null
+  expected_columns: [Received Sort descending, Title, Industry, Location(s), County,
+    Region, Type, Layoff date(s), '# affected', Notes]
   source_url: https://jobs.mo.gov/warn/
-  notes: "Clean per-year HTML tables, but site is behind Incapsula bot protection; needs a browser-based patch. Held rows export."
+  notes: "Incapsula bot protection; our patch falls back to headless Chrome when
+    the challenge is served. Site now lists ~1 year of notices (72 rows 2026-07),
+    hence the low min_rows; history is already in the DB via BLN."
 
 ms:
   name: Mississippi
@@ -533,6 +536,22 @@ pa:
   expected_columns: [company, addressfull, county, jobs, date_effective, closure_or_layoff]
   source_url: https://www.pa.gov/agencies/dli/programs-services/workforce-development-home/warn-requirements/warn-notices
   notes: "HTML tables; recently migrated to pa.gov domain."
+
+pr:
+  name: Puerto Rico
+  source: manual
+  status: manual_only
+  tier: null
+  cadence: null
+  needs_browser: false
+  min_rows: 0
+  staleness_days: null
+  expected_columns: null
+  source_url: null
+  notes: "No public notice-level WARN list found (checked 2026-07): WARN/ALERTA
+    notices go to DDEC's dislocated-worker unit but are not published; DTRH
+    publishes only aggregated quarterly 'Despidos Significativos' statistics
+    (estadisticas.pr.gov). Records request only."
 
 ri:
   name: Rhode Island

@@ -12,7 +12,7 @@
 | DC | active | 2026-07-19T08:14:06Z | ✅ ok | 168 | 0 |  |
 | DE | active | 2026-07-19T08:14:42Z | ✅ ok | 102 | 0 |  |
 | FL | active | 2026-07-23T11:17:38Z | ✅ ok | 2805 | 0 |  |
-| GA | archive | — | — — | 4151 | 0 |  |
+| GA | archive | 2026-07-26T16:04:31Z | ❌ failed | 4151 | 2 | ConnectTimeout: HTTPSConnectionPool(host='www.tcsg.edu', port=443): Max retries exceeded with url: /warn-public-view/ (C |
 | HI | active | 2026-07-19T08:15:07Z | ✅ ok | 453 | 0 |  |
 | IA | active | 2026-07-19T08:15:08Z | ✅ ok | 952 | 0 |  |
 | ID | active | 2026-07-19T08:15:11Z | ✅ ok | 193 | 0 |  |
@@ -26,7 +26,7 @@
 | ME | active | 2026-07-19T08:20:54Z | ✅ ok | 577 | 0 |  |
 | MI | active | 2026-07-26T15:29:13Z | ✅ ok | 1356 | 0 |  |
 | MN | active | 2026-07-23T11:19:20Z | ✅ ok | 968 | 0 |  |
-| MO | archive | — | — — | 516 | 0 |  |
+| MO | active | 2026-07-26T16:07:34Z | ❌ failed | 516 | 4 | **recommend marking broken** (4 consecutive failures) |
 | MS | active | 2026-07-26T15:29:35Z | ✅ ok | 142 | 0 |  |
 | MT | active | 2026-07-19T08:22:04Z | ✅ ok | 43 | 0 |  |
 | NC | active | 2026-07-23T11:19:49Z | ✅ ok | 967 | 0 |  |
@@ -41,6 +41,7 @@
 | OK | active | 2026-07-19T08:22:54Z | ✅ ok | 806 | 0 |  |
 | OR | active | 2026-07-19T08:23:23Z | ✅ ok | 1190 | 0 |  |
 | PA | active | 2026-07-19T08:23:24Z | ✅ ok | 294 | 0 |  |
+| PR | manual_only | — | — — | 0 | 0 |  |
 | RI | active | 2026-07-26T15:39:25Z | ✅ ok | 135 | 0 |  |
 | SC | active | 2026-07-19T08:23:38Z | ✅ ok | 611 | 0 |  |
 | SD | active | 2026-07-19T08:23:38Z | ✅ ok | 79 | 0 |  |
