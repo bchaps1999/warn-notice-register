@@ -28,7 +28,9 @@ export function StateProfile() {
         <Stamp tone={data.source.status === "active" ? "neutral" : "oxide"}>
           {data.source.status === "active"
             ? `Automated · ${data.source.cadence ?? "weekly"}`
-            : data.source.status}
+            : data.source.status === "archive"
+              ? "Archived data · source fetch blocked"
+              : data.source.status}
         </Stamp>
       </div>
 

@@ -36,9 +36,16 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
     (out_dir / "states").mkdir(parents=True, exist_ok=True)
     (out_dir / "notices").mkdir(parents=True, exist_ok=True)
 
-    notices = conn.execute(
-        "SELECT * FROM notices ORDER BY state, notice_date, employer_name, dedupe_key"
-    ).fetchall()
+    # display_date drives all time bucketing/sorting on the site: notices
+    # from sources that never published a notice date (CA pre-2014 archive,
+    # GA, NJ/PA backfills) fall back to their effective date rather than
+    # vanishing from charts and date ranges. The raw fields stay distinct.
+    notices = [
+        dict(r) | {"display_date": r["notice_date"] or r["effective_date"]}
+        for r in conn.execute(
+            "SELECT * FROM notices ORDER BY state, notice_date, employer_name, dedupe_key"
+        )
+    ]
     linked_ids = {
         r["notice_id"] for r in conn.execute("SELECT DISTINCT notice_id FROM notice_links")
     } | {
@@ -92,7 +99,7 @@ def _month(d: str | None) -> str | None:
 def _monthly_series(rows) -> list[dict]:
     months: dict[str, dict] = {}
     for n in rows:
-        m = _month(n["notice_date"])
+        m = _month(n["display_date"])
         if m is None:
             continue
         entry = months.setdefault(
@@ -121,7 +128,7 @@ def _notice_summary(n, prefix_len: int) -> dict:
 def _top_employers(rows, since: str | None, limit: int) -> list[dict]:
     agg: dict[str, dict] = {}
     for n in rows:
-        if since and (n["notice_date"] or "") < since:
+        if since and (n["display_date"] or "") < since:
             continue
         name = n["employer_name"]
         e = agg.setdefault(name, {"employer": name, "notices": 0, "workers": 0})
@@ -136,7 +143,7 @@ def _today(notices) -> str:
     to the build date — a handful of source typos carry far-future notice
     dates and would otherwise drag every trailing window into the future."""
     build_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    dates = [n["notice_date"] for n in notices if n["notice_date"] and n["notice_date"] <= build_date]
+    dates = [n["display_date"] for n in notices if n["display_date"] and n["display_date"] <= build_date]
     return max(dates) if dates else "1970-01-01"
 
 
@@ -147,7 +154,7 @@ def _shift_months(iso_date: str, months_back: int) -> str:
 
 
 def _build_meta(notices, status: dict, prefix_len: int) -> dict:
-    dates = [n["notice_date"] for n in notices if n["notice_date"]]
+    dates = [n["display_date"] for n in notices if n["display_date"]]
     return {
         "built_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "key_prefix_len": prefix_len,
@@ -174,16 +181,16 @@ def _build_national(notices, prefix_len: int) -> dict:
     anchor = _today(notices)
     t12 = _shift_months(anchor, 12)
     recent_cut = _shift_months(anchor, 3)
-    dated = [n for n in notices if n["notice_date"]]
+    dated = [n for n in notices if n["display_date"]]
 
     biggest_recent = sorted(
-        (n for n in dated if recent_cut <= n["notice_date"] <= anchor),
+        (n for n in dated if recent_cut <= n["display_date"] <= anchor),
         key=lambda n: -(n["employees_affected"] or 0),
     )[:50]
 
     state_agg: dict[str, dict] = {}
     for n in dated:
-        if not (t12 <= n["notice_date"] <= anchor):
+        if not (t12 <= n["display_date"] <= anchor):
             continue
         e = state_agg.setdefault(n["state"], {"state": n["state"], "notices": 0, "workers": 0})
         e["notices"] += 1
@@ -199,9 +206,9 @@ def _build_national(notices, prefix_len: int) -> dict:
 
 
 def _build_state(postal: str, rows, health: dict, cfg, prefix_len: int) -> dict:
-    dated = [n for n in rows if n["notice_date"]]
+    dated = [n for n in rows if n["display_date"]]
     anchor = _today(rows)
-    recent = sorted(dated, key=lambda n: n["notice_date"], reverse=True)[:50]
+    recent = sorted(dated, key=lambda n: n["display_date"], reverse=True)[:50]
     return {
         "state": postal,
         "name": cfg.name,
@@ -221,8 +228,8 @@ def _build_state(postal: str, rows, health: dict, cfg, prefix_len: int) -> dict:
         },
         "coverage": {
             "notices": len(rows),
-            "earliest": min((n["notice_date"] for n in dated), default=None),
-            "latest": max((n["notice_date"] for n in dated), default=None),
+            "earliest": min((n["display_date"] for n in dated), default=None),
+            "latest": max((n["display_date"] for n in dated), default=None),
         },
         "monthly": _monthly_series(rows),
         "top_employers": _top_employers(dated, None, 20),
@@ -249,7 +256,7 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
         )
         cols["key"].append(n["dedupe_key"][:prefix_len])
         cols["state"].append(state_idx[n["state"]])
-        cols["date"].append(n["notice_date"])
+        cols["date"].append(n["display_date"])
         cols["employer"].append(n["employer_name"])
         cols["location"].append(n["location"])
         cols["jobs"].append(n["employees_affected"])

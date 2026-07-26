@@ -6,12 +6,14 @@ import { Stamp } from "../components/ui/Stamp";
 
 const STATUS_TONE: Record<string, string> = {
   active: "neutral",
+  archive: "unknown",
   broken: "oxide",
   manual_only: "unknown",
   unverified: "unknown",
 };
 const STATUS_LABEL: Record<string, string> = {
   active: "Automated",
+  archive: "Archived data",
   broken: "Source down",
   manual_only: "No public portal",
   unverified: "Unverified",
