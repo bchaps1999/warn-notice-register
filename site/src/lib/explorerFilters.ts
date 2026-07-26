@@ -1,3 +1,4 @@
+import { FLAG_PUBLIC } from "./types";
 import type { NoticeIndex } from "./types";
 
 export interface Filters {
@@ -7,6 +8,7 @@ export interface Filters {
   from: string; // YYYY-MM-DD or ""
   to: string;
   minJobs: number | null;
+  publicOnly: boolean; // only notices matched to an SEC CIK
   sort: SortKey;
   dir: "asc" | "desc";
 }
@@ -20,6 +22,7 @@ export const DEFAULT_FILTERS: Filters = {
   from: "",
   to: "",
   minJobs: null,
+  publicOnly: false,
   sort: "date",
   dir: "desc",
 };
@@ -34,6 +37,7 @@ export function filtersFromParams(p: URLSearchParams): Filters {
     from: p.get("from") ?? "",
     to: p.get("to") ?? "",
     minJobs: p.get("minJobs") ? Number(p.get("minJobs")) : null,
+    publicOnly: p.get("public") === "1",
     sort: (["date", "employer", "jobs", "state"] as const).includes(sort as SortKey)
       ? (sort as SortKey)
       : "date",
@@ -49,6 +53,7 @@ export function paramsFromFilters(f: Filters): URLSearchParams {
   if (f.from) p.set("from", f.from);
   if (f.to) p.set("to", f.to);
   if (f.minJobs !== null) p.set("minJobs", String(f.minJobs));
+  if (f.publicOnly) p.set("public", "1");
   if (f.sort !== "date") p.set("sort", f.sort);
   if (f.dir !== "desc") p.set("dir", f.dir);
   return p;
@@ -70,7 +75,7 @@ export function applyFilters(
   haystack: string[],
   f: Filters
 ): number[] {
-  const { state, date, jobs, type } = index.columns;
+  const { state, date, jobs, type, flags } = index.columns;
   const stateIdx = f.state ? index.states.indexOf(f.state) : -1;
   const typeIdx = f.type ? index.types.indexOf(f.type) : -1;
   const q = f.q.trim().toLowerCase();
@@ -83,6 +88,7 @@ export function applyFilters(
     if (f.from && (!d || d < f.from)) continue;
     if (f.to && (!d || d > f.to)) continue;
     if (f.minJobs !== null && (jobs[i] ?? -1) < f.minJobs) continue;
+    if (f.publicOnly && !(flags[i] & FLAG_PUBLIC)) continue;
     if (q && !haystack[i].includes(q)) continue;
     rows.push(i);
   }

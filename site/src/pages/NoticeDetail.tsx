@@ -57,6 +57,41 @@ export function NoticeDetailPage() {
         </Row>
       </dl>
 
+      {n.cik && (
+        <>
+          <SectionHeading>Public company</SectionHeading>
+          <dl className="grid grid-cols-[11rem_1fr] gap-y-2 text-sm">
+            <Row label="SEC CIK">
+              <a
+                href={`https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${n.cik}&type=&dateb=&owner=include&count=40`}
+                className="underline hover:text-ink tabular"
+                target="_blank" rel="noreferrer"
+              >
+                {String(n.cik).padStart(10, "0")}
+              </a>
+              <span className="text-ink-faint text-xs ml-2">
+                filing history around this notice
+              </span>
+            </Row>
+            {n.ticker && (
+              <Row label="Ticker">
+                <a
+                  href={`https://finance.yahoo.com/quote/${n.ticker}`}
+                  className="underline hover:text-ink tabular"
+                  target="_blank" rel="noreferrer"
+                >
+                  {n.ticker}
+                </a>
+                <span className="text-ink-faint text-xs ml-2">price chart</span>
+              </Row>
+            )}
+            <Row label="Name match">
+              <span className="tabular text-xs">{n.cik_match}</span>
+            </Row>
+          </dl>
+        </>
+      )}
+
       {n.versions.length > 1 && (
         <>
           <SectionHeading>Version history</SectionHeading>

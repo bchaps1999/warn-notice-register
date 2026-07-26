@@ -29,6 +29,7 @@ FLAG_TEMPORARY = 1
 FLAG_AMENDMENT = 2
 FLAG_AMENDED = 4
 FLAG_HAS_LINKS = 8
+FLAG_PUBLIC = 16  # matched to an SEC CIK
 
 
 def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> dict[str, int]:
@@ -46,6 +47,19 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
             "SELECT * FROM notices ORDER BY state, notice_date, employer_name, dedupe_key"
         )
     ]
+
+    # SEC EDGAR annotation (same Matcher as the CSV exports); flows into the
+    # detail shards via dict(n) and into index.json as FLAG_PUBLIC.
+    from warnlive.enrich.edgar import REFERENCE_PATH, Matcher
+
+    matcher = Matcher() if REFERENCE_PATH.exists() else None
+    for n in notices:
+        n["cik"] = n["ticker"] = n["cik_match"] = None
+        if matcher is not None:
+            d = n["display_date"]
+            hit = matcher.match(n["employer_name"], int(d[:4]) if d else None)
+            if hit:
+                n["cik"], n["ticker"], n["cik_match"] = hit[0], hit[1] or None, hit[2]
     linked_ids = {
         r["notice_id"] for r in conn.execute("SELECT DISTINCT notice_id FROM notice_links")
     } | {
@@ -253,6 +267,7 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
             | (FLAG_AMENDMENT if n["is_amendment"] else 0)
             | (FLAG_AMENDED if n["is_amended"] else 0)
             | (FLAG_HAS_LINKS if n["id"] in linked_ids else 0)
+            | (FLAG_PUBLIC if n["cik"] else 0)
         )
         cols["key"].append(n["dedupe_key"][:prefix_len])
         cols["state"].append(state_idx[n["state"]])

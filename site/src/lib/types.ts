@@ -85,6 +85,7 @@ export const FLAG_TEMPORARY = 1;
 export const FLAG_AMENDMENT = 2;
 export const FLAG_AMENDED = 4;
 export const FLAG_HAS_LINKS = 8;
+export const FLAG_PUBLIC = 16;
 
 export interface NoticeVersion {
   version: number;
@@ -117,6 +118,9 @@ export interface NoticeDetail {
   current_version: number;
   source_url: string | null;
   source_notice_id: string | null;
+  cik: number | null;
+  ticker: string | null;
+  cik_match: string | null;
   first_seen: string;
   last_seen: string;
   versions: NoticeVersion[];

@@ -107,6 +107,14 @@ export function Explorer() {
             className="input w-24"
           />
         </Field>
+        <label className="flex items-center gap-1.5 pb-2 text-xs text-ink-muted cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={filters.publicOnly}
+            onChange={(e) => setFilters({ publicOnly: e.target.checked })}
+          />
+          Public companies
+        </label>
       </div>
 
       <div className="flex items-center justify-between border-t border-rule-strong pt-2 mb-1">
