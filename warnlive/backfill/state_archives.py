@@ -503,10 +503,18 @@ def fetch_ny(cache_dir: Path) -> list[dict]:
             continue
         county = (fields.get("County") or "").split("|")[0].strip()
         classification = (fields.get("Classification") or "").lower()
-        # First number token only — these pages sometimes run several fields
-        # onto one line, and stripping non-digits would concatenate them all
-        # into absurd counts.
-        jobs_m = re.search(r"\d{1,6}", fields.get("Number Affected", "").replace(",", ""))
+        # Real counts lead the field ("620 (600 Station Agent...)", "Four
+        # (4) will be separated..."); prose buries numbers that are NOT
+        # counts (dates, the 250-person statutory threshold). So: strip
+        # dates, collapse whitespace, and only accept a number appearing in
+        # the first 15 characters.
+        jobs_text = " ".join(
+            re.sub(
+                r"\d{1,2}/\d{1,2}/\d{2,4}", " ",
+                fields.get("Number Affected", "").replace(",", ""),
+            ).split()
+        )
+        jobs_m = re.search(r"\d{1,6}", jobs_text[:15])
         jobs = jobs_m.group(0) if jobs_m else ""
         records.append(
             _canonical(
