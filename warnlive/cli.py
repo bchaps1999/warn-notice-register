@@ -159,22 +159,39 @@ def backfill(states, workdir: Path, db_path: Path, data_dir: Path) -> None:
 @click.option("--workdir", type=click.Path(path_type=Path), default=Path("workdir/backfill"))
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
-def backfill_bln(states, workdir: Path, db_path: Path, data_dir: Path) -> None:
+@click.option("--gaps", is_flag=True,
+              help="Fill months where a state has zero notices (instead of only "
+                   "rows older than its oldest notice).")
+@click.option("--all-missing", is_flag=True,
+              help="With --gaps: ingest every BLN row lacking a (state, employer, "
+                   "date) match, even in months we already cover. Review "
+                   "health/dupes_review.csv afterwards.")
+def backfill_bln(states, workdir: Path, db_path: Path, data_dir: Path,
+                 gaps: bool, all_missing: bool) -> None:
     """Deep-history backfill from BLN's accumulated integrated dataset,
-    ingesting only rows older than each state's current oldest notice."""
+    ingesting only rows older than each state's current oldest notice
+    (or into coverage gaps with --gaps)."""
     from warnlive.backfill import bln_integrated
     from warnlive.store.dedupe import ingest
+
+    if all_missing and not gaps:
+        raise click.UsageError("--all-missing requires --gaps")
 
     registry = load_registry()
     conn = db_mod.connect(db_path)
     db_mod.init_db(conn)
 
     csv_path = bln_integrated.download(Path(workdir))
-    per_state = bln_integrated.older_rows_by_state(
-        csv_path, conn, registry, list(states) or None
-    )
+    if gaps:
+        per_state = bln_integrated.gap_rows_by_state(
+            csv_path, conn, registry, list(states) or None, all_missing=all_missing
+        )
+    else:
+        per_state = bln_integrated.older_rows_by_state(
+            csv_path, conn, registry, list(states) or None
+        )
     if not per_state:
-        click.echo("Nothing older than existing data — no rows to ingest.")
+        click.echo("No eligible rows to ingest.")
         return
     from warnlive.pipeline import now_utc
 

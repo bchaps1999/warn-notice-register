@@ -106,6 +106,7 @@ NY,2018-06-01,Cardinal McCloskey Community Services - Head Start Programs (Sacre
 NY,2016-06-22,New York Life Insurance Company - Technology Operations,New York Life Insurance Company - Information Technology Operations,New York,0.928,7,20,61270,61272
 NY,2016-04-26,Restaurant Associates @ Equinox 1 Park,Restaurant Associates @ Equinox Columbus,New York,0.928,6,8,61324,61327
 NY,2016-04-26,Restaurant Associates @ Equinox Printing,Restaurant Associates @ Equinox 53rd Street,New York,0.928,10,2,61328,61331
+OK,2002-02-12,Siemens Health Services,Siemans Health Services,,0.928,34,34,68250,68251
 CA,2025-10-23,"Applied Materials, Inc. (3050 Bowers Ave)","Applied Materials, Inc. (Remote)",,0.927,38,15,1729,1743
 CA,2025-10-23,"Applied Materials, Inc. (3100 Bowers Ave)","Applied Materials, Inc. (Remote)",,0.927,21,15,1730,1743
 CA,2025-11-03,CommUnify - Filmore Center,CommUnify - Los Padres Center,,0.927,4,4,1860,1870
@@ -252,6 +253,7 @@ NY,2020-03-13,"WeWork Companies, Inc. (W. 18th Street)","WeWork Companies, Inc. 
 NY,2020-03-13,"WeWork Companies, Inc. (W. 18th Street)","WeWork Companies, Inc. (Hudson Street)",New York,0.925,29,6,59748,59751
 NY,2019-07-18,Spruce & Bond (HBG employees) Bond St.,Spruce & Bond (HBG employees) Amsterdam Ave,New York,0.925,4,1,60081,60083
 NY,2019-03-26,PVH - Tommy Hilfiger (Madison Avenue),PVH - Tommy Hilfiger (Fifth Avenue),New York,0.925,2,76,60199,60200
+OK,2009-01-26,Thermu Tru,Thermu Tru Doors,,0.925,220,220,68138,68139
 CA,2025-10-13,Blue shield of California 601,Blue Shield of California Building C,,0.924,31,18,1668,1669
 CA,2025-10-31,Ceryx Management LLC (Blackstone),Ceryx Management LLC (Hoover),,0.924,39,3,1896,1900
 CA,2025-11-03,CommUnify - Filmore Center,CommUnify - I Center,,0.924,4,6,1860,1861
@@ -463,6 +465,7 @@ NY,2019-11-22,"WeWork Companies, Inc. (Beach St.)","WeWork Companies, Inc. (W 14
 NY,2019-03-13,Instacart (at Whole Foods Market) Columbus Circle,Instacart (at Whole Foods Market) (808 Columbus Avenue),New York,0.921,32,16,60214,60217
 NY,2019-02-28,Kuni's Corporation d/b/a Ikinari Steak (37 West 46th St),Kuni's Corporation d/b/a Ikinari Steak (Bleecker),New York,0.921,9,10,60242,60244
 NY,2018-06-01,Cardinal McCloskey Community Services - Head Start Programs (St. Anthony),Cardinal McCloskey Community Services - Head Start Programs (Courtland Ave. - Child Development Center),Bronx,0.921,29,29,60564,60568
+KY,2020-03-20,Communicare Services - Radcliff,Communicare Services - Brandenburg,Hardin,0.921,17,14,67353,67355
 CA,2025-10-13,Blue shield of California 601,"Blue Shield of California, Building B",,0.92,31,24,1668,1670
 CA,2025-11-03,CommUnify - Maple Center,CommUnify - Adam Center,,0.92,3,4,1862,1864
 CA,2025-11-03,CommUnify - Westgate Center,CommUnify - Goleta Center,,0.92,7,2,1873,1880
@@ -754,6 +757,7 @@ NY,2020-01-24,Fairway Group Holdings Corp. (Harlem),Fairway Group Holdings Corp.
 NY,2019-11-22,"WeWork Companies, Inc. (Broad St.)","WeWork Companies, Inc. (54 W 40th St.)",New York,0.916,250,7,59936,59942
 NY,2019-11-22,"WeWork Companies, Inc. (Broad St.)","WeWork Companies, Inc. (W 14th Street)",New York,0.916,250,8,59936,59944
 NY,2016-06-30,"Catholic Charities Neighborhood Services, Inc. - OPWDD Residences and Day Habilitation Programs","Catholic Charities Neighborhood Services, Inc. (Casa Betsaida Homeless Program)",Brooklyn,0.916,91,3,61250,61260
+KY,2025-01-31,Jack Cooper Transport (Westport Road Facility),Jack Cooper Transport (Grade Lane Facility),Jefferson County - Louisville,0.916,100,89,67473,67477
 CA,2025-09-14,University of Southern California (Health Sciences Campus),University of Southern California (Norris),,0.915,151,1,1560,1563
 CA,2025-10-31,Ceryx Management LLC (Sepulveda),Ceryx Management LLC (Vermont),,0.915,4,8,1897,1898
 CA,2025-10-31,Ceryx Management LLC (Vermont),Ceryx Management LLC (7111 S Hoover),,0.915,8,1,1898,1907
@@ -802,6 +806,7 @@ NY,2023-08-04,"SDH Education West, LLC","SDH Education West, LLC - Capital Regio
 NY,2023-05-04,"Home Clean Home, HCH Management - New York City Region","Home Clean Home, HCH Management",,0.915,,,57434,57439
 NY,2022-03-15,Portmore Delivery Service Corp.,Portmore Delivery Service Corp. - New York City Region,,0.915,,,57223,57615
 NY,2020-01-03,Catholic Guardian Services (Payson Ave.),Catholic Guardian Services (1011 Main Office),New York,0.915,30,8,59885,59895
+KY,2023-09-10,Wellmore Energy Company LLC - Surface Minerals #1,Wellmore Energy Company LLC - Elk Creek,Pike,0.915,15,58,67223,67224
 AL,2007-12-10,WESTPOINT HOME-FAIRFAX FABRICATION PLANT,WESTPOINT HOME-FAIRFAX FINISHING PLANT,Valley,0.914,650,200,239,240
 CA,2025-07-14,"Blue Shield of California - Town Center, Building C",Blue Shield of California - Long Beach,,0.914,6,11,1383,1385
 CA,2025-07-14,"Blue shield of California - Town Center, Building B",Blue Shield of California - Long Beach,,0.914,32,11,1384,1385
@@ -1031,6 +1036,7 @@ NY,2020-03-13,"WeWork Companies, Inc. (Avenue of the Americas)","WeWork Companie
 NY,2020-01-03,Catholic Guardian Services (Wallace Ave),Catholic Guardian Services (225th Street),Bronx,0.91,19,12,59882,59883
 NY,2019-09-09,Catholic Guardian Services (Co-Op City),Catholic Guardian Services (243rd Street),Bronx,0.91,34,24,60040,60042
 NY,2019-09-09,Catholic Guardian Services (243rd Street),Catholic Guardian Services (Lacombe Ave),Bronx,0.91,24,28,60042,60043
+KY,2020-04-15,Jacobsen|Daniels Enterprise d.b.a Fly Away Valet - CVG,Jacobsen|Daniels Enterprise - CVG,Boone,0.91,17,17,67533,67566
 CA,2025-07-14,"Blue Shield of California - Town Center, Building C",Blue Shield of California - San Diego,,0.909,6,2,1383,1388
 CA,2025-07-14,"Blue shield of California - Town Center, Building B",Blue Shield of California - San Diego,,0.909,32,2,1384,1388
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Dublin Physical & Hand Therapy),Agile Physical Therapy (Sutter Health San Carlos Physical Therapy & Hand Therapy),,0.909,7,19,1591,1593
@@ -1251,6 +1257,7 @@ NY,2023-04-20,"Sumitovant Biopharma, Inc.","Sumitovant Biopharma, Inc. - New Yor
 NY,2020-06-09,"Century 21 Department Stores, LLC (Corporate Offices)","Century 21 Department Stores, LLC (Downtown Manhattan Store)",New York,0.906,83,126,58302,58303
 NY,2019-03-13,Instacart (at Whole Foods Market) Columbus Circle,Instacart (at Whole Foods Market) (7th Avenue),New York,0.906,32,21,60214,60221
 NY,2018-03-30,"CAMBA, Inc.- LTW at Cascades High School","CAMBA, Inc.- LTW at Independence High School",New York,0.906,6,7,60652,60653
+KY,2023-09-10,Wellmore Energy Company LLC - Paw Paw 2 North,Wellmore Energy Company LLC - Elk Creek,Pike,0.906,20,58,67124,67224
 CA,2025-09-08,Kaiser Foundation Hospitals - Walnut Creek,Kaiser Foundation Hospitals - 99 S. Pasadena,,0.905,1,1,1554,1555
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Dublin Physical & Hand Therapy),Agile Physical Therapy (Sutter Health Mountain View Center),,0.905,7,1,1591,1597
 CA,2025-10-31,Ceryx Management LLC (Vermont),Ceryx Management LLC (801 W 70th),,0.905,8,9,1898,1904
@@ -1396,6 +1403,8 @@ TX,2013-08-12,SER Jobs for Progress-Hillcrest Dr,SER Jobs for Progress-S. Flores
 VA,2023-07-11,Wellmore Energy Company LLC (Surface Minerals),Wellmore Energy Company LLC (Black Watch Operations),Grundy VA,0.903,15,1,49001,49007
 NY,2020-06-10,Hyatt Corporation dba Hotel 50 Bowery,Hyatt Corporation dba Andaz Wall Street,New York,0.903,67,114,58290,58295
 NY,2020-06-09,"Century 21 Department Stores, LLC (Downtown Manhattan Store)","Century 21 Department Stores, LLC (Lincoln Square Store)",New York,0.903,126,64,58303,58304
+KY,2018-12-24,K&T SWITCHING SERVICE -Fern Valley Road,K&T SWITCHING SERVICE -Chamberlain Lane,Jefferson County - Louisville,0.903,52,38,67401,67402
+OK,2002-02-11,Dana Corporation,Dana Corporation / Wix Division,05 - CentralRegion,0.903,200,181,68252,68253
 AL,2005-12-13,RUSSELL CORP. (PLANT #7-BLEACHERY),RUSSELL CORP. (ALEX CITY),Alexander City,0.902,180,747,783,784
 CA,2025-07-14,Blue Shield of California - Oakland,"Blue Shield of California - Town Center, Building C",,0.902,70,6,1382,1383
 CA,2025-07-14,Blue Shield of California - Oakland,"Blue shield of California - Town Center, Building B",,0.902,70,32,1382,1384
@@ -1550,6 +1559,8 @@ NY,2020-04-22,Visionworks (Western Region),Visionworks (New York City Region),,0
 NY,2020-04-08,"B.R. Guest Holdings, LLC dba Blue Fin - New York","B.R. Guest Holdings, LLC dba Dos Caminos - Meatpacking NY",New York,0.9,129,96,58770,58774
 NY,2020-03-20,"Sobaya Restaurant, Inc dba Rai Rai Ken","Sobaya Restaurant Inc., dba HI-COLLAR",New York,0.9,11,9,59508,59513
 NY,2020-01-03,Catholic Guardian Services (Payson Ave.),Catholic Guardian Services (34 W Central Harlem),New York,0.9,30,2,59885,59894
+KY,2018-09-27,Dormakaba,dormakaba USA Inc.,Fayette,0.9,58,58,67536,67594
+OK,2001-10-01,Wellcore America,WellCore,05 - CentralRegion,0.9,50,32,68265,68266
 CA,2025-07-10,Intel Corporation (Robert Noyce),Intel Corporation (SC-11),,0.899,203,5,1374,1378
 CA,2025-07-10,Intel Corporation (Robert Noyce),Intel Corporation (SC-12),,0.899,203,55,1374,1379
 CA,2025-08-15,Adventist Health Glendale,Adventist Health Simi Valley,,0.899,58,1,1480,1483
@@ -1645,6 +1656,7 @@ WI,2020-06-25,Levy Premium Food Service at Fiserv Forum,Levy Premium Food Servic
 AZ,2019-12-30,Compass USA - St Mary' Hospital,Compass USA - Holy Cross,Tucson,0.898,75,12,50256,50258
 WI,2016-05-19,Anchor Bank FSB - East Towne Blvd.,Anchor Bank FSB - City View Dr.,Madison,0.898,46,46,53601,53602
 NY,2020-03-17,Manhasset Restaurant LLC dba Cipollini,Manhasset Restaurant LLC dbaToku Modern Asian,Manhasset,0.898,76,89,59634,59647
+KY,2023-07-25,Wellmore Energy Company LLC - Laboratory Department,Wellmore Energy Company LLC - Black Watch #8 Prep Plant,Pike,0.898,2,1,67233,67234
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Sunnyvale Center 401 Physical Therapy),Agile Physical Therapy (Sutter Health Palo Alto Physical Therapy & Hand Therapy),,0.897,16,30,1595,1598
 CA,2025-10-31,Ceryx Management LLC (Vermont),Ceryx Management LLC (1540 S St. Andrews),,0.897,8,18,1898,1906
 CA,2026-03-12,Total Storage Solutions (Best RV & Self Storage),Total Storage Solutions (El Monte Stor It Now),,0.897,3,3,2246,2248
@@ -1820,6 +1832,7 @@ NY,2020-04-22,Visionworks (Southern Region),Visionworks (New York City Region),,
 NY,2020-02-04,Macy's Inc. (NYC Corporate Office) Penn Plaza,Macy's Inc. (NYC Corporate Office) 112 West 34th Street,New York,0.894,206,30,59826,59827
 NY,2019-03-13,Instacart (at Whole Foods Market) Columbus Circle,Instacart (at Whole Foods Market) (1551 3rd Avenue),New York,0.894,32,20,60214,60218
 NY,2017-08-16,"Lutech Resources, LLC at (Fitzpatrick Nuclear Station)","Lutech Resources, LLC at (Nine Mile Point Nuclear Station)",Oswego,0.894,93,91,60915,60916
+KY,2020-03-20,Communicare Services - Radcliff,Communicare Clinic - Radcliff,Hardin,0.894,17,17,67353,67357
 CA,2025-10-31,Ceryx Management LLC (Sepulveda),Ceryx Management LLC (1540 S St. Andrews),,0.893,4,18,1897,1906
 CA,2025-11-03,CommUnify - Adam Center,CommUnify - Maggie Espinoza Center,,0.893,4,5,1864,1876
 CA,2025-11-03,CommUnify - JC Washington Center,CommUnify - Goleta Center,,0.893,3,2,1867,1880
@@ -1997,6 +2010,7 @@ NY,2023-05-18,Ball Corporation Beverage Packaging d/b/a Ball Metal Beverage Cont
 NY,2020-04-13,"Bay Ridge Foreign Autos, Inc.","Bay Ridge Nissan, Inc.",Brooklyn,0.89,70,96,58699,58700
 NY,2020-03-29,Major Food Group (MFG) dba Parm Upper West LLC,Major Food Group (MFG) 375 Park Food LLC,New York,0.89,48,176,59087,59090
 NY,2019-03-13,Instacart (at Whole Foods Market) Greenwich Street,Instacart (at Whole Foods Market) (808 Columbus Avenue),New York,0.89,26,16,60213,60217
+KY,2025-03-28,BANDO USA INC (CLOSED 3/2025),BANDO USA INC,Warren,0.89,65,65,67130,67471
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Sunnyvale Center (301) Physical Therapy),Agile Physical Therapy (Sutter Health Palo Alto Physical Therapy & Hand Therapy),,0.889,4,30,1596,1598
 CA,2025-11-03,CommUnify - Maple Center,CommUnify - Chapel Office,,0.889,3,13,1862,1866
 CA,2025-11-03,CommUnify - Maple Center,CommUnify - Little Village Center,,0.889,3,8,1862,1868
@@ -2034,6 +2048,7 @@ NY,2020-06-10,Hyatt Corporation dba Hotel 50 Bowery,Hyatt Corporation dba Grand 
 NY,2020-06-10,Hyatt Corporation dba Park Hyatt,Hyatt Corporation dba Andaz Fifth Avenue,New York,0.889,264,134,58291,58296
 NY,2020-04-08,Del Frisco's of New York LLC dba Del Frisco's - New York,Del Frisco's Grille of New York LLC dba Del Frisco's Grille - New York,New York,0.889,251,101,58778,58779
 NY,2020-04-01,"Catholic Charities Neighborhood Services, Inc. (Brownsville Family Support Center & Brownsville Family Treatment Rehabilitation)","Catholic Charities Neighborhood Services, Inc. (East New York Family Support Center)",Brooklyn,0.889,3,13,58925,58926
+KY,2025-05-05,Dakkota Integrated Systems LLC - Louisville / Chamberlain 2,"Dakkota Integrated Systems, Inc",Jefferson County - Louisville,0.889,41,1,67487,67491
 CA,2025-10-23,"San Diego Imaging - Chula Vista, LLC",San Diego Imaging - Kearny Mesa,,0.888,63,32,1755,1756
 CA,2025-10-31,Ceryx Management LLC (Figueroa),Ceryx Management LLC (801 W 70th),,0.888,8,9,1899,1904
 CA,2025-11-03,CommUnify - I Center,CommUnify - Betty Sanchez Center,,0.888,6,1,1861,1877
@@ -2209,6 +2224,7 @@ TX,2019-07-08,"NTT Data, Inc.-S. Mopac","NTT Data, Inc.-N IH 35",Austin,0.885,50
 NY,2020-05-21,"WeWork Companies, Inc. (115 Broadway, NY, NY 10006)","WeWork Companies, Inc. (Broad St.)",New York,0.885,2,40,58404,58405
 NY,2020-04-22,Visionworks (Finger Lakes Region),Visionworks (New York City Region),,0.885,44,49,58557,58574
 NY,2017-08-07,"Aptim Services, LLC (@FitzPatrick Nuclear Station)","Aptim Services, LLC (@Nine Mile Point Nuclear Station)",Oswego,0.885,105,62,60922,60923
+KY,2023-09-10,Wellmore Energy Company LLC - Black Watch Shop and Central Warehouse Departments,Wellmore Energy Company LLC - Elk Creek,Pike,0.885,3,58,67221,67224
 CA,2025-11-03,CommUnify - Filmore Center,CommUnify - Chapel Office,,0.884,4,13,1860,1866
 CA,2025-11-03,CommUnify - Little Village Center,CommUnify - Sierra Madre Center,,0.884,8,5,1868,1872
 CA,2025-11-03,CommUnify - Little Village Center,CommUnify - Betty Sanchez Center,,0.884,8,1,1868,1877
@@ -2258,6 +2274,7 @@ NY,2020-06-10,Hyatt Corporation dba Parker New York,Hyatt Corporation dba Andaz 
 NY,2020-04-22,Visionworks (Finger Lakes Region),Visionworks (Capital Region),,0.884,44,91,58557,58569
 NY,2020-04-22,Visionworks (Long Island Region),Visionworks (Mid-Hudson Region),,0.884,210,34,58570,58571
 NY,2020-03-30,In Good Co Park Ave Inc.,In Good Company HG Inc.,New York,0.884,60,28,59064,59065
+KY,2025-05-05,Dakkota Integrated Systems LLC - Louisville / Westport 2,"Dakkota Integrated Systems, Inc",Jefferson County - Louisville,0.884,1,1,67486,67491
 CA,2025-07-07,Intel Corporation (Robert Noyce Building),Intel Corporation,,0.883,184,174,1332,1340
 CA,2025-07-14,"Blue shield of California - Town Center, Building B",Blue Shield of California - Rancho Cordova,,0.883,32,3,1384,1387
 CA,2025-10-31,Ceryx Management LLC (Sepulveda),Ceryx Management LLC (801 W 70th),,0.883,4,9,1897,1904
@@ -2367,6 +2384,7 @@ NY,2020-04-22,Visionworks (Mohawk Valley Region),Visionworks (New York City Regi
 NY,2020-02-04,M&T Bank (Long Island),M&T Bank (NYC),New York,0.881,17,28,59823,59830
 NY,2018-09-13,Henri Bendel ( Home Office),Henri Bendel (Flagship Store),New York,0.881,42,67,60454,60455
 NY,2016-11-14,Yeshiva University - Israel Henry Beren Campus,Yeshiva University -Brookdale Center,New York,0.881,4,2,61171,61172
+KY,2020-03-20,Communicare Clinic - Lebanon,Communicare Services - Lebanon,Marion,0.881,16,16,67352,67354
 CA,2025-11-03,CommUnify - Chapel Office,CommUnify - JC Washington Center,,0.88,13,3,1866,1867
 CA,2026-01-06,Alameda Health System - Wilma Chan Highland Hospital,Alameda Health System - Park Bridge,,0.88,128,3,2000,2006
 CA,2026-01-29,Amazon,Amazon - SNA 16,,0.88,72,24,2097,2099
