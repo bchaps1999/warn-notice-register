@@ -6,7 +6,7 @@
 | AL | active | 2026-07-19T08:07:03Z | ✅ ok | 1037 | 0 |  |
 | AR | manual_only | — | — — | 0 | 0 |  |
 | AZ | active | 2026-07-19T08:11:55Z | ✅ ok | 1072 | 0 |  |
-| CA | active | 2026-07-23T11:09:58Z | ✅ ok | 14171 | 0 |  |
+| CA | active | 2026-07-23T11:09:58Z | ✅ ok | 25158 | 0 |  |
 | CO | active | 2026-07-23T11:10:10Z | 🟡 degraded | 879 | 0 | schema_drift |
 | CT | active | 2026-07-19T08:14:02Z | ✅ ok | 656 | 0 |  |
 | DC | active | 2026-07-19T08:14:06Z | ✅ ok | 168 | 0 |  |

@@ -11,6 +11,10 @@ Sources here (found 2026-07-26; see docs / plan notes):
       files, 1996-2015. Clean one-file-per-year spreadsheets.
   FL: predecessor app floridajobs.org/react/warn.asp?year=YYYY, yearly HTML
       tables 1997-2015 (1997 has its own page name).
+  CA: EDD yearly WARN report PDFs (eddwarncn{YY}.pdf and sorted variants),
+      2000-2014. Ruled-table PDFs listing company/location/jobs/layoff
+      date — no notice date, so rows land with notice_date NULL and the
+      dedupe key falls back to the effective date.
 
 Ingestion uses the same strict month-gap rule as the BLN gap-fill: a row
 only enters months where the state currently has zero notices, so archive
@@ -58,7 +62,12 @@ def _canonical(rec: dict, raw: dict) -> dict:
     rec.setdefault("is_amendment", 0)
     rec.setdefault("source_notice_id", None)
     rec["raw_extra"] = json.dumps(raw, sort_keys=True, ensure_ascii=False, default=str)
-    rec["dedupe_key"] = _dedupe_key(rec)
+    # Sources that publish no notice date (CA's yearly PDFs) key on the
+    # effective date instead, else same-employer same-city rows with
+    # different layoff dates would collide on an all-empty date slot.
+    rec["dedupe_key"] = _dedupe_key(
+        dict(rec, notice_date=rec.get("notice_date") or rec.get("effective_date"))
+    )
     rec["raw_record_hash"] = _record_hash(rec)
     return rec
 
@@ -291,7 +300,80 @@ def fetch_fl(cache_dir: Path) -> list[dict]:
     return records
 
 
-FETCHERS = {"WI": fetch_wi, "FL": fetch_fl}
+# --- California --------------------------------------------------------------
+
+CA_ORIGINALS = [
+    "http://www.edd.ca.gov/Jobs_and_Training/warn/eddwarncn{yy}.pdf",
+    "http://www.edd.ca.gov/Jobs_and_Training/warn/eddwarncnal{yy}.pdf",
+    "http://www.edd.ca.gov/Jobs_and_Training/warn/eddwarncnda{yy}.pdf",
+]
+CA_YEARS = range(2000, 2015)
+PDF_MAGIC = b"%PDF"
+
+
+def fetch_ca(cache_dir: Path) -> list[dict]:
+    import pdfplumber
+
+    records: list[dict] = []
+    for year in CA_YEARS:
+        yy = f"{year % 100:02d}"
+        content = url = None
+        dest = cache_dir / "archives" / "ca" / f"{year}.pdf"
+        # The plain, alphabetical, and date-sorted variants hold the same
+        # rows; take the first variant with a usable archived PDF.
+        for original in CA_ORIGINALS:
+            for candidate in _wayback_captures(original.format(yy=yy)):
+                content = _download(candidate, dest)
+                if content is not None and content.startswith(PDF_MAGIC):
+                    url = candidate
+                    break
+                dest.unlink(missing_ok=True)
+                content = None
+            if content is not None:
+                break
+        if content is None:
+            logger.warning("CA %s: no usable archived pdf found", year)
+            continue
+
+        n = 0
+        with pdfplumber.open(dest) as pdf:
+            for page in pdf.pages:
+                for table in page.find_tables():
+                    for cells in table.extract():
+                        cells = [" ".join((c or "").split()) for c in cells]
+                        if len(cells) < 4 or cells[0] in ("", "Company Name"):
+                            continue
+                        effective = _fl_date(cells[3])
+                        if effective is None:
+                            continue
+                        jobs = re.sub(r"[^\d]", "", cells[2])
+                        records.append(
+                            _canonical(
+                                {
+                                    "state": "CA",
+                                    "employer_name": cells[0],
+                                    "location": cells[1],
+                                    "notice_date": None,
+                                    "effective_date": effective,
+                                    "employees_affected": int(jobs) if jobs else None,
+                                    "layoff_type": "unknown",
+                                    "source_url": url,
+                                },
+                                {
+                                    "year_file": year,
+                                    "Company Name": cells[0],
+                                    "Location": cells[1],
+                                    "Employees Affected": cells[2],
+                                    "Layoff Date": cells[3],
+                                },
+                            )
+                        )
+                        n += 1
+        logger.info("CA %s: %d archive rows", year, n)
+    return records
+
+
+FETCHERS = {"WI": fetch_wi, "FL": fetch_fl, "CA": fetch_ca}
 
 
 def gap_filter(
