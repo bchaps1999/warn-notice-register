@@ -296,3 +296,45 @@ def test_rejected_candidate_grants_nothing_and_stops_resurfacing(tmp_path):
     got = a.annotate("Midway Airlines, Inc", "1991-01-01", None)
     assert got["cik"] is None
     assert got["identity_source"] is None
+
+
+def test_ohio_column_labels_come_from_the_values(tmp_path):
+    """Ohio's yearly PDFs centre their headers over left-aligned data, so
+    columns are identified by what they contain, not by a header row."""
+    from warnlive.backfill.state_archives import _oh_label_columns
+
+    rows = [
+        ["12/28/01", "Southern Ohio Coal", "Langsville", "80", "2/28/02", "53-01-070"],
+        ["12/11/01", "TRW Automotive", "Cleveland", "500", "12/10/01", "3-01-068"],
+        ["12/10/01", "Getronics", "Cleveland", "70", "12/12/01", "3-01-067"],
+    ]
+    labels = _oh_label_columns(rows)
+    assert labels["company"] == 1
+    assert labels["city"] == 2
+    assert labels["jobs"] == 3
+    assert labels["layoff"] == 4
+    assert labels["warn_id"] == 5
+
+
+def test_ohio_quality_bar_rejects_mangled_years():
+    """A year is ingested only if it parses well; a mangled employer name is
+    worse than an absent one."""
+    from warnlive.backfill.state_archives import _oh_quality
+
+    clean = [{"employer_name": "Southern Ohio Coal Company"}] * 90
+    ok, _ = _oh_quality(clean, dated_rows=95, expected=100)
+    assert ok
+
+    # rows lost to bad line grouping (2012 collapses 101 rows into one)
+    ok, _ = _oh_quality(clean, dated_rows=20, expected=100)
+    assert not ok
+
+    # a column split mid-name leaves implausibly short employers
+    split = [{"employer_name": "Penske"}] * 90
+    ok, _ = _oh_quality(split, dated_rows=95, expected=100)
+    assert not ok
+
+    # two fields merged into one leaves implausibly long employers
+    merged = [{"employer_name": "ABX Air, Inc. (Clinton) Grove City Franklin"}] * 90
+    ok, _ = _oh_quality(merged, dated_rows=95, expected=100)
+    assert not ok

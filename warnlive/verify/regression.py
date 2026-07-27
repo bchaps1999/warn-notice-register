@@ -47,6 +47,14 @@ WORKER_GROWTH_FLOOR = 1_000
 NULL_RATE_SHIFT_MAX = 0.20
 NULL_RATE_BREAK = 0.50
 # Duplicate links should grow roughly with ingest, not independently of it.
+# Only confident ones are counted: the link table also records same-employer
+# refilings at *different* sites as weak possible-duplicates, and a batch
+# covering a mass liquidation produces those in bulk — Ohio's 2001-2005
+# archive brought 39 of them (Big Bear closing six towns at once, Republic
+# Technologies three mills in nine days), all of them real distinct notices.
+# Above this score a link means near-identical names at one place and time,
+# which is what a genuinely duplicated ingest looks like.
+DUP_CONFIDENT_SCORE = 0.75
 DUP_GROWTH_RATE_MAX = 0.01
 DUP_GROWTH_ABSOLUTE_MAX = 25
 
@@ -71,7 +79,9 @@ def build_snapshot(conn: sqlite3.Connection) -> dict:
     for row in conn.execute(_METRIC_SQL):
         states[row["state"]] = {k: row[k] for k in row.keys() if k != "state"}
     links = conn.execute(
-        "SELECT COUNT(*) AS c FROM notice_links WHERE kind = 'possible_duplicate'"
+        "SELECT COUNT(*) AS c FROM notice_links "
+        "WHERE kind = 'possible_duplicate' AND score >= ?",
+        (DUP_CONFIDENT_SCORE,),
     ).fetchone()["c"]
     return {
         "notices": sum(s["notices"] for s in states.values()),

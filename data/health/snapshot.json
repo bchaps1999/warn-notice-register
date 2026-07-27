@@ -1,6 +1,6 @@
 {
- "notices": 88828,
- "possible_duplicates": 5371,
+ "notices": 89447,
+ "possible_duplicates": 1499,
  "states": {
   "AK": {
    "employers": 59,
@@ -366,15 +366,15 @@
    "workers": 461995
   },
   "OH": {
-   "employers": 1053,
-   "first": "2015-01-05",
+   "employers": 1586,
+   "first": "2001-01-09",
    "last": "2026-07-14",
    "max_workers": 5833,
    "no_jobs": 24,
-   "no_location": 0,
-   "notices": 1237,
-   "undated": 0,
-   "workers": 172911
+   "no_location": 32,
+   "notices": 1856,
+   "undated": 1,
+   "workers": 283453
   },
   "OK": {
    "employers": 684,
@@ -520,5 +520,5 @@
    "workers": 336177
   }
  },
- "workers": 9219216
+ "workers": 9329758
 }

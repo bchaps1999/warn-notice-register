@@ -593,8 +593,278 @@ def fetch_ny(cache_dir: Path) -> list[dict]:
     return records
 
 
+# --- Ohio ---------------------------------------------------------------------
+#
+# ODJFS published one document per year from 2001 and kept renaming it
+# (WARN_2001.pdf, Warn_2004.pdf, Warn2007.pdf, 2011WARNNotices.pdf,
+# WARN2014.stm — the .stm ones are PDFs too). None of it survives on
+# jfs.ohio.gov today, which 404s every one of those paths.
+#
+# The documents print the same eight columns every year but not the same
+# way, and two things defeat the obvious parsers. Header labels are centred
+# over columns whose data is left-aligned, so header positions mislocate
+# every field; and the character spacing is irregular enough that any
+# gap-based table extraction cuts words in half ("Deve lopment Grou p").
+#
+# So columns are learned from where the data starts — every row begins each
+# field at the same x, so the histogram of word positions peaks at the
+# column edges — and fields are filled from whole words, never from cell
+# text. Years whose parse does not clear _OH_BAR are skipped rather than
+# ingested: 2006-2014 are still missing rows or merging them, and a
+# mangled employer name is worse than an absent one.
+
+OH_YEARS = range(2001, 2015)  # 2015 onward comes from the live portal
+OH_PATTERNS = [
+    "http://jfs.ohio.gov/warn/WARN_{year}.pdf",
+    "http://jfs.ohio.gov/warn/Warn_{year}.pdf",
+    "http://jfs.ohio.gov/warn/pdf/Warn{year}.pdf",
+    "http://jfs.ohio.gov/warn/pdf/{year}WARNNotices.pdf",
+    "http://jfs.ohio.gov/warn/{year}WARNNotices.stm",
+    "http://jfs.ohio.gov/warn/WARN_{year}.stm",
+    "http://jfs.ohio.gov/warn/WARN{year}.stm",
+]
+PDF_MAGIC = b"%PDF"
+_OH_DATE = re.compile(r"^\d{1,2}/\d{1,2}/\d{2,4}$")
+_OH_WARN_ID = re.compile(r"^\d{1,3}[‐-]\d{2}[‐-]\d{3}$")
+_OH_INT = re.compile(r"^\d[\d,]{0,5}$")
+# A year is ingested only if it parses this well. Coverage catches rows lost
+# to bad line grouping; the rate catches unparsed rows; the company-length
+# window catches a column split mid-name (too short) or two fields merged
+# into one (too long).
+_OH_BAR = {"coverage": 0.80, "rate": 0.85, "company_min": 8, "company_max": 42}
+_OH_COLUMN_MIN_WIDTH = 34  # narrower than this is a split field, not a column
+
+
+def _oh_lines(page) -> list[list[dict]]:
+    """Words grouped into visual lines, each sorted left to right."""
+    lines: dict[int, list] = {}
+    for word in page.extract_words():
+        lines.setdefault(round(word["top"] / 3), []).append(word)
+    return [sorted(ws, key=lambda w: w["x0"]) for _, ws in sorted(lines.items())]
+
+
+def _oh_columns(all_lines: list[list[dict]]) -> list[float]:
+    """Column left edges, learned from where words actually start."""
+    from collections import Counter
+
+    data = [ws for ws in all_lines if ws and _OH_DATE.match(ws[0]["text"])]
+    if not data:
+        return []
+    hist: Counter = Counter()
+    for ws in data:
+        for word in ws:
+            hist[round(word["x0"] / 2) * 2] += 1
+    floor = max(3, int(len(data) * 0.15))
+    edges: list[float] = []
+    for x in sorted(x for x, n in hist.items() if n >= floor):
+        if not edges or x - edges[-1] >= _OH_COLUMN_MIN_WIDTH:
+            edges.append(x)
+
+    def median(values):
+        values = sorted(values)
+        return values[len(values) // 2] if values else None
+
+    # The company column is sometimes centred, leaving no peak of its own —
+    # then the date and the company share column 0. Its left edge shows up
+    # either as the first non-date word on a row, or, where the name is too
+    # long to fit and gets printed on its own line above the row, as the
+    # first word of those lines. Take the leftmost of the two.
+    on_row = median([
+        min(w["x0"] for w in ws[1:] if not _OH_DATE.match(w["text"]))
+        for ws in data
+        if len(ws) > 1 and any(not _OH_DATE.match(w["text"]) for w in ws[1:])
+    ])
+    alone = median([
+        ws[0]["x0"] for ws in all_lines
+        if ws and not _OH_DATE.match(ws[0]["text"]) and len(ws) <= 6
+    ])
+    candidates = [x for x in (on_row, alone) if x is not None and x > edges[0] + 20]
+    if candidates and not any(abs(min(candidates) - e) <= 12 for e in edges):
+        edges = sorted(edges + [round(min(candidates))])
+    return edges
+
+
+def _oh_split(words, edges) -> list[str]:
+    cols: list[list[str]] = [[] for _ in edges]
+    for word in words:
+        idx = 0
+        for i, edge in enumerate(edges):
+            if word["x0"] >= edge - 3:
+                idx = i
+        cols[idx].append(word["text"])
+    return [" ".join(c).strip() for c in cols]
+
+
+def _oh_label_columns(rows: list[list[str]]) -> dict | None:
+    """Which column holds what, decided by the values rather than a header."""
+    width = max((len(r) for r in rows), default=0)
+    if width < 4:
+        return None
+
+    def share(i, pattern):
+        values = [r[i] for r in rows if i < len(r) and r[i]]
+        return sum(1 for v in values if pattern.match(v)) / len(values) if values else 0
+
+    jobs = next((i for i in range(1, width) if share(i, _OH_INT) > 0.6), None)
+    if jobs is None:
+        return None
+    warn_id = next(
+        (i for i in range(width - 1, 0, -1) if share(i, _OH_WARN_ID) > 0.5), None
+    )
+    layoff = next(
+        (i for i in range(jobs + 1, width) if share(i, _OH_DATE) > 0.5), None
+    )
+    return {
+        "received": 0, "company": 1,
+        # City is the column before the count — unless that is the company
+        # column itself, in which case this year never separated them and
+        # inventing a city would only duplicate the name.
+        "city": jobs - 1 if jobs - 1 > 1 else None,
+        "jobs": jobs, "layoff": layoff, "warn_id": warn_id,
+    }
+
+
+def _oh_records(path: Path) -> tuple[list[list[str]], dict | None, int]:
+    """(grouped rows, column labels, rows the document should have)."""
+    import pdfplumber
+
+    with pdfplumber.open(path) as pdf:
+        pages = [_oh_lines(page) for page in pdf.pages]
+    expected = sum(
+        1 for page in pages for ws in page if ws and _OH_DATE.match(ws[0]["text"])
+    )
+    edges = _oh_columns([ln for page in pages for ln in page])
+    if not edges:
+        return [], None, expected
+
+    rows: list[list[str]] = []
+    for page in pages:
+        current, pending = None, []
+        for ws in page:
+            cols = _oh_split(ws, edges)
+            if ws and _OH_DATE.match(ws[0]["text"]):
+                if current:
+                    rows.append(current)
+                current = cols
+                if pending and len(current) > 1:
+                    current[1] = " ".join(pending + [current[1]]).strip()
+                    pending = []
+            elif any(cols):
+                company_only = len(cols) > 1 and cols[1] and not any(
+                    c for i, c in enumerate(cols) if i != 1
+                )
+                if company_only:
+                    pending.append(cols[1])  # a name printed above its row
+                elif current:
+                    current = [f"{a} {b}".strip() for a, b in zip(current, cols)]
+        if current:
+            rows.append(current)
+    return rows, _oh_label_columns(rows), expected
+
+
+def _oh_quality(parsed: list[dict], dated_rows: int, expected: int) -> tuple[bool, str]:
+    import statistics
+
+    if not parsed or not expected:
+        return False, "nothing parsed"
+    coverage = dated_rows / expected
+    rate = len(parsed) / dated_rows if dated_rows else 0
+    median_len = statistics.median(len(p["employer_name"]) for p in parsed)
+    detail = (
+        f"{dated_rows}/{expected} rows ({coverage:.0%}), {rate:.0%} parsed, "
+        f"median name {median_len:.0f} chars"
+    )
+    ok = (
+        coverage >= _OH_BAR["coverage"]
+        and rate >= _OH_BAR["rate"]
+        and _OH_BAR["company_min"] <= median_len <= _OH_BAR["company_max"]
+    )
+    return ok, detail
+
+
+def fetch_oh(cache_dir: Path) -> list[dict]:
+    records: list[dict] = []
+    for year in OH_YEARS:
+        dest = cache_dir / "archives" / "oh" / f"{year}.pdf"
+        content = url = None
+        for pattern in OH_PATTERNS:
+            content, url = _archived(
+                pattern.format(year=year), dest, valid=lambda c: c.startswith(PDF_MAGIC)
+            )
+            if content is not None:
+                break
+        if content is None:
+            logger.warning("OH %s: no archived yearly document found", year)
+            continue
+
+        rows, labels, expected = _oh_records(dest)
+        if labels is None:
+            logger.warning("OH %s: columns could not be identified; skipped", year)
+            continue
+
+        def field(row, name):
+            idx = labels.get(name)
+            return row[idx] if idx is not None and idx < len(row) else ""
+
+        dated = [r for r in rows if r and _OH_DATE.match(r[0])]
+        parsed = []
+        for row in dated:
+            company = _clean_text(field(row, "company"))
+            jobs = field(row, "jobs")
+            if not company or not _OH_INT.match(jobs or ""):
+                continue
+            city = _clean_text(field(row, "city"))
+            warn_id = field(row, "warn_id")
+            # A yearly document listing a date years outside its own year has
+            # a typo in it — the 2001 file prints "02/23/91" against a 2001
+            # layoff date. The printed value stays in raw_extra; the notice
+            # falls back to its effective date, as dateless sources do, so
+            # one typo cannot stretch the state's coverage by a decade.
+            received = _oh_date(field(row, "received"))
+            if received and abs(int(received[:4]) - year) > 1:
+                received = None
+            parsed.append({
+                "state": "OH",
+                "employer_name": company,
+                "location": city,
+                "notice_date": received,
+                "effective_date": _oh_date(field(row, "layoff")),
+                "employees_affected": int(jobs.replace(",", "")),
+                "layoff_type": "unknown",
+                "source_url": url,
+                "source_notice_id": warn_id if _OH_WARN_ID.match(warn_id or "") else None,
+                "_raw": {
+                    "year_file": year, "Date Rec'd": field(row, "received"),
+                    "Company": company, "City": city or "",
+                    "# Affected": jobs, "Layoff Date": field(row, "layoff"),
+                    "WARN ID": warn_id,
+                },
+            })
+
+        ok, detail = _oh_quality(parsed, len(dated), expected)
+        if not ok:
+            logger.warning("OH %s: %s — below the bar, skipped", year, detail)
+            continue
+        logger.info("OH %s: %s — %d rows", year, detail, len(parsed))
+        for rec in parsed:
+            records.append(_canonical(rec, rec.pop("_raw")))
+    logger.info("OH: %d archive rows", len(records))
+    return records
+
+
+def _oh_date(value: str) -> str | None:
+    """Ohio prints m/d/yy and m/d/yyyy in the same column."""
+    token = (value or "").split()[0] if value else ""
+    for fmt in ("%m/%d/%Y", "%m/%d/%y"):
+        try:
+            return datetime.strptime(token, fmt).date().isoformat()
+        except ValueError:
+            continue
+    return None
+
+
 FETCHERS = {"WI": fetch_wi, "FL": fetch_fl, "CA": fetch_ca, "MA": fetch_ma,
-            "NY": fetch_ny}
+            "NY": fetch_ny, "OH": fetch_oh}
 
 
 def refresh_raw(conn: sqlite3.Connection, records: list[dict]) -> dict:
