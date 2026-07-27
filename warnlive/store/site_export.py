@@ -96,6 +96,9 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
     counts["employers/* (256 shards)"] = _build_employer_shards(
         notices, out_dir / "employers", prefix_len
     )
+    counts["employers/index.json"] = _write(
+        out_dir / "employers" / "index.json", _build_employer_index(notices)
+    )
 
     shard_counts = _build_detail_shards(conn, notices, out_dir / "notices", prefix_len)
     counts["notices/* (256 shards)"] = shard_counts
@@ -187,6 +190,37 @@ def _shift_months(iso_date: str, months_back: int) -> str:
 
 def _build_meta(notices, status: dict, prefix_len: int) -> dict:
     dates = [n["display_date"] for n in notices if n["display_date"]]
+
+    # Per-state completeness, so the site can say what is missing rather
+    # than only what is present: how far back a state's history reaches,
+    # and how much of it arrived without a date, a headcount or a location.
+    per_state: dict[str, dict] = {}
+    for n in notices:
+        e = per_state.setdefault(
+            n["state"],
+            {"first": None, "last": None, "undated": 0, "no_jobs": 0,
+             "no_location": 0, "archived": 0, "identified": 0},
+        )
+        d = n["display_date"]
+        if d:
+            e["first"] = min(e["first"] or d, d)
+            e["last"] = max(e["last"] or d, d)
+        if not n["notice_date"]:
+            e["undated"] += 1
+        if n["employees_affected"] is None:
+            e["no_jobs"] += 1
+        if not n["location"]:
+            e["no_location"] += 1
+        if "web.archive.org" in (n["source_url"] or ""):
+            e["archived"] += 1
+        if n["cik"] or n["ein"] or n["lei"] or n["wikidata_qid"]:
+            e["identified"] += 1
+
+    def quality(rows: dict) -> dict:
+        return {k: rows[k] for k in
+                ("first", "last", "undated", "no_jobs", "no_location",
+                 "archived", "identified")}
+
     return {
         "built_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "key_prefix_len": prefix_len,
@@ -194,6 +228,17 @@ def _build_meta(notices, status: dict, prefix_len: int) -> dict:
             "notices": len(notices),
             "workers": sum(n["employees_affected"] or 0 for n in notices),
             "states": len({n["state"] for n in notices}),
+            "undated": sum(1 for n in notices if not n["notice_date"]),
+            "no_jobs": sum(1 for n in notices if n["employees_affected"] is None),
+            "no_location": sum(1 for n in notices if not n["location"]),
+            "archived": sum(
+                1 for n in notices if "web.archive.org" in (n["source_url"] or "")
+            ),
+            "identified": sum(
+                1 for n in notices
+                if n["cik"] or n["ein"] or n["lei"] or n["wikidata_qid"]
+            ),
+            "with_industry": sum(1 for n in notices if n["naics"]),
         },
         "date_range": {"min": min(dates), "max": max(dates)} if dates else None,
         "states": {
@@ -203,10 +248,35 @@ def _build_meta(notices, status: dict, prefix_len: int) -> dict:
                 "notices": s["notices"],
                 "latest_verdict": s["latest_verdict"],
                 "last_success": s["last_success"],
+                "source": s.get("source"),
+                **quality(per_state.get(postal, {
+                    "first": None, "last": None, "undated": 0, "no_jobs": 0,
+                    "no_location": 0, "archived": 0, "identified": 0})),
             }
             for postal, s in sorted(status.items())
         },
     }
+
+
+def _sector_series(rows) -> list[dict]:
+    """Notices and workers per NAICS sector, biggest first. Notices whose
+    industry is unknown are counted under a null sector rather than
+    dropped — the site should never imply the mix is fully known."""
+    from warnlive.enrich.industry import SECTOR_LABELS, sector_of
+
+    agg: dict[str | None, dict] = {}
+    for n in rows:
+        code = sector_of(n["naics"])
+        e = agg.setdefault(
+            code,
+            {"sector": code, "label": SECTOR_LABELS.get(code, "Industry not recorded"),
+             "notices": 0, "workers": 0},
+        )
+        e["notices"] += 1
+        e["workers"] += n["employees_affected"] or 0
+    return sorted(
+        agg.values(), key=lambda e: (e["sector"] is None, -e["workers"], -e["notices"])
+    )
 
 
 def _build_national(notices, prefix_len: int) -> dict:
@@ -228,12 +298,25 @@ def _build_national(notices, prefix_len: int) -> dict:
         e["notices"] += 1
         e["workers"] += n["employees_affected"] or 0
 
+    in_window = [n for n in dated if t12 <= n["display_date"] <= anchor]
+    prior = [
+        n for n in dated
+        if _shift_months(anchor, 24) <= n["display_date"] < t12
+    ]
     return {
         "anchor_date": anchor,
         "monthly": _monthly_series(notices),
         "top_employers_12mo": _top_employers(dated, t12, 25),
         "biggest_recent": [_notice_summary(n, prefix_len) for n in biggest_recent],
         "states_12mo": sorted(state_agg.values(), key=lambda e: -e["workers"]),
+        "sectors_12mo": _sector_series(in_window),
+        # The comparable window a year earlier, so the site can say whether
+        # the current one is unusual rather than only how big it is.
+        "prior_12mo": {
+            "notices": len(prior),
+            "workers": sum(n["employees_affected"] or 0 for n in prior),
+            "sectors": _sector_series(prior),
+        },
     }
 
 
@@ -271,13 +354,19 @@ def _build_state(postal: str, rows, health: dict, cfg, prefix_len: int) -> dict:
 
 
 def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
+    from warnlive.enrich.industry import SECTOR_LABELS, sector_of
+
     states = sorted({n["state"] for n in notices})
     state_idx = {s: i for i, s in enumerate(states)}
     type_idx = {t: i for i, t in enumerate(TYPES)}
+    # Sectors ride as an index into a 20-entry table rather than as codes:
+    # one small integer per notice instead of a repeated string.
+    sectors = list(SECTOR_LABELS)
+    sector_idx = {code: i for i, code in enumerate(sectors)}
 
     cols: dict[str, list] = {
         "key": [], "state": [], "date": [], "employer": [],
-        "location": [], "jobs": [], "type": [], "flags": [],
+        "location": [], "jobs": [], "type": [], "flags": [], "sector": [],
     }
     for n in notices:
         flags = (
@@ -295,7 +384,81 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
         cols["jobs"].append(n["employees_affected"])
         cols["type"].append(type_idx[n["layoff_type"]])
         cols["flags"].append(flags)
-    return {"states": states, "types": TYPES, "count": len(notices), "columns": cols}
+        sector = sector_of(n["naics"])
+        cols["sector"].append(sector_idx[sector] if sector else -1)
+    return {
+        "states": states,
+        "types": TYPES,
+        "sectors": [{"code": c, "label": SECTOR_LABELS[c]} for c in sectors],
+        "count": len(notices),
+        "columns": cols,
+    }
+
+
+# An employer earns a directory entry by filing more than once or by
+# affecting a meaningful number of workers. Single small filings are the
+# long tail — 47,000 of them — and listing every one would make the
+# directory unreadable and its payload enormous.
+DIRECTORY_MIN_NOTICES = 2
+DIRECTORY_MIN_WORKERS = 250
+
+
+def _build_employer_index(notices) -> dict:
+    """A browsable directory of employers, with their corporate parents."""
+    from warnlive.enrich.industry import SECTOR_LABELS, sector_of
+
+    agg: dict[str, dict] = {}
+    for n in notices:
+        e = agg.setdefault(
+            n["employer_key"],
+            {"key": n["employer_key"], "names": {}, "canonical": None,
+             "notices": 0, "workers": 0, "states": set(), "sector": None,
+             "parent": None, "identified": False, "first": None, "last": None},
+        )
+        e["names"][n["employer_name"]] = e["names"].get(n["employer_name"], 0) + 1
+        e["canonical"] = e["canonical"] or n["canonical_name"]
+        e["notices"] += 1
+        e["workers"] += n["employees_affected"] or 0
+        e["states"].add(n["state"])
+        e["sector"] = e["sector"] or sector_of(n["naics"])
+        e["parent"] = e["parent"] or n["parent_company"]
+        e["identified"] = e["identified"] or bool(
+            n["cik"] or n["ein"] or n["lei"] or n["wikidata_qid"]
+        )
+        d = n["display_date"]
+        if d:
+            e["first"] = min(e["first"] or d, d)
+            e["last"] = max(e["last"] or d, d)
+
+    rows = []
+    for e in agg.values():
+        if e["notices"] < DIRECTORY_MIN_NOTICES and e["workers"] < DIRECTORY_MIN_WORKERS:
+            continue
+        rows.append((
+            e["key"],
+            e["canonical"] or max(sorted(e["names"]), key=lambda k: e["names"][k]),
+            e["notices"],
+            e["workers"],
+            sorted(e["states"]),
+            e["sector"],
+            e["parent"],
+            1 if e["identified"] else 0,
+            e["first"],
+            e["last"],
+        ))
+    rows.sort(key=lambda r: (-r[3], -r[2], r[1]))
+    # Columnar, like the notice index: 13,000 rows of repeated JSON field
+    # names cost more than the values themselves.
+    fields = ["key", "label", "notices", "workers", "states", "sector",
+              "parent", "identified", "first_date", "last_date"]
+    return {
+        "sectors": [{"code": c, "label": SECTOR_LABELS[c]} for c in SECTOR_LABELS],
+        "columns": {name: [r[i] for r in rows] for i, name in enumerate(fields)},
+        "total_employers": len(agg),
+        "listed": len(rows),
+        "min_notices": DIRECTORY_MIN_NOTICES,
+        "min_workers": DIRECTORY_MIN_WORKERS,
+    }
 
 
 def _fnv_shard(key: str) -> str:
@@ -318,8 +481,11 @@ def _build_employer_shards(notices, out_dir: Path, prefix_len: int) -> int:
         names: dict[str, int] = {}
         for n in rows:
             names[n["employer_name"]] = names.get(n["employer_name"], 0) + 1
-        label = max(sorted(names), key=lambda k: names[k])
         first = rows[0]  # enrichment fields identical across the group's key
+        # Prefer the name the identity carries ("United Airlines") over the
+        # commonest thing states typed ("UNITED"); the raw spellings all
+        # survive as aliases.
+        label = first["canonical_name"] or max(sorted(names), key=lambda k: names[k])
         dated = sorted((n["display_date"] for n in rows if n["display_date"]))
         summaries = sorted(
             (_notice_summary(n, prefix_len) for n in rows),
@@ -330,6 +496,7 @@ def _build_employer_shards(notices, out_dir: Path, prefix_len: int) -> int:
             "key": key,
             "label": label,
             "aliases": sorted(k for k in names if k != label)[:12],
+            "canonical_name": first["canonical_name"],
             "cik": first["cik"],
             "ticker": first["ticker"],
             "ein": first["ein"],

@@ -42,3 +42,37 @@ export const STATE_NAMES: Record<string, string> = {
   TN: "Tennessee", TX: "Texas", UT: "Utah", VT: "Vermont", VA: "Virginia",
   WA: "Washington", WV: "West Virginia", WI: "Wisconsin", WY: "Wyoming",
 };
+
+// Legal-form and unit abbreviations keep their own casing when a shouted
+// name is settled down; anything else short enough is taken for an
+// initialism ("BAE", "HMS") and left alone.
+const LEGAL_FORMS: Record<string, string> = {
+  INC: "Inc.", "INC.": "Inc.", CORP: "Corp.", "CORP.": "Corp.", CO: "Co.",
+  "CO.": "Co.", LTD: "Ltd.", "LTD.": "Ltd.", COMPANY: "Company",
+  INCORPORATED: "Incorporated", CORPORATION: "Corporation", HOLDINGS: "Holdings",
+  GROUP: "Group", SERVICES: "Services", SYSTEMS: "Systems",
+};
+const KEEP_UPPER = new Set(["LLC", "LLP", "LP", "PLC", "PC", "USA", "US", "NA", "AG", "SA", "NV", "BV"]);
+
+/** Settle a shouted name into title case: states file "MERVYN'S LLC" and
+ *  the SEC records "TEXTRON INC", but neither is how the company writes
+ *  itself. Mixed-case names are left exactly as filed. */
+export function displayName(name: string | null | undefined): string {
+  if (!name) return "";
+  if (/[a-z]/.test(name)) return name; // already mixed case — trust it
+  return name
+    .split(/\s+/)
+    .map((word) => {
+      const bare = word.replace(/[^A-Za-z.]/g, "");
+      if (KEEP_UPPER.has(bare)) return word;
+      if (LEGAL_FORMS[word]) return LEGAL_FORMS[word];
+      if (bare.length <= 3 && !word.includes(".")) return word; // initialism
+      // Capitalise after a separator, and after an apostrophe only where
+      // it follows a single letter: O'Brien, but Mervyn's.
+      return word
+        .toLowerCase()
+        .replace(/(^|[\s("\-\/])([a-z])/g, (_, sep, c) => sep + c.toUpperCase())
+        .replace(/(^[A-Za-z])(['\u2019])([a-z])/g, (_, a, q, c) => a + q + c.toUpperCase());
+    })
+    .join(" ");
+}

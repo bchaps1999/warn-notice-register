@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useNotice } from "../lib/hooks";
-import { date, num, STATE_NAMES, TYPE_LABEL } from "../lib/format";
+import { date, displayName, num, STATE_NAMES, TYPE_LABEL } from "../lib/format";
 import { SectionHeading } from "../components/ui/SectionHeading";
 import { ErrorNote, Skeleton } from "../components/ui/Skeleton";
 import { Stamp } from "../components/ui/Stamp";
@@ -140,10 +140,10 @@ export function NoticeDetailPage() {
                     className="underline hover:text-ink"
                     target="_blank" rel="noreferrer"
                   >
-                    {n.parent_company}
+                    {displayName(n.parent_company)}
                   </a>
                 ) : (
-                  n.parent_company
+                  displayName(n.parent_company)
                 )}
                 {n.parent_cik && (
                   <span className="text-ink-faint text-xs ml-2">

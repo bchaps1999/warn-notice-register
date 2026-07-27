@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEmployer } from "../lib/hooks";
-import { date, num } from "../lib/format";
+import { date, displayName, num } from "../lib/format";
 import { NoticeTable } from "../components/ui/NoticeTable";
 import { SectionHeading } from "../components/ui/SectionHeading";
 import { ErrorNote, Skeleton } from "../components/ui/Skeleton";
@@ -52,14 +52,14 @@ export function EmployerPage() {
   return (
     <div>
       <p className="smallcaps text-[10px] text-ink-muted">Employer record</p>
-      <h2 className="font-display text-3xl mt-1">{e.label}</h2>
+      <h2 className="font-display text-3xl mt-1">{displayName(e.label)}</h2>
       {e.aliases.length > 0 && (
         <p className="text-xs text-ink-faint font-serif mt-1">
           Also filed as: {e.aliases.join(" · ")}
         </p>
       )}
       <p className="text-sm font-serif text-ink-muted mt-2">
-        {e.parent_company && <>Parent: <strong className="text-ink">{e.parent_company}</strong> · </>}
+        {e.parent_company && <>Parent: <strong className="text-ink">{displayName(e.parent_company)}</strong> · </>}
         {e.sic_description && <>{e.sic_description} · </>}
         {identityLinks(e).map((link, i) => (
           <span key={link.href}>

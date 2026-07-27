@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { employerShardFor, fetchJson, shardFor } from "./dataClient";
 import type {
-  EmployerDetail, Meta, National, NoticeDetail, NoticeIndex, StateData,
+  EmployerDetail, EmployerIndex, Meta, National, NoticeDetail, NoticeIndex,
+  StateData,
 } from "./types";
 
 interface Loaded<T> {
@@ -30,6 +31,8 @@ export const useNational = () => useJson<National>("/data/national.json");
 export const useStateData = (xx: string | undefined) =>
   useJson<StateData>(xx ? `/data/states/${xx.toLowerCase()}.json` : null);
 export const useIndex = () => useJson<NoticeIndex>("/data/index.json");
+export const useEmployerIndex = () =>
+  useJson<EmployerIndex>("/data/employers/index.json");
 
 export function useEmployer(key: string | undefined): Loaded<EmployerDetail> {
   const shard = useJson<Record<string, EmployerDetail>>(

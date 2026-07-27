@@ -5,6 +5,7 @@ import { useIndex } from "../lib/hooks";
 import {
   applyFilters,
   buildHaystack,
+  facetCounts,
   filtersFromParams,
   paramsFromFilters,
   type Filters,
@@ -14,6 +15,9 @@ import { downloadCsv } from "../lib/csv";
 import { date, num, STATE_NAMES, TYPE_LABEL } from "../lib/format";
 import { Stamp } from "../components/ui/Stamp";
 import { ErrorNote, Skeleton } from "../components/ui/Skeleton";
+import { EmptyState } from "../components/ui/EmptyState";
+import { FacetList } from "../components/ui/FacetList";
+import { SectionHeading } from "../components/ui/SectionHeading";
 import clsx from "clsx";
 
 export function Explorer() {
@@ -38,6 +42,14 @@ export function Explorer() {
   const rows = useMemo(
     () => (index ? applyFilters(index, haystack, filters) : []),
     [index, haystack, filters]
+  );
+  const facets = useMemo(
+    () => (index ? facetCounts(index, haystack, filters) : null),
+    [index, haystack, filters]
+  );
+  const shownWorkers = useMemo(
+    () => (index ? rows.reduce((sum, i) => sum + (index.columns.jobs[i] ?? 0), 0) : 0),
+    [index, rows]
   );
 
   if (error) return <ErrorNote message={error} />;
@@ -90,6 +102,20 @@ export function Explorer() {
             ))}
           </select>
         </Field>
+        <Field label="Industry">
+          <select
+            value={filters.sector}
+            onChange={(e) => setFilters({ sector: e.target.value })}
+            className="input"
+          >
+            <option value="">All</option>
+            {index.sectors.map((s) => (
+              <option key={s.code} value={s.code}>
+                {s.label}
+              </option>
+            ))}
+          </select>
+        </Field>
         <Field label="From">
           <input type="date" value={filters.from}
             onChange={(e) => setFilters({ from: e.target.value })} className="input" />
@@ -119,7 +145,8 @@ export function Explorer() {
 
       <div className="flex items-center justify-between border-t border-rule-strong pt-2 mb-1">
         <p className="tabular text-xs text-ink-muted">
-          {num(rows.length)} of {num(index.count)} notices
+          {num(rows.length)} of {num(index.count)} notices ·{" "}
+          {num(shownWorkers)} workers
         </p>
         <button
           onClick={() => downloadCsv(index, rows, "warn_notices_filtered.csv")}
@@ -129,10 +156,55 @@ export function Explorer() {
         </button>
       </div>
 
-      <VirtualRows index={index} rows={rows} sort={filters.sort} dir={filters.dir} onSort={toggleSort} />
-      {rows.length === 0 && (
-        <p className="text-center py-16 text-ink-muted font-serif">No notices match these filters.</p>
-      )}
+      <div className="grid lg:grid-cols-[1fr_15rem] gap-8 items-start">
+        <div className="min-w-0">
+          {rows.length > 0 ? (
+            <VirtualRows index={index} rows={rows} sort={filters.sort}
+              dir={filters.dir} onSort={toggleSort} />
+          ) : (
+            <EmptyState
+              title="No notices match these filters"
+              detail="Try widening the date range, lowering the minimum workers, or clearing the industry filter — 35% of notices have no industry recorded and are excluded whenever one is selected."
+              action={
+                <button
+                  type="button"
+                  onClick={() => setParams(new URLSearchParams(), { replace: true })}
+                  className="smallcaps text-[10px] text-oxide hover:underline"
+                >
+                  Clear all filters
+                </button>
+              }
+            />
+          )}
+        </div>
+
+        {facets && (
+          <aside className="hidden lg:block">
+            <SectionHeading tight>Industry</SectionHeading>
+            <FacetList
+              facets={facets.sectors}
+              selected={filters.sector}
+              onSelect={(v) => setFilters({ sector: v })}
+              max={10}
+              emptyLabel="No industry recorded in these results"
+            />
+            <SectionHeading tight>States</SectionHeading>
+            <FacetList
+              facets={facets.states.map((s) => ({
+                ...s,
+                label: STATE_NAMES[s.value] ?? s.value,
+              }))}
+              selected={filters.state}
+              onSelect={(v) => setFilters({ state: v })}
+              max={10}
+            />
+            <p className="text-[11px] text-ink-faint font-serif mt-4 leading-relaxed">
+              Counts are notices in the current results, each facet counted
+              with its own filter lifted.
+            </p>
+          </aside>
+        )}
+      </div>
       {/* local styles for inputs */}
       <style>{`
         .input {
@@ -198,7 +270,11 @@ function VirtualRows({
         <Header label="Workers" k="jobs" right />
         <Header label="Type" />
       </div>
-      <div ref={parentRef} className="overflow-y-auto" style={{ height: "60vh" }}>
+      <div
+        ref={parentRef}
+        className="overflow-y-auto"
+        style={{ height: "min(78vh, calc(100vh - 19rem))", minHeight: "24rem" }}
+      >
         <div style={{ height: virtualizer.getTotalSize(), position: "relative" }}>
           {virtualizer.getVirtualItems().map((v) => {
             const i = rows[v.index];

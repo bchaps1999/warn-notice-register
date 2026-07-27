@@ -7,7 +7,9 @@ import clsx from "clsx";
 const NAV = [
   { to: "/", label: "Register" },
   { to: "/explore", label: "Explorer" },
+  { to: "/employers", label: "Employers" },
   { to: "/states", label: "States" },
+  { to: "/methods", label: "Methods" },
 ];
 
 export function Shell() {

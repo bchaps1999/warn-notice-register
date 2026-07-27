@@ -13,6 +13,11 @@ private firms respectively — so an employer usually reaches at most one.
 An employer that is none of these may still be somebody's subsidiary,
 which Exhibit 21 of the parent's 10-K reveals.
 
+Where an identity carries an authoritative name — Wikidata's label, the
+IRS's registered name, GLEIF's legal name — it is kept as canonical_name,
+so a company whose notices are filed as "UNITED" can be shown as United
+Airlines without discarding what the state actually wrote.
+
 Industry falls back in order of directness: the source's own NAICS code,
 an official sector name it printed, the SIC the SEC assigned the CIK
 through the Census concordance, the NTEE activity code the IRS assigned
@@ -31,6 +36,7 @@ from warnlive.normalize.engine import normalized_employer
 
 FIELDS = [
     "normalized_name",
+    "canonical_name",
     "industry",
     "naics",
     "naics_basis",
@@ -136,6 +142,7 @@ class Annotator:
                 wd = self.wikidata_by_cik.get(out["cik"])
                 if wd:
                     out["wikidata_qid"], out["wikidata_match"] = wd["qid"], "cik"
+                    out["canonical_name"] = wd["label"] or None
                     out["parent_company"] = (
                         wd["parents"].split("||")[0] if wd["parents"] else None
                     )
@@ -151,14 +158,19 @@ class Annotator:
             org = self.nonprofit_by_name.get(norm)
             if org:
                 out["ein"], out["ntee"] = org["ein"], org["ntee"] or None
+                out["canonical_name"] = out["canonical_name"] or org["name"] or None
             entity = self.gleif_by_name.get(norm)
             if entity:
                 out["lei"] = entity["lei"]
+                out["canonical_name"] = (
+                    out["canonical_name"] or entity["legal_name"] or None
+                )
 
         if norm and not out["wikidata_qid"]:
             wd = self.wikidata_by_name.get(norm)
             if wd:
                 out["wikidata_qid"], out["wikidata_match"] = wd["qid"], "label"
+                out["canonical_name"] = wd["label"] or out["canonical_name"]
                 out["parent_company"] = (
                     wd["parents"].split("||")[0] if wd["parents"] else None
                 )

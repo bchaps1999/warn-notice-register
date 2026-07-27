@@ -1,18 +1,35 @@
+export interface StateCoverage {
+  name: string;
+  status: string;
+  notices: number;
+  latest_verdict: string | null;
+  last_success: string | null;
+  source: string | null;
+  first: string | null;
+  last: string | null;
+  undated: number;
+  no_jobs: number;
+  no_location: number;
+  archived: number;
+  identified: number;
+}
+
 export interface Meta {
   built_at: string;
   key_prefix_len: number;
-  totals: { notices: number; workers: number; states: number };
+  totals: {
+    notices: number;
+    workers: number;
+    states: number;
+    undated: number;
+    no_jobs: number;
+    no_location: number;
+    archived: number;
+    identified: number;
+    with_industry: number;
+  };
   date_range: { min: string; max: string } | null;
-  states: Record<
-    string,
-    {
-      name: string;
-      status: string;
-      notices: number;
-      latest_verdict: string | null;
-      last_success: string | null;
-    }
-  >;
+  states: Record<string, StateCoverage>;
 }
 
 export interface MonthPoint {
@@ -40,12 +57,46 @@ export interface TopEmployer {
   workers: number;
 }
 
+export interface SectorPoint {
+  sector: string | null;
+  label: string;
+  notices: number;
+  workers: number;
+}
+
 export interface National {
   anchor_date: string;
   monthly: MonthPoint[];
   top_employers_12mo: TopEmployer[];
   biggest_recent: NoticeSummary[];
   states_12mo: { state: string; notices: number; workers: number }[];
+  sectors_12mo: SectorPoint[];
+  prior_12mo: { notices: number; workers: number; sectors: SectorPoint[] };
+}
+
+export interface Sector {
+  code: string;
+  label: string;
+}
+
+export interface EmployerIndex {
+  sectors: Sector[];
+  total_employers: number;
+  listed: number;
+  min_notices: number;
+  min_workers: number;
+  columns: {
+    key: string[];
+    label: string[];
+    notices: number[];
+    workers: number[];
+    states: string[][];
+    sector: (string | null)[];
+    parent: (string | null)[];
+    identified: number[];
+    first_date: (string | null)[];
+    last_date: (string | null)[];
+  };
 }
 
 export interface StateData {
@@ -75,6 +126,7 @@ export interface StateData {
 export interface NoticeIndex {
   states: string[];
   types: string[];
+  sectors: Sector[];
   count: number;
   columns: {
     key: string[];
@@ -85,6 +137,7 @@ export interface NoticeIndex {
     jobs: (number | null)[];
     type: number[];
     flags: number[];
+    sector: number[];
   };
 }
 

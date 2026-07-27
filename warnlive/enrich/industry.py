@@ -84,6 +84,49 @@ _SECTOR_BY_NAME = {
 _WS_RUN = re.compile(r"\s+")
 
 
+# The 20 NAICS sectors, in official order. Three are ranges because the
+# standard itself groups them that way; codes derived from a sector name
+# already arrive in range form, codes from a source arrive as digits, and
+# sector_of() reconciles the two so the site can group either.
+SECTOR_LABELS: dict[str, str] = {
+    "11": "Agriculture, forestry, fishing and hunting",
+    "21": "Mining, quarrying, oil and gas",
+    "22": "Utilities",
+    "23": "Construction",
+    "31-33": "Manufacturing",
+    "42": "Wholesale trade",
+    "44-45": "Retail trade",
+    "48-49": "Transportation and warehousing",
+    "51": "Information",
+    "52": "Finance and insurance",
+    "53": "Real estate, rental and leasing",
+    "54": "Professional, scientific and technical services",
+    "55": "Management of companies",
+    "56": "Administrative, support and waste services",
+    "61": "Educational services",
+    "62": "Health care and social assistance",
+    "71": "Arts, entertainment and recreation",
+    "72": "Accommodation and food services",
+    "81": "Other services",
+    "92": "Public administration",
+}
+_SECTOR_OF_PREFIX = {
+    p: sector
+    for sector in SECTOR_LABELS
+    for p in (
+        [sector] if "-" not in sector
+        else [f"{n:02d}" for n in range(int(sector[:2]), int(sector[-2:]) + 1)]
+    )
+}
+
+
+def sector_of(naics: str | None) -> str | None:
+    """The NAICS sector a code belongs to, as a SECTOR_LABELS key."""
+    if not naics:
+        return None
+    return _SECTOR_OF_PREFIX.get(naics[:2])
+
+
 def sector_from_text(industry: str | None) -> str | None:
     """2-digit NAICS sector for an official sector name; None otherwise."""
     if not industry:

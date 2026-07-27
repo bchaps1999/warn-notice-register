@@ -1,12 +1,19 @@
 import { Link } from "react-router-dom";
 import { useMeta, useNational } from "../lib/hooks";
-import { date, num } from "../lib/format";
+import { date, displayName, num } from "../lib/format";
 import { StatTile } from "../components/ui/StatTile";
 import { SectionHeading } from "../components/ui/SectionHeading";
 import { ErrorNote, Skeleton } from "../components/ui/Skeleton";
 import { NoticeTable } from "../components/ui/NoticeTable";
+import { Bar } from "../components/ui/Bar";
 import { MonthlyTrend } from "../components/charts/MonthlyTrend";
 import { Choropleth } from "../components/charts/Choropleth";
+
+/** Change against the same window a year earlier; null when there is no
+ *  prior period to compare against. */
+function change(now: number, before: number): number | null {
+  return before > 0 ? (now - before) / before : null;
+}
 
 export function Dashboard() {
   const { data: meta, error: metaErr } = useMeta();
@@ -18,6 +25,7 @@ export function Dashboard() {
   const t12 = national.states_12mo;
   const workers12 = t12.reduce((s, x) => s + x.workers, 0);
   const notices12 = t12.reduce((s, x) => s + x.notices, 0);
+  const prior = national.prior_12mo;
   const activeStates = new Set(
     Object.entries(meta.states)
       .filter(([, s]) => s.status === "active")
@@ -25,19 +33,42 @@ export function Dashboard() {
   );
   const mapValues = Object.fromEntries(t12.map((s) => [s.state, s.workers]));
 
+  const sectors = national.sectors_12mo.filter((s) => s.sector);
+  const sectorPeak = Math.max(1, ...sectors.map((s) => s.workers));
+  const priorBySector = new Map(prior.sectors.map((s) => [s.sector, s.workers]));
+  const unknownSector = national.sectors_12mo.find((s) => !s.sector);
+
   return (
     <div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-        <StatTile label="Notices on record" value={num(meta.totals.notices)}
-          sub={meta.date_range ? `since ${date(meta.date_range.min)}` : undefined} />
-        <StatTile label="Workers affected" value={num(meta.totals.workers)} sub="all recorded notices" />
-        <StatTile label="Notices, trailing 12 mo" value={num(notices12)}
-          sub={`through ${date(national.anchor_date)}`} />
-        <StatTile label="Workers, trailing 12 mo" value={num(workers12)}
-          sub={`${activeStates.size} states reporting`} />
+        <StatTile
+          label="Notices, trailing 12 mo"
+          value={num(notices12)}
+          delta={change(notices12, prior.notices)}
+          deltaLabel="vs. prior 12 mo"
+          sub={`through ${date(national.anchor_date)}`}
+        />
+        <StatTile
+          label="Workers, trailing 12 mo"
+          value={num(workers12)}
+          delta={change(workers12, prior.workers)}
+          deltaLabel="vs. prior 12 mo"
+          sub={`${activeStates.size} states reporting`}
+        />
+        <StatTile
+          label="Notices on record"
+          value={num(meta.totals.notices)}
+          sub={meta.date_range ? `since ${date(meta.date_range.min)}` : undefined}
+        />
+        <StatTile
+          label="Workers on record"
+          value={num(meta.totals.workers)}
+          sub="a floor: 5% of notices omit headcount"
+        />
       </div>
 
       <SectionHeading
+        sub="Notices are placed by filing date, or by layoff date where a state publishes none."
         right={
           <Link to="/explore" className="smallcaps text-[10px] text-oxide hover:underline">
             Open explorer →
@@ -50,28 +81,94 @@ export function Dashboard() {
 
       <div className="grid lg:grid-cols-5 gap-10">
         <div className="lg:col-span-3">
-          <SectionHeading>Workers affected by state · trailing 12 months</SectionHeading>
+          <SectionHeading sub="Trailing 12 months. Unshaded states publish no notice-level list.">
+            Workers affected by state
+          </SectionHeading>
           <Choropleth values={mapValues} activeStates={activeStates}
             label="workers affected, trailing 12 mo" />
         </div>
         <div className="lg:col-span-2">
-          <SectionHeading>Largest employers · trailing 12 months</SectionHeading>
-          <table className="w-full text-sm">
+          <SectionHeading
+            sub={
+              unknownSector
+                ? `${num(unknownSector.workers)} workers are in notices with no industry recorded.`
+                : undefined
+            }
+          >
+            Industry · trailing 12 months
+          </SectionHeading>
+          <ul className="space-y-2.5">
+            {sectors.slice(0, 10).map((s) => {
+              const before = priorBySector.get(s.sector) ?? 0;
+              const delta = change(s.workers, before);
+              return (
+                <li key={s.sector}>
+                  <Link
+                    to={`/explore?sector=${encodeURIComponent(s.sector!)}`}
+                    className="group block"
+                  >
+                    <div className="flex items-baseline justify-between gap-2">
+                      <span className="text-[13px] font-serif group-hover:text-oxide truncate">
+                        {s.label}
+                      </span>
+                      <span className="tabular text-xs shrink-0">
+                        {num(s.workers)}
+                        {delta !== null && Math.abs(delta) >= 0.1 && (
+                          <span
+                            className={
+                              delta > 0 ? "text-oxide ml-1.5" : "text-federal ml-1.5"
+                            }
+                          >
+                            {delta > 0 ? "+" : ""}
+                            {Math.round(delta * 100)}%
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                    <Bar value={s.workers} max={sectorPeak} className="mt-1" />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+
+      <SectionHeading
+        right={
+          <Link to="/employers" className="smallcaps text-[10px] text-oxide hover:underline">
+            All employers →
+          </Link>
+        }
+        sub="Grouped by company, so filings under different spellings count once."
+      >
+        Largest employers · trailing 12 months
+      </SectionHeading>
+      <div className="grid sm:grid-cols-2 gap-x-10">
+        {[0, 1].map((col) => (
+          <table key={col} className="w-full text-sm">
             <tbody>
-              {national.top_employers_12mo.slice(0, 12).map((e, i) => (
-                <tr key={e.key} className="border-b border-rule">
-                  <td className="tabular text-xs text-ink-faint py-1.5 pr-2 w-6">{i + 1}</td>
-                  <td className="py-1.5 pr-3 font-serif">
-                    <Link to={`/employers/${encodeURIComponent(e.key)}`} className="hover:underline">
-                      {e.employer}
-                    </Link>
-                  </td>
-                  <td className="tabular text-right py-1.5">{num(e.workers)}</td>
-                </tr>
-              ))}
+              {national.top_employers_12mo
+                .slice(col * 8, col * 8 + 8)
+                .map((e, i) => (
+                  <tr key={e.key} className="border-b border-rule">
+                    <td className="tabular text-xs text-ink-faint py-1.5 pr-2 w-6">
+                      {col * 8 + i + 1}
+                    </td>
+                    <td className="py-1.5 pr-3 font-serif">
+                      <Link
+                        to={`/employers/${encodeURIComponent(e.key)}`}
+                        className="hover:underline"
+                      >
+                        {displayName(e.employer)}
+                      </Link>
+                    </td>
+                    <td className="tabular text-right py-1.5">{num(e.workers)}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
-        </div>
+        ))}
       </div>
 
       <SectionHeading>Largest notices · trailing 90 days</SectionHeading>
@@ -79,12 +176,14 @@ export function Dashboard() {
 
       <SectionHeading>Coverage</SectionHeading>
       <p className="text-sm font-serif text-ink-muted max-w-3xl leading-relaxed">
-        This register consolidates notices from {activeStates.size} state portals with automated
-        collection; {Object.values(meta.states).filter((s) => s.status === "manual_only").length}{" "}
-        states publish nothing online and are absent. History depth varies by state — Illinois
-        reaches back to 1987 while some portals expose only the current year. See each{" "}
-        <Link to="/states" className="underline hover:text-ink">state profile</Link> for source
-        details and coverage depth.
+        This register consolidates notices from {activeStates.size} state portals;{" "}
+        {Object.values(meta.states).filter((s) => s.status === "manual_only").length}{" "}
+        states publish nothing online and are absent. History depth varies —
+        Illinois reaches back to 1987 while some portals expose only the current
+        year — and {Math.round((meta.totals.undated / meta.totals.notices) * 100)}%
+        of notices carry no filing date. What each figure here does and does not
+        count is set out in{" "}
+        <Link to="/methods" className="underline hover:text-ink">methods</Link>.
       </p>
     </div>
   );
