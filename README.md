@@ -188,17 +188,85 @@ matching both a place and a county is a coincidence, not a filed county,
 which is why Houston resolves to Harris County rather than to the Houston
 County it is not in.
 
+States also file out-of-state addresses — a corporate headquarters rather
+than the worksite — and share city names with the states they file into.
+A location that names its own state, and names a different one, resolves
+to nothing: reading "2323 KENNEDY DRIVE JANESVILLE, WI 53547" against
+Illinois would place the layoff in the Janesville Illinois has, which is a
+wrong answer given confidently rather than a missing one.
+
 Local knowledge that no roster carries goes in
 `data/reference/place_aliases.csv` — NYC boroughs, Los Angeles
 neighbourhoods, abbreviations states use. A `kind` of `county` says the
 alias can only be placed at county level, as for an unincorporated
-community that is in no city at all. `places-refresh` also writes
-`data/health/places_review.csv`, every unresolved location ranked by
-workers at stake; much of the top of that file is Kansas, Vermont, Maine
-and Oklahoma filing against workforce investment areas, which are not
-places and never resolve.
+community that is in no city at all. An alias may name a whole filed
+string rather than a name inside it, which is the only way to place
+something like "O'HARE INTERNATIONAL AIRPORT CHICAGO, IL 60666", where no
+segment is a place and no rule will make one. A `decision` of `reject`
+records that a string names no geography at all, so it stops returning to
+the review file; it grants nothing.
+
+`places-refresh` also writes `data/health/places_review.csv`, every
+unresolved location ranked by workers at stake; much of the top of that
+file is Kansas, Vermont, Maine and Oklahoma filing against workforce
+investment areas, which are not places and never resolve.
 
 Overrides outrank every automatic tier and are reported as
 `identity_source=override` in exports, so an adjudication can always be
-audited or revoked. Nothing in the pipeline writes this file; no
-adjudication is ever inferred.
+audited or revoked. Nothing in the pipeline writes these files by itself;
+no adjudication is ever inferred.
+
+### Adjudication
+
+Each of those review files is a queue of things no rule can settle,
+because settling them needs knowledge the corpus does not contain. `warnlive
+adjudicate` works those queues with a model, and every proposal is judged by
+the same code that refused in the first place:
+
+```bash
+warnlive adjudicate places               # unresolved locations
+warnlive adjudicate identity             # unidentified employers
+warnlive adjudicate industry --calibrate # measure before trusting
+warnlive adjudicate industry             # then assign sectors
+```
+
+The model proposes; it never rewrites. A location alias is written into the
+table and the resolver is run again on the original string — either it now
+names a real Census place or the proposal is worth nothing, so an invented
+city fails on the gazetteer rather than on anything the prompt said. A
+proposed registrant must clear the unmodified EDGAR matcher and then be
+corroborated at least twice by evidence the proposal never saw: the filing
+calendar, a parent's Exhibit 21, the state-published industry, the IRS or
+GLEIF rosters. Anything unproven is staged under `data/health/*_adjudicated.csv`
+for a person instead of being written.
+
+A subsidiary becomes a parent link in
+`data/reference/subsidiary_overrides.csv`, never an identity: First Transit
+is owned by FirstGroup and is not FirstGroup, and writing the parent's CIK
+into its identity would conflate the two in every join made afterwards. For
+the same reason an employer that its own proposed registrant lists in
+Exhibit 21 is refused — a company does not appear in its own subsidiary
+schedule.
+
+Industry is the one queue with no authority to check an answer against, so
+its threshold is measured rather than chosen. `--calibrate` classifies the
+employers whose industry a state already published, with the label hidden,
+and writes precision at each confidence cut to
+`data/health/industry_calibration.csv`. Scoring is per employer, never per
+notice. Adjudicated sectors are reported as `naics_basis=adjudicated`,
+ranked below every basis tracing back to an authority.
+
+Every question and answer is appended to
+`data/reference/adjudications.jsonl.gz`, keyed by task, row, prompt version
+and model. A rerun replays it and calls nothing; `--dry-run` re-judges those
+stored answers through today's gates, which is how a change to a gate is
+checked before any money is spent. Refusals are recorded too — that is what
+stops an unanswerable row returning on every refresh.
+
+This runs by hand and never in CI: scheduled scrapes read reference files
+and contact no model. The provider is a base URL and a key name in
+`warnlive/adjudicate/providers.yaml` (DeepSeek by default, needs
+`DEEPSEEK_API_KEY`), so changing models is a flag and changing vendors is a
+config edit. `--budget` caps spending and is checked before each call; a
+model with no prices on file reports tokens and an unknown cost rather than
+a confidently wrong one.

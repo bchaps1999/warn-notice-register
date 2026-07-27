@@ -37,6 +37,16 @@ jobs:
         run: .venv/bin/warnlive scrape --cadence weekly --trigger scheduled
       - name: Detect revisions/duplicates
         run: .venv/bin/warnlive dupes
+      - name: Rebuild the adjudication queues
+        # New notices bring locations no gazetteer places and employers no
+        # matcher identifies. Both are found only by rebuilding the review
+        # files, so without this a queue is as stale as the last time
+        # somebody ran it by hand — and the work never surfaces at all.
+        # Reads reference files and the database, calls nothing external;
+        # adjudicating what these list stays a manual, offline step.
+        run: |
+          .venv/bin/warnlive places-refresh --review-only
+          .venv/bin/warnlive identity-review
       - name: Check for data regressions
         # Whole-database checks: a parser can ingest the right number of rows
         # with wrong values in them, which per-state verification cannot see.

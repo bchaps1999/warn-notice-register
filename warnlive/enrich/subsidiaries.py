@@ -38,6 +38,7 @@ logger = logging.getLogger("warnlive")
 SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik:010d}.json"
 ARCHIVE_URL = "https://www.sec.gov/Archives/edgar/data/{cik}/{acc}/"
 PATH = Path("data/reference/subsidiaries.csv.gz")
+OVERRIDES_PATH = Path("data/reference/subsidiary_overrides.csv")
 PROGRESS_PATH = Path("workdir/backfill/cache/subsidiaries_progress.csv")
 FIELDS = ["normalized_name", "parent_cik", "parent_name", "source_year"]
 
@@ -251,13 +252,23 @@ def refresh(out_path: Path = PATH, progress_path: Path = PROGRESS_PATH,
 class Index:
     """Subsidiary-name lookup that tolerates a notice's shorter name."""
 
-    def __init__(self, path: Path = PATH):
+    def __init__(self, path: Path = PATH, overrides_path: Path = OVERRIDES_PATH):
         self.by_name: dict[str, dict] = {}
         self.by_first: dict[str, list[str]] = defaultdict(list)
         if path.exists():
             with gzip.open(path, "rt") as fh:
                 for row in csv.DictReader(fh):
                     self.by_name[row["normalized_name"]] = row
+        # Adjudicated links live in their own file and are applied last, so
+        # they outrank the generated table and survive its regeneration.
+        # Exhibit 21 lists a parent's subsidiaries under their registered
+        # names; a state files "First Transit" or "Crothall Healthcare",
+        # which belong to somebody but appear in no filing under that name.
+        if overrides_path.exists():
+            with open(overrides_path, newline="") as fh:
+                for row in csv.DictReader(fh):
+                    if row.get("normalized_name") and row.get("parent_cik"):
+                        self.by_name[row["normalized_name"]] = row
         for name in self.by_name:
             self.by_first[name.split(" ", 1)[0]].append(name)
 

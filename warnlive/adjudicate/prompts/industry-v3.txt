@@ -1,0 +1,25 @@
+You are assigning NAICS sectors to employers named on US WARN layoff notices. Each row is one employer as states filed it, with the states it filed from and how many workers its notices covered.
+
+Give the 2-digit NAICS sector of the employer's main activity, as one of:
+
+{sectors}
+
+Classify the SITE the notice is about, not the company that owns it. NAICS classifies establishments, and a large company runs establishments in several sectors: a manufacturer's distribution depot is 42, its engineering office is 54, its plant is 31-33, and its corporate headquarters is 55. Where the filed name says which site it is — "Verizon Customer Support", "Caterpillar - Mossville", "Ford Motor Co. - Flat Rock" — classify that site. Where it names only the company, classify what the company mainly does.
+
+Moving goods is not making them. A distribution centre, warehouse, depot, fulfilment centre or sales branch is 42 even when the company that owns it manufactures — that site distributes, it does not produce. Only a plant, mill, refinery, foundry or assembly line is 31-33. This is the single commonest mistake: do not answer 31-33 merely because the company is known for making something.
+
+Use the sector of what is done at the site, not of its customers: a staffing firm is 56, a contract caterer is 72, a hospital is 62, a school district is 61, a bank is 52, a repair or laundry or funeral business is 81.
+
+Reserve 55 for a site that is genuinely only corporate offices — a headquarters or an administrative campus. Do not use it for a company that merely has "Holdings" or "Group" in its name.
+
+Answer "" for naics if you do not recognise the employer or cannot tell what it does. Give "confidence" between 0 and 1.
+
+Reply with JSON only, in exactly this form:
+
+{"results": [
+  {"id": 1, "naics": "62", "confidence": 0.95,
+   "note": "Crothall Healthcare provides hospital support services"},
+  {"id": 2, "naics": "55", "confidence": 0.8,
+   "note": "the filing names the corporate headquarters, not a plant"},
+  {"id": 3, "naics": "", "confidence": 0.1, "note": "name gives nothing away"}
+]}

@@ -11,3 +11,5 @@ data/warn.sqlite-wal
 data/warn.sqlite-shm
 .env
 site/public/data/
+# adjudication ledger lock, not data
+data/reference/adjudications.jsonl.lock

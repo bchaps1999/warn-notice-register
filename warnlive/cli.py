@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import sys
 from pathlib import Path
 
@@ -16,6 +17,30 @@ from warnlive.verify.report import write_health
 
 DEFAULT_WORKDIR = Path("workdir")
 DEFAULT_DATA_DIR = Path("data")
+ENV_FILE = Path(".env")
+
+
+def _load_env(path: Path = ENV_FILE) -> None:
+    """Read .env into the environment, without overriding what is already set.
+
+    Credentials live in a gitignored .env, and every command that needs one
+    reads os.environ. A shell that has not sourced the file therefore fails
+    at the point of use rather than at the point of configuration — which
+    for a paid API means a run that queues two hundred rows, calls nothing,
+    and reports two hundred failures. Reading it here makes the file mean
+    what everyone assumes it means. Anything already exported wins, so an
+    explicit override on the command line still does.
+    """
+    if not path.exists():
+        return
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key, value = key.strip(), value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
 
 
 def _exportable(registry) -> list[str]:
@@ -28,6 +53,7 @@ def _exportable(registry) -> list[str]:
 @click.option("-v", "--verbose", is_flag=True)
 def cli(verbose: bool) -> None:
     """Consolidated WARN notice pipeline."""
+    _load_env()
     logging.basicConfig(
         level=logging.DEBUG if verbose else logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s %(message)s",
@@ -482,17 +508,344 @@ def gleif_refresh(db_path: Path, top_n: int) -> None:
 
 @cli.command("places-refresh")
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
-def places_refresh(db_path: Path) -> None:
+@click.option("--review-only", is_flag=True,
+              help="Rebuild only the unresolved-location queue, against the "
+                   "roster already on disk. The Census files change once a "
+                   "year; what can be placed changes every time an alias is "
+                   "added or a notice arrives.")
+def places_refresh(db_path: Path, review_only: bool) -> None:
     """Rebuild the Census place and county roster used to resolve notice
     locations, and list the locations it cannot place."""
     from warnlive.enrich import places
 
-    n = places.refresh()
-    click.echo(f"{places.PATH}: {n} places and counties")
+    if not review_only:
+        n = places.refresh()
+        click.echo(f"{places.PATH}: {n} places and counties")
+    elif not places.PATH.exists():
+        raise click.UsageError(
+            f"{places.PATH} does not exist; run without --review-only first"
+        )
     conn = db_mod.connect(db_path)
     db_mod.init_db(conn)
     unresolved = places.review(conn)
     click.echo(f"{places.REVIEW_PATH}: {unresolved} unresolved locations")
+
+
+@cli.group()
+def adjudicate() -> None:
+    """Ask a model to settle what the deterministic tiers refused.
+
+    Every proposal is judged by the same code that refused in the first
+    place — an alias must make the resolver place the string, a name must
+    clear the EDGAR matcher's gates — so a wrong guess fails rather than
+    landing as a confident match. What survives is appended to the
+    reference files under data/reference with the model named as the
+    decider; what does not is staged under data/health for a person.
+
+    Runs by hand, never in CI: scheduled scrapes read reference files and
+    contact no model. Needs the key named in adjudicate/providers.yaml
+    (DEEPSEEK_API_KEY by default).
+    """
+
+
+def _llm_options(fn):
+    """The options every adjudicate subcommand shares."""
+    for option in reversed([
+        click.option("--limit", type=int, default=None,
+                     help="Stop after this many rows of real work."),
+        click.option("--min-workers", default=0,
+                     help="Ignore rows with fewer workers riding on them."),
+        click.option("--dry-run", is_flag=True,
+                     help="Re-judge the ledger through today's gates; no API calls."),
+        click.option("--reask", is_flag=True,
+                     help="Ask again even where an answer is already on file."),
+        click.option("--budget", type=float, default=None,
+                     help="Hard ceiling in USD, checked before each call."),
+        click.option("--provider", default=None, help="Provider from providers.yaml."),
+        click.option("--model", "model_alias", default=None, help="Model alias, e.g. flash."),
+        click.option("--threshold", default=0.8, show_default=True,
+                     help="Confidence at or above which a cleared proposal is written."),
+        click.option("--write/--no-write", default=True,
+                     help="Whether to write reference and staging files."),
+        click.option("--thinking/--no-thinking", default=True,
+                     help="Let the model reason before answering. Reasoning is "
+                          "billed as output and ran ~3x the answer itself; "
+                          "--no-thinking is cheaper and measurably worse on "
+                          "the judgements the gates cannot check."),
+    ]):
+        fn = option(fn)
+    return fn
+
+
+def _client_for(provider, model_alias, budget, dry_run):
+    """The client to call with, and the model name to replay answers under.
+
+    A dry run has no client and still needs the model's name: the ledger is
+    keyed by it, so replaying without it would match nothing and report an
+    empty queue as though there were no work.
+    """
+    from warnlive.adjudicate.client import Client, resolve
+
+    model = resolve(provider, model_alias)
+    click.echo(f"model: {model}" + (" (dry run, no calls)" if dry_run else ""))
+    if dry_run:
+        return None, str(model)
+    return Client(model, budget=budget), str(model)
+
+
+def _report(tally, client) -> None:
+    click.echo(tally.summary())
+    if client is not None:
+        click.echo(client.usage.summary())
+    if tally.stopped:
+        click.echo(f"stopped: {tally.stopped}")
+
+
+@adjudicate.command("sweep")
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--sample", default=300, show_default=True,
+              help="Employers per configuration, from the tune split.")
+@click.option("--cut", default=0.9, show_default=True,
+              help="Confidence cut the table is ranked at.")
+@click.option("--budget-each", type=float, default=0.10, show_default=True,
+              help="Ceiling per configuration, in USD.")
+@click.option("--prompts", default=None,
+              help="Comma-separated prompt names. Default: every file in "
+                   "adjudicate/prompts.")
+@click.option("--settings", is_flag=True,
+              help="Sweep batch size, thinking and model on the given prompt "
+                   "instead of comparing prompts.")
+def adjudicate_sweep(db_path, sample, cut, budget_each, prompts, settings) -> None:
+    """Compare prompts and settings on the tune split, before trusting one.
+
+    Never touches the test split: that half is scored once, by the winner,
+    and is the only number worth quoting because nothing was changed in
+    response to it."""
+    from warnlive.adjudicate import industry as adj_industry
+    from warnlive.adjudicate import sweep as sweep_mod
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    items = adj_industry.load_calibration(conn, sample=sample, split="tune")
+    click.echo(f"{len(items)} employers from the tune split\n")
+
+    names = ([p.strip() for p in prompts.split(",")] if prompts else
+             sorted(p.stem for p in adj_industry.PROMPTS_DIR.glob("*.txt")))
+    if settings:
+        base = names[0]
+        configs = [
+            sweep_mod.Config(base),
+            sweep_mod.Config(base, batch_size=10),
+            sweep_mod.Config(base, thinking=False),
+            sweep_mod.Config(base, model="pro"),
+        ]
+    else:
+        configs = [sweep_mod.Config(n) for n in names]
+
+    results = sweep_mod.run(items, configs, cut=cut, budget_each=budget_each)
+    click.echo("\n" + sweep_mod.table(results, cut))
+    sweep_mod.write(results, cut)
+    click.echo(f"\nwritten to {sweep_mod.RESULTS_PATH}")
+    total = sum(r.cost for r in results)
+    click.echo(f"total spent: ${total:.4f}")
+
+
+@adjudicate.command("places")
+@_llm_options
+@click.option("--auto-county", is_flag=True,
+              help="Also write county-level answers automatically. Off by "
+                   "default: nothing can check one, since the gate only "
+                   "confirms the county exists and every real county does.")
+def adjudicate_places(limit, min_workers, dry_run, reask, budget, provider,
+                      model_alias, threshold, write, thinking, auto_county) -> None:
+    """Resolve the location strings the Census gazetteer could not place.
+
+    A proposal is written into the alias table and the resolver is run again
+    on the original string: either it now names a real Census place or
+    county, or the proposal is worth nothing. Strings that name no geography
+    at all — workforce investment areas, "Various Cities" — are recorded as
+    rejected so they stop returning to the review file."""
+    from warnlive.adjudicate import places as adj_places
+    from warnlive.adjudicate import queue as queue_mod
+
+    items = adj_places.load_queue(min_workers=min_workers)
+    click.echo(f"{adj_places.REVIEW_PATH}: {len(items)} unresolved locations queued")
+    client, model_name = _client_for(provider, model_alias, budget, dry_run)
+    worker = adj_places.Places(threshold=threshold, auto_county=auto_county)
+    worker.thinking = thinking
+    tally = queue_mod.run(
+        worker, items, client=client, limit=limit, dry_run=dry_run,
+        reask=reask, model=model_name,
+    )
+    _report(tally, client)
+    if write and not dry_run and tally.rows:
+        written, staged = adj_places.write(
+            tally.rows, decided_by=model_name
+        )
+        click.echo(f"{adj_places.ALIAS_PATH}: +{written} decided")
+        click.echo(f"{adj_places.STAGING_PATH}: {staged} staged for review")
+
+
+@adjudicate.command("identity")
+@_llm_options
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--corroborators", default=2, show_default=True,
+              help="Independent witnesses a matched CIK must have.")
+def adjudicate_identity(limit, min_workers, dry_run, reask, budget, provider,
+                        model_alias, threshold, write, thinking, db_path, corroborators) -> None:
+    """Identify the employers the EDGAR matcher could not.
+
+    A proposed registrant must clear the unmodified matcher and then be
+    corroborated by evidence the proposal never saw — the filing calendar,
+    a parent's Exhibit 21, the state-published industry, the IRS or GLEIF
+    rosters. A subsidiary becomes a parent link rather than an identity,
+    because First Transit is owned by FirstGroup and is not FirstGroup."""
+    from warnlive.adjudicate import identity as adj_identity
+    from warnlive.adjudicate import queue as queue_mod
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    items = adj_identity.load_queue(conn, min_workers=min_workers)
+    click.echo(f"{len(items)} unidentified employers queued")
+    client, model_name = _client_for(provider, model_alias, budget, dry_run)
+    worker = adj_identity.Identity(
+        threshold=threshold, min_corroborators=corroborators
+    )
+    worker.thinking = thinking
+    tally = queue_mod.run(
+        worker, items, client=client, limit=limit, dry_run=dry_run,
+        reask=reask, model=model_name,
+    )
+    _report(tally, client)
+    if write and not dry_run and tally.rows:
+        ids, links, staged = adj_identity.write(
+            tally.rows, decided_by=model_name
+        )
+        click.echo(f"{adj_identity.OVERRIDES_PATH}: +{ids} identities")
+        click.echo(f"{adj_identity.SUBSIDIARY_OVERRIDES}: +{links} parent links")
+        click.echo(f"{adj_identity.STAGING_PATH}: {staged} staged for review")
+
+
+@adjudicate.command("confirm")
+@_llm_options
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+def adjudicate_confirm(limit, min_workers, dry_run, reask, budget, provider,
+                       model_alias, threshold, write, thinking, db_path) -> None:
+    """Confirm the matches no independent record could corroborate.
+
+    `adjudicate identity` writes a match only when two outside authorities
+    agree with it, and stages the rest. For an obscure employer nothing else
+    knows about, staged means abandoned. This asks the narrower question the
+    staging leaves open — is this named registrant this named employer — with
+    the roster's view of the company beside the notices' view of it.
+
+    Runs only where deterministic corroboration failed, so it never overrides
+    evidence; it speaks where there is none.
+    """
+    from warnlive.adjudicate import confirm as adj_confirm
+    from warnlive.adjudicate import identity as adj_identity
+    from warnlive.adjudicate import queue as queue_mod
+    from warnlive.adjudicate.ledger import Ledger
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    client, model_name = _client_for(provider, model_alias, budget, dry_run)
+    ledger = Ledger()
+    items = adj_confirm.load_queue(conn, ledger, model_name, min_workers=min_workers)
+    click.echo(f"{len(items)} uncorroborated matches to confirm")
+    worker = adj_confirm.Confirm(threshold=threshold)
+    worker.thinking = thinking
+    tally = queue_mod.run(
+        worker, items, client=client, ledger=ledger, limit=limit,
+        dry_run=dry_run, reask=reask, model=model_name,
+    )
+    _report(tally, client)
+    if write and not dry_run and tally.rows:
+        ids, links, staged = adj_identity.write(tally.rows, decided_by=model_name)
+        click.echo(f"{adj_identity.OVERRIDES_PATH}: +{ids} identities")
+        click.echo(f"{adj_identity.STAGING_PATH}: {staged} staged for review")
+
+
+@adjudicate.command("industry")
+@_llm_options
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--calibrate", is_flag=True,
+              help="Score against states' own published industries instead of "
+                   "writing; prints precision at each confidence cut.")
+@click.option("--prompt", "prompt_name", default=None,
+              help="Which prompt in adjudicate/prompts to use. Its name is "
+                   "the version answers are keyed by, so two variants never "
+                   "blend and switching back replays rather than re-buys.")
+@click.option("--split", type=click.Choice(["tune", "test"]), default="tune",
+              show_default=True,
+              help="Which half of the labelled employers to grade. Compare "
+                   "prompts on 'tune'; score the winner once on 'test'. "
+                   "Iterating against 'test' measures the fit to that sample, "
+                   "not the prompt.")
+@click.option("--sample", type=int, default=1000, show_default=True,
+              help="With --calibrate: how many labelled employers to grade, "
+                   "drawn at random (seeded). The labelled set is ranked by "
+                   "workers, so grading its head would measure the easiest "
+                   "employers and overstate the threshold.")
+def adjudicate_industry(limit, min_workers, dry_run, reask, budget, provider,
+                        model_alias, threshold, write, thinking, db_path, calibrate, sample,
+                        split, prompt_name) -> None:
+    """Assign a NAICS sector to employers no basis reached.
+
+    Nothing can verify a sector the way the resolver verifies a place, so
+    run --calibrate first: it classifies employers whose industry a state
+    already published, with the label hidden, and reports precision at each
+    confidence cut. Pick --threshold off that curve rather than guessing."""
+    from warnlive.adjudicate import industry as adj_industry
+    from warnlive.adjudicate import queue as queue_mod
+    from warnlive.adjudicate.ledger import Ledger
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    if calibrate:
+        items = adj_industry.load_calibration(conn, min_workers=min_workers,
+                                              sample=sample, split=split)
+    else:
+        items = adj_industry.load_queue(conn, min_workers=min_workers)
+    click.echo(
+        f"{len(items)} employers "
+        + (f"with a published industry ({split} split)" if calibrate else "queued")
+    )
+    client, model_name = _client_for(provider, model_alias, budget, dry_run)
+    worker = adj_industry.Industry(
+        threshold=threshold,
+        **({'prompt': prompt_name} if prompt_name else {}),
+    )
+    worker.thinking = thinking
+    led = Ledger()
+    tally = queue_mod.run(
+        worker, items, client=client, ledger=led, limit=limit,
+        dry_run=dry_run, reask=reask, model=model_name,
+    )
+    _report(tally, client)
+
+    if calibrate:
+        curve = adj_industry.score(items, worker, led, model_name)
+        click.echo("\n  cut   answered  coverage  precision  worker-precision")
+        for r in curve:
+            click.echo(
+                f"  {r['threshold']:.2f}  {r['answered']:8d}  {r['coverage']:8.1%}"
+                f"  {r['precision']:9.1%}  {r['worker_precision']:16.1%}"
+            )
+        click.echo(f"\nwritten to {adj_industry.CALIBRATION_PATH}")
+        confused = adj_industry.confusions(items, worker, led, model_name)
+        if confused:
+            click.echo("\nmost confused sectors (published -> predicted):")
+            for (truth, pred), n in confused:
+                click.echo(f"  {n:5d}  {truth} -> {pred}")
+        return
+
+    if write and not dry_run and tally.rows:
+        accepted, staged = adj_industry.write(
+            tally.rows, decided_by=model_name
+        )
+        click.echo(f"{adj_industry.OVERRIDES_PATH}: +{accepted} sectors")
+        click.echo(f"{adj_industry.STAGING_PATH}: {staged} staged for review")
 
 
 @cli.command("wikidata-refresh")

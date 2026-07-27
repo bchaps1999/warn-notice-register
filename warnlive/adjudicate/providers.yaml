@@ -1,0 +1,50 @@
+# Where a model is reached and what it costs.
+#
+# Every candidate vendor speaks the OpenAI chat-completions dialect, so a
+# provider is nothing but a base URL and the name of the environment variable
+# holding its key. Swapping vendors is an edit here, not a second client.
+#
+# Prices are USD per million tokens, recorded so a run can report what it
+# actually spent rather than how many tokens it moved. They go stale: a
+# provider whose prices are omitted still runs, and reports tokens with an
+# unknown cost rather than a confidently wrong one.
+#
+# DeepSeek discounts a cache hit by ~98%, and the cache keys on a shared
+# prefix, so prompts put the fixed instructions first and the variable rows
+# last. That is worth more than any batching tweak.
+
+default_provider: deepseek
+default_model: flash
+
+providers:
+  deepseek:
+    base_url: https://api.deepseek.com
+    api_key_env: DEEPSEEK_API_KEY
+    models:
+      flash:
+        slug: deepseek-v4-flash
+        input_miss_per_m: 0.14
+        input_hit_per_m: 0.0028
+        output_per_m: 0.28
+      pro:
+        slug: deepseek-v4-pro
+        input_miss_per_m: 0.435
+        input_hit_per_m: 0.003625
+        output_per_m: 0.87
+
+  # Present so a second opinion costs a flag rather than a rewrite. Rates
+  # read from OpenRouter's own /models endpoint; no cache-hit rate is
+  # published, so a hit is billed as a miss, which is the conservative
+  # reading and the right one for a router that may not cache at all.
+  openrouter:
+    base_url: https://openrouter.ai/api/v1
+    api_key_env: OPENROUTER_API_KEY
+    models:
+      flash:
+        slug: deepseek/deepseek-v4-flash
+        input_miss_per_m: 0.14
+        output_per_m: 0.28
+      pro:
+        slug: deepseek/deepseek-v4-pro
+        input_miss_per_m: 0.435
+        output_per_m: 0.87

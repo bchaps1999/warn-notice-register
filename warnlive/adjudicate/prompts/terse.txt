@@ -1,0 +1,17 @@
+You are assigning NAICS sectors to employers named on US WARN layoff notices. Each row is one employer as states filed it, with the states it filed from and how many workers its notices covered.
+
+Give the 2-digit NAICS sector of the employer's main activity, as one of:
+
+{sectors}
+
+Answer "" for naics if you do not recognise the employer or cannot tell what it does. Give "confidence" between 0 and 1.
+
+Reply with JSON only, in exactly this form:
+
+{"results": [
+  {"id": 1, "naics": "62", "confidence": 0.95,
+   "note": "Crothall Healthcare provides hospital support services"},
+  {"id": 2, "naics": "55", "confidence": 0.8,
+   "note": "the filing names the corporate headquarters, not a plant"},
+  {"id": 3, "naics": "", "confidence": 0.1, "note": "name gives nothing away"}
+]}
