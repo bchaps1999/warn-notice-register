@@ -33,6 +33,60 @@ _NAICS_SECTORS = {
 # omitted. Source: census.gov/naics/concordances/1987_SIC_to_1997_NAICS.xls
 SIC_NAICS_PATH = Path("data/reference/sic_naics.csv.gz")
 
+# Sectors decided by adjudication rather than published by anybody. Read here
+# with the other reference files; written by warnlive adjudicate industry.
+OVERRIDES_PATH = Path("data/reference/industry_overrides.csv")
+
+# Which question a code answers, per basis.
+#
+# NAICS classifies establishments, not companies, and a large employer runs
+# establishments in several sectors at once: Caterpillar's plant is 31-33 and
+# its parts depot is 42, ArcelorMittal's mill is 31-33 and its headquarters is
+# 55 — the sector whose name is literally Management of Companies. States code
+# the site a notice is about; the SEC and the IRS code the organization. Where
+# a notice carries both, the two agree about four times in five, and the fifth
+# is not an error but two correct answers to different questions.
+#
+# So the level is recorded and the conflict is left standing. Flattening them
+# would destroy the distinction rather than resolve it, and a consumer
+# studying which industries are shedding jobs wants the site, while one
+# studying which firms are shrinking wants the company.
+_LEVEL_BY_BASIS = {
+    "source": "establishment",         # the state's own code for the site
+    "sector-name": "establishment",    # the state's own sector label
+    "sic-crosswalk": "establishment",  # a SIC the state published
+    "adjudicated": "establishment",    # the model is asked about the site
+    # Inherited from another notice of the same employer. An establishment
+    # code, but observed at a different establishment — which is why the
+    # basis says so and this tier ranks last.
+    "employer": "establishment",
+    "sec-sic": "enterprise",           # the SIC the SEC assigned the filer
+    "ntee": "enterprise",              # the IRS activity code for the org
+    "parent-sic": "enterprise",        # the parent company's industry
+}
+
+
+def naics_level(basis: str | None) -> str | None:
+    """Whether a code describes the site or the company behind it."""
+    return _LEVEL_BY_BASIS.get(basis or "")
+
+
+def load_industry_overrides(path: Path = OVERRIDES_PATH) -> dict[str, str]:
+    """normalized employer name -> adjudicated NAICS sector.
+
+    Kept separate from the published-code path on purpose: an entry here is
+    a conclusion about an employer, not a code a state printed, and the
+    export says so by labelling the basis "adjudicated".
+    """
+    if not path.exists():
+        return {}
+    with open(path, newline="") as fh:
+        return {
+            r["normalized_name"]: r["naics"]
+            for r in csv.DictReader(fh)
+            if r.get("normalized_name") and r.get("naics")
+        }
+
 
 # "sic" as a standalone word: "SIC", "SIC Code" — never "music", "basic".
 _SIC_KEY = re.compile(r"\bsic\b")

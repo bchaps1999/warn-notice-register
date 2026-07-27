@@ -30,16 +30,23 @@ from __future__ import annotations
 
 from warnlive.enrich import gleif, nonprofits, review, subsidiaries
 from warnlive.enrich.edgar import REFERENCE_PATH, Matcher, load_sic
-from warnlive.enrich.industry import industry_from_fields_json, load_sic_naics
+from warnlive.enrich.industry import (
+    industry_from_fields_json,
+    load_industry_overrides,
+    load_sic_naics,
+    naics_level,
+)
 from warnlive.enrich.wikidata import load_labels, load_orgs
 from warnlive.normalize.engine import base_employer, normalized_employer
 
 FIELDS = [
     "normalized_name",
     "canonical_name",
+    "canonical_basis",
     "industry",
     "naics",
     "naics_basis",
+    "naics_level",
     "cik",
     "ticker",
     "cik_match",
@@ -70,6 +77,7 @@ class Annotator:
         self.gleif_by_name = gleif.load()
         self.subsidiaries = subsidiaries.Index()
         self.overrides = review.load_overrides()
+        self.industry_overrides = load_industry_overrides()
         self.naics_by_employer: dict[str, str] = {}
 
     def prime(self, conn) -> int:
@@ -161,6 +169,8 @@ class Annotator:
                 if wd:
                     out["wikidata_qid"], out["wikidata_match"] = wd["qid"], "cik"
                     out["canonical_name"] = wd["label"] or None
+                    if out["canonical_name"]:
+                        out["canonical_basis"] = "wikidata"
                     out["parent_company"] = (
                         wd["parents"].split("||")[0] if wd["parents"] else None
                     )
@@ -178,25 +188,51 @@ class Annotator:
             org = lookup(self.nonprofit_by_name)
             if org:
                 out["ein"], out["ntee"] = org["ein"], org["ntee"] or None
-                out["canonical_name"] = out["canonical_name"] or org["name"] or None
+                if not out["canonical_name"] and org["name"]:
+                    out["canonical_name"], out["canonical_basis"] = org["name"], "irs"
             entity = lookup(self.gleif_by_name)
             if entity:
                 out["lei"] = entity["lei"]
-                out["canonical_name"] = (
-                    out["canonical_name"] or entity["legal_name"] or None
-                )
+                if not out["canonical_name"] and entity["legal_name"]:
+                    out["canonical_name"] = entity["legal_name"]
+                    out["canonical_basis"] = "gleif"
 
         if norm and not out["wikidata_qid"]:
             wd = lookup(self.wikidata_by_name)
             if wd:
                 out["wikidata_qid"], out["wikidata_match"] = wd["qid"], "label"
-                out["canonical_name"] = wd["label"] or out["canonical_name"]
+                if wd["label"]:
+                    out["canonical_name"], out["canonical_basis"] = wd["label"], "wikidata"
                 out["parent_company"] = (
                     wd["parents"].split("||")[0] if wd["parents"] else None
                 )
 
+        # Every notice gets a company name, whether or not anyone identified
+        # the company.
+        #
+        # A state files the same firm as "Ford Motor Co. - Flat Rock", "FORD
+        # MOTOR COMPANY" and "Ford Motor Co", and until now only the third of
+        # notices with an identity carried a single name for all three. The
+        # rest fall back to the company part of what was filed — the same cut
+        # the matcher retries on, and the same one employer_key groups by, so
+        # the name shown agrees with the grouping rather than contradicting it.
+        # Its casing is the state's, because inventing capitalization is worse
+        # than keeping theirs.
+        #
+        # The basis says which it is. A name from Wikidata, the IRS or GLEIF
+        # is an authority's; a cleaned one is this pipeline's reading of a
+        # filing, and a consumer joining on company names needs to know the
+        # difference.
+        if not out["canonical_name"]:
+            cleaned = base_employer(employer_name)
+            if cleaned:
+                out["canonical_name"], out["canonical_basis"] = cleaned, "cleaned"
+            elif employer_name:
+                out["canonical_name"] = employer_name.strip() or None
+                out["canonical_basis"] = "filed" if out["canonical_name"] else None
+
         if out["naics"] is None and out["sic"] in self.naics_by_sic:
-            out["naics"], out["naics_basis"] = self.naics_by_sic[out["sic"]], "sic-crosswalk"
+            out["naics"], out["naics_basis"] = self.naics_by_sic[out["sic"]], "sec-sic"
         if out["naics"] is None and out["ntee"]:
             naics = nonprofits.naics_from_ntee(out["ntee"])
             if naics:
@@ -206,6 +242,19 @@ class Annotator:
             if parent_sic in self.naics_by_sic:
                 out["naics"] = self.naics_by_sic[parent_sic]
                 out["naics_basis"] = "parent-sic"
+
+        # An adjudicated sector ranks below every basis that traces back to an
+        # authority — a published code, a registrant's SIC, an IRS activity
+        # code — because those say what an employer does on someone's record,
+        # and this says what a model concluded from its name. It ranks above
+        # inheritance from the employer's other notices, which is an
+        # assumption rather than a statement about this employer at all.
+        if out["naics"] is None:
+            adjudicated = self.industry_overrides.get(norm or "") or (
+                self.industry_overrides.get(base_norm) if base_norm else None
+            )
+            if adjudicated:
+                out["naics"], out["naics_basis"] = adjudicated, "adjudicated"
 
         # Identity key for employer-level aggregation and /employers pages:
         # the strongest available identity wins (a QID survives renames, a
@@ -228,6 +277,8 @@ class Annotator:
             inherited = self.naics_by_employer.get(out["employer_key"])
             if inherited:
                 out["naics"], out["naics_basis"] = inherited, "employer"
+
+        out["naics_level"] = naics_level(out["naics_basis"])
 
         if out["identity_source"] is None and any(
             out[f] for f in ("cik", "ein", "lei", "wikidata_qid")
