@@ -131,7 +131,10 @@ class Annotator:
         decided = self.overrides.get(norm or "") or (
             self.overrides.get(base_norm) if base_norm else None
         )
-        if decided:
+        # A rejection is recorded so it is not re-decided; it grants nothing.
+        if decided and any(
+            decided.get(f) for f in ("cik", "ein", "lei", "wikidata_qid")
+        ):
             out["identity_source"] = "override"
             if decided.get("cik"):
                 out["cik"], out["cik_match"] = int(decided["cik"]), "override"

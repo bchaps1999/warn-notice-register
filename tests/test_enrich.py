@@ -269,3 +269,30 @@ def test_matcher_retries_without_the_site_qualifier(tmp_path):
     assert m.match("KMART", 2002) == (56824, "", "exact")
     assert m.match("KMART - STORE #3671", 2002) == (56824, "", "exact:base")
     assert m.match("Some Diner - Main St", 2002) is None
+
+
+def test_rejected_candidate_grants_nothing_and_stops_resurfacing(tmp_path):
+    """A rejection records that candidates were examined and refused. It
+    carries no identity, and it keeps the employer out of the next review
+    file — but it does not veto a rule that later finds the right one."""
+    import csv
+
+    from warnlive.enrich import review
+    from warnlive.enrich.annotate import Annotator
+
+    path = tmp_path / "identity_overrides.csv"
+    with open(path, "w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=review.OVERRIDE_FIELDS)
+        w.writeheader()
+        w.writerow({"normalized_name": "midway airlines", "decision": "reject",
+                    "decided_by": "test", "decided_at": "2026-07-27",
+                    "note": "the 1991 carrier is not the 1997 one"})
+
+    loaded = review.load_overrides(path)
+    assert "midway airlines" in loaded  # remembered, so review skips it
+
+    a = Annotator()
+    a.overrides = loaded
+    got = a.annotate("Midway Airlines, Inc", "1991-01-01", None)
+    assert got["cik"] is None
+    assert got["identity_source"] is None

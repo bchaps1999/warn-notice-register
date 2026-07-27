@@ -45,6 +45,7 @@ REVIEW_FIELDS = [
 ]
 OVERRIDE_FIELDS = [
     "normalized_name",
+    "decision",
     "cik",
     "ein",
     "lei",
@@ -56,7 +57,19 @@ OVERRIDE_FIELDS = [
 
 
 def load_overrides(path: Path = OVERRIDES_PATH) -> dict[str, dict]:
-    """normalized_name -> adjudicated identity. Absent file means none."""
+    """normalized_name -> adjudication. Absent file means none.
+
+    Two kinds of decision live here. One assigns an identity. The other
+    records that a candidate was examined and rejected — "the 1991 Midway
+    Airlines is not the 1997 one" — which carries no identity but must
+    still be remembered, or the same candidate returns in every future
+    review file and is re-decided forever.
+
+    A rejection is about the candidates that were on the table, not about
+    the employer: it stops the review from asking again, and grants
+    nothing, but it does not veto a future rule that finds the right
+    registrant by better evidence.
+    """
     if not path.exists():
         return {}
     with open(path, newline="") as fh:
@@ -64,7 +77,10 @@ def load_overrides(path: Path = OVERRIDES_PATH) -> dict[str, dict]:
             row["normalized_name"]: row
             for row in csv.DictReader(fh)
             if row.get("normalized_name")
-            and any(row.get(f) for f in ("cik", "ein", "lei", "wikidata_qid"))
+            and (
+                any(row.get(f) for f in ("cik", "ein", "lei", "wikidata_qid"))
+                or (row.get("decision") or "").strip().lower() == "reject"
+            )
         }
 
 
