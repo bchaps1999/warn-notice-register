@@ -320,6 +320,9 @@ def _places_fixture(tmp_path):
         ("CA", "place", "Burbank city", "0608954", "06037", "Los Angeles County", "1"),
         ("CA", "place", "Burbank CDP", "0608955", "06085", "Santa Clara County", ""),
         ("IL", "place", "Chicago city", "1714000", "17031", "Cook County", "1"),
+        # "urbana" is a status word only inside Puerto Rico's "zona urbana".
+        ("IL", "place", "Urbana city", "1777005", "17019", "Champaign County", "1"),
+        ("IL", "place", "Decatur city", "1718563", "17115", "Macon County", "1"),
         # A city sharing its name with a county it is not in.
         ("TX", "county", "Houston County", "", "48225", "Houston County", "1"),
         ("TX", "county", "Harris County", "", "48201", "Harris County", "1"),
@@ -392,6 +395,49 @@ def test_a_place_name_is_not_eaten_by_the_address_stripper(tmp_path):
 
     assert r.resolve("TX", "Flower Mound")["place_name"] == "Flower Mound town"
     assert r.resolve("TX", "Houston, Suite 400")["place_name"] == "Houston city"
+
+
+def test_a_street_address_gives_up_its_city(tmp_path):
+    """A US address ends "<street> <City>, <ST> <ZIP>". Where the street
+    carries a type word it can be cut off; where it does not, the city is
+    still the thing at the end."""
+    from warnlive.enrich.places import Resolver
+
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+
+    # The street names itself, so it can simply be removed.
+    assert (
+        r.resolve("IL", "1900 North Austin Avenue Chicago, IL 60639-5079")["place_name"]
+        == "Chicago city"
+    )
+    # Illinois writes streets with no type word at all; only position helps.
+    decatur = r.resolve("IL", "2200 E. Eldorado Decatur, IL 62521")
+    assert decatur["place_name"] == "Decatur city"
+    assert decatur["geo_basis"] == "address"
+    # A floor or suite sits between the street and the city.
+    assert (
+        r.resolve("IL", "200 East Randolph Street 70th Floor Chicago, IL 60601")[
+            "place_name"
+        ]
+        == "Chicago city"
+    )
+    # Position is only mined from things that look like addresses, so a
+    # phrase naming no place stays unresolved rather than donating a word.
+    assert r.resolve("IL", "Various locations in Chicago area")["geo_basis"] != "address"
+
+
+def test_urbana_is_a_city_not_a_status_word(tmp_path):
+    """"Zona urbana" is Puerto Rican boilerplate; "Urbana" on its own is a
+    city in Illinois, Ohio and Iowa."""
+    from warnlive.enrich.places import Resolver, fold
+
+    assert fold("Urbana city") == "urbana"
+    assert fold("Zona Urbana Rio Grande") == "riogrande"
+
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    assert r.resolve("IL", "1710 PHILO ROAD URBANA, IL 61801")["place_name"] == (
+        "Urbana city"
+    )
 
 
 def test_places_refuse_rather_than_guess(tmp_path):

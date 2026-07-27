@@ -62,8 +62,11 @@ MULTI_COUNTY = "~~~"  # how the Census joins the counties of a place that spans 
 # Legal-status words the Census appends to a name but nobody files with:
 # "Abbeville city", "Franklin County", "Anchorage municipality".
 _STATUS = re.compile(
+    # "zona urbana" only as the whole Puerto Rican phrase — on its own,
+    # "urbana" is the name of cities in Illinois, Ohio and Iowa, and
+    # stripping it deleted every one of them from the roster.
     r"\b(?:city and borough|census area|city|town|village|borough|township|"
-    r"municipality|county|parish|cdp|comunidad|zona urbana|urbana|"
+    r"municipality|county|parish|cdp|comunidad|zona urbana|"
     r"metro government|metropolitan government|unified government|"
     r"consolidated government|balance)\b",
     re.IGNORECASE,
@@ -87,11 +90,27 @@ _STREET = re.compile(
     re.IGNORECASE,
 )
 # The trailing \b matters: without it "fl" matches the front of "Flower" and
-# eats the rest, turning Flower Mound into Mound.
+# eats the rest, turning Flower Mound into Mound. The designator that follows
+# is taken only when it looks like one — a number, a # or a lone letter —
+# because "70th Floor Chicago" and "3rd Floor San Francisco" put the city
+# immediately after the unit word, and a greedy token would swallow it.
 _UNIT = re.compile(
-    r"\b(?:suite|ste|unit|floor|fl|building|bldg|apt|#)\b\.?\s*[\w-]*", re.IGNORECASE
+    r"\b(?:suite|ste|unit|floor|fl|building|bldg|apt|#)\b\.?"
+    r"(?:\s*(?:[#\d][\w-]*|[a-z]\b))?",
+    re.IGNORECASE,
 )
 _SEGMENT = re.compile(r"[/,;()]|\s+-\s+|\s+&\s+|\s+\band\b\s+")
+# Looks like a street address: a house number, or a street-type word. Used
+# only to decide whether a segment may be mined for a trailing city name.
+_ADDRESS = re.compile(
+    r"^\s*\d+[\w-]*\s+\S|\b(?:street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|"
+    r"way|parkway|pkwy|highway|hwy|lane|ln|court|ct|place|pl|circle|cir|"
+    r"terrace|ter|trail|trl|route|rte)\b\.?",
+    re.IGNORECASE,
+)
+# No US place name runs longer than this, and a longer tail would start
+# swallowing the street.
+_ADDRESS_TAIL_WORDS = 4
 _POSTAL = {
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID",
     "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO",
@@ -338,10 +357,33 @@ def load_aliases(path: Path = ALIAS_PATH) -> dict[tuple[str, str], tuple[str, st
             )
             for r in csv.DictReader(fh)
             if r.get("state") and r.get("filed_name") and r.get("census_name")
+            and (r.get("decision") or "").strip().lower() != "reject"
         }
 
 
-def review(conn, out_path: Path = REVIEW_PATH) -> int:
+def load_rejections(path: Path = ALIAS_PATH) -> set[tuple[str, str]]:
+    """(state, folded location) strings settled as naming no place at all.
+
+    The review file is rebuilt from the database on every refresh, so a
+    string nobody can place returns to the top of it forever unless the fact
+    that it was examined is written down. Kansas and Oklahoma file against
+    workforce investment areas, and "Various Cities/Various Counties" names
+    no county in particular; these are not failures to be retried, they are
+    answers. A rejection grants no geography — it only stops the asking.
+    """
+    if not path.exists():
+        return set()
+    with open(path, newline="") as fh:
+        return {
+            (r["state"].upper(), fold(r["filed_name"]))
+            for r in csv.DictReader(fh)
+            if r.get("state") and r.get("filed_name")
+            and (r.get("decision") or "").strip().lower() == "reject"
+        }
+
+
+def review(conn, out_path: Path = REVIEW_PATH,
+           alias_path: Path = ALIAS_PATH) -> int:
     """Write the location strings that resolved to nothing, worst first.
 
     A refusal is only defensible if somebody can see it. Most of these are
@@ -349,13 +391,16 @@ def review(conn, out_path: Path = REVIEW_PATH) -> int:
     are not places and never will be — but the rest are the working list for
     data/reference/place_aliases.csv, ranked by the workers riding on them.
     """
-    resolver = Resolver()
+    resolver = Resolver(alias_path=alias_path)
+    rejected = load_rejections(alias_path)
     unresolved: dict[tuple[str, str], dict] = {}
     for row in conn.execute(
         "SELECT state, location, COALESCE(employees_affected, 0) AS jobs FROM notices "
         "WHERE location IS NOT NULL AND location != ''"
     ):
         if resolver.resolve(row["state"], row["location"])["geo_basis"]:
+            continue
+        if ((row["state"] or "").upper(), fold(row["location"])) in rejected:
             continue
         key = (row["state"], row["location"])
         entry = unresolved.setdefault(key, {"notices": 0, "workers": 0})
@@ -402,6 +447,16 @@ class Resolver:
 
     def _keys(self, state: str, location: str) -> list[tuple[str, str]]:
         """The candidate (folded name, kind) pairs inside a location string."""
+        # An alias may name the whole filed string rather than a name inside
+        # it. Segmenting finds a place only when the string contains one:
+        # "O'HARE INTERNATIONAL AIRPORT CHICAGO, IL 60666" folds to a single
+        # segment that is no place at all, and no rule will ever make it one.
+        # Naming the string outright is the only way to say where it is, and
+        # it settles the whole string rather than a word that might recur
+        # innocently elsewhere.
+        whole = self.aliases.get((state, fold(location)))
+        if whole:
+            return [whole]
         keys = []
         for segment in _SEGMENT.split(location):
             segment = _UNIT.sub(" ", segment or "")
@@ -421,6 +476,35 @@ class Resolver:
             if key:
                 keys.append(self.aliases.get((state, key), (key, "")))
         return keys
+
+    def _address_tails(self, state: str, location: str) -> list[str]:
+        """Trailing place names to try when a street address hides its city.
+
+        A US address ends "<street> <City>, <ST> <ZIP>", and the street is
+        recognisable only when it carries a type word — Illinois writes
+        "2200 E. Eldorado Decatur, IL 62521" with none, so nothing marks
+        where Eldorado stops and Decatur starts.
+
+        The city's position does, though: it is what sits at the end. So the
+        trailing words are tried as a name, longest first, and the roster
+        decides. This runs only after the ordinary reading has failed, and
+        only on segments that look like an address, so a phrase like "various
+        locations in Washington" is never mined for a place name it does not
+        claim to be.
+        """
+        tails: list[str] = []
+        for segment in _SEGMENT.split(location):
+            if not _ADDRESS.search(segment or ""):
+                continue
+            words = _ZIP.sub(" ", _UNIT.sub(" ", segment)).split()
+            while words and words[-1].upper().replace(".", "") in _POSTAL:
+                words.pop()
+            # Longest first: "West Des Moines" before "Des Moines".
+            for size in range(min(_ADDRESS_TAIL_WORDS, len(words) - 1), 0, -1):
+                key = fold(" ".join(words[-size:]))
+                if key and key not in tails:
+                    tails.append(key)
+        return tails
 
     def resolve(self, state: str, location: str | None) -> dict:
         """Place and county for one notice; every RESULT_FIELDS key is present."""
@@ -547,6 +631,26 @@ class Resolver:
                 return out
             self.refusals[(state, location)] = f"{len(found)} distinct places named"
             return out
+
+        # Last resort: the string may be a street address whose city the
+        # ordinary reading could not isolate, because nothing in it marks
+        # where the street ends. The city is at the end, so the roster is
+        # asked about the trailing words.
+        for key in self._address_tails(state, location):
+            candidates = self.places.get((state, key), [])
+            if len(candidates) > 1:
+                municipal = [c for c in candidates if c["incorporated"]]
+                candidates = municipal if len(municipal) == 1 else candidates
+            if len(candidates) == 1:
+                place = candidates[0]
+                out.update(
+                    place_name=place["name"], place_fips=place["place_fips"],
+                    county_name=place["county_name"],
+                    county_fips=place["county_fips"],
+                    latitude=place["lat"] or None, longitude=place["lon"] or None,
+                    geo_basis="address",
+                )
+                return out
 
         self.refusals[(state, location)] = (
             "name matches more than one place" if ambiguous else "no matching place"

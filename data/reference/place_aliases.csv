@@ -1,43 +1,43 @@
-state,filed_name,census_name,kind,note
-NY,Brooklyn,Kings County,county,"A New York City borough; the Census place is New York city, and the borough is coextensive with Kings County."
-NY,Queens,Queens County,county,A New York City borough coextensive with Queens County.
-NY,Jamaica,Queens County,county,A Queens neighbourhood; not a Census place.
-NY,Long Island City,Queens County,county,A Queens neighbourhood; not a Census place.
-NY,Flushing,Queens County,county,A Queens neighbourhood; not a Census place.
-NY,Astoria,Queens County,county,A Queens neighbourhood; not a Census place.
-NY,Staten Island,Richmond County,county,A New York City borough coextensive with Richmond County.
-NY,Bronx,Bronx County,county,A New York City borough coextensive with Bronx County.
-NY,Manhattan,New York County,county,A New York City borough coextensive with New York County.
-CA,Chatsworth,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Woodland Hills,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Van Nuys,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Northridge,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,North Hollywood,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Sun Valley,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,West Hills,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Sylmar,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Canoga Park,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Sherman Oaks,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Pacoima,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Encino,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Granada Hills,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Studio City,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Panorama City,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Reseda,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Tarzana,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
-CA,Hollywood,Los Angeles,,A neighbourhood of the City of Los Angeles; the only Census place named Hollywood is in Florida.
-CA,San Pedro,Los Angeles,,A harbour-area neighbourhood of the City of Los Angeles.
-CA,Wilmington,Los Angeles,,A harbour-area neighbourhood of the City of Los Angeles.
-CA,Harbor City,Los Angeles,,A harbour-area neighbourhood of the City of Los Angeles.
-CA,Venice,Los Angeles,,A coastal neighbourhood of the City of Los Angeles.
-CA,Playa Vista,Los Angeles,,A westside neighbourhood of the City of Los Angeles.
-CA,Valencia,Santa Clarita,,A master-planned community annexed by the City of Santa Clarita.
-CA,La Jolla,San Diego,,A neighbourhood of the City of San Diego.
-CA,Universal City,Los Angeles County,county,An unincorporated island within Los Angeles County; in no city at all.
-CA,Rancho Dominguez,Los Angeles County,county,An unincorporated community in Los Angeles County.
-CA,Mira Loma,Riverside County,county,"A community split between Jurupa Valley and unincorporated Riverside County."
-CA,Foothill Ranch,Lake Forest,,A planned community annexed by the City of Lake Forest.
-CA,Newbury Park,Thousand Oaks,,A community within the City of Thousand Oaks.
-UT,SLC,Salt Lake City,,The abbreviation Utah filings use for Salt Lake City.
-TX,Corpus Ch,Corpus Christi,,Corpus Christi truncated by the source's column width.
-DC,Washington DC,Washington,,The District's only Census place is Washington city.
+state,filed_name,decision,census_name,kind,note
+NY,Brooklyn,,Kings County,county,"A New York City borough; the Census place is New York city, and the borough is coextensive with Kings County."
+NY,Queens,,Queens County,county,A New York City borough coextensive with Queens County.
+NY,Jamaica,,Queens County,county,A Queens neighbourhood; not a Census place.
+NY,Long Island City,,Queens County,county,A Queens neighbourhood; not a Census place.
+NY,Flushing,,Queens County,county,A Queens neighbourhood; not a Census place.
+NY,Astoria,,Queens County,county,A Queens neighbourhood; not a Census place.
+NY,Staten Island,,Richmond County,county,A New York City borough coextensive with Richmond County.
+NY,Bronx,,Bronx County,county,A New York City borough coextensive with Bronx County.
+NY,Manhattan,,New York County,county,A New York City borough coextensive with New York County.
+CA,Chatsworth,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Woodland Hills,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Van Nuys,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Northridge,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,North Hollywood,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Sun Valley,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,West Hills,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Sylmar,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Canoga Park,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Sherman Oaks,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Pacoima,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Encino,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Granada Hills,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Studio City,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Panorama City,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Reseda,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Tarzana,,Los Angeles,,A San Fernando Valley neighbourhood of the City of Los Angeles.
+CA,Hollywood,,Los Angeles,,A neighbourhood of the City of Los Angeles; the only Census place named Hollywood is in Florida.
+CA,San Pedro,,Los Angeles,,A harbour-area neighbourhood of the City of Los Angeles.
+CA,Wilmington,,Los Angeles,,A harbour-area neighbourhood of the City of Los Angeles.
+CA,Harbor City,,Los Angeles,,A harbour-area neighbourhood of the City of Los Angeles.
+CA,Venice,,Los Angeles,,A coastal neighbourhood of the City of Los Angeles.
+CA,Playa Vista,,Los Angeles,,A westside neighbourhood of the City of Los Angeles.
+CA,Valencia,,Santa Clarita,,A master-planned community annexed by the City of Santa Clarita.
+CA,La Jolla,,San Diego,,A neighbourhood of the City of San Diego.
+CA,Universal City,,Los Angeles County,county,An unincorporated island within Los Angeles County; in no city at all.
+CA,Rancho Dominguez,,Los Angeles County,county,An unincorporated community in Los Angeles County.
+CA,Mira Loma,,Riverside County,county,A community split between Jurupa Valley and unincorporated Riverside County.
+CA,Foothill Ranch,,Lake Forest,,A planned community annexed by the City of Lake Forest.
+CA,Newbury Park,,Thousand Oaks,,A community within the City of Thousand Oaks.
+UT,SLC,,Salt Lake City,,The abbreviation Utah filings use for Salt Lake City.
+TX,Corpus Ch,,Corpus Christi,,Corpus Christi truncated by the source's column width.
+DC,Washington DC,,Washington,,The District's only Census place is Washington city.
