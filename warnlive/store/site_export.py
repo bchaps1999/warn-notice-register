@@ -61,12 +61,16 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
     annotator.prime(conn)
     resolver = Resolver()
     for n in notices:
+        # Kept until the resolver has had it: a state that publishes its city
+        # and county in their own columns has already answered the question
+        # the location string is being parsed for.
+        fields_json = n.pop("fields_json")
         n.update(
-            annotator.annotate(
-                n["employer_name"], n["display_date"], n.pop("fields_json")
-            )
+            annotator.annotate(n["employer_name"], n["display_date"], fields_json)
         )
-        n.update(resolver.resolve(n["state"], n.get("location")))
+        n.update(resolver.resolve(
+            n["state"], n.get("location"), fields_json, n["employer_name"]
+        ))
     linked_ids = {
         r["notice_id"] for r in conn.execute("SELECT DISTINCT notice_id FROM notice_links")
     } | {

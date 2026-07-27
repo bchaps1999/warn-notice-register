@@ -90,10 +90,16 @@ def _unplaced(conn: sqlite3.Connection) -> dict[str, int]:
         return {}
     counts: dict[str, int] = {}
     for row in conn.execute(
-        "SELECT state, location FROM notices "
-        "WHERE location IS NOT NULL AND location != ''"
+        "SELECT n.state AS state, n.location AS location, "
+        "       n.employer_name AS employer_name, "
+        "       (SELECT v.fields_json FROM notice_versions v "
+        "        WHERE v.notice_id = n.id AND v.version = n.current_version"
+        "       ) AS fields_json FROM notices n "
+        "WHERE n.location IS NOT NULL AND n.location != ''"
     ):
-        if not resolver.resolve(row["state"], row["location"])["geo_basis"]:
+        if not resolver.resolve(
+            row["state"], row["location"], row["fields_json"], row["employer_name"]
+        )["geo_basis"]:
             counts[row["state"]] = counts.get(row["state"], 0) + 1
     return counts
 

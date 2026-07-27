@@ -33,11 +33,14 @@ from __future__ import annotations
 import csv
 import gzip
 import io
+import json
 import logging
 import re
 import urllib.request
 import zipfile
 from pathlib import Path
+
+from warnlive.normalize.engine import filed_address
 
 logger = logging.getLogger("warnlive")
 
@@ -102,8 +105,13 @@ _UNIT = re.compile(
 _SEGMENT = re.compile(r"[/,;()]|\s+-\s+|\s+&\s+|\s+\band\b\s+")
 # Looks like a street address: a house number, or a street-type word. Used
 # only to decide whether a segment may be mined for a trailing city name.
+#
+# "st" is deliberately absent where "street" is present: abbreviated, it is
+# far more often Saint. Georgia files "St. Mountain" for Stone Mountain, and
+# reading that as a street address mined a city called Mountain out of it. A
+# real numbered address is caught by the house-number branch regardless.
 _ADDRESS = re.compile(
-    r"^\s*\d+[\w-]*\s+\S|\b(?:street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|"
+    r"^\s*\d+[\w-]*\s+\S|\b(?:street|avenue|ave|road|rd|boulevard|blvd|drive|dr|"
     r"way|parkway|pkwy|highway|hwy|lane|ln|court|ct|place|pl|circle|cir|"
     r"terrace|ter|trail|trl|route|rte)\b\.?",
     re.IGNORECASE,
@@ -111,6 +119,94 @@ _ADDRESS = re.compile(
 # No US place name runs longer than this, and a longer tail would start
 # swallowing the street.
 _ADDRESS_TAIL_WORDS = 4
+# House numbers and compass points are not street names. A tail is only a
+# city if something that could be a street is still standing in front of it.
+_DIRECTIONAL = {
+    "n", "s", "e", "w", "ne", "nw", "se", "sw",
+    "north", "south", "east", "west",
+}
+
+
+def _streetish(word: str) -> bool:
+    """Whether a word could be part of a street name."""
+    bare = word.strip(".").lower()
+    return bool(bare) and not bare.isdigit() and bare not in _DIRECTIONAL
+
+
+def _trailing_noise(word: str) -> bool:
+    """Whether a trailing word is a state abbreviation or a stray number."""
+    bare = word.strip(".")
+    return bare.upper() in _POSTAL or bare.isdigit()
+
+
+# What states call the columns they publish a city and county in.
+_FILED_CITY = ("city", "city_name", "city/town", "worksite city")
+_FILED_COUNTY = ("county", "county_name", "county name")
+
+
+def _filed_place(fields_json: str | dict | None) -> tuple[str, str]:
+    """The city and county a state published in their own columns.
+
+    Returned apart rather than glued into a string, because which column a
+    value came from is information the string form throws away. fold() strips
+    legal-status words, so "Hamilton County" and "Hamilton city" reduce to the
+    same key and a county filed as a county would come back as the city of
+    that name in a different county. A state saying "county" is worth
+    believing.
+    """
+    if not fields_json:
+        return ("", "")
+    raw = fields_json
+    if isinstance(raw, str):
+        try:
+            raw = json.loads(raw)
+        except (TypeError, ValueError):
+            return ("", "")
+    if not isinstance(raw, dict):
+        return ("", "")
+    extra = raw.get("raw_extra", raw)
+    if isinstance(extra, str):
+        try:
+            extra = json.loads(extra)
+        except (TypeError, ValueError):
+            return ("", "")
+    if not isinstance(extra, dict):
+        return ("", "")
+
+    lowered = {
+        (k or "").strip().lower(): v.strip()
+        for k, v in extra.items()
+        if isinstance(v, str) and v.strip()
+    }
+    return (
+        next((lowered[k] for k in _FILED_CITY if k in lowered), ""),
+        next((lowered[k] for k in _FILED_COUNTY if k in lowered), ""),
+    )
+
+
+def _foreign_state(state: str, location: str) -> str | None:
+    """The other state this location names, if it names one.
+
+    Two letters are a state only where an address puts one: at the very end
+    of the string, or in front of a ZIP. Everywhere else they are likelier to
+    be a word — "IN" and "OR" are Indiana and Oregon exactly as often as they
+    are English, and a street type is worse still. Georgia files "5531 Rafe
+    Ct, Flowery Branch, Georgia", where Ct is Court and reading it as
+    Connecticut would refuse a Georgia address for naming Georgia.
+    """
+    segments = [s for s in _SEGMENT.split(location) if (s or "").strip()]
+    for index, segment in enumerate(segments):
+        has_zip = bool(_ZIP.search(segment))
+        if not has_zip and index != len(segments) - 1:
+            continue
+        words = _ZIP.sub(" ", segment).split()
+        while words and words[-1].strip(".").isdigit():
+            words.pop()
+        if words:
+            trailing = words[-1].upper().replace(".", "")
+            if trailing in _POSTAL and trailing != state.upper():
+                return trailing
+    return None
 _POSTAL = {
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID",
     "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO",
@@ -395,10 +491,17 @@ def review(conn, out_path: Path = REVIEW_PATH,
     rejected = load_rejections(alias_path)
     unresolved: dict[tuple[str, str], dict] = {}
     for row in conn.execute(
-        "SELECT state, location, COALESCE(employees_affected, 0) AS jobs FROM notices "
-        "WHERE location IS NOT NULL AND location != ''"
+        "SELECT n.state AS state, n.location AS location, "
+        "       n.employer_name AS employer_name, "
+        "       COALESCE(n.employees_affected, 0) AS jobs, "
+        "       (SELECT v.fields_json FROM notice_versions v "
+        "        WHERE v.notice_id = n.id AND v.version = n.current_version"
+        "       ) AS fields_json FROM notices n "
+        "WHERE n.location IS NOT NULL AND n.location != ''"
     ):
-        if resolver.resolve(row["state"], row["location"])["geo_basis"]:
+        if resolver.resolve(
+            row["state"], row["location"], row["fields_json"], row["employer_name"]
+        )["geo_basis"]:
             continue
         if ((row["state"] or "").upper(), fold(row["location"])) in rejected:
             continue
@@ -492,33 +595,126 @@ class Resolver:
         locations in Washington" is never mined for a place name it does not
         claim to be.
         """
+        if not any(_ADDRESS.search(seg or "") for seg in _SEGMENT.split(location)):
+            return []
+
+        # Mined from the whole string rather than segment by segment. A comma
+        # splits an address into fragments — "ROUTE 148 NORTH, BOX 566 SESSER,
+        # IL 62884" — and the city ends the address, not the first fragment
+        # that happens to look like one.
+        words = _ZIP.sub(" ", _UNIT.sub(" ", location)).replace(",", " ").split()
+        # A state abbreviation and whatever trails it: no US place is a bare
+        # number, so a stray digit — half a ZIP, a site count, "MD 21240 1" —
+        # is noise, and leaving it would stop the state coming off and take
+        # the city down with it.
+        while words and _trailing_noise(words[-1]):
+            words.pop()
+
         tails: list[str] = []
-        for segment in _SEGMENT.split(location):
-            if not _ADDRESS.search(segment or ""):
+        # Longest first: "West Des Moines" before "Des Moines".
+        for size in range(min(_ADDRESS_TAIL_WORDS, len(words) - 1), 0, -1):
+            # Something recognisable as a street has to remain in front of the
+            # tail. Without this a bare street line donates its own name —
+            # "1234 Burbank" and "2200 E. Eldorado" are addresses missing
+            # their city, not places called Burbank and Eldorado.
+            if not any(_streetish(w) for w in words[:-size]):
                 continue
-            words = _ZIP.sub(" ", _UNIT.sub(" ", segment)).split()
-            while words and words[-1].upper().replace(".", "") in _POSTAL:
-                words.pop()
-            # Longest first: "West Des Moines" before "Des Moines".
-            for size in range(min(_ADDRESS_TAIL_WORDS, len(words) - 1), 0, -1):
-                key = fold(" ".join(words[-size:]))
-                if key and key not in tails:
-                    tails.append(key)
+            key = fold(" ".join(words[-size:]))
+            if key and key not in tails:
+                tails.append(key)
         return tails
 
-    def resolve(self, state: str, location: str | None) -> dict:
-        """Place and county for one notice; every RESULT_FIELDS key is present."""
+    def resolve(self, state: str, location: str | None,
+                fields_json: str | dict | None = None,
+                employer_name: str | None = None) -> dict:
+        """Place and county for one notice; every RESULT_FIELDS key is present.
+
+        The filed location string is read first, because it names the site
+        the notice is actually about. Where it yields nothing, the components
+        the state published in their own columns are tried — and they are
+        often decisive, because a string a parser cannot crack is frequently
+        accompanied by a plain county field. Illinois files "O'HARE
+        INTERNATIONAL AIRPORT CHICAGO" and a county of Cook; Texas files "DFW
+        Airport" and a county of Tarrant, settling by hand a question that
+        straddles two counties and that no amount of reasoning about the
+        string could answer.
+
+        A basis resolved this way is marked ":filed", so a consumer can tell
+        a county the state stated from one this pipeline inferred.
+        """
         state = (state or "").upper()
-        if not location or not state:
+        if not state:
             return dict.fromkeys(RESULT_FIELDS)
-        cached = self._cache.get((state, location))
-        if cached is None:
-            cached = self._resolve(state, location)
-            self._cache[(state, location)] = cached
-        return dict(cached)
+        out = dict.fromkeys(RESULT_FIELDS)
+        if location:
+            cached = self._cache.get((state, location))
+            if cached is None:
+                cached = self._resolve(state, location)
+                self._cache[(state, location)] = cached
+            out = dict(cached)
+            if out["geo_basis"]:
+                return out
+
+        city, county = _filed_place(fields_json)
+        # City with its county first: that is the shape the resolver reads
+        # best, and the county settles a city name repeating within a state.
+        for candidate in ([f"{city} ({county})"] if city and county else []) + (
+            [city] if city else []
+        ):
+            got = self.resolve(state, candidate)
+            if got["geo_basis"]:
+                got["geo_basis"] = f"{got['geo_basis']}:filed"
+                return got
+        if county:
+            got = self._county_only(state, county)
+            if got:
+                return got
+
+        # Last: the address some states append to the employer name.
+        #
+        # Florida does this on half its notices and leaves the location
+        # column empty, so "Staples 2305 S.W. 32nd Avenue, Bldg. L Pembroke
+        # Park, FL 33023" is the only record that the layoff was in Pembroke
+        # Park. Read last because it is the least deliberate of the three: a
+        # location column and a county field were filled in as such, while
+        # this is a site that happened to be typed into the wrong box.
+        address = filed_address(employer_name)
+        if address:
+            got = self.resolve(state, address)
+            if got["geo_basis"]:
+                got["geo_basis"] = f"{got['geo_basis']}:name"
+                return got
+        return out
+
+    def _county_only(self, state: str, county: str) -> dict | None:
+        """A county looked up as a county, because a state said it was one."""
+        rows = self.counties.get((state, fold(county)), [])
+        if len(rows) != 1:
+            return None
+        row = rows[0]
+        out = dict.fromkeys(RESULT_FIELDS)
+        out.update(
+            county_name=row["county_name"], county_fips=row["county_fips"],
+            latitude=row["lat"] or None, longitude=row["lon"] or None,
+            geo_basis="county:filed",
+        )
+        return out
 
     def _resolve(self, state: str, location: str) -> dict:
         out = dict.fromkeys(RESULT_FIELDS)
+
+        # A string that names its own state, and names another one, describes
+        # somewhere this notice's roster cannot reach. Illinois files "2323
+        # KENNEDY DRIVE JANESVILLE, WI 53547", and Illinois has a Janesville
+        # of its own — resolving against the filing state would put the layoff
+        # in the wrong one, silently and with full confidence. Refusing is the
+        # same trade the rest of the module makes: a missing place costs
+        # enrichment, a wrong one poisons every join built on it.
+        foreign = _foreign_state(state, location)
+        if foreign:
+            self.refusals[(state, location)] = f"address is in {foreign}, not {state}"
+            return out
+
         keys = self._keys(state, location)
         if not keys:
             self.refusals[(state, location)] = "no place name in the string"

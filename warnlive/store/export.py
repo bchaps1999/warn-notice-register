@@ -75,7 +75,7 @@ def export_csvs(
         extra = annotator.annotate(
             r[1], r[date_idx] or r[eff_idx], r["fields_json"]
         )
-        extra.update(resolver.resolve(r[0], r[loc_idx]))
+        extra.update(resolver.resolve(r[0], r[loc_idx], r["fields_json"], r[1]))
         return (
             r[0], r[1],
             *(extra[f] if extra[f] is not None else "" for f in DERIVED_COLUMNS),

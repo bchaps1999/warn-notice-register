@@ -255,6 +255,41 @@ def test_base_employer_separates_company_from_site():
     assert base_employer("A - B") is None
 
 
+def test_an_address_typed_into_the_employer_field_is_split_off():
+    """Florida appends the site address to the company name on half its
+    notices and leaves the location column empty, so one field holds both
+    who and where — and neither is usable until they are separated."""
+    from warnlive.normalize.engine import base_employer, filed_address
+
+    filed = "Staples 2305 S.W. 32nd Avenue, Bldg. L Pembroke Park, FL 33023"
+    assert base_employer(filed) == "Staples"
+    assert filed_address(filed) == "2305 S.W. 32nd Avenue, Bldg. L Pembroke Park, FL 33023"
+
+    assert base_employer("Motorola 1500 Gateway Blvd. Boynton Bch., FL 33426") == "Motorola"
+    assert base_employer("J.C. Penney 1701 Biscayne Blvd. Miami, FL 33132") == "J.C. Penney"
+
+
+def test_a_number_in_a_company_name_is_not_an_address():
+    """The rule needs both halves of its evidence. A house number alone
+    would eat every company whose name begins with a number; a street word
+    alone would eat every company named after a street."""
+    from warnlive.normalize.engine import base_employer, filed_address
+
+    for name in (
+        "99 Cents Only Store LLC",
+        "118 Churchill Avenue Corporation",
+        "255 Peter's Street Lounge",
+        "7-Eleven, Inc.",
+        "3M Company",
+        "1-800-FLOWERS.COM, Inc.",
+        "Building 5 Associates",
+        # A store number is not an address: nothing after it reads like one.
+        "Kmart 3671",
+    ):
+        assert filed_address(name) is None, name
+        assert base_employer(name) is None, name
+
+
 def test_base_employer_frees_a_stranded_legal_form():
     """cleanco strips a legal form only at the end of a string, so the
     qualifier costs the suffix too until it is cut."""
@@ -459,6 +494,101 @@ def test_places_refuse_rather_than_guess(tmp_path):
     assert r.resolve("OH", "4 - Workforce Investment Area IV")["geo_basis"] is None
 
 
+def test_the_components_a_state_published_settle_what_the_string_cannot(tmp_path):
+    """States that publish a city and county in their own columns have
+    already answered the question the location string is being parsed for.
+    Illinois files "O'HARE INTERNATIONAL AIRPORT CHICAGO" with a county of
+    Cook; Texas files "DFW Airport" with a county of Tarrant, settling by
+    hand a site that straddles two counties."""
+    import json
+
+    from warnlive.enrich.places import Resolver
+
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+
+    fields = json.dumps({"raw_extra": {"COUNTY": "Hamilton"}})
+    assert r.resolve("OH", "SOME AIRPORT NOBODY CAN PLACE")["geo_basis"] is None
+    got = r.resolve("OH", "SOME AIRPORT NOBODY CAN PLACE", fields)
+    assert got["county_name"] == "Hamilton County"
+    # Marked, so a county the state stated is distinguishable from one
+    # this pipeline inferred.
+    assert got["geo_basis"] == "county:filed"
+
+    # A notice with no location string at all is still placeable.
+    assert r.resolve("OH", "", fields)["county_name"] == "Hamilton County"
+
+    # The filed city wins over the county, being more specific...
+    both = json.dumps({"raw_extra": {"CITY": "Cincinnati", "COUNTY": "Hamilton"}})
+    assert r.resolve("OH", "???", both)["place_name"] == "Cincinnati city"
+
+    # ...and the location string still wins over both, being the site.
+    assert r.resolve("OH", "Hamilton", both)["place_name"] == "Hamilton city"
+
+    # Components that name nothing real place nothing.
+    junk = json.dumps({"raw_extra": {"CITY": "Nowheresville"}})
+    assert r.resolve("OH", "???", junk)["geo_basis"] is None
+
+
+def test_an_address_in_another_state_is_never_read_against_this_one(tmp_path):
+    """States file out-of-state addresses, and share city names with the
+    states they file into. Illinois filing a Nashville TN address must not
+    resolve to the Nashville Illinois has, which is a wrong answer given
+    with full confidence rather than a missing one."""
+    from warnlive.enrich.places import Resolver
+
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+
+    # The city is reachable by the ordinary segment reading...
+    got = r.resolve("TX", "2323 KENNEDY DRIVE HOUSTON, IL 60639")
+    assert got["geo_basis"] is None
+    assert "not TX" in r.refusals[("TX", "2323 KENNEDY DRIVE HOUSTON, IL 60639")]
+
+    # ...and by the address-tail reading. Both are refused.
+    assert r.resolve("TX", "421 Great Circle Rd Chicago, IL 60639")["geo_basis"] is None
+
+    # A string naming its own state is untouched.
+    assert r.resolve("IL", "1900 N AUSTIN AVE CHICAGO, IL 60639")["place_name"] \
+        == "Chicago city"
+
+
+def test_an_address_tail_needs_a_street_still_standing_in_front_of_it(tmp_path):
+    """A street line whose city was never filed must not donate its own name.
+    "1234 Burbank" is an address missing its city, not a place called
+    Burbank; only a house number and a compass point remain in front of it."""
+    from warnlive.enrich.places import Resolver
+
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+
+    assert r.resolve("CA", "1234 Burbank")["geo_basis"] is None
+    assert r.resolve("CA", "2200 E. Burbank")["geo_basis"] is None
+    # With a street in front of it, the trailing word is a city again.
+    assert r.resolve("CA", "2200 E. Eldorado Burbank")["place_name"] == "Burbank city"
+
+
+def test_the_city_ends_the_address_not_the_first_fragment_of_it(tmp_path):
+    """A comma splits an address into fragments. Mining each fragment in turn
+    lets an earlier one answer for the whole string: Illinois files "ROUTE
+    148 NORTH, BOX 566 SESSER, IL 62884", where the city is in the second."""
+    from warnlive.enrich.places import Resolver
+
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+
+    got = r.resolve("IL", "ROUTE 41 NORTH, BOX 566 CHICAGO, IL 62884")
+    assert got["place_name"] == "Chicago city"
+
+
+def test_an_abbreviated_saint_is_not_a_street(tmp_path):
+    """Georgia files "St. Mountain" for Stone Mountain. Read as a street
+    address it gets mined for a trailing city and finds one."""
+    from warnlive.enrich.places import Resolver
+
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+
+    assert r.resolve("TX", "St. Houston")["geo_basis"] is None
+    # A numbered address still reads as one without the bare abbreviation.
+    assert r.resolve("TX", "100 Main St Houston")["place_name"] == "Houston city"
+
+
 def test_places_prefer_the_municipality_and_fall_back_to_the_township(tmp_path):
     """Where a city and a CDP share a name an employer files from the city;
     where a state files from townships there is no place at all."""
@@ -574,3 +704,33 @@ def test_ohio_quality_bar_rejects_mangled_years():
     merged = [{"employer_name": "ABX Air, Inc. (Clinton) Grove City Franklin"}] * 90
     ok, _ = _oh_quality(merged, dated_rows=95, expected=100)
     assert not ok
+
+
+def test_an_address_in_the_employer_name_places_a_notice_with_no_location(tmp_path):
+    """Half of Florida's notices name the site only inside the company field.
+
+    The location column is empty on every one of them, so without reading
+    the name these notices are not merely mislocated — they look locationless,
+    and no amount of adjudicating the location string reaches them.
+    """
+    from warnlive.enrich.places import Resolver
+
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+
+    got = r.resolve(
+        "TX", None, None, "Staples 2305 S.W. 32nd Avenue, Bldg. L Houston, TX 77002"
+    )
+    assert got["place_name"] == "Houston city"
+    # Marked so a consumer can tell it from a location the state filed as one.
+    assert got["geo_basis"].endswith(":name")
+
+    # A filed location still wins: it was put in the location column on
+    # purpose, while an address in the name was typed into the wrong box.
+    got = r.resolve(
+        "TX", "Flower Mound", None, "Acme 100 Main St, Houston, TX 77002"
+    )
+    assert got["place_name"] == "Flower Mound town"
+    assert got["geo_basis"] == "place"
+
+    # A company whose name merely contains a number donates no location.
+    assert not r.resolve("TX", None, None, "99 Cents Only Store")["geo_basis"]

@@ -203,9 +203,27 @@ _WS = re.compile(r"\s+")
 # Everything from the first of these onward describes where, not who.
 _QUALIFIER = re.compile(
     r"""
-      \s+[-–—]\s*                 # a dash after a space; Wal-Mart keeps its own
+      \s+[-–—]\s* | [-–—]\s+      # a dash with a space on either side.
+                                  # Spaced on the left is the common form
+                                  # ("Ford Motor Co. - Flat Rock"); spaced
+                                  # only on the right is just as common a
+                                  # typo ("General Electric Company-
+                                  # Lexington") and cost that employer any
+                                  # cut at all, so the whole filed name went
+                                  # to the matcher and missed. A hyphen
+                                  # inside a name has a space on neither
+                                  # side, which is what keeps Wal-Mart,
+                                  # Harley-Davidson, Coca-Cola and
+                                  # Sanmina-SCI whole.
     | \s*[\(\[\{"“]               # parenthetical or quoted nickname
     | \s+(?:dba|d/b/a|aka|a/k/a|fka|f/k/a)\b
+    | \s*/\s*(?:updated|revised|amended|new|rescinded|cancelled)\b
+                                  # "Thomson Inc / UPDATED" — an edit marker
+                                  # some states append. Only these words: a
+                                  # bare slash joins a parent to its site in
+                                  # "Pfizer/Pharmacia" and names one company
+                                  # in "Bridgestone/Firestone", and nothing
+                                  # in the string says which.
     | \s*,\s*(?=[A-Z]{2}\b)       # ", FL 32399" — a trailing address
     | \s+(?:store|plant|facility|location|branch|site|unit)?\s*\#\s*\d
     """,
@@ -213,6 +231,86 @@ _QUALIFIER = re.compile(
 )
 # Leading edit markers some states prepend: "*Updated* Acme, Inc."
 _LEAD_MARKER = re.compile(r"^\s*[*\[]\s*(updated|revised|amended|new)[^*\]]*[*\]]\s*", re.I)
+
+# A street address appended to the company name. Florida does this on half
+# of its notices and leaves the location column empty, so "Staples 2305 S.W.
+# 32nd Avenue, Bldg. L Pembroke Park, FL 33023" is the whole record of both
+# who and where — the address is in the name because it is nowhere else.
+#
+# The house number must not begin the string, because a leading number is
+# usually part of the name: "99 Cents Only Store", "118 Churchill Avenue
+# Corporation", "255 Peter's Street Lounge". And a number alone is not an
+# address, or "Kmart 3671" would lose a store number that is at least
+# arguably part of the site. So the tail has to corroborate itself.
+_HOUSE_NUMBER = re.compile(r"(?<=\S)\s+(?:\d{2,6}(?=\s)|P\.?\s*O\.?\s+Box\b)", re.I)
+_ADDRESSISH = re.compile(
+    r"""
+      \b(?:ave|avenue|st|street|rd|road|blvd|boulevard|dr|drive|hwy|highway
+        |way|ln|lane|pkwy|parkway|ct|court|cir|circle|pl|place|ste|suite
+        |bldg|building|fl|floor|rte|route|turnpike|trail|terrace|plaza)\b\.?
+    | \bP\.?\s*O\.?\s+Box\b
+    | \b[A-Za-z]{2}\.?\s*\d{5}(?:-\d{4})?\b          # ", FL 33023"
+    """,
+    re.IGNORECASE | re.VERBOSE,
+)
+
+
+def _sane_cut(text: str, match: re.Match) -> bool:
+    """Whether a qualifier match is really the start of a site.
+
+    Only one form needs checking: a dash with a space after it and none
+    before. That form is genuinely ambiguous, because it is written both by
+    a state appending a plant — "General Electric Company- Lexington" — and
+    by one putting a stray space inside a hyphenated company name. The
+    second is common, and the four cases it produced here are all alike:
+
+        Apple- Metro, Inc.        LOUISIANA- PACIFIC CORPORATION
+        Anheuser- Busch           Take- Two Interactive Software
+
+    Three of those landed on the right company anyway, because Anheuser,
+    Louisiana and Take-Two each dominate their first word. Apple does not:
+    cutting it left "Apple", which matched Apple Inc. for a New York
+    Applebee's franchisee — a wrong identity published as fact.
+
+    What separates them is length. A site qualifier follows a company's
+    whole name, which is usually several words; a split hyphenated name
+    leaves exactly one behind. So a one-word head from this form is refused,
+    and the employer stays unidentified, which is the safe way to be wrong.
+    """
+    if not re.match(r"[-–—]\s", match.group()):
+        return True
+    head = text[: match.start()].strip()
+    return len(head.split()) > 1
+
+
+def _address_start(text: str) -> int | None:
+    """Where a street address begins inside an employer name, if it does.
+
+    Conservative on purpose: a house number only counts when what follows
+    it reads like an address — a street type, a PO box, or a ZIP. Without
+    that second condition the rule eats store numbers and any company whose
+    name simply contains a number.
+    """
+    for m in _HOUSE_NUMBER.finditer(text):
+        if _ADDRESSISH.search(text, m.end()):
+            return m.start()
+    return None
+
+
+def filed_address(value: str | None) -> str | None:
+    """The address part of an employer name, for states that append one.
+
+    The counterpart of base_employer: that returns who, this returns where.
+    Given to the place resolver as a last resort, so a notice whose location
+    column is empty is not treated as locationless when its address was
+    sitting in the name all along.
+    """
+    if not value:
+        return None
+    start = _address_start(value)
+    if start is None:
+        return None
+    return value[start:].strip(" ,-–—") or None
 
 
 def base_employer(value: str | None) -> str | None:
@@ -227,9 +325,15 @@ def base_employer(value: str | None) -> str | None:
     if not value:
         return None
     text = _LEAD_MARKER.sub("", value).strip()
-    m = _QUALIFIER.search(text)
-    if m:
-        text = text[: m.start()]
+    # Whichever comes first: the qualifier that starts naming a site, or the
+    # street address of one. Florida writes the address with no qualifier at
+    # all, so neither rule alone reaches "Staples 2305 S.W. 32nd Avenue".
+    cuts = [m.start() for m in _QUALIFIER.finditer(text) if _sane_cut(text, m)]
+    address = _address_start(text)
+    if address is not None:
+        cuts.append(address)
+    if cuts:
+        text = text[: min(cuts)]
     text = text.strip().rstrip(",;:-–— ")
     # Too little left to identify anyone, or nothing was actually cut.
     if len(text) < 4 or not any(c.isalpha() for c in text):
