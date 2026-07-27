@@ -298,6 +298,168 @@ def test_rejected_candidate_grants_nothing_and_stops_resurfacing(tmp_path):
     assert got["identity_source"] is None
 
 
+def _places_fixture(tmp_path):
+    """A miniature Census roster: the cases the resolver has to get right."""
+    import csv
+    import gzip
+
+    from warnlive.enrich.places import FIELDS, fold
+
+    rows = [
+        # Ohio files "Cincinnati (Hamilton)" and also has a city called
+        # Hamilton, so the two have to be told apart.
+        ("OH", "county", "Hamilton County", "", "39061", "Hamilton County", "1"),
+        ("OH", "county", "Butler County", "", "39017", "Butler County", "1"),
+        ("OH", "place", "Cincinnati city", "3915000", "39061", "Hamilton County", "1"),
+        ("OH", "place", "Hamilton city", "3933012", "39017", "Butler County", "1"),
+        # Two Springfields in one state, with nothing to choose between them.
+        ("OH", "place", "Springfield city", "3974608", "39023", "Clark County", "1"),
+        ("OH", "place", "Springfield city", "3974609", "39035", "Cuyahoga County", "1"),
+        # An incorporated city and a CDP sharing a name.
+        ("CA", "county", "Los Angeles County", "", "06037", "Los Angeles County", "1"),
+        ("CA", "place", "Burbank city", "0608954", "06037", "Los Angeles County", "1"),
+        ("CA", "place", "Burbank CDP", "0608955", "06085", "Santa Clara County", ""),
+        ("IL", "place", "Chicago city", "1714000", "17031", "Cook County", "1"),
+        # A city sharing its name with a county it is not in.
+        ("TX", "county", "Houston County", "", "48225", "Houston County", "1"),
+        ("TX", "county", "Harris County", "", "48201", "Harris County", "1"),
+        ("TX", "place", "Houston city", "4835000", "48201", "Harris County", "1"),
+        ("TX", "place", "Flower Mound town", "4826232", "48121", "Denton County", "1"),
+        # A township, which is a county subdivision rather than a place.
+        ("NJ", "cousub", "Edison township", "", "34023", "Middlesex County", ""),
+    ]
+    path = tmp_path / "places.csv.gz"
+    with gzip.open(path, "wt", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=FIELDS)
+        writer.writeheader()
+        for state, kind, name, place_fips, county_fips, county, inc in rows:
+            writer.writerow({
+                "state": state, "kind": kind, "key": fold(name), "name": name,
+                "place_fips": place_fips, "county_fips": county_fips,
+                "county_name": county, "lat": "40.0", "lon": "-83.0",
+                "incorporated": inc,
+            })
+    return path
+
+
+def test_places_resolve_the_shapes_states_actually_file(tmp_path):
+    """Locations arrive as a bare city, a city and county, or a street
+    address, and all three name the same kind of thing."""
+    from warnlive.enrich.places import Resolver
+
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+
+    got = r.resolve("OH", "Cincinnati (Hamilton)")
+    assert got["place_name"] == "Cincinnati city"
+    assert got["county_fips"] == "39061"
+    assert got["geo_basis"] == "place+county"
+
+    # The county in parentheses must not read as a second place, even though
+    # Ohio has a city of the same name.
+    assert r.resolve("OH", "Cincinnati (Hamilton)")["place_fips"] == "3915000"
+
+    # A street address names its city after the street; a five-digit house
+    # number must not be mistaken for a ZIP.
+    address = r.resolve("IL", "1900 NORTH AUSTIN AVENUE CHICAGO, IL 60639-5079")
+    assert address["place_name"] == "Chicago city"
+    assert r.resolve("IL", "13800 Gentilly Road Chicago")["place_name"] == "Chicago city"
+
+    # A trailing state abbreviation is not part of the name.
+    assert r.resolve("IL", "Chicago IL")["place_name"] == "Chicago city"
+
+
+def test_a_city_is_not_placed_in_the_county_that_shares_its_name(tmp_path):
+    """Houston is in Harris County; Texas also has a Houston County. One
+    segment matching both is a coincidence of names, not a filed county."""
+    from warnlive.enrich.places import Resolver
+
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+
+    houston = r.resolve("TX", "Houston")
+    assert houston["county_name"] == "Harris County"
+    assert houston["geo_basis"] == "place"
+
+    # A county named in its own segment is a filed county and does count.
+    assert r.resolve("OH", "Cincinnati (Hamilton)")["geo_basis"] == "place+county"
+
+
+def test_a_place_name_is_not_eaten_by_the_address_stripper(tmp_path):
+    """Suite and floor markers are stripped from addresses, but only as
+    whole words — "fl" must not match the front of "Flower Mound"."""
+    from warnlive.enrich.places import Resolver
+
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+
+    assert r.resolve("TX", "Flower Mound")["place_name"] == "Flower Mound town"
+    assert r.resolve("TX", "Houston, Suite 400")["place_name"] == "Houston city"
+
+
+def test_places_refuse_rather_than_guess(tmp_path):
+    """A wrong place poisons every join built on it, so ambiguity resolves
+    to nothing — and never across a state line."""
+    from warnlive.enrich.places import Resolver
+
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+
+    # Two Springfields, no county to choose between them.
+    assert r.resolve("OH", "Springfield")["county_fips"] is None
+    assert "more than one place" in r.refusals[("OH", "Springfield")]
+
+    # Chicago is in Illinois; a New Jersey notice naming it resolves to
+    # nothing rather than reaching into another state.
+    assert r.resolve("NJ", "Chicago")["geo_basis"] is None
+
+    # A workforce investment area is not a place and must not become one.
+    assert r.resolve("OH", "4 - Workforce Investment Area IV")["geo_basis"] is None
+
+
+def test_places_prefer_the_municipality_and_fall_back_to_the_township(tmp_path):
+    """Where a city and a CDP share a name an employer files from the city;
+    where a state files from townships there is no place at all."""
+    from warnlive.enrich.places import Resolver
+
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+
+    burbank = r.resolve("CA", "Burbank")
+    assert burbank["place_name"] == "Burbank city"
+    assert burbank["county_fips"] == "06037"
+
+    edison = r.resolve("NJ", "Edison")
+    assert edison["place_name"] is None
+    assert edison["county_fips"] == "34023"
+    assert edison["geo_basis"] == "subdivision"
+
+
+def test_place_aliases_can_name_a_county_when_there_is_no_city(tmp_path):
+    """Brooklyn is a borough, not a Census place; aliasing it to a city
+    would be wrong, so the alias names its county instead."""
+    import csv
+
+    from warnlive.enrich.places import Resolver
+
+    alias_path = tmp_path / "aliases.csv"
+    with open(alias_path, "w", newline="") as fh:
+        writer = csv.DictWriter(
+            fh, fieldnames=["state", "filed_name", "census_name", "kind", "note"]
+        )
+        writer.writeheader()
+        writer.writerow({
+            "state": "CA", "filed_name": "Chatsworth",
+            "census_name": "Burbank", "kind": "", "note": "a neighbourhood",
+        })
+        writer.writerow({
+            "state": "CA", "filed_name": "Universal City",
+            "census_name": "Los Angeles County", "kind": "county",
+            "note": "unincorporated",
+        })
+    r = Resolver(path=_places_fixture(tmp_path), alias_path=alias_path)
+
+    assert r.resolve("CA", "Chatsworth")["place_name"] == "Burbank city"
+    unincorporated = r.resolve("CA", "Universal City")
+    assert unincorporated["place_name"] is None
+    assert unincorporated["county_fips"] == "06037"
+
+
 def test_ohio_column_labels_come_from_the_values(tmp_path):
     """Ohio's yearly PDFs centre their headers over left-aligned data, so
     columns are identified by what they contain, not by a header row."""

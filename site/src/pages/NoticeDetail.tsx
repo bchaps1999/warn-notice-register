@@ -44,6 +44,22 @@ export function NoticeDetailPage() {
       <SectionHeading>Filing</SectionHeading>
       <dl className="grid grid-cols-[11rem_1fr] gap-y-2 text-sm">
         <Row label="Location">{n.location ?? "—"}</Row>
+        {n.county_fips && (
+          <Row label="Resolved place">
+            <Link
+              to={`/explore?state=${n.state}&county=${n.county_fips}`}
+              className="hover:underline"
+            >
+              {n.place_name ? `${n.place_name}, ` : ""}
+              {n.county_name}
+            </Link>
+            <span className="tabular text-xs text-ink-muted ml-2">
+              FIPS {n.county_fips}
+              {n.geo_basis === "county" && " · county only"}
+              {n.geo_basis === "subdivision" && " · township"}
+            </span>
+          </Row>
+        )}
         <Row label="Notice date">{date(n.notice_date)}</Row>
         <Row label="Layoff/closure date">{date(n.effective_date)}</Row>
         <Row label="Workers affected">

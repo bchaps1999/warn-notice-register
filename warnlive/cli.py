@@ -480,6 +480,21 @@ def gleif_refresh(db_path: Path, top_n: int) -> None:
     click.echo(f"{gleif.PATH}: {n} matched")
 
 
+@cli.command("places-refresh")
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+def places_refresh(db_path: Path) -> None:
+    """Rebuild the Census place and county roster used to resolve notice
+    locations, and list the locations it cannot place."""
+    from warnlive.enrich import places
+
+    n = places.refresh()
+    click.echo(f"{places.PATH}: {n} places and counties")
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    unresolved = places.review(conn)
+    click.echo(f"{places.REVIEW_PATH}: {unresolved} unresolved locations")
+
+
 @cli.command("wikidata-refresh")
 def wikidata_refresh() -> None:
     """Fetch all Wikidata entities carrying an SEC CIK (P5531) with parent

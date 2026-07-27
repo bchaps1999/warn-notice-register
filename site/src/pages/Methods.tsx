@@ -88,6 +88,16 @@ export function Methods() {
         <span className="text-ink-muted">{pct(r.identified, r.notices)}</span>
       ),
     },
+    {
+      key: "placed",
+      header: "Placed to a county",
+      numeric: true,
+      render: (r) => (
+        <span className={r.placed ? "text-ink-muted" : "text-oxide"}>
+          {pct(r.placed, r.notices)}
+        </span>
+      ),
+    },
   ];
 
   return (
@@ -102,7 +112,7 @@ export function Methods() {
       </p>
 
       <SectionHeading>What is in the data</SectionHeading>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-6">
         <StatTile label="Notices" value={num(t.notices)}
           sub={meta.date_range ? `since ${date(meta.date_range.min)}` : undefined} />
         <StatTile label="States collected" value={String(t.states)}
@@ -111,6 +121,8 @@ export function Methods() {
           sub="matched to a company register" />
         <StatTile label="Industry recorded" value={pct(t.with_industry, t.notices)}
           sub="published or derived" />
+        <StatTile label="Placed to a county" value={pct(t.placed, t.notices)}
+          sub="location resolved to Census geography" />
       </div>
 
       <SectionHeading sub="Every figure on this site inherits these gaps. They are properties of what states publish, not of the collection.">
@@ -190,6 +202,31 @@ export function Methods() {
         {pct(t.notices - t.identified, t.notices)} of notices carry no company
         identifier: most are single-location businesses in no public register,
         and a wrong identifier would be worse than none.
+      </p>
+
+      <SectionHeading>How locations become places</SectionHeading>
+      <p className="text-sm font-serif text-ink-muted max-w-2xl leading-relaxed">
+        States write a location however they like: a bare city, a city and its
+        county, a full street address, several sites in one field. Each is
+        matched against the Census rosters of places, counties and townships
+        within the filing state, so a notice can carry a county FIPS code that
+        joins to other federal data instead of a string that joins to nothing.
+        {" "}{pct(t.placed, t.notices)} of notices reach a county.
+      </p>
+      <p className="text-sm font-serif text-ink-muted max-w-2xl leading-relaxed mt-3">
+        The rule is the one used for employers: a name that could be two places
+        in the state resolves to neither, and matching never crosses a state
+        line. Where a state files the county alongside the city, that county
+        settles names that would otherwise be ambiguous. A city that shares its
+        name with a county it is not in — Houston is in Harris County, Iowa City
+        in Johnson — is placed by the city, not the coincidence.
+      </p>
+      <p className="text-sm font-serif text-ink-muted max-w-2xl leading-relaxed mt-3">
+        Some filings name no place at all and never will. Kansas, Vermont, Maine
+        and Oklahoma file against workforce investment areas; other notices say
+        "statewide" or "various". These are absent from every map and county
+        table rather than counted as zero, which is why a county map is a view
+        of {pct(t.placed, t.notices)} of the register and not all of it.
       </p>
 
       <SectionHeading>Provenance</SectionHeading>

@@ -73,11 +73,39 @@ FROM notices GROUP BY state
 """
 
 
+def _unplaced(conn: sqlite3.Connection) -> dict[str, int]:
+    """Per state, how many notices carry a location that resolves to nowhere.
+
+    Geography is derived rather than stored, so this is the one metric the
+    snapshot has to compute rather than read. It exists because a change to
+    the location parsing or the place roster would otherwise silently drop
+    the county from thousands of notices, which is exactly the failure the
+    Wisconsin column-mapping bug taught us to watch for. If the roster has
+    not been built, the metric is omitted rather than reported as a collapse.
+    """
+    from warnlive.enrich.places import Resolver
+
+    resolver = Resolver()
+    if not resolver.places:
+        return {}
+    counts: dict[str, int] = {}
+    for row in conn.execute(
+        "SELECT state, location FROM notices "
+        "WHERE location IS NOT NULL AND location != ''"
+    ):
+        if not resolver.resolve(row["state"], row["location"])["geo_basis"]:
+            counts[row["state"]] = counts.get(row["state"], 0) + 1
+    return counts
+
+
 def build_snapshot(conn: sqlite3.Connection) -> dict:
     """Per-state and national metrics describing the database as it stands."""
     states = {}
+    unplaced = _unplaced(conn)
     for row in conn.execute(_METRIC_SQL):
         states[row["state"]] = {k: row[k] for k in row.keys() if k != "state"}
+        if unplaced:
+            states[row["state"]]["unplaced"] = unplaced.get(row["state"], 0)
     links = conn.execute(
         "SELECT COUNT(*) AS c FROM notice_links "
         "WHERE kind = 'possible_duplicate' AND score >= ?",
@@ -142,7 +170,11 @@ def check_regressions(conn: sqlite3.Connection, previous: dict | None) -> Verifi
             and now["workers"] > before["workers"] * WORKER_GROWTH_MAX
         ):
             grew.append(f"{postal} {before['workers']:,}->{now['workers']:,}")
-        for field in ("undated", "no_jobs", "no_location"):
+        for field in ("undated", "no_jobs", "no_location", "unplaced"):
+            # "unplaced" is absent from snapshots taken before the place
+            # roster existed; a missing metric is not a regression.
+            if field not in now or field not in before:
+                continue
             shift = abs(
                 _rate(now[field], now["notices"]) - _rate(before[field], before["notices"])
             )

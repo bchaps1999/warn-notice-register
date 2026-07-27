@@ -5,6 +5,7 @@ import type { FeatureCollection, Geometry } from "geojson";
 import statesTopo from "us-atlas/states-10m.json";
 import { useNavigate } from "react-router-dom";
 import { num } from "../../lib/format";
+import { RAMP_DARK, RAMP_LIGHT } from "./ramp";
 
 // FIPS -> postal for us-atlas state ids
 const FIPS: Record<string, string> = {
@@ -18,10 +19,6 @@ const FIPS: Record<string, string> = {
   "47": "TN", "48": "TX", "49": "UT", "50": "VT", "51": "VA", "53": "WA",
   "54": "WV", "55": "WI", "56": "WY",
 };
-
-// Sequential oxide ramp, light -> dark (monotonic lightness), per mode via CSS.
-const RAMP_LIGHT = ["#f3e2d8", "#e5bda9", "#d4977c", "#c07052", "#a84a2e", "#8c2f1b"];
-const RAMP_DARK = ["#3a2018", "#5a3021", "#7c422b", "#9e5535", "#c06a42", "#e08154"];
 
 export function Choropleth({
   values,

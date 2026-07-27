@@ -1,3 +1,4 @@
+import { lazy, Suspense, useState } from "react";
 import { Link } from "react-router-dom";
 import { useMeta, useNational } from "../lib/hooks";
 import { date, displayName, num } from "../lib/format";
@@ -9,6 +10,14 @@ import { Bar } from "../components/ui/Bar";
 import { MonthlyTrend } from "../components/charts/MonthlyTrend";
 import { Choropleth } from "../components/charts/Choropleth";
 
+// The county topology is a megabyte of boundaries, and most visits never open
+// the county view — so it is fetched when that view is, not on every load.
+const CountyChoropleth = lazy(() =>
+  import("../components/charts/CountyChoropleth").then((m) => ({
+    default: m.CountyChoropleth,
+  }))
+);
+
 /** Change against the same window a year earlier; null when there is no
  *  prior period to compare against. */
 function change(now: number, before: number): number | null {
@@ -18,6 +27,7 @@ function change(now: number, before: number): number | null {
 export function Dashboard() {
   const { data: meta, error: metaErr } = useMeta();
   const { data: national, error: natErr } = useNational();
+  const [geography, setGeography] = useState<"state" | "county">("state");
 
   if (metaErr || natErr) return <ErrorNote message={metaErr ?? natErr ?? ""} />;
   if (!meta || !national) return <Skeleton lines={8} />;
@@ -32,6 +42,13 @@ export function Dashboard() {
       .map(([postal]) => postal)
   );
   const mapValues = Object.fromEntries(t12.map((s) => [s.state, s.workers]));
+  const countyValues = Object.fromEntries(
+    national.counties_12mo.map((c) => [c.fips, c.workers])
+  );
+  // Say what the county map leaves out rather than letting blank read as none.
+  const placedShare = notices12
+    ? `${Math.round((national.placed_12mo / notices12) * 100)}%`
+    : "none";
 
   const sectors = national.sectors_12mo.filter((s) => s.sector);
   const sectorPeak = Math.max(1, ...sectors.map((s) => s.workers));
@@ -81,11 +98,43 @@ export function Dashboard() {
 
       <div className="grid lg:grid-cols-5 gap-10">
         <div className="lg:col-span-3">
-          <SectionHeading sub="Trailing 12 months. Unshaded states publish no notice-level list.">
-            Workers affected by state
+          <SectionHeading
+            sub={
+              geography === "state"
+                ? "Trailing 12 months. Unshaded states publish no notice-level list."
+                : `Trailing 12 months, across ${num(national.counties_12mo.length)} counties. ` +
+                  `${placedShare} of notices in the window name a location a county could be found for.`
+            }
+            right={
+              <div className="flex gap-3">
+                {(["state", "county"] as const).map((mode) => (
+                  <button
+                    key={mode}
+                    onClick={() => setGeography(mode)}
+                    className={
+                      "smallcaps text-[10px] " +
+                      (geography === mode
+                        ? "text-oxide underline"
+                        : "text-ink-muted hover:text-ink")
+                    }
+                  >
+                    {mode === "state" ? "By state" : "By county"}
+                  </button>
+                ))}
+              </div>
+            }
+          >
+            Workers affected by {geography}
           </SectionHeading>
-          <Choropleth values={mapValues} activeStates={activeStates}
-            label="workers affected, trailing 12 mo" />
+          {geography === "state" ? (
+            <Choropleth values={mapValues} activeStates={activeStates}
+              label="workers affected, trailing 12 mo" />
+          ) : (
+            <Suspense fallback={<Skeleton lines={10} />}>
+              <CountyChoropleth values={countyValues}
+                label="workers affected, trailing 12 mo" />
+            </Suspense>
+          )}
         </div>
         <div className="lg:col-span-2">
           <SectionHeading

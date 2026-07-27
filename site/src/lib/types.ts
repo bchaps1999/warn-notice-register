@@ -12,6 +12,7 @@ export interface StateCoverage {
   no_location: number;
   archived: number;
   identified: number;
+  placed: number;
 }
 
 export interface Meta {
@@ -27,6 +28,7 @@ export interface Meta {
     archived: number;
     identified: number;
     with_industry: number;
+    placed: number;
   };
   date_range: { min: string; max: string } | null;
   states: Record<string, StateCoverage>;
@@ -70,8 +72,18 @@ export interface National {
   top_employers_12mo: TopEmployer[];
   biggest_recent: NoticeSummary[];
   states_12mo: { state: string; notices: number; workers: number }[];
+  counties_12mo: CountyPoint[];
+  placed_12mo: number;
   sectors_12mo: SectorPoint[];
   prior_12mo: { notices: number; workers: number; sectors: SectorPoint[] };
+}
+
+export interface CountyPoint {
+  fips: string;
+  county: string;
+  state: string;
+  notices: number;
+  workers: number;
 }
 
 export interface Sector {
@@ -116,7 +128,13 @@ export interface StateData {
     last_success: string | null;
     consecutive_failures: number;
   };
-  coverage: { notices: number; earliest: string | null; latest: string | null };
+  coverage: {
+    notices: number;
+    earliest: string | null;
+    latest: string | null;
+    placed: number;
+  };
+  counties: CountyPoint[];
   monthly: MonthPoint[];
   top_employers: TopEmployer[];
   top_employers_24mo: TopEmployer[];
@@ -127,6 +145,7 @@ export interface NoticeIndex {
   states: string[];
   types: string[];
   sectors: Sector[];
+  counties: { fips: string; name: string; state: string }[];
   count: number;
   columns: {
     key: string[];
@@ -138,6 +157,7 @@ export interface NoticeIndex {
     type: number[];
     flags: number[];
     sector: number[];
+    county: number[];
   };
 }
 
@@ -208,6 +228,13 @@ export interface NoticeDetail {
   parent_company: string | null;
   parent_cik: number | null;
   employer_key: string;
+  place_name: string | null;
+  place_fips: string | null;
+  county_name: string | null;
+  county_fips: string | null;
+  latitude: string | null;
+  longitude: string | null;
+  geo_basis: string | null;
   industry: string | null;
   naics: string | null;
   naics_basis: string | null;

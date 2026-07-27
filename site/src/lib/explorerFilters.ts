@@ -9,6 +9,7 @@ export interface Filters {
   to: string;
   minJobs: number | null;
   sector: string; // NAICS sector code or ""
+  county: string; // county FIPS or ""
   publicOnly: boolean; // only notices matched to an SEC CIK
   sort: SortKey;
   dir: "asc" | "desc";
@@ -24,6 +25,7 @@ export const DEFAULT_FILTERS: Filters = {
   to: "",
   minJobs: null,
   sector: "",
+  county: "",
   publicOnly: false,
   sort: "date",
   dir: "desc",
@@ -40,6 +42,7 @@ export function filtersFromParams(p: URLSearchParams): Filters {
     to: p.get("to") ?? "",
     minJobs: p.get("minJobs") ? Number(p.get("minJobs")) : null,
     sector: p.get("sector") ?? "",
+    county: p.get("county") ?? "",
     publicOnly: p.get("public") === "1",
     sort: (["date", "employer", "jobs", "state"] as const).includes(sort as SortKey)
       ? (sort as SortKey)
@@ -57,6 +60,7 @@ export function paramsFromFilters(f: Filters): URLSearchParams {
   if (f.to) p.set("to", f.to);
   if (f.minJobs !== null) p.set("minJobs", String(f.minJobs));
   if (f.sector) p.set("sector", f.sector);
+  if (f.county) p.set("county", f.county);
   if (f.publicOnly) p.set("public", "1");
   if (f.sort !== "date") p.set("sort", f.sort);
   if (f.dir !== "desc") p.set("dir", f.dir);
@@ -79,11 +83,14 @@ export function applyFilters(
   haystack: string[],
   f: Filters
 ): number[] {
-  const { state, date, jobs, type, flags, sector } = index.columns;
+  const { state, date, jobs, type, flags, sector, county } = index.columns;
   const stateIdx = f.state ? index.states.indexOf(f.state) : -1;
   const typeIdx = f.type ? index.types.indexOf(f.type) : -1;
   const sectorIdx = f.sector
     ? index.sectors.findIndex((s) => s.code === f.sector)
+    : -1;
+  const countyIdx = f.county
+    ? index.counties.findIndex((c) => c.fips === f.county)
     : -1;
   const q = f.q.trim().toLowerCase();
 
@@ -96,6 +103,7 @@ export function applyFilters(
     if (f.to && (!d || d > f.to)) continue;
     if (f.minJobs !== null && (jobs[i] ?? -1) < f.minJobs) continue;
     if (sectorIdx >= 0 && sector[i] !== sectorIdx) continue;
+    if (countyIdx >= 0 && county[i] !== countyIdx) continue;
     if (f.publicOnly && !(flags[i] & FLAG_PUBLIC)) continue;
     if (q && !haystack[i].includes(q)) continue;
     rows.push(i);
@@ -122,6 +130,7 @@ function sortRows(index: NoticeIndex, rows: number[], sort: SortKey, dir: "asc" 
 export interface FacetCounts {
   states: { value: string; label: string; count: number; weight: number }[];
   sectors: { value: string; label: string; count: number; weight: number }[];
+  counties: { value: string; label: string; count: number; weight: number }[];
 }
 
 /** Facet counts over a result set.
@@ -136,7 +145,8 @@ export function facetCounts(
 ): FacetCounts {
   const stateRows = applyFilters(index, haystack, { ...f, state: "" });
   const sectorRows = applyFilters(index, haystack, { ...f, sector: "" });
-  const { state, sector, jobs } = index.columns;
+  const countyRows = applyFilters(index, haystack, { ...f, county: "" });
+  const { state, sector, county, jobs } = index.columns;
 
   const tally = (rows: number[], col: (i: number) => number, size: number) => {
     const counts = new Array<number>(size).fill(0);
@@ -152,6 +162,7 @@ export function facetCounts(
 
   const st = tally(stateRows, (i) => state[i], index.states.length);
   const sc = tally(sectorRows, (i) => sector[i], index.sectors.length);
+  const ct = tally(countyRows, (i) => county[i], index.counties.length);
   return {
     states: index.states
       .map((code, i) => ({
@@ -165,5 +176,17 @@ export function facetCounts(
       }))
       .filter((x) => x.count > 0)
       .sort((a, b) => b.count - a.count),
+    // Two thousand counties is far too many to list, so only the ones
+    // carrying real weight in the current result set are offered.
+    counties: index.counties
+      .map((c, i) => ({
+        value: c.fips,
+        label: `${c.name.replace(/ (County|Parish|Borough|Municipality|Census Area)$/, "")}, ${c.state}`,
+        count: ct.counts[i],
+        weight: ct.weights[i],
+      }))
+      .filter((x) => x.count > 0)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 40),
   };
 }

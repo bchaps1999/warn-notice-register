@@ -57,18 +57,25 @@ def export_csvs(
     # data/reference and are empty until those are built (warnlive
     # edgar-refresh, edgar-sic-refresh, nonprofit-refresh, gleif-refresh,
     # wikidata-refresh); see warnlive.enrich.annotate.
-    from warnlive.enrich.annotate import FIELDS as DERIVED_COLUMNS, Annotator
+    from warnlive.enrich.annotate import FIELDS as IDENTITY_COLUMNS, Annotator
+    from warnlive.enrich.places import RESULT_FIELDS as PLACE_COLUMNS, Resolver
 
     annotator = Annotator()
     annotator.prime(conn)
+    # Geography belongs to the notice rather than the employer, so it is
+    # resolved separately and merged in beside the identity columns.
+    resolver = Resolver()
+    DERIVED_COLUMNS = IDENTITY_COLUMNS + PLACE_COLUMNS
     header = EXPORT_COLUMNS[:2] + DERIVED_COLUMNS + EXPORT_COLUMNS[2:]
     date_idx = EXPORT_COLUMNS.index("notice_date")
     eff_idx = EXPORT_COLUMNS.index("effective_date")
+    loc_idx = EXPORT_COLUMNS.index("location")
 
     def derived(r: sqlite3.Row) -> tuple:
         extra = annotator.annotate(
             r[1], r[date_idx] or r[eff_idx], r["fields_json"]
         )
+        extra.update(resolver.resolve(r[0], r[loc_idx]))
         return (
             r[0], r[1],
             *(extra[f] if extra[f] is not None else "" for f in DERIVED_COLUMNS),

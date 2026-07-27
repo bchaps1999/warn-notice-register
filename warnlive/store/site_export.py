@@ -55,15 +55,18 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
     # Derived annotations (same logic as the CSV exports); they flow into
     # the detail shards via dict(n), and CIK presence into FLAG_PUBLIC.
     from warnlive.enrich.annotate import Annotator
+    from warnlive.enrich.places import Resolver
 
     annotator = Annotator()
     annotator.prime(conn)
+    resolver = Resolver()
     for n in notices:
         n.update(
             annotator.annotate(
                 n["employer_name"], n["display_date"], n.pop("fields_json")
             )
         )
+        n.update(resolver.resolve(n["state"], n.get("location")))
     linked_ids = {
         r["notice_id"] for r in conn.execute("SELECT DISTINCT notice_id FROM notice_links")
     } | {
@@ -150,6 +153,29 @@ def _notice_summary(n, prefix_len: int) -> dict:
     }
 
 
+def _county_series(rows, limit: int | None = None) -> list[dict]:
+    """Notices and workers per county, for the maps and county tables.
+
+    Notices whose location did not resolve are simply absent — a county map
+    can only show what could be placed, and the share that could not is
+    reported separately rather than folded in as a zero.
+    """
+    agg: dict[str, dict] = {}
+    for n in rows:
+        fips = n.get("county_fips")
+        if not fips:
+            continue
+        entry = agg.setdefault(
+            fips,
+            {"fips": fips, "county": n["county_name"], "state": n["state"],
+             "notices": 0, "workers": 0},
+        )
+        entry["notices"] += 1
+        entry["workers"] += n["employees_affected"] or 0
+    ranked = sorted(agg.values(), key=lambda e: -e["workers"])
+    return ranked[:limit] if limit else ranked
+
+
 def _top_employers(rows, since: str | None, limit: int) -> list[dict]:
     """Aggregate by identity key (not raw spelling), labeled with the
     group's most common raw name."""
@@ -199,7 +225,7 @@ def _build_meta(notices, status: dict, prefix_len: int) -> dict:
         e = per_state.setdefault(
             n["state"],
             {"first": None, "last": None, "undated": 0, "no_jobs": 0,
-             "no_location": 0, "archived": 0, "identified": 0},
+             "no_location": 0, "archived": 0, "identified": 0, "placed": 0},
         )
         d = n["display_date"]
         if d:
@@ -215,11 +241,13 @@ def _build_meta(notices, status: dict, prefix_len: int) -> dict:
             e["archived"] += 1
         if n["cik"] or n["ein"] or n["lei"] or n["wikidata_qid"]:
             e["identified"] += 1
+        if n.get("county_fips"):
+            e["placed"] += 1
 
     def quality(rows: dict) -> dict:
         return {k: rows[k] for k in
                 ("first", "last", "undated", "no_jobs", "no_location",
-                 "archived", "identified")}
+                 "archived", "identified", "placed")}
 
     return {
         "built_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -239,6 +267,7 @@ def _build_meta(notices, status: dict, prefix_len: int) -> dict:
                 if n["cik"] or n["ein"] or n["lei"] or n["wikidata_qid"]
             ),
             "with_industry": sum(1 for n in notices if n["naics"]),
+            "placed": sum(1 for n in notices if n.get("county_fips")),
         },
         "date_range": {"min": min(dates), "max": max(dates)} if dates else None,
         "states": {
@@ -251,7 +280,8 @@ def _build_meta(notices, status: dict, prefix_len: int) -> dict:
                 "source": s.get("source"),
                 **quality(per_state.get(postal, {
                     "first": None, "last": None, "undated": 0, "no_jobs": 0,
-                    "no_location": 0, "archived": 0, "identified": 0})),
+                    "no_location": 0, "archived": 0, "identified": 0,
+                    "placed": 0})),
             }
             for postal, s in sorted(status.items())
         },
@@ -309,6 +339,8 @@ def _build_national(notices, prefix_len: int) -> dict:
         "top_employers_12mo": _top_employers(dated, t12, 25),
         "biggest_recent": [_notice_summary(n, prefix_len) for n in biggest_recent],
         "states_12mo": sorted(state_agg.values(), key=lambda e: -e["workers"]),
+        "counties_12mo": _county_series(in_window),
+        "placed_12mo": sum(1 for n in in_window if n.get("county_fips")),
         "sectors_12mo": _sector_series(in_window),
         # The comparable window a year earlier, so the site can say whether
         # the current one is unusual rather than only how big it is.
@@ -345,7 +377,12 @@ def _build_state(postal: str, rows, health: dict, cfg, prefix_len: int) -> dict:
             "notices": len(rows),
             "earliest": min((n["display_date"] for n in dated), default=None),
             "latest": max((n["display_date"] for n in dated), default=None),
+            # How much of this state could be put on a map, so a county view
+            # can say what it is leaving out. Kansas files against workforce
+            # areas, so its answer is close to none.
+            "placed": sum(1 for n in rows if n.get("county_fips")),
         },
+        "counties": _county_series(rows),
         "monthly": _monthly_series(rows),
         "top_employers": _top_employers(dated, None, 20),
         "top_employers_24mo": _top_employers(dated, _shift_months(anchor, 24), 20),
@@ -364,9 +401,22 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
     sectors = list(SECTOR_LABELS)
     sector_idx = {code: i for i, code in enumerate(sectors)}
 
+    # Counties ride as an index into a table of their own, the way sectors
+    # do: one small integer per notice rather than a repeated FIPS string
+    # and name across ninety thousand rows.
+    counties = sorted(
+        {
+            (n["county_fips"], n["county_name"], n["state"])
+            for n in notices if n.get("county_fips")
+        },
+        key=lambda c: (c[2], c[1]),
+    )
+    county_idx = {fips: i for i, (fips, _, _) in enumerate(counties)}
+
     cols: dict[str, list] = {
         "key": [], "state": [], "date": [], "employer": [],
         "location": [], "jobs": [], "type": [], "flags": [], "sector": [],
+        "county": [],
     }
     for n in notices:
         flags = (
@@ -386,10 +436,15 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
         cols["flags"].append(flags)
         sector = sector_of(n["naics"])
         cols["sector"].append(sector_idx[sector] if sector else -1)
+        cols["county"].append(county_idx.get(n.get("county_fips"), -1))
     return {
         "states": states,
         "types": TYPES,
         "sectors": [{"code": c, "label": SECTOR_LABELS[c]} for c in sectors],
+        "counties": [
+            {"fips": fips, "name": name, "state": state}
+            for fips, name, state in counties
+        ],
         "count": len(notices),
         "columns": cols,
     }

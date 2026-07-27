@@ -11,6 +11,7 @@
    "no_location": 0,
    "notices": 66,
    "undated": 0,
+   "unplaced": 19,
    "workers": 9609
   },
   "AL": {
@@ -22,6 +23,7 @@
    "no_location": 4,
    "notices": 1037,
    "undated": 0,
+   "unplaced": 30,
    "workers": 179429
   },
   "AZ": {
@@ -33,6 +35,7 @@
    "no_location": 18,
    "notices": 1072,
    "undated": 0,
+   "unplaced": 115,
    "workers": 138750
   },
   "CA": {
@@ -44,6 +47,7 @@
    "no_location": 4340,
    "notices": 25162,
    "undated": 10987,
+   "unplaced": 437,
    "workers": 2172512
   },
   "CO": {
@@ -55,6 +59,7 @@
    "no_location": 54,
    "notices": 879,
    "undated": 12,
+   "unplaced": 209,
    "workers": 89742
   },
   "CT": {
@@ -66,6 +71,7 @@
    "no_location": 15,
    "notices": 656,
    "undated": 0,
+   "unplaced": 73,
    "workers": 78700
   },
   "DC": {
@@ -77,6 +83,7 @@
    "no_location": 0,
    "notices": 168,
    "undated": 0,
+   "unplaced": 0,
    "workers": 28245
   },
   "DE": {
@@ -88,6 +95,7 @@
    "no_location": 86,
    "notices": 102,
    "undated": 0,
+   "unplaced": 6,
    "workers": 16486
   },
   "FL": {
@@ -99,6 +107,7 @@
    "no_location": 2568,
    "notices": 5373,
    "undated": 0,
+   "unplaced": 186,
    "workers": 630396
   },
   "GA": {
@@ -110,6 +119,7 @@
    "no_location": 0,
    "notices": 4152,
    "undated": 4152,
+   "unplaced": 206,
    "workers": 501015
   },
   "HI": {
@@ -121,6 +131,7 @@
    "no_location": 453,
    "notices": 453,
    "undated": 0,
+   "unplaced": 0,
    "workers": 0
   },
   "IA": {
@@ -132,6 +143,7 @@
    "no_location": 0,
    "notices": 952,
    "undated": 0,
+   "unplaced": 7,
    "workers": 59033
   },
   "ID": {
@@ -143,6 +155,7 @@
    "no_location": 1,
    "notices": 193,
    "undated": 0,
+   "unplaced": 23,
    "workers": 21813
   },
   "IL": {
@@ -154,6 +167,7 @@
    "no_location": 0,
    "notices": 5692,
    "undated": 0,
+   "unplaced": 1469,
    "workers": 777976
   },
   "IN": {
@@ -165,6 +179,7 @@
    "no_location": 0,
    "notices": 1011,
    "undated": 0,
+   "unplaced": 81,
    "workers": 152037
   },
   "KS": {
@@ -176,6 +191,7 @@
    "no_location": 2,
    "notices": 2807,
    "undated": 0,
+   "unplaced": 2611,
    "workers": 256777
   },
   "KY": {
@@ -187,6 +203,7 @@
    "no_location": 554,
    "notices": 1756,
    "undated": 12,
+   "unplaced": 48,
    "workers": 274677
   },
   "LA": {
@@ -198,6 +215,7 @@
    "no_location": 2,
    "notices": 629,
    "undated": 1,
+   "unplaced": 196,
    "workers": 87123
   },
   "MA": {
@@ -209,6 +227,7 @@
    "no_location": 0,
    "notices": 553,
    "undated": 4,
+   "unplaced": 131,
    "workers": 58666
   },
   "MD": {
@@ -220,6 +239,7 @@
    "no_location": 1,
    "notices": 1407,
    "undated": 0,
+   "unplaced": 310,
    "workers": 118048
   },
   "ME": {
@@ -231,6 +251,7 @@
    "no_location": 0,
    "notices": 577,
    "undated": 0,
+   "unplaced": 300,
    "workers": 15130
   },
   "MI": {
@@ -242,6 +263,7 @@
    "no_location": 23,
    "notices": 1356,
    "undated": 570,
+   "unplaced": 132,
    "workers": 218669
   },
   "MN": {
@@ -253,6 +275,7 @@
    "no_location": 49,
    "notices": 968,
    "undated": 645,
+   "unplaced": 58,
    "workers": 42657
   },
   "MO": {
@@ -264,6 +287,7 @@
    "no_location": 13,
    "notices": 516,
    "undated": 0,
+   "unplaced": 65,
    "workers": 82906
   },
   "MS": {
@@ -275,6 +299,7 @@
    "no_location": 129,
    "notices": 142,
    "undated": 0,
+   "unplaced": 0,
    "workers": 14695
   },
   "MT": {
@@ -286,6 +311,7 @@
    "no_location": 2,
    "notices": 43,
    "undated": 0,
+   "unplaced": 9,
    "workers": 3896
   },
   "NC": {
@@ -297,6 +323,7 @@
    "no_location": 36,
    "notices": 1199,
    "undated": 6,
+   "unplaced": 200,
    "workers": 123576
   },
   "ND": {
@@ -308,6 +335,7 @@
    "no_location": 0,
    "notices": 54,
    "undated": 0,
+   "unplaced": 9,
    "workers": 6137
   },
   "NE": {
@@ -319,6 +347,7 @@
    "no_location": 82,
    "notices": 987,
    "undated": 0,
+   "unplaced": 8,
    "workers": 46275
   },
   "NJ": {
@@ -330,6 +359,7 @@
    "no_location": 2,
    "notices": 2414,
    "undated": 155,
+   "unplaced": 260,
    "workers": 362276
   },
   "NM": {
@@ -341,6 +371,7 @@
    "no_location": 0,
    "notices": 115,
    "undated": 1,
+   "unplaced": 11,
    "workers": 14842
   },
   "NV": {
@@ -352,6 +383,7 @@
    "no_location": 1,
    "notices": 296,
    "undated": 1,
+   "unplaced": 25,
    "workers": 35893
   },
   "NY": {
@@ -363,6 +395,7 @@
    "no_location": 1141,
    "notices": 6339,
    "undated": 0,
+   "unplaced": 152,
    "workers": 461995
   },
   "OH": {
@@ -374,6 +407,7 @@
    "no_location": 32,
    "notices": 2764,
    "undated": 1,
+   "unplaced": 195,
    "workers": 424605
   },
   "OK": {
@@ -385,6 +419,7 @@
    "no_location": 268,
    "notices": 806,
    "undated": 0,
+   "unplaced": 415,
    "workers": 64495
   },
   "OR": {
@@ -396,6 +431,7 @@
    "no_location": 72,
    "notices": 1190,
    "undated": 0,
+   "unplaced": 72,
    "workers": 175117
   },
   "PA": {
@@ -407,6 +443,7 @@
    "no_location": 1,
    "notices": 294,
    "undated": 294,
+   "unplaced": 18,
    "workers": 42880
   },
   "RI": {
@@ -418,6 +455,7 @@
    "no_location": 0,
    "notices": 135,
    "undated": 10,
+   "unplaced": 12,
    "workers": 16259
   },
   "SC": {
@@ -429,6 +467,7 @@
    "no_location": 0,
    "notices": 611,
    "undated": 3,
+   "unplaced": 58,
    "workers": 81091
   },
   "SD": {
@@ -440,6 +479,7 @@
    "no_location": 1,
    "notices": 79,
    "undated": 0,
+   "unplaced": 7,
    "workers": 8758
   },
   "TN": {
@@ -451,6 +491,7 @@
    "no_location": 0,
    "notices": 1104,
    "undated": 0,
+   "unplaced": 33,
    "workers": 127390
   },
   "TX": {
@@ -462,6 +503,7 @@
    "no_location": 10,
    "notices": 7377,
    "undated": 0,
+   "unplaced": 75,
    "workers": 699678
   },
   "UT": {
@@ -473,6 +515,7 @@
    "no_location": 0,
    "notices": 281,
    "undated": 0,
+   "unplaced": 15,
    "workers": 35980
   },
   "VA": {
@@ -484,6 +527,7 @@
    "no_location": 0,
    "notices": 1121,
    "undated": 0,
+   "unplaced": 192,
    "workers": 130730
   },
   "VT": {
@@ -495,6 +539,7 @@
    "no_location": 0,
    "notices": 341,
    "undated": 0,
+   "unplaced": 283,
    "workers": 15253
   },
   "WA": {
@@ -506,6 +551,7 @@
    "no_location": 1,
    "notices": 1462,
    "undated": 0,
+   "unplaced": 260,
    "workers": 232516
   },
   "WI": {
@@ -517,6 +563,7 @@
    "no_location": 9,
    "notices": 3664,
    "undated": 0,
+   "unplaced": 129,
    "workers": 336177
   }
  },

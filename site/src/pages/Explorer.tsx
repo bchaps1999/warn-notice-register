@@ -198,9 +198,20 @@ export function Explorer() {
               onSelect={(v) => setFilters({ state: v })}
               max={10}
             />
+            <SectionHeading tight>Counties</SectionHeading>
+            <FacetList
+              facets={facets.counties}
+              selected={filters.county}
+              onSelect={(v) => setFilters({ county: v })}
+              max={10}
+              emptyLabel="No notice here names a place a county could be found for"
+            />
             <p className="text-[11px] text-ink-faint font-serif mt-4 leading-relaxed">
               Counts are notices in the current results, each facet counted
-              with its own filter lifted.
+              with its own filter lifted. Counties come from resolving the
+              filed location; notices whose location names no place — a
+              workforce area, "statewide" — are in the results but in no
+              county.
             </p>
           </aside>
         )}

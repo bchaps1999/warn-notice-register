@@ -128,6 +128,7 @@ warnlive gleif-refresh       # Legal Entity Identifiers for private companies
 warnlive subsidiary-refresh  # subsidiary -> parent, from 10-K Exhibit 21
 warnlive wikidata-refresh    # Wikidata entities keyed by CIK
 warnlive wikidata-labels     # Wikidata for CIK-less employers, exact labels
+warnlive places-refresh      # Census place/county roster for locations
 ```
 
 The SEC commands require `SEC_EDGAR_UA` set to a declared user agent per
@@ -162,6 +163,40 @@ Decisions come back in `data/reference/identity_overrides.csv`:
 | `decided_by` | Who or what decided (a person, a model, a ticket) |
 | `decided_at` | When |
 | `note` | Why — the evidence that settled it |
+
+### Where a notice happened
+
+States write locations however they like — a bare city, a city and its
+county, a street address, several sites in one field — so `location` on
+its own joins to nothing. `warnlive/enrich/places.py` resolves it against
+the Census rosters of places, counties and townships, adding
+`place_name`, `place_fips`, `county_name`, `county_fips`, `latitude`,
+`longitude` and `geo_basis` to every export. 79% of notices reach a
+county FIPS code, which is the key that joins to BLS and Census data.
+
+`places-refresh` rebuilds `data/reference/places.csv.gz` from four Census
+files. Three are rosters; the fourth is county boundaries, needed because
+a city like Chicago or Atlanta straddles county lines and the roster
+cannot say which county it belongs to — the place's own interior point
+decides, unless it shares its name with one of its counties, in which
+case that is the one it is named for.
+
+The matching rule is the identity rule: exact after normalization, one
+survivor, and never across a state line. A county the state filed in its
+own field settles a city name that repeats — but a single segment
+matching both a place and a county is a coincidence, not a filed county,
+which is why Houston resolves to Harris County rather than to the Houston
+County it is not in.
+
+Local knowledge that no roster carries goes in
+`data/reference/place_aliases.csv` — NYC boroughs, Los Angeles
+neighbourhoods, abbreviations states use. A `kind` of `county` says the
+alias can only be placed at county level, as for an unincorporated
+community that is in no city at all. `places-refresh` also writes
+`data/health/places_review.csv`, every unresolved location ranked by
+workers at stake; much of the top of that file is Kansas, Vermont, Maine
+and Oklahoma filing against workforce investment areas, which are not
+places and never resolve.
 
 Overrides outrank every automatic tier and are reported as
 `identity_source=override` in exports, so an adjudication can always be

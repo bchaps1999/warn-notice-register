@@ -8,6 +8,7 @@ import { ErrorNote, Skeleton } from "../components/ui/Skeleton";
 import { NoticeTable } from "../components/ui/NoticeTable";
 import { MonthlyTrend } from "../components/charts/MonthlyTrend";
 import { Stamp } from "../components/ui/Stamp";
+import { Bar } from "../components/ui/Bar";
 import { NotFound } from "./NotFound";
 
 export function StateProfile() {
@@ -63,6 +64,43 @@ export function StateProfile() {
           <EmployerList rows={data.top_employers_24mo} />
         </div>
       </div>
+
+      {data.counties.length > 0 && (
+        <>
+          <SectionHeading
+            sub={
+              `${num(data.coverage.placed)} of ${num(data.coverage.notices)} notices ` +
+              `name a location that resolves to a county. The rest are filed ` +
+              `against something else — an address that names no town, a ` +
+              `workforce area, or nothing at all — and are absent here.`
+            }
+          >
+            Counties
+          </SectionHeading>
+          <div className="grid sm:grid-cols-2 gap-x-10">
+            {data.counties.slice(0, 20).map((c) => (
+              <Link
+                key={c.fips}
+                to={`/explore?state=${data.state}&county=${c.fips}`}
+                className="block py-1.5 border-b border-rule/60 hover:bg-surface"
+              >
+                <div className="flex justify-between items-baseline gap-3 text-sm">
+                  <span className="truncate">
+                    {c.county.replace(
+                      / (County|Parish|Borough|Municipality|Census Area)$/,
+                      ""
+                    )}
+                  </span>
+                  <span className="tabular text-ink-muted text-xs shrink-0">
+                    {num(c.workers)} · {num(c.notices)}
+                  </span>
+                </div>
+                <Bar value={c.workers} max={data.counties[0].workers} tone="oxide" />
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
 
       <SectionHeading>Most recent notices</SectionHeading>
       <NoticeTable notices={data.recent} showState={false} />
