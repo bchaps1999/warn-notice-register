@@ -32,7 +32,7 @@ from warnlive.enrich import gleif, nonprofits, review, subsidiaries
 from warnlive.enrich.edgar import REFERENCE_PATH, Matcher, load_sic
 from warnlive.enrich.industry import industry_from_fields_json, load_sic_naics
 from warnlive.enrich.wikidata import load_labels, load_orgs
-from warnlive.normalize.engine import normalized_employer
+from warnlive.normalize.engine import base_employer, normalized_employer
 
 FIELDS = [
     "normalized_name",
@@ -109,13 +109,28 @@ class Annotator:
         out = dict.fromkeys(FIELDS)
         norm = normalized_employer(employer_name)
         out["normalized_name"] = norm
+        # The same retry the CIK matcher makes: a filed name that names a
+        # site rather than a company still identifies the company once the
+        # site is set aside. Reference files are keyed on the filed name's
+        # normalization, so both forms are tried rather than re-keyed.
+        base_norm = normalized_employer(base_employer(employer_name))
+        names = [n for n in (norm, base_norm) if n]
+
+        def lookup(table: dict):
+            for candidate in names:
+                hit = table.get(candidate)
+                if hit:
+                    return hit
+            return None
         out["industry"], out["naics"], out["naics_basis"] = industry_from_fields_json(
             fields_json
         )
 
         # An adjudicated identity outranks every automatic tier: it was
         # decided by someone looking at evidence the matcher cannot see.
-        decided = self.overrides.get(norm or "")
+        decided = self.overrides.get(norm or "") or (
+            self.overrides.get(base_norm) if base_norm else None
+        )
         if decided:
             out["identity_source"] = "override"
             if decided.get("cik"):
@@ -151,15 +166,17 @@ class Annotator:
             # Not a registrant itself — but Exhibit 21 may show whose
             # subsidiary it is, which supplies both a corporate parent and,
             # failing anything better, that parent's industry.
-            owner = self.subsidiaries.parent(norm)
+            owner = next(
+                (o for o in (self.subsidiaries.parent(n) for n in names) if o), None
+            )
             if owner:
                 out["parent_cik"] = int(owner["parent_cik"])
                 out["parent_company"] = owner["parent_name"] or None
-            org = self.nonprofit_by_name.get(norm)
+            org = lookup(self.nonprofit_by_name)
             if org:
                 out["ein"], out["ntee"] = org["ein"], org["ntee"] or None
                 out["canonical_name"] = out["canonical_name"] or org["name"] or None
-            entity = self.gleif_by_name.get(norm)
+            entity = lookup(self.gleif_by_name)
             if entity:
                 out["lei"] = entity["lei"]
                 out["canonical_name"] = (
@@ -167,7 +184,7 @@ class Annotator:
                 )
 
         if norm and not out["wikidata_qid"]:
-            wd = self.wikidata_by_name.get(norm)
+            wd = lookup(self.wikidata_by_name)
             if wd:
                 out["wikidata_qid"], out["wikidata_match"] = wd["qid"], "label"
                 out["canonical_name"] = wd["label"] or out["canonical_name"]
@@ -198,7 +215,11 @@ class Annotator:
                 out["employer_key"] = f"{prefix}:{value}"
                 break
         else:
-            out["employer_key"] = f"n:{norm or (employer_name or '').lower()}"
+            # Unidentified employers group on the company part of the name,
+            # so a firm's Flat Rock and Dearborn filings are one employer
+            # rather than two. Their notices stay distinct: dedupe keys are
+            # built from the filed name, not from this.
+            out["employer_key"] = f"n:{base_norm or norm or (employer_name or '').lower()}"
 
         if out["naics"] is None:
             inherited = self.naics_by_employer.get(out["employer_key"])

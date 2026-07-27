@@ -40,7 +40,7 @@ from time import sleep
 
 import jellyfish
 
-from warnlive.normalize.engine import normalized_employer
+from warnlive.normalize.engine import base_employer, normalized_employer
 
 logger = logging.getLogger("warnlive")
 
@@ -458,7 +458,12 @@ class Matcher:
         norm = normalized_employer(employer_name)
         if not norm:
             return None
-        key = (norm, year)
+        # Keyed on the base name too, not just the normalized one: two
+        # spellings can normalize alike ("Inc. - Olive", "Inc. -Olive")
+        # while only one of them has a site qualifier to set aside, and
+        # they must not share a cached answer or its method label.
+        base = base_employer(employer_name)
+        key = (norm, normalized_employer(base), year)
         if key in self._cache:
             return self._cache[key]
         result = None
@@ -521,6 +526,15 @@ class Matcher:
             if len(candidates) == 1:
                 (cik, (jw, ticker)), = candidates.items()
                 result = (cik, ticker, f"fuzzy:{jw:.2f}")
+
+        if result is None:
+            # The name may identify a site rather than a company: retry
+            # without the qualifier, and say so, since a base match is a
+            # weaker claim than one the filed name supports outright.
+            if base:
+                hit = self.match(base, year)
+                if hit:
+                    result = (hit[0], hit[1], f"{hit[2]}:base")
 
         self._cache[key] = result
         return result

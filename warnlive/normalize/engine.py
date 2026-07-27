@@ -196,6 +196,47 @@ _NON_ALNUM = re.compile(r"[^a-z0-9 ]+")
 _WS = re.compile(r"\s+")
 
 
+# Where a filer stops naming the company and starts naming the site. WARN
+# forms have one employer field, so states append the plant, store number,
+# airport, campus or trading name to it: "Ford Motor Co. - Flat Rock",
+# "KMART - STORE #3671", "Aramark Campus, LLC (University of Kentucky)".
+# Everything from the first of these onward describes where, not who.
+_QUALIFIER = re.compile(
+    r"""
+      \s+[-–—]\s*                 # a dash after a space; Wal-Mart keeps its own
+    | \s*[\(\[\{"“]               # parenthetical or quoted nickname
+    | \s+(?:dba|d/b/a|aka|a/k/a|fka|f/k/a)\b
+    | \s*,\s*(?=[A-Z]{2}\b)       # ", FL 32399" — a trailing address
+    | \s+(?:store|plant|facility|location|branch|site|unit)?\s*\#\s*\d
+    """,
+    re.IGNORECASE | re.VERBOSE,
+)
+# Leading edit markers some states prepend: "*Updated* Acme, Inc."
+_LEAD_MARKER = re.compile(r"^\s*[*\[]\s*(updated|revised|amended|new)[^*\]]*[*\]]\s*", re.I)
+
+
+def base_employer(value: str | None) -> str | None:
+    """The company part of an employer name, without the site it names.
+
+    Used only to retry a failed match: a name that identifies a company
+    outright is never touched, and the filed name is what gets displayed
+    and keyed. Cutting matters twice over, because cleanco strips a legal
+    form only at the end of a string — so "Ford Motor Co. - Flat Rock"
+    keeps its "Co." as an interior token until the qualifier goes.
+    """
+    if not value:
+        return None
+    text = _LEAD_MARKER.sub("", value).strip()
+    m = _QUALIFIER.search(text)
+    if m:
+        text = text[: m.start()]
+    text = text.strip().rstrip(",;:-–— ")
+    # Too little left to identify anyone, or nothing was actually cut.
+    if len(text) < 4 or not any(c.isalpha() for c in text):
+        return None
+    return text if text != value.strip() else None
+
+
 def normalized_employer(value: str | None) -> str | None:
     """Standardized employer name for cross-notice/cross-state matching:
     legal suffixes stripped via cleanco's curated list (applied twice for

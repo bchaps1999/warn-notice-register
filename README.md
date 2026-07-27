@@ -121,6 +121,14 @@ CIKs, state for EINs), and a single surviving candidate. Ambiguity
 matches nothing — a missing identifier costs only enrichment, while a
 wrong one silently poisons every join made against it.
 
+WARN forms carry one employer field, so states append the site to the
+company: "Ford Motor Co. - Flat Rock", "KMART - STORE #3671", "Aramark
+Campus, LLC (University of Kentucky)". A name that fails to match is
+retried with that qualifier set aside — recorded as `exact:base` and the
+like, since it is a weaker claim than the filed name supports outright.
+The filed name is still what gets displayed, and dedupe keys are built
+from it, so notices stay distinct even when their employer resolves.
+
 A refusal is not always an absence, though: often a rule saw a plausible
 registrant and lacked a tiebreaker. `warnlive identity-review` writes
 those near-misses to `data/health/identity_review.csv` — the candidate,

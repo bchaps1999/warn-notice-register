@@ -235,3 +235,37 @@ def test_adjudicated_identity_outranks_automatic_matching(tmp_path):
     assert got["cik_match"] == "override"
     assert got["identity_source"] == "override"
     assert got["employer_key"] == "cik:1166126"
+
+
+def test_base_employer_separates_company_from_site():
+    """WARN forms have one employer field, so states append the plant,
+    store or trading name to the company's."""
+    from warnlive.normalize.engine import base_employer
+
+    assert base_employer("Ford Motor Co. - Flat Rock") == "Ford Motor Co."
+    assert base_employer("KMART - STORE #3671") == "KMART"
+    assert base_employer("Tyson Foods, Inc. (Amarillo B-Shift)") == "Tyson Foods, Inc."
+    assert base_employer("Acme Holdings dba Speedy Mart") == "Acme Holdings"
+    assert base_employer("*Updated* Community Healthlink") == "Community Healthlink"
+    # Names that identify a company outright are left alone, hyphens and all
+    assert base_employer("SANMINA-SCI CORPORATION") is None
+    assert base_employer("Wal-Mart Stores, Inc.") is None
+    assert base_employer("Boeing") is None
+    # Nothing usable left to match on
+    assert base_employer("A - B") is None
+
+
+def test_base_employer_frees_a_stranded_legal_form():
+    """cleanco strips a legal form only at the end of a string, so the
+    qualifier costs the suffix too until it is cut."""
+    from warnlive.normalize.engine import base_employer, normalized_employer
+
+    assert normalized_employer("Ford Motor Co. - Flat Rock") == "ford motor co flat rock"
+    assert normalized_employer(base_employer("Ford Motor Co. - Flat Rock")) == "ford motor"
+
+
+def test_matcher_retries_without_the_site_qualifier(tmp_path):
+    m = _matcher(tmp_path, [("kmart", 56824, 1994, 2005, "")])
+    assert m.match("KMART", 2002) == (56824, "", "exact")
+    assert m.match("KMART - STORE #3671", 2002) == (56824, "", "exact:base")
+    assert m.match("Some Diner - Main St", 2002) is None
