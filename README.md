@@ -88,6 +88,24 @@ warnlive backfill                # historical data from BLN's warn-github-flow
 warnlive report --gh-issues      # open/close per-state health issues (CI)
 ```
 
+Scheduled runs commit to `data/`, so **a local session must pull and unpack the
+committed database before regenerating anything**:
+
+```bash
+git pull && gunzip -kf data/warn.sqlite.gz   # before any export/build-site
+```
+
+Regenerating exports from a stale local `data/warn.sqlite` silently reverts
+whatever CI collected in the meantime — the row counts still look right, because
+the loss is of notices you never had. Push promptly for the same reason.
+
+Every scheduled run ends with `warnlive check-regressions`, which compares the
+whole database against `data/health/snapshot.json` from the last published run:
+notices are only ever added, no state's history shrinks, no single notice covers
+100,000 workers, and no field empties out. It fails the run before the commit
+and deploy steps, so data that trips it never lands. Per-state checks guard a
+scrape against its source; this guards the database against itself.
+
 Scheduled runs: `.github/workflows/scrape-daily.yml` (high-volume states) and
 `scrape-weekly.yml` (full sweep, Sundays). Optional secret `ZYTE_API_KEY`
 enables the Zyte proxy for states behind aggressive bot protection (LA, TX

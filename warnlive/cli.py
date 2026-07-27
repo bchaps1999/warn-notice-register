@@ -580,6 +580,39 @@ def clean_text(db_path: Path, dry_run: bool) -> None:
     click.echo(f"{label} {changed} rows, collisions linked {collided}")
 
 
+@cli.command("check-regressions")
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
+@click.option("--update-snapshot", is_flag=True,
+              help="Record the current database as the baseline (do this only "
+                   "in the same commit as the data it describes).")
+def check_regressions(db_path: Path, data_dir: Path, update_snapshot: bool) -> None:
+    """Compare the whole database against the last published snapshot.
+
+    Per-state checks guard a scrape against its own source; this guards the
+    database against itself, catching parsers that ingest the right number
+    of rows with wrong values in them. Exits nonzero on failure so a
+    scheduled run stops before committing or publishing.
+    """
+    from warnlive.verify import regression
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    snapshot_path = Path(data_dir) / "health" / "snapshot.json"
+    result = regression.check_regressions(conn, regression.load_snapshot(snapshot_path))
+
+    icons = {"pass": "✓", "warn": "~", "fail": "✗"}
+    for check in result.checks:
+        click.echo(f"  {icons[check.outcome]} {check.name}: {check.detail}")
+    click.echo(result.verdict.upper())
+
+    if result.verdict == "failed":
+        sys.exit(1)
+    if update_snapshot:
+        regression.write_snapshot(regression.build_snapshot(conn), snapshot_path)
+        click.echo(f"snapshot updated: {snapshot_path}")
+
+
 @cli.command()
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)

@@ -37,6 +37,11 @@ jobs:
         run: .venv/bin/warnlive scrape --cadence weekly --trigger scheduled
       - name: Detect revisions/duplicates
         run: .venv/bin/warnlive dupes
+      - name: Check for data regressions
+        # Whole-database checks: a parser can ingest the right number of rows
+        # with wrong values in them, which per-state verification cannot see.
+        # Failing here leaves the repo and the published site untouched.
+        run: .venv/bin/warnlive check-regressions --update-snapshot
       - name: Commit data
         run: |
           git config user.name "warn-register bot"
