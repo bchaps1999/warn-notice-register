@@ -41,3 +41,581 @@ CA,Newbury Park,,Thousand Oaks,,A community within the City of Thousand Oaks.
 UT,SLC,,Salt Lake City,,The abbreviation Utah filings use for Salt Lake City.
 TX,Corpus Ch,,Corpus Christi,,Corpus Christi truncated by the source's column width.
 DC,Washington DC,,Washington,,The District's only Census place is Washington city.
+KS,4 - Workforce Investment Area IV,reject,,,"Workforce Investment Area, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+KS,4 - Workforce Alliance,reject,,,"Workforce Alliance, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+KS,3 - Workforce Investment Area III,reject,,,"Workforce Investment Area, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+KS,3 - Workforce Partnership,reject,,,"Workforce Partnership, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+KS,1 - Workforce Investment Area I,reject,,,"Workforce Investment Area, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+OK,05 - CentralRegion,reject,,,"regional designation, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+KS,2 - Workforce Investment Area II,reject,,,"Workforce Investment Area, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Various Cities/Various Counties,reject,,,generic description (deepseek/deepseek-v4-flash 2026-07-27)
+WA,Various locations in Washington,reject,,,generic description (deepseek/deepseek-v4-flash 2026-07-27)
+VT,00 - Vermont Workforce Investment Area,reject,,,"Vermont Workforce Investment Area, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+KS,5 - Workforce Investment Area V,reject,,,"Kansas Workforce Investment Area, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+WA,Puget Sound Area,reject,,,"Puget Sound is a region, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+WA,Nationwide,reject,,,Nationwide is not a place (deepseek/deepseek-v4-flash 2026-07-27)
+MO,Multiple Locations,reject,,,"Multiple Locations, not a single place (deepseek/deepseek-v4-flash 2026-07-27)"
+WA,Puget Sound,reject,,,"Puget Sound is a region, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,Pikes Peak,reject,,,"Pikes Peak is a mountain, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,Statewide,reject,,,"Statewide, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,STATEWIDE,reject,,,"Statewide, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+KS,1 - Kansas WorkforceONE,reject,,,"Kansas WorkforceONE, workforce area (deepseek/deepseek-v4-flash 2026-07-27)"
+MI,Statewide,reject,,,"Statewide, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+OK,07 - NorthEastRegion,reject,,,a workforce region (deepseek/deepseek-v4-flash 2026-07-27)
+IN,Statewide,reject,,,statewide is not a place (deepseek/deepseek-v4-flash 2026-07-27)
+ME,3 - Central Western Local Area 3,reject,,,a local workforce area (deepseek/deepseek-v4-flash 2026-07-27)
+MI,Various,reject,,,Various is not a specific place (deepseek/deepseek-v4-flash 2026-07-27)
+ME,4 - Coastal Counties Local Area 4,reject,,,a local workforce area (deepseek/deepseek-v4-flash 2026-07-27)
+OK,06 - SouthCentralRegion,reject,,,a workforce region (deepseek/deepseek-v4-flash 2026-07-27)
+OK,08 - SouthernRegion,reject,,,"workforce investment region, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"VARIOUS ADDRESSES SPRINGFIELD, IL 62701",,Springfield,place,The string includes various addresses but specifies Springfield [Springfield city] (deepseek/deepseek-v4-flash 2026-07-27)
+SC,Statewide,reject,,,statewide is not a place (deepseek/deepseek-v4-flash 2026-07-27)
+OK,03 - EastCentralRegion,reject,,,"region code, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+OK,09 - SouthEastRegion,reject,,,"region code, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+LA,Statewide,reject,,,statewide is not a place (deepseek/deepseek-v4-flash 2026-07-27)
+AZ,6 - Pima County Workforce Investment Board,reject,,,Pima County Workforce Investment Board is an administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Rural Consortium,reject,,,Rural Consortium is an administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+WA,Western Washington,reject,,,"Western Washington is a region, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+ME,1 - Northeastern Workforce Board,reject,,,Northeastern Workforce Board is an administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+WA,Statewide,reject,,,Statewide is not a place (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Statewide,reject,,,statewide area (deepseek/deepseek-v4-flash 2026-07-27)
+KY,Out of the State County,reject,,,not a valid place name (deepseek/deepseek-v4-flash 2026-07-27)
+OK,02 - SouthWestRegion,reject,,,"region code, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+KY,Out of the Area County,reject,,,not a valid place name (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Statewide,reject,,,statewide area (deepseek/deepseek-v4-flash 2026-07-27)
+WI,multiple,reject,,,"the location string is literally 'multiple', not a geography (deepseek/deepseek-v4-flash 2026-07-27)"
+CA,Yosemite National,reject,,,"Yosemite National is a national park, not a city or county (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,Rural Resort,reject,,,no matching place for 'Rural Resort' (deepseek/deepseek-v4-flash 2026-07-27)
+UT,Statewide,reject,,,"'Statewide' is an administrative area, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+NC,Winston-,reject,,,truncated string 'Winston-' incomplete (deepseek/deepseek-v4-flash 2026-07-27)
+CA,YOSEMITE NATIONAL PA,reject,,,Yosemite National Park is not a place or county (deepseek/deepseek-v4-flash 2026-07-27)
+KS,same,reject,,,Ambiguous string 'same' (deepseek/deepseek-v4-flash 2026-07-27)
+OK,04 - NorthCentralRegion,reject,,,"Regional designation, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+WA,4 sites,reject,,,No specific geography named (deepseek/deepseek-v4-flash 2026-07-27)
+VA,Statewide VA,reject,,,Statewide is an administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,"Company Location: Philadelphia, PA Affected Employees: Throughout NJ",reject,,,"Location refers to company in PA, not NJ geography (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,32815,reject,,,ZIP code only (deepseek/deepseek-v4-flash 2026-07-27)
+FL,FL 32815,reject,,,ZIP code with state (deepseek/deepseek-v4-flash 2026-07-27)
+GA,"Various Remote Locations - See Attached Letter, See Attached Letter, See Attached Letter, Georgia",reject,,,Vague description not tied to a specific geography (deepseek/deepseek-v4-flash 2026-07-27)
+CT,Greater Hartford Area,reject,,,"Regional area, not a specific census place (deepseek/deepseek-v4-flash 2026-07-27)"
+CT,Various Hartford locations,reject,,,"Vague, refers to multiple unspecified Hartford locations (deepseek/deepseek-v4-flash 2026-07-27)"
+KS,5800 SW 6th/3630 SW Burlingam Rd,reject,,,"street addresses, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+NC,Research,reject,,,too vague (deepseek/deepseek-v4-flash 2026-07-27)
+CA,OAKLAND AIRPORT,,Oakland,place,Oakland airport is within Oakland city limits [Oakland city] (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,NO. BRUNSWICK,,North Brunswick,place,"NO. BRUNSWICK is an abbreviation for North Brunswick, New Jersey [Middlesex County] (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Hamilton (Butler),,Hamilton,place,"Hamilton is a city in Butler County, Ohio [Hamilton city] (deepseek/deepseek-v4-flash 2026-07-27)"
+AZ,9 - Yuma County Workforce Investment Board,reject,,,Yuma County Workforce Investment Board is an administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+FL,33069,reject,,,"33069 is a ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,Jeffco (Tri-County),reject,,,administrative area Jeffco Tri-County (deepseek/deepseek-v4-flash 2026-07-27)
+FL,Center,reject,,,generic name 'Center' not specific to a place (deepseek/deepseek-v4-flash 2026-07-27)
+ND,Nationwide - Remote,reject,,,"nationwide remote, not a specific geography (deepseek/deepseek-v4-flash 2026-07-27)"
+CA,MIRA MESA,reject,,,"MIRA MESA is a neighborhood in San Diego, not a place or county name (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"Peoria County Courthouse 324 Main St., Room 503 Peoria, IL 61602",,Peoria,place,"Peoria County Courthouse is located in Peoria, IL [Peoria city] (deepseek/deepseek-v4-flash 2026-07-27)"
+KS,5000 Kansas Avenue,reject,,,"No place name in the string, only an address (deepseek/deepseek-v4-flash 2026-07-27)"
+KY,Statewide,reject,,,"Refers to entire state, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+GA,Cartersvile,,Cartersville,place,Common misspelling of Cartersville [Cartersville city] (deepseek/deepseek-v4-flash 2026-07-27)
+AL,State Wide,reject,,,statewide area (deepseek/deepseek-v4-flash 2026-07-27)
+RI,Rhode Island,reject,,,state name (deepseek/deepseek-v4-flash 2026-07-27)
+FL,32401,reject,,,ZIP code (deepseek/deepseek-v4-flash 2026-07-27)
+CO,ADWorks,reject,,,not a geographic place (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"ROCK ISLAND ARSENAL ROCK ISLAND, IL 61299",,Rock Island,place,address includes Rock Island city [Rock Island city] (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,So. Plainfield,,South Plainfield,place,"Borough in Middlesex County, NJ [South Plainfield borough] (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Unknown City/County,reject,,,Explicitly listed as 'Unknown City/County'. (deepseek/deepseek-v4-flash 2026-07-27)
+MD,"10100 Reisterstown Road, Owing Mills",reject,,,"String includes a street address, not just a place name. (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Springfield of WIA-Rapid,reject,,,"Springfield of WIA-Rapid appears to reference a workforce area, not a specific place. (deepseek/deepseek-v4-flash 2026-07-27)"
+GA,Peachtree Cit,,Peachtree City,place,"Likely abbreviation for Peachtree City, Georgia. [Peachtree City city] (deepseek/deepseek-v4-flash 2026-07-27)"
+PA,Various,reject,,,'Various' is not a specific geography. (deepseek/deepseek-v4-flash 2026-07-27)
+OK,01 - NorthWestRegion,reject,,,"a region, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+AZ,Arizona,reject,,,"the state itself, not a specific place within it (deepseek/deepseek-v4-flash 2026-07-27)"
+CA,Terminal Island,,Los Angeles,place,Terminal Island is a neighborhood within Los Angeles city limits [Los Angeles city] (deepseek/deepseek-v4-flash 2026-07-27)
+VA,Virignia Beach VA,,Virginia Beach,place,Virginia Beach is an independent city in VA. [Virginia Beach city] (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Various (Various),reject,,,"Generic 'Various' string, not a specific geography. (deepseek/deepseek-v4-flash 2026-07-27)"
+VA,Fort Eustis VA,,Newport News,place,Fort Eustis is within Newport News city limits [Newport News city] (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Rural,reject,,,Vague term 'Rural' (deepseek/deepseek-v4-flash 2026-07-27)
+MI,"Statewide, multiple locations",reject,,,"Statewide, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33716,reject,,,ZIP code 33716 (deepseek/deepseek-v4-flash 2026-07-27)
+LA,Nitrile Plant Facility,reject,,,"specific facility, not a geography (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,FL 32899,reject,,,"ZIP code only, no place name (deepseek/deepseek-v4-flash 2026-07-27)"
+OR,PORTAND,,Portland,place,"Misspelling of Portland, OR [Portland city] (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Toledo of WIA-Rapid,reject,,,Likely a workforce investment area reference (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Metro Atlanta,reject,,,"Metro area, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,Statewide,reject,,,"Statewide, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,32830,reject,,,ZIP code only (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Western,reject,,,"region name, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+NC,R o b b i n s v ille,,Robbinsville,place,"spaced letters but clearly Robbinsville, NC [Robbinsville town] (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,Denver DIA,,Denver,place,Denver DIA is within Denver city limits [Denver city] (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Middleburg Hts,,Middleburg Heights,place,Middleburg Heights city (deepseek/deepseek-v4-flash 2026-07-27)
+VA,Central VA,reject,,,"Regional designation, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+VA,Cheseapeake VA,,Chesapeake,place,"Misspelling of Chesapeake, an independent city in Virginia [Chesapeake city] (deepseek/deepseek-v4-flash 2026-07-27)"
+GA,Breman,,Bremen,place,"Likely misspelling of Bremen, Georgia [Bremen city] (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Bureau of WIA-Rapid,reject,,,"Government agency, not a geographic location (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Various/Various,reject,,,"Various cities, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"1501 W. Shure Dr. Fl 2 Arlington Hts., IL 60004",,Arlington Heights,place,"address in Arlington Heights, IL [Arlington Heights village] (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Fairfield (Butler),,Fairfield,place,"city in Butler County, OH [Fairfield city] (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"27th and Pershing Decatur, IL 62526",,Decatur,place,"intersection in Decatur, IL [Decatur city] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Various locations throughout NJ,reject,,,various locations throughout NJ (deepseek/deepseek-v4-flash 2026-07-27)
+NM,New Mexico,reject,,,statewide reference (deepseek/deepseek-v4-flash 2026-07-27)
+NV,"Re, Ye, Fe, To, Wa, Ly, Ny",reject,,,unrecognizable string (deepseek/deepseek-v4-flash 2026-07-27)
+NY,Douglaston,reject,,,neighborhood not a place (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Multiple locations & Local Areas,reject,,,"administrative area, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33309,reject,,,"ZIP code, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,32212,reject,,,"ZIP code, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+CT,Startford,,Stratford,place,Likely typo for Stratford [Fairfield County] (deepseek/deepseek-v4-flash 2026-07-27)
+FL,SUNNY ISLES,,Sunny Isles Beach,place,Sunny Isles Beach [Sunny Isles Beach city] (deepseek/deepseek-v4-flash 2026-07-27)
+AZ,multiple,reject,,,Literal 'multiple' (deepseek/deepseek-v4-flash 2026-07-27)
+CA,STANDFORD,,Stanford,place,Likely typo for Stanford [Stanford CDP] (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"GLENVIEW NAVAL AIR STATION GLENVIEW, IL 60026",,Glenview,place,Naval Air Station is within Glenview village [Glenview village] (deepseek/deepseek-v4-flash 2026-07-27)
+WI,Milwaukiee,,Milwaukee,place,Misspelling of Milwaukee [Milwaukee city] (deepseek/deepseek-v4-flash 2026-07-27)
+FL,33134,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Multiple Locations - NJ,reject,,,"Generic reference, no specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Multiple Counties,reject,,,"Administrative designation, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+MI,Delta Twp.,,Delta Township,place,Delta Twp. is a township in Michigan [Delta County] (deepseek/deepseek-v4-flash 2026-07-27)
+CT,"75 Gerber Road East South Windsor, CT 06074",,South Windsor,place,"Address in South Windsor, CT [Hartford County] (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33014,reject,,,"ZIP code only, no place name (deepseek/deepseek-v4-flash 2026-07-27)"
+GA,Social Cirlce,,Social Circle,place,Typo in input: 'Cirlce' should be 'Circle' [Social Circle city] (deepseek/deepseek-v4-flash 2026-07-27)
+FL,32901,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,Multi area,reject,,,Vague region description (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,Pedtricktown,,Pedricktown,place,Pedricktown is a census-designated place in New Jersey [Pedricktown CDP] (deepseek/deepseek-v4-flash 2026-07-27)
+AZ,2 - Gila-Pinal Local Workforce Investment Board,reject,,,"Workforce investment board, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,32547,reject,,,"ZIP code, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+AK,Statewide,reject,,,Statewide is not a place (deepseek/deepseek-v4-flash 2026-07-27)
+FL,33064,reject,,,ZIP code only (deepseek/deepseek-v4-flash 2026-07-27)
+OH,CH,reject,,,Abbreviation 'CH' not a place (deepseek/deepseek-v4-flash 2026-07-27)
+KS,4911 State Avenue,reject,,,"Address only, no place name (deepseek/deepseek-v4-flash 2026-07-27)"
+CT,Remote,reject,,,"""Remote"" is not a geographic location (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,00000,reject,,,String is just numbers (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Cleveland of WIA-Rapid,reject,,,Workforce investment area reference (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,Acme Markets,reject,,,"Acme Markets is a business, not a geographic location (deepseek/deepseek-v4-flash 2026-07-27)"
+NY,Corona,reject,,,"Corona is a neighborhood in New York City, not an incorporated place (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"3850 NORTH WILKE ROAD ARLINGTON HGTS, IL 60004",,Arlington Heights,place,address indicates Arlington Heights [Arlington Heights village] (deepseek/deepseek-v4-flash 2026-07-27)
+MO,St. Louis area,reject,,,regional descriptor 'St. Louis area' (deepseek/deepseek-v4-flash 2026-07-27)
+MA,"Middleboro, Southeast",,Middleborough,place,"Middleboro is a town in Massachusetts, 'Southeast' likely a subregion [Plymouth County] (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,"500 Hickory Drive, Abredeen, MD",,Aberdeen,place,"Misspelling of Aberdeen, a city in Maryland [Aberdeen city] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Various locations throughout New Jersey,reject,,,"Administrative area, not a specific place. (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,Rural - Western Sub-Area,reject,,,Administrative area description. (deepseek/deepseek-v4-flash 2026-07-27)
+MN,Brooklyn Ctr,,Brooklyn Center,place,Abbreviation 'Ctr' stands for Center; city in Minnesota. [Brooklyn Center city] (deepseek/deepseek-v4-flash 2026-07-27)
+VA,Northern VA,reject,,,"Region, not a specific place or county. (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,"1238 Putty Hill Avenue Suite 5 Towson, Maryland 21286",,Towson,place,"Address in Towson, MD. [Towson CDP] (deepseek/deepseek-v4-flash 2026-07-27)"
+CA,Milipitas,,Milpitas,place,Misspelling of Milpitas [Milpitas city] (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Fitgerald,,Fitzgerald,place,Misspelling of Fitzgerald [Fitzgerald city] (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Hazlhurst,,Hazlehurst,place,Misspelling of Hazlehurst [Hazlehurst city] (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Hilliard of WIA-Rapid,,Hilliard,place,"City name present, suffix likely administrative [Hilliard city] (deepseek/deepseek-v4-flash 2026-07-27)"
+CA,Azuza,,Azusa,place,Misspelling of Azusa [Azusa city] (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,"Atlanta, GA (work location: Newark International Airport)",,Newark,place,Newark International Airport is within Newark city limits [Newark city] (deepseek/deepseek-v4-flash 2026-07-27)
+SC,Midlands,reject,,,region (deepseek/deepseek-v4-flash 2026-07-27)
+VA,Norlfolk VA,,Norfolk,place,"likely Norfolk, VA [Norfolk city] (deepseek/deepseek-v4-flash 2026-07-27)"
+GA,Fort Oglethro,,Fort Oglethorpe,place,"likely typo for Fort Oglethorpe, GA [Fort Oglethorpe city] (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"PO BOX 940 SALEM, IL 62881",,Salem,place,"Salem, IL [Salem city] (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"multiple Chicago locations Chicago, IL 60606",,Chicago,place,states multiple locations within Chicago [Chicago city] (deepseek/deepseek-v4-flash 2026-07-27)
+NC,Southern,reject,,,too vague; could refer to multiple places (deepseek/deepseek-v4-flash 2026-07-27)
+LA,"Jacobs Technology Michoud Assembly Facility New Orleans, LA 70129",,New Orleans,place,Facility located in New Orleans city [New Orleans city] (deepseek/deepseek-v4-flash 2026-07-27)
+NY,Renssalaer,,Rensselaer,place,"Spelling variant of Rensselaer, NY [Rensselaer city] (deepseek/deepseek-v4-flash 2026-07-27)"
+VA,Multiple Retail Locations in VA VA,reject,,,"Vague description, no specific places named (deepseek/deepseek-v4-flash 2026-07-27)"
+KS,3401 E. 4th,reject,,,"Address only, no city (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,JESEY CITY,,Jersey City,place,Probably typo for Jersey City [Jersey City city] (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Lithia Spring,,Lithia Springs,place,"Likely Lithia Springs, but spelling mismatch [Lithia Springs CDP] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,New Jersey,reject,,,State name (deepseek/deepseek-v4-flash 2026-07-27)
+AK,Anchorage on Old Seward Hwy.,,Anchorage,place,Anchorage municipality (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,Bricktown,,Brick,place,Common name for Brick Township [Ocean County] (deepseek/deepseek-v4-flash 2026-07-27)
+MO,No. Kansas City,,North Kansas City,place,Abbreviation 'No.' stands for North [North Kansas City city] (deepseek/deepseek-v4-flash 2026-07-27)
+IA,Duquque,,Dubuque,place,Possible misspelling of Dubuque [Dubuque city] (deepseek/deepseek-v4-flash 2026-07-27)
+MA,Various Locations,reject,,,Various Locations is not a specific geographic place. (deepseek/deepseek-v4-flash 2026-07-27)
+AL,Auburn University,reject,,,"Auburn University is an institution, not a place. (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"1201 TONNE ROAD ELK GROVE VILLGE, IL 60007",,Elk Grove Village,place,"Address points to Elk Grove Village, IL [Elk Grove Village village] (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,Base,reject,,,Base is too vague; could refer to any military base in FL (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,HASBROUCK HTS.,,Hasbrouck Heights,place,"HASBROUCK HTS. is Hasbrouck Heights, NJ [Hasbrouck Heights borough] (deepseek/deepseek-v4-flash 2026-07-27)"
+AK,Anchorage on Muldoon Road,,Anchorage,place,Muldoon Road is within Anchorage city limits [Anchorage municipality] (deepseek/deepseek-v4-flash 2026-07-27)
+LA,1335 Jackson St,reject,,,"Only a street address, no place name (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,"7630 Gambrills Cove Curtis Bay, MD 21226",reject,,,"Street address with neighborhood name, no clear place (deepseek/deepseek-v4-flash 2026-07-27)"
+MA,"Statewide, Statewide",reject,,,"Statewide is an administrative area, not a place. (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Multiple Locations Throughout NJ,reject,,,Describes multiple locations statewide (deepseek/deepseek-v4-flash 2026-07-27)
+CT,Remote Workers,reject,,,Not a geographic location (deepseek/deepseek-v4-flash 2026-07-27)
+MT,Multiple Counties,reject,,,Multiple Counties is an administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+CT,Not mentioned,reject,,,Vague location string (deepseek/deepseek-v4-flash 2026-07-27)
+MO,Town & Country,,Town and Country,place,Town and Country is a city in St. Louis County [Town and Country city] (deepseek/deepseek-v4-flash 2026-07-27)
+MD,"1681 Nelson Street Fort Detrick, MD 21702",,Frederick,place,Fort Detrick is within Frederick city limits [Frederick city] (deepseek/deepseek-v4-flash 2026-07-27)
+WI,Statewide,reject,,,"Statewide is administrative, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,Various Regions,reject,,,Generic term 'Various Regions' (deepseek/deepseek-v4-flash 2026-07-27)
+AL,Coosa Pine,reject,,,No matching place for Coosa Pine (deepseek/deepseek-v4-flash 2026-07-27)
+CA,ARLINGTON,reject,,,Arlington not recognized as a place in CA (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"ALLSTATE PLAZA SOUTH NORTHBROOK, IL 60062",,Northbrook,place,Village in Illinois [Northbrook village] (deepseek/deepseek-v4-flash 2026-07-27)
+VA,Culpepper VA,,Culpeper,place,"Misspelling of Culpeper, a town in VA [Culpeper town] (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33316,reject,,,ZIP code only (deepseek/deepseek-v4-flash 2026-07-27)
+FL,32258,reject,,,ZIP code only (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"multiple Chicago locations Chicago, IL 60604",,Chicago,place,city mentioned despite 'multiple locations' [Chicago city] (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Total,reject,,,no matching geography (deepseek/deepseek-v4-flash 2026-07-27)
+GA,"Working Remote, Remote, Georgia",reject,,,Not a geographic place (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"UNIVERSITY MALL CARBONDALE, IL 62901",,Carbondale,place,Mall in Carbondale [Carbondale city] (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,NO. BERGEN,,North Bergen,place,Abbreviation for North Bergen [Hudson County] (deepseek/deepseek-v4-flash 2026-07-27)
+GA,30313,reject,,,only a ZIP code (deepseek/deepseek-v4-flash 2026-07-27)
+FL,32408,reject,,,only a ZIP code (deepseek/deepseek-v4-flash 2026-07-27)
+LA,(Premier Health Urgent Care),reject,,,"Facility name, not a geographic place (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Middlefield of WIA-Rapid,,Middlefield,place,"Middlefield is a village in Geauga County, OH, extra text ignored [Middlefield village] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,South Iselin,reject,,,South Iselin is not a recognized place (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,S. KEARNY,,Kearny,place,"S. KEARNY refers to South Kearny, part of Kearny [Kearny town] (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,11 Horseshoe Point Lane,reject,,,No place name in string (deepseek/deepseek-v4-flash 2026-07-27)
+NY,Sunnyside,reject,,,"Sunnyside is a neighborhood in New York City, not an incorporated place (deepseek/deepseek-v4-flash 2026-07-27)"
+NC,and,reject,,,String is just 'and' (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Montpelier of WIA-Rapid,reject,,,"Includes WIA reference, administrative area (deepseek/deepseek-v4-flash 2026-07-27)"
+LA,"4811 A. Bradford Drive Huntsville, LA 35805",reject,,,"Address and state mismatch; Huntsville, LA does not exist; ZIP 35805 is Alabama (deepseek/deepseek-v4-flash 2026-07-27)"
+DE,974 Centre Road,reject,,,no place name (deepseek/deepseek-v4-flash 2026-07-27)
+IN,Cambridgebr />City,,Cambridge City,place,likely Cambridge City despite typo [Cambridge City town] (deepseek/deepseek-v4-flash 2026-07-27)
+NM,Las Curces,,Las Cruces,place,"Misspelling of Las Cruces, NM [Las Cruces city] (deepseek/deepseek-v4-flash 2026-07-27)"
+SC,Statewide - Multiple Counties,reject,,,Statewide administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Toledo Bureau of WIA-Rapid,reject,,,"Administrative office, not a geographic place. (deepseek/deepseek-v4-flash 2026-07-27)"
+NV,"Remote, Remote",reject,,,No known place named 'Remote' in NV. (deepseek/deepseek-v4-flash 2026-07-27)
+CA,Mcclellan,,McClellan Park,place,likely McClellan Park CDP [McClellan Park CDP] (deepseek/deepseek-v4-flash 2026-07-27)
+MD,"U.S.Navy's Fleet Readiness Center- Aviation Support Equipment, Solomons Complex, Bldg 105, B Ave, Solomons Island, MD 20688",,Solomons,place,Solomons Island is a census-designated place [Solomons CDP] (deepseek/deepseek-v4-flash 2026-07-27)
+MO,Springfield area,reject,,,"Area reference, not specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+CA,DODGERTOWN,reject,,,Not a recognized place (deepseek/deepseek-v4-flash 2026-07-27)
+CA,Sunland,reject,,,"Sunland is a neighborhood within Los Angeles, not a recognized place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,Dania,,Dania Beach,place,Common short name for Dania Beach [Dania Beach city] (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Bluffton of WIA-Rapid,reject,,,Workforce investment area reference (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Washington C.H.,,Washington Court House,place,"Abbreviation for Washington Court House, Ohio [Washington Court House city] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Kennilworth,,Kenilworth,place,"Likely typo for Kenilworth, NJ [Kenilworth borough] (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,Various,reject,,,Generic term 'Various' (deepseek/deepseek-v4-flash 2026-07-27)
+SC,SC,reject,,,state abbreviation only (deepseek/deepseek-v4-flash 2026-07-27)
+FL,34428,reject,,,"ZIP code, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Remote Locations Throughout NJ,reject,,,statewide description (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Health,reject,,,not a recognizable place name (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Suwanne,,Suwanee,place,"Likely misspelling of Suwanee, Georgia [Suwanee city] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Remote Location,reject,,,"Vague description, not a specific location (deepseek/deepseek-v4-flash 2026-07-27)"
+CT,Not provided,reject,,,Location not provided (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Hapesville,,Hapeville,place,"Likely misspelling of Hapeville, Georgia [Hapeville city] (deepseek/deepseek-v4-flash 2026-07-27)"
+LA,3340 Perimeter Hill Drive Nashville TN 37211 (Orleans Justice Centre),reject,,,"Address in Nashville, TN, not Louisiana (deepseek/deepseek-v4-flash 2026-07-27)"
+CA,CAMP ROBERTS,reject,,,"Camp Roberts is a military base, not a place; county not specified (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,32708,reject,,,ZIP code only (deepseek/deepseek-v4-flash 2026-07-27)
+AZ,1 - ARIZONA@WORK - Southeastern Arizona,reject,,,workforce area (deepseek/deepseek-v4-flash 2026-07-27)
+AZ,1 - Southeastern Arizona Workforce Connection,reject,,,workforce area (deepseek/deepseek-v4-flash 2026-07-27)
+ND,Multiple sites,reject,,,generic phrase (deepseek/deepseek-v4-flash 2026-07-27)
+FL,33009,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+GA,Metrowide,reject,,,"administrative region, not a geographic place (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"PO BOX 871 JOLIET, IL 60434",,Joliet,place,post office box in Joliet [Joliet city] (deepseek/deepseek-v4-flash 2026-07-27)
+MN,Mendota Hts,,Mendota Heights,place,Abbreviation 'Hts' for 'Heights' [Mendota Heights city] (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Atlnta,,Atlanta,place,Typo for Atlanta [Atlanta city] (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Cornella,,Cornelia,place,Possible misspelling of Cornelia [Cornelia city] (deepseek/deepseek-v4-flash 2026-07-27)
+MD,"111 Market Place, Suite 310 Baltimore, Maryland 21202",,Baltimore,place,Address in Baltimore; only one city [Baltimore city] (deepseek/deepseek-v4-flash 2026-07-27)
+CA,Cost Mesa,,Costa Mesa,place,Typo for Costa Mesa [Costa Mesa city] (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Multiple,reject,,,"Generic term, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,34689,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+WI,Statewide-Remote Employees,reject,,,Statewide - not a specific geography (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Norcoss,,Norcross,place,Likely typo for Norcross [Norcross city] (deepseek/deepseek-v4-flash 2026-07-27)
+LA,Technology (GDIT),reject,,,"Company name, not a geographic location (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,Southeast,reject,,,"Vague region description, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,32925,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,SO. HACKENSACK,,South Hackensack,place,Abbreviated 'SO.' means South [Bergen County] (deepseek/deepseek-v4-flash 2026-07-27)
+FL,Hallandale,,Hallandale Beach,place,Hallandale is Hallandale Beach city in FL [Hallandale Beach city] (deepseek/deepseek-v4-flash 2026-07-27)
+LA,Stafford PLLC,reject,,,"Company name, not a location (deepseek/deepseek-v4-flash 2026-07-27)"
+SC,Statewide - Mu,reject,,,Statewide administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+VA,Various VA,reject,,,Various VA is an administrative designation (deepseek/deepseek-v4-flash 2026-07-27)
+CA,FULLERON,,Fullerton,place,Misspelling of Fullerton [Fullerton city] (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"ONE FIRST NATIONAL PLAZA CHICAGO, IL 60670",,Chicago,place,Address in Chicago [Chicago city] (deepseek/deepseek-v4-flash 2026-07-27)
+MT,Multiple sites,reject,,,Vague description (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Dayton ODJFS Bureau of WIA-Rapid,,Dayton,place,Dayton is a city in Ohio [Dayton city] (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Multiple,reject,,,"String is 'Multiple', not a geographic name (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,"Orlando, FL (statewide in NJ)",reject,,,"Orlando, FL is out of state; 'statewide' suggests no specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Cleveland Bureau of WIA-Rapid,,Cleveland,place,"Bureau may be in Cleveland, but uncertain [Cleveland city] (deepseek/deepseek-v4-flash 2026-07-27)"
+VA,Waynsboro VA,,Waynesboro,place,Waynsboro is likely a typo for Waynesboro [Waynesboro city] (deepseek/deepseek-v4-flash 2026-07-27)
+VT,P. O. Box 43,reject,,,"PO Box, no location (deepseek/deepseek-v4-flash 2026-07-27)"
+NC,City,reject,,,'City' is too vague (deepseek/deepseek-v4-flash 2026-07-27)
+FL,32117,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33312,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+OR,MCMINVILLE,,McMinnville,place,"City in Oregon, case difference [McMinnville city] (deepseek/deepseek-v4-flash 2026-07-27)"
+WI,SE WI locations,reject,,,"Region description, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,CORAL WAY,reject,,,"Coral Way is a street, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+OR,CENTRAL OREGON,reject,,,Region description (deepseek/deepseek-v4-flash 2026-07-27)
+FL,33133,reject,,,Zip code only (deepseek/deepseek-v4-flash 2026-07-27)
+FL,Coconut Grove,,Miami,place,Neighborhood in Miami [Miami city] (deepseek/deepseek-v4-flash 2026-07-27)
+LA,10404 Twin Port Road Delacambre LA 70528,,Delcambre,place,"Delacambre is a typo for Delcambre, a town in Louisiana [Delcambre town] (deepseek/deepseek-v4-flash 2026-07-27)"
+MA,"MA, Remote/National",reject,,,"MA, Remote/National is an administrative area, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,several locations within NJ,reject,,,"Vague description, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33406,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+LA,MMF PPE Manufacturing Facility,reject,,,"facility name, not a geographic place (deepseek/deepseek-v4-flash 2026-07-27)"
+LA,Multiple Locations in Ouachita Parish,reject,,,describes multiple locations within a parish (deepseek/deepseek-v4-flash 2026-07-27)
+FL,32114,reject,,,"ZIP code, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33315,reject,,,"ZIP code, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Barberton of WIA-Rapid,,Barberton,place,Barberton is a city in Ohio [Barberton city] (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Hts.,reject,,,Abbreviation 'Hts.' is ambiguous (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Remote Workforce,reject,,,Not a geographic location (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Flowery Branc,,Flowery Branch,place,Misspelling of Flowery Branch [Flowery Branch city] (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Rural Consortium / Western,reject,,,"Administrative region, not a geographic place (deepseek/deepseek-v4-flash 2026-07-27)"
+VA,Rcihmond VA,,Richmond,place,"Typo for Richmond, VA [Richmond city] (deepseek/deepseek-v4-flash 2026-07-27)"
+AZ,Changler,,Chandler,place,"Typo for Chandler, AZ [Chandler city] (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,32544,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33431,reject,,,"ZIP code only, no place name (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"Rock Island Arsenal Bldg. 210 Rock Island, IL 61299",,Rock Island,place,Rock Island Arsenal is a military base within Rock Island city [Rock Island city] (deepseek/deepseek-v4-flash 2026-07-27)
+MD,"20 Firstfield Road Gaithersburg, Maryland 20878",,Gaithersburg,place,Address includes city name [Gaithersburg city] (deepseek/deepseek-v4-flash 2026-07-27)
+VA,N. Fairfax VA,,Fairfax,place,'N. Fairfax' likely refers to Fairfax city [Fairfax city] (deepseek/deepseek-v4-flash 2026-07-27)
+OH,D Mason,reject,,,Ambiguous 'D Mason' does not clearly name a place (deepseek/deepseek-v4-flash 2026-07-27)
+PA,Various Counties within the Commonwealth,reject,,,"Describes multiple counties, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+AL,Tuskegee Institute,reject,,,"Tuskegee Institute is an institution, not a census place (deepseek/deepseek-v4-flash 2026-07-27)"
+AZ,Phoneix,,Phoenix,place,"Misspelling of Phoenix, Arizona [Phoenix city] (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,RC: Broomfield,,Broomfield,place,"Likely refers to Broomfield, CO; 'RC:' prefix unclear but ignorable [Broomfield city] (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"RT. 1 GILLESPIE, IL 62033",,Gillespie,place,Gillespie is a city in IL [Gillespie city] (deepseek/deepseek-v4-flash 2026-07-27)
+IN,Indianapolis S. East Street,,Indianapolis,place,"Street address, city is Indianapolis [Indianapolis city (balance)] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Hamilton Twp,reject,,,Ambiguous Hamilton Township in NJ (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,Monroe Twp,reject,,,Ambiguous Monroe Township in NJ (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,NO. ARLINGTON,,North Arlington,place,"Abbreviation for North Arlington, NJ [North Arlington borough] (deepseek/deepseek-v4-flash 2026-07-27)"
+VA,Manasas VA,,Manassas,place,"Misspelling of Manassas, an independent city in Virginia [Manassas city] (deepseek/deepseek-v4-flash 2026-07-27)"
+CA,Pleasant Hills,reject,,,No matching place; likely misspelling of Pleasant Hill but uncertain (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Remote locations in CO,reject,,,"Descriptive phrase, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+WA,Nineteen locations across Washington State,reject,,,Vague description (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Tri-County,reject,,,Administrative region (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"US RT 45 NORTH HARRISBURG, IL 62946",,Harrisburg,place,Harrisburg city (deepseek/deepseek-v4-flash 2026-07-27)
+FL,32324,reject,,,"ZIP code 32324, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+CT,"400 Captain Neville Drive, in the city of Waterbury, Connecticut 06705",,Waterbury,place,"Explicitly names Waterbury, CT [Waterbury city] (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33172,reject,,,"ZIP code only, no place name (deepseek/deepseek-v4-flash 2026-07-27)"
+LA,"(Full Service Systems Corp.) – , Horseshoe Bossier City",,Bossier City,place,"Horseshoe Bossier City refers to Bossier City, LA [Bossier City city] (deepseek/deepseek-v4-flash 2026-07-27)"
+LA,Green Canyon 65 (Bullwinkle) Platform Offshore Louisiana,reject,,,"Offshore platform, not in any city or county (deepseek/deepseek-v4-flash 2026-07-27)"
+CT,322 WestFarms Mall space F226 Farmington Ct06032,,Farmington,place,"Address in Farmington, CT [Hartford County] (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"185 North Kennedy Dr Bradely, IL 60915",,Bradley,place,Spelling corrected from Bradely to Bradley [Bradley village] (deepseek/deepseek-v4-flash 2026-07-27)
+IN,Nationwide,reject,,,Nationwide is not a specific geographic location (deepseek/deepseek-v4-flash 2026-07-27)
+LA,DS-18 Drilling Rig,reject,,,DS-18 Drilling Rig does not name a geographic location (deepseek/deepseek-v4-flash 2026-07-27)
+MN,Bloomingto,,Bloomington,place,Likely Bloomington [Bloomington city] (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Unknown City/Unknown Counties,reject,,,Explicitly unknown (deepseek/deepseek-v4-flash 2026-07-27)
+UT,Cottonwoods Heights,,Cottonwood Heights,place,likely refers to Cottonwood Heights city [Cottonwood Heights city] (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Macon Drive,reject,,,"Appears to be a street name, not a place or county (deepseek/deepseek-v4-flash 2026-07-27)"
+SC,Hilton Head,,Hilton Head Island,place,Hilton Head refers to the town of Hilton Head Island [Hilton Head Island town] (deepseek/deepseek-v4-flash 2026-07-27)
+FL,33308,reject,,,ZIP code only (deepseek/deepseek-v4-flash 2026-07-27)
+MD,"8321 Leishear Road Laurel, Maryland 20723",,Laurel,place,Laurel is a city in Maryland [Laurel city] (deepseek/deepseek-v4-flash 2026-07-27)
+NC,Pines and,reject,,,Incomplete string (deepseek/deepseek-v4-flash 2026-07-27)
+VA,Fairfaix VA,,Fairfax,place,Likely misspelling of Fairfax [Fairfax city] (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Fredricktown,,Fredericktown,place,"Likely misspelling of Fredericktown, Ohio [Fredericktown village] (deepseek/deepseek-v4-flash 2026-07-27)"
+RI,Multiple Locations,reject,,,"Administrative area, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+SC,CYoonrskumer Products G,reject,,,"Garbled text, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,32218,reject,,,"ZIP code, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33319,reject,,,"ZIP code, no place name (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33404,reject,,,"ZIP code, no place name (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33782,reject,,,"ZIP code, no place name (deepseek/deepseek-v4-flash 2026-07-27)"
+GA,"All remote workers - no physical site, N/A, Georgia",reject,,,"All remote workers, no physical site (deepseek/deepseek-v4-flash 2026-07-27)"
+GA,Smryna,,Smyrna,place,"Likely misspelling of Smyrna, Georgia [Smyrna city] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,PORT NEWARK,,Newark,place,Port Newark is a neighborhood within Newark city limits [Newark city] (deepseek/deepseek-v4-flash 2026-07-27)
+CT,12/08/2025,reject,,,"Date string, not a location (deepseek/deepseek-v4-flash 2026-07-27)"
+MA,Middleboro,,Middleborough,place,"Spelling variant of Middleborough, MA [Plymouth County] (deepseek/deepseek-v4-flash 2026-07-27)"
+TN,"DeSoto County, Mississippi County",reject,,,Counties not in TN (deepseek/deepseek-v4-flash 2026-07-27)
+CA,SEQUOIA NATIONAL PAR,reject,,,"National park, not a place or county (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33702,reject,,,"ZIP code only, no place name (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"VILLAGE OF ELWOOD ELWOOD, IL 60421",,Elwood,place,Village of Elwood [Elwood village] (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Columbus ODJFS Bureau of WIA-Rapid,,Columbus,place,Columbus is a city in OH [Columbus city] (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Remote Employees,reject,,,No geographic location (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,DELAIR,,Camden,place,DELAIR is a neighborhood in Camden [Camden city] (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"816 State Street Eldordao, IL 62930-1220",,Eldorado,place,"Likely Eldorado, typo in 'Eldordao' [Eldorado city] (deepseek/deepseek-v4-flash 2026-07-27)"
+KS,523 E. Wall Street,reject,,,"Address only, no place name (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,"Annapolis Mall 1695 Annapolis Mall Annapolis, MD 21401",,Annapolis,place,Address in Annapolis [Annapolis city] (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Colo Springs,,Colorado Springs,place,Colo Springs is a common abbreviation for Colorado Springs [Colorado Springs city] (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Alanta,,Atlanta,place,Alanta is a clear misspelling of Atlanta [Atlanta city] (deepseek/deepseek-v4-flash 2026-07-27)
+CO,RC: Rural Resort,reject,,,"RC: Rural Resort is a workforce area, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Monachie,,Moonachie,place,"Monachie is likely a misspelling of Moonachie, NJ [Moonachie borough] (deepseek/deepseek-v4-flash 2026-07-27)"
+CA,Arleta,reject,,,"Arleta is a neighborhood within Los Angeles, not a census place or county (deepseek/deepseek-v4-flash 2026-07-27)"
+MI,"Statewide, County: Statewide, Number Affected: 62",reject,,,"Statewide is an administrative area, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Avon of WIA-Rapid,reject,,,"Workforce investment area reference, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,"NIAID IRF NIH Facility on Ft. Detrick Campus 8200 Research Plaza Frederick, MD 21702",,Frederick,place,"Address includes Frederick, MD [Frederick city] (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"3516 Powell Lane Mottoon, IL 61938",,Mattoon,place,"Typo in location string; likely Mattoon, IL. [Mattoon city] (deepseek/deepseek-v4-flash 2026-07-27)"
+KS,P.O. # 98,reject,,,"Only a P.O. Box number, no location specified. (deepseek/deepseek-v4-flash 2026-07-27)"
+MI,Remote,reject,,,"Remote work location, not a geographic place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,34787,reject,,,"ZIP code 34787, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+MI,Saginaw Twp.,,Saginaw Township,place,"Township in Michigan, considered a place [Saginaw city] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,"Company Location: Los Angeles, CA Affected Employees: Multiple NJ cities",reject,,,"Describes multiple NJ cities, not a specific place. (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33463,reject,,,"ZIP code only, not a specific place. (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"ALT RT. 250 Sumner, IL 62466",,Sumner,place,Route 250 in Sumner. [Sumner city] (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Union City (Darke),,Union City,place,"Ohio city in Darke County, parenthetical specifies county disambiguation [Union County] (deepseek/deepseek-v4-flash 2026-07-27)"
+MA,"Foxboro, Southeast",,Foxborough,place,"Foxboro is a common name for Foxborough, Massachusetts [Foxborough CDP] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Lakes,reject,,,No known place called Lakes in New Jersey (deepseek/deepseek-v4-flash 2026-07-27)
+OH,Mentor Bureau of WIA-Rapid,,Mentor,place,Mentor is a city in Ohio [Mentor city] (deepseek/deepseek-v4-flash 2026-07-27)
+WI,11 Fox Valley locations,reject,,,"Fox Valley is a region, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+LA,MMF Facility (Second WARN),reject,,,MMF Facility is not a geographic name (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"NOT PROVIDED LONG GROVE, IL 60049-0001",,Long Grove,place,Long Grove is the place name [Long Grove village] (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"Whitaker and Westgate Salem, IL 62881",,Salem,place,specifies intersection in Salem [Salem city] (deepseek/deepseek-v4-flash 2026-07-27)
+VA,Mananssas VA,,Manassas,place,"Misspelling of Manassas, an independent city in VA. [Manassas city] (deepseek/deepseek-v4-flash 2026-07-27)"
+WI,Greeny Bay,,Green Bay,place,"Misspelling of Green Bay, a city in Brown County, WI. [Green Bay city] (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,Various-Workers were stationed in 17 different Target Stores around the state.,reject,,,"Workers at 17 different Target stores across the state, not a single site (deepseek/deepseek-v4-flash 2026-07-27)"
+GA,Georgia,reject,,,"State name, not a specific site (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,"1901 Sulphur Springs Road Halethorpe, MD 21227",reject,,,"Address, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,Rural Consortium - Eastern Sub-Area,reject,,,Workforce investment area (deepseek/deepseek-v4-flash 2026-07-27)
+MD,"1125 N. Charles Street Baltimore, Maryland 21201",,Baltimore,place,Address in Baltimore city [Baltimore city] (deepseek/deepseek-v4-flash 2026-07-27)
+FL,32128,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+NE,Ogalalla,,Ogallala,place,"Misspelling of Ogallala, a city in Nebraska. [Ogallala city] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,WEST PATERSON,,Woodland Park,place,WEST PATERSON is now Woodland Park borough. [Woodland Park borough] (deepseek/deepseek-v4-flash 2026-07-27)
+WI,Hales Corner,,Hales Corners,place,village in Milwaukee County [Hales Corners village] (deepseek/deepseek-v4-flash 2026-07-27)
+FL,33179,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33823,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+VA,VA,reject,,,Only state abbreviation (deepseek/deepseek-v4-flash 2026-07-27)
+ND,Statewide,reject,,,Statewide refers to entire state (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,MONMOUTH JCT,,Monmouth Junction,place,Abbreviation for Monmouth Junction [Monmouth Junction CDP] (deepseek/deepseek-v4-flash 2026-07-27)
+VA,Eastern VA,reject,,,"Region, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+NY,Broadway,reject,,,"Broadway is a street, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Unknown/Unknown,reject,,,Unknown/Unknown is not a geography (deepseek/deepseek-v4-flash 2026-07-27)
+LA,Elastomer LLC,reject,,,"Company name, not a geography (deepseek/deepseek-v4-flash 2026-07-27)"
+IN,Out of State,reject,,,Not a specific geographic location (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,Robinsville,,Robbinsville,place,Likely Robbinsville Township [Mercer County] (deepseek/deepseek-v4-flash 2026-07-27)
+IN,various Indiana locations,reject,,,Non-specific locations (deepseek/deepseek-v4-flash 2026-07-27)
+CA,WESTCHESTER,,Los Angeles,place,Westchester is a neighborhood in Los Angeles [Los Angeles city] (deepseek/deepseek-v4-flash 2026-07-27)
+GA,College Pk,,College Park,place,"Abbreviation for College Park, GA [College Park city] (deepseek/deepseek-v4-flash 2026-07-27)"
+PA,Various counties,reject,,,Various counties is an administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+FL,32174,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+IN,Statewide- Various Locations,reject,,,Statewide administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+WA,5 Puget Sound military locations,reject,,,"Vague description, not specific place names (deepseek/deepseek-v4-flash 2026-07-27)"
+NY,Amherst_x0001_,,Amherst,place,Amherst is a town in New York [Erie County] (deepseek/deepseek-v4-flash 2026-07-27)
+WI,Milwaukeee,,Milwaukee,place,Misspelling of Milwaukee [Milwaukee city] (deepseek/deepseek-v4-flash 2026-07-27)
+MD,No specific location,reject,,,No location given (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,Mawah,,Mahwah,place,"Probably Mahwah, NJ [Bergen County] (deepseek/deepseek-v4-flash 2026-07-27)"
+SC,11/21/2012,reject,,,"string is a date, not a location (deepseek/deepseek-v4-flash 2026-07-27)"
+CA,West Los Angeles,,Los Angeles,place,West Los Angeles is a neighborhood within Los Angeles city [Los Angeles city] (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Unspecified,reject,,,Clearly not a geographic location (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Alphretta,,Alpharetta,place,"Likely a misspelling of Alpharetta, Georgia [Alpharetta city] (deepseek/deepseek-v4-flash 2026-07-27)"
+VA,Virginia VA,reject,,,"Names the state itself, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+WA,"Statewide, WA",reject,,,Statewide is an administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+WI,Various location,reject,,,Various location is not a specific place (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"multiple remote IL locations multiple, IL 99999",reject,,,No specific place names given (deepseek/deepseek-v4-flash 2026-07-27)
+WI,Abbottsford,,Abbotsford,place,Likely Abbotsford [Abbotsford city] (deepseek/deepseek-v4-flash 2026-07-27)
+CT,"5 Technology Dr Wallinford,CT 06492",,Wallingford,place,Address in Wallingford [New Haven County] (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,Cranburry,,Cranbury,place,Likely Cranbury [Cranbury CDP] (deepseek/deepseek-v4-flash 2026-07-27)
+CA,Carmel,,Carmel-by-the-Sea,place,Carmel is an incorporated city in California [Carmel-by-the-Sea city] (deepseek/deepseek-v4-flash 2026-07-27)
+CA,STEINBECK,reject,,,Not a recognized place in California (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,Various NJ locations,reject,,,"Administrative area, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+MT,Multiple,reject,,,'Multiple' is not a geographic place (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,Bedminister,,Bedminster,place,"Spelled 'Bedminister' in input, likely Bedminster, NJ [Bedminster CDP] (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"RT 148 SOUTH HERRIN, IL 62948",,Herrin,place,"Street address in Herrin, IL [Herrin city] (deepseek/deepseek-v4-flash 2026-07-27)"
+AZ,Case Grande,,Casa Grande,place,"Spelled 'Case Grande', likely Casa Grande [Casa Grande city] (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,Rural Consortium - Eastern,reject,,,Administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+CT,CT,reject,,,State abbreviation only (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Forest Pk,,Forest Park,place,"Abbreviation for Forest Park, GA [Forest Park city] (deepseek/deepseek-v4-flash 2026-07-27)"
+NY,Rockville Center,,Rockville Centre,place,"Rockville Center likely refers to Rockville Centre, NY [Rockville Centre village] (deepseek/deepseek-v4-flash 2026-07-27)"
+UT,State of Utah,reject,,,"State name, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+WA,Whidbey Island,reject,,,"Island name, not a census geography (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33065,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+NY,Oakland Gardens,reject,,,"Neighborhood in New York City, not a separate place (deepseek/deepseek-v4-flash 2026-07-27)"
+NY,So Ozone Park,reject,,,"Neighborhood in New York City, not a separate place (deepseek/deepseek-v4-flash 2026-07-27)"
+KS,200 South Ridge Road,reject,,,Address with no place name (deepseek/deepseek-v4-flash 2026-07-27)
+VA,VA-Statewide VA,reject,,,Statewide administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Remote Workers,reject,,,No geographic location named (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Rural Alliance: Pueblo,reject,,,"Administrative area or program, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,"9315 Ocean Highway Delmar, Maryland 21875",,Delmar,place,Delmar is an incorporated town in Maryland [Delmar town] (deepseek/deepseek-v4-flash 2026-07-27)
+MD,"Shoppers Coral Hills 4801 Marlboro Pike Capitol Heights, MD 20743",,Capitol Heights,place,Capitol Heights is an incorporated town in Maryland [Capitol Heights town] (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"YORKTOWN SHOPPING CENTER LOMBARD, IL 60148",,Lombard,place,shopping center in Lombard [Lombard village] (deepseek/deepseek-v4-flash 2026-07-27)
+NE,Statewide,reject,,,Statewide is not a place (deepseek/deepseek-v4-flash 2026-07-27)
+SC,South Carolina,reject,,,"State name, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+CA,CALLISTOGA,,Calistoga,place,Calistoga city (deepseek/deepseek-v4-flash 2026-07-27)
+MD,"Annapolis Mall 2002 Annapolis Mall Annapolis, Md 21401",,Annapolis,place,Annapolis Mall is within the city of Annapolis [Annapolis city] (deepseek/deepseek-v4-flash 2026-07-27)
+NE,O.Neil,,O'Neill,place,"Likely misspelling of O'Neill, Nebraska [O'Neill city] (deepseek/deepseek-v4-flash 2026-07-27)"
+CT,Wetherfield,,Wethersfield,place,"Likely misspelling of Wethersfield, Connecticut [Wethersfield CDP] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Egg Harbor Twp,,Egg Harbor Township,place,Egg Harbor Twp is a township in New Jersey [Egg Harbor City city] (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,WEEHAWKIN,,Weehawken,place,"Likely misspelling of Weehawken, New Jersey [Hudson County] (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,"ProMedica Chevy Chase 8700 Jones Mill Rd Chevy Chase, MD 20815",,Chevy Chase,place,Chevy Chase is a town in Maryland [Montgomery County] (deepseek/deepseek-v4-flash 2026-07-27)
+WA,Remote in Washington,reject,,,"Describes remote work, not a specific location (deepseek/deepseek-v4-flash 2026-07-27)"
+WI,Sturevant,,Sturtevant,place,"Likely typo for Sturtevant, a village in Racine County, WI [Sturtevant village] (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,Unknown (Remote Workers),reject,,,"Describes remote workers, not a geographic place (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,32433,reject,,,"A zip code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,"5550 Friendship Boulevard Suite T-90 Chevy Chase, MD 20815",,Chevy Chase,place,"Chevy Chase is a town in Montgomery County, MD [Montgomery County] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Remote Workers in NJ,reject,,,"Describes remote workers in NJ, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+SC,UnitedStates/Statewide,reject,,,"Statewide designation, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,"6611 Annapolis Road Landover Hill, MD 20784",,Landover Hills,place,"Likely a typo for Landover Hills, MD [Landover Hills town] (deepseek/deepseek-v4-flash 2026-07-27)"
+NC,North,reject,,,Too vague; not a specific place (deepseek/deepseek-v4-flash 2026-07-27)
+MD,"2201 Varnum St, Mt. Rainer, MD 20712",,Mount Rainier,place,"Mt. Rainer is a typo for Mount Rainier, MD [Mount Rainier city] (deepseek/deepseek-v4-flash 2026-07-27)"
+MN,Inver Grove Hts,,Inver Grove Heights,place,"Abbreviation for Inver Grove Heights, MN [Inver Grove Heights city] (deepseek/deepseek-v4-flash 2026-07-27)"
+OR,Hermistion,,Hermiston,place,"Likely misspelling of Hermiston, Oregon [Hermiston city] (deepseek/deepseek-v4-flash 2026-07-27)"
+OR,Tualitin,,Tualatin,place,"Likely misspelling of Tualatin, Oregon [Tualatin city] (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33410,reject,,,"Only a ZIP code, no place name (deepseek/deepseek-v4-flash 2026-07-27)"
+GA,Sm\,reject,,,Truncated or garbage string (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,Ivrington,,Irvington,place,"Likely misspelling of Irvington, NJ [Essex County] (deepseek/deepseek-v4-flash 2026-07-27)"
+RI,Nationwide - RI,reject,,,Nationwide is not a place (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Rural Consortium =RR,reject,,,Rural Consortium is an administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+FL,33027,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,33304,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+WI,Multiple locations,reject,,,Multiple locations (deepseek/deepseek-v4-flash 2026-07-27)
+FL,33169,reject,,,"ZIP code only, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+SC,SC – statewide,reject,,,Statewide designation (deepseek/deepseek-v4-flash 2026-07-27)
+CT,"100 Post Rd E,Westport CT 06880",,Westport,place,"Address in Westport, CT [Westport Village CDP] (deepseek/deepseek-v4-flash 2026-07-27)"
+GA,STOCKBRIDG,,Stockbridge,place,"Likely typo for Stockbridge, GA [Stockbridge city] (deepseek/deepseek-v4-flash 2026-07-27)"
+LA,Multiple Cities,reject,,,Multiple Cities is an administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+WI,Wisconsin,reject,,,"State name, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+CT,04/01/2021,reject,,,Date string (deepseek/deepseek-v4-flash 2026-07-27)
+CT,Not Indicated,reject,,,'Not Indicated' (deepseek/deepseek-v4-flash 2026-07-27)
+GA,Swanee,,Suwanee,place,"Likely misspelling of Suwanee, GA [Suwanee city] (deepseek/deepseek-v4-flash 2026-07-27)"
+SC,"LLLexCi,n dg/tbo/na Yelloh",reject,,,Garbled text (deepseek/deepseek-v4-flash 2026-07-27)
+WI,Unknown - Remote Employees,reject,,,"Explicitly unknown, remote employees (deepseek/deepseek-v4-flash 2026-07-27)"
+FL,32757,reject,,,"zip code only, no place name (deepseek/deepseek-v4-flash 2026-07-27)"
+ID,Mtn. Home,,Mountain Home,place,"Mtn. Home is an abbreviation for Mountain Home, Idaho [Mountain Home city] (deepseek/deepseek-v4-flash 2026-07-27)"
+MA,"Remote/MA, Remote",reject,,,"Remote/MA, Remote is not a geographic place (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Keasby,,Keasbey,place,"likely misspelling of Keasbey, NJ [Keasbey CDP] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Princeton JCT,,Princeton Junction,place,Princeton Junction CDP (deepseek/deepseek-v4-flash 2026-07-27)
+RI,RI,reject,,,just state abbreviation (deepseek/deepseek-v4-flash 2026-07-27)
+SC,"LCLhCar,l eds/bto/an Yelloh",reject,,,garbled text (deepseek/deepseek-v4-flash 2026-07-27)
+SC,Mrytle Beach,,Myrtle Beach,place,misspelling [Myrtle Beach city] (deepseek/deepseek-v4-flash 2026-07-27)
+SC,"tSivtaet eSwerivdiec e- sM, LuLltiCple",reject,,,scrambled text (deepseek/deepseek-v4-flash 2026-07-27)
+VA,Newport New VA,,Newport News,place,typo for Newport News [Newport News city] (deepseek/deepseek-v4-flash 2026-07-27)
+WA,Mt. Rainier,reject,,,"mountain, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,"704 Chase Six Boulevard Boonesboro, MD 21713",,Boonsboro,place,"Address in Boonsboro, MD, slight misspelling of Boonsboro [Boonsboro town] (deepseek/deepseek-v4-flash 2026-07-27)"
+MN,Oak Park Hts,,Oak Park Heights,place,Abbreviation for Oak Park Heights. [Oak Park Heights city] (deepseek/deepseek-v4-flash 2026-07-27)
+NE,Gothernburg,,Gothenburg,place,"Misspelling of Gothenburg, Nebraska. [Gothenburg city] (deepseek/deepseek-v4-flash 2026-07-27)"
+CO,Rural Southwest,reject,,,"Rural Southwest is a region, not a specific geography (deepseek/deepseek-v4-flash 2026-07-27)"
+GA,"277 Park Ave, New York, Georgia",reject,,,"Address-like string, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+MA,"Massachusetts, Remote",reject,,,"statewide reference, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+MA,"Massachusetts, Remote-National",reject,,,"statewide reference, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+NV,"unknown, unknown",reject,,,"""unknown, unknown"" is not a geographic entity (deepseek/deepseek-v4-flash 2026-07-27)"
+OH,Unknown/Out-of-State,reject,,,Indicates out-of-state or unspecified (deepseek/deepseek-v4-flash 2026-07-27)
+WI,Caddot,reject,,,No known place called Caddot in WI (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Multiple areas Remote Employees,reject,,,"Multiple areas and remote employees, not a specific geography (deepseek/deepseek-v4-flash 2026-07-27)"
+GA,Warner Robbins,,Warner Robins,place,"Likely typo for Warner Robins, Georgia [Warner Robins city] (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,6700 Taylor Avenue,reject,,,No place name in the string (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"PO Box 98 Gilman, IL 60938",,Gilman,place,city in Illinois [Gilman city] (deepseek/deepseek-v4-flash 2026-07-27)
+GA,St. Mountain,reject,,,no matching place in GA for 'St. Mountain' (deepseek/deepseek-v4-flash 2026-07-27)
+SC,107 Fountain Inn,,Fountain Inn,place,address '107 Fountain Inn' likely refers to Fountain Inn city [Fountain Inn city] (deepseek/deepseek-v4-flash 2026-07-27)
+LA,"U.S. Gulf of Mexico 105 Tower Rd. Houma, Louisiana",,Houma,place,"address includes Houma, LA [Houma city] (deepseek/deepseek-v4-flash 2026-07-27)"
+SC,111 Fountain Inn,,Fountain Inn,place,address '111 Fountain Inn' likely refers to Fountain Inn city [Fountain Inn city] (deepseek/deepseek-v4-flash 2026-07-27)
+MD,"Medstar Harbor 3001 S. Hanover St. Baltimore, MD 21225",,Baltimore,place,"Medstar Harbor address in Baltimore, MD [Baltimore city] (deepseek/deepseek-v4-flash 2026-07-27)"
+LA,"2317 Hwy 662 South Morgan City, Louisiana 70380",,Morgan City,place,Valid city in Louisiana [Morgan City city] (deepseek/deepseek-v4-flash 2026-07-27)
+WA,Not Provided,reject,,,no matching place (deepseek/deepseek-v4-flash 2026-07-27)
+WI,517919.0,reject,,,no matching place (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Not Disclosed,reject,,,Not a geographic name (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Not Stated,reject,,,Not a geographic name (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Remote location in CO,reject,,,Vague description (deepseek/deepseek-v4-flash 2026-07-27)
+CO,Rural Alliance,reject,,,Not a recognized place (deepseek/deepseek-v4-flash 2026-07-27)
+FL,32216,reject,,,"ZIP code, not a place name (deepseek/deepseek-v4-flash 2026-07-27)"
+LA,Multi-state WARN,reject,,,"Administrative region, not a geography (deepseek/deepseek-v4-flash 2026-07-27)"
+MA,"Remote Worker/National, Remote-National",reject,,,"Conceptual location, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+MN,South St,reject,,,"Ambiguous street name, not a recognized place (deepseek/deepseek-v4-flash 2026-07-27)"
+ND,Nationwide,reject,,,Nationwide is not a geographic location (deepseek/deepseek-v4-flash 2026-07-27)
+NJ,Edisom,,Edison,place,"Typo for Edison, a census place in NJ [Middlesex County] (deepseek/deepseek-v4-flash 2026-07-27)"
+NY,Finger Lakes/WIB: Monroe/ Region: Finger Lakes,reject,,,"Workforce investment area and region, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+RI,United States,reject,,,refers to the entire United States (deepseek/deepseek-v4-flash 2026-07-27)
+SC,Statewide - Multiple,reject,,,statewide administrative area (deepseek/deepseek-v4-flash 2026-07-27)
+SD,South Dakota,reject,,,refers to entire state (deepseek/deepseek-v4-flash 2026-07-27)
+WA,Virtual,reject,,,not a geographic location (deepseek/deepseek-v4-flash 2026-07-27)
+CT,08/17/2020,reject,,,"Date string, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"IL Statewide Event Springfield, IL 62701",reject,,,"statewide event, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"IL Statewide Event Springfield, IL 62701-3512",reject,,,"statewide event, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+IL,"RR DANVILLE, IL 61832",,Danville,place,RR likely refers to a location within Danville city limits [Danville city] (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"STEPHEN ST & SANITARY CANAL LEMONT, IL 60439",,Lemont,place,intersection within Lemont village [Lemont village] (deepseek/deepseek-v4-flash 2026-07-27)
+IL,"Statewide Event-Chicago Parent LWIA Chicago/multiple sites, IL 60606",reject,,,workforce investment area with multiple sites (deepseek/deepseek-v4-flash 2026-07-27)
+LA,Offshore – Gulf of Mexico,reject,,,"Offshore Gulf of Mexico is a body of water, not a place (deepseek/deepseek-v4-flash 2026-07-27)"
+MA,"North Attelboro, Southeast",,North Attleborough,place,"Likely misspelling of North Attleborough, a town in Massachusetts [North Attleborough Town city] (deepseek/deepseek-v4-flash 2026-07-27)"
+MA,"Planville, Metro Southwest",,Plainville,place,"Likely misspelling of Plainville, a town in Massachusetts [Norfolk County] (deepseek/deepseek-v4-flash 2026-07-27)"
+MA,"Remote Workers/National, Remote-National",reject,,,"Describes remote work arrangement, not a geographic place (deepseek/deepseek-v4-flash 2026-07-27)"
+MD,"Maryland Square Riverdale, MD",,Riverdale Park,place,Maryland Square is a neighborhood in Riverdale Park [Riverdale Park town] (deepseek/deepseek-v4-flash 2026-07-27)
+MI,"Statewide, County: Statewide",reject,,,"statewide layoff notice, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+MN,e SRRT has becom,reject,,,garbled text (deepseek/deepseek-v4-flash 2026-07-27)
+MT,Multiple - Eastern MT,reject,,,"Refers to multiple locations in eastern Montana, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,Haboken,,Hoboken,place,"Spelling variant of Hoboken, New Jersey [Hoboken city] (deepseek/deepseek-v4-flash 2026-07-27)"
+NJ,No. Cape May,,North Cape May,place,No. stands for North; North Cape May is a CDP in New Jersey [North Cape May CDP] (deepseek/deepseek-v4-flash 2026-07-27)
+NV,"Amentum - CTTR, Fa, LV",reject,,,"Appears to be a company name with abbreviations, not a geographic place (deepseek/deepseek-v4-flash 2026-07-27)"
+NV,"Gaudin Motor Company, He, LV",reject,,,"Company name with abbreviations, not a clear geographic place (deepseek/deepseek-v4-flash 2026-07-27)"
+NV,"Go Rentals, LV, Re",reject,,,"Company name with abbreviations, not a clear geographic place (deepseek/deepseek-v4-flash 2026-07-27)"
+OK,Central (COWIB),reject,,,Central (COWIB) is a workforce investment board area (deepseek/deepseek-v4-flash 2026-07-27)
+OK,CentralRegion,reject,,,CentralRegion is a workforce region (deepseek/deepseek-v4-flash 2026-07-27)
+OK,EastCentralRegion,reject,,,EastCentralRegion is a workforce region (deepseek/deepseek-v4-flash 2026-07-27)
+OK,Green Country,reject,,,Green Country is a region in Oklahoma (deepseek/deepseek-v4-flash 2026-07-27)
+OK,GreenCountryRegion,reject,,,"regional name, not a specific geographic place (deepseek/deepseek-v4-flash 2026-07-27)"
+OK,Guyman,,Guymon,place,"likely typo for Guymon, an incorporated city in Oklahoma [Guymon city] (deepseek/deepseek-v4-flash 2026-07-27)"
+OK,NorthCentral,reject,,,"Refers to a region, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+OK,NorthWestRegion,reject,,,"Refers to a region, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+OK,Oklahoma CityOklahoma City,,Oklahoma City,place,Duplication of Oklahoma City [Oklahoma City city] (deepseek/deepseek-v4-flash 2026-07-27)
+OK,Purchase,reject,,,Purchase is not a recognized Oklahoma place (deepseek/deepseek-v4-flash 2026-07-27)
+OK,SouthCentralRegion,reject,,,"Refers to a region, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+OK,SouthEastRegion,reject,,,"Refers to a region, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+OK,SouthWestRegion,reject,,,"Refers to a region, not a specific place (deepseek/deepseek-v4-flash 2026-07-27)"
+OK,Southern,reject,,,vague region name (deepseek/deepseek-v4-flash 2026-07-27)
+OK,SouthernRegion,reject,,,vague region name (deepseek/deepseek-v4-flash 2026-07-27)
+SD,Nationwide,reject,,,Nationwide is not a specific geography (deepseek/deepseek-v4-flash 2026-07-27)
+WA,Nine Locations - WA,reject,,,Generic phrase indicating multiple unspecified locations (deepseek/deepseek-v4-flash 2026-07-27)
+WI,No WI,reject,,,Not a place name (deepseek/deepseek-v4-flash 2026-07-27)

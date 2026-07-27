@@ -1,0 +1,1025 @@
+state,location,notices,workers,reason,kind,census_name,resolved_to,confidence,elsewhere,outcome,gate,note
+CT,"82-E Buckland St, Manchester CT / 112-118 Boston Post Road, Orange, CT / 15 Backus Ave, Space 13-15, Danbury CT",2,18496,3 distinct places named,multiple,,,0.99,,staged,multiple,"lists three distinct places: Manchester, Orange, Danbury"
+VA,Dulles VA,14,5352,no matching place,county,Loudoun County,Loudoun County,0.9,,staged,county-level,"Dulles is an airport in Loudoun County, Virginia"
+IN,Gary and Portage,1,3765,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct cities: Gary and Portage
+WA,"Seattle, Bellevue",8,3491,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct cities
+MI,"Dearborn, Michigan; Farmington Hills, Michigan; Grosse Pointe, Michigan; Royal Oak, Michigan; Southfield, Michigan; Taylor, Michigan; Trenton, Michigan; Troy, Michigan; and Wayne, Michigan",1,2900,8 distinct places named,multiple,,,0.99,,staged,multiple,eight distinct places named
+MD,"7002 Arundel Mills Circle Hanover, MD 21076",1,2400,no matching place,county,Anne Arundel County,Anne Arundel County,0.95,"AL,IL,IN,KS,MA,ME,MI,MN,NE,NH,NJ,NM,NY,OH,PA,VA,WI",staged,county-level,"Address in Hanover, an unincorporated community in Anne Arundel County"
+MI,"Ann Arbor, Michigan; Birmingham, Michigan; Canton, Michigan; Clarkston, Michigan; Flint, Michigan; Grand Rapids, Michigan; Grandville, Michigan; Jackson, Michigan; Kalamazoo, Michigan; Kentwood, Michigan; Lansing, Michigan; Livonia, Michigan; Madison Heights, Michigan; Novi, Michigan; Okemos, Michigan; Portage, Michigan; Roseville, Michigan; Saginaw, Michigan, Shelby Township, Michigan; Southfield, Michigan, Southgate, Michigan; Sterling Heights, Michigan; Traverse City, Michigan; and Troy, Michigan",1,2289,23 distinct places named,multiple,,,1.0,,staged,multiple,23 distinct places listed
+WI,"Brookfield, Eau Claire, Glendale, Greendale, Janesville, Madison, Marshfield, Milwaukee, Racine, Wauwatosa",1,2255,10 distinct places named,multiple,,,1.0,,staged,multiple,10 distinct places listed
+WA,"Redmond, Bellevue, Issaquah",3,2184,3 distinct places named,multiple,,,1.0,,staged,multiple,3 distinct places listed
+WA,"Seattle, Kent",2,2177,2 distinct places named,multiple,,,1.0,,staged,multiple,2 distinct places listed
+AZ,Laveen,1,2137,no matching place,county,Maricopa County,Maricopa County,0.9,,staged,county-level,Laveen is an unincorporated community in Maricopa County
+MD,"1430 Sparrows Point Blvd., Sparrows Point, MD",1,1975,no matching place,county,Baltimore County,,0.8,,staged,did not resolve,unincorporated community in Baltimore County
+WI,"Milwaukee, Wabeno, Crandon",1,1835,2 distinct places named,multiple,,,0.99,,staged,multiple,"three distinct places: Milwaukee, Wabeno, Crandon"
+MO,St. Louis & Springfield,1,1810,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places: St. Louis and Springfield
+NJ,Lawrence Twp,9,1770,no matching place,place,Lawrence Township,,0.95,,staged,did not resolve,Lawrence Township is an incorporated township in New Jersey
+WI,"Abbotsford, Adams, Appleton, Arcadia, Ashwaubenon, Beaver Dam, Chippewa Falls, Clintonville, De Pere, Eagle River, Eau Claire, Fond du Lac, Fort Atkinson, Green Bay, Janesville, La Crosse, Lancaster, Marshfield, Mequon, Monroe, Neillsville, Oconto, Onalaska, Oshkosh, Park Falls, Reedsburg, Rice Lake, River Falls, Rothschild, Sister Bay, Spooner, Stanley, Suamico, Tomahawk, Waukesha, Wausau, Wautoma, Wisconsin Rapids",1,1715,38 distinct places named,multiple,,,0.99,,staged,multiple,list of 38 distinct places
+CO,Arapahoe/Douglas (Centennial),2,1700,2 distinct places named,multiple,,,0.99,,staged,multiple,two counties named with a city in parentheses
+WA,Redmond and Bellevue,3,1665,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places: Redmond and Bellevue
+MI,"Detroit, Michigan and Troy, Michigan",1,1656,2 distinct places named,multiple,,,0.99,,staged,multiple,"two distinct places: Detroit and Troy, both in Michigan"
+WA,"Seatac, Seattle",1,1583,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places: Seatac and Seattle
+WI,"Appleton, Greenville, Kimberly, Neenah",1,1546,3 distinct places named,multiple,,,0.99,,staged,multiple,"multiple places: Appleton, Greenville, Kimberly, Neenah"
+VA,Ringgold VA,7,1477,no matching place,county,Pittsylvania County,Pittsylvania County,0.9,"GA,LA,MD,PA,TX",staged,county-level,Ringgold is an unincorporated community in Pittsylvania County
+IN,"Merrillville, Mishawaka, Fort Wayne, Kokomo, Greenwood, Muncie, Terre Haute, Bloomington, Clarksville, Evansville and Indianapolis",1,1448,11 distinct places named,multiple,,,0.99,,staged,multiple,11 distinct places listed
+LA,"2650 Louisiana Avenue, Bldg. 4386 Fort Polk, LA 71459",5,1422,no matching place,county,Vernon Parish,Vernon Parish,0.95,,staged,county-level,Fort Polk military base in Vernon Parish
+GA,McRae,3,1371,no matching place,place,McRae,,0.9,,staged,did not resolve,McRae is a city in Georgia
+MI,"Auburn Hills, Michigan; Birmingham, Michigan; Detroit, Michigan; Farmington Hills, Michigan; Holly, Michigan; Livonia, Michigan; Milford, Michigan; Oscoda, Michigan; Plymouth, Michigan; Mt. Clemens, Michigan; Royal Oak, Michigan; Southgate, Michigan; and St. Clair Shores, Michigan",1,1318,12 distinct places named,multiple,,,0.99,,staged,multiple,13 distinct places listed
+MI,"Belmont, Michigan; Grand Rapids, Michigan; Grandville, Michigan; Lowell, Michigan; Middleville, Michigan; and Wyoming, Michigan",1,1295,5 distinct places named,multiple,,,0.99,,staged,multiple,6 distinct places listed
+CO,Arapahoe Douglas,10,1215,no matching place,multiple,"Arapahoe County, Douglas County",,0.95,,staged,multiple,Likely refers to two counties
+GA,Rabun Gap,4,1150,no matching place,county,Rabun County,Rabun County,0.97,,staged,county-level,Rabun Gap is an unincorporated community in Rabun County
+VA,"Alexandria, Arlington, Fairfax, Falls Church & Vienna VA",1,1141,5 distinct places named,multiple,"Alexandria, Arlington, Fairfax, Falls Church, Vienna",,0.98,,staged,multiple,Five distinct places listed
+WI,"Waukesha, Menomonee Falls, Greenfield, Wauwatosa, New Berlin, Mukwonago",1,1100,5 distinct places named,multiple,"Waukesha, Menomonee Falls, Greenfield, Wauwatosa, New Berlin, Mukwonago",,0.98,,staged,multiple,Six distinct places listed
+PA,York and Philadelphia,1,1096,2 distinct places named,multiple,,,0.99,,staged,multiple,York and Philadelphia
+GA,Ellenwood,5,1072,no matching place,place,Ellenwood,,0.95,,staged,did not resolve,
+MA,"Boston, Chestnut Hill & Framingham",1,1019,2 distinct places named,multiple,,,0.99,,staged,multiple,"Boston, Chestnut Hill & Framingham"
+MD,"1430 Sparrows Point Boulevard, Sparrows Point, MD",1,1012,no matching place,place,Sparrows Point,,0.95,,staged,did not resolve,
+NV,"Las Vegas/Reno, Clark/Washoe",3,1010,2 distinct places named,multiple,,,0.99,,staged,multiple,"Las Vegas/Reno, Clark/Washoe"
+WI,"Arcadia, Augusta, Barron, Black River Falls, Chetek, Chippewa Falls, Cornell, Eau Claire, Galesville, Hayward, La Crosse, Ladysmith, Neillsville, Rice Lake, Richland Center, Shell Lake, Spencer, Stanley, Tomah, Whitehall",1,1008,20 distinct places named,multiple,,,0.99,,staged,multiple,List of 20 places
+CA,OLYMPIC VALLEY,4,995,no matching place,place,Olympic Valley,,0.95,,staged,did not resolve,"Census-designated place in Placer County, California"
+PA,"Bucks, Delaware, Montgomery and Philadelphia",1,983,2 distinct places named,multiple,,,0.99,,staged,multiple,"Bucks, Delaware, Montgomery, and Philadelphia counties in Pennsylvania"
+CA,TAHOE CITY,2,979,no matching place,place,Tahoe City,,0.95,,staged,did not resolve,"Census-designated place in Placer County, California"
+MI,"Alpine, Michigan; Burton, Michigan; Grand Rapids, Michigan; Lansing, Michigan; Novi, Michigan; Shelby Township, Michigan; and Warren, Michigan",1,979,6 distinct places named,multiple,,,0.99,,staged,multiple,"Alpine, Burton, Grand Rapids, Lansing, Novi, Shelby Township, and Warren in Michigan"
+CA,MCCLELLAN AFB,10,963,no matching place,county,Sacramento County,Sacramento County,0.95,,staged,county-level,"McClellan AFB is an unincorporated area in Sacramento County, California"
+MD,"47123 Buse Rd. #540 Patuxent River, MD 20670",1,937,no matching place,place,Patuxent River,,0.95,,staged,did not resolve,"Census-designated place in St. Mary's County, Maryland"
+GA,Midland,5,919,no matching place,place,Midland,,0.8,,staged,did not resolve,"Town in Muscogee County, Georgia"
+OR,"Portland, Eugene, Medford, Salem",1,919,4 distinct places named,multiple,,,0.99,,staged,multiple,four distinct places named
+NY,Buffalo/Amherst/Kenmore/Lancaster/Lockport/Niagara,1,909,4 distinct places named,multiple,,,0.99,,staged,multiple,six distinct places named
+WA,"Bothell, Redmond",23,894,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places named
+WA,Bangor,2,887,no matching place,county,Kitsap County,Kitsap County,0.95,"CA,ME,MI,MN,NY,PA,SD,WI",staged,county-level,Bangor is an unincorporated community in Kitsap County
+WI,Wilmot,3,884,no matching place,place,Wilmot,,0.95,,staged,did not resolve,Wilmot is a village in Wisconsin
+MO,Earth City,8,877,no matching place,county,St. Louis County,,0.95,,staged,did not resolve,Earth City is an unincorporated community in St. Louis County
+WA,Malaga,3,874,no matching place,county,Chelan County,Chelan County,0.95,"CA,NJ,NM,OH",staged,county-level,Malaga is an unincorporated community in Chelan County
+AL,Adger,3,872,no matching place,county,Jefferson County,Jefferson County,0.95,,staged,county-level,"Adger is an unincorporated community in Jefferson County, Alabama"
+MN,Bentonville,2,840,no matching place,place,Bentonville,,0.85,,staged,did not resolve,"Bentonville is a small city in Wright County, Minnesota"
+WI,"Waukesha, Oconomowoc, Mukwonago, Brookfield, New Berlin, Delafield, Pewaukee, Watertown, Muskego, Waterford, Sussex, Hartland",1,835,10 distinct places named,multiple,,,0.99,,staged,multiple,List of 12 distinct places in Wisconsin
+OH,"Steubenville, Mingo Junction, Yorkville (Jefferson)",1,831,3 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places in Jefferson County, Ohio"
+TN,"Davidson, Sevier, and Williamson County",1,830,no matching place,multiple,,,0.99,,staged,multiple,Three counties in Tennessee
+WI,"Green Bay, Brussels, Suring",1,829,2 distinct places named,multiple,,,0.99,,staged,multiple,Three distinct places in Wisconsin
+OH,Cleveland & Ashtabula (Cuyahoga & Ashtabula),1,803,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places: Cleveland and Ashtabula
+OH,Sandusky/ErieMason/Warren,1,802,2 distinct places named,multiple,,,0.95,,staged,multiple,"multiple places: Sandusky, Erie, Mason, Warren"
+NJ,NEWARK/JERSEY CITY,1,800,2 distinct places named,multiple,,,0.99,,staged,multiple,two places: Newark and Jersey City
+TN,Davidson and Shelby County,3,787,no matching place,multiple,,,0.99,,staged,multiple,two counties: Davidson and Shelby
+CA,ORO GRANDE,10,775,no matching place,place,Oro Grande,,0.9,,staged,did not resolve,Census-designated place in CA
+CT,"Hartford, Bridgeport, Farmington, Enfield, East Windsor, Cos Cob, North Haven, New Haven, South Windsor, Southington, Stamford, Wethersfield, Woodbridge",1,747,7 distinct places named,multiple,,,0.99,,staged,multiple,list of CT cities
+MI,"Warren, Michigan; Novi, Michigan; Grand Rapids, Michigan; Burton, Michigan; Shelby Township, Michigan; Lansing, Michigan; and Alpine, Michigan",1,721,6 distinct places named,multiple,,,0.99,,staged,multiple,list of MI cities/townships
+MD,"6811 Kenilworth Avenue Riverdale, MD 20737",4,718,no matching place,place,Riverdale,,0.99,,staged,did not resolve,"address in Riverdale, MD"
+FL,KENNEDY SPACE CENTER,2,713,no matching place,county,Brevard County,Brevard County,0.99,,staged,county-level,"Kennedy Space Center is in Brevard County, FL"
+CT,"West Hartford, Southington, Orange, Newington, Wilton, New London, North Haven, Enfield, Shelton, Danbury",1,702,6 distinct places named,multiple,,,0.99,,staged,multiple,List of 10 distinct places in CT
+NY,Hogansburg,1,700,no matching place,county,Franklin County,Franklin County,0.95,,staged,county-level,"Hogansburg is an unincorporated community in Franklin County, NY"
+WI,"West Bend, Port Washington",1,700,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places in WI
+IN,Walesboro,1,694,no matching place,county,Bartholomew County,Bartholomew County,0.95,,staged,county-level,"Walesboro is an unincorporated community in Bartholomew County, IN"
+IN,"Indianapolis, Wakarusa, Tipton, Sullivan, Rushville, Peru, LaGrange, and Huntington",1,691,8 distinct places named,multiple,,,0.99,,staged,multiple,List of 8 distinct places in IN
+VA,"Fairfax, Franconia, Lorton, Alexandria & Falls church VA",1,691,5 distinct places named,multiple,,,0.99,,staged,multiple,List of 5 distinct places in VA
+MI,"Grandville, Michigan; Livonia, Michigan; Rochester Hills, Michigan; and Clinton, Michigan",1,688,3 distinct places named,multiple,,,0.99,,staged,multiple,List of 4 distinct places in MI
+WA,Seattle-Renton,1,684,no matching place,multiple,,,0.99,,staged,multiple,Names two distinct cities: Seattle and Renton
+MI,"Bay City, Belleville, Brownstown, Burton, Detroit, Flint, Grand Blanc, Grand Rapids, Lake Orion, Lansing, Milford, Pontiac, Romulus, Saginaw, Swartz Creek, Warren, Waterford, Ypsilanti",1,664,16 distinct places named,multiple,,,0.99,,staged,multiple,Lists multiple places in Michigan
+MI,"Bay City, Michigan; Belleville, Michigan; Brownstown, Michigan; Burton, Michigan; Detroit, Michigan; Flint, Michigan; Grand Blanc, Michigan; Grand Rapids, Michigan; Lake Orion, Michigan; Lansing, Michigan; Milford, Michigan; Pontiac, Michigan; Romulus, Michigan; Saginaw, Michigan; Swartz Creek, Michigan; Warren, Michigan; Waterford, Michigan; and Ypsilanti, Michigan",1,664,16 distinct places named,multiple,,,0.99,,staged,multiple,Lists multiple places in Michigan
+AL,Coosa Pines,3,659,no matching place,county,Talladega County,Talladega County,0.9,,staged,county-level,Coosa Pines is an unincorporated community in Talladega County
+WI,"Appleton, Brookfield, Green Bay, Madison, Onalaska, Milwaukee, Racine, and Janesville",2,652,8 distinct places named,multiple,,,1.0,,staged,multiple,8 distinct Wisconsin places
+OH,Fairfield/Butler,7,650,2 distinct places named,multiple,,,1.0,,staged,multiple,Fairfield and Butler are separate places
+WI,"Appleton, Brookfield, Eau Claire, Franklin, Green Bay, Janesville, Kenosha, Madison, Manitowoc, Menomonee Falls, Monona, Onalaska, Oshkosh, Racine, Rhinelander, Rice Lake, Waukesha, Wausau, Wauwatosa, West Allis, West Bend",1,639,21 distinct places named,multiple,,,1.0,,staged,multiple,21 distinct Wisconsin places
+CA,Olympic Valley,1,637,no matching place,county,Placer County,Placer County,0.96,,staged,county-level,Olympic Valley is a CDP in Placer County
+IN,EvansvilleIndianapolis,1,633,no matching place,multiple,,,1.0,,staged,multiple,two cities: Evansville and Indianapolis
+AL,Eastaboga,2,623,no matching place,county,Talladega County,Talladega County,0.95,,staged,county-level,unincorporated community in Talladega County
+CA,Moffett Field,9,617,no matching place,county,Santa Clara County,Santa Clara County,0.99,,staged,county-level,Moffett Field is an unincorporated area in Santa Clara County
+AK,Girdwood,1,616,no matching place,place,Girdwood,,0.95,,staged,did not resolve,CDP in Alaska
+WI,"Grafton, Saukville",3,612,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places: Grafton and Saukville
+MI,"Ann Arbor, Clinton Township, Dearborn, Grand Rapids, Lansing, Livonia, Rochester, and Troy, Counties: Ingham, Kent, Macomb, Oakland, Washtenaw and Wayne, Number Affected: 600",1,600,10 distinct places named,multiple,,,0.99,,staged,multiple,lists multiple cities and counties
+WA,"Kent, Everett, Spokane",1,600,2 distinct places named,multiple,,,0.99,,staged,multiple,"three distinct places: Kent, Everett, Spokane"
+LA,"116 Roy Baker Road LeMoyen, LA 71356",2,591,no matching place,place,LeMoyen,,0.85,,staged,did not resolve,"Village in St. Landry Parish, LA"
+CO,Gilpin/Jefferson,2,587,no matching place,multiple,,,0.99,,staged,multiple,Names both Gilpin and Jefferson counties
+FL,FL 32925,3,585,no place name in the string,county,Brevard County,Brevard County,0.8,,staged,county-level,ZIP 32925 corresponds to Patrick SFB in Brevard County
+KY,"Harlan,Letcher, (Appalachia VA)",2,584,"address is in VA, not KY",multiple,,,0.99,,staged,multiple,"names Harlan County KY, Letcher County KY, and Appalachia VA"
+WI,"De Pere, Watertown, Beloit, Racine, Kimberly, Kenosha, Monona, Marinette, Sheboygan, Delavan, Rhinelander",1,578,11 distinct places named,multiple,,,0.99,,staged,multiple,Eleven distinct places listed
+NY,East Elmhurst,7,558,no matching place,county,Queens County,Queens County,0.9,,staged,county-level,"East Elmhurst is a neighborhood in Queens, New York City, which is coextensive with Queens County."
+WI,"Chippewa Falls, Eau Claire, New Auburn",1,557,2 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places: Chippewa Falls, Eau Claire, and New Auburn."
+VA,Richmond & Glen Allen VA,2,553,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Richmond and Glen Allen.
+WA,"Bellevue, Kirkland, Redmond, Seattle, Tukwila",1,545,5 distinct places named,multiple,,,0.99,,staged,multiple,"Five distinct places: Bellevue, Kirkland, Redmond, Seattle, Tukwila."
+WI,"Oconomowoc, Watertown",1,542,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Oconomowoc and Watertown.
+FL,CHAMPIONSGATE,1,541,no matching place,county,Osceola County,Osceola County,0.9,,staged,county-level,Championsgate is an unincorporated community in Osceola County
+IN,"Albion, Avilla & Franklin",1,535,2 distinct places named,multiple,,,0.99,,staged,multiple,"lists three places: Albion, Avilla, and Franklin"
+OH,"Steubenville, Martins Ferry, Yorkville (Jefferson & Belmont)",1,534,5 distinct places named,multiple,,,0.99,,staged,multiple,"lists multiple places, possibly including counties"
+OH,Hamilton/Butler,8,532,2 distinct places named,multiple,,,0.99,,staged,multiple,Hamilton and Butler are two distinct places
+WA,"Seattle, Bellevue, Redmond",3,532,3 distinct places named,multiple,,,0.99,,staged,multiple,three distinct cities
+MI,New Hudson,5,531,no matching place,county,Oakland County,Oakland County,0.9,NY,staged,county-level,"New Hudson is an unincorporated community in Oakland County, Michigan"
+WA,"Seattle, Pullman",1,531,2 distinct places named,multiple,,,0.99,,staged,multiple,Seattle and Pullman are two distinct cities
+FL,PONTE VEDRA BEACH,4,528,no matching place,county,St. Johns County,St. Johns County,0.95,,staged,county-level,"Ponte Vedra Beach is an unincorporated community in St. Johns County, FL."
+VA,"Fredericksburg, Virginia Beach, Newport News, Chesapeake & Hampton VA",1,524,5 distinct places named,multiple,,,0.99,,staged,multiple,"Five distinct places: Fredericksburg, Virginia Beach, Newport News, Chesapeake, Hampton."
+CA,"Culver City, Baldwin Park, Montebello",1,517,3 distinct places named,multiple,,,0.99,,staged,multiple,"Three places: Culver City, Baldwin Park, Montebello."
+IN,"Wakarusa, Milford, Warsaw",1,515,3 distinct places named,multiple,,,0.99,,staged,multiple,"Three places: Wakarusa, Milford, Warsaw."
+WA,"Clarkston, Vancouver",1,508,2 distinct places named,multiple,,,0.99,,staged,multiple,Two places: Clarkston and Vancouver.
+IN,"Merrillville, Schererville, Portage, Mishawaka, Lafayette, Clarksville, Jeffersonville, Evansville and Indianapolis",1,502,9 distinct places named,multiple,,,0.99,,staged,multiple,Nine distinct places listed.
+MD,"23013 Cedar Point Road Bldg. 2118 Patuxent River, MD 20670",2,494,no matching place,county,St. Mary's County,St. Mary's County,0.95,,staged,county-level,Patuxent River is an unincorporated community in St. Mary's County
+NJ,Bentonville,1,494,no matching place,place,Bentonville,,0.9,,staged,did not resolve,
+MA,"Cambridge, Andover, Bedford, Boston, Northeast, Metro Southwest",1,493,3 distinct places named,multiple,,,0.99,,staged,multiple,Lists multiple places and regions
+NY,Rego Park,5,488,no matching place,county,Queens County,Queens County,0.9,,staged,county-level,Rego Park is a neighborhood in Queens County
+SC,Mount Holly,1,487,no matching place,county,Berkeley County,,0.7,,staged,below threshold 0.8,Mount Holly is an unincorporated community in Berkeley County
+KY,Clark / Montgomery,2,484,no matching place,multiple,,,0.99,,staged,multiple,Refers to two counties
+VA,Fairfax & Woodbridge VA,2,483,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places
+CA,Mountain Pass,1,474,no matching place,county,San Bernardino County,San Bernardino County,0.99,,staged,county-level,Unincorporated community Mountain Pass
+VA,Norfolk & Virginia Beach VA,4,474,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Norfolk and Virginia Beach
+NJ,Fairfield,6,473,no matching place,place,Fairfield,,0.99,,staged,did not resolve,"Fairfield Township, NJ"
+MD,"7555 Harmans Road Harmans, MD 21077",3,470,no matching place,county,Anne Arundel County,Anne Arundel County,0.99,,staged,county-level,"Census-designated place Harmans, unincorporated"
+NJ,FAIRFIELD,5,468,no matching place,place,Fairfield,,0.99,,staged,did not resolve,"Fairfield Township, NJ"
+NJ,Salisbury,1,460,no matching place,county,Middlesex County,Middlesex County,0.99,"CT,MA,MD,MO,NC,NH,NY,OH,PA,VT",staged,county-level,Unincorporated community Salisbury
+VA,"Herndon, Woodbridge, Clifton, Springfield, Fairfax, Arlington & Vienna VA",1,455,6 distinct places named,multiple,,,0.99,,staged,multiple,lists multiple places in VA
+IN,Mishawaka and Indianapolis,1,452,2 distinct places named,multiple,,,0.99,,staged,multiple,two places in IN
+MI,"Fruitport, Michigan and Southfield, Michigan",1,451,2 distinct places named,multiple,,,0.99,,staged,multiple,two places in MI
+OH,"Conneaut (Ashtabula), Grafton (Lorain)",1,446,4 distinct places named,multiple,,,0.99,,staged,multiple,two places in OH with county references
+CT,"Stamford, Greenwich, Riverside, New Canaan, Old Lyme, New Canaan, Newington, Mystic, Newington, Waterford, Riverside, Ridgefield, Danbury, Bristol",1,444,10 distinct places named,multiple,,,0.99,,staged,multiple,lists multiple places in CT
+NY,Howard Beach,6,443,no matching place,county,Queens County,Queens County,0.95,,staged,county-level,"Howard Beach is a neighborhood in Queens, not an incorporated place"
+WA,"Everett, Seattle, Tacoma, E. Wenatchee, Union Gap, Pasco, Spokane",1,437,6 distinct places named,multiple,,,0.99,,staged,multiple,7 distinct places listed
+FL,Cantonment,5,434,no matching place,county,Escambia County,Escambia County,0.9,,staged,county-level,Cantonment is a CDP in Escambia County
+WI,Delevan,2,431,no matching place,place,Delavan,,0.7,,staged,below threshold 0.8,"Likely misspelling of Delavan, WI"
+GA,Kings Bay,3,427,no matching place,county,Camden County,Camden County,0.95,,staged,county-level,Kings Bay is a military base in Camden County
+LA,"2650 Louisiana Ave., Building 4386 Fort Polk, LA 71459",1,426,no matching place,county,Vernon Parish,Vernon Parish,0.9,,staged,county-level,Fort Polk is a military base in Vernon Parish
+MI,"Dearborn Heights, Detroit, Ecorse, Ferndale, Flint, Highland Park, Livonia, Royal Oak, Southfield, Walled Lake, Warren, Whitmore Lake",1,424,12 distinct places named,multiple,,,0.99,,staged,multiple,12 distinct places listed
+NY,"Westbury, Massapequa & Islandia",1,421,3 distinct places named,multiple,,,0.99,,staged,multiple,3 distinct places listed
+MA,"Leominster, Webster & Worcester, MA, Central",4,420,2 distinct places named,multiple,,,0.99,,staged,multiple,Three distinct places named
+OH,Cleveland and Brooklyn,1,420,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places named
+MI,Waterford,3,410,no matching place,place,Waterford,,0.9,,staged,did not resolve,"Waterford Township, MI"
+WA,"Everett, Tukwila, Tacoma, Bellevue, Seattle",1,401,5 distinct places named,multiple,,,0.99,,staged,multiple,"Everett, Tukwila, Tacoma, Bellevue, Seattle"
+MI,"Saranac, Michigan and Lake Odessa, Michigan",1,400,2 distinct places named,multiple,,,0.99,,staged,multiple,Saranac and Lake Odessa
+SD,Sioux Falls /Garretson,1,400,2 distinct places named,multiple,,,0.99,,staged,multiple,Sioux Falls and Garretson
+MD,"Maryland House Travel Plaza, I-95, JFK Memorial Highway, Mile Markers 82, Aberdeen, MD & Chesapeake House Travel Plaza, I-95, JFK Memorial Highway, Mile Marker 96.5, North East, MD",1,396,2 distinct places named,multiple,,,0.99,,staged,multiple,Aberdeen and North East
+NJ,Haskell,2,385,no matching place,county,Passaic County,Passaic County,0.95,"AR,KS,OK,TX",staged,county-level,Haskell is an unincorporated community in Passaic County
+NJ,"Somers Point, Edgewater Park, North Cape May, Toms River, Clifton, Brickton, South Plainfield, West Deptford, Sicklerville, Middletown, Dover, Barnegat, Cape May Court House, Lumberton, Millville, Hamilton",1,385,10 distinct places named,multiple,,,0.99,,staged,multiple,16 distinct places named
+VA,"Charlottesville, Harrisonburg, Waynesboro, Lynchburg & Danville VA",1,384,5 distinct places named,multiple,,,0.99,,staged,multiple,5 distinct places named
+CA,EL TORO,5,372,no matching place,county,Orange County,Orange County,0.8,,staged,county-level,"El Toro is an unincorporated community in Orange County, CA"
+WI,"Deforest, Franklin, Green Bay, Janesville, Kenosha, Onalaska, Rothschild, Waukesha, West Baraboo",1,371,9 distinct places named,multiple,,,0.99,,staged,multiple,"9 distinct places: Deforest, Franklin, Green Bay, Janesville, Kenosha, Onalaska, Rothschild, Waukesha, West Baraboo"
+IN,"Valparaiso, Franklin and Hanover",1,365,2 distinct places named,multiple,,,0.99,,staged,multiple,"3 distinct places: Valparaiso, Franklin, Hanover"
+MA,Boston & Somerville,1,364,2 distinct places named,multiple,,,0.99,,staged,multiple,2 distinct places: Boston and Somerville
+MD,"1020A Airport 100 Way Hanover, MD 21076",1,362,no matching place,county,Anne Arundel County,Anne Arundel County,0.8,"AL,IL,IN,KS,MA,ME,MI,MN,NE,NH,NJ,NM,NY,OH,PA,VA,WI",staged,county-level,"Address in Hanover, an unincorporated community in Anne Arundel County, MD"
+VA,Oakwood VA,3,362,no matching place,place,Oakwood,,0.9,,staged,did not resolve,Oakwood is an incorporated town in Virginia
+CA,Paso Robles,5,361,no matching place,place,Paso Robles,,0.99,,staged,did not resolve,city in CA
+MD,"7401 Coca Cola Drive, Hanover, MD 20176",1,361,no matching place,county,Anne Arundel County,Anne Arundel County,0.85,"AL,IL,IN,KS,MA,ME,MI,MN,NE,NH,NJ,NM,NY,OH,PA,VA,WI",staged,county-level,Hanover is an unincorporated community in Anne Arundel County
+MI,"Novi, Michigan; Southfield, Michigan; and Taylor, Michigan",1,360,3 distinct places named,multiple,,,0.99,,staged,multiple,"Lists Novi, Southfield, and Taylor, Michigan"
+SC,Columbia/Greer,1,359,2 distinct places named,multiple,,,0.99,,staged,multiple,"Lists Columbia and Greer, South Carolina"
+CA,"Fremont, Pleasanton",1,350,2 distinct places named,multiple,,,0.99,,staged,multiple,"two distinct places: Fremont and Pleasanton, CA"
+VA,Sweet Briar VA,1,344,no matching place,county,Amherst County,Amherst County,0.98,,staged,county-level,"unincorporated community in Amherst County, VA"
+GA,Fort Gordon,3,343,no matching place,county,Richmond County,Richmond County,0.99,,staged,county-level,Military base Fort Gordon
+CA,"Cupertino, Palo Alto, San Bruno",1,342,3 distinct places named,multiple,,,0.99,,staged,multiple,"three distinct places: Cupertino, Palo Alto, San Bruno, CA"
+KY,"Jefferson, Bullitt, Shelby",2,338,no matching place,multiple,,,0.99,,staged,multiple,"three distinct counties: Jefferson, Bullitt, Shelby, KY"
+NY,College Point,4,338,no matching place,county,Queens County,Queens County,0.98,,staged,county-level,"neighborhood in Queens County, NY"
+AL,Chapman,2,335,no matching place,county,Butler County,Butler County,0.8,"KS,ME,NE,PA",staged,county-level,unincorporated community
+CA,KORBEL,3,335,no matching place,county,Humboldt County,Humboldt County,0.9,,staged,county-level,unincorporated community
+WA,"Westport, Port Angeles, Seattle",1,335,3 distinct places named,multiple,"Westport, Port Angeles, Seattle",,0.99,,staged,multiple,3 distinct places
+LA,"2650 Louisiana Ave.bldg 4386 Fort Polk, LA 71459",1,332,no matching place,place,Fort Polk,,0.9,,staged,did not resolve,military base CDP
+PA,"Somerset County, PA; Garrett County, MD",1,332,"address is in MD, not PA",multiple,,,0.99,,staged,multiple,names Somerset County PA and Garrett County MD
+ID,Boise Eagle Boise Nampa Caldwell Meridian,1,328,no matching place,multiple,"Boise, Eagle, Nampa, Caldwell, Meridian",,0.99,,staged,multiple,multiple cities
+NJ,"Company Location: Orlando, FL Affected Employees: Woodbridge, Toms River, Wayne, Paramus",1,327,2 distinct places named,multiple,"Woodbridge, Toms River, Wayne, Paramus",,0.99,,staged,multiple,affected employees in NJ
+VA,"Richmond, Mechanicsville & Midlothian VA",1,326,3 distinct places named,multiple,"Richmond, Mechanicsville, Midlothian",,0.99,,staged,multiple,3 distinct places
+CA,CARMEL,2,321,no matching place,place,Carmel,,0.95,,staged,did not resolve,city in California
+MO,Cassville & Carthage,1,321,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places: Cassville and Carthage
+VA,"Fredericksburg, Chesapeake, Newport News, Virginia Beach & Williamsburg VA",1,319,5 distinct places named,multiple,,,0.99,,staged,multiple,"five distinct places: Fredericksburg, Chesapeake, Newport News, Virginia Beach, Williamsburg"
+KY,Perry/Leslie,2,318,no matching place,multiple,,,0.9,,staged,multiple,likely two counties: Perry County and Leslie County
+OH,Moraine ODJFS Bureau of WIA-Rapid,1,314,no matching place,place,Moraine,,0.7,,staged,below threshold 0.8,administrative text appended to place name
+WI,"Fitchburg, Kenosha, Madison, Middleton, Waukesha",1,313,5 distinct places named,multiple,,,0.99,,staged,multiple,"five distinct places: Fitchburg, Kenosha, Madison, Middleton, Waukesha"
+WI,Brown Deer and Glendale,3,311,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places: Brown Deer and Glendale
+KY,Lewis/Boone,1,309,no matching place,multiple,,,0.99,,staged,multiple,Two counties: Lewis and Boone
+OH,"Columbus, Worthington",1,309,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Columbus and Worthington
+IN,"Anderson, Columbus, Elkhart, Indianapolis and Marion",1,306,5 distinct places named,multiple,,,0.99,,staged,multiple,"Five distinct places: Anderson, Columbus, Elkhart, Indianapolis, Marion"
+VA,"McLean, Woodbridge, Arlington, Fairfax VA",1,306,3 distinct places named,multiple,,,0.99,,staged,multiple,"Four distinct places: McLean, Woodbridge, Arlington, Fairfax"
+UT,Provo and Springville,1,303,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Provo and Springville
+WA,"Federal Way, Olympia, Tacoma, Walla Walla, and Bellevue",1,303,4 distinct places named,multiple,,,0.99,,staged,multiple,"Five distinct places: Federal Way, Olympia, Tacoma, Walla Walla, Bellevue"
+CA,TRAVIS AFB,3,302,no matching place,county,Solano County,Solano County,0.99,,staged,county-level,Travis AFB is in unincorporated Solano County
+LA,"41237 Hwy 22 Burnside, LA",1,302,no matching place,county,Ascension Parish,Ascension Parish,0.98,,staged,county-level,Burnside is an unincorporated community in Ascension Parish
+KY,"Letcher , Pike",4,300,no matching place,multiple,,,0.99,,staged,multiple,Names two counties: Letcher County and Pike County
+MI,"Shelby Township, Michigan; Sterling Heights, Michigan, Washington Township, Michigan",1,300,2 distinct places named,multiple,,,0.99,,staged,multiple,"Three places: Shelby Township, Sterling Heights, Washington Township"
+GA,Pine Mountain Vally,1,298,no matching place,county,Harris County,Harris County,0.85,,staged,county-level,"Probable misspelling of Pine Mountain Valley, an unincorporated CDP in Harris County"
+MD,"7458 New Ridge Road Hanover, MD 21076",2,297,no matching place,county,Anne Arundel County,Anne Arundel County,0.98,"AL,IL,IN,KS,MA,ME,MI,MN,NE,NH,NJ,NM,NY,OH,PA,VA,WI",staged,county-level,Hanover is a CDP in Anne Arundel County
+CT,"Manchester, Enfield, Milford, North Haven",1,295,3 distinct places named,multiple,,,0.99,,staged,multiple,"Four towns: Manchester, Enfield, Milford, North Haven"
+PA,"Lehigh, Northampton, Cumberland, York and Luzerne",1,294,3 distinct places named,multiple,,,0.99,,staged,multiple,"List of counties: Lehigh, Northampton, Cumberland, York, Luzerne"
+CA,MOFFETT FIELD,4,293,no matching place,county,Santa Clara County,Santa Clara County,0.9,,staged,county-level,Moffett Field is a CDP in Santa Clara County
+IN,GoshenElkhart,1,293,no matching place,multiple,,,0.95,,staged,multiple,Two cities: Goshen and Elkhart
+VA,Hurley VA,7,293,no matching place,county,Buchanan County,Buchanan County,0.95,"MO,MS,ND,NM,NY,SD,WI",staged,county-level,Hurley is a CDP in Buchanan County
+VA,Wallops Island VA,2,292,no matching place,county,Accomack County,Accomack County,0.95,,staged,county-level,Wallops Island is an unincorporated area in Accomack County
+VA,"Alexandria, Arlington, Ashburn, Centreville, Fairfax & Gainesville VA",1,291,6 distinct places named,multiple,,,0.99,,staged,multiple,"Six cities/towns: Alexandria, Arlington, Ashburn, Centreville, Fairfax, Gainesville"
+NY,Woodside,6,287,no matching place,county,Queens County,,0.7,,staged,below threshold 0.8,"Woodside is a neighborhood in Queens County, NY"
+TN,"Blount, Knox, Monroe, and Sevier County",1,286,no matching place,multiple,,,0.99,,staged,multiple,"Lists multiple counties: Blount, Knox, Monroe, Sevier"
+NY,"Bronx, Brooklyn,NYC",1,285,no matching place,multiple,,,0.99,,staged,multiple,"Names Bronx, Brooklyn, and NYC"
+VA,"Henrico, Glen Allen, Chester & Chesapeake VA",1,282,3 distinct places named,multiple,,,0.99,,staged,multiple,"Lists Henrico, Glen Allen, Chester, Chesapeake"
+WA,"Seattle, Des Moines",1,282,2 distinct places named,multiple,,,0.99,,staged,multiple,Names Seattle and Des Moines
+VA,"Alexandria, Sterling, Warrenton & Winchester VA",1,281,4 distinct places named,multiple,,,0.99,,staged,multiple,"Lists Alexandria, Sterling, Warrenton, Winchester"
+WI,"Marshfield, Stevens Point, Neillsville",1,279,3 distinct places named,multiple,,,0.99,,staged,multiple,Three distinct places
+WI,"New Berlin, Muskego, Brookfield",1,279,3 distinct places named,multiple,,,0.99,,staged,multiple,Three distinct places
+IN,"Indianapolis, Anderson, Logansport, Martinsville, and Richmond",1,277,5 distinct places named,multiple,,,0.99,,staged,multiple,Five distinct places
+AL,Vienna,1,276,no matching place,place,Vienna,,0.99,,staged,did not resolve,Town in Alabama
+WI,"Baraboo, Black River Falls, Wittenberg",1,274,3 distinct places named,multiple,,,0.99,,staged,multiple,Three distinct places
+GA,Eastanollee,2,273,no matching place,place,Eastanollee,,0.99,,staged,did not resolve,Town in Georgia
+NJ,MONROE,3,270,no matching place,place,Monroe,,0.7,,staged,did not resolve,Ambiguous; likely refers to Monroe Township
+MA,"Lowell, Peabody, Tyngsboro & Methuen",1,266,3 distinct places named,multiple,"Lowell, Peabody, Tyngsboro, Methuen",,0.99,,staged,multiple,Multiple distinct places listed
+IN,Goshen Howe,1,265,no matching place,multiple,"Goshen, Howe",,0.7,,staged,multiple,"Likely two distinct places: Goshen and Howe, IN"
+IN,"Carmel, Clarksville and Indianapolis",1,263,3 distinct places named,multiple,"Carmel, Clarksville, Indianapolis",,0.99,,staged,multiple,Multiple distinct places listed
+NJ,"Company Location: Hudson, OH Affected Employees: Atlantic, Bergen, Burlington, Camden, Gloucester, Mercer, Middlesex, Monmouth, Morris, and Ocean Counties",1,262,4 distinct places named,multiple,,,0.99,,staged,multiple,"Multiple sites: company location in Hudson, OH and affected counties in NJ"
+WI,"Appleton, Brookfield, Glendale, Green Bay, Greendale, La Crosse, Madison, Milwaukee, Racine, Wauwatosa",1,261,10 distinct places named,multiple,,,0.99,,staged,multiple,10 Wisconsin cities
+MI,"Bingham Farms, Michigan; Bloomfield Hills, Michigan; and Northville, Michigan",1,260,3 distinct places named,multiple,,,0.99,,staged,multiple,3 Michigan cities
+TN,"Blount, Davidson, and Shelby County",1,260,no matching place,multiple,,,0.99,,staged,multiple,3 Tennessee counties
+VA,Norfolk & Portsmouth VA,1,260,2 distinct places named,multiple,,,0.99,,staged,multiple,"Norfolk and Portsmouth, VA"
+WI,"Waukesha, Oak Creek, Milwaukee",1,260,3 distinct places named,multiple,,,0.99,,staged,multiple,3 Wisconsin cities
+CA,San Ysidro,2,258,no matching place,county,San Diego County,San Diego County,0.9,NM,staged,county-level,San Ysidro is a neighborhood in San Diego County
+VA,Appalachia & St. Charles VA,1,258,2 distinct places named,multiple,,,0.99,,staged,multiple,"Appalachia and St. Charles, VA"
+WA,"Everett, Puyallup",1,258,2 distinct places named,multiple,"Everett, Puyallup",,1.0,,staged,multiple,
+GA,Ft. Benning,2,256,no matching place,county,Chattahoochee County,Chattahoochee County,0.8,,staged,county-level,"Military base, not incorporated"
+NV,"Las Vegas/Sparks/Elko, Clark/Washoe/Elko",1,255,3 distinct places named,multiple,"Las Vegas, Sparks, Elko",,1.0,,staged,multiple,
+IN,"Avon, Brownsburg, Indianapolis, Lebanon and Noblesville",1,254,5 distinct places named,multiple,"Avon, Brownsburg, Indianapolis, Lebanon, Noblesville",,1.0,,staged,multiple,
+NJ,LAWRENCE TWP.,1,254,no matching place,place,Lawrence Township,,0.95,,staged,did not resolve,NJ township
+PA,Lehigh and Westmoreland,1,253,no matching place,multiple,"Lehigh County, Westmoreland County",,1.0,,staged,multiple,
+WI,Franksville,2,252,no matching place,county,Racine County,Racine County,0.8,,staged,county-level,Unincorporated community Franksville in Racine County
+OH,Fayette/Fulton,1,251,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Fayette and Fulton
+ID,Nampa Boise,1,250,no matching place,multiple,,,0.99,,staged,multiple,Two distinct places: Nampa and Boise
+NY,Brooklyn/NY/Jamaica,1,247,no matching place,multiple,,,0.99,,staged,multiple,"Distinct sites: Brooklyn, NY; Jamaica, NY"
+CA,Edwards,3,245,no matching place,county,Kern County,Kern County,0.95,"CO,MI,MN,MS,NY",staged,county-level,Edwards likely refers to Edwards AFB in Kern County
+NJ,FORT MONMOUTH,1,245,no matching place,county,Monmouth County,Monmouth County,0.95,,staged,county-level,Fort Monmouth is a military base in Monmouth County
+MA,"Boston, Burlington",1,242,2 distinct places named,multiple,,,0.99,,staged,multiple,Boston and Burlington are two distinct places
+WA,"Moses Lake, Renton",1,240,2 distinct places named,multiple,,,0.99,,staged,multiple,Moses Lake and Renton are two distinct places
+GA,Glynco,3,239,no matching place,county,Glynn County,Glynn County,0.9,,staged,county-level,Glynco is an unincorporated community in Glynn County
+NY,Irving,2,239,no matching place,place,Irving,,0.95,,staged,did not resolve,Irving is a village in New York
+WI,"Appleton, Greenfield, Kenosha, Madison, Milwaukee, Mount Pleasant, Prairie du Sac, Sheboygan, West Bend",1,238,9 distinct places named,multiple,,,0.99,,staged,multiple,Nine distinct places listed
+GA,Mcrae,4,237,no matching place,place,McRae,,0.95,,staged,did not resolve,McRae is a city in Georgia
+NY,"Buffalo, Depew, Orchard Park",1,237,3 distinct places named,multiple,,,0.99,,staged,multiple,"three distinct places: Buffalo, Depew, Orchard Park"
+OH,Columbus (Franklin) and Akron (Summit),1,237,3 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places: Columbus and Akron
+MI,"Cheboygan, Gaylord, Petoskey, Rogers City",1,236,3 distinct places named,multiple,,,0.99,,staged,multiple,"four distinct places: Cheboygan, Gaylord, Petoskey, Rogers City"
+MI,"Flint, Michigan and Burton, Michigan",1,235,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places: Flint and Burton
+MO,House Springs,2,234,no matching place,county,Jefferson County,Jefferson County,0.95,,staged,county-level,"House Springs is an unincorporated community in Jefferson County, MO"
+OH,Monroe/Butler,1,233,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places: Monroe and Butler
+OH,Brooklyn and Cleveland,1,230,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places: Brooklyn and Cleveland
+OH,Richfield and Independence,1,230,2 distinct places named,multiple,,,0.99,,staged,multiple,two places named
+WA,"King, Pierce, and Snohomish Counties",1,230,no matching place,multiple,,,0.99,,staged,multiple,three counties named
+FL,PATRICK SFB,1,228,no matching place,county,Brevard County,Brevard County,0.95,,staged,county-level,Patrick Space Force Base in Brevard County
+MD,"21 Governors Court Suite 250 Windsor Mill, MD 21244",2,228,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,Windsor Mill is unincorporated in Baltimore County
+KY,Jefferson/Boone,1,227,no matching place,multiple,,,0.99,,staged,multiple,two counties: Jefferson and Boone
+IN,Indianapolis & Fort Wayne,1,225,2 distinct places named,multiple,,,0.99,,staged,multiple,Indianapolis and Fort Wayne are two distinct cities in Indiana
+MD,"1201 Winterson Road 4th Floor Linthicum Heights, MD 21090",1,224,no matching place,county,Anne Arundel County,Anne Arundel County,0.9,,staged,county-level,Linthicum Heights is an unincorporated community within Anne Arundel County
+VA,"Centreville, Reston, Winchester & Woodbridge VA",1,224,3 distinct places named,multiple,,,0.99,,staged,multiple,Four distinct places named in Virginia
+OH,Middleburg Heights/Berea/Cuyahoga,1,223,2 distinct places named,multiple,,,0.99,,staged,multiple,Middleburg Heights and Berea are cities; Cuyahoga likely refers to county
+SC,CatawbaLancasterJonesville,1,222,no matching place,multiple,,,0.99,,staged,multiple,"Three distinct places in South Carolina: Catawba, Lancaster, Jonesville"
+MD,"701 Wedeman Avenue Linthicum Heights, MD 21090",1,220,no matching place,county,Anne Arundel County,Anne Arundel County,0.9,,staged,county-level,"Address in Linthicum Heights, an unincorporated community in Anne Arundel County"
+IN,Indianapolis and Fishers,1,219,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct cities named.
+CA,TERMINAL ISLAND,2,218,no matching place,county,Los Angeles County,Los Angeles County,0.95,,staged,county-level,Terminal Island is an unincorporated area within Los Angeles County.
+WI,"Madison, Wauwatosa",1,218,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct cities named.
+ID,Tamarack,1,217,no matching place,place,Tamarack,,0.8,,staged,did not resolve,"Recognized CDP in Adams County, Idaho."
+OH,Willoughby (Lake) and Lorain (Lorain),1,217,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct cities with county identifiers.
+NY,Derby,1,216,no matching place,county,Erie County,Erie County,0.85,"CO,CT,IA,KS,OH,VT",staged,county-level,"Derby is an unincorporated hamlet in Erie County, New York."
+WA,"Seattle, Mountlake Terrace",1,216,2 distinct places named,multiple,,,1.0,,staged,multiple,Two distinct places: Seattle and Mountlake Terrace.
+IN,Kentland & North Vernon,1,214,2 distinct places named,multiple,,,1.0,,staged,multiple,Two places: Kentland and North Vernon.
+VA,"Vansant, Jewell Ridge & Honaker VA",1,214,3 distinct places named,multiple,,,1.0,,staged,multiple,"Three places: Vansant, Jewell Ridge, Honaker."
+MI,"Ann Arbor, Michigan; Auburn Hills, Michigan; Grandville, Michigan; Grand Rapids, Michigan; Holland, Michigan; Muskegon, Michigan; and Stevensville, Michigan",1,213,6 distinct places named,multiple,,,1.0,,staged,multiple,Seven distinct places.
+NY,West Nyack/ Pelham Manor,1,211,2 distinct places named,multiple,,,1.0,,staged,multiple,Two places: West Nyack and Pelham Manor.
+WA,"Lynwood, Mukilteo, Lakewood",1,210,2 distinct places named,multiple,,,0.99,,staged,multiple,Three distinct cities
+MD,"7000 Arundel Mills Circle Hanover, MD 21076",3,209,no matching place,county,Anne Arundel County,Anne Arundel County,0.8,"AL,IL,IN,KS,MA,ME,MI,MN,NE,NH,NJ,NM,NY,OH,PA,VA,WI",staged,county-level,Address with unincorporated community Hanover
+NY,Central Valley,6,209,no matching place,county,Orange County,Orange County,0.9,UT,staged,county-level,Central Valley is an unincorporated hamlet
+NJ,HAMILTON,3,207,no matching place,place,Hamilton,,0.95,,staged,did not resolve,Hamilton is a township in NJ
+NC,New Hill,1,206,no matching place,county,Wake County,Wake County,0.9,,staged,county-level,New Hill is unincorporated
+MO,"Kinloch, Vinita Park, Hazelwood",1,204,3 distinct places named,multiple,,,0.95,,staged,multiple,3 distinct places named
+MA,"Chelsea, Dedham (Amazon Fulfillment Station)",1,201,2 distinct places named,multiple,,,0.95,,staged,multiple,2 distinct places named
+MA,North Billerica,1,201,no matching place,county,Middlesex County,Middlesex County,0.85,,staged,county-level,unincorporated community in Middlesex County
+VA,"Federicksburg, Newport News, Virginia Beach & Williamsburg VA",1,201,3 distinct places named,multiple,,,0.99,,staged,multiple,"lists multiple cities: Fredericksburg, Newport News, Virginia Beach, Williamsburg"
+IN,"Bloomington, Mishawaka, South Bend",1,200,3 distinct places named,multiple,,,0.99,,staged,multiple,"three distinct Indiana cities: Bloomington, Mishawaka, South Bend"
+KY,Perry & Leslie,1,200,no matching place,multiple,,,0.9,,staged,multiple,"likely Perry and Leslie counties, KY"
+KY,Pilaski,1,200,no matching place,county,Pulaski County,Pulaski County,0.8,,staged,county-level,"typo for Pulaski County, KY"
+MD,"55 Schilling Road Hunt Valley, MD 21031",1,200,no matching place,county,Baltimore County,,0.9,,staged,did not resolve,Hunt Valley is an unincorporated community in Baltimore County
+VA,Springfield & Newington VA,2,200,2 distinct places named,multiple,,,0.99,,staged,multiple,two unincorporated communities in Virginia: Springfield and Newington
+MO,"High Ridge, Eureka, Grover",2,199,2 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places: High Ridge, Eureka, Grover"
+CT,Uncasville,3,197,no matching place,place,Uncasville,,0.95,,staged,did not resolve,"CDP in Montville, Connecticut"
+NJ,Gladstone,1,195,no matching place,place,Gladstone,,0.95,,staged,did not resolve,Borough in Somerset County
+WA,Eastsound (Orcas Island),1,195,no matching place,place,Eastsound,,0.95,,staged,did not resolve,"CDP on Orcas Island, San Juan County"
+WA,Joint Base Lewis McChord,3,195,no matching place,county,Pierce County,Pierce County,0.8,,staged,county-level,"Joint Base Lewis-McChord is a military base in Pierce County, not in an incorporated city"
+MD,"8261 Central Avenue Capital Heights, MD 20743",1,194,no matching place,place,Capital Heights,,0.95,,staged,did not resolve,Address includes city Capital Heights
+IN,"Indianapolis, Franklin, Greencastle, Brazil, Batesville, Elkhart, Gary, Valparaiso, Hobart, Michigan City, Mooresville, Brazil",1,193,11 distinct places named,multiple,,,0.99,,staged,multiple,Lists 12 distinct Indiana cities
+IN,Greenfield & Goshen,1,192,2 distinct places named,multiple,,,0.99,,staged,multiple,Two Indiana towns: Greenfield and Goshen
+IN,Nappanee and Peru,1,192,2 distinct places named,multiple,,,0.99,,staged,multiple,Two Indiana towns: Nappanee and Peru
+SC,Moore,2,192,no matching place,place,Moore,,0.85,,staged,did not resolve,"Town in Spartanburg County, SC"
+MD,"16020 Leeland Rd, Upper Marlboro, MD 20774; 6300 Columbia Park Rd, Landover, MD 20785",1,191,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct Maryland towns: Upper Marlboro and Landover
+MI,"Waterford, Michigan",1,191,no matching place,place,Waterford,,0.95,,staged,did not resolve,"Township in Oakland County, MI"
+CT,"Westport, West Harford, Stamford",1,190,2 distinct places named,multiple,,,0.95,,staged,multiple,"Three distinct places named: Westport, West Hartford, Stamford"
+CT,"westport, West Hartford, Stamford",1,190,3 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places named: Westport, West Hartford, Stamford"
+MD,"7515 & 7535 Mission Dr, Lanhan-Seabrook and 8800 Greenbelt Road, Geenbelt, MD",1,190,no matching place,multiple,,,0.9,,staged,multiple,Two distinct locations: Lanham-Seabrook and Greenbelt
+MD,"7426 New Ridge Road Hanover, MD 21076",1,189,no matching place,county,Anne Arundel County,Anne Arundel County,0.95,"AL,IL,IN,KS,MA,ME,MI,MN,NE,NH,NJ,NM,NY,OH,PA,VA,WI",staged,county-level,Unincorporated community Hanover in Anne Arundel County
+MI,Redford,1,188,no matching place,place,Redford,,0.95,,staged,did not resolve,Redford is a charter township in Michigan
+NJ,"Jersey City, Rutherford, Short Hills, Paramus,Hoboken, Fort Lee",1,187,6 distinct places named,multiple,,,0.99,,staged,multiple,6 distinct places named
+WA,"Kent, Bothell, Bellevue, Fife",1,187,4 distinct places named,multiple,,,0.99,,staged,multiple,4 distinct places named
+WA,"Lynnwood, Seattle",1,187,2 distinct places named,multiple,,,0.99,,staged,multiple,2 distinct places named
+IN,Indianapolis & Yorktown,2,186,2 distinct places named,multiple,,,0.99,,staged,multiple,2 distinct places named
+AK,"Fairbanks, North Pole",1,185,2 distinct places named,multiple,,,0.99,,staged,multiple,2 distinct places named
+LA,"2002 Crow Lane Pelican, LA 71063",2,185,no matching place,place,Pelican,,0.85,,staged,did not resolve,Includes street address; city is Pelican
+MI,Canton,4,183,no matching place,place,Canton,,0.95,,staged,did not resolve,Charter township in Michigan
+OH,"Columbus (Franklin), Johnstown (Licking)",1,183,3 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places
+WA,Bothell/Redmond/Bellevue,3,183,3 distinct places named,multiple,,,0.99,,staged,multiple,Three distinct places
+MD,"101 Schilling Road Suite 40 Hunt Valley, MD 21031",1,180,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,Hunt Valley is an unincorporated community in Baltimore County
+NJ,DEEPWATER,3,180,no matching place,county,Salem County,Salem County,0.95,"MO,ND,WV",staged,county-level,Deepwater is an unincorporated community in Salem County
+WI,"Manitowoc, Sheboygan, West Bend",1,178,3 distinct places named,multiple,,,0.99,,staged,multiple,"Lists three distinct places: Manitowoc, Sheboygan, West Bend"
+NY,Edgewood,2,177,no matching place,county,Suffolk County,Suffolk County,0.95,"CA,FL,IA,IL,IN,KY,MD,NM,OH,PA,TX,WA",staged,county-level,Edgewood is an unincorporated community in Suffolk County
+MD,"47765 Ranch Road HGR 101 Patuxent River, MD 20670",1,176,no matching place,county,St. Mary's County,St. Mary's County,0.95,,staged,county-level,Patuxent River is an unincorporated community in St. Mary's County
+AK,"Clear, AK",2,175,no matching place,county,Denali Borough,Denali Borough,0.9,,staged,county-level,Clear is an unincorporated community in Denali Borough
+CA,BRODERICK,1,175,no matching place,county,Yolo County,Yolo County,0.95,,staged,county-level,Broderick is a CDP in Yolo County
+KY,"Muhlenberg, Hopkins",1,175,no matching place,multiple,"Muhlenberg County, Hopkins County",,0.95,,staged,multiple,Two distinct counties named
+NJ,Boston,1,175,no matching place,county,Ocean County,Ocean County,0.9,"GA,IN,KY,MA,MI,NY,OH,PA,VA",staged,county-level,Boston is an unincorporated community in Ocean County
+VA,Fairfax & Reston VA,1,175,2 distinct places named,multiple,"Fairfax, Reston",,0.98,,staged,multiple,Two distinct places named
+WI,Madison/Fitchburg,1,175,2 distinct places named,multiple,"Madison, Fitchburg",,0.98,,staged,multiple,Two distinct cities named
+IN,"Gary, Merrillville",1,174,2 distinct places named,multiple,"Gary, Merrillville",,0.98,,staged,multiple,Two distinct cities named
+MD,"10900 Old Court Road Woodstock, MD 21163",1,174,no matching place,county,Howard County,Howard County,0.95,,staged,county-level,Woodstock is a CDP in Howard County
+WA,"Keyport, Silverdale",2,174,2 distinct places named,multiple,,,1.0,,staged,multiple,Two distinct places named: Keyport and Silverdale.
+OH,Monroe (Butler),1,173,2 distinct places named,multiple,,,1.0,,staged,multiple,"String interpreted as Monroe and Butler, two distinct places."
+WA,"Seattle, Tukwila",1,173,2 distinct places named,multiple,,,1.0,,staged,multiple,Two distinct places: Seattle and Tukwila.
+CA,NIPTON,1,172,no matching place,place,Nipton,,0.9,,staged,did not resolve,Nipton is a CDP in California.
+SC,Slater,2,172,no matching place,place,Slater,,0.9,,staged,did not resolve,Slater is a CDP in South Carolina.
+AK,Clear,1,171,no matching place,place,Clear,,0.9,,staged,did not resolve,Clear is a CDP in Alaska.
+FL,VENUS,1,170,no matching place,place,Venus,,0.9,,staged,did not resolve,Venus is a CDP in Florida.
+OR,GILCRIST,1,170,no matching place,county,Klamath County,Klamath County,0.95,,staged,county-level,"Gilchrist is an unincorporated community in Klamath County, OR"
+WA,"Everett, Kirkland, and Monroe",1,169,3 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places: Everett, Kirkland, Monroe"
+WA,"Mount Vernon, Mabton",1,169,2 distinct places named,multiple,,,0.99,,staged,multiple,"Two distinct places: Mount Vernon, Mabton"
+MD,"10150 York Road, Suite 300 Hunt Valley, MD 21030",1,168,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,"Hunt Valley is an unincorporated community in Baltimore County, MD"
+VA,N. Chesterfield VA,1,168,no matching place,county,Chesterfield County,Chesterfield County,0.95,,staged,county-level,"N. Chesterfield is an unincorporated community in Chesterfield County, VA"
+WI,Madison and Menomonee Falls,1,168,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places named: Madison and Menomonee Falls
+AL,Perdue Hill,1,167,no matching place,county,Monroe County,Monroe County,0.8,,staged,county-level,Perdue Hill is an unincorporated community in Monroe County
+GA,Hazelhurst,2,167,no matching place,place,Hazelhurst,,0.99,,staged,did not resolve,Hazelhurst is an incorporated city in Georgia
+KY,"Metcalfe, Monroe",1,167,no matching place,multiple,,,0.8,,staged,multiple,Two distinct sites: Metcalfe and Monroe
+UT,"Honeyville, Genola, Providence, & Midvale",1,167,4 distinct places named,multiple,,,0.99,,staged,multiple,"Four distinct places named: Honeyville, Genola, Providence, Midvale"
+IN,Bloomington and Oolitic,1,166,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places named: Bloomington and Oolitic
+AL,Townley,1,165,no matching place,place,Townley,,0.99,,staged,did not resolve,Townley is an incorporated town in Alabama.
+MI,"Birmingham, Michigan; Grand Rapids, Michigan; East Grand Rapids, Michigan; Holland, Michigan; Kalamazoo, Michigan; and Northville, Michigan",1,164,5 distinct places named,multiple,,,0.99,,staged,multiple,Multiple distinct cities listed.
+NJ,Ortley Beach,1,164,no matching place,county,Ocean County,Ocean County,0.95,,staged,county-level,Ortley Beach is a CDP in Ocean County.
+NY,Elmhurst,6,164,no matching place,county,Queens County,Queens County,0.95,"IL,PA",staged,county-level,Elmhurst is a neighborhood in Queens County.
+VA,Langley-Eustis VI,1,164,no matching place,county,Hampton,Hampton city,0.8,,staged,county-level,"Langley-Eustis VI likely refers to a military base in Hampton, VA."
+MD,"6700A Rockledge Drive, Suite 200 Bethesda, Maryland 20817",1,163,2 distinct places named,county,Montgomery County,Montgomery County,0.99,,staged,county-level,Bethesda is a CDP in Montgomery County.
+MI,"Grand Rapids, Michigan and Detroit, Michigan",1,163,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Grand Rapids and Detroit
+OH,Franklin (Warren),2,163,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Franklin and Warren
+OH,Franklin/Warren,3,163,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Franklin and Warren
+MI,"Flint, Michigan; Taylor, Michigan; and Ypsilanti, Michigan",1,162,3 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places: Flint, Taylor, Ypsilanti"
+AK,"North Slope, Kenai Peninsula, And Valdez",1,161,no matching place,multiple,,,0.99,,staged,multiple,"Three distinct areas: North Slope, Kenai Peninsula, Valdez"
+WA,Bellevue & Kirkland,1,161,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct cities: Bellevue and Kirkland
+WA,Orondo,2,161,no matching place,county,Douglas County,Douglas County,0.95,,staged,county-level,Orondo is an unincorporated community in Douglas County
+CA,BRANSCOMB,2,160,no matching place,county,Mendocino County,Mendocino County,0.95,,staged,county-level,Branscomb is an unincorporated community in Mendocino County
+CO,Colo Springs/Pikes Peak,1,160,no matching place,multiple,,,0.7,,staged,multiple,Refers to Colorado Springs and Pikes Peak area
+NJ,Baskin Ridge,1,160,no matching place,county,Somerset County,Somerset County,0.95,,staged,county-level,"Misspelling of Basking Ridge, an unincorporated community in Somerset County"
+NJ,Peapack & Gladstone,1,160,no matching place,place,Peapack-Gladstone,,0.95,,staged,did not resolve,Single borough consisting of Peapack and Gladstone
+NV,"Las Vegas/Sparks, Clark/Washoe",1,160,2 distinct places named,multiple,,,0.99,,staged,multiple,"Two cities (Las Vegas, Sparks) and two counties (Clark, Washoe)"
+OH,Fairfield (2) and Hamilton (1)(Butler),1,160,3 distinct places named,multiple,,,0.99,,staged,multiple,"Two cities: Fairfield and Hamilton, both in Butler County"
+MI,"Grand Rapids and Livonia, Counties: Kent and Wayne, Number Affected: 159",1,159,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Grand Rapids and Livonia
+OH,Columbus (Franklin) and Wheelersburg (Scioto),1,159,3 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Columbus and Wheelersburg
+GA,Armuchee,1,158,no matching place,county,Floyd County,Floyd County,0.95,,staged,county-level,Armuchee is an unincorporated community in Floyd County
+MA,"Boston, Cambridge, Boston",1,158,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Boston and Cambridge
+NY,Middle Village,2,158,no matching place,county,Queens County,Queens County,0.9,"IN,NJ,WI",staged,county-level,"Middle Village is a neighborhood in Queens County, NY"
+VA,"Abingdon, Clintwood & Haysi VA",1,158,3 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places: Abingdon, Clintwood, and Haysi"
+VA,Tabb VA,1,158,no matching place,county,York County,York County,0.95,,staged,county-level,Tabb is a census-designated place in York County
+MD,"3300 Lord Baltimore Drive Windsor Mill, MD 21244",1,156,no matching place,county,Baltimore County,,0.9,,staged,did not resolve,Windsor Mill is an unincorporated community in Baltimore County
+NJ,"Bergen, Burlington, Camden, Cumberland, Essex, Gloucester, Hudson, Mercer, Middlesex, Monmouth, Morris, Ocean, Passaic, Somerset, and Union Counties",1,155,7 distinct places named,multiple,,,0.99,,staged,multiple,Multiple counties listed
+MO,North Kansas CityLiberty,1,154,no matching place,multiple,,,0.95,,staged,multiple,Likely two distinct cities: North Kansas City and Liberty
+NY,East Vestal,1,154,no matching place,county,Broome County,Broome County,0.8,,staged,county-level,East Vestal is a hamlet within Broome County
+WA,Bothell/Everett,1,154,2 distinct places named,multiple,,,1.0,,staged,multiple,Two distinct places: Bothell and Everett
+WA,"Seattle, Bellevue, Everett, Federal Way, Kennewick",1,154,5 distinct places named,multiple,,,1.0,,staged,multiple,"Five distinct places: Seattle, Bellevue, Everett, Federal Way, Kennewick"
+MD,"1350 Brass Mill Road Belcamp, MD 21017",1,152,no matching place,place,Belcamp,,0.95,,staged,did not resolve,"Address with Belcamp, MD 21017"
+MI,"Southfield, Michigan; Kalamazoo, Michigan; and Center Line, Michigan",1,151,2 distinct places named,multiple,,,1.0,,staged,multiple,"Three distinct places: Southfield, Kalamazoo, Center Line"
+CA,WARNER SPRINGS,1,150,no matching place,place,Warner Springs,,1.0,,staged,did not resolve,CDP in San Diego County
+IN,"Valparaiso, Mishawaka and Indianapolis",1,150,3 distinct places named,multiple,,,1.0,,staged,multiple,"Three places: Valparaiso, Mishawaka, Indianapolis"
+VA,Arlingotn VA,2,150,no matching place,county,Arlington County,Arlington County,0.95,,staged,county-level,"Misspelling of Arlington, a county in VA"
+AK,"Anchorage, Fairbanks, Denali National Park and Healy",1,149,2 distinct places named,multiple,,,1.0,,staged,multiple,"Multiple: Anchorage, Fairbanks, Denali National Park, Healy"
+AK,"Soldotna, Homer & Seward",1,149,3 distinct places named,multiple,,,1.0,,staged,multiple,"Three places: Soldotna, Homer, Seward"
+VA,Alexandria & Arlington VA,1,149,2 distinct places named,multiple,,,1.0,,staged,multiple,Two places: Alexandria and Arlington in VA
+VA,"Alexandria, Arlington, Falls Church, Sterling, Vienna & Woodbridge VA",1,148,6 distinct places named,multiple,"Alexandria, Arlington, Falls Church, Sterling, Vienna, Woodbridge",,0.99,,staged,multiple,six distinct places
+WA,Usk,1,148,no matching place,place,Usk,,0.95,,staged,did not resolve,census-designated place in Washington
+CA,BASSETT,1,147,no matching place,place,Bassett,,0.9,,staged,did not resolve,census-designated place in California
+NY,Mount Tremper,1,147,no matching place,place,Mount Tremper,,0.85,,staged,did not resolve,census-designated place in New York
+TN,Claiborne and Greene County,1,147,no matching place,multiple,"Claiborne County, Greene County",,0.99,,staged,multiple,two counties
+WA,"Wenatchee, Spokane, Sunnyside",1,147,2 distinct places named,multiple,,,1.0,,staged,multiple,"Three distinct places: Wenatchee, Spokane, Sunnyside"
+WI,"Greenfield, Brookfield, Grand Chute, Madison, Ashwaubenon, Eau Claire",1,147,4 distinct places named,multiple,,,1.0,,staged,multiple,"Six distinct places: Greenfield, Brookfield, Grand Chute, Madison, Ashwaubenon, Eau Claire"
+FL,Lake Worth,2,146,no matching place,place,Lake Worth,,0.95,,staged,did not resolve,City in Florida
+NJ,HAMILTON TOWNSHIP,1,146,no matching place,place,Hamilton Township,,0.8,,staged,did not resolve,Possibly one of several Hamilton Townships in NJ
+FL,ISLAMORADA,1,145,no matching place,place,Islamorada,,0.95,,staged,did not resolve,Village in Florida
+MD,"NSA 9800 Savage Road Fort George G Meade, MD 20755",1,145,no matching place,county,Anne Arundel County,Anne Arundel County,0.95,,staged,county-level,Fort Meade is an unincorporated community in Anne Arundel County
+WA,"Seattle, Woodinville",1,145,2 distinct places named,multiple,,,1.0,,staged,multiple,Two distinct places: Seattle and Woodinville
+GA,St Mountain,1,144,no matching place,place,Stone Mountain,,0.7,,staged,below threshold 0.8,"likely abbreviation for Stone Mountain, GA"
+CO,"Denver, Broomfield",3,142,2 distinct places named,multiple,"Denver, Broomfield",,0.99,,staged,multiple,two distinct cities
+WA,"Lynnwood, Marysville, Pasco, Puyallup, Spokane Valley",1,142,5 distinct places named,multiple,"Lynnwood, Marysville, Pasco, Puyallup, Spokane Valley",,0.99,,staged,multiple,five distinct cities
+WI,"Janesville, Milton",1,142,2 distinct places named,multiple,"Janesville, Milton",,0.99,,staged,multiple,two distinct cities
+AL,Tanner,1,140,no matching place,place,Tanner,,0.9,,staged,did not resolve,"Tanner, AL is a CDP"
+IN,Anderson & Indianapolis,1,140,2 distinct places named,multiple,,,1.0,,staged,multiple,"Anderson and Indianapolis, two distinct places"
+IN,Lake Counties,1,140,no matching place,county,Lake County,Lake County,0.9,,staged,county-level,"Likely refers to Lake County, IN despite plural wording"
+OR,"Portland, Tigard",1,140,2 distinct places named,multiple,,,1.0,,staged,multiple,"Portland and Tigard, two distinct places"
+WI,"Altoona, Eau Claire, Augusta",1,140,2 distinct places named,multiple,,,1.0,,staged,multiple,"Altoona, Eau Claire, Augusta - three distinct places"
+WI,"Baraboo, Bellevue, Brookfield, Brown Deer, Cedarburg, Crivitz, De Pere, Fitchburg, Glendale, Green Bay, Hales Corner, Hartford, Kenosha, Merrill, Milwaukee, Mukwonago, New Berlin, New London, Oak Creek, Racine, Reedsburg, Sheboygan, Sun Prairie, Waukesha, Wauwatosa, West Allis, Wisconsin Rapids",1,140,26 distinct places named,multiple,,,1.0,,staged,multiple,26 distinct places listed
+WI,"Milwaukee, Pewaukee, and Waukesha",1,140,2 distinct places named,multiple,,,1.0,,staged,multiple,"Milwaukee, Pewaukee, Waukesha - three distinct places"
+LA,"414 Pine St, Monroe, LA 4673 Eugene Ware Blvd, Bastrop, LA",1,139,2 distinct places named,multiple,,,1.0,,staged,multiple,Monroe and Bastrop
+OH,Cleveland(Cuyahoga) Cincinnati (Hamilton),1,139,3 distinct places named,multiple,,,1.0,,staged,multiple,Cleveland and Cincinnati
+WI,"Brookfield, Madison, Monroe, New Glarus, & Oconomowoc",1,139,4 distinct places named,multiple,,,1.0,,staged,multiple,"Brookfield, Madison, Monroe, New Glarus, Oconomowoc"
+MI,"Zeeland, Michigan and Traverse City, Michigan",1,138,2 distinct places named,multiple,,,1.0,,staged,multiple,Zeeland and Traverse City
+OR,PORTLAND & GRESHAM,1,138,2 distinct places named,multiple,,,1.0,,staged,multiple,Portland and Gresham
+CA,EDWARDS,2,137,no matching place,county,Kern County,Kern County,0.9,"CO,MI,MN,MS,NY",staged,county-level,Edwards Air Force Base is an unincorporated area in Kern County
+MD,"8601 Adelphi Rd, College Park, MD 20740; and 700 Pennsylvania Ave, Washington, D.C. 20408",1,137,"address is in DC, not MD",multiple,,,0.99,,staged,multiple,"College Park, MD and Washington, DC"
+WI,"Middleton, DeForest",1,136,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Middleton and DeForest
+CA,VERNALIS,1,135,no matching place,county,San Joaquin County,San Joaquin County,0.9,,staged,county-level,Vernalis is an unincorporated community in San Joaquin County
+CA,PASO ROBLES,3,134,no matching place,place,Paso Robles,,0.99,,staged,did not resolve,Paso Robles is a city in California
+CO,Denver & Arapahoe/Douglas,1,134,2 distinct places named,multiple,,,0.95,,staged,multiple,Denver city and Arapahoe/Douglas counties
+MI,"Grand Rapids, Michigan and Kentwood, Michigan",1,134,2 distinct places named,multiple,,,0.99,,staged,multiple,"Grand Rapids and Kentwood, both in Michigan"
+VA,Crozrt VA,1,134,no matching place,place,Crozet,,0.7,,staged,below threshold 0.8,Typo for Crozet
+VA,Faiffax VA,1,134,no matching place,place,Fairfax,,0.7,,staged,below threshold 0.8,Typo for Fairfax
+VA,"Norfolk, Chesapeake & Newport News VA",1,134,3 distinct places named,multiple,,,0.99,,staged,multiple,"Norfolk, Chesapeake, and Newport News"
+CO,"Multiple: A/D, Pikes Peak, Jeffco",1,133,no matching place,multiple,,,0.95,,staged,multiple,"Multiple administrative areas: Arapahoe/Douglas, Pikes Peak region, Jefferson County"
+WI,Miwaukee,1,133,no matching place,place,Milwaukee,,0.7,,staged,below threshold 0.8,Typo 'Miwaukee' for Milwaukee
+MN,Burnseville,1,132,no matching place,place,Burnsville,,0.7,,staged,below threshold 0.8,Typo 'Burnseville' for Burnsville
+VA,Dumfries & Fairfax VA,1,132,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct sites: Dumfries and Fairfax
+CA,MONTROSE,3,131,no matching place,place,Montrose,,0.95,,staged,did not resolve,CDP in California
+WI,"Green Bay, Greendale, Janesville, Johnson Creek, Madison, Racine, Wauwatosa",1,131,6 distinct places named,multiple,,,0.99,,staged,multiple,7 distinct places
+GA,Ft. Gordon,2,130,no matching place,county,Columbia County,Columbia County,0.9,,staged,county-level,"military base, not a city"
+MD,"4801 Hollins Ferry Road Halethorpe, MD 21227",1,130,no matching place,county,Baltimore County,,0.8,,staged,did not resolve,"Address in Halethorpe, an unincorporated community within Baltimore County"
+NJ,Ft. Monmouth,1,130,no matching place,county,Monmouth County,Monmouth County,0.95,,staged,county-level,Fort Monmouth is a military base in Monmouth County
+NY,Bayside,3,130,no matching place,county,Queens County,Queens County,0.9,"TX,VA,WI",staged,county-level,Bayside is a neighborhood within Queens County (New York City)
+NY,West Harrison,1,130,no matching place,county,Westchester County,Westchester County,0.9,IN,staged,county-level,West Harrison is a hamlet/cdp in Westchester County
+OH,Avon Lake and Elyria (Lorain),1,130,2 distinct places named,multiple,,,1.0,,staged,multiple,Avon Lake and Elyria
+OH,"Cleveland, Parma, North Olmstead",1,130,2 distinct places named,multiple,,,1.0,,staged,multiple,"Cleveland, Parma, North Olmstead"
+OH,Jefferson (Ashtabula),1,130,2 distinct places named,multiple,,,1.0,,staged,multiple,Jefferson and Ashtabula
+OH,Miamisburg & Dayton(Montgomery and Greene),1,130,3 distinct places named,multiple,,,1.0,,staged,multiple,"Miamisburg, Dayton, Montgomery, Greene"
+VA,Fort Eustis & Fort Story VA,1,130,no matching place,multiple,,,1.0,,staged,multiple,Fort Eustis and Fort Story
+NJ,Blue Anchor,1,128,no matching place,county,Camden County,Camden County,0.85,,staged,county-level,"Blue Anchor is an unincorporated community in Camden County, NJ"
+VA,North Chesterfield VA,3,128,no matching place,county,Chesterfield County,Chesterfield County,0.9,,staged,county-level,"North Chesterfield is a CDP in Chesterfield County, VA"
+WI,"Rothschild, Monona",1,128,2 distinct places named,multiple,"Rothschild, Monona",,0.99,,staged,multiple,Two distinct places in WI
+FL,LAKE WORTH,7,127,no matching place,place,Lake Worth,,0.98,,staged,did not resolve,City in FL
+NC,Battleboro,1,127,no matching place,place,Battleboro,,0.98,,staged,did not resolve,Town in NC
+VA,Kinsale VA,2,127,no matching place,county,Westmoreland County,Westmoreland County,0.9,,staged,county-level,"Kinsale is an unincorporated community in Westmoreland County, VA"
+FL,MAYPORT,2,126,no matching place,place,Mayport,,0.95,,staged,did not resolve,Mayport is a CDP in Florida
+IN,Warsaw and Fort Wayne,1,126,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Warsaw and Fort Wayne
+MI,Harbor Springs/Boyne City,1,126,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Harbor Springs and Boyne City
+GA,Bremen/waco,1,125,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Bremen and Waco
+IN,"Highland, Merrillville, Lafayette, Avon, Carmel, Fishers, Greenwood, Terre Haute, Bloomington, Clarksville, New Albany, Evansville and Indianapolis",1,125,13 distinct places named,multiple,,,0.99,,staged,multiple,13 distinct places in Indiana
+WA,"Auburn, Arlington, Benton City, Spokane",1,125,4 distinct places named,multiple,,,0.99,,staged,multiple,"Four distinct places: Auburn, Arlington, Benton City, Spokane"
+MI,"Canton, Michigan",2,124,no matching place,place,Canton,,0.95,,staged,did not resolve,Canton is a township in Michigan
+IN,"Anderson, Auburn, Bloomington, Columbus, Elkhart, Evansville, Fort Wayne, Gary, Hammond, Indianapolis, Kokomo, Lafayette, Madison, Marion, Merrillville, Michigan City, Muncie, Richmond, South Bend, Terre Haute, Valparaiso, and Vincennes",1,123,22 distinct places named,multiple,,,1.0,,staged,multiple,List of 22 distinct cities.
+WA,"Mountlake Terrace, Fife",1,123,2 distinct places named,multiple,,,1.0,,staged,multiple,Two distinct cities: Mountlake Terrace and Fife.
+WI,"Appleton, La Crosse, Wauwatosa",1,123,2 distinct places named,multiple,,,1.0,,staged,multiple,"Three distinct cities: Appleton, La Crosse, Wauwatosa."
+CA,CHINA LAKE,3,122,no matching place,county,Kern County,Kern County,0.95,,staged,county-level,"China Lake is a military base in Kern County, CA."
+NJ,Peapack,1,122,no matching place,place,Peapack,,0.95,,staged,did not resolve,"Peapack is a borough in Somerset County, NJ."
+NY,"Corfu, West Henrietta, Victor",1,122,2 distinct places named,multiple,,,1.0,,staged,multiple,"Three distinct locations: Corfu, West Henrietta, Victor."
+SC,Fort Jackson,2,122,no matching place,county,Richland County,Richland County,0.95,,staged,county-level,"Fort Jackson is a military base in Richland County, SC."
+CO,"Denver, Boulder",1,121,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct cities
+MI,"Cadillac, Michigan and Novi, Michigan",1,121,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct cities
+WA,"Lynnwood, Vancouver",1,121,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct cities
+OR,SOUTH AND NORTH SALEM,1,120,no matching place,multiple,,,0.95,,staged,multiple,Two neighborhoods: South Salem and North Salem
+PA,Lehigh and Bucks,1,120,no matching place,multiple,,,0.99,,staged,multiple,Two counties: Lehigh and Bucks
+WA,Redmond & Kent,1,120,2 distinct places named,multiple,,,0.99,,staged,multiple,Two cities: Redmond and Kent
+WA,"SeaTac, Tukwila",1,120,2 distinct places named,multiple,,,0.99,,staged,multiple,Two cities: SeaTac and Tukwila
+CA,Carlotta,1,119,no matching place,county,Humboldt County,Humboldt County,0.95,,staged,county-level,Unincorporated community in Humboldt County
+IN,Indianapolis & Plainfield,1,119,2 distinct places named,multiple,,,0.99,,staged,multiple,Two cities: Indianapolis and Plainfield
+VA,Tyson's Corner VA,1,119,no matching place,county,Fairfax County,,0.95,,staged,did not resolve,Tyson's Corner is an unincorporated community in Fairfax County
+WA,"Des Moines, Auburn, Puyallup",1,119,3 distinct places named,multiple,,,0.99,,staged,multiple,Three distinct places in WA
+CA,Korbel,2,118,no matching place,county,Humboldt County,Humboldt County,0.8,,staged,county-level,Korbel is an unincorporated community in Humboldt County
+MA,East Taunton,2,118,no matching place,county,Bristol County,,0.7,,staged,below threshold 0.8,"East Taunton is a neighborhood within Taunton, MA, but not an incorporated place"
+MD,"3901 Vero Road Halethorpe, MD 21227",1,118,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,"Address in Halethorpe, a CDP in Baltimore County"
+WI,"Athens, Plover",1,118,2 distinct places named,multiple,"Athens, Plover",,0.98,,staged,multiple,two distinct places in WI
+CA,Hemet & Temecula,1,117,2 distinct places named,multiple,Hemet & Temecula,,0.98,,staged,multiple,two distinct places in CA
+GA,Sargent,1,117,no matching place,place,Sargent,,0.8,,staged,did not resolve,CDP in Georgia
+NJ,Hamilton Township,2,117,no matching place,place,Hamilton Township,,0.6,,staged,did not resolve,"multiple townships in NJ, ambiguous"
+VA,"Arlington, Alexandria & Reston VA",1,117,3 distinct places named,multiple,"Arlington, Alexandria & Reston VA",,0.98,,staged,multiple,three distinct sites in VA
+NY,Pocantico Hills,1,116,no matching place,county,Westchester County,Westchester County,0.85,,staged,county-level,"unincorporated community in Westchester County, NY"
+VA,Midlothian & Glen Allen VA,1,116,2 distinct places named,multiple,Midlothian & Glen Allen VA,,0.98,,staged,multiple,two distinct CDPs in VA
+MT,Lewis & Clark,2,115,no matching place,county,Lewis and Clark County,Lewis and Clark County,0.99,"CO,IA,IN,KS,MN,ND,NE,NY,OH,PA,WI",staged,county-level,"Refers to Lewis and Clark County, Montana"
+OH,Parma/Cuyahoga and Cleveland Heights/Cuyahoga,1,115,2 distinct places named,multiple,,,0.99,,staged,multiple,"Two places: Parma and Cleveland Heights, both in Cuyahoga County"
+OH,Wellston (Jackson) Hamden (Vinton)and Gallipolis (Gallia),1,115,4 distinct places named,multiple,,,0.99,,staged,multiple,"Multiple places: Wellston, Hamden, and Gallipolis"
+WA,Seattle-Tacoma,1,115,no matching place,multiple,,,0.95,,staged,multiple,Seattle and Tacoma are two distinct cities
+LA,"Ft. Polk U.S. Army Base Bldg 1560 – Alabama Ave Ft. Polk, LA 71459",1,114,no matching place,county,Vernon Parish,Vernon Parish,0.95,,staged,county-level,Military base; located in Vernon Parish (LA equivalent of county)
+MI,Remus,1,114,no matching place,place,Remus,,0.9,,staged,did not resolve,"Village in Mecosta County, Michigan"
+MI,"Remus, Michigan",1,114,no matching place,place,Remus,,0.95,,staged,did not resolve,"Village in Mecosta County, Michigan"
+MI,"Shelby Township, Michigan and Caledonia, Michigan",1,114,2 distinct places named,multiple,,,0.98,,staged,multiple,"Two distinct places: Shelby Township and Caledonia, both in Michigan"
+OH,Columbus (Franklin) and Pataskala (Licking),1,114,3 distinct places named,multiple,,,0.98,,staged,multiple,Two distinct places: Columbus (Franklin) and Pataskala (Licking)
+SC,Columbia/Irmo/West Columbia,1,114,3 distinct places named,multiple,,,0.98,,staged,multiple,"Three distinct places: Columbia, Irmo, West Columbia"
+CO,Multiple: Denver and Pikes Peak,1,113,no matching place,multiple,,,0.9,,staged,multiple,"Denver is a city; Pikes Peak is a mountain, treated as distinct site"
+CT,"Colchester,Milford,Northford,Ridgefield,Tolland, Monroe,Norwaik, oldsaybrook",1,113,4 distinct places named,multiple,,,0.95,,staged,multiple,Multiple places in Connecticut; includes likely misspellings
+IN,Evansville and Mount Vernon,1,113,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Evansville and Mount Vernon
+MI,Commerce Twp.,1,113,no matching place,place,Commerce Township,,0.95,,staged,did not resolve,Township in Michigan
+OH,Columbus (Franklin) Cincinnati (Hamilton) Various (Various),1,113,4 distinct places named,multiple,,,0.99,,staged,multiple,"Multiple places: Columbus, Cincinnati, and Various"
+AL,Fort McClellan,1,112,no matching place,county,Calhoun County,Calhoun County,0.97,,staged,county-level,Fort McClellan is a military base in Calhoun County
+IN,"Edwardsport, Freelandville, Oaktown, Petersburg",1,112,4 distinct places named,multiple,,,0.99,,staged,multiple,"Four distinct places: Edwardsport, Freelandville, Oaktown, Petersburg"
+OH,Moraine & Kettering (Montgomery),1,112,2 distinct places named,multiple,,,0.99,,staged,multiple,"Moraine and Kettering, both in Montgomery County, OH"
+IN,"Anderson, Evansville, Indianapolis, Kokomo, Salem",1,111,5 distinct places named,multiple,,,0.99,,staged,multiple,Five distinct Indiana cities
+MO,"Maryland Heights, Bridgeton",1,111,2 distinct places named,multiple,,,0.99,,staged,multiple,"Maryland Heights and Bridgeton, both in MO"
+MO,Maryland HeightsBridgeton,1,111,no matching place,multiple,,,0.8,,staged,multiple,"Likely refers to Maryland Heights and Bridgeton, MO"
+SC,Surfside,1,111,no matching place,place,Surfside Beach,,0.7,,staged,below threshold 0.8,"Likely Surfside Beach, SC"
+WA,Renton and Sumner,1,111,2 distinct places named,multiple,,,0.99,,staged,multiple,"Renton and Sumner, both in WA"
+WA,Tacoma/Shelton,1,111,2 distinct places named,multiple,,,0.99,,staged,multiple,"Tacoma and Shelton, both in WA"
+MD,"7565 Harmans Road, Hanover, MD",1,110,no matching place,place,Hanover,,0.95,,staged,did not resolve,"address in Hanover, MD"
+WI,Albany & Orfordville,1,110,2 distinct places named,multiple,,,0.95,,staged,multiple,two distinct places: Albany and Orfordville
+WA,"Seattle, Tacoma",2,109,2 distinct places named,multiple,,,1.0,,staged,multiple,two distinct places: Seattle and Tacoma
+LA,"Plaquemine, New Orleans, and Hackberry, LA",1,108,3 distinct places named,multiple,,,1.0,,staged,multiple,"three distinct places: Plaquemine, New Orleans, Hackberry"
+MD,"5001 Washington Blvd. Relay, MD 21227",1,108,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,Relay is an unincorporated community in Baltimore County
+NJ,"Lawrence, Princeton, Berkeley Heights, Pennington, New Brunswick",1,108,3 distinct places named,multiple,,,1.0,,staged,multiple,Lists at least three distinct municipalities in New Jersey
+IN,Mishawaka & New Carlisle,1,107,2 distinct places named,multiple,,,1.0,,staged,multiple,Two distinct places: Mishawaka and New Carlisle
+NJ,"Burlington, Gloucester, Middlesex, Monmouth",1,107,3 distinct places named,multiple,,,1.0,,staged,multiple,Lists four New Jersey counties
+CA,EDWARDS AIR FORCE BA,10,106,no matching place,county,Kern County,Kern County,0.8,,staged,county-level,"Edwards Air Force Base, a military base not in an incorporated city; located in Kern County"
+MD,"7200 Standard Drive, Hanover, MD",1,106,no matching place,county,Anne Arundel County,Anne Arundel County,0.9,"AL,IL,IN,KS,MA,ME,MI,MN,NE,NH,NJ,NM,NY,OH,PA,VA,WI",staged,county-level,Hanover is a CDP in Anne Arundel County
+MI,Brownstown,1,106,no matching place,place,Brownstown Township,,0.9,,staged,did not resolve,"Brownstown Township, a charter township in Wayne County"
+MI,"Brownstown, Michigan",1,106,no matching place,place,Brownstown,,0.8,,staged,did not resolve,"Charter township in Wayne County, Michigan"
+WA,"Battleground, Camas, Vancouver",1,106,3 distinct places named,multiple,,,1.0,,staged,multiple,"Three distinct cities in Washington: Battleground, Camas, Vancouver"
+WA,Seattle and Liberty Lake,1,106,2 distinct places named,multiple,,,1.0,,staged,multiple,Two distinct cities in Washington: Seattle and Liberty Lake
+WA,"Seattle, Kirkland",1,106,2 distinct places named,multiple,,,1.0,,staged,multiple,Two distinct cities in Washington: Seattle and Kirkland
+GA,"1033 South Reynolds Street, Metcalfe, Georgia",1,105,no matching place,place,Metcalfe,,0.95,,staged,did not resolve,"Town in Thomas County, Georgia"
+KY,"Bullitt, Jefferson",1,105,no matching place,multiple,,,1.0,,staged,multiple,Two counties in Kentucky: Bullitt County and Jefferson County
+MD,"Patuxent River NAS 47758 Ranch Road, Building 1492, Patuxent River, MD 20670",1,105,no matching place,county,St. Mary's County,St. Mary's County,0.95,,staged,county-level,"Naval air station in St. Mary's County, Maryland"
+NJ,Monroe Twp.,1,105,no matching place,place,Monroe Township,,0.7,,staged,did not resolve,"Ambiguous township in New Jersey, multiple counties possible"
+NY,"East Little Falls,Canastota, Little Falls",1,105,2 distinct places named,multiple,,,1.0,,staged,multiple,"Three distinct places in New York: East Little Falls, Canastota, Little Falls"
+VA,Skippers VA,1,105,no matching place,county,Greensville County,Greensville County,0.85,,staged,county-level,"Unincorporated community in Greensville County, Virginia"
+VA,"Williamsburg & Virginia Beach, VA 23462 VA",1,104,2 distinct places named,multiple,,,0.99,,staged,multiple,Two places: Williamsburg and Virginia Beach
+FL,SANDESTIN,2,103,no matching place,county,Walton County,Walton County,0.9,,staged,county-level,Unincorporated community in Walton County
+ID,Mt. Home AFB,1,103,no matching place,county,Elmore County,Elmore County,0.95,,staged,county-level,Mountain Home AFB is in Elmore County
+MD,"9060 Crisfield Highway, Westover, MD",1,103,no matching place,county,Somerset County,Somerset County,0.85,"AL,PA,WV",staged,county-level,Westover is a CDP in Somerset County
+NJ,Deepwater,1,103,no matching place,county,Salem County,Salem County,0.95,"MO,ND,WV",staged,county-level,Deepwater is an unincorporated community in Salem County
+TN,"Hamilton, Knox, Sevier, Williamson County",1,103,no matching place,multiple,,,0.99,,staged,multiple,"Four counties listed: Hamilton, Knox, Sevier, Williamson"
+VA,Centreville & Fairfax VA,1,103,2 distinct places named,multiple,,,0.99,,staged,multiple,Two places: Centreville and Fairfax
+WI,"Chippewa Falls, Cornell",1,103,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Chippewa Falls and Cornell
+AK,Mat-Su,1,102,no matching place,county,Matanuska-Susitna Borough,Matanuska-Susitna Borough,0.9,,staged,county-level,Abbreviation for Matanuska-Susitna Borough
+AZ,Ft. Huachuca,1,102,no matching place,county,Cochise County,Cochise County,0.8,,staged,county-level,Fort Huachuca is a military base in Cochise County
+CA,Helm,1,102,no matching place,county,Fresno County,Fresno County,0.9,,staged,county-level,Helm is an unincorporated community in Fresno County
+KY,Boone/Kenton,1,102,no matching place,multiple,,,0.99,,staged,multiple,Two counties: Boone and Kenton
+VA,Potomac Falls VA,1,102,no matching place,county,Loudoun County,Loudoun County,0.85,,staged,county-level,Potomac Falls is a CDP in Loudoun County
+WI,"Brookfield, Fox Point",1,102,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Brookfield and Fox Point
+AK,Fort Wainwright and Joint Base Elmendorf-Richardson (JBER),1,101,no matching place,multiple,,,0.9,,staged,multiple,Two military bases in Alaska
+GA,Preston,1,101,no matching place,place,Preston,,0.9,,staged,did not resolve,"Town in Webster County, GA"
+MA,Braintree & Quincy,1,101,2 distinct places named,multiple,,,0.99,,staged,multiple,Two cities: Braintree and Quincy
+MD,"7441 Candlewood Road Hanover, MD 21076",1,101,no matching place,place,Hanover,,0.95,,staged,did not resolve,Address in Hanover CDP
+NJ,MILFORD/BLOOMSBURY,1,101,2 distinct places named,multiple,,,0.99,,staged,multiple,Two boroughs: Milford and Bloomsbury
+AK,"Anchorage, Eagle River, Wasilla & Soldotna",1,100,2 distinct places named,multiple,,,1.0,,staged,multiple,"Anchorage, Eagle River, Wasilla, Soldotna"
+CA,Branscomb,1,100,no matching place,county,Mendocino County,Mendocino County,0.8,,staged,county-level,Branscomb is an unincorporated community in Mendocino County
+CA,Long Beach (Carson),1,100,2 distinct places named,multiple,,,0.99,,staged,multiple,Long Beach and Carson
+IL,"multiple locations multiple, IL 60606",1,100,no matching place,multiple,,,0.8,,staged,multiple,Indicates multiple locations
+IN,"Indianapolis, Martinsville, Petersburg",1,100,3 distinct places named,multiple,,,0.95,,staged,multiple,Three distinct places listed
+IN,Pimento,2,100,no matching place,county,Vigo County,Vigo County,0.85,,staged,county-level,Unincorporated community in Vigo County
+PA,Lancaster & Lebanon,1,100,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Lancaster and Lebanon
+WA,"Seattle, Tacoma, Lakewood, Auburn, Bellevue, Burien, Federal Way, Kent, Puyallup",1,100,9 distinct places named,multiple,,,0.99,,staged,multiple,Nine distinct places listed
+VA,"Fairfax, Arlington, Bailey's Crossroad, Manassas, Prince William, Reston, Herndon & Springfield VA",1,99,6 distinct places named,multiple,,,0.99,,staged,multiple,Multiple places including counties and CDPs
+CO,Rural Consortium (Alamosa) & Denver,1,98,2 distinct places named,multiple,,,0.99,,staged,multiple,"Alamosa and Denver, two distinct places"
+VA,"Glen Allen, Chester, Henrico VA",1,98,2 distinct places named,multiple,,,0.95,,staged,multiple,"Glen Allen, Chester, and Henrico County are distinct"
+NY,Annandale on Hudson,1,97,no matching place,county,Dutchess County,,0.7,,staged,below threshold 0.8,Annandale on Hudson is a hamlet in Dutchess County
+UT,Ivans,1,97,no matching place,place,Ivins,,0.6,,staged,below threshold 0.8,"Ivans is likely a misspelling of Ivins, UT"
+WI,"Kenosha, Milwaukee, Shorewood, West Allis, Wauwatosa, Greendale, Mequon, West Bend, Brookfield, Waukesha, Oconomowoc, Menomonee Falls, Eau Claire, La Crosse",1,97,14 distinct places named,multiple,,,0.99,,staged,multiple,14 distinct places in WI
+GA,Ellabell,1,96,no matching place,county,Bryan County,,0.7,,staged,below threshold 0.8,Ellabell is an unincorporated community in Bryan County
+MD,"300 Clubhouse Lane, Hunt Valley, MD",1,96,no matching place,county,Baltimore County,,0.8,,staged,did not resolve,Hunt Valley is an unincorporated community in Baltimore County
+MD,"3066 Perimeter Road, Andrews Air Force Base, MD",1,96,no matching place,county,Prince George's County,Prince George's County,0.9,,staged,county-level,Andrews Air Force Base is in Prince George's County
+ND,"Ross & Watford City, ND",1,96,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Ross and Watford City
+OR,Powell Butte,1,96,no matching place,place,Powell Butte,,0.95,,staged,did not resolve,CDP in Oregon
+PA,Montgomery and Philadelphia,1,96,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct: Montgomery County and Philadelphia
+VA,Arlington & Alexandria VA,1,95,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct: Arlington County and Alexandria
+WA,"Bellevue, Seattle, Vancouver",1,95,3 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places: Bellevue, Seattle, Vancouver"
+MD,"10830 Guilford Road Suite 311 Annapolis Junction, MD 20701-1108",1,94,no matching place,place,Annapolis Junction,,0.95,,staged,did not resolve,CDP in Maryland
+MD,"11333 McCormick Road, Hunt Valley, MD",2,94,no matching place,place,Hunt Valley,,0.95,,staged,did not resolve,CDP in Maryland
+UT,"Nephi, Provo/Orem",1,94,3 distinct places named,multiple,,,0.99,,staged,multiple,"Names three distinct places: Nephi, Provo, Orem"
+WA,"Vancouver, Tacoma",1,94,2 distinct places named,multiple,,,0.99,,staged,multiple,"Names two distinct places: Vancouver, Tacoma"
+ID,Naples,1,93,no matching place,place,Naples,,0.95,,staged,did not resolve,Town in Idaho
+IN,Crown Point and Munster,1,93,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Crown Point and Munster
+MT,Missoula CTY,1,93,no matching place,county,Missoula County,Missoula County,0.99,,staged,county-level,Missoula County
+VA,Grafton VA,1,93,no matching place,county,York County,York County,0.95,"IA,IL,MA,MN,ND,NE,NH,NY,OH,SD,VT,WI,WV",staged,county-level,CDP in York County
+WI,"Beloit, Brown Deer, Monroe",1,93,2 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places: Beloit, Brown Deer, Monroe"
+GA,Haddock,1,92,no matching place,county,Jones County,Jones County,0.95,,staged,county-level,Unincorporated community in Jones County
+MI,"Orion Township, Michigan",1,92,no matching place,place,Orion Township,,0.95,,staged,did not resolve,charter township in Michigan
+MO,LucernePrincetonNewtown,1,92,no matching place,multiple,,,0.9,,staged,multiple,three concatenated place names
+NC,Cherry Point,1,92,no matching place,county,Craven County,Craven County,0.9,,staged,county-level,Cherry Point military base in Craven County
+OH,Westlake & Berea/Cuyahoga,1,92,2 distinct places named,multiple,,,0.95,,staged,multiple,Westlake and Berea
+TX,Cypress,2,92,no matching place,county,Harris County,Harris County,0.95,"CA,IL,MO,ND",staged,county-level,"Cypress is an unincorporated community in Harris County, TX"
+VA,Norfolk & Suffolk VA,1,92,2 distinct places named,multiple,,,0.95,,staged,multiple,Norfolk and Suffolk
+WA,"Seattle, Tacoma, Yakima, Spokane, Richland",1,92,5 distinct places named,multiple,,,0.95,,staged,multiple,five cities
+MA,"Needham Heights, Metro Southwest",1,91,no matching place,county,Norfolk County,,0.7,,staged,below threshold 0.8,"Needham Heights neighborhood in Needham, Norfolk County; Metro Southwest is region"
+MD,"7005 Security Blvd., Woodlawn, MD",1,91,name matches more than one place,county,Baltimore County,,0.9,,staged,did not resolve,Woodlawn CDP in Baltimore County
+MO,St. Louis (city)Springfield,1,91,2 distinct places named,multiple,,,0.95,,staged,multiple,St. Louis city and Springfield
+NY,Bronx/Brooklyn/Jamaica/NY,1,91,no matching place,multiple,,,0.95,,staged,multiple,"Bronx, Brooklyn, and Jamaica are distinct neighborhoods or boroughs in New York City"
+WA,"Bellevue & Kirkland, WA",1,91,2 distinct places named,multiple,,,0.95,,staged,multiple,Bellevue and Kirkland are separate cities in Washington
+AZ,Waddell,1,90,no matching place,county,Maricopa County,Maricopa County,0.85,,staged,county-level,Waddell is an unincorporated community in Maricopa County
+CA,Onizuka Air Station,1,90,no matching place,county,Santa Clara County,,0.7,,staged,below threshold 0.8,Onizuka Air Station is a military base in Santa Clara County
+ID,Boise Chubbuck Idaho Falls,1,90,no matching place,multiple,,,0.95,,staged,multiple,"Boise, Chubbuck, and Idaho Falls are separate cities in Idaho"
+MD,"1900 Landsdowne Road Halethorpe, MD 21227",1,90,no matching place,county,Baltimore County,,0.9,,staged,did not resolve,Halethorpe is a CDP in Baltimore County
+MD,"7000 Arundel Mills Circle C-1 Hanover, MD 21076",1,90,no matching place,county,Anne Arundel County,Anne Arundel County,0.9,,staged,county-level,Hanover is a CDP in Anne Arundel County
+NJ,TOMS RIVER/NEWARK,1,90,2 distinct places named,multiple,,,0.95,,staged,multiple,Toms River and Newark are separate cities in New Jersey
+NY,McConnelsville,1,90,no matching place,county,Oswego County,Oswego County,0.8,OH,staged,county-level,Unincorporated hamlet in Oswego County
+VA,"Fairfax, Herndon, Sterling, Chantilly VA",1,90,4 distinct places named,multiple,,,1.0,,staged,multiple,Four distinct places in Virginia
+CO,Pikes Peak-Colo Springs,1,89,no matching place,multiple,,,0.95,,staged,multiple,Pikes Peak and Colorado Springs
+CT,"Colchester, Milford, Northford, Ridgefield, Tolland, Monroe, Norwalk, Old Saybrook",1,89,5 distinct places named,multiple,,,1.0,,staged,multiple,8 distinct places in Connecticut
+MI,"Detroit, Michigan and Grand Rapids, Michigan",1,89,2 distinct places named,multiple,,,1.0,,staged,multiple,Two distinct places in Michigan
+NJ,"Paramus, Livingston, Ramsey",1,89,2 distinct places named,multiple,,,1.0,,staged,multiple,Three distinct places in New Jersey
+NJ,VINELAND/MILLVILLE,1,89,2 distinct places named,multiple,,,1.0,,staged,multiple,Two distinct places in New Jersey
+NY,Huntington Station/Garden City,1,89,2 distinct places named,multiple,,,1.0,,staged,multiple,Two distinct places in New York
+OH,Jefferson/Ashtabula,1,89,2 distinct places named,multiple,,,0.99,,staged,multiple,names two counties: Jefferson and Ashtabula
+LA,"Westwego, LA c/o 2200 West Loop South, Suite 800 Houston, TX 77027",1,88,"address is in TX, not LA",place,Westwego,,0.95,,staged,did not resolve,"primary location is Westwego, LA"
+MI,"Flint, Roseville, Saginaw, Taylor, Counties: Genesee, Macomb, Saginaw, Wayne, Number Affected: 87",1,87,5 distinct places named,multiple,,,0.99,,staged,multiple,names multiple cities and counties
+VA,Hayes VA,1,87,no matching place,county,Gloucester County,Gloucester County,0.95,"KS,LA,MI,MN,NE",staged,county-level,Hayes is a CDP in Gloucester County
+CA,McClellan AFB,1,86,no matching place,county,Sacramento County,Sacramento County,0.98,,staged,county-level,McClellan AFB is in Sacramento County
+NY,West Henrietta,1,86,no matching place,county,Monroe County,Monroe County,0.95,,staged,county-level,West Henrietta is a CDP in Monroe County
+VA,DCA-Arlington VA,1,86,no matching place,county,Arlington County,Arlington County,0.96,,staged,county-level,DCA airport is in Arlington County
+VA,"Virginia Beach, Newport News & Norfolk VA",1,86,3 distinct places named,multiple,,,0.99,,staged,multiple,Three distinct cities in VA
+AZ,8 - Santa Cruz County One Stop Career Center,1,85,no matching place,county,Santa Cruz County,Santa Cruz County,0.99,KS,staged,county-level,"Santa Cruz County, AZ"
+MO,CottlevilleGarden CityLawsonLexingtonOzarkPeculiarRollaSpringfieldWaverlyWentzville,1,85,no matching place,multiple,,,0.99,,staged,multiple,10 distinct places named
+VA,"Alexandria, Ashburn, Burke, Fair Oaks, Falls Church, Haymarket, Manassas, McLean, Reston VA",1,85,9 distinct places named,multiple,,,0.99,,staged,multiple,9 distinct places named
+WA,Marysville and Newport,1,85,2 distinct places named,multiple,,,0.99,,staged,multiple,2 distinct places named
+MN,Bloominton Minneapolis,1,84,no matching place,multiple,,,0.99,,staged,multiple,Two places: Bloomington and Minneapolis
+WA,Seattle & Bellevue,1,84,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Seattle and Bellevue
+CT,"Stamford & Houston, TX",1,84,"address is in TX, not CT",multiple,,,0.99,,staged,multiple,"Names Stamford, CT and Houston, TX"
+MD,"10000 Franklin Square Drive Suite 300 Nottingham, MD 21236",1,83,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,"Nottingham is an unincorporated community in Baltimore County, MD"
+NY,Purchase,1,83,no matching place,county,Westchester County,Westchester County,0.9,,staged,county-level,"Purchase is a hamlet/CDP in Westchester County, NY"
+WA,"Vancouver, Tacoma, Poulsbo",1,83,3 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places: Vancouver, Tacoma, Poulsbo"
+NJ,LANDISVILLE,1,82,no matching place,county,Atlantic County,Atlantic County,0.95,PA,staged,county-level,Landisville is an unincorporated community in Atlantic County
+OR,EUGENE AND BEAVERTON,1,82,no matching place,multiple,,,0.99,,staged,multiple,Two distinct places: Eugene and Beaverton
+SC,"Columbia,Greenville, NorthCharleston",1,82,2 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places: Columbia, Greenville, and North Charleston"
+WA,Toutle,2,82,no matching place,county,Cowlitz County,Cowlitz County,0.95,,staged,county-level,Toutle is an unincorporated community in Cowlitz County
+ID,Buhl Buhl Buhl Wendell,1,81,no matching place,multiple,"Buhl, Wendell",,0.98,,staged,multiple,Repeated Buhl and Wendell are two distinct places in Idaho
+NY,Waterloo/Penn Yan/Seneca Falls,1,81,3 distinct places named,multiple,"Waterloo, Penn Yan, Seneca Falls",,0.99,,staged,multiple,Three distinct places in New York
+MA,"Acton, Gardner, Athol, Leominster, Worcester",1,80,3 distinct places named,multiple,,,0.99,,staged,multiple,Five distinct Massachusetts places
+OH,Glenwillow/Solon/Cuyahoga,1,80,2 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places named: Glenwillow, Solon, Cuyahoga"
+OH,Langsville,1,80,no matching place,county,Meigs County,Meigs County,0.9,,staged,county-level,"Unincorporated community in Meigs County, Ohio"
+OR,Bend/Prineville/Redmond,1,80,3 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places named: Bend, Prineville, Redmond"
+TN,Davidson and Knox County,1,80,no matching place,multiple,,,0.99,,staged,multiple,Two counties named: Davidson County and Knox County
+VA,Annadale VA,1,80,no matching place,county,Fairfax County,,0.95,,staged,did not resolve,"Misspelling of Annandale, an unincorporated community in Fairfax County, VA"
+VA,Dulles International Airport VA,1,80,no matching place,county,Loudoun County,Loudoun County,0.9,,staged,county-level,"Dulles International Airport is located in unincorporated area of Loudoun County, VA"
+WA,Randle,1,80,no matching place,county,Lewis County,Lewis County,0.9,,staged,county-level,"Randle is an unincorporated community in Lewis County, WA"
+NC,Camp Lejeune,1,79,no matching place,county,Onslow County,Onslow County,0.98,,staged,county-level,Military base not in an incorporated place
+CT,"Shelton, Danbury, Wethersfield",3,78,3 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct places: Shelton, Danbury, Wethersfield"
+MD,"825 Dulaney Valley Road Towson, Maryland 21204",1,78,2 distinct places named,county,Baltimore County,Maryland City CDP,0.95,,staged,county-level,Towson is an unincorporated community
+MT,"Dawson, Fallon, Prairie and Wibaux",1,78,2 distinct places named,multiple,,,1.0,,staged,multiple,"Dawson County, Fallon County, Prairie County, Wibaux County"
+VA,Richmond & Sandston VA,1,78,2 distinct places named,multiple,,,1.0,,staged,multiple,Richmond city and Sandston CDP in Virginia
+CA,BANTA,5,77,no matching place,county,San Joaquin County,San Joaquin County,0.8,,staged,county-level,"Banta is an unincorporated community in San Joaquin County, CA"
+CA,Cucamonga,1,77,no matching place,county,San Bernardino County,,0.7,,staged,below threshold 0.8,"Cucamonga is a neighborhood within Rancho Cucamonga, in San Bernardino County"
+MD,"10745 DeMarr Road, White Plains, MD 20695",1,77,no matching place,county,Charles County,Charles County,0.8,"AL,GA,KY,NC,NY",staged,county-level,"White Plains is a CDP in Charles County, MD"
+NJ,"Princeton, Ledgewood, Middletown Township",1,77,2 distinct places named,multiple,,,1.0,,staged,multiple,"Princeton borough, Ledgewood CDP, Middletown Township"
+MD,"7020 Dorsey Road Suite C Hanover, MD 21076",1,76,no matching place,place,Hanover,,0.99,,staged,did not resolve,"Address includes Hanover, MD"
+NV,"LV, NLV, He, Sp, El, Cl, Wa, El",1,76,no matching place,multiple,,,0.99,,staged,multiple,Abbreviations for multiple cities in NV
+IN,"Muncie, Bloomington, Chandler and Indianapolis",1,75,4 distinct places named,multiple,,,1.0,,staged,multiple,"Four distinct places named: Muncie, Bloomington, Chandler, Indianapolis"
+MD,"7442 Shipley Avenue, Harmans MD",1,75,no matching place,county,Anne Arundel County,Anne Arundel County,0.95,,staged,county-level,"Harmans is an unincorporated community in Anne Arundel County, MD"
+MI,New Boston,1,75,no matching place,place,New Boston,,1.0,,staged,did not resolve,New Boston is a village in Michigan
+NJ,Bayville,1,75,no matching place,county,Ocean County,Ocean County,0.95,NY,staged,county-level,Bayville is an unincorporated community in Ocean County
+WA,Everett and Renton,1,75,2 distinct places named,multiple,,,1.0,,staged,multiple,"Everett and Renton, WA"
+WA,North Creek & Fairview,1,75,no matching place,multiple,,,0.9,,staged,multiple,"North Creek and Fairview, WA"
+WI,"Green Bay, Manitowoc, Oconto, Shawano",1,75,4 distinct places named,multiple,,,1.0,,staged,multiple,"Green Bay, Manitowoc, Oconto, Shawano"
+WI,"Menomonie, Neenah, Rice Lake, Pulaski, Brodhead, Lake Geneva, Appleton, Marinette, Forest Junction, Menasha, Chippewa Falls, Mosinee, Kewaunee, Onalaska, Lake Mills, Rice Lake, Lannon, Beaver Dam, Eden, Fond du Lac, Waupaca, Wisconsin Rapids, Markesan, Janesville, Fennimore, Fort Atkinson, Portage, Marquette, Plover, Reeseville, Amery, Kenosha, East Troy, Sullivan, Beloit, Oak Creek, Spencer",1,75,36 distinct places named,multiple,,,1.0,,staged,multiple,36 distinct places listed
+FL,CLEAR WATER BEACH,1,74,no matching place,county,Pinellas County,Pinellas County,0.95,,staged,county-level,Clearwater Beach is in Pinellas County
+MA,"Sturbridge, Webster & Worcester",1,74,2 distinct places named,multiple,,,1.0,,staged,multiple,"Sturbridge, Webster, and Worcester, MA"
+MD,"11333 McCormick Road Hunt Valley, MD 21031",1,74,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,Hunt Valley is in Baltimore County
+MI,"Bingham Farms, Bloomfield Hills, and Northville, Counties: Oakland and Wayne, Number Affected: 74",1,74,3 distinct places named,multiple,,,1.0,,staged,multiple,"Bingham Farms, Bloomfield Hills, and Northville"
+VA,Milford VA,1,74,no matching place,place,Milford,,0.99,,staged,did not resolve,Milford is a town in Virginia
+CA,March Air Reserve Base,1,73,no matching place,county,Riverside County,Riverside County,0.95,,staged,county-level,March Air Reserve Base is a military installation in Riverside County
+MA,"East Freetown, Southeast",1,73,no matching place,place,East Freetown,,0.8,,staged,did not resolve,East Freetown is a CDP in Massachusetts; 'Southeast' may be a descriptor
+MD,"12620 Crain Highway Newburg, MD 20664",1,73,no matching place,county,Charles County,Charles County,0.9,"IL,MN,MO,ND,PA,WI,WV",staged,county-level,Newburg is an unincorporated community in Charles County
+MD,"235 Schilling Circle Suite 108 Hunt Valley, MD 21031",1,73,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,Hunt Valley is an unincorporated community in Baltimore County
+VA,Rosslyn VA,1,73,no matching place,county,Arlington County,Arlington County,0.95,,staged,county-level,Rosslyn is a neighborhood in Arlington County
+WA,Renton and Mukilteo,1,73,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Renton and Mukilteo
+NY,Getzville,1,72,no matching place,county,Erie County,Erie County,0.9,,staged,county-level,Getzville is an unincorporated community in Erie County
+UT,Kearns,1,72,no matching place,county,Salt Lake County,Salt Lake County,0.9,,staged,county-level,Kearns is an unincorporated community in Salt Lake County
+VA,Newport News & Portsmouth VA,2,72,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Newport News and Portsmouth
+KS,Cleveland,1,71,no matching place,place,Cleveland,,0.95,,staged,did not resolve,City in Kansas
+KY,McCraken,2,71,no matching place,county,McCracken County,McCracken County,0.8,,staged,county-level,Likely misspelling of McCracken County
+MD,"1110 Old Elkridge Landing Rd Linthicum Heights, MD 21090",1,71,no matching place,place,Linthicum Heights,,0.95,,staged,did not resolve,Census-designated place in Maryland
+CA,Jolon,1,70,no matching place,county,Monterey County,Monterey County,0.9,,staged,county-level,Jolon is an unincorporated community in Monterey County
+CA,TOLLHOUSE,1,70,no matching place,county,Fresno County,Fresno County,0.9,,staged,county-level,Tollhouse is an unincorporated community in Fresno County
+IN,"Lafayette, Avon, Terre Haute, Evansville, and Vincennes",1,70,5 distinct places named,multiple,,,0.99,,staged,multiple,Five distinct places listed
+MA,"Northampton, Pittsfield & West Springfield, MA, Western",1,70,3 distinct places named,multiple,,,0.99,,staged,multiple,Three distinct places listed
+MD,"4805 Philadelphia Road Belcamp, MD 21014",1,70,no matching place,county,Harford County,Harford County,0.8,,staged,county-level,Belcamp is an unincorporated community in Harford County
+MD,"5001 Washington Blvd. Halethorpe, MD 21227",1,70,no matching place,county,Baltimore County,,0.8,,staged,did not resolve,Halethorpe is an unincorporated community in Baltimore County
+NY,"Hastings on Hudson, Plattekill",1,70,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Hastings on Hudson and Plattekill
+OH,Worthington/Columbus,1,70,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Worthington and Columbus
+VA,Raphine VA,1,70,no matching place,county,Rockbridge County,Rockbridge County,0.9,,staged,county-level,Raphine is an unincorporated community in Rockbridge County
+WI,Fort McCoy,1,70,no matching place,county,Monroe County,Monroe County,0.98,,staged,county-level,Fort McCoy is a military base in Monroe County
+IN,"Highland, Merrillville, Michigan City, Portage, Valparaiso, Elkhart, Goshen, Mishawaka, South Bend, Warsaw, Angola, Fort Wayne, Kokomo, Lafayette, Greenwood, Noblesville, Plainfield, Muncie, Richmond, Terre Haute, Jasper, Vincennes, Marion",1,69,23 distinct places named,multiple,,,0.99,,staged,multiple,23 distinct places listed
+ID,Post Falls Bonners Ferry,1,68,no matching place,multiple,"Post Falls, Bonners Ferry",,0.98,,staged,multiple,Two Idaho cities
+MD,"118 Shawan Road, Hunt Valley, MD",1,68,no matching place,place,Hunt Valley,,0.95,,staged,did not resolve,"Address in Hunt Valley, MD"
+MD,"130 Shawan Road Hunt Valley, MD 21031",1,68,no matching place,place,Hunt Valley,,0.95,,staged,did not resolve,"Address in Hunt Valley, MD"
+NY,Ashville,1,68,no matching place,place,Ashville,,0.9,,staged,did not resolve,"Village in Chautauqua County, NY"
+NY,Ronkonkoma/Carle Place,1,68,2 distinct places named,multiple,"Ronkonkoma, Carle Place",,0.98,,staged,multiple,Two NY hamlets
+NY,Yonkers/West Nyack,1,68,2 distinct places named,multiple,"Yonkers, West Nyack",,0.98,,staged,multiple,Two NY places
+VA,"Arlington, Fairfax, Newport News, Richmond VA",1,68,4 distinct places named,multiple,"Arlington, Fairfax, Newport News, Richmond",,0.98,,staged,multiple,Four Virginia cities/counties
+GA,Nahutta,1,66,no matching place,place,Nahunta,,0.7,,staged,below threshold 0.8,"Possible typo for Nahunta, GA"
+IN,"Boonville, Evansville",1,66,2 distinct places named,multiple,"Boonville, Evansville",,1.0,,staged,multiple,
+MD,"134 Shawan Road Hunt Valley, MD 21030",1,66,no matching place,county,Baltimore County,,0.9,,staged,did not resolve,Hunt Valley is an unincorporated community in Baltimore County
+MD,"940 Ridgebrook Road Sparks, MD 21152",1,66,no matching place,county,Baltimore County,,0.9,,staged,did not resolve,Sparks is an unincorporated community in Baltimore County
+MI,"Detroit, Michigan and Highland Park, Michigan",1,66,2 distinct places named,multiple,"Detroit, Highland Park",,1.0,,staged,multiple,
+NY,Bronx/Brooklyn/NY/Astoria/Elmhurst/Flushing,1,66,no matching place,multiple,"Bronx, Brooklyn, Astoria, Elmhurst, Flushing",,1.0,,staged,multiple,
+VA,Fort Belvoir (Fairfax County) VA,1,66,2 distinct places named,county,Fairfax County,,1.0,,staged,did not resolve,Fort Belvoir is a military base in Fairfax County
+WI,"Franklin, Sturtevant, Milwaukee",1,66,2 distinct places named,multiple,"Franklin, Sturtevant, Milwaukee",,1.0,,staged,multiple,
+IN,Noblesville & Westfield,1,65,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Noblesville and Westfield
+LA,"415 Davis Avenue Barksdale AFB, LA 71110",1,65,no matching place,county,Bossier Parish,Bossier Parish,0.9,,staged,county-level,Barksdale AFB is an unincorporated military base in Bossier Parish
+NC,Fort Bragg,1,65,no matching place,county,Cumberland County,Cumberland County,0.95,CA,staged,county-level,Fort Bragg is a military base in Cumberland County
+NJ,FT. MONMOUTH,1,65,no matching place,county,Monmouth County,Monmouth County,0.95,,staged,county-level,Fort Monmouth is a former military base in Monmouth County
+NY,Cattaragus,1,65,no matching place,county,Cattaraugus County,,0.7,,staged,below threshold 0.8,likely a misspelling of Cattaraugus County
+WA,"Seattle, Centralia",1,65,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places: Seattle and Centralia
+WA,Smokey Point,1,65,no matching place,county,Snohomish County,Snohomish County,0.8,,staged,county-level,Smokey Point is an unincorporated community in Snohomish County
+AK,Shemya Island,1,64,no matching place,county,Aleutians West Census Area,,0.7,,staged,below threshold 0.8,Shemya Island is within Aleutians West Census Area
+AL,Quinton,1,64,no matching place,place,Quinton,,0.9,,staged,did not resolve,Quinton is a Census-designated place in Alabama
+TN,"Davidson, Sumner, Williamson, and Wilson County",1,64,no matching place,multiple,,,0.99,,staged,multiple,"four Tennessee counties: Davidson, Sumner, Williamson, Wilson"
+VA,Doswell VA,2,64,no matching place,county,Hanover County,Hanover County,0.8,,staged,county-level,Doswell is an unincorporated community in Hanover County
+VA,Fairfax Coner VA,1,64,no matching place,county,Fairfax County,,0.6,,staged,did not resolve,likely refers to Fairfax County or Fairfax Corner area
+AZ,Luke AFB,1,63,no matching place,county,Maricopa County,Maricopa County,0.9,,staged,county-level,Luke AFB is a military base within Maricopa County
+CA,CAMP PENDLETON,4,63,no matching place,county,San Diego County,San Diego County,0.95,,staged,county-level,Camp Pendleton is a Marine Corps base in San Diego County
+CT,"915 Lafayette Blvd, Bridgeport CT / 450 Main St, Hartford CT / 157 Church St, 18th Floor, New Haven CT / 157 Main st, 22nd Floor, New Haven CT / 141 Church St, New Haven CT",1,63,3 distinct places named,multiple,,,1.0,,staged,multiple,"Multiple addresses in Bridgeport, Hartford, and New Haven"
+CT,"Bridgeport, Hartford, New Haven",1,63,3 distinct places named,multiple,,,1.0,,staged,multiple,"Bridgeport, Hartford, New Haven are distinct cities"
+MD,"21200 Martinsburg Road Dickerson, MD 20842",1,63,no matching place,county,Montgomery County,Montgomery County,0.9,FL,staged,county-level,"Dickerson is an unincorporated community in Montgomery County, MD"
+OH,Blacklick,1,63,no matching place,county,Franklin County,Franklin County,0.8,PA,staged,county-level,"Blacklick is an unincorporated community in Franklin County, OH"
+CO,"Arapahoe, Denver, El Paso",1,62,2 distinct places named,multiple,,,0.95,,staged,multiple,"Names three counties: Arapahoe, Denver, and El Paso in Colorado"
+GA,Black Creek,1,62,no matching place,county,Bryan County,,0.7,,staged,below threshold 0.8,"Black Creek is an unincorporated community likely in Bryan County, GA"
+MI,"New Hudson, Michigan",1,62,no matching place,place,New Hudson,,0.8,,staged,did not resolve,New Hudson is a CDP in Michigan
+NJ,"Pennington, Jersey City, Woodland Park",1,62,3 distinct places named,multiple,,,1.0,,staged,multiple,"Three distinct places: Pennington, Jersey City, Woodland Park"
+OH,Waterford (Beverly)/Washington,1,62,2 distinct places named,multiple,,,1.0,,staged,multiple,"Two or three places: Waterford, Beverly, Washington"
+IN,"Michigan City, Dyer, Crown Point, Munster, Lafayette, Beech Grove, Indianapolis",1,61,7 distinct places named,multiple,,,1.0,,staged,multiple,Seven distinct places listed
+MD,"7021 Dorsey Road Hanover, MD 21076",1,61,no matching place,place,Hanover,,0.95,,staged,did not resolve,"Address includes Hanover, MD"
+NJ,"Company Location: Lancaster, PA Affected Employees: Monmouth County, NJ",1,61,no matching place,county,Monmouth County,Monmouth County,0.95,,staged,county-level,"Affected employees in Monmouth County, NJ; Lancaster, PA ignored"
+NY,Mohegan Lake,2,61,no matching place,place,Mohegan Lake,,0.6,,staged,did not resolve,"Mohegan Lake is a census-designated place, not incorporated, but commonly recognized."
+OH,Patterson AFB,1,61,no matching place,county,Greene County,Greene County,0.8,,staged,county-level,Patterson AFB is part of Wright-Patterson AFB in Greene County.
+WI,"Madison, Brookfield",1,61,2 distinct places named,multiple,"Madison, Brookfield",,0.99,,staged,multiple,Two distinct cities in Wisconsin.
+GA,"1131 Chapel Crossing Rd, Glynco, Georgia",1,60,no matching place,county,Glynn County,Glynn County,0.8,"SD,VT",staged,county-level,Glynco is an unincorporated community in Glynn County.
+IL,"PO Box 348 300 N. Haag Street Breeze, IL 62230",1,60,no matching place,place,Breese,,0.7,,staged,below threshold 0.8,"Likely typo for Breese, IL based on zip code."
+LA,"7720 California Avenue Ft. Polk, LA 71459",1,60,no matching place,county,Vernon Parish,Vernon Parish,0.9,,staged,county-level,"Fort Polk is in Vernon Parish, Louisiana."
+MI,"Ann Arbor, Michigan and Dexter, Michigan",1,60,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Ann Arbor and Dexter
+OH,Garfield Heights/Cleveland,1,60,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Garfield Heights and Cleveland
+VA,Jetersville VA,1,60,no matching place,county,Amelia County,Amelia County,0.8,,staged,county-level,"Jetersville is an unincorporated community in Amelia County, VA"
+WI,Brokaw,1,60,no matching place,place,Brokaw,,0.95,,staged,did not resolve,"Brokaw is a village in Marathon County, WI."
+WI,"Nekoosa and Scandinavia, WI",1,60,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Nekoosa and Scandinavia
+LA,"2137 Bayou Blue Road Houma, LA c/o HR- Gulf of Mexico 17021 Aldine Westfield Houston, TX 77073",1,60,"address is in TX, not LA",multiple,,,0.99,,staged,multiple,"Names Houma, LA and Houston, TX"
+VA,Suffolk & Virginia Beach VA,1,59,2 distinct places named,multiple,"Suffolk, Virginia Beach",,0.99,,staged,multiple,Two distinct cities.
+CA,Canyon Country,3,58,no matching place,county,Los Angeles County,Los Angeles County,0.85,,staged,county-level,"Canyon Country is a neighborhood in Santa Clarita, within Los Angeles County"
+GA,Fort Gillem,1,58,no matching place,county,Clayton County,Clayton County,0.9,,staged,county-level,Military base in Clayton County.
+NJ,"Bergen, Morris, Camden, Monmouth, Somerset",1,58,2 distinct places named,multiple,"Bergen, Morris, Camden, Monmouth, Somerset",,0.99,,staged,multiple,Five New Jersey counties.
+NJ,Lawrence Township,1,58,no matching place,place,Lawrence Township,,0.95,,staged,did not resolve,Valid New Jersey township
+VA,"Arlington, Alexandria & Chantilly VA",2,58,3 distinct places named,multiple,,,0.99,,staged,multiple,Three distinct places named
+VA,Virignai Beach VA,1,58,no matching place,place,Virginia Beach,,0.7,,staged,below threshold 0.8,Likely misspelling of Virginia Beach
+WI,Steven Point,1,58,no matching place,place,Stevens Point,,0.7,,staged,below threshold 0.8,Likely misspelling of Stevens Point
+MD,"245 Shawan Road Hunt Valley, MD 21031",1,57,no matching place,place,Hunt Valley,,0.95,,staged,did not resolve,Census-designated place in Maryland
+NY,Pattersonville,2,57,no matching place,place,Pattersonville,,0.7,,staged,did not resolve,"Hamlet in New York, may not be incorporated"
+OH,Farmdale,1,57,no matching place,county,Trumbull County,,0.7,,staged,below threshold 0.8,"Unincorporated community in Trumbull County, Ohio"
+TN,Blount and Knox County,1,57,no matching place,multiple,,,0.99,,staged,multiple,Two counties: Blount and Knox
+CT,"Waterbury, Naugatuck",1,56,2 distinct places named,multiple,,,0.99,,staged,multiple,Two cities: Waterbury and Naugatuck
+IL,"209 N Bridge St Eleroy, IL 61027",1,56,no matching place,place,Eleroy,,0.99,,staged,did not resolve,Eleroy is a village in Illinois
+LA,"1541 Kings Hwy Shreveport, LA 71103 Ochsner Monroe FNS-ABM 4864 Jackson Street Monroe, LA 71202 Ochsner – Various locations (Jefferson, Algiers, Belle Chase, Kenner, Metairie, New Orleans and Lacomb)",1,56,4 distinct places named,multiple,,,0.99,,staged,multiple,"Multiple locations: Shreveport, Monroe, Jefferson, Algiers, Belle Chase, Kenner, Metairie, New Orleans, Lacomb"
+MD,"48542 Haney Road Bldg. 2657 Patuxent River, MD 20670",1,56,no matching place,county,St. Mary's County,St. Mary's County,0.95,,staged,county-level,Patuxent River is an unincorporated community in St. Mary's County
+NY,Selkirk,1,56,no matching place,county,Albany County,Albany County,0.95,,staged,county-level,unincorporated community in Albany County
+WI,"Richfield, Wauwatosa",1,56,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Richfield and Wauwatosa
+AL,Mount Meigs,1,55,no matching place,county,Montgomery County,Montgomery County,0.9,,staged,county-level,unincorporated community in Montgomery County
+IN,"Elkhart, Fort Wayne, Merrillville, Michigan City, Mishawaka, Portage, Schererville, South Bend",1,55,7 distinct places named,multiple,,,1.0,,staged,multiple,eight distinct Indiana cities
+MD,"306 Sentinel Drive, Suite 500, Annapolis Junction, MD 20701",1,55,no matching place,county,Anne Arundel County,Anne Arundel County,0.95,,staged,county-level,Annapolis Junction is a CDP in Anne Arundel County
+MD,"336 Clubhouse Road Hunt Valley, MD 21031",1,55,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,"Hunt Valley is an unincorporated community in Baltimore County, MD."
+MI,Ottawa Lake,1,55,no matching place,county,Monroe County,Monroe County,0.95,,staged,county-level,"Ottawa Lake is an unincorporated community in Monroe County, MI."
+VA,Crystal City VA,1,55,no matching place,county,Arlington County,Arlington County,0.95,"KS,ME,MI,MN,MO,ND,NM,TX,WI",staged,county-level,"Crystal City is a neighborhood in Arlington County, VA."
+VA,"Hampton, Virginia Beach, Chesapeake, Newport News, Portsmouth, Suffolk, Yorktown, Franklin, Stafford VA",1,55,8 distinct places named,multiple,,,1.0,,staged,multiple,Lists multiple distinct cities and counties.
+WI,FRANKSVILLE,1,55,no matching place,county,Racine County,Racine County,0.95,,staged,county-level,"Franksville is an unincorporated community in Racine County, WI."
+AL,Green Pond,1,54,no matching place,county,Bibb County,Bibb County,0.95,,staged,county-level,"Green Pond is an unincorporated community in Bibb County, AL."
+MD,"705 Digital Drive, Suite V Linthicum Heights, MD 21090",1,54,no matching place,county,Anne Arundel County,Anne Arundel County,0.95,,staged,county-level,"Linthicum Heights is a CDP, not incorporated; site is in Anne Arundel County"
+UT,Draper and Bluffdale,1,54,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct cities: Draper and Bluffdale
+VA,Tysons Corner VA,1,54,no matching place,county,Fairfax County,,0.95,,staged,did not resolve,Tysons Corner is a CDP in Fairfax County
+CA,Corona del Mar,1,53,no matching place,county,Orange County,,0.7,,staged,below threshold 0.8,"Corona del Mar is a neighborhood in Newport Beach, but not an incorporated place; county level"
+GA,Red Oak,1,53,no matching place,county,Henry County,Henry County,0.9,"IA,NC,OK,TX",staged,county-level,Red Oak is a CDP in Henry County
+LA,"9203 Highway 23 Belle Chase, LA 70037",1,53,no matching place,county,Plaquemines Parish,Plaquemines Parish,0.95,,staged,county-level,Belle Chasse is a CDP in Plaquemines Parish
+SD,"Rapid City, Sioux Falls",1,53,2 distinct places named,multiple,"Rapid City, Sioux Falls",,0.99,,staged,multiple,Two distinct cities named
+WI,"Milwaukee, Cudahy, Brown Deer",1,53,2 distinct places named,multiple,"Milwaukee, Cudahy, Brown Deer",,0.99,,staged,multiple,Three distinct cities named
+GA,Rex,1,52,no matching place,county,Clayton County,Clayton County,0.9,"NC,SD",staged,county-level,Rex is an unincorporated community in Clayton County
+MA,"Attleboro, Brockton, Fall River, New Bedford & Taunton, MA, Southeast",1,52,5 distinct places named,multiple,"Attleboro, Brockton, Fall River, New Bedford, Taunton",,0.99,,staged,multiple,Five distinct places named
+NJ,SEABROOK,1,52,no matching place,county,Cumberland County,Cumberland County,0.8,"MA,MD,NH,SC,TX",staged,county-level,Seabrook is an unincorporated community in Cumberland County
+NY,Freeport/Franklin Square/Westbury,1,52,3 distinct places named,multiple,"Freeport, Franklin Square, Westbury",,0.99,,staged,multiple,Three distinct places named
+TN,"Anderson, Blount, Davidson, Hamblen, Hamilton, Knox, Madison, Maury, Putnam, Rutherford, Sumner, Washington, Williamson, Wilson County",1,52,2 distinct places named,multiple,,,0.99,,staged,multiple,List of multiple counties
+CA,Point Mugu,2,51,no matching place,county,Ventura County,Ventura County,0.99,,staged,county-level,"Naval air station, unincorporated"
+CO,"Pikes Peak, Arapahoe/Douglas, Denver, Larimer",1,51,2 distinct places named,multiple,,,0.99,,staged,multiple,"Mountain, counties, and city"
+LA,"400 Russell Avenue Belle Chase, LA 70143",1,51,no matching place,county,Plaquemines Parish,Plaquemines Parish,0.99,,staged,county-level,Unincorporated community Belle Chasse
+LA,"415 Davis Ave East Barksdale, LA 71110",1,51,no matching place,county,Bossier Parish,Bossier Parish,0.9,,staged,county-level,"East Barksdale area, likely Barksdale AFB"
+MD,"4500 Forbes Blvd., Suite 300 Lanham, MD 20706 and 8800 Greenbelt Road Greenbelt, MD 20771",1,51,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct locations: Lanham and Greenbelt
+MI,"Detroit, Michigan; Flint, Michigan; Freeland, Michigan; Kalamazoo, Michigan; Livonia, Michigan; and Traverse City, Michigan",1,51,5 distinct places named,multiple,,,1.0,,staged,multiple,"Six distinct places named: Detroit, Flint, Freeland, Kalamazoo, Livonia, Traverse City"
+GA,Fort Mcpherson,1,50,no matching place,county,Fulton County,Fulton County,0.95,,staged,county-level,"Fort McPherson (spelled Mcpherson) is in Fulton County, Georgia"
+MA,"Boston, Cambridge, Brookline & Burlington",1,50,4 distinct places named,multiple,,,0.99,,staged,multiple,"Four distinct places: Boston, Cambridge, Brookline, Burlington"
+MD,"11333 McCormick Road, Hunt Valley",1,50,no matching place,county,Baltimore County,,0.9,,staged,did not resolve,"Hunt Valley is in Baltimore County, Maryland"
+MD,"1500 Shipyard Road Sparrows Point, MD 21219",1,50,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,"Address in Sparrows Point, which is in Baltimore County, not an incorporated place."
+ME,Coopers Mills,1,50,no matching place,county,Lincoln County,Lincoln County,0.9,,staged,county-level,Coopers Mills is an unincorporated community in Lincoln County.
+MI,Brownstown Township,1,50,no matching place,place,Brownstown Township,,0.9,,staged,did not resolve,Brownstown Township is a charter township in Wayne County.
+MI,"Brownstown Township, Michigan",1,50,no matching place,place,Brownstown Township,,0.9,,staged,did not resolve,Same as id=3.
+MI,"Romulus, Livonia, Brownstown Township, Monroe Counties: Wayne, Monroe, Number Affected: 50",1,50,2 distinct places named,multiple,,,1.0,,staged,multiple,"Lists multiple towns and counties: Romulus, Livonia, Brownstown Township, and counties Wayne and Monroe."
+OH,Carroll (Fairfield),1,50,2 distinct places named,multiple,,,1.0,,staged,multiple,Carroll and Fairfield are two distinct places.
+WI,"Appleton, Eau Claire, Milwaukee, St. Francis",1,50,4 distinct places named,multiple,,,1.0,,staged,multiple,"Four distinct places: Appleton, Eau Claire, Milwaukee, St. Francis."
+WI,Hubertus,1,50,no matching place,county,Washington County,Washington County,0.95,,staged,county-level,unincorporated community in Washington County
+CA,NEWHALL,1,49,no matching place,county,Los Angeles County,Los Angeles County,0.95,IA,staged,county-level,"neighborhood in Santa Clarita, Los Angeles County"
+IN,Edinburg,1,49,no matching place,place,Edinburg,,0.98,,staged,did not resolve,town in Johnson County
+CA,Clairemont,1,48,no matching place,county,San Diego County,San Diego County,0.95,,staged,county-level,neighborhood in San Diego County
+MD,"7556 Teague Road, Suite 300, Hanover, MD",1,48,no matching place,county,Anne Arundel County,Anne Arundel County,0.95,"AL,IL,IN,KS,MA,ME,MI,MN,NE,NH,NJ,NM,NY,OH,PA,VA,WI",staged,county-level,unincorporated community in Anne Arundel County
+MI,"Grand Rapids, Michigan; and Wyoming, Michigan",1,48,2 distinct places named,multiple,,,1.0,,staged,multiple,Two places: Grand Rapids and Wyoming
+MN,Togo,1,48,no matching place,county,Itasca County,,0.7,,staged,below threshold 0.8,Togo is an unincorporated community in Itasca County
+WI,Appleton & DePere,1,48,2 distinct places named,multiple,,,1.0,,staged,multiple,Two places: Appleton and De Pere
+WI,Meonomie Falls,1,48,no matching place,place,Menomonee Falls,,0.7,,staged,below threshold 0.8,Likely misspelling of Menomonee Falls
+MA,"Pittsfield, Lenox, West",1,47,2 distinct places named,multiple,,,0.8,,staged,multiple,At least two places: Pittsfield and Lenox; 'West' ambiguous
+NJ,NEWARK/PAULSBORO,1,47,2 distinct places named,multiple,,,1.0,,staged,multiple,Two places: Newark and Paulsboro
+NJ,"West New York, Fort Lee, Morristown, Whiting Commons",1,47,3 distinct places named,multiple,,,0.9,,staged,multiple,"At least three places: West New York, Fort Lee, Morristown; Whiting Commons unclear"
+VA,"Arlington, Alexandria, Dale City, Fairfax, Falls Church, Leesburg, Springfield, Woodbridge, Manassas VA",1,46,9 distinct places named,multiple,,,0.99,,staged,multiple,List of 9 distinct places
+CA,Big Sur,1,45,no matching place,county,Monterey County,Monterey County,0.99,,staged,county-level,Unincorporated community Big Sur
+MO,SpringfieldOzarkNixaLee’s SummitOakville,1,45,no matching place,multiple,,,0.95,,staged,multiple,Concatenated city names in MO
+KY,Daviess/ Hancock,2,44,no matching place,multiple,,,0.95,,staged,multiple,Two counties: Daviess and Hancock
+MO,CarthageColumbiaO'FallonRepublicSedalia,1,44,no matching place,multiple,,,0.95,,staged,multiple,"Multiple places: Carthage, Columbia, O'Fallon, Republic, Sedalia"
+VA,"Fairfax, Alexandria & Reston VA",1,44,2 distinct places named,multiple,,,0.99,,staged,multiple,"Three places: Fairfax, Alexandria, Reston"
+VA,"Norfolk, Portsmouth, Hampton, Chesapeake VA",1,44,4 distinct places named,multiple,,,0.99,,staged,multiple,"Four places: Norfolk, Portsmouth, Hampton, Chesapeake"
+VA,"Vienna, Sterling, Alexandria & Leesburg VA",1,44,3 distinct places named,multiple,,,0.99,,staged,multiple,"Four places: Vienna, Sterling, Alexandria, Leesburg"
+MI,"Canton, Charlotte, Clare, Gaylord, Jackson, St. Johns, Three Rivers",1,43,6 distinct places named,multiple,,,0.99,,staged,multiple,7 distinct places named
+NY,Rensselaer\Saratoga,1,43,no matching place,multiple,,,0.99,,staged,multiple,Two counties: Rensselaer and Saratoga
+NY,Sterling Forest,1,42,no matching place,county,Orange County,,0.7,,staged,below threshold 0.8,"Sterling Forest is an unincorporated area in Orange County, NY"
+VA,"Chesapeake, VA Beach, Newport News, Portsmouth & Hampton VA",1,42,4 distinct places named,multiple,,,0.99,,staged,multiple,5 distinct cities in Virginia
+WA,"Camas, Vancouver",1,42,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Camas and Vancouver
+WA,"Seattle, Shelton",1,42,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Seattle and Shelton
+GA,Ft Gordon,2,41,no matching place,place,Fort Gordon,,0.9,,staged,did not resolve,"US Army base, also a CDP"
+GA,Hunter Army Airfiel,1,41,no matching place,county,Chatham County,Chatham County,0.8,,staged,county-level,"Military airfield in Chatham County, GA"
+MI,"Sterling Heights, Michigan and Livonia, Michigan",1,41,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Sterling Heights and Livonia
+NY,Laurelton,2,41,no matching place,county,Queens County,Queens County,0.9,PA,staged,county-level,"Neighborhood in Queens County, NY"
+IN,Westfield and Terre Haute,1,40,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct places named
+MA,"East Taunton, MA, Southeast",1,40,no matching place,county,Bristol County,Bristol County,0.8,"IN,NY",staged,county-level,East Taunton is an unincorporated community in Bristol County
+MD,"1352 ""A"" Charwood Road, Hanover, MD",1,40,no matching place,county,Anne Arundel County,Anne Arundel County,0.9,"AL,IL,IN,KS,MA,ME,MI,MN,NE,NH,NJ,NM,NY,OH,PA,VA,WI",staged,county-level,"Hanover is an unincorporated CDP, not an incorporated place"
+MD,"9070 Junction Drive, Suite E Annapolis Junction, MD 20701",1,40,no matching place,county,Anne Arundel County,Anne Arundel County,0.9,,staged,county-level,Annapolis Junction is an unincorporated community
+NY,Tomkins Cove,1,40,no matching place,county,Rockland County,Rockland County,0.9,,staged,county-level,Tomkins Cove is a hamlet in Rockland County
+SD,Aberdeen/Sioux Falls/Yankton,1,40,2 distinct places named,multiple,,,0.99,,staged,multiple,three distinct places named
+NJ,West Trenton,1,39,no matching place,county,Mercer County,Mercer County,0.9,,staged,county-level,West Trenton is an unincorporated community in Mercer County
+IN,"Gary, Fort Wayne & Indianapolis",1,38,3 distinct places named,multiple,,,0.99,,staged,multiple,3 distinct places named
+VA,"Lynchburg, Richmond, Colonial Heights, Mechanicsville, Emporia, Chester, Petersburg, Farmville VA",1,38,8 distinct places named,multiple,,,0.99,,staged,multiple,8 distinct places named
+WI,"Madison, Deforest",1,38,2 distinct places named,multiple,,,0.99,,staged,multiple,2 distinct places named
+CA,La Canada,1,37,no matching place,place,La Cañada Flintridge,,0.7,,staged,below threshold 0.8,"Likely refers to La Cañada Flintridge, CA"
+CA,Pacific Palisades,1,37,no matching place,county,Los Angeles County,Los Angeles County,0.99,,staged,county-level,"Pacific Palisades is a neighborhood within Los Angeles, in Los Angeles County"
+IN,Pekin,1,37,no matching place,place,Pekin,,0.9,,staged,did not resolve,Town in Indiana
+UT,Draper & St. George,1,37,2 distinct places named,multiple,"Draper, St. George",,0.99,,staged,multiple,two distinct cities in Utah
+CA,EAST RANCHO DOMINGUE,3,36,no matching place,county,Los Angeles County,Los Angeles County,0.8,,staged,county-level,"likely East Rancho Dominguez, an unincorporated CDP in Los Angeles County (typo in string)"
+WI,Pickett,1,36,no matching place,county,Winnebago County,Winnebago County,0.85,OK,staged,county-level,"Pickett is an unincorporated community in Winnebago County, Wisconsin"
+CA,Anaheim Hills,2,35,no matching place,place,Anaheim,,0.7,,staged,below threshold 0.8,Anaheim Hills is a neighborhood within Anaheim city
+CA,Bernardo Heights,1,35,no matching place,place,San Diego,,0.6,,staged,below threshold 0.8,Bernardo Heights is a neighborhood within San Diego city
+MD,"307 International Circle, Suite 600, Hunt Valley, MD",1,35,no matching place,county,Baltimore County,,0.9,,staged,did not resolve,Hunt Valley is an unincorporated community in Baltimore County
+MD,"525 Progress Drive, Suite K, Linthicum Heights, MD 21090",1,35,no matching place,county,Anne Arundel County,Anne Arundel County,0.9,,staged,county-level,Linthicum Heights is an unincorporated community in Anne Arundel County
+MD,"6201 Security Blvd Woodlawn, MD 21207",1,35,name matches more than one place,county,Baltimore County,,0.85,,staged,did not resolve,Woodlawn is an unincorporated community in Baltimore County
+MI,"Detroit, Michigan and Saline, Michigan",1,35,2 distinct places named,multiple,,,0.99,,staged,multiple,Names two distinct places: Detroit and Saline
+NJ,Parlin,1,35,no matching place,county,Middlesex County,Middlesex County,0.9,,staged,county-level,Parlin is an unincorporated community in Middlesex County
+WA,"Centralia, Chehalis",1,35,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Centralia and Chehalis
+WI,Shell Lake and New Richmond,1,35,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Shell Lake and New Richmond
+GA,St. Simons Island,1,34,no matching place,county,Glynn County,Glynn County,0.95,,staged,county-level,St. Simons Island is an unincorporated community in Glynn County
+IN,"Lawrenceburg,Merrillville,Valparaiso &Crown Point",1,34,2 distinct places named,multiple,,,0.99,,staged,multiple,"Four distinct places: Lawrenceburg, Merrillville, Valparaiso, Crown Point"
+MD,"45 Schilling Road Hunt Valley, MD 21031",1,34,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,Hunt Valley is an unincorporated community in Baltimore County
+VA,"Fairfax, Reston VA",1,34,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Fairfax and Reston
+WI,Janesville & Beloit,1,34,2 distinct places named,multiple,,,0.99,,staged,multiple,2 distinct places named
+MD,"7539 Harmans Road Harmans, MD 21077",1,33,no matching place,place,Harmans,,0.9,,staged,did not resolve,Address in Harmans CDP
+VA,"Staunton, Charlottesville, Lynchburg & Harrisonburg VA",1,33,4 distinct places named,multiple,,,0.99,,staged,multiple,4 distinct places named
+MO,FentonO'FallonRaymore,1,32,no matching place,multiple,,,0.99,,staged,multiple,"Three places: Fenton, O'Fallon, Raymore"
+NY,Celeron,1,32,no matching place,place,Celeron,,0.95,,staged,did not resolve,"Village in Chautauqua County, New York"
+WI,"Eau Claire, Marshfield, Rice Lake, Wausau",1,32,3 distinct places named,multiple,,,0.99,,staged,multiple,Four distinct cities in Wisconsin
+WA,Peshastin,1,31,no matching place,county,Chelan County,Chelan County,0.9,,staged,county-level,"Unincorporated community in Chelan County, Washington"
+CA,Camp Pendleton,1,30,no matching place,county,San Diego County,San Diego County,0.95,,staged,county-level,Marine Corps base in San Diego County
+MD,"725 Pittman Road Curtis Bay, Md 21226",1,30,no matching place,place,Curtis Bay,,0.85,,staged,did not resolve,"Census-designated place in Anne Arundel County, Maryland"
+WA,Tulalip,1,30,no matching place,place,Tulalip,,0.9,,staged,did not resolve,"Census-designated place in Snohomish County, Washington"
+WI,"Dresser, Osceola",1,30,2 distinct places named,multiple,,,0.99,,staged,multiple,"Two villages in Polk County, Wisconsin"
+IL,"1901 1st Ave., Sterling 61081 1013 Franklin Grove, Dixon 61021 1261 IL-38 Nechusa, IL 61057",1,29,no matching place,multiple,,,0.99,,staged,multiple,Multiple locations in Illinois
+MD,"979 Corporate Blvd. Linthicum Heights, MD 21090",1,28,no matching place,place,Linthicum Heights,,0.99,,staged,did not resolve,Address in Linthicum Heights CDP
+MI,"Baraga, Michigan; Marquette, Michigan; and Marenisco, Michigan",1,28,3 distinct places named,multiple,,,0.99,,staged,multiple,"Baraga, Marquette, Marenisco"
+WA,"Spokane, Vancouver, and Renton",1,28,2 distinct places named,multiple,,,0.99,,staged,multiple,"Spokane, Vancouver, Renton"
+WI,Silver Lake,1,28,no matching place,place,Silver Lake,,0.9,,staged,did not resolve,"Silver Lake, WI (village or town)"
+WI,"Wautoma, Portage, Delevan, Milwaukee, Sheboygan, Madison, Appleton, Fond du Lac, Beloit, Janesville, West Bend, Green Bay, Eau Claire, Wausau, Marinette, Hudson, Racine, Marshfield, Superior, Shawano",1,28,18 distinct places named,multiple,,,0.99,,staged,multiple,18 cities listed
+LA,"6970 W. 70th St. Shreveport, LA 71129 17021 Aldine Westfield Road Houston, TX 77073",1,28,"address is in TX, not LA",multiple,,,0.99,,staged,multiple,"Names Shreveport, LA and Houston, TX"
+AK,"Anchorage, Juneau, and Fairbanks",1,27,3 distinct places named,multiple,,,0.99,,staged,multiple,"Anchorage, Juneau, Fairbanks"
+CA,POINT MUGU,3,27,no matching place,county,Ventura County,Ventura County,0.95,,staged,county-level,Point Mugu is a military base in Ventura County
+VA,"Ashburn, Arlington, Dulles & Springfield VA",1,27,2 distinct places named,multiple,,,0.9,,staged,multiple,"Lists multiple places: Ashburn, Arlington, Dulles, Springfield"
+VA,"Springfield, Sterling, Woodbridge VA",1,27,3 distinct places named,multiple,,,0.9,,staged,multiple,"Lists multiple places: Springfield, Sterling, Woodbridge"
+MD,"6200 Baltimore Avenue Riverdale, MD 20737",1,26,no matching place,place,Riverdale,,0.7,,staged,did not resolve,"Riverdale, MD likely"
+VA,"Lorton, Manassas, & Springfield VA",1,26,2 distinct places named,multiple,,,0.98,,staged,multiple,Three distinct places listed
+MA,"Chestnut Hill, Dedham & Wellesley",1,25,2 distinct places named,multiple,,,0.98,,staged,multiple,Three distinct places listed
+MD,"101 Schilling Road, Hunt Valley, MD 21031",1,25,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,Unincorporated community in Baltimore County
+MI,West Bloomfield,1,25,no matching place,place,West Bloomfield,,0.95,,staged,did not resolve,Charter township in Michigan
+OH,Harrison/Hamilton,1,25,2 distinct places named,multiple,Harrison; Hamilton,,0.95,,staged,multiple,Two distinct places named: Harrison and Hamilton in Ohio
+GA,Bonaire,1,24,no matching place,county,Houston County,Houston County,0.9,,staged,county-level,Bonaire is an unincorporated community in Houston County
+GA,FORTSON,1,24,no matching place,county,Muscogee County,Muscogee County,0.9,,staged,county-level,Fortson is an unincorporated community in Muscogee County
+MD,"1945 Reservoir Road Sparrows Point, MD 21219",1,24,no matching place,county,Baltimore County,,0.9,,staged,did not resolve,Sparrows Point is a neighborhood in Baltimore County
+MI,Commerce Township,1,24,no matching place,place,Commerce Township,,0.95,,staged,did not resolve,Commerce Township is an incorporated township in Michigan
+NJ,MONTVALE/PARK RIDGE,1,24,2 distinct places named,multiple,Montvale; Park Ridge,,0.95,,staged,multiple,Two distinct places named
+TN,"Davidson, Hamilton, and Shelby County",1,24,no matching place,multiple,Davidson County; Hamilton County; Shelby County,,0.95,,staged,multiple,Three distinct counties named
+CT,"WindsorLocks,Danbury,New Haven",1,23,2 distinct places named,multiple,"Windsor Locks, Danbury, New Haven",,0.99,,staged,multiple,Three distinct places named
+MD,"10 Warren Road #220 Hunt Valley, MD 21030",1,23,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,Hunt Valley is an unincorporated community in Baltimore County
+MD,"Tunnel 9 at Moffett Road, Silver Springs, MD 20904",1,23,no matching place,county,Montgomery County,Montgomery County,0.95,"AK,FL,NV,NY",staged,county-level,"Silver Springs is a typo for Silver Spring, an unincorporated community in Montgomery County"
+TN,"Washington, Madison, Wilson County",1,23,no matching place,multiple,"Washington, Madison, Wilson",,0.85,,staged,multiple,"Likely three counties in Tennessee: Washington, Madison, Wilson"
+VA,Hampton & Chesapeake VA,1,23,2 distinct places named,multiple,"Hampton, Chesapeake",,0.99,,staged,multiple,Two independent cities in Virginia
+PA,"Bucks, Philadelphia, Montgomery, Delaware, Allegheny, Northampton and Chester",1,22,4 distinct places named,multiple,,,1.0,,staged,multiple,list of counties
+WI,"Baraboo, Wisconsin Dells, Spring Green, Reedsburg",1,22,4 distinct places named,multiple,,,1.0,,staged,multiple,list of places
+MD,"10820 Gilroy Road Hunt Valley, MD 21031",1,21,no matching place,county,Baltimore County,,0.8,,staged,did not resolve,unincorporated community Hunt Valley
+MD,"2190 Urbana Pike Ijamsville, MD 21754",1,21,no matching place,county,Frederick County,Frederick County,0.8,,staged,county-level,unincorporated community Ijamsville
+MD,Rockville and Landover,1,21,2 distinct places named,multiple,,,1.0,,staged,multiple,Rockville and Landover
+NY,Franklin Park,1,21,no matching place,county,Erie County,,0.6,,staged,below threshold 0.8,unincorporated community Franklin Park
+WI,"Black River Falls, Mauston, La Crosse, Holmen, Sparta, Viroqua",1,21,5 distinct places named,multiple,,,1.0,,staged,multiple,list of places
+AL,Alpine,1,20,no matching place,place,Alpine,,0.7,,staged,did not resolve,town in Alabama
+MD,"3136 Peary Road , Patuxent River, MD 20670",1,20,no matching place,county,St. Mary's County,St. Mary's County,0.9,,staged,county-level,CDP Patuxent River is unincorporated
+MD,3600 Cabover Drive Hanover MD 21076,1,20,no matching place,county,Anne Arundel County,Anne Arundel County,0.8,"AL,IL,IN,KS,MA,ME,MI,MN,NE,NH,NJ,NM,NY,OH,PA,VA,WI",staged,county-level,Hanover is an unincorporated CDP within Anne Arundel County
+NY,South Ozone Park,1,20,no matching place,place,New York,,0.7,,staged,below threshold 0.8,South Ozone Park is a neighborhood within New York City
+RI,North Scituate,1,20,no matching place,place,Scituate,,0.7,,staged,below threshold 0.8,North Scituate is a village in the town of Scituate
+IN,Fort Wayne & Indianapolis,1,19,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct cities: Fort Wayne and Indianapolis
+MD,"1450 S. Rolling Road Halethorpe, MD 21227",1,19,no matching place,county,Baltimore County,,0.8,,staged,did not resolve,Halethorpe is an unincorporated CDP within Baltimore County
+VA,"Hampton, Virginia Beach, Williamsburg & Norfolk VA",1,19,4 distinct places named,multiple,,,1.0,,staged,multiple,"Four distinct places: Hampton, Virginia Beach, Williamsburg, Norfolk"
+GA,"1131 Chapel Crossing Rd, Building 681, Glynco, Georgia",1,18,no matching place,place,Glynco,,0.99,,staged,did not resolve,Glynco is a CDP in Georgia
+MD,"Arundel Mills Mall 7000 Arundel Mills Circle Hanover, MD 21076",1,18,no matching place,place,Hanover,,0.99,,staged,did not resolve,Hanover is a CDP in Maryland
+NV,"Reno/Las Vegas, Washoe/Clark",1,18,2 distinct places named,multiple,,,0.99,,staged,multiple,Names two cities and two counties
+IN,Indianapolis And Carmel,1,17,no matching place,multiple,,,0.99,,staged,multiple,Two distinct places named
+MD,"133 National Business Parkway, Suite 250 Annapolis Junction, MD 20701",1,17,no matching place,county,Howard County,Howard County,0.9,,staged,county-level,Annapolis Junction is a CDP in Howard County
+MD,"1407 Parker Road Halethorpe, MD 21227",1,17,no matching place,county,Baltimore County,,0.9,,staged,did not resolve,Halethorpe is a CDP in Baltimore County
+VA,"Galax, Marian, Bristol, Fairlawn, Roanoke VA",1,17,4 distinct places named,multiple,,,0.99,,staged,multiple,Names multiple cities and towns in Virginia
+GA,"6900 US-411, Crandall, Georgia",1,15,no matching place,place,Crandall,,0.99,,staged,did not resolve,Town in Murray County
+UT,"St. George, Cedar City, Spanish Fork",1,15,3 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct Utah cities: St. George, Cedar City, Spanish Fork"
+WA,Bothell/Redmond,1,15,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct Washington cities: Bothell and Redmond
+IN,Lafayette and Indianapolis,1,14,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct Indiana cities: Lafayette and Indianapolis
+MD,"Patuxent River, MD",1,14,no matching place,place,Patuxent River,,0.8,,staged,did not resolve,Patuxent River CDP in Maryland
+MO,Monett (7) & Joplin (7),1,14,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct Missouri cities: Monett and Joplin
+ND,"Nationwide (ND locations: Fargo, Bismarck, & Minot)",1,14,2 distinct places named,multiple,,,0.99,,staged,multiple,"Three distinct North Dakota cities: Fargo, Bismarck, Minot"
+NJ,HASKELL,1,14,no matching place,place,Haskell,,0.98,,staged,did not resolve,"Haskell is a borough in Passaic County, NJ"
+MD,"1701 Twin Springs Road Halethorpe, MD 21227",1,13,no matching place,place,Halethorpe,,0.98,,staged,did not resolve,"Halethorpe is a CDP in Baltimore County, MD"
+MD,"NAS Patuxent River Cafeteria 47123 Buse Road #540 Patuxent River, MD 20607",1,13,no matching place,place,Patuxent River,,0.98,,staged,did not resolve,"Patuxent River is a CDP in St. Mary's County, MD"
+MD,"Arunde Mills Mall 7000 Arundel Mills Circle Hanover, MD 21076",1,12,no matching place,place,Hanover,,0.9,,staged,did not resolve,"Mall located in Hanover, MD"
+NY,Bronx/Brooklyn,1,12,no matching place,multiple,,,1.0,,staged,multiple,Two distinct boroughs: Bronx and Brooklyn
+VA,Ridgway VA,1,12,no matching place,place,Ridgeway,,0.7,,staged,below threshold 0.8,"Likely a typo for Ridgeway, VA"
+WI,"Suamico, Two Rivers, Seymour, Shawano, Wautoma",1,12,4 distinct places named,multiple,,,1.0,,staged,multiple,Five distinct places listed
+MD,"7000 Arundel Mills Circle Space 404 Hanover, MD 21076",1,11,no matching place,place,Hanover,,0.9,,staged,did not resolve,"Address in Hanover, MD"
+GA,Townsend,1,10,no matching place,place,Townsend,,0.9,,staged,did not resolve,
+MD,"Westview Mall 5816 Baltimore National Pike Catonsville, MD 21228",1,10,no matching place,county,Baltimore County,,0.8,,staged,did not resolve,Catonsville is a CDP in Baltimore County
+MI,Fort Gratiot,1,10,no matching place,county,St. Clair County,St. Clair County,0.8,,staged,county-level,Fort Gratiot is an unincorporated community in St. Clair County
+MO,RollaSikeston,1,10,no matching place,multiple,Rolla;Sikeston,,0.99,,staged,multiple,Two towns concatenated
+VA,"Charlottesville, Harrisonburg, Danville, Martinsville VA",1,10,4 distinct places named,multiple,Charlottesville;Harrisonburg;Danville;Martinsville,,0.99,,staged,multiple,Four distinct places named
+VA,Richmond and Springfield VA,1,10,2 distinct places named,multiple,Richmond;Springfield,,0.99,,staged,multiple,Two distinct places named
+WI,"La Crosse, Milwaukee",1,10,2 distinct places named,multiple,La Crosse;Milwaukee,,0.99,,staged,multiple,Two distinct places named
+MD,"4920 Campbell Blvd. Nottingham, MD 21236",1,9,no matching place,place,Nottingham,,0.99,,staged,did not resolve,"Nottingham is a CDP in Baltimore County, MD"
+MD,"7141 Security Boulevard Windsor Mill, MD 21244",1,9,no matching place,county,Baltimore County,,0.85,,staged,did not resolve,"Address in Windsor Mill, an unincorporated community in Baltimore County"
+NJ,Whiting,1,9,no matching place,county,Ocean County,Ocean County,0.9,"IA,IN,KS,ME,MO,ND,VT,WI,WY",staged,county-level,"Whiting is a CDP in Ocean County, New Jersey"
+AZ,Yuma Proving Grounds,1,8,no matching place,county,Yuma County,Yuma County,0.95,,staged,county-level,"Yuma Proving Grounds is in Yuma County, Arizona"
+CA,ISLAND BALBOA,1,8,no matching place,county,Orange County,Orange County,0.8,,staged,county-level,"Island Balboa likely Balboa Island, in Orange County"
+CA,LANDERS,1,8,no matching place,county,San Bernardino County,San Bernardino County,0.9,,staged,county-level,Landers is a CDP in San Bernardino County
+FL,WAKULLA SPRINGS,1,8,no matching place,place,Wakulla Springs,,0.8,,staged,did not resolve,"Census-designated place in Wakulla County, FL"
+MD,"109 Industry Lane Forest Hill, MD 21050",1,8,no matching place,place,Forest Hill,,0.95,,staged,did not resolve,"Town in Harford County, MD"
+MD,"4610 Mercedes Drive, Suite 110 Belcamp, MD 21017",1,8,no matching place,place,Belcamp,,0.95,,staged,did not resolve,"CDP in Harford County, MD"
+MO,BallwinSt. PetersMaryland Heights,2,8,no matching place,multiple,,,0.98,,staged,multiple,"Three concatenated city names: Ballwin, St. Peters, Maryland Heights"
+NJ,Lawrence Twonship,1,8,no matching place,place,Lawrence Township,,0.9,,staged,did not resolve,"Township in Mercer County, NJ; typo corrected"
+OR,Eugen,1,8,no matching place,place,Eugene,,0.6,,staged,below threshold 0.8,"Likely typo for Eugene, OR"
+SC,Knightsville,1,8,no matching place,county,Dorchester County,Dorchester County,0.9,IN,staged,county-level,"Knightsville is an unincorporated community in Dorchester County, SC"
+SD,Ellsworth Air Force Base,1,8,no matching place,county,Pennington County,Pennington County,0.9,,staged,county-level,"Ellsworth Air Force Base in Pennington County, SD"
+WI,"Windsor, Waunakee, Deforest",1,8,3 distinct places named,multiple,,,0.98,,staged,multiple,"Three distinct places: Windsor, Waunakee, Deforest"
+FL,SUMMERFIELD,1,7,no matching place,place,Summerfield,,0.95,,staged,did not resolve,"CDP in Marion County, FL"
+MD,"114 Shawan Road Suite 4 Hunt Valley, MD 21030",1,7,no matching place,place,Hunt Valley,,0.98,,staged,did not resolve,"CDP in Baltimore County, MD"
+MD,"7031 Ridge Road Hanover, MD 21076",2,7,no matching place,place,Hanover,,0.99,,staged,did not resolve,"CDP in Anne Arundel County, MD"
+MD,"7455 New Ridge Road, Suite R, Hanover, MD 21076",1,7,no matching place,place,Hanover,,0.99,,staged,did not resolve,CDP in MD
+MD,"930 Ridgebrook Road Sparks, MD 21152",1,7,no matching place,place,Sparks,,0.98,,staged,did not resolve,"CDP in Baltimore County, MD"
+NY,Slate Hill,1,7,no matching place,county,Orange County,Orange County,0.9,,staged,county-level,"Slate Hill is an unincorporated community in Orange County, NY"
+WA,"Bellevue, Bothell, Kirkland, Monroe, Redmond, Sammamish",1,7,6 distinct places named,multiple,,,0.99,,staged,multiple,"Six distinct places: Bellevue, Bothell, Kirkland, Monroe, Redmond, Sammamish"
+FL,NALCREST,1,6,no matching place,place,Nalcrest,,0.9,,staged,did not resolve,"CDP in Polk County, FL"
+KS,different locations in Topeka and across the state,1,6,no matching place,multiple,,,0.8,,staged,multiple,Mentions Topeka and other locations across Kansas
+CA,MARCH AIR RESERVE BA,1,5,no matching place,county,Riverside County,Riverside County,0.95,,staged,county-level,March Air Reserve Base is in Riverside County
+CO,Pikes Peak/Mesa/Adams,1,5,no matching place,multiple,,,0.9,,staged,multiple,"Three separate names: Pikes Peak, Mesa, Adams"
+FL,OSTEEN,1,5,no matching place,county,Volusia County,Volusia County,0.95,,staged,county-level,Osteen is an unincorporated community in Volusia County
+MD,"7432 New Ridge Road Hanover, MD 21076",1,5,no matching place,county,Anne Arundel County,Anne Arundel County,0.95,"AL,IL,IN,KS,MA,ME,MI,MN,NE,NH,NJ,NM,NY,OH,PA,VA,WI",staged,county-level,"Hanover, MD is an unincorporated community in Anne Arundel County"
+VA,"Norfolk, Hampton, Tappahannock, Fredericksburg & Newport News VA",1,5,5 distinct places named,multiple,,,0.99,,staged,multiple,lists multiple distinct places
+CA,March AFB,1,4,no matching place,county,Riverside County,Riverside County,0.95,,staged,county-level,March AFB is in Riverside County
+CA,SAN YSIDRO,2,4,no matching place,place,San Ysidro,,0.95,,staged,did not resolve,CDP in San Diego
+CO,"Multiple (Larimer, Jeffco, Adams)",1,4,no matching place,multiple,,,0.95,,staged,multiple,"Lists three Colorado counties: Larimer, Jefferson, Adams"
+FL,DUETTE,1,4,no matching place,county,Manatee County,Manatee County,0.8,,staged,county-level,"Duette is an unincorporated community in Manatee County, FL"
+FL,ENTERPRISE,1,4,no matching place,county,Volusia County,Volusia County,0.8,"AL,KS,MI,MN,MO,MS,ND,NV,OK,OR,SD,UT,WI,WV",staged,county-level,"Enterprise is a CDP in Volusia County, FL"
+FL,MYAKKA CITY,1,4,no matching place,county,Manatee County,Manatee County,0.8,,staged,county-level,"Myakka City is an unincorporated community in Manatee County, FL"
+FL,WATERFORD LAKES,1,4,no matching place,county,Orange County,Orange County,0.8,,staged,county-level,"Waterford Lakes is a neighborhood in Orange County, FL"
+MA,Cape Cod,1,4,no matching place,county,Barnstable County,,0.7,,staged,below threshold 0.8,Cape Cod is commonly used for Barnstable County
+MO,JacksonCape GirardeauSt. Louis (city),1,4,no matching place,multiple,,,0.99,,staged,multiple,"Three distinct cities: Jackson, Cape Girardeau, and St. Louis."
+NY,Kings/Queens/Bronx,1,4,no matching place,multiple,,,0.99,,staged,multiple,"Three New York City boroughs (counties): Kings, Queens, Bronx."
+OR,Powell Valley,1,4,no matching place,county,Multnomah County,Multnomah County,0.95,,staged,county-level,Unincorporated community in Multnomah County.
+TN,Davidson and Williamson County,1,4,no matching place,multiple,,,0.99,,staged,multiple,Two counties: Davidson and Williamson.
+VA,Richmond & Mechanicsville VA,1,4,2 distinct places named,multiple,,,0.99,,staged,multiple,Richmond (city) and Mechanicsville (unincorporated community in Hanover County).
+WA,"Seattle, Tacoma, Snoqualmie, Spokane",1,4,3 distinct places named,multiple,,,0.99,,staged,multiple,"multiple cities listed: Seattle, Tacoma, Snoqualmie, Spokane"
+FL,EGLIN AIR FORCE BASE,1,3,no matching place,county,Okaloosa County,Okaloosa County,0.99,,staged,county-level,"Eglin Air Force Base is in Okaloosa County, Florida"
+IN,"Evansville, Plainfield, and Indianapolis",1,3,3 distinct places named,multiple,,,1.0,,staged,multiple,lists three distinct places in Indiana
+LA,"10656 LA-23 Belle Chase, LA 70037",1,3,no matching place,county,Plaquemines Parish,Plaquemines Parish,0.8,,staged,county-level,unincorporated community in Louisiana; spelling may be Belle Chasse
+MA,"Brookline, Milton, Everett, Remote/National",1,3,3 distinct places named,multiple,,,1.0,,staged,multiple,lists three distinct places in Massachusetts
+MD,"7190 Parkway Drive Hanover, MD 21076",1,3,no matching place,county,Anne Arundel County,Anne Arundel County,0.95,,staged,county-level,Hanover is an unincorporated community in Anne Arundel County
+NJ,West Creek,1,3,no matching place,place,West Creek,,0.95,,staged,did not resolve,"CDP in Ocean County, NJ"
+TN,Cocke and Shelby County,1,3,no matching place,multiple,,,1.0,,staged,multiple,Two counties named
+WA,"Seattle, Tacoma and Vancouver",1,3,3 distinct places named,multiple,,,1.0,,staged,multiple,Three distinct cities
+WI,Hagar City,1,3,no matching place,county,Polk County,Polk County,0.8,MI,staged,county-level,"Unincorporated community in Polk County, WI"
+CA,CHARTER OAKS,1,2,no matching place,county,Los Angeles County,Los Angeles County,0.8,,staged,county-level,Unincorporated community in Los Angeles County
+IN,"Carmel, Sellersburg",1,2,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Carmel and Sellersburg
+IN,"Merrillville, Bloomington",1,2,2 distinct places named,multiple,,,0.99,,staged,multiple,Two distinct places: Merrillville and Bloomington
+IN,"Noblesville, Kendallville",1,2,2 distinct places named,multiple,,,0.99,,staged,multiple,Noblesville and Kendallville are distinct places in Indiana
+MA,"New Bedford, Sturbridge, Remote",1,2,2 distinct places named,multiple,,,0.99,,staged,multiple,New Bedford and Sturbridge are distinct places in Massachusetts
+MD,"8197 Dorsey Run Road Annapolis Junction, MD 20701",1,2,no matching place,county,Howard County,Howard County,0.8,,staged,county-level,"Annapolis Junction is an unincorporated community in Howard County, Maryland"
+MO,Kansas CityHigh Ridge,1,2,no matching place,multiple,,,0.99,,staged,multiple,Kansas City and High Ridge are distinct places in Missouri
+MO,Oak GroveFlorissant,1,2,no matching place,multiple,,,0.99,,staged,multiple,Oak Grove and Florissant are distinct places in Missouri
+NY,Jamesville,1,2,no matching place,county,Onondaga County,Onondaga County,0.9,"NC,SD",staged,county-level,"Jamesville is an unincorporated community in Onondaga County, NY"
+OR,Hillsboro-Portland,1,2,no matching place,multiple,,,0.95,,staged,multiple,Two cities: Hillsboro and Portland
+VA,"Alexandria, Arlington, Ashburn & Reston VA",1,2,4 distinct places named,multiple,,,1.0,,staged,multiple,4 distinct places named
+VA,Richmond and Midlothian VA,1,2,2 distinct places named,multiple,,,1.0,,staged,multiple,2 distinct places named
+WA,"Arlington, Fife",1,2,2 distinct places named,multiple,,,1.0,,staged,multiple,2 distinct places named
+WA,"Seattle, Lynden",1,2,2 distinct places named,multiple,,,1.0,,staged,multiple,2 distinct places named
+CA,HELENDALE,1,1,no matching place,place,Helendale,,0.9,,staged,did not resolve,"CDP in San Bernardino County, California"
+CA,NEWBERRY SPRINGS,1,1,no matching place,place,Newberry Springs,,0.9,,staged,did not resolve,"CDP in San Bernardino County, California"
+FL,LOXAHATCHEE,1,1,no matching place,place,Loxahatchee,,0.9,,staged,did not resolve,"CDP in Palm Beach County, Florida"
+FL,ROTONDA WEST,1,1,no matching place,place,Rotonda West,,0.9,,staged,did not resolve,"CDP in Charlotte County, Florida"
+FL,WELLBORN,1,1,no matching place,place,Wellborn,,0.95,,staged,did not resolve,
+GA,MOUNTAIN VIEW,1,1,no matching place,place,Mountain View,,0.9,,staged,did not resolve,
+GA,SILVER CREEK,1,1,no matching place,place,Silver Creek,,0.9,,staged,did not resolve,
+MD,"2730 Hercules Drive Annapolis Junction, MD 20701",1,1,no matching place,county,Anne Arundel County,Anne Arundel County,0.8,,staged,county-level,"Address in unincorporated Annapolis Junction, likely in Anne Arundel County"
+MD,"318 National Business Pkwy. Annapolis Junction, MD 20701",1,1,no matching place,county,Anne Arundel County,Anne Arundel County,0.8,,staged,county-level,Address in unincorporated Annapolis Junction
+MD,"McCormick Company Store 24 Schilling Road #1 Hunt Valley, MD 21031",1,1,no matching place,county,Baltimore County,,0.95,,staged,did not resolve,"Address in unincorporated Hunt Valley, in Baltimore County"
+AZ,"Tucson, Oro Valley",1,0,2 distinct places named,multiple,,,1.0,,staged,multiple,Two distinct places: Tucson and Oro Valley
+CT,"Lisbon, Mashantucket, Bristol, Farmington, Hartford, West Hartford",1,0,3 distinct places named,multiple,,,1.0,,staged,multiple,"Six distinct places: Lisbon, Mashantucket, Bristol, Farmington, Hartford, West Hartford"
+CT,"Manchester, Danbury, Orange",2,0,3 distinct places named,multiple,,,1.0,,staged,multiple,"Three distinct places: Manchester, Danbury, Orange"
+KY,Adair/Jefferson,1,0,no matching place,multiple,,,0.95,,staged,multiple,Refers to Adair County and Jefferson County in Kentucky
+KY,"Ballard, McCracken",2,0,no matching place,multiple,,,0.95,,staged,multiple,Refers to Ballard County and McCracken County in Kentucky
+MA,"East Weymouth, Southeast",1,0,no matching place,place,East Weymouth,,0.8,,staged,did not resolve,East Weymouth is a CDP in Massachusetts; 'Southeast' is a region
+MA,"Randolph, Cohasset, Weymouth, Southeast",1,0,2 distinct places named,multiple,,,0.95,,staged,multiple,"Refers to Randolph, Cohasset, and Weymouth in Massachusetts"
+MA,"South Easton, Southeast",1,0,no matching place,place,South Easton,,0.9,,staged,did not resolve,South Easton is a CDP in Massachusetts
+MD,"1111 Pepper Rd., Hunt Valley, MD",1,0,no matching place,place,Hunt Valley,,0.95,,staged,did not resolve,Hunt Valley is a CDP in Maryland; address is extraneous
+MD,"7566 Ridge Road Hanover, MD 21076",1,0,no matching place,place,Hanover,,0.9,,staged,did not resolve,Address in Hanover CDP
+ME,Port Clyde,1,0,no matching place,county,Knox County,Knox County,0.9,,staged,county-level,Port Clyde is an unincorporated village in Knox County
+ME,West Rockport,1,0,no matching place,county,Knox County,Knox County,0.9,,staged,county-level,West Rockport is an unincorporated village in Knox County
+MI,"Adrian, Michigan and Benton Harbor, Michigan",1,0,2 distinct places named,multiple,,,0.99,,staged,multiple,two distinct cities: Adrian and Benton Harbor
+MI,"Allen Park, Ann Arbor, Canton, Lake Orion, Novi, Rochester Hills, Roseville, Southfield, Sterling Heights and Taylor, Counties: Macomb, Oakland, Washtenaw and Wayne, Number Affected: 39",1,0,10 distinct places named,multiple,,,0.99,,staged,multiple,multiple places and counties listed
+MO,St. CharlesSt. Louis (city),1,0,no matching place,multiple,,,0.99,,staged,multiple,St. Charles and St. Louis city
+MO,St. PetersBlue SpringsSpringfieldSunset HillsKansas CityColumbia,1,0,no matching place,multiple,,,0.99,,staged,multiple,multiple cities listed
+NV,"Carson City/Elko/R, Carson/Elko/Wash",1,0,2 distinct places named,multiple,,,0.95,,staged,multiple,"Names multiple places: Carson City, Elko, and possibly Reno and Washoe"
+NV,"Reno/Henderson/Las Vegas, Washoe/Clark",1,0,3 distinct places named,multiple,,,0.99,,staged,multiple,"Names three cities: Reno, Henderson, Las Vegas, and two counties"
+NY,Olean/Jamestown/Lakewood,1,0,3 distinct places named,multiple,,,0.99,,staged,multiple,"Names three places: Olean, Jamestown, Lakewood"
+OK,Altus AFB,1,0,no matching place,county,Jackson County,Jackson County,0.95,,staged,county-level,Altus Air Force Base is an unincorporated military base in Jackson County
+OK,Savannah,3,0,no matching place,place,Savannah,,0.95,,staged,did not resolve,Savannah is a town in Oklahoma
+SC,Barnwell/Graniteville/North Augusta,1,0,2 distinct places named,multiple,,,0.95,,staged,multiple,Lists three distinct places in SC

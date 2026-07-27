@@ -1,0 +1,5 @@
+prompt,model,batch_size,thinking,answered,coverage,precision,worker_precision,cost,reasoning_tokens
+industry-v2,flash,20,1,286,0.7333,0.8455,0.9461,0.0,0
+industry-v2,flash,10,1,289,0.78,0.8205,0.9285,0.0,0
+industry-v2,flash,20,0,297,0.7167,0.8233,0.9335,0.0,0
+industry-v2,pro,20,1,271,0.7393,0.8599,0.945,0.0,0
