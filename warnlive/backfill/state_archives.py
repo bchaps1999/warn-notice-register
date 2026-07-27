@@ -600,18 +600,30 @@ def fetch_ny(cache_dir: Path) -> list[dict]:
 # WARN2014.stm — the .stm ones are PDFs too). None of it survives on
 # jfs.ohio.gov today, which 404s every one of those paths.
 #
-# The documents print the same eight columns every year but not the same
-# way, and two things defeat the obvious parsers. Header labels are centred
-# over columns whose data is left-aligned, so header positions mislocate
-# every field; and the character spacing is irregular enough that any
-# gap-based table extraction cuts words in half ("Deve lopment Grou p").
+# The documents print the same eight columns every year but ODJFS changed
+# how it produced them, and no single geometry reads all fourteen. Three do,
+# and each year is read by whichever one fits it:
 #
-# So columns are learned from where the data starts — every row begins each
-# field at the same x, so the histogram of word positions peaks at the
-# column edges — and fields are filled from whole words, never from cell
-# text. Years whose parse does not clear _OH_BAR are skipped rather than
-# ingested: 2006-2014 are still missing rows or merging them, and a
-# mangled employer name is worse than an absent one.
+#   ruled  — 2005-2008 and 2012-2014 are Word tables with real cell borders.
+#            Extracting through the borders rejoins wrapped cells for free.
+#   banded — 2011 draws no cell borders but rules a full-width line between
+#            records, and underlines each header label. The rules group the
+#            rows; the underlines give the columns.
+#   flowed — 2001-2004 and 2010 are plain text in columns, with no rules at
+#            all. Records are anchored on the line carrying the date.
+#
+# Two traps are common to all three. Header labels are centred over columns
+# whose data is left-aligned, so header positions mislocate every field
+# (which is why "flowed" learns columns from a histogram of where the data
+# starts, and why the header underlines are only trusted when they win on
+# quality). And the character spacing is irregular enough that any
+# gap-based split cuts words in half ("Deve lopment Grou p"), so fields are
+# filled from whole words, never from cell text.
+#
+# Strategies are scored against the number of distinct WARN IDs the document
+# prints — an independent count of how many records it holds — and the best
+# one wins. A year whose best parse does not clear _OH_BAR is skipped rather
+# than ingested: a mangled employer name is worse than an absent one.
 
 OH_YEARS = range(2001, 2015)  # 2015 onward comes from the live portal
 OH_PATTERNS = [
@@ -627,12 +639,14 @@ PDF_MAGIC = b"%PDF"
 _OH_DATE = re.compile(r"^\d{1,2}/\d{1,2}/\d{2,4}$")
 _OH_WARN_ID = re.compile(r"^\d{1,3}[‐-]\d{2}[‐-]\d{3}$")
 _OH_INT = re.compile(r"^\d[\d,]{0,5}$")
+_OH_WARN_ID_ANY = re.compile(r"\b\d{1,3}[‐-]\d{2}[‐-]\d{3}\b")
 # A year is ingested only if it parses this well. Coverage catches rows lost
 # to bad line grouping; the rate catches unparsed rows; the company-length
 # window catches a column split mid-name (too short) or two fields merged
 # into one (too long).
 _OH_BAR = {"coverage": 0.80, "rate": 0.85, "company_min": 8, "company_max": 42}
 _OH_COLUMN_MIN_WIDTH = 34  # narrower than this is a split field, not a column
+_OH_RULE_SPAN = 0.4  # a rect this share of the page wide separates records
 
 
 def _oh_lines(page) -> list[list[dict]]:
@@ -724,19 +738,87 @@ def _oh_label_columns(rows: list[list[str]]) -> dict | None:
     }
 
 
-def _oh_records(path: Path) -> tuple[list[list[str]], dict | None, int]:
-    """(grouped rows, column labels, rows the document should have)."""
-    import pdfplumber
+def _oh_starts_dated(row: list[str]) -> bool:
+    """A row of cells whose first field carries a received date.
 
-    with pdfplumber.open(path) as pdf:
-        pages = [_oh_lines(page) for page in pdf.pages]
-    expected = sum(
-        1 for page in pages for ws in page if ws and _OH_DATE.match(ws[0]["text"])
-    )
-    edges = _oh_columns([ln for page in pages for ln in page])
-    if not edges:
-        return [], None, expected
+    The date need not lead the cell: where a record's text is wrapped and
+    vertically centred, a fragment printed above the date line sorts ahead
+    of it. The received column holds exactly one date, so finding it
+    anywhere in the cell is enough to know this is a record.
+    """
+    return _oh_date(row[0] if row else "") is not None
 
+
+def _oh_rows_ruled(pdf) -> list[list[str]]:
+    """Rows read through the table's own cell borders.
+
+    Where the document draws its cells, the borders already say which text
+    belongs to which record — so a name wrapped over three lines arrives
+    whole, and the vertically centred layout the later years use costs
+    nothing.
+    """
+    rows = []
+    for page in pdf.pages:
+        for table in page.find_tables():
+            for row in table.extract():
+                cells = [(c or "").replace("\n", " ").strip() for c in row]
+                if len(cells) >= 6 and _oh_starts_dated(cells):
+                    rows.append(cells)
+    return rows
+
+
+def _oh_header_columns(page) -> list[float] | None:
+    """Column edges from the underline drawn beneath each header label.
+
+    Unlike the label text, which is centred, an underline spans its column,
+    so the midpoint between two of them is a real boundary.
+    """
+    groups: dict[int, list] = {}
+    for rect in page.rects:
+        if rect["x1"] - rect["x0"] < page.width * _OH_RULE_SPAN:
+            groups.setdefault(round(rect["top"]), []).append(rect)
+    row = max(groups.values(), key=len, default=[])
+    if len(row) < 6:
+        return None
+    row = sorted(row, key=lambda r: r["x0"])
+    return [row[0]["x0"]] + [(a["x1"] + b["x0"]) / 2 for a, b in zip(row, row[1:])]
+
+
+def _oh_rows_banded(pdf, edges: list[float]) -> list[list[str]]:
+    """Rows separated by the full-width rule the document draws between them.
+
+    The rule is the record boundary the "flowed" reading has to guess at, so
+    a name printed above its own row needs no special case: it simply falls
+    inside the same band.
+    """
+    rows = []
+    for page in pdf.pages:
+        rules = sorted({
+            round(rect["top"], 1) for rect in page.rects
+            if rect["x1"] - rect["x0"] > page.width * _OH_RULE_SPAN
+        })
+        if len(rules) < 3:
+            continue
+        words = page.extract_words()
+        for top, bottom in zip(rules, rules[1:] + [page.height]):
+            band = [w for w in words if top <= w["top"] < bottom]
+            if not band:
+                continue
+            band.sort(key=lambda w: (round(w["top"] / 3), w["x0"]))
+            cells = _oh_split(band, edges)
+            if _oh_starts_dated(cells):
+                rows.append(cells)
+    return rows
+
+
+def _oh_rows_flowed(pages: list[list[list[dict]]], edges: list[float]) -> list[list[str]]:
+    """Rows anchored on the line carrying the received date.
+
+    With no rules to go by, a record is the date line plus the lines that
+    continue it. A line holding nothing but a company name belongs to the
+    record *below* — that is how these years print a name too long to fit —
+    while anything else continues the record above.
+    """
     rows: list[list[str]] = []
     for page in pages:
         current, pending = None, []
@@ -754,12 +836,42 @@ def _oh_records(path: Path) -> tuple[list[list[str]], dict | None, int]:
                     c for i, c in enumerate(cols) if i != 1
                 )
                 if company_only:
-                    pending.append(cols[1])  # a name printed above its row
+                    pending.append(cols[1])
                 elif current:
                     current = [f"{a} {b}".strip() for a, b in zip(current, cols)]
         if current:
             rows.append(current)
-    return rows, _oh_label_columns(rows), expected
+    return [r for r in rows if r and _OH_DATE.match(r[0])]
+
+
+def _oh_readings(path: Path) -> tuple[list[tuple[str, list[list[str]]]], int]:
+    """Every way of reading the document, and how many records it holds.
+
+    The count is the number of distinct WARN IDs printed anywhere in the
+    text — the document's own record identifiers, so it is independent of
+    any parse. The earliest years predate the identifier, and there the
+    date-leading line count is the better denominator; whichever is larger
+    is the one that has actually seen every record.
+    """
+    import pdfplumber
+
+    with pdfplumber.open(path) as pdf:
+        pages = [_oh_lines(page) for page in pdf.pages]
+        text = "\n".join((page.extract_text() or "") for page in pdf.pages)
+        date_lines = sum(
+            1 for page in pages for ws in page if ws and _OH_DATE.match(ws[0]["text"])
+        )
+        identifiers = len(set(_OH_WARN_ID_ANY.findall(text)))
+        expected = identifiers if identifiers >= date_lines * 0.5 else date_lines
+        edges = _oh_columns([ln for page in pages for ln in page])
+        readings = [("ruled", _oh_rows_ruled(pdf))]
+        header_edges = _oh_header_columns(pdf.pages[0]) if pdf.pages else None
+        if header_edges:
+            readings.append(("banded", _oh_rows_banded(pdf, header_edges)))
+        if edges:
+            readings.append(("banded-learned", _oh_rows_banded(pdf, edges)))
+            readings.append(("flowed", _oh_rows_flowed(pages, edges)))
+    return [(name, rows) for name, rows in readings if rows], expected
 
 
 def _oh_quality(parsed: list[dict], dated_rows: int, expected: int) -> tuple[bool, str]:
@@ -782,6 +894,69 @@ def _oh_quality(parsed: list[dict], dated_rows: int, expected: int) -> tuple[boo
     return ok, detail
 
 
+def _oh_count(cell: str) -> int | None:
+    """The headcount from a cell the neighbouring column has bled into.
+
+    Where the layoff-date text wraps, its first word lands in the count
+    column: "124 Begin", "303 3/6/10 Begins". The count is still the first
+    thing in its own column, so the leading integer is it — unless the cell
+    holds a second bare integer, which means the columns are genuinely
+    confused ("2 1 3 2/28/11" is 213 broken up by spacing, not 2) and
+    guessing would invent a number the state never printed.
+    """
+    tokens = (cell or "").split()
+    if not tokens or not _OH_INT.match(tokens[0]):
+        return None
+    if any(_OH_INT.match(t) for t in tokens[1:]):
+        return None
+    return int(tokens[0].replace(",", ""))
+
+
+def _oh_build(
+    rows: list[list[str]], labels: dict, year: int, url: str | None
+) -> list[dict]:
+    """Notices from labelled rows; rows missing a name or a count are dropped."""
+    def field(row, name):
+        idx = labels.get(name)
+        return row[idx] if idx is not None and idx < len(row) else ""
+
+    parsed = []
+    for row in rows:
+        company = _clean_text(field(row, "company"))
+        jobs = field(row, "jobs")
+        count = _oh_count(jobs)
+        if not company or count is None:
+            continue
+        city = _clean_text(field(row, "city"))
+        warn_id = field(row, "warn_id")
+        # A yearly document listing a date years outside its own year has a
+        # typo in it — the 2001 file prints "02/23/91" against a 2001 layoff
+        # date. The printed value stays in raw_extra; the notice falls back
+        # to its effective date, as dateless sources do, so one typo cannot
+        # stretch the state's coverage by a decade.
+        received = _oh_date(field(row, "received"))
+        if received and abs(int(received[:4]) - year) > 1:
+            received = None
+        parsed.append({
+            "state": "OH",
+            "employer_name": company,
+            "location": city,
+            "notice_date": received,
+            "effective_date": _oh_date(field(row, "layoff")),
+            "employees_affected": count,
+            "layoff_type": "unknown",
+            "source_url": url,
+            "source_notice_id": warn_id if _OH_WARN_ID.match(warn_id or "") else None,
+            "_raw": {
+                "year_file": year, "Date Rec'd": field(row, "received"),
+                "Company": company, "City": city or "",
+                "# Affected": jobs, "Layoff Date": field(row, "layoff"),
+                "WARN ID": warn_id,
+            },
+        })
+    return parsed
+
+
 def fetch_oh(cache_dir: Path) -> list[dict]:
     records: list[dict] = []
     for year in OH_YEARS:
@@ -797,69 +972,47 @@ def fetch_oh(cache_dir: Path) -> list[dict]:
             logger.warning("OH %s: no archived yearly document found", year)
             continue
 
-        rows, labels, expected = _oh_records(dest)
-        if labels is None:
-            logger.warning("OH %s: columns could not be identified; skipped", year)
-            continue
-
-        def field(row, name):
-            idx = labels.get(name)
-            return row[idx] if idx is not None and idx < len(row) else ""
-
-        dated = [r for r in rows if r and _OH_DATE.match(r[0])]
-        parsed = []
-        for row in dated:
-            company = _clean_text(field(row, "company"))
-            jobs = field(row, "jobs")
-            if not company or not _OH_INT.match(jobs or ""):
+        readings, expected = _oh_readings(dest)
+        best: tuple[str, list[dict], str] | None = None
+        rejected: list[str] = []
+        for name, rows in readings:
+            labels = _oh_label_columns(rows)
+            if labels is None:
+                rejected.append(f"{name}: columns unidentifiable")
                 continue
-            city = _clean_text(field(row, "city"))
-            warn_id = field(row, "warn_id")
-            # A yearly document listing a date years outside its own year has
-            # a typo in it — the 2001 file prints "02/23/91" against a 2001
-            # layoff date. The printed value stays in raw_extra; the notice
-            # falls back to its effective date, as dateless sources do, so
-            # one typo cannot stretch the state's coverage by a decade.
-            received = _oh_date(field(row, "received"))
-            if received and abs(int(received[:4]) - year) > 1:
-                received = None
-            parsed.append({
-                "state": "OH",
-                "employer_name": company,
-                "location": city,
-                "notice_date": received,
-                "effective_date": _oh_date(field(row, "layoff")),
-                "employees_affected": int(jobs.replace(",", "")),
-                "layoff_type": "unknown",
-                "source_url": url,
-                "source_notice_id": warn_id if _OH_WARN_ID.match(warn_id or "") else None,
-                "_raw": {
-                    "year_file": year, "Date Rec'd": field(row, "received"),
-                    "Company": company, "City": city or "",
-                    "# Affected": jobs, "Layoff Date": field(row, "layoff"),
-                    "WARN ID": warn_id,
-                },
-            })
-
-        ok, detail = _oh_quality(parsed, len(dated), expected)
-        if not ok:
-            logger.warning("OH %s: %s — below the bar, skipped", year, detail)
+            parsed = _oh_build(rows, labels, year, url)
+            ok, detail = _oh_quality(parsed, len(rows), expected)
+            if not ok:
+                rejected.append(f"{name}: {detail}")
+            elif best is None or len(parsed) > len(best[1]):
+                best = (name, parsed, detail)
+        if best is None:
+            logger.warning(
+                "OH %s: no reading cleared the bar (%s); skipped",
+                year, "; ".join(rejected) or "nothing parsed",
+            )
             continue
-        logger.info("OH %s: %s — %d rows", year, detail, len(parsed))
-        for rec in parsed:
+        logger.info("OH %s: %s via %s — %d rows", year, best[2], best[0], len(best[1]))
+        for rec in best[1]:
             records.append(_canonical(rec, rec.pop("_raw")))
     logger.info("OH: %d archive rows", len(records))
     return records
 
 
 def _oh_date(value: str) -> str | None:
-    """Ohio prints m/d/yy and m/d/yyyy in the same column."""
-    token = (value or "").split()[0] if value else ""
-    for fmt in ("%m/%d/%Y", "%m/%d/%y"):
-        try:
-            return datetime.strptime(token, fmt).date().isoformat()
-        except ValueError:
-            continue
+    """The first date in a cell; Ohio prints m/d/yy and m/d/yyyy alike.
+
+    Scanning rather than reading the leading token matters because the
+    neighbouring column bleeds words in: a layoff date is printed as
+    "Begins 2/12/10 until 3/31/10", and a received date can sit behind a
+    wrapped fragment that sorts ahead of it.
+    """
+    for token in (value or "").split():
+        for fmt in ("%m/%d/%Y", "%m/%d/%y"):
+            try:
+                return datetime.strptime(token, fmt).date().isoformat()
+            except ValueError:
+                continue
     return None
 
 

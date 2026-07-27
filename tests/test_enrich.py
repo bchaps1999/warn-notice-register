@@ -316,6 +316,34 @@ def test_ohio_column_labels_come_from_the_values(tmp_path):
     assert labels["warn_id"] == 5
 
 
+def test_ohio_count_survives_the_neighbouring_column_bleeding_in():
+    """Where the layoff-date text wraps, its first word lands in the count
+    column. The count still leads its own column — but a second number means
+    the columns are confused, and guessing would invent a figure."""
+    from warnlive.backfill.state_archives import _oh_count
+
+    assert _oh_count("124") == 124
+    assert _oh_count("1,240") == 1240
+    assert _oh_count("124 Begin") == 124  # "Begin 2/14/11 until 11/18/11"
+    assert _oh_count("303 3/6/10 Begins") == 303
+    # "213" broken up by irregular spacing, not a count of 2
+    assert _oh_count("2 1 3 2/28/11") is None
+    # the count landed in the city column instead
+    assert _oh_count("- 63") is None
+    assert _oh_count("") is None
+
+
+def test_ohio_date_is_found_rather_than_read_off_the_front():
+    """Both neighbouring columns bleed words into a date cell, and a wrapped
+    fragment can sort ahead of the date it belongs to."""
+    from warnlive.backfill.state_archives import _oh_date
+
+    assert _oh_date("12/18/2009") == "2009-12-18"
+    assert _oh_date("Begins 2/12/10 until 3/31/10") == "2010-02-12"
+    assert _oh_date("Youngstown 12/18/2009") == "2009-12-18"
+    assert _oh_date("unknown") is None
+
+
 def test_ohio_quality_bar_rejects_mangled_years():
     """A year is ingested only if it parses well; a mangled employer name is
     worse than an absent one."""

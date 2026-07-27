@@ -1836,7 +1836,7 @@
     "name": "Ohio",
     "registry_status": "active",
     "source": "patched",
-    "notices": 1856,
+    "notices": 2764,
     "latest_verdict": "ok",
     "latest_run": "2026-07-27T12:33:37Z",
     "latest_error": null,
