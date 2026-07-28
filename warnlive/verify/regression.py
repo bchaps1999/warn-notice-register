@@ -53,10 +53,13 @@ WORKER_GROWTH_FLOOR = 1_000
 # new employer is a large ratio.
 EMPLOYER_SHIFT_MAX = 0.20
 EMPLOYER_FLOOR = 50
-# Dates outside these bounds are parse artifacts, not filings: WARN's federal
-# effective date is 1989, and an effective date only reaches a couple of
-# years out.
-FIRST_YEAR_FLOOR = 1988
+# Dates outside these bounds are parse artifacts, not filings — with the
+# floor set by the data, not the statute. Illinois's own export API carries
+# notices from before the federal effective date (G.E. Appliances, Cicero,
+# 1987-09-01 is the earliest anywhere; the 1988 floor failed the first
+# daily run after it shipped, 2026-07-28). An effective date only reaches
+# a couple of years out.
+FIRST_YEAR_FLOOR = 1987
 LAST_YEAR_SLACK = 2
 # Field completeness shifting this far means the source or parser changed.
 # Past the second threshold a field has essentially emptied or filled, which
