@@ -1,0 +1,477 @@
+normalized_name,parent_cik,parent_name,source_year,decided_by,decided_at,note
+granite city works,1163302,United States Steel Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Steel mill owned by United States Steel Corporation. Parent CIK from the EDGAR roster (exact).
+xpo logistics supply chain,1166003,"XPO Logistics, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"XPO Logistics Supply Chain, Inc. is a subsidiary of XPO Logistics, Inc."
+bon appetit management,1317627,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,Bon Appétit Management Company is a subsidiary of Compass Group PLC. Parent CIK from the EDGAR roster (exact).
+crothall healthcare,1317627,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,Crothall Healthcare is a subsidiary of Compass Group PLC. Parent CIK from the EDGAR roster (exact).
+gm lordstown complex,1467858,General Motors Company,,deepseek/deepseek-v4-flash,2026-07-27,GM Lordstown Complex is owned by General Motors Company.
+toledo north assembly plant,1467858,General Motors Company,,deepseek/deepseek-v4-flash,2026-07-27,Toledo North Assembly Plant is a General Motors facility.
+daimler trucks north america,1067318,Daimler AG,,deepseek/deepseek-v4-flash,2026-07-27,Daimler Trucks North America LLC is a subsidiary of Daimler AG. Parent CIK from the EDGAR roster (exact:listed).
+jpmorgan chase bank jpmorgan chase,19617,JPMorgan Chase & Co.,,deepseek/deepseek-v4-flash,2026-07-27,"JPMorgan Chase Bank is a subsidiary of JPMorgan Chase & Co., a publicly traded company."
+boeing satellite systems,12927,The Boeing Company,,deepseek/deepseek-v4-flash,2026-07-27,"Boeing Satellite Systems is a subsidiary of The Boeing Company, a public company."
+kmart store,1310067,Sears Holdings Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Kmart stores are subsidiaries of Sears Holdings, which was a public company. Parent CIK from the EDGAR roster (exact)."
+northrup grumman electro optical systems,1133421,Northrop Grumman Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Northrop Grumman is a public defense contractor, and this is a division."
+robinsons may macy s,794367,Macy's Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Robinsons-May / Macy's is a division of publicly traded Macy's Inc.
+cargill meat solutions corporation plainview,884100,"Cargill, Incorporated",,deepseek/deepseek-v4-flash,2026-07-27,Cargill Meat Solutions is a subsidiary of privately-held Cargill. Parent CIK from the EDGAR roster (exact).
+brown williamson tobacco,1303523,British American Tobacco p.l.c.,,deepseek/deepseek-v4-flash,2026-07-27,Brown & Williamson Tobacco was a subsidiary of publicly-traded British American Tobacco. Parent CIK from the EDGAR roster (exact).
+penske vehicle services,1045742,"Penske Automotive Group, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of publicly traded Penske Automotive Group, Inc."
+gaylord national harbor resort and conference center,1048286,Marriott International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Gaylord National Harbor is a Marriott-branded resort, owned by Marriott. Parent CIK from the EDGAR roster (exact)."
+jacobs technology,52988,Jacobs Solutions Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Jacobs Technology is a subsidiary of publicly traded Jacobs Solutions. Parent CIK from the EDGAR roster (exact).
+morrison healthcare,1317627,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,"Morrison Healthcare is a division of Compass Group, a public company. Parent CIK from the EDGAR roster (exact)."
+novartis pharmaceuticals,1114448,Novartis AG,,deepseek/deepseek-v4-flash,2026-07-27,Novartis Pharmaceuticals Corporation is a U.S. subsidiary of Novartis AG.
+lockheed aeronautical systems,936468,Lockheed Martin Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Lockheed Aeronautical Systems is a division of Lockheed Martin.
+os restaurant llc d b a outback steakhouse,1546417,"Bloomin' Brands, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"OS Restaurant, LLC is a subsidiary of Bloomin' Brands, the publicly traded parent of Outback Steakhouse. Parent CIK from the EDGAR roster (exact)."
+update mgm springfield,789570,MGM Resorts International,,deepseek/deepseek-v4-flash,2026-07-27,"MGM Springfield is owned by MGM Resorts International, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+dole farming,18169,Dole Food Company,,deepseek/deepseek-v4-flash,2026-07-27,"Dole Farming Company was a subsidiary of Dole Food Company, publicly traded at the time of the 2001 layoff. Parent CIK from the EDGAR roster (exact)."
+gm lordstown,1467858,General Motors Company,,deepseek/deepseek-v4-flash,2026-07-27,GM Lordstown is a subsidiary of General Motors.
+seaworld of florida llc swbg orlando corporate operations group,1564902,SeaWorld Entertainment Inc.,,deepseek/deepseek-v4-flash,2026-07-27,SeaWorld of Florida is a subsidiary of SeaWorld Entertainment.
+comair,27904,Delta Air Lines Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Comair was a subsidiary of Delta Air Lines.
+boeing commercial airplane group,12927,The Boeing Company,,deepseek/deepseek-v4-flash,2026-07-27,"Boeing Commercial Airplane Group is a division of Boeing, a public company."
+xerox business services,108772,Xerox Holdings Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Xerox Business Services, LLC is a subsidiary of Xerox Holdings Corporation."
+sodexo inc and affiliates,1169715,Sodexo S.A.,,deepseek/deepseek-v4-flash,2026-07-27,"Sodexo is a French multinational, US operations under Sodexo Inc. Parent CIK from the EDGAR roster (exact:post-era)."
+ritz carlton,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Ritz-Carlton is a wholly owned subsidiary of Marriott International.
+hyatt regency,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Likely owned and operated by Hyatt Hotels Corporation, a publicly traded hospitality company. Parent CIK from the EDGAR roster (exact)."
+tecumseh power,96831,Tecumseh Products Company,,deepseek/deepseek-v4-flash,2026-07-27,"Tecumseh Power Company was a subsidiary of Tecumseh Products Company, which filed with the SEC. Parent CIK from the EDGAR roster (exact)."
+gannett publishing services,1579684,"Gannett Co., Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Gannett Publishing Services is a subsidiary of Gannett Co., Inc., a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+bae systems san diego ship repair,895564,BAE Systems plc,,deepseek/deepseek-v4-flash,2026-07-27,"A subsidiary of BAE Systems plc, which files with the SEC as a foreign private issuer. Parent CIK from the EDGAR roster (exact:listed)."
+amazonfresh,1018724,"Amazon.com, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Amazon's grocery subsidiary, wholly owned by Amazon.com, Inc."
+ritz carlton naples,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"The Ritz-Carlton, Naples is part of Marriott International."
+ipic theaters,62234,The Marcus Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"IPIC Theaters LLC is a subsidiary of Marcus Theatres, which is owned by The Marcus Corporation (NYSE: MCS). Parent CIK from the EDGAR roster (exact)."
+eg g florida inc p o box 21267 kennedy space center fl 32815,31791,EG&G Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of EG&G Inc., a public company at the time. Parent CIK from the EDGAR roster (exact)."
+john deere waterloo works,315189,Deere & Company,,deepseek/deepseek-v4-flash,2026-07-27,John Deere facility; parent Deere & Company is public.
+ogden entertainment,73902,Ogden Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Ogden Entertainment was a division of Ogden Corporation, a public company until 2005. Parent CIK from the EDGAR roster (exact)."
+csc applied technology group,23082,Computer Sciences Corporation,,deepseek/deepseek-v4-flash,2026-07-27,CSC Applied Technology Group was a unit of Computer Sciences Corporation (NYSE: CSC). Parent CIK from the EDGAR roster (exact).
+hcal llc dba harrah s resort southern california,1590895,Caesars Entertainment Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"HCAL is a subsidiary of Caesars Entertainment, a public company."
+northrup grumman technical services,1133421,Northrop Grumman Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Northrup Grumman Technical Services is a subsidiary of Northrop Grumman, a public company. Parent CIK from the EDGAR roster (exact)."
+cb i project servicesgroup,708819,"McDermott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,CB&I was a public company acquired by McDermott in 2018; this layoff is likely under McDermott's subsidiary. Parent CIK from the EDGAR roster (exact).
+bon apetite,1317627,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,"Bon Appetit Management Company is a subsidiary of Compass Group, a public UK company. Parent CIK from the EDGAR roster (exact)."
+ultium cells general motors,1467858,General Motors Company,,deepseek/deepseek-v4-flash,2026-07-27,"Ultium Cells is a joint venture between General Motors and LG Energy Solution, with GM as a major parent and SEC registrant."
+gm warren technical center,1467858,General Motors Company,,deepseek/deepseek-v4-flash,2026-07-27,"Part of General Motors, a public SEC registrant."
+toyota motor engineering manufacturing,1094517,Toyota Motor Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"U.S. division of Toyota, which files with the SEC."
+fluor federal,1124198,Fluor Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Fluor Federal is a division of Fluor Corporation, a public company. Parent CIK from the EDGAR roster (exact)."
+expo design center expo,354950,"The Home Depot, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Former subsidiary of The Home Depot, a public company."
+buena vista construction,1744489,The Walt Disney Company,,deepseek/deepseek-v4-flash,2026-07-27,Buena Vista Construction is likely a Disney subsidiary operating near Disney World.
+ups cartage services,1090727,"United Parcel Service, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"UPS Cartage Services is a subsidiary of UPS, a public company."
+ritz carlton lake tahoe,1048286,Marriott International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Ritz-Carlton is a Marriott brand; specific hotel property likely a subsidiary. Parent CIK from the EDGAR roster (exact).
+united space alliance llc jsc houston2,12927,The Boeing Company,,deepseek/deepseek-v4-flash,2026-07-27,Joint venture between Boeing and Lockheed; Boeing is the managing partner and files with SEC.
+general motors corporation buick oldsmobile cadillac group,1467858,General Motors Company,,deepseek/deepseek-v4-flash,2026-07-27,Division of General Motors
+jp morgan chase mortgage bank,19617,JPMorgan Chase & Co.,,deepseek/deepseek-v4-flash,2026-07-27,Division of JPMorgan Chase
+alcoa intalco works,1675149,Alcoa Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Alcoa Intalco Works is a plant of Alcoa, a public company."
+capital one plano,927628,Capital One Financial Corp,,deepseek/deepseek-v4-flash,2026-07-27,"Capital One-Plano is a location of Capital One, a public company."
+patrick cudahy,91388,"Smithfield Foods, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Patrick Cudahy Incorporated is a brand of Smithfield Foods, which was public until 2013. Parent CIK from the EDGAR roster (exact)."
+levy premium foodservice lp dba levy at allegiant stadium,1317627,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,"Levy Premium Foodservice LP is a subsidiary of Compass Group, which files with SEC. Parent CIK from the EDGAR roster (exact)."
+cub foods super discount markets,95521,Supervalu Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Cub Foods is a supermarket chain owned by Supervalu, a public company at the time. Parent CIK from the EDGAR roster (exact)."
+verizon wireless irvine,732712,Verizon Communications Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Verizon Wireless is a subsidiary of Verizon Communications.
+lago resort casino llc dba del lago resort casino,1056903,"Penn Entertainment, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Lago Resort & Casino is operated by Penn Entertainment, a public company"
+wyndham vacation ownership,1361658,Travel + Leisure Co.,,deepseek/deepseek-v4-flash,2026-07-27,Timeshare branch of publicly traded Travel + Leisure Co. (formerly Wyndham Destinations). Parent CIK from the EDGAR roster (exact).
+universal television,1166691,Comcast Corporation,,deepseek/deepseek-v4-flash,2026-07-27,TV production unit wholly owned by Comcast NBCUniversal.
+kyocera wireless,57083,Kyocera Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Kyocera Wireless Corp. is a subsidiary of Kyocera Corporation, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+fluor federal solutions,1124198,Fluor Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Fluor Federal Solutions is a subsidiary of Fluor Corporation, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+hyatt regency orlando,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Hyatt Regency hotel, owned by Hyatt Hotels Corporation (public)."
+ritz carlton los angeles jw marriott l a live,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Ritz-Carlton hotel, part of Marriott International (public)."
+hoosier park llc dba harrah s hoosier park racing and casino,1590895,Caesars Entertainment Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Hoosier Park, LLC is a subsidiary of Caesars Entertainment, a publicly traded casino operator."
+macys cheshire fulfillment center,794367,"Macy's, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Fulfillment center of Macy's, Inc., a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+sara lee bakery group,23666,Sara Lee Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Bakery division of Sara Lee Corporation, which was publicly traded at the time. Parent CIK from the EDGAR roster (exact)."
+mattel murray,63276,Mattel Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Mattel-Murray is a facility of Mattel Inc., a publicly traded company."
+desert springs hospital dba desert springs medical group,352915,"Universal Health Services, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Desert Springs Hospital is part of the Valley Health System, a subsidiary of UHS."
+textron pcd,217346,Textron Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Textron PCD is a division of Textron Inc., a public company with CIK 217346."
+carlisle interconnect technologies,790051,Carlisle Companies Incorporated,,deepseek/deepseek-v4-flash,2026-07-27,Carlisle Interconnect Technologies is a subsidiary of Carlisle Companies Incorporated. Parent CIK from the EDGAR roster (exact).
+ups supply chain solutions,1090727,"United Parcel Service, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"UPS Supply Chain Solutions is a subsidiary of United Parcel Service, Inc."
+levy restaurants,1317627,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,Levy Restaurants is a subsidiary of Compass Group PLC. Parent CIK from the EDGAR roster (exact).
+brotman medical center tenet california,70318,Tenet Healthcare Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Brotman Medical Center is a Tenet Healthcare hospital.
+wells fargo home mortgage,72971,Wells Fargo & Company,,deepseek/deepseek-v4-flash,2026-07-27,"Wells Fargo Home Mortgage is a division of Wells Fargo Bank, a subsidiary of Wells Fargo & Company."
+aramark sports entertainment svcs,1584509,Aramark,,deepseek/deepseek-v4-flash,2026-07-27,"Aramark Sports & Entertainment Svcs, LLC is a subsidiary of Aramark, a public company. Parent CIK from the EDGAR roster (exact)."
+siemens energy and automation,1173786,Siemens AG,,deepseek/deepseek-v4-flash,2026-07-27,"US subsidiary of Siemens AG, a German public company. Parent CIK from the EDGAR roster (suffix)."
+sikorsky support services,101829,United Technologies Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Sikorsky Support Services is a subsidiary of United Technologies Corporation via Sikorsky. Parent CIK from the EDGAR roster (exact).
+america on line aol,1105705,Time Warner Inc.,,deepseek/deepseek-v4-flash,2026-07-27,America On Line (AOL) was a subsidiary of Time Warner Inc. in 2006. Parent CIK from the EDGAR roster (exact).
+sears catalog direct marketing home office unit,319256,"Sears, Roebuck and Co.",,deepseek/deepseek-v4-flash,2026-07-27,"Division of Sears, Roebuck and Co., a public company at the time. Parent CIK from the EDGAR roster (fuzzy:0.95)."
+lockheed martin corporation information systems,936468,Lockheed Martin Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Lockheed Martin Corporation is a public company and the parent of this division.
+aramark educational services duval county public schools 2924 knights lane e jacksonville fl 32216,1584509,Aramark,,deepseek/deepseek-v4-flash,2026-07-27,ARAMARK is a public company; this is its educational services division.
+safran cabin,1364012,Safran SA,,deepseek/deepseek-v4-flash,2026-07-27,"Safran Cabin is a subsidiary of Safran SA, a French publicly traded company. Parent CIK from the EDGAR roster (exact:post-era)."
+bechtel national,1110785,"Bechtel Group, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Bechtel National is a subsidiary of privately held Bechtel Group, Inc. Parent CIK from the EDGAR roster (exact:post-era)."
+hilton orlando bonnet creek and waldorf astoria orlando,1585689,Hilton Worldwide Holdings Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Hotels operated by Hilton Worldwide, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+whittier hospital medical center tenet california,70318,Tenet Healthcare Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Hospital operated by Tenet Healthcare, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+invista,923338,"Koch Industries, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Invista is a wholly owned subsidiary of privately held Koch Industries. Parent CIK from the EDGAR roster (exact).
+kraft foods global,1103982,Kraft Foods Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Kraft Foods Global Inc. was a subsidiary of Kraft Foods Inc., which was publicly traded. Parent CIK from the EDGAR roster (exact)."
+fedex supply chain logistics electrronics inc coppell,1048911,FedEx Corporation,,deepseek/deepseek-v4-flash,2026-07-27,FedEx Supply Chain is a subsidiary of FedEx Corporation
+nabors well services,1000753,Nabors Industries Ltd.,,deepseek/deepseek-v4-flash,2026-07-27,Nabors Well Services is a subsidiary of Nabors Industries
+akorn operating,1000209,"Akorn, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Akorn Operating Company is a subsidiary of Akorn, Inc."
+delta faucet,62996,Masco Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Delta Faucet is a brand of Masco Corporation
+husqvarna consumeroutdoor,1361124,Husqvarna AB,,deepseek/deepseek-v4-flash,2026-07-27,US subsidiary of Swedish public company Parent CIK from the EDGAR roster (exact:post-era).
+general dynamics it waco,40533,General Dynamics Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"IT division of General Dynamics, a public company."
+first data teleservices 5031 commerce park circle pensacola fl 32505,883980,First Data Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"First Data Teleservices is a division of First Data Corporation, which was public in 2000. Parent CIK from the EDGAR roster (exact)."
+hyatt regency century plaza,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Hyatt Regency Century Plaza is part of publicly traded Hyatt Hotels Corporation. Parent CIK from the EDGAR roster (exact).
+crothall and morrison healthcare,1317627,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,Crothall and Morrison Healthcare are divisions of Compass Group. Parent CIK from the EDGAR roster (exact).
+johnson controls interior mfg us,53669,Johnson Controls International plc,,deepseek/deepseek-v4-flash,2026-07-27,"Wholly owned subsidiary of Johnson Controls, a public company."
+ford motor company batavia transmissions,37996,Ford Motor Company,,deepseek/deepseek-v4-flash,2026-07-27,"Wholly owned subsidiary of Ford Motor Company, a public company."
+sony dadc us,313838,Sony Group Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Sony DADC US Inc. is a subsidiary of Sony Group Corporation.
+sea ray sport,14930,Brunswick Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Sea Ray is a brand of Brunswick Corporation (public, NYSE: BC). Parent CIK from the EDGAR roster (exact)."
+northrop grumman technical srvcs lss contract,1133421,Northrop Grumman Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Northrop Grumman Technical Services is a division of Northrop Grumman Corporation (NYSE: NOC). Parent CIK from the EDGAR roster (exact).
+barclays services,312070,Barclays PLC,,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of Barclays, a UK-based global bank."
+ups scs hebron building k facility,1090727,"United Parcel Service, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Facility of UPS Supply Chain Solutions, a subsidiary of UPS."
+vf imagewear wrangler,103379,VF Corporation,,deepseek/deepseek-v4-flash,2026-07-27,VF Imagewear is a division of publicly traded VF Corporation.
+georgia pacific corrugated,923338,Koch Industries,,deepseek/deepseek-v4-flash,2026-07-27,"Georgia-Pacific is owned by Koch Industries, a private company. Parent CIK from the EDGAR roster (exact)."
+heinz pet products,46640,H.J. Heinz Company,,deepseek/deepseek-v4-flash,2026-07-27,"Heinz Pet Products is a division of H.J. Heinz Company, an SEC filer at the time."
+olam west coast,1275158,Olam International,,deepseek/deepseek-v4-flash,2026-07-27,"Olam West Coast Inc. is a subsidiary of Olam International, which files with the SEC."
+american eagle executive airlines,6201,American Airlines Group,,deepseek/deepseek-v4-flash,2026-07-27,American Eagle & Executive Airlines is a subsidiary of American Airlines Group.
+macy s strawbridge s,794367,"Macy's, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Macy’s/Strawbridge’s is a division of Macy's, Inc."
+chase card services,19617,JPMorgan Chase & Co.,,deepseek/deepseek-v4-flash,2026-07-27,"Chase Card Services is a division of JPMorgan Chase, a public company."
+meridian yacht us marine,14930,Brunswick Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Meridian Yacht is a brand of US Marine, a subsidiary of Brunswick Corporation. Parent CIK from the EDGAR roster (exact:listed)."
+smithfield packing 4611 lykes road plant city fl 33566,91388,Smithfield Foods Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Smithfield Packing is a subsidiary of Smithfield Foods, which is publicly traded. Parent CIK from the EDGAR roster (exact)."
+fca u s,1605484,Fiat Chrysler Automobiles N.V.,,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of Fiat Chrysler Automobiles, now part of Stellantis."
+pulte building services pbs,822416,"PulteGroup, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of PulteGroup, a public homebuilder."
+bae systems technical services inc 557 mary esther cut off fort walton beach fl 32548 4090,895564,BAE Systems PLC,,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of BAE Systems PLC, a UK-based defense contractor. Parent CIK from the EDGAR roster (exact:listed)."
+shell convent refinery,1306965,Shell plc,,deepseek/deepseek-v4-flash,2026-07-27,"Shell Convent Refinery is owned by Shell Oil, a subsidiary of Shell plc. Parent CIK from the EDGAR roster (exact)."
+hilton chicago magnificent mile,1585689,Hilton Worldwide Holdings Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Hilton Chicago Magnificent Mile is owned and operated by Hilton Worldwide, a public company."
+harrah s,1590895,Caesars Entertainment Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Harrah's is a brand of Caesars Entertainment, a publicly traded company."
+live nation clubs theaters the wiltern,1335258,Live Nation Entertainment Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Live Nation Clubs & Theaters is a subsidiary of Live Nation Entertainment.
+southstar llc kroger facility,56873,Kroger Co.,,deepseek/deepseek-v4-flash,2026-07-27,"Southstar LLC may be a subsidiary of Kroger, as indicated by 'Kroger Facility'."
+manchester grand hyatt,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Manchester Grand Hyatt is a hotel owned by Hyatt Hotels, a public company."
+robinsons may,794367,"Macy's, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Robinsons-May was part of Federated Department Stores, now Macy's."
+sema4 opco,1818331,Sema4 Holdings Corp.,,deepseek/deepseek-v4-flash,2026-07-27,Operating subsidiary of Sema4 Holdings.
+raytheon technical services co llc ft bliss,1047122,Raytheon Company,,deepseek/deepseek-v4-flash,2026-07-27,Subsidiary of defense contractor Raytheon.
+sony music holdings,313838,Sony Group Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Subsidiary of Sony.
+vf jeanswear oneonta,103379,VF Corporation,,deepseek/deepseek-v4-flash,2026-07-27,VF Jeanswear is a division of VF Corporation
+nacco industries inc s materials handling,789073,"NACCO Industries, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Materials Handling division of NACCO Industries, a public company"
+regal beloit america,82811,Regal Rexnord Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Regal Beloit America is a subsidiary of Regal Rexnord Corporation.
+novartis gene therapies,1114448,Novartis AG,,deepseek/deepseek-v4-flash,2026-07-27,Novartis Gene Therapies is a subsidiary of Novartis AG.
+hsni llc and hsn,1018724,"Qurate Retail, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,HSNi is a subsidiary of Qurate Retail Group.
+catalent maryland,1596783,"Catalent, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Catalent Maryland is a subsidiary of Catalent Inc.
+abm industry group,771497,ABM Industries Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Facility services; wholly-owned subsidiary of public company ABM Industries.
+masco cabinetry,62996,Masco Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Cabinetry manufacturing; division of public company Masco Corporation.
+brunswick bicycles,14930,Brunswick Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Bicycle manufacturing; subsidiary of public company Brunswick Corporation.
+bae systems controls,895564,BAE Systems plc,,deepseek/deepseek-v4-flash,2026-07-27,BAE Systems Controls is a subsidiary of publicly traded BAE Systems. Parent CIK from the EDGAR roster (exact:listed).
+ritz carlton amelia island,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Ritz-Carlton is a subsidiary of Marriott International (public).
+united states steel corporation lorain,1163302,United States Steel Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Lorain plant of United States Steel Corporation, a public company."
+amazon comksdc,1018724,"Amazon.com, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Amazon subsidiary for distribution center
+masco retail cabinet group,62996,Masco Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Division of Masco, publicly traded company"
+arco bp amoco,313807,BP p.l.c.,,deepseek/deepseek-v4-flash,2026-07-27,"Gas station operations, subsidiary of BP (public). Parent CIK from the EDGAR roster (exact)."
+john deere seeding plant,315189,Deere & Company,,deepseek/deepseek-v4-flash,2026-07-27,John Deere Seeding Plant is a facility of Deere & Company.
+ge healthcare monitoring solutions,40545,General Electric Company,,deepseek/deepseek-v4-flash,2026-07-27,"Part of General Electric, a public company."
+motorola order fulfillment ctr,68505,"Motorola, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Part of Motorola, a public company."
+saint gobain containers,1012037,Compagnie de Saint-Gobain S.A.,,deepseek/deepseek-v4-flash,2026-07-27,"U.S. subsidiary of Saint-Gobain, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+aramark sports entertainment la convention ctr,1584509,Aramark,,deepseek/deepseek-v4-flash,2026-07-27,Aramark is a public company; this is a division. Parent CIK from the EDGAR roster (exact:listed).
+gm detroit hamtramck,1467858,General Motors Company,,deepseek/deepseek-v4-flash,2026-07-27,GM Detroit Hamtramck plant is a General Motors facility.
+square d,923734,Schneider Electric SE,,deepseek/deepseek-v4-flash,2026-07-27,Square D is a subsidiary of Schneider Electric SE. Parent CIK from the EDGAR roster (exact).
+ltf club management company llc dba life time in roseville,1869198,"Life Time Group Holdings, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"LTF Club Management Company, LLC operates Life Time fitness centers and is a subsidiary of Life Time Group Holdings (ticker LTH). Parent CIK from the EDGAR roster (exact)."
+pace membership warehouse,56824,Kmart Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"PACE MEMBERSHIP WAREHOUSE was a chain owned by Kmart Corporation, which was public at the time. Parent CIK from the EDGAR roster (exact)."
+supervalu distribution center,95521,Supervalu Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Distribution center of Supervalu Inc., which was a public company until 2018. Parent CIK from the EDGAR roster (exact)."
+dana thermal products,26780,Dana Incorporated,,deepseek/deepseek-v4-flash,2026-07-27,"Thermal products division of Dana Incorporated, a public company. Parent CIK from the EDGAR roster (exact)."
+alcoa warrick operations,1675149,Alcoa Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Alcoa Warrick Operations is a plant of Alcoa, a public company."
+keystone rv,730255,Thor Industries Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Keystone RV is a subsidiary of Thor Industries, a public company."
+verizon corp resources group,732712,Verizon Communications Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Verizon Corp Resources Group is a subsidiary of Verizon Communications.
+seagate recording media,1137789,Seagate Technology Holdings plc,,deepseek/deepseek-v4-flash,2026-07-27,"Seagate Recording Media is a division of Seagate Technology, a public company."
+wal mart distribution center,104169,Walmart Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Wal-Mart Distribution Center is part of Walmart Inc., a public company."
+geo secure services llc western region detention facility,1060391,"The GEO Group, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"GEO Secure Services is a subsidiary of The GEO Group, a publicly traded company."
+cypress fairbanks medical center,860730,HCA Healthcare Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Cypress Fairbanks Medical Center is a hospital likely owned by HCA Healthcare.
+fedex supply chain logistics electronics ft worth,1048911,FedEx Corporation,,deepseek/deepseek-v4-flash,2026-07-27,FedEx Supply Chain is a subsidiary of FedEx Corporation.
+holland america line,815097,CARNIVAL CORPORATION & PLC,,deepseek/deepseek-v4-flash,2026-07-27,"Cruise line, wholly owned by Carnival Corporation"
+midway hospital medical center tenet california,70318,TENET HEALTHCARE CORP,,deepseek/deepseek-v4-flash,2026-07-27,"Hospital, part of Tenet Healthcare"
+freeport mcmoran sierrita,831259,Freeport-McMoRan Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Freeport-McMoRan Sierrita Inc. is a subsidiary of Freeport-McMoRan Inc.
+unitedhealthcare community state,731766,UnitedHealth Group Incorporated,,deepseek/deepseek-v4-flash,2026-07-27,"UnitedHealthcare is a division of UnitedHealth Group, a public company."
+john deere foundry east moline,315189,Deere & Company,,deepseek/deepseek-v4-flash,2026-07-27,John Deere is a public company; this facility is part of Deere & Company.
+netflixcs,1065280,Netflix Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Netflix is a public company; this appears to be a customer service operation under Netflix, Inc."
+vf jeanswear russellville,103379,VF Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"VF Jeanswear is a division of VF Corporation, a public company."
+adt security services,833444,Tyco International plc,,deepseek/deepseek-v4-flash,2026-07-27,ADT Security Services was a subsidiary of Tyco International
+briggs stratton power group,14195,Briggs & Stratton Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Briggs & Stratton Power Group LLC was a subsidiary of Briggs & Stratton Corporation
+marriott marquis chicago,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Marriott Marquis Chicago is operated by a subsidiary of Marriott International.
+aramark sports entertainment llc honda center,1584509,Aramark,,deepseek/deepseek-v4-flash,2026-07-27,"Aramark Sports & Entertainment is a division of Aramark, a public company. Parent CIK from the EDGAR roster (exact:listed)."
+aramark healthcare services,1584509,Aramark,,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of Aramark, a public company. Parent CIK from the EDGAR roster (exact:listed)."
+propetro hydraulic fracturing,1680247,ProPetro Holding Corp.,,deepseek/deepseek-v4-flash,2026-07-27,"ProPetro-Hydraulic Fracturing is a subsidiary of ProPetro Holding Corp., a public company. Parent CIK from the EDGAR roster (exact)."
+manpower group us inc dba hellofresh,871763,ManpowerGroup Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Subsidiary of publicly traded ManpowerGroup Inc. Parent CIK from the EDGAR roster (exact).
+american general life companies,5272,"American International Group, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Subsidiary of AIG. Parent CIK from the EDGAR roster (exact:listed).
+citimortgage inc 7159 corklan dr jacksonville fl 32202,831001,Citigroup Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"CitiMortgage is a subsidiary of Citigroup, a publicly traded company."
+adient usa,1670541,Adient plc,,deepseek/deepseek-v4-flash,2026-07-27,"Adient USA LLC is a subsidiary of Adient plc, which files with SEC."
+heinz north america,1637459,The Kraft Heinz Company,,deepseek/deepseek-v4-flash,2026-07-27,"Heinz North America is a division of The Kraft Heinz Company, a public company."
+h r block mortgage,12659,"H&R Block, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,H & R Block Mortgage Corporation is a subsidiary of H&R Block.
+marriott services inc rancho las palmas marriot,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Marriott Services Inc. operates a Marriott hotel; Marriott International is the public parent.
+sw hotels resorts ww llc sheraton boston hotel,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"SW Hotels & Resorts operates a Sheraton hotel, which is owned by Marriott."
+john deere davenport works,315189,Deere & Company,,deepseek/deepseek-v4-flash,2026-07-27,"John Deere Davenport Works is a factory of Deere & Company, a public company."
+ritz carlton chicago,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Ritz-Carlton hotel operated by Marriott subsidiary.
+marriott payroll servies llc the boston marriott copley place hotel,1048286,Marriott International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Marriott Payroll Services LLC is a payroll entity for Marriott hotels, owned by Marriott International. Parent CIK from the EDGAR roster (exact)."
+vanity fair intimates,1067983,Berkshire Hathaway Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Vanity Fair Intimates is part of Fruit of the Loom, a Berkshire Hathaway subsidiary. Parent CIK from the EDGAR roster (exact:listed)."
+bell helicopter s norwood,217346,Textron Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Bell Helicopter is a division of Textron Inc., a public company"
+northrop grumman technical,1133421,Northrop Grumman Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Division of publicly traded Northrop Grumman.
+aladdin mills,851968,"Mohawk Industries, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Aladdin Mills was acquired by Mohawk Industries in 1994; Mohawk files with SEC.
+hsbc card and retail services,1089113,HSBC Holdings plc,,deepseek/deepseek-v4-flash,2026-07-27,"HSBC Card and Retail Services is a division of HSBC, which is publicly traded. Parent CIK from the EDGAR roster (exact:listed)."
+ball metal food household products,9389,Ball Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Ball Metal Food & Household Products is a division of Ball Corporation, a publicly traded company. Parent CIK from the EDGAR roster (exact:listed)."
+fluor fernald,1124198,Fluor Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Fluor Fernald was a subsidiary of Fluor Corporation. Parent CIK from the EDGAR roster (exact).
+panasonic automotive systems,63271,Panasonic Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Panasonic Automotive Systems is a subsidiary of Panasonic Corp., a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+pepsi beverages,77476,"PepsiCo, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Beverage division of publicly traded PepsiCo
+joann stores support center,1834585,Joann Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Joann Stores Support Center is likely a subsidiary of Joann Inc., a former public company. Parent CIK from the EDGAR roster (exact)."
+sprint lawrence,101830,Sprint Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Sprint-Lawrence is likely a subsidiary of Sprint, which was a public telecom company. Parent CIK from the EDGAR roster (exact)."
+ltf club management company llc dba life time covid19,1869198,"Life Time Group Holdings, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"LTF Club Management Company is a subsidiary of Life Time, a public fitness company. Parent CIK from the EDGAR roster (exact)."
+bae systems technology solutions services,895564,BAE Systems plc,,deepseek/deepseek-v4-flash,2026-07-27,BAE Systems Technology Solutions & Services Inc. is a US subsidiary of BAE Systems. Parent CIK from the EDGAR roster (exact).
+emerson power transmission,32604,Emerson Electric Co.,,deepseek/deepseek-v4-flash,2026-07-27,"Division of Emerson Electric, a public company."
+honeywell intelligrated,773840,Honeywell International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Honeywell Intelligrated is a subsidiary of Honeywell International.
+westrock services,1597672,WestRock Company,,deepseek/deepseek-v4-flash,2026-07-27,"WestRock Services, LLC is a subsidiary of WestRock, a public company."
+schneider logistics transloading and,1692063,"Schneider National, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Schneider Logistics Transloading is a division of Schneider National, a public company. Parent CIK from the EDGAR roster (exact)."
+faurecia highland park jit,1559444,Faurecia SE,,deepseek/deepseek-v4-flash,2026-07-27,"Faurecia Highland Park is a subsidiary of Faurecia, a French public company. Parent CIK from the EDGAR roster (exact)."
+sprint pcs customer solution center,101830,Sprint Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Sprint PCS Customer Solution Center was part of Sprint Corporation. Parent CIK from the EDGAR roster (exact).
+thomson learning,1075124,The Thomson Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Thomson Learning was a subsidiary of The Thomson Corporation (now Thomson Reuters). Parent CIK from the EDGAR roster (exact:listed).
+hollywood palladium a subsidiary of live nation entertainment,1335258,"Live Nation Entertainment, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Listed as subsidiary of Live Nation Entertainment.
+vanity fair intimates atmore,103379,VF Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Vanity Fair Intimates is a brand of VF Corporation, a public company."
+gm global tech center,1467858,General Motors Company,,deepseek/deepseek-v4-flash,2026-07-27,"GM Global Tech Center is a facility of General Motors, a public company."
+park hyatt aviara resort golf club,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Park Hyatt Aviara Resort is a hotel owned by Hyatt Hotels Corp. Parent CIK from the EDGAR roster (exact).
+fluor b w portsmouth,1124198,Fluor Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Fluor B&W Portsmouth LLC is a joint venture, with Fluor as a parent. Parent CIK from the EDGAR roster (exact)."
+oracle usa,1341439,Oracle Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Oracle USA, Inc. is a subsidiary of Oracle Corporation, a public company."
+ge aircraft engines,40545,General Electric Company,,deepseek/deepseek-v4-flash,2026-07-27,Division of General Electric.
+sikorsky a,936468,Lockheed Martin Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Sikorsky is a helicopter manufacturer, subsidiary of Lockheed Martin"
+northshore mining silver bay babbitt 2022,764065,Cleveland-Cliffs Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Subsidiary of publicly traded Cleveland-Cliffs Inc.
+grand lux cafe,887596,The Cheesecake Factory Incorporated,,deepseek/deepseek-v4-flash,2026-07-27,"Grand Lux Cafe is owned by The Cheesecake Factory, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+cubic applications,26076,Cubic Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Cubic Applications is a subsidiary of publicly traded Cubic Corporation. Parent CIK from the EDGAR roster (exact).
+aegon insurance group,1090727,Aegon N.V.,,deepseek/deepseek-v4-flash,2026-07-27,Aegon Insurance Group is a subsidiary of the Dutch public company Aegon.
+siemens energy automation,1173786,Siemens AG,,deepseek/deepseek-v4-flash,2026-07-27,US subsidiary of German conglomerate Siemens. Parent CIK from the EDGAR roster (suffix).
+miami beach edition,1048286,Marriott International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,EDITION hotel brand owned by Marriott; likely subsidiary. Parent CIK from the EDGAR roster (exact).
+lowe s hiw,60667,"Lowe's Companies, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Lowe's HIW, Inc. is a subsidiary of Lowe's Companies, Inc., a publicly traded home improvement retailer."
+sbc ameritech,732717,AT&T Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Subsidiary of SBC Communications (now AT&T). Parent CIK from the EDGAR roster (exact:listed).
+milgard manufacturing,62996,Masco Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Milgard is a wholly-owned subsidiary of Masco Corporation.
+northrop grumman technology services,1133421,Northrop Grumman Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Northrop Grumman Technology Services is a business unit of Northrop Grumman Corporation.
+united space alliance,12927,The Boeing Company,,deepseek/deepseek-v4-flash,2026-07-27,Joint venture between Boeing and Lockheed Martin for space operations.
+safran labinal power systems,1364012,Safran,,deepseek/deepseek-v4-flash,2026-07-27,French aerospace company; Labinal Power Systems is a Safran subsidiary Parent CIK from the EDGAR roster (exact).
+chrysler financial,1513153,Chrysler Group LLC,,deepseek/deepseek-v4-flash,2026-07-27,"Financial arm of Chrysler, then privately held. Parent CIK from the EDGAR roster (exact)."
+american airlines customer reservations center,6201,AMR Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Reservations center of American Airlines' parent at the time.
+espn zone,1744489,Walt Disney Company,,deepseek/deepseek-v4-flash,2026-07-27,"ESPN Zone is owned by ESPN, a subsidiary of Walt Disney Company."
+hyatt regency o hare rosemont,1467858,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Hyatt Regency O'Hare-Rosemont is a hotel owned by Hyatt Hotels Corporation.
+campbells soup supply,16732,Campbell Soup Company,,deepseek/deepseek-v4-flash,2026-07-27,Supply chain subsidiary of Campbell Soup.
+blue sky studios,356364,Twentieth Century Fox Film Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Blue Sky Studios was a subsidiary of 20th Century Fox. Parent CIK from the EDGAR roster (exact:post-era).
+bluesky studio,356364,Twentieth Century Fox Film Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"BlueSky Studio Inc. is likely the same as Blue Sky Studios, a subsidiary of 20th Century Fox. Parent CIK from the EDGAR roster (exact:post-era)."
+macy s east central headquarters,794367,"Macy's, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Macy's East is a division of Macy's, Inc., a public company."
+avis budget rental services,723612,"Avis Budget Group, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Avis Budget Rental Services Inc. is a subsidiary of Avis Budget Group, a public company."
+transamerica life,769218,Aegon N.V.,,deepseek/deepseek-v4-flash,2026-07-27,Transamerica Life Insurance Company is a subsidiary of Aegon; automatic matcher found it as a candidate but refused due to incompatible tokens. Parent CIK from the EDGAR roster (exact).
+vestas blades america,1330306,Vestas Wind Systems A/S,,deepseek/deepseek-v4-flash,2026-07-27,Vestas Blades America is a subsidiary of the Danish wind turbine manufacturer. Parent CIK from the EDGAR roster (listed-extension).
+hyatt regency long beach,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Hyatt Regency Long Beach is operated by a subsidiary of Hyatt Hotels Corporation.
+home depot bath and remodeling inc,354950,"The Home Depot, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Bath and remodeling division of The Home Depot.
+northrop grumman technology,1133421,Northrop Grumman Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Division of Northrop Grumman, as indicated by refused candidate."
+broadspectrum downstream services,1468522,Ferrovial S.A.,,deepseek/deepseek-v4-flash,2026-07-27,"Broadspectrum was a subsidiary of Ferrovial, a Spanish public company. Parent CIK from the EDGAR roster (exact)."
+hyatt regency scottsdale resort spa at gainey ra,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"The Hyatt Regency Scottsdale is owned and operated by Hyatt Hotels Corporation, a public company."
+alcoa wenatchee,4281,Alcoa Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Alcoa-Wenatchee is a facility of Alcoa Corp. Parent CIK from the EDGAR roster (exact).
+at t consumer communications services,5907,AT&T Inc.,,deepseek/deepseek-v4-flash,2026-07-27,AT&T Consumer Communications Services is a division of AT&T Inc. Parent CIK from the EDGAR roster (exact).
+sodexo services,1169715,Sodexo S.A.,,deepseek/deepseek-v4-flash,2026-07-27,"Sodexo Services is part of Sodexo, a French multinational, which is not an SEC registrant. Parent CIK from the EDGAR roster (exact)."
+owens corning masonry products,1370946,Owens Corning,,deepseek/deepseek-v4-flash,2026-07-27,"Division of Owens Corning, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+moen,1519751,"Fortune Brands Home & Security, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of Fortune Brands Home & Security, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+nbc universal media,1166691,Comcast Corporation,,deepseek/deepseek-v4-flash,2026-07-27,NBCUniversal is a subsidiary of Comcast Corporation.
+walmart midland,104169,Walmart Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Walmart store owned by Walmart Inc.
+arcelormittal cleveland inc arcelormittal usa,1232582,ArcelorMittal,,deepseek/deepseek-v4-flash,2026-07-27,"ArcelorMittal Cleveland, Inc is a subsidiary of ArcelorMittal, a public company."
+gmac mortgage,40730,General Motors Company,,deepseek/deepseek-v4-flash,2026-07-27,GMAC Mortgage was a subsidiary of General Motors. Parent CIK from the EDGAR roster (exact).
+honeywell autolite,773840,Honeywell International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Autolite brand operated under Honeywell at the time. Parent CIK from the EDGAR roster (exact).
+dupont performance elastomer,1666700,"DuPont de Nemours, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,DuPont Performance Elastomer is a subsidiary of DuPont.
+nordstrom trunk club,72333,"Nordstrom, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Nordstrom Trunk Club is a subsidiary of Nordstrom, Inc., a public company. Parent CIK from the EDGAR roster (exact)."
+general motors stamping plant,1467858,General Motors Company,,deepseek/deepseek-v4-flash,2026-07-27,Plant of General Motors Company.
+gm lansing grand river ass y plant,1467858,General Motors Company,,deepseek/deepseek-v4-flash,2026-07-27,Plant of General Motors Company.
+kellogg s snacks,55067,Kellogg Company,,deepseek/deepseek-v4-flash,2026-07-27,Division of Kellogg Company.
+molex fiber optics,67472,Molex Incorporated,,deepseek/deepseek-v4-flash,2026-07-27,"Molex Fiber Optics is a subsidiary of Molex, which was a public company at the time. Parent CIK from the EDGAR roster (exact)."
+centene management corporation dba kentucky spirit health plan,1071739,Centene Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Centene Management is a subsidiary of Centene, a public managed care company. Parent CIK from the EDGAR roster (exact)."
+masco bath,62996,Masco Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Masco Bath is a division of Masco Corporation, a public company."
+united technologies automotive engineered systems div,101829,United Technologies Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Division of public company United Technologies.
+at t material management services,732717,AT&T Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"AT&T Material Management Services is a division of AT&T, a public company."
+restaurant associates,1144980,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,"Restaurant Associates is a subsidiary of Compass Group, a public company."
+kitty hawk international inc ft worth,932110,"Kitty Hawk, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Kitty Hawk International was a subsidiary of Kitty Hawk, Inc., a public company. Parent CIK from the EDGAR roster (exact)."
+charter communications customer contact center,1091667,Charter Communications Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Charter Communications Customer Contact Center is part of public Charter Communications.
+fedex kinko s,1048911,FedEx Corporation,,deepseek/deepseek-v4-flash,2026-07-27,FedEx/Kinko's is a subsidiary of FedEx Corporation.
+kenworth trucking,75362,PACCAR Inc,,deepseek/deepseek-v4-flash,2026-07-27,Kenworth Trucking is a brand of PACCAR Inc.
+sodexo inc,1169715,Sodexo SA,,deepseek/deepseek-v4-flash,2026-07-27,"Sodexo, Inc. is a US subsidiary of Sodexo SA, which files with SEC as a foreign private issuer."
+walmart store 3463,104169,Walmart Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Walmart Store #3463 is a corporate-owned store of Walmart Inc., a public company."
+hsbc auto finance,1089113,HSBC Holdings plc,,deepseek/deepseek-v4-flash,2026-07-27,"HSBC Auto Finance is a division of HSBC, a public company registered with the SEC. Parent CIK from the EDGAR roster (exact:listed)."
+lpl financial,1397911,LPL Financial Holdings Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"LPL Financial LLC is the operating subsidiary of LPL Financial Holdings Inc., which files with the SEC."
+el dorado national california,1687221,"REV Group, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"El Dorado National is a subsidiary of REV Group, a public company. Parent CIK from the EDGAR roster (exact)."
+learjet bombardier,878334,Bombardier Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Learjet is a brand of Bombardier Inc., a public company. Parent CIK from the EDGAR roster (exact:post-era)."
+lockheed martin space systems co mrl bldg 54915 cape canaveral a f station fl 32920,936468,Lockheed Martin Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Lockheed Martin Space Systems is a division of Lockheed Martin Corp., a public company."
+medtronic cardiopulmonary,64670,Medtronic plc,,deepseek/deepseek-v4-flash,2026-07-27,"Medtronic Cardiopulmonary is a division of Medtronic plc, a public company. Parent CIK from the EDGAR roster (exact)."
+xerox commercial solutioins,108772,Xerox Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Xerox Commercial Solutions is a division of publicly traded Xerox Corporation.
+darden restaurants inc olive garden,940944,"Darden Restaurants, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Olive Garden is a chain owned by publicly traded Darden Restaurants.
+3m touch systems,66740,3M Company,,deepseek/deepseek-v4-flash,2026-07-27,3M Touch Systems is a division or subsidiary of publicly traded 3M Company.
+monterey park hospital tenet california,70318,Tenet Healthcare Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Monterey Park Hospital is part of Tenet Healthcare, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+optum care,731766,UnitedHealth Group Incorporated,,deepseek/deepseek-v4-flash,2026-07-27,"Optum Care is a subsidiary of UnitedHealth Group, a public company."
+sam s town hotel casino,906553,Boyd Gaming Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Sam's Town is a brand of Boyd Gaming. Parent CIK from the EDGAR roster (exact).
+shutterfly lifetouch,1125920,Shutterfly Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Shutterfly Lifetouch is a subsidiary of Shutterfly Inc., a publicly traded company."
+aramark at usc galen center,1584509,Aramark,,deepseek/deepseek-v4-flash,2026-07-27,Aramark is a public company; this is a specific site division. Parent CIK from the EDGAR roster (exact).
+johnson johnson consumer products,200406,Johnson & Johnson,,deepseek/deepseek-v4-flash,2026-07-27,Division of public company Johnson & Johnson.
+adecco at air fayre usa,1446251,Adecco Group AG,,deepseek/deepseek-v4-flash,2026-07-27,"Adecco is a global staffing firm, parent is Adecco Group AG Parent CIK from the EDGAR roster (exact)."
+o p i products,1024305,Coty Inc.,,deepseek/deepseek-v4-flash,2026-07-27,OPI Products Inc. is a subsidiary of publicly traded Coty Inc. Parent CIK from the EDGAR roster (exact).
+envoy,6201,American Airlines Group Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Envoy Air is a wholly owned subsidiary of American Airlines Group. Parent CIK from the EDGAR roster (exact).
+flint hills resources,923338,Koch Industries,,deepseek/deepseek-v4-flash,2026-07-27,"Flint Hills Resources is a wholly owned subsidiary of Koch Industries, a private company. Parent CIK from the EDGAR roster (exact)."
+macy s west,794367,Macy's Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Macy's West is a division of Macy's Inc., which is a public company that files with the SEC."
+trinity rail trinity tank car jordan valley,101538,Trinity Industries Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Trinity Rail is a subsidiary of Trinity Industries Inc., which is a public company."
+williamson dickie manufacturing company2,103379,VF Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Workwear manufacturer, subsidiary of publicly traded VF Corporation."
+kellogg s keebler company macon bakery,55067,Kellogg Company,,deepseek/deepseek-v4-flash,2026-07-27,The Keebler Company is a subsidiary of Kellogg Company.
+lsc communications us llc,1669812,LSC Communications Inc,,deepseek/deepseek-v4-flash,2026-07-27,Automatic match found LSC Communications Inc but refused due to token mismatch; filed entity is a subsidiary.
+advance stores company jeffersonville,1158449,"Advance Auto Parts, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Advance Stores Company is a subsidiary of Advance Auto Parts, a public company."
+takeda pharmaceuticals usa,1395064,Takeda Pharmaceutical Company Limited,,deepseek/deepseek-v4-flash,2026-07-27,Takeda Pharmaceuticals USA is a U.S. subsidiary of Takeda Pharmaceutical Company Limited. Parent CIK from the EDGAR roster (exact:listed).
+volt service group,884121,"Volt Information Sciences, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Volt Service Group likely a subsidiary of Volt Information Sciences, Inc., a public company."
+conseco services,1224608,CNO Financial Group,,deepseek/deepseek-v4-flash,2026-07-27,"Conseco Services, LLC is part of CNO Financial Group (formerly Conseco)."
+technicolor creative services usa,1080259,Technicolor SA,,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of Technicolor SA, a French company. Parent CIK from the EDGAR roster (exact:post-era)."
+jbl professional,800459,"Harman International Industries, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Division of Harman, which was a public company at the time. Parent CIK from the EDGAR roster (exact)."
+blockbuster distribution center mckinney,1001082,Dish Network Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Blockbuster was acquired by Dish Network in 2011.
+crothall laundry services,1317627,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,Crothall Laundry Services is a division of Compass Group Parent CIK from the EDGAR roster (exact).
+delta global services,27904,"Delta Air Lines, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Delta Global Services is a subsidiary of Delta Air Lines.
+actavis laboratories,1551152,AbbVie Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Actavis Laboratories is a subsidiary of AbbVie (formerly Allergan/Actavis).
+sanofi aventis u s,1121404,Sanofi,,deepseek/deepseek-v4-flash,2026-07-27,U.S. subsidiary of French pharmaceutical company Sanofi.
+home loan center inc lendingtree loans,1013237,"LendingTree, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Home Loan Center is part of LendingTree, a public company (CIK 0001013237)."
+shaw industries plant 07,1067983,Berkshire Hathaway Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Shaw Industries is a subsidiary of Berkshire Hathaway.
+emery worldwide airlines 1904 n w 97th avenue miami fl 33172,1022581,Consolidated Freightways Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Emery Worldwide Airlines was a subsidiary of Consolidated Freightways. Parent CIK from the EDGAR roster (exact).
+carlisle tire wheel,790051,Carlisle Companies Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Carlisle Tire & Wheel Co. was a subsidiary of Carlisle Companies, a public company. Parent CIK from the EDGAR roster (exact)."
+chevron gulf of mexico,93410,Chevron Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Chevron Gulf of Mexico is a subsidiary of Chevron Corporation, a public company."
+hyatt regency columbus,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Hyatt Regency Columbus is a hotel operated by Hyatt, which is publicly traded."
+hyatt regency mccormick,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Hyatt Regency McCormick is a Hyatt hotel, subsidiary of Hyatt Hotels Corporation."
+united technologies automotive,101829,United Technologies Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Division of United Technologies Corporation, which files with SEC."
+adt security services inc 9000 town center parkway bradenton fl 34202,833444,Tyco International Ltd.,,deepseek/deepseek-v4-flash,2026-07-27,ADT was a subsidiary of Tyco International at the time.
+fedex supply chain inc s,1048911,FedEx Corporation,,deepseek/deepseek-v4-flash,2026-07-27,FedEx Supply Chain is a subsidiary of FedEx Corp. Parent CIK from the EDGAR roster (exact).
+dana commercial vehicle manufacturing,26780,Dana Incorporated,,deepseek/deepseek-v4-flash,2026-07-27,Dana Commercial Vehicle Manufacturing is a subsidiary of Dana Inc. Parent CIK from the EDGAR roster (exact).
+john deere des moines works,315189,Deere & Company,,deepseek/deepseek-v4-flash,2026-07-27,John Deere Des Moines Works is a manufacturing facility of Deere & Company.
+sikorsky naval air stat whiting field milton fl 32570,936468,Lockheed Martin Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Sikorsky Aircraft is a subsidiary of Lockheed Martin, a public company."
+georgia pacific wood products talladega,923338,"Koch Industries, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Georgia-Pacific is a subsidiary of Koch Industries, which is privately held. Parent CIK from the EDGAR roster (exact)."
+hilton baltimore convention center hotel,1585689,Hilton Worldwide Holdings Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Hilton Baltimore is a hotel property of Hilton Worldwide.
+mckesson medical surgical,927653,McKesson Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"McKesson Medical Surgical is a division of McKesson Corporation, a public company."
+warner brothers,1437107,"Warner Bros. Discovery, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Warner Bros. is a subsidiary of Warner Bros. Discovery, Inc., a public company."
+hyatt regency san francisco airport,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Hotel managed by Hyatt Hotels Corporation, a public company."
+jw marriott washington dc,1048286,Marriott International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"JW Marriott is a brand of Marriott International, which is publicly traded."
+marriott laguna cliffs resort,1048286,Marriott International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"A Marriott resort, subsidiary of Marriott International."
+rich s,794367,"Federated Department Stores, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Rich's is a department store chain, a subsidiary of Federated Department Stores (now Macy's). Parent CIK from the EDGAR roster (exact)."
+shaw industries plant wk,1067983,Berkshire Hathaway Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Shaw Industries is a flooring company, wholly owned by Berkshire Hathaway."
+levy premium foodservice limited gwcc,1317627,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,"Levy Premium Foodservice is a subsidiary of Compass Group, a public company traded OTC. Parent CIK from the EDGAR roster (exact)."
+american airlines inc charlotte douglas int apt covid19,4515,American Airlines Group Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"American Airlines, Inc. is a subsidiary of American Airlines Group, a public company"
+american airlines inc charlotte receiving bldg covid19,4515,American Airlines Group Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"American Airlines, Inc. is a subsidiary of American Airlines Group"
+american airlines inc clt hgr covid19,4515,American Airlines Group Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"American Airlines, Inc. is a subsidiary of American Airlines Group"
+american airlines inc int res ctr,4515,American Airlines Group Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Despite automatic refusal, American Airlines Inc. is still a subsidiary of public parent"
+american airlines inc sro covid19,4515,American Airlines Group Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"American Airlines, Inc. is a subsidiary of American Airlines Group"
+teledyne cae,1094285,Teledyne Technologies Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Teledyne CAE is a subsidiary of Teledyne Technologies. Parent CIK from the EDGAR roster (exact).
+arizona biltmore a waldorf astoria resort,1585689,Hilton Worldwide Holdings Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Arizona Biltmore is a Waldorf Astoria resort, owned by Hilton. Parent CIK from the EDGAR roster (exact)."
+ritz carlton dallas,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Ritz-Carlton is a brand owned by Marriott International. Parent CIK from the EDGAR roster (exact).
+sikorsky nas whiting field milton nas pensacola statewide fl 00000,936468,Lockheed Martin Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Sikorsky Aircraft is a subsidiary of Lockheed Martin. Parent CIK from the EDGAR roster (exact).
+citicorp data services,831001,Citigroup Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Data services subsidiary of Citigroup
+chevron products,93410,Chevron Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Chevron Products Company is a subsidiary of Chevron Corporation.
+marriott international shared services,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Shared services division of Marriott, which is publicly traded."
+chevron u s a statewide statewide fl 00000,93410,Chevron Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Chevron U.S.A. is a subsidiary of Chevron, publicly traded."
+sony music mfg support operation,313838,Sony Group Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Sony Music is a subsidiary of Sony Group Corporation.
+conrad hotel,1585689,Hilton Worldwide Holdings Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Conrad Hotel is a brand of Hilton, which is SEC-registered"
+durham school services lewisville,1455632,National Express Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,Durham School Services is a subsidiary of National Express Group. Parent CIK from the EDGAR roster (listed-extension).
+argosy casino hotel and,921738,"Penn Entertainment, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Argosy Casino Hotel and Spa is owned by Penn Entertainment, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+delta downs racetrack casino and hotel,906553,Boyd Gaming Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Delta Downs Racetrack Casino and Hotel is owned by Boyd Gaming Corporation, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+nestle prepared foods company hot,792990,Nestle S.A.,,deepseek/deepseek-v4-flash,2026-07-27,Nestle Prepared Foods Company is a subsidiary of Nestle S.A. Parent CIK from the EDGAR roster (exact).
+dubuque diamond jo casino,93751,Boyd Gaming Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Dubuque Diamond Jo Casino is a property of Boyd Gaming Corporation, a public company."
+universal logistics insights,1308208,"Universal Logistics Holdings, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Subsidiary of Universal Logistics Holdings.
+matsushita battery industrial,63271,Panasonic Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Matsushita Battery is a subsidiary of Panasonic, which is SEC registered."
+nyp holdings inc dow jones company 900 east 132nd st nyc,1564708,News Corp,,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of News Corp, which owns Dow Jones and NYP."
+general dynamics anteon,40533,General Dynamics Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Anteon Corporation was acquired by General Dynamics, which files with the SEC."
+northrop grumman electronic systems,1133421,Northrop Grumman Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Division of Northrop Grumman, a public defense contractor Parent CIK from the EDGAR roster (exact)."
+procter gamble paper products,80424,Procter & Gamble Company,,deepseek/deepseek-v4-flash,2026-07-27,Paper products division of Procter & Gamble Parent CIK from the EDGAR roster (exact:listed).
+old ben coal company mine 21,313807,BP p.l.c.,,deepseek/deepseek-v4-flash,2026-07-27,Old Ben Coal was a subsidiary of BP in 1989.
+novartis group,1114448,Novartis AG,,deepseek/deepseek-v4-flash,2026-07-27,"Novartis Group is a subsidiary of Novartis AG, which files with the SEC despite near-spelling match."
+ritz carlton tysons corner,1048286,Marriott International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"The Ritz Carlton Tysons Corner is a hotel operated by Marriott International, a public company."
+merkafon teleperformance,1406914,Teleperformance SE,,deepseek/deepseek-v4-flash,2026-07-27,"Merkafon Teleperformance is likely a subsidiary of Teleperformance SE, a public company. Parent CIK from the EDGAR roster (exact)."
+golf channel,1166691,Comcast Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"The Golf Channel is owned by NBCUniversal, a subsidiary of Comcast Corporation. Parent CIK from the EDGAR roster (exact)."
+northrop grumman technical services inc ngts,1133421,Northrop Grumman Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Wholly-owned subsidiary of Northrop Grumman Corporation.
+crothall healthcare environmental services,1317627,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,"Crothall is a division of Compass Group, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+clayton homes and cmh manufacturing,1067983,Berkshire Hathaway Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Manufactured home builder, owned by Berkshire Hathaway."
+fluor enterprises m g jumbo project,1124198,Fluor Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Fluor Enterprises is a subsidiary of Fluor Corporation. Parent CIK from the EDGAR roster (exact).
+unilever food solutions,217410,Unilever PLC,,deepseek/deepseek-v4-flash,2026-07-27,"Unilever division, Unilever is public. Parent CIK from the EDGAR roster (exact)."
+honeywell sensing control,773840,Honeywell International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Division of Honeywell, which is public. Parent CIK from the EDGAR roster (exact)."
+owens brockway glass containers,812074,"Owens-Illinois, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Owens-Brockway Glass Containers was a subsidiary of Owens-Illinois, a public company. Parent CIK from the EDGAR roster (exact)."
+psa airlines covid19,6201,American Airlines Group Inc.,,deepseek/deepseek-v4-flash,2026-07-27,PSA Airlines is a wholly owned subsidiary of American Airlines Group. Parent CIK from the EDGAR roster (exact).
+united space alliance llc houston5,12927,The Boeing Company,,deepseek/deepseek-v4-flash,2026-07-27,Joint venture between Boeing and Lockheed Martin.
+vantec hitachi transport system canton madison,47710,"Hitachi, Ltd.",,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of Hitachi Group, which files with SEC. Parent CIK from the EDGAR roster (exact)."
+tyco healthcare,833444,Tyco International Ltd.,,deepseek/deepseek-v4-flash,2026-07-27,"Tyco Healthcare was a division of Tyco International, which later became part of Johnson Controls. Parent CIK from the EDGAR roster (exact:listed)."
+tyco healthcare kendall,833444,Tyco International Ltd.,,deepseek/deepseek-v4-flash,2026-07-27,Tyco Healthcare/kendall was part of Tyco International. Parent CIK from the EDGAR roster (exact:listed).
+johnson johnson consumer,200406,Johnson & Johnson,,deepseek/deepseek-v4-flash,2026-07-27,"Johnson & Johnson Consumer, Inc. is a subsidiary of Johnson & Johnson."
+wells fargo pvsi,72971,Wells Fargo & Company,,deepseek/deepseek-v4-flash,2026-07-27,"Division of Wells Fargo & Company, a public registrant."
+3m precision optics,66740,3M Company,,deepseek/deepseek-v4-flash,2026-07-27,3M subsidiary in optics
+alcoa primary metals at massena east,4281,Alcoa Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Alcoa subsidiary in primary metals
+ilevel by weyerhaeuser,106535,Weyerhaeuser Company,,deepseek/deepseek-v4-flash,2026-07-27,brand of Weyerhaeuser
+hyatt regency hotel,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Hyatt Regency hotels are corporate-owned or managed by Hyatt Parent CIK from the EDGAR roster (exact).
+it s a laugh productions,1744489,Walt Disney Company,,deepseek/deepseek-v4-flash,2026-07-27,It's a Laugh Productions is a Disney-owned production company Parent CIK from the EDGAR roster (exact:listed).
+p f automotive llc dba penske ford,1163302,"Penske Automotive Group, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"P.F. Automotive is a dealership entity of Penske Automotive Group, a public company."
+gmri inc t a bahama breeze,940944,"Darden Restaurants, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"GMRI Inc. operates Bahama Breeze, a chain owned by Darden Restaurants, a public company. Parent CIK from the EDGAR roster (exact)."
+hyatt regency houston,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Hyatt Regency is a brand owned by Hyatt Hotels Corporation, a public company. Parent CIK from the EDGAR roster (exact)."
+hyatt regency irvine,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Hyatt Regency Irvine is a hotel owned by Hyatt Hotels Corporation. Parent CIK from the EDGAR roster (exact).
+chartwells,1317627,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,Chartwells is a division of Compass Group Parent CIK from the EDGAR roster (exact).
+cheesecake factory bakery,1018840,The Cheesecake Factory Incorporated,,deepseek/deepseek-v4-flash,2026-07-27,"The Cheesecake Factory Bakery is a subsidiary of The Cheesecake Factory Inc., a public company."
+compass group usa northwestern,1317627,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,"Compass Group USA is a subsidiary of Compass Group PLC, a public company. Parent CIK from the EDGAR roster (exact)."
+live nation clubs theaters house of blues anaheim,1335258,Live Nation Entertainment,,deepseek/deepseek-v4-flash,2026-07-27,House of Blues is a venue owned by Live Nation Entertainment
+live nation clubs theaters the fillmore san francisco,1335258,"Live Nation Entertainment, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Division of Live Nation, which files with SEC"
+under armour nashville distribution house,1336917,"Under Armour, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Under Armour Nashville Distribution House is a distribution center of Under Armour, Inc., a publicly traded company."
+assurant specialty property,1267238,"Assurant, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Assurant Specialty Property is a division of Assurant, a public insurance company."
+caci technologies,1604464,CACI International Inc,,deepseek/deepseek-v4-flash,2026-07-27,"CACI Technologies is a subsidiary of CACI International, a publicly traded government contractor."
+hyatt regency dfw,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Hyatt Regency DFW is a hotel likely owned by Hyatt Hotels Corporation
+scios inc johnson johnson,200406,Johnson & Johnson,,deepseek/deepseek-v4-flash,2026-07-27,Scios Inc. was a wholly owned subsidiary of Johnson & Johnson at the time.
+associates credit card services,831001,Citigroup Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Associates Credit Card Services was a subsidiary of Citigroup after the 2000 acquisition of Associates First Capital.
+bae sys southeast shipyards mayport llc 1936 bailey avenue jacksonville fl 32228,895564,BAE Systems plc,,deepseek/deepseek-v4-flash,2026-07-27,BAE Systems Southeast Shipyards Mayport LLC is a subsidiary of BAE Systems. Parent CIK from the EDGAR roster (exact:listed).
+dutchmen,730255,"Thor Industries, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Dutchmen is a recreational vehicle brand owned by Thor Industries (public).
+georgia pacific corp monroeville,923338,"Koch Industries, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Georgia-Pacific is a subsidiary of Koch Industries (private). Parent CIK from the EDGAR roster (exact).
+cbre,1138118,"CBRE Group, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"CBRE, Inc. is a subsidiary of publicly traded CBRE Group. Parent CIK from the EDGAR roster (exact)."
+honeywell technology solutions,773840,Honeywell International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Subsidiary of Honeywell International
+tele tech customer care management california,829323,TTEC (TeleTech Holdings),,deepseek/deepseek-v4-flash,2026-07-27,Subsidiary of TeleTech Holdings
+airtran airways inc hartsfield jackson alt int l airport,92380,Southwest Airlines Co.,,deepseek/deepseek-v4-flash,2026-07-27,"Airtran Airways, Inc. was a subsidiary of Southwest Airlines after acquisition. Parent CIK from the EDGAR roster (exact)."
+option one mortgage,12659,"H&R Block, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Option One Mortgage Corp. was a subsidiary of publicly traded H&R Block. Parent CIK from the EDGAR roster (exact).
+sbc west consumer markets group call center,732717,SBC Communications Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"SBC West is a division of SBC Communications, a public company. Parent CIK from the EDGAR roster (exact)."
+safran cabin bellingham,1364012,Safran SA,,deepseek/deepseek-v4-flash,2026-07-27,"Safran Cabin is a subsidiary of Safran, a French aerospace public company. Parent CIK from the EDGAR roster (exact)."
+ltf club management company llc dba life time in la jolla,1869198,"Life Time Group Holdings, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Life Time is a publicly traded health and fitness company; this entity manages its clubs. Parent CIK from the EDGAR roster (exact).
+3m electro communications business,66740,3M Company,,deepseek/deepseek-v4-flash,2026-07-27,"3M Electro & Communications Business is a division of 3M Company, which is publicly traded."
+corrections corporation of america otter creek correctional facility,1070985,CoreCivic Inc,,deepseek/deepseek-v4-flash,2026-07-27,"Corrections Corporation of America is now CoreCivic, a publicly traded company."
+ltf club management company llc life time syosset,1869198,Life Time Group Holdings Inc,,deepseek/deepseek-v4-flash,2026-07-27,"LTF Club Management is a subsidiary of Life Time, a publicly traded fitness company. Parent CIK from the EDGAR roster (exact)."
+optum services,731766,UnitedHealth Group Incorporated,,deepseek/deepseek-v4-flash,2026-07-27,Optum Services is a subsidiary of UnitedHealth Group.
+rbc capital markets,1000753,Royal Bank of Canada,,deepseek/deepseek-v4-flash,2026-07-27,"RBC Capital Markets is a subsidiary of Royal Bank of Canada, a public company"
+ritz carlton south beach,1048286,Marriott International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Ritz-Carlton is a brand of Marriott International, a public company"
+daniel freeman marina hospital tenet health system,70318,Tenet Healthcare Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Hospital owned by Tenet Healthcare, a public company. Parent CIK from the EDGAR roster (exact)."
+marriott global reservations sales customer care,1048286,Marriott International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Division of Marriott International, a public company."
+seterus inc a subsidiary of ibm,51143,IBM,,deepseek/deepseek-v4-flash,2026-07-27,"Explicitly stated as a subsidiary of IBM, which is a public company."
+indian point energy center ipec owned by entergy nuclear indian point 2 llc entergy nuclear indian point 3 llc entergy nuclear operations inc entergy services,65984,Entergy Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Nuclear power plant owned by Entergy subsidiaries.
+marriott crystal gateway,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Crystal Gateway is a Marriott hotel property; Marriott International is a public company.
+oscar meyer div kraft heinz food,1637459,The Kraft Heinz Company,,deepseek/deepseek-v4-flash,2026-07-27,"Division of The Kraft Heinz Company, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+ge consumer finance business ctr,40545,General Electric Company,,deepseek/deepseek-v4-flash,2026-07-27,GE Consumer Finance is a division of General Electric.
+general dynamics information technology ctrs for medicare medicaid 3030 u s hwy 301 s riverview fl 33578,40533,General Dynamics Corporation,,deepseek/deepseek-v4-flash,2026-07-27,General Dynamics Information Technology is a subsidiary of General Dynamics.
+ubs warburg energy,1114446,UBS Group AG,,deepseek/deepseek-v4-flash,2026-07-27,UBS Warburg Energy LLC is a subsidiary of UBS Group AG.
+xpo logistics ft worth,1166003,"XPO Logistics, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,XPO Logistics is a publicly traded company; this is one of its facilities.
+teleperformanceusa,1406914,Teleperformance SE,,deepseek/deepseek-v4-flash,2026-07-27,"TeleperformanceUSA is a US subsidiary of Teleperformance SE, a French public company. Parent CIK from the EDGAR roster (exact)."
+wells fargo home and consumer finance group,72971,Wells Fargo & Company,,deepseek/deepseek-v4-flash,2026-07-27,"Wells Fargo Home and Consumer Finance Group is a division of Wells Fargo & Company, a public company."
+boeing electronics,12927,The Boeing Company,,deepseek/deepseek-v4-flash,2026-07-27,"Boeing Electronics is a division or subsidiary of Boeing, a public company."
+ritz carlton marriott,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Ritz-Carlton is a subsidiary of Marriott International. Parent CIK from the EDGAR roster (exact).
+sheraton overland park hotel,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Sheraton is a brand of Marriott International. Parent CIK from the EDGAR roster (exact).
+at t global customer service,732717,AT&T Inc.,,deepseek/deepseek-v4-flash,2026-07-27,AT&T Global Customer Service is a division of publicly traded AT&T Inc.
+armstrong air conditioning a k a allied air enterprises a lennox international,1069202,Lennox International Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Armstrong Air is a subsidiary of Lennox International, a public HVAC company Parent CIK from the EDGAR roster (exact)."
+cooper lighting solutions vicksburg warren,1551182,Eaton Corporation plc,,deepseek/deepseek-v4-flash,2026-07-27,Cooper Lighting Solutions was a business of Eaton Corporation until 2020. Parent CIK from the EDGAR roster (exact:listed).
+cunard line limited 6100 blue lagoon drive suite 400 miami fl 33126,815097,Carnival Corporation & plc,,deepseek/deepseek-v4-flash,2026-07-27,Cunard Line is a subsidiary of Carnival Corporation. Parent CIK from the EDGAR roster (exact:listed).
+jpmorgan chase bank 3990 s babcock melbourne fl 32901,19617,JPMorgan Chase & Co.,,deepseek/deepseek-v4-flash,2026-07-27,JPMorgan Chase Bank is a subsidiary of JPMorgan Chase & Co.
+northrop grumman corporation aerospace systems,1133421,Northrop Grumman Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Northrop Grumman Aerospace Systems is a division of the publicly traded Northrop Grumman Corporation. Parent CIK from the EDGAR roster (exact).
+phelps dodge industries d b a freeport mcmoran updated notice,831259,Freeport-McMoRan Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Phelps Dodge Industries d.b.a. Freeport-McMoRan is a subsidiary of Freeport-McMoRan Inc., a public company. Parent CIK from the EDGAR roster (exact)."
+daifuku services america,1762831,"Daifuku Co., Ltd.",,deepseek/deepseek-v4-flash,2026-07-27,US subsidiary of Japanese public company Daifuku. Parent CIK from the EDGAR roster (exact:post-era).
+northrop grumman technical services inc uscis,1133421,Northrop Grumman Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Subsidiary of Northrop Grumman. Parent CIK from the EDGAR roster (exact).
+novartis vaccines diagnostics,1114448,Novartis AG,,deepseek/deepseek-v4-flash,2026-07-27,Novartis Vaccines & Diagnostics is a subsidiary of Novartis AG.
+depuy orthotech,200406,Johnson & Johnson,,deepseek/deepseek-v4-flash,2026-07-27,"DePuy OrthoTech is a division of DePuy, a subsidiary of Johnson & Johnson."
+permacel a nitto denko,353991,Nitto Denko Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Permacel is a subsidiary of Nitto Denko, a Japanese public company. Parent CIK from the EDGAR roster (listed-extension)."
+mcneil consumer,200406,Johnson & Johnson,,deepseek/deepseek-v4-flash,2026-07-27,McNeil Consumer is a Johnson & Johnson subsidiary.
+cvs al distribution,64803,CVS Health Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"CVS AL Distribution LLC is a subsidiary of CVS Health Corporation, a public company."
+fedex home delivery,1048911,FedEx Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"FedEx Home Delivery is a division of FedEx Corporation, which is publicly traded."
+great indoors,1310067,Sears Holdings Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"The Great Indoors was a retail chain owned by Sears Holdings Corporation, a public company."
+hilton reservation worldwide,1585689,Hilton Worldwide Holdings Inc.,,deepseek/deepseek-v4-flash,2026-07-27,"Hilton Reservation Worldwide, LLC is a subsidiary of Hilton Worldwide Holdings Inc., a public company."
+tyson extension lexington,100493,"Tyson Foods, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Tyson Extension is a division of Tyson Foods, a publicly traded company."
+centene management,1071739,Centene Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Centene Management Company is a subsidiary of Centene Corporation, a public company."
+bungie inc sony interactive entertainment,313838,Sony Group Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Bungie is a subsidiary of Sony Interactive Entertainment, which is owned by Sony Group Corporation. Parent CIK from the EDGAR roster (exact)."
+sony pictures studios,313838,Sony Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of Sony, which is SEC registrant Parent CIK from the EDGAR roster (exact)."
+sears merchandizing accounting ctr,319256,"Sears, Roebuck and Co.",,deepseek/deepseek-v4-flash,2026-07-27,"Accounting center of Sears, which was publicly traded Parent CIK from the EDGAR roster (fuzzy:0.95)."
+fiserv aurora customer operations,790359,"Fiserv, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,Fiserv is a publicly traded company; this is a customer operations site.
+xerox capital services llc 800 carillon pkwy st petersburg fl 33716,108772,Xerox Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Xerox Capital Services is a subsidiary of Xerox Corporation (public). Parent CIK from the EDGAR roster (exact).
+bae systems nas whiting field milton nas pensacola milton pensacola fl 00000,895564,BAE Systems plc,,deepseek/deepseek-v4-flash,2026-07-27,"BAE Systems NAS is part of BAE Systems, a public company. Parent CIK from the EDGAR roster (exact:listed)."
+cendant travel,723612,Cendant Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Cendant Travel is a division of Cendant Corporation, a public company. Parent CIK from the EDGAR roster (exact)."
+hyatt regency mission bay spa and marina,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Hyatt Regency is a brand of Hyatt Hotels Corporation, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+intercontinental san diego,858446,InterContinental Hotels Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,"InterContinental San Diego is a hotel owned by InterContinental Hotels Group, a publicly traded company. Parent CIK from the EDGAR roster (exact)."
+lsg group sky chefs,1049724,Deutsche Lufthansa AG,,deepseek/deepseek-v4-flash,2026-07-27,"LSG Group is a subsidiary of Lufthansa, a publicly traded airline. Parent CIK from the EDGAR roster (listed-extension)."
+macy s home store,794367,Macy's Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Home store division of Macy's department store chain Parent CIK from the EDGAR roster (exact).
+peabody coal baldwin mine,1064728,Peabody Energy Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Peabody Coal is a subsidiary of public company Peabody Energy
+raytheon systems georgia,101829,RTX Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Raytheon Systems is a division of public company RTX
+hyatt regency bonaventure 250 racquet club road weston fl 33326,1468174,Hyatt Hotels Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Hyatt Regency Bonaventure is a hotel owned or managed by Hyatt Hotels Corporation. Parent CIK from the EDGAR roster (exact).
+shaw industries group inc plant wg,1067983,Berkshire Hathaway Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Shaw Industries is a wholly owned subsidiary of Berkshire Hathaway.
+chase home finance default,1325347,JPMorgan Chase & Co.,,deepseek/deepseek-v4-flash,2026-07-27,"Part of JPMorgan Chase & Co., which files with SEC. Parent CIK from the EDGAR roster (exact)."
+securitylink tyco fire and security 9512 sunbeam center drive jacksonville fl 32257,833444,Tyco International Ltd,,deepseek/deepseek-v4-flash,2026-07-27,"Securitylink-Tyco Fire And Security is part of Tyco International, a public company."
+aes ohio generation llc dayton power light,874761,The AES Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"AES Ohio Generation, LLC is a subsidiary of The AES Corporation, a public company."
+convergys customer management group inc pharr,1045942,Convergys Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Convergys Customer Management Group Inc. is a subsidiary of Convergys Corporation, a public company."
+correction corporation s california city correctio,1070985,CoreCivic,,deepseek/deepseek-v4-flash,2026-07-27,"Correction Corporation's facility is operated by CoreCivic, a public real estate investment trust."
+hsbc consumer lending dept,1089113,HSBC Holdings plc,,deepseek/deepseek-v4-flash,2026-07-27,"HSBC Consumer Lending is a department of HSBC Holdings plc, which files with SEC."
+ritz carlton south,1048286,"Marriott International, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Ritz-Carlton is a subsidiary of Marriott International, which files with SEC."
+sony disc manufacturing,313838,Sony Group Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"Sony Disc Manufacturing is a division of Sony Group Corporation, which files with SEC."
+time,1105705,Time Warner Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Time Inc. was a subsidiary of Time Warner at the time of the layoff.
+vistakon 5985 richard street jacksonville fl 32216,200406,Johnson & Johnson,,deepseek/deepseek-v4-flash,2026-07-27,Vistakon is a division of Johnson & Johnson.
+zimmer biomet dental,1136869,"Zimmer Biomet Holdings, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Zimmer Biomet Dental is a division of Zimmer Biomet Holdings, a public company."
+procter and gamble manufacturing,80424,The Procter & Gamble Company,,deepseek/deepseek-v4-flash,2026-07-27,Manufacturing subsidiary of Procter & Gamble.
+sears teleconsumer resource center unit 9542,319256,"Sears, Roebuck and Co.",,deepseek/deepseek-v4-flash,2026-07-27,"Unit of Sears, which was publicly traded at the time Parent CIK from the EDGAR roster (fuzzy:0.95)."
+bae systems san diego ship repair sdsr,895564,BAE Systems plc,,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of BAE Systems plc, which files with SEC as foreign private issuer. Parent CIK from the EDGAR roster (exact:listed)."
+centerplate sodexo,1169715,Sodexo,,deepseek/deepseek-v4-flash,2026-07-27,"Centerplate is a subsidiary of Sodexo, which files with SEC as foreign private issuer. Parent CIK from the EDGAR roster (exact)."
