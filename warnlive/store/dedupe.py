@@ -132,6 +132,20 @@ def ingest(
                     (observed_at, row["id"]),
                 )
             stats.unchanged += 1
+        elif cur.execute(
+            "SELECT 1 FROM notice_versions WHERE notice_id = ? AND raw_record_hash = ?",
+            (row["id"], rec["raw_record_hash"]),
+        ).fetchone():
+            # Not the current version, but one we already hold. A source that
+            # lists a notice twice — original row, then amendment — re-sends
+            # both every day; treating the original as "new again" would
+            # ping-pong two junk versions per key per run, forever. Seen
+            # before means seen, whichever version it was.
+            cur.execute(
+                "UPDATE notices SET last_seen = ? WHERE id = ?",
+                (observed_at, row["id"]),
+            )
+            stats.unchanged += 1
         else:
             if _dates_disagree(row["effective_date"], rec["effective_date"]):
                 stats.suspected_collisions += 1

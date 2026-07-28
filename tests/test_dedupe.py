@@ -108,3 +108,20 @@ def test_far_apart_effective_dates_are_counted_as_a_suspected_collision(conn):
         "2026-07-08",
     )
     assert stats.suspected_collisions == 1
+
+
+def test_a_reobserved_older_version_does_not_ping_pong(conn):
+    """A source that lists original and amendment re-sends both every run.
+    The original matching an *older* version is a re-observation, not a new
+    amendment — or every run would add two junk versions per such key."""
+    batch = [record(), record(employees_affected=200, raw_record_hash="hash-2")]
+    ingest(conn, batch, "2026-07-01")
+    stats = ingest(conn, batch, "2026-07-02")
+    assert (stats.new, stats.updated, stats.unchanged) == (0, 0, 2)
+    row = conn.execute(
+        "SELECT employees_affected, current_version, last_seen FROM notices"
+    ).fetchone()
+    assert row["employees_affected"] == 200
+    assert row["current_version"] == 2
+    assert row["last_seen"] == "2026-07-02"
+    assert conn.execute("SELECT COUNT(*) c FROM notice_versions").fetchone()["c"] == 2
