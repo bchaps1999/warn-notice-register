@@ -19,6 +19,7 @@ import json
 import logging
 import re
 import urllib.request
+from datetime import date, datetime
 from pathlib import Path
 
 import pdfplumber
@@ -34,7 +35,10 @@ PAGES = [
     "https://mn.gov/deed/business/layoff-resources/index.jsp",
     "https://mn.gov/deed/business/layoff-resources/warn-archive/",
 ]
-WAYBACK_API = "http://archive.org/wayback/available?url={url}"
+WAYBACK_API = "https://archive.org/wayback/available?url={url}"
+# A snapshot older than this cannot be listing the newest monthly PDFs;
+# taking it silently is how a state goes stale while every run reads "ok".
+WAYBACK_MAX_AGE_DAYS = 60
 HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"}
 
 COLUMNS = [
@@ -110,9 +114,29 @@ def _get_page_html(url: str, cache: Cache) -> str | None:
             snap = json.load(resp).get("archived_snapshots", {}).get("closest")
         if not snap:
             return None
+        # The fallback is worth surfacing loudly: a stale snapshot omits
+        # the newest monthly PDFs and the run still verdicts ok, so the
+        # only trace that MN is running on old data is this log line.
+        age_days = None
+        ts = snap.get("timestamp") or ""
+        if len(ts) >= 8:
+            try:
+                taken = datetime.strptime(ts[:8], "%Y%m%d").date()
+                age_days = (date.today() - taken).days
+            except ValueError:
+                pass
+        if age_days is not None and age_days > WAYBACK_MAX_AGE_DAYS:
+            logger.warning(
+                "MN: newest Wayback snapshot of %s is %d days old — refusing "
+                "it; the freshest PDFs would be silently missing", url, age_days,
+            )
+            return None
+        logger.warning(
+            "MN: live page blocked; using Wayback snapshot %s (%s days old)",
+            snap["url"], age_days if age_days is not None else "unknown",
+        )
         r = requests.get(snap["url"], headers=HEADERS, timeout=120)
         r.raise_for_status()
-        logger.debug("MN: using Wayback snapshot %s", snap["url"])
         return r.text
     except Exception as e:  # noqa: BLE001
         logger.warning("MN: Wayback fallback for %s failed: %s", url, e)

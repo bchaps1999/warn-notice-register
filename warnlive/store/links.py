@@ -261,11 +261,28 @@ def detect(conn: sqlite3.Connection) -> tuple[list[Link], list[dict]]:
     return links, review
 
 
+# Every method detect() can produce. rebuild() deletes and recreates only
+# these: links written by other commands (repair-dates' "date-repair",
+# clean-text's "text-cleanup") record key collisions found during repair
+# that detection cannot rediscover, and deleting them would un-flag known
+# duplicates permanently.
+DETECTED_METHODS = ("marker", "declared", "amendment", "dated-twin", "fuzzy")
+
+
 def rebuild(conn: sqlite3.Connection, review_path: Path | None = None) -> dict:
-    """Recompute all links (idempotent; detection is deterministic)."""
+    """Recompute detected links (idempotent; detection is deterministic).
+
+    Links whose method is not one of DETECTED_METHODS are left alone: they
+    were written by hand or by a repair command, and this function cannot
+    reproduce them.
+    """
     links, review = detect(conn)
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    conn.execute("DELETE FROM notice_links")
+    conn.execute(
+        "DELETE FROM notice_links WHERE method IN (%s)"
+        % ",".join("?" * len(DETECTED_METHODS)),
+        DETECTED_METHODS,
+    )
     conn.executemany(
         "INSERT INTO notice_links (notice_id, related_id, kind, score, method, detail, created_at) "
         "VALUES (?,?,?,?,?,?,?)",

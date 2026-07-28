@@ -97,10 +97,13 @@ def scrape(
         raise Exception("TX: no yearly workbooks retrievable (WAF-blocked?).")
 
     # Workbooks vary in trailing empty columns; strip them from the header so
-    # the emitted CSV header doesn't depend on which year came first.
+    # the emitted CSV header doesn't depend on which year came first — and
+    # trim every data row to the header's width, or the extras land beyond
+    # the named columns where a DictReader piles them under None.
     header = row_list[0]
     while header and header[-1] in (None, ""):
         header.pop()
+    row_list = [row[: len(header)] for row in row_list]
 
     # Historical data (pre-2019) from BLN's archived workbook, trimmed to the
     # same columns as the yearly files — unchanged from upstream.
@@ -192,14 +195,14 @@ def _discover_links(html: str) -> list[str]:
         return []
     soup = BeautifulSoup(html, "html5lib")
     hrefs = [a.get("href") for a in soup.find_all("a", href=HREF_PATTERN)]
-    return [h for h in hrefs if _get_year(h) >= FIRST_YEAR]
+    return [h for h in hrefs if (_get_year(h) or 0) >= FIRST_YEAR]
 
 
-def _get_year(url: str) -> int:
-    """Plucks the year from a workbook URL (upstream logic)."""
+def _get_year(url: str) -> int | None:
+    """Plucks the year from a workbook URL; None for a year-less name
+    (e.g. a "current" listing), which is filtered rather than crashed on."""
     m = re.match(r".*-(\d{4})(.*)$", url, re.I)
-    assert m is not None
-    return int(m.group(1)[-4:])
+    return int(m.group(1)[-4:]) if m else None
 
 
 def _download_year(

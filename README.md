@@ -11,7 +11,7 @@ is no national feed. This pipeline scrapes every state that publishes online,
 normalizes each state's idiosyncratic format into one canonical schema,
 deduplicates and version-tracks notices, and commits the results here:
 
-- `data/warn.sqlite.gz` — the full database, gzipped (notices, versions, run telemetry)
+- `data/warn.sql.gz` — the full database as a gzipped SQL dump (notices, versions, run telemetry); `warnlive unpack-db` restores the working sqlite file
 - `data/exports/warn_notices.csv` — one row per notice, all active states
 - `data/exports/states/{xx}.csv` — per-state cuts
 - `data/exports/notice_links.csv` — detected revision/duplicate links between notices
@@ -92,7 +92,7 @@ Scheduled runs commit to `data/`, so **a local session must pull and unpack the
 committed database before regenerating anything**:
 
 ```bash
-git pull && gunzip -kf data/warn.sqlite.gz   # before any export/build-site
+git pull && warnlive unpack-db               # before any export/build-site
 ```
 
 Regenerating exports from a stale local `data/warn.sqlite` silently reverts

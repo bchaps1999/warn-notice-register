@@ -109,6 +109,27 @@ def scrape(states, cadence, include_unverified, smoke, use_cache, workdir, db_pa
     )
 
     if conn is not None:
+        # The regression gate runs before anything is written to data/: a
+        # failed gate must leave no bad exports, health report or DB dump
+        # sitting in the working tree looking legitimate. CI runs
+        # `check-regressions --update-snapshot` again after `dupes`; this
+        # earlier pass exists so artifact-writing, not just committing,
+        # depends on the data being sane.
+        from warnlive.verify import regression
+
+        result = regression.check_regressions(
+            conn, regression.load_snapshot(Path(data_dir) / "health" / "snapshot.json")
+        )
+        if result.verdict == "failed":
+            _print_report(report)
+            for check in result.checks:
+                if check.outcome == "fail":
+                    click.echo(f"  ✗ {check.name}: {check.detail}", err=True)
+            click.echo(
+                "regression gate failed; exports and DB dump were NOT refreshed",
+                err=True,
+            )
+            sys.exit(1)
         export_csvs(conn, Path(data_dir) / "exports", _exportable(registry))
         write_health(conn, registry, Path(data_dir) / "health")
         _compress_db(db_path)
@@ -729,29 +750,50 @@ def adjudicate_identity(limit, min_workers, dry_run, reask, budget, provider,
 @adjudicate.command("confirm")
 @_llm_options
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--proposer-provider", default=None,
+              help="Provider whose identity answers to confirm (defaults to "
+                   "the configured default provider).")
+@click.option("--proposer-model", default=None,
+              help="Model whose identity answers to confirm. --model names "
+                   "the *confirming* model; use a different one, or the "
+                   "confirmer shares the proposer's misconceptions.")
 def adjudicate_confirm(limit, min_workers, dry_run, reask, budget, provider,
-                       model_alias, threshold, write, thinking, db_path) -> None:
-    """Confirm the matches no independent record could corroborate.
+                       model_alias, threshold, write, thinking, db_path,
+                       proposer_provider, proposer_model) -> None:
+    """Confirm the matches short of independent corroboration.
 
-    `adjudicate identity` writes a match only when two outside authorities
-    agree with it, and stages the rest. For an obscure employer nothing else
-    knows about, staged means abandoned. This asks the narrower question the
-    staging leaves open — is this named registrant this named employer — with
-    the roster's view of the company beside the notices' view of it.
+    `adjudicate identity` writes a match only with corroborators including a
+    CIK-anchored one, and stages the rest. For an obscure employer nothing
+    else knows about, staged means abandoned. This asks the narrower question
+    the staging leaves open — is this named registrant this named employer —
+    with the roster's view of the company beside the notices' view of it.
 
-    Runs only where deterministic corroboration failed, so it never overrides
-    evidence; it speaks where there is none.
+    A yes is written only where at least one independent corroborator already
+    agreed; with none at all the match stays staged for a person. Run it with
+    a different --model than the one that proposed the matches.
     """
     from warnlive.adjudicate import confirm as adj_confirm
     from warnlive.adjudicate import identity as adj_identity
     from warnlive.adjudicate import queue as queue_mod
+    from warnlive.adjudicate.client import resolve
     from warnlive.adjudicate.ledger import Ledger
 
     conn = db_mod.connect(db_path)
     db_mod.init_db(conn)
     client, model_name = _client_for(provider, model_alias, budget, dry_run)
+    # The queue replays the *proposer's* identity answers; the confirming
+    # model is a separate choice. Keying the replay off the confirmer would
+    # make a different-model confirm find an empty queue.
+    proposer_name = str(resolve(proposer_provider, proposer_model))
+    if proposer_name == model_name and not dry_run:
+        click.echo(
+            f"warning: confirming with the model that proposed the matches "
+            f"({model_name}); a shared family shares its misconceptions — "
+            "consider --provider/--model for a second opinion",
+            err=True,
+        )
     ledger = Ledger()
-    items = adj_confirm.load_queue(conn, ledger, model_name, min_workers=min_workers)
+    items = adj_confirm.load_queue(conn, ledger, proposer_name, min_workers=min_workers)
     click.echo(f"{len(items)} uncorroborated matches to confirm")
     worker = adj_confirm.Confirm(threshold=threshold)
     worker.thinking = thinking
@@ -977,8 +1019,20 @@ def check_regressions(db_path: Path, data_dir: Path, update_snapshot: bool) -> N
     if result.verdict == "failed":
         sys.exit(1)
     if update_snapshot:
-        regression.write_snapshot(regression.build_snapshot(conn), snapshot_path)
-        click.echo(f"snapshot updated: {snapshot_path}")
+        if result.verdict == "ok":
+            regression.write_snapshot(regression.build_snapshot(conn), snapshot_path)
+            click.echo(f"snapshot updated: {snapshot_path}")
+        else:
+            # A warn-level drift must not become tomorrow's baseline: 2% of
+            # slippage a day re-baselined daily never accumulates to any
+            # break threshold, and the gate stops seeing the ramp it exists
+            # to catch. The old snapshot stands until a run comes back
+            # clean or a person updates it deliberately.
+            click.echo(
+                f"snapshot NOT updated ({result.verdict}): warn-level drift "
+                "keeps the previous baseline so it can accumulate to a "
+                "failure instead of becoming the new normal"
+            )
 
 
 @cli.command()
@@ -1018,10 +1072,18 @@ def report(db_path: Path, gh_issues: bool) -> None:
     db_mod.init_db(conn)
     status = write_health(conn, registry, DEFAULT_DATA_DIR / "health")
 
+    # Two in a row, not one: single-run failures are usually a transient
+    # host and open an issue that closes itself the next morning. The state
+    # loses at most one extra day of freshness by waiting for the second.
     failing = {
         postal: s
         for postal, s in status.items()
-        if s["registry_status"] == "active" and s["consecutive_failures"] >= 1
+        if s["registry_status"] == "active" and s["consecutive_failures"] >= 2
+    }
+    # Degraded states ingest and so never fail — which left a portal that
+    # quietly stopped updating sitting yellow forever with no escalation.
+    chronic = {
+        postal: s for postal, s in status.items() if s["chronically_degraded"]
     }
     for postal, s in sorted(status.items()):
         if s["latest_verdict"]:
@@ -1057,13 +1119,35 @@ def report(db_path: Path, gh_issues: bool) -> None:
         gh("issue", "create", "--title", title, "--body", body, "--label", "state-health")
         click.echo(f"opened issue: {title}")
 
+    for postal, s in chronic.items():
+        title = f"[health] {postal} chronically degraded"
+        if title in open_issues:
+            continue
+        body = (
+            f"State {postal} ({s['name']}) has been degraded for "
+            f"{s['consecutive_degraded']} consecutive runs. Data still "
+            "ingests, so nothing fails — but a portal that quietly stopped "
+            "updating looks exactly like this.\n\n"
+            f"Checks: ```json\n{json_mod.dumps(s['latest_checks'], indent=2)}\n```\n"
+        )
+        gh("issue", "create", "--title", title, "--body", body, "--label", "state-health")
+        click.echo(f"opened issue: {title}")
+
     for title, number in open_issues.items():
-        postal = title.removeprefix("[health] ").removesuffix(" failing")
-        s = status.get(postal)
-        if s and s["latest_verdict"] in ("ok", "degraded"):
-            gh("issue", "close", str(number), "--comment",
-               f"{postal} recovered: latest run verdict is {s['latest_verdict']}.")
-            click.echo(f"closed issue: {title}")
+        if title.endswith(" failing"):
+            postal = title.removeprefix("[health] ").removesuffix(" failing")
+            s = status.get(postal)
+            if s and s["latest_verdict"] in ("ok", "degraded"):
+                gh("issue", "close", str(number), "--comment",
+                   f"{postal} recovered: latest run verdict is {s['latest_verdict']}.")
+                click.echo(f"closed issue: {title}")
+        elif title.endswith(" chronically degraded"):
+            postal = title.removeprefix("[health] ").removesuffix(" chronically degraded")
+            s = status.get(postal)
+            if s and s["latest_verdict"] == "ok":
+                gh("issue", "close", str(number), "--comment",
+                   f"{postal} recovered: latest run verdict is ok.")
+                click.echo(f"closed issue: {title}")
 
 
 @cli.command("build-site")
@@ -1082,15 +1166,102 @@ def build_site(db_path: Path, out_dir: Path) -> None:
 
 
 def _compress_db(db_path: Path) -> None:
-    """Refresh the committed gzip copy of the database (the raw sqlite file
-    exceeds GitHub's file-size comfort zone and is gitignored)."""
+    """Refresh the committed dump of the database as data/warn.sql.gz.
+
+    A SQL text dump, not the sqlite file: the raw file is a binary that git
+    cannot delta or merge, so every publish added a fresh ~22 MB blob and a
+    concurrent commit meant an unresolvable conflict. Text dumps in rowid
+    order change only where the data changed, and gzip --rsyncable (used
+    when the system gzip has it) restarts its dictionary often enough that
+    a local change stays a local change in the compressed bytes — which is
+    what lets git pack a day's scrape as kilobytes instead of megabytes.
+
+    The legacy warn.sqlite.gz is removed alongside, so the repo carries one
+    copy. `warnlive unpack-db` restores a working database from either.
+    """
     import gzip
     import shutil
+    import sqlite3 as sqlite3_mod
+    import subprocess
 
-    if not Path(db_path).exists():
+    db_path = Path(db_path)
+    if not db_path.exists():
         return
-    with open(db_path, "rb") as src, gzip.open(f"{db_path}.gz", "wb", compresslevel=9) as dst:
-        shutil.copyfileobj(src, dst)
+    dump_path = db_path.parent / "warn.sql.gz"
+    tmp = dump_path.with_name(dump_path.name + ".tmp")
+    conn = sqlite3_mod.connect(db_path)
+
+    def rsyncable() -> bool:
+        if not shutil.which("gzip"):
+            return False
+        try:
+            probe = subprocess.run(
+                ["gzip", "--rsyncable", "-c"], input=b"x", capture_output=True
+            )
+        except OSError:
+            return False
+        # Apple's gzip exits 0 on an unrecognized option (printing usage
+        # instead of compressing), so the exit code proves nothing: only
+        # a gzip magic number on stdout does.
+        return probe.returncode == 0 and probe.stdout[:2] == b"\x1f\x8b"
+
+    try:
+        if rsyncable():
+            with open(tmp, "wb") as out:
+                proc = subprocess.Popen(
+                    ["gzip", "--rsyncable", "-9", "-c"],
+                    stdin=subprocess.PIPE, stdout=out,
+                )
+                for line in conn.iterdump():
+                    proc.stdin.write(f"{line}\n".encode())
+                proc.stdin.close()
+                if proc.wait() != 0:
+                    raise RuntimeError("gzip --rsyncable failed mid-dump")
+        else:
+            with gzip.open(tmp, "wt", compresslevel=9) as fh:
+                for line in conn.iterdump():
+                    fh.write(f"{line}\n")
+    finally:
+        conn.close()
+    tmp.rename(dump_path)
+    Path(f"{db_path}.gz").unlink(missing_ok=True)
+
+
+@cli.command("unpack-db")
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+def unpack_db(db_path: Path) -> None:
+    """Restore the working database from the committed dump.
+
+    Reads data/warn.sql.gz (or the legacy data/warn.sqlite.gz if that is
+    all the checkout has) and writes the sqlite file the commands use.
+    """
+    import gzip
+    import shutil
+    import sqlite3 as sqlite3_mod
+
+    db_path = Path(db_path)
+    dump_path = db_path.parent / "warn.sql.gz"
+    legacy = Path(f"{db_path}.gz")
+    if dump_path.exists():
+        tmp = db_path.with_name(db_path.name + ".tmp")
+        tmp.unlink(missing_ok=True)
+        conn = sqlite3_mod.connect(tmp)
+        try:
+            with gzip.open(dump_path, "rt") as fh:
+                conn.executescript(fh.read())
+            conn.commit()
+        finally:
+            conn.close()
+        tmp.replace(db_path)
+        click.echo(f"{db_path} restored from {dump_path}")
+    elif legacy.exists():
+        with gzip.open(legacy, "rb") as src, open(db_path, "wb") as dst:
+            shutil.copyfileobj(src, dst)
+        click.echo(f"{db_path} restored from {legacy}")
+    else:
+        raise click.ClickException(
+            f"neither {dump_path} nor {legacy} exists; nothing to unpack"
+        )
 
 
 def _print_report(report: pipeline.RunReport) -> None:

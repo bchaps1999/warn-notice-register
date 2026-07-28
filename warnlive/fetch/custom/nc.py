@@ -56,10 +56,20 @@ def scrape(
     year = date.today().year
 
     # The current-year page may not exist yet in early January; fall back.
+    # An exception on the first try must reach the fallback too — a timeout
+    # is no more proof the prior year is gone than a 404 is.
+    r = None
+    last_exc: Exception | None = None
     for y in (year, year - 1):
-        r = requests.get(REPORT_PAGE.format(year=y), headers=HEADERS, timeout=120)
+        try:
+            r = requests.get(REPORT_PAGE.format(year=y), headers=HEADERS, timeout=120)
+        except requests.RequestException as exc:
+            last_exc = exc
+            continue
         if r.ok:
             break
+    if r is None:
+        raise ValueError(f"NC: report page unreachable for {year} and {year - 1}") from last_exc
     r.raise_for_status()
     cache.write("nc/report_page.html", r.text)
 
@@ -78,8 +88,11 @@ def scrape(
 
     r = requests.get(link, headers=HEADERS, timeout=120)
     r.raise_for_status()
-    cache.write("nc/latest.csv", r.text)
-    rows = list(csv.DictReader(StringIO(r.text)))
+    # Decoded explicitly: requests guesses ISO-8859-1 for text/csv with no
+    # charset, and a mojibake employer name mints a new dedupe key.
+    text = r.content.decode("utf-8-sig", errors="replace")
+    cache.write("nc/latest.csv", text)
+    rows = list(csv.DictReader(StringIO(text)))
 
     rows.extend(_scrape_archives(cache))
 

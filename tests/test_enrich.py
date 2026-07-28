@@ -38,6 +38,24 @@ def test_industry_rejects_sic_mislabelled_as_naics():
     assert naics and naics.startswith("33")
 
 
+def test_a_code_valid_under_both_systems_is_refused_not_guessed():
+    """SIC 4213 (trucking) has a valid NAICS sector prefix — 42, Wholesale.
+    A NAICS-labelled column holding it could mean either system, and the
+    readings name different sectors, so neither is written: a wrong guess
+    would carry basis "source" and spread to the employer's other notices."""
+    _, naics, basis = extract_industry(
+        {"Industry": "trucking", "NAICS Code": "4213"}
+    )
+    assert (naics, basis) == (None, None)
+
+
+def test_a_genuine_naics_code_with_no_sic_namesake_still_passes():
+    """5-6 digit codes cannot be SIC, and a 4-digit code the concordance
+    does not know is not ambiguous."""
+    _, naics, basis = extract_industry({"NAICS Code": "722310"})
+    assert (naics, basis) == ("722310", "source")
+
+
 def test_industry_falls_back_to_sector_name():
     _, naics, basis = extract_industry({"Industry": "Retail Trade"})
     assert (naics, basis) == ("44-45", "sector-name")
@@ -234,7 +252,14 @@ def test_adjudicated_identity_outranks_automatic_matching(tmp_path):
     assert got["cik"] == 1166126
     assert got["cik_match"] == "override"
     assert got["identity_source"] == "override"
-    assert got["employer_key"] == "cik:1166126"
+    # The override gets the same CIK-keyed Wikidata join the automatic tier
+    # gets, so the employer keys agree whichever path identified the CIK —
+    # otherwise one company would split across two keys.
+    if got["wikidata_qid"]:
+        assert got["wikidata_match"] == "cik"
+        assert got["employer_key"] == f"qid:{got['wikidata_qid']}"
+    else:
+        assert got["employer_key"] == "cik:1166126"
 
 
 def test_base_employer_separates_company_from_site():

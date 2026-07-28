@@ -20,7 +20,14 @@ def fetch_state(postal: str, data_dir: Path, cache_dir: Path) -> Path:
     for package in ("warnlive.fetch.patches", "warnlive.fetch.custom"):
         try:
             mod = import_module(f"{package}.{postal}")
-        except ModuleNotFoundError:
+        except ModuleNotFoundError as exc:
+            # Only "this state has no patch" may fall through. A patch that
+            # exists but cannot import (a missing dependency, say) must not
+            # be skipped: the upstream scraper it replaces is the known-broken
+            # thing the patch exists for, and running it would misreport a
+            # local environment problem as an upstream outage.
+            if exc.name != f"{package}.{postal}":
+                raise
             continue
         return Path(mod.scrape(data_dir, cache_dir))
 

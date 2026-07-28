@@ -94,3 +94,21 @@ def test_rebuild_is_idempotent(conn):
     s2 = rebuild(conn)
     assert s1["links"] == s2["links"] == 1
     assert conn.execute("SELECT COUNT(*) c FROM notice_links").fetchone()["c"] == 1
+
+
+def test_rebuild_preserves_links_it_cannot_reproduce(conn):
+    """repair-dates and clean-text record key collisions as links; a dupes
+    run must not destroy the only record that those rows are duplicates."""
+    a = insert(conn, employer_name="Acme Corp")
+    b = insert(conn, employer_name="Acme Corp (Amended)", notice_date="2026-06-20")
+    conn.execute(
+        "INSERT INTO notice_links (notice_id, related_id, kind, score, method, detail, created_at) "
+        "VALUES (?, ?, 'possible_duplicate', 0.9, 'date-repair', 'key collision', '2026-07-01')",
+        (b, a),
+    )
+    conn.commit()
+    rebuild(conn)
+    kept = conn.execute(
+        "SELECT method FROM notice_links ORDER BY method"
+    ).fetchall()
+    assert [r["method"] for r in kept] == ["date-repair", "marker"]

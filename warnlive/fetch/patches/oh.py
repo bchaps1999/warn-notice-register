@@ -41,14 +41,22 @@ def scrape(
     cache = Cache(cache_dir)
 
     r = requests.get(CURRENT_URL, headers=HEADERS, timeout=120)
+    r.raise_for_status()
     cache.write("oh/index.html", r.text)
-    csv_url = re.findall(r"(\\\"csvUrl\\\":\\\")(.*?)(\\\")", r.text)[0][1]
+    found = re.findall(r"(\\\"csvUrl\\\":\\\")(.*?)(\\\")", r.text)
+    if not found:
+        raise ValueError("Ohio index page has no csvUrl — layout changed or challenge page served")
+    csv_url = found[0][1]
     logger.debug("Ohio CSV link: %s", csv_url)
     r = requests.get(csv_url, headers=HEADERS, timeout=120)
-    cache.write("oh/rawdata.csv", r.text)
+    r.raise_for_status()
+    # Decoded explicitly: requests guesses ISO-8859-1 for text/csv with no
+    # charset, and a mojibake employer name mints a new dedupe key.
+    current_text = r.content.decode("utf-8-sig", errors="replace")
+    cache.write("oh/rawdata.csv", current_text)
 
     # Skip the junk preamble: keep from the real header line onward.
-    lines = r.text.splitlines()
+    lines = current_text.splitlines()
     start = next(i for i, line in enumerate(lines) if line.startswith("Company,"))
     masterlist = list(csv.DictReader(StringIO("\n".join(lines[start:]))))
     if not masterlist:
@@ -66,7 +74,16 @@ def scrape(
         "Notice ID": "Notice ID",
     }
     r = requests.get(HISTORICAL_URL, timeout=120)
-    for row in csv.DictReader(r.text.splitlines()):
+    r.raise_for_status()
+    historical = csv.DictReader(
+        r.content.decode("utf-8-sig", errors="replace").splitlines()
+    )
+    missing = [old for old in lookup if old not in (historical.fieldnames or [])]
+    if missing:
+        # An error body or a reshaped mirror must not silently contribute
+        # zero (or garbage) historical rows while the run reports success.
+        raise ValueError(f"Ohio historical mirror is missing columns: {missing}")
+    for row in historical:
         masterlist.append({new: row[old] for old, new in lookup.items()})
 
     data_path = data_dir / "oh.csv"

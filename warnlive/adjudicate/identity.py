@@ -19,8 +19,20 @@ different destination, and that distinction is the point:
 - a subsidiary becomes a parent link, claiming only that somebody owns it —
   First Transit is not FirstGroup, and writing FirstGroup's CIK into its
   identity would conflate them in every join made afterwards;
-- everything else becomes a recorded rejection, which grants nothing and
-  stops the same employer being re-decided every run.
+- everything else is recorded in the ledger, which stops the same employer
+  being re-asked every run, and staged for a person. It does not become an
+  override: "the model said private" is the one claim in this file nothing
+  can verify, and writing it would make the least-checked answer the most
+  permanent. Reject rows in identity_overrides.csv are for people.
+
+The model is never asked to decide *whether* to search. Every row is asked
+for the names the employer might be registered under and for its possible
+parent, and what kind of thing it found ("stance") rides along as context
+for a reviewer. An earlier design routed on the stance — proposals were
+only honoured when the model first said "public" — which put an
+unverifiable classification in front of every gate: a wrong "private"
+silently prevented the matcher from ever seeing names it would have
+matched.
 
 Nothing here trusts the model's word. A proposed name is fed to the ordinary
 EDGAR matcher and must clear the same era, token-compatibility and uniqueness
@@ -72,8 +84,9 @@ STAGING_FIELDS = [
     "confidence", "corroborated_by", "outcome", "gate", "note",
 ]
 
-# Stances that assert nothing is there to find. Recorded as rejections so the
-# employer stops returning to the queue; they grant no identity.
+# Stances that assert nothing is there to find. Recorded in the ledger (so
+# the employer stops being re-asked) and staged; they grant nothing and
+# write nothing — a permanent reject override takes a person.
 EMPTY_STANCES = {"private", "government", "franchise", "nonexistent"}
 MIN_CORROBORATORS = 2
 
@@ -85,32 +98,41 @@ registrants an automatic matcher found and then refused, with the reason.
 
 For each row, say who the employer is:
 
-- "stance": one of "public" (the employer itself files with the SEC), \
-"subsidiary" (it is owned by a company that does), "private", "government", \
-"franchise" (an independently owned outlet of a chain), or "unknown".
 - "proposed": names under which this employer might be registered with the \
-SEC, most likely first, at most three. Give the registrant's own legal name, \
-not the filed name. Empty unless stance is "public".
-- "parent_name" and "parent_cik": the corporate parent, when stance is \
-"subsidiary". Give the CIK only if you are sure of it; otherwise leave it 0.
+SEC, most likely first, at most three — its full legal name, a former name, \
+the name of the entity that files for it, and the plain company name itself \
+if that is what you would search for. Leave it empty only when you are \
+confident the employer has never had an SEC registration of its own.
+- "parent_name" and "parent_cik": the corporate parent, when the employer is \
+owned by another company. Give the CIK only if you are sure of it; otherwise \
+leave it 0. A row may carry both proposals and a parent; give whichever you \
+have evidence for.
+- "stance": your reading of what kind of employer this is — "public" (files \
+with the SEC itself), "subsidiary", "private", "government", "franchise" (an \
+independently owned outlet of a chain), or "unknown". This is context for a \
+reviewer; the proposals and the parent are what get checked.
 - "confidence": 0 to 1.
 - "note": the evidence, in one short sentence.
 
 Most WARN employers are private companies, franchises, school districts, \
-hospitals and staffing firms with no SEC registration at all. Answering \
-"private" or "government" is a real answer and is expected to be common. \
-Answer "unknown" rather than guessing. Never invent a CIK.
+hospitals and staffing firms with no SEC registration at all. An empty \
+"proposed" with stance "private" or "government" is a real answer and is \
+expected to be common. Answer "unknown" rather than guessing. Never invent \
+a CIK.
 
 Names carry the site as well as the company — "Ford Motor Co. - Flat Rock", \
 "KMART - STORE #3671". Identify the company, and ignore the site. Where a \
 row has a "company" field, the site has already been cut off for you; use \
 it, and go back to the filed name only if the cut looks wrong.
 
-The company name has already been searched against the SEC's register of \
-filers and not found. Propose the other names this same company might be \
-registered under: its full legal name, a former name, the name of the \
-entity that actually files for it. Do not repeat a name that was already \
-searched — the one in "company" — unless you believe the search was wrong.
+An automatic search of the SEC's register did not identify this employer. \
+That search is literal and often fails on a company that plainly is \
+registered — because the filed name carries a site, or a punctuation \
+variant, or the search could not choose between two filers of the same \
+name. So propose whatever names this company might be registered under, \
+most likely first: its full legal name, a former name, the name of the \
+entity that files for it, and the plain company name itself if that is \
+what you would search for.
 
 Where a row lists "sites", those are the towns the employer laid off in, \
 largest first. Use them to tell apart companies that share a name, and to \
@@ -240,12 +262,18 @@ class Identity(Adjudicator):
     """Proposes a registrant or a parent; evidence decides whether to keep it."""
 
     task = "identity"
-    #: v2 shows the deterministically cleaned company name and says it has
-    #: already been searched, which turns "who is this employer" into "what
-    #: else might this company be registered as". A different question, so a
-    #: different version: v1's answers stay for comparison and are not
-    #: replayed as though they answered this one.
-    prompt_version = "identity-v2"
+    #: v2 showed the cleaned company name and said it had already been
+    #: searched, turning "who is this employer" into "what else might this
+    #: company be registered as". That bought more parent links and more
+    #: rejections and cost every direct identity: "public" fell from 25 in
+    #: 200 to 12, taking Fleming, Sykes and JP Morgan Chase with it, because
+    #: for those the obvious name was the right one and the search had
+    #: failed for an incidental reason. v3 says the search is literal and
+    #: often wrong, and asks for the plain name too. v4 stops routing on the
+    #: stance: proposals are asked for on every row and always tried, so a
+    #: wrong "private" can no longer keep the matcher from names it would
+    #: have matched — the v2 losses were exactly that failure, one level up.
+    prompt_version = "identity-v4"
     required = {"stance": str, "confidence": (int, float)}
     batch_size = 8
     max_tokens_per_row = 200
@@ -354,15 +382,20 @@ class Identity(Adjudicator):
         return None
 
     def _corroborate(self, item: dict, cik: int, cik_match: str,
-                     parent_cik: int | None) -> list[str]:
+                     parent_cik: int | None) -> list[tuple[str, bool]]:
         """Evidence for a matched CIK that the proposal itself did not supply.
 
-        Each of these is an independent authority: the filing calendar, the
-        parent's own Exhibit 21, the industry the state published, and the
-        rosters the other identity tiers are built from. Agreement between
-        two of them is a much stronger claim than a name that merely matched.
+        Each entry is (what the witness says, whether it is anchored to the
+        CIK). The distinction matters because the witnesses are not equal:
+        Wikidata naming this CIK, or a parent's Exhibit 21, speak about the
+        specific registrant matched. The filing calendar and a 2-digit
+        sector agreement speak only about *a* registrant of this name and
+        rough kind — and a same-industry namesake, the likeliest way a
+        wrong match arises, passes both of those for free. So acceptance
+        requires at least one anchored witness among the corroborators;
+        two weak ones can only stage a row for confirmation.
         """
-        found: list[str] = []
+        found: list[tuple[str, bool]] = []
 
         # The registrant was filing across the whole span of these notices.
         #
@@ -375,7 +408,12 @@ class Identity(Adjudicator):
         span = self._filing_span(cik)
         years = [int(y) for y in item.get("years", []) if y.isdigit()]
         if span and years and span[0] <= min(years) and max(years) <= span[1]:
-            found.append(f"registrant filed {span[0]}-{span[1]}, covering the notices")
+            # Weak: any long-lived registrant covers any span. A namesake
+            # that happens to be old passes this for free.
+            found.append(
+                (f"registrant filed {span[0]}-{span[1]}, covering the notices",
+                 False)
+            )
 
         # Wikidata, which keys its own entities by CIK, calls this registrant
         # by the name the state filed.
@@ -389,7 +427,9 @@ class Identity(Adjudicator):
         if entity and entity.get("label"):
             label = normalized_employer(entity["label"])
             if label and label in set(_names(item["employer_name"])):
-                found.append(f"Wikidata knows CIK {cik} as {entity['label']!r}")
+                found.append(
+                    (f"Wikidata knows CIK {cik} as {entity['label']!r}", True)
+                )
 
         # Exhibit 21 of the proposed parent's 10-K lists this employer.
         #
@@ -402,26 +442,29 @@ class Identity(Adjudicator):
         owner = self._owner(item)
         if owner and parent_cik and parent_cik != cik:
             if int(owner["parent_cik"]) == parent_cik:
-                found.append(f"Exhibit 21 of {owner['parent_name']} lists it")
+                found.append(
+                    (f"Exhibit 21 of {owner['parent_name']} lists it", True)
+                )
 
         # The industry the states published for this employer agrees with the
-        # industry the SEC assigned the registrant.
+        # industry the SEC assigned the registrant. Weak: twenty sectors,
+        # and WARN filers cluster in a handful — two same-industry namesakes
+        # agree here by construction.
         sic = self.annotator.sic_by_cik.get(cik, ("", ""))[0]
         sec_naics = self.annotator.naics_by_sic.get(sic)
         if sec_naics and item.get("source_naics"):
             if any(_same_sector(sec_naics, n) for n in item["source_naics"]):
-                found.append("SEC industry agrees with the state-reported one")
+                found.append(
+                    ("SEC industry agrees with the state-reported one", False)
+                )
 
-        # The IRS or GLEIF roster knows this name, in a state it filed from.
-        for name in _names(item["employer_name"]):
-            org = self.annotator.nonprofit_by_name.get(name)
-            if org and org.get("state") in set(item["states"]):
-                found.append("IRS roster has it in a state it filed from")
-                break
-            entity = self.annotator.gleif_by_name.get(name)
-            if entity and entity.get("jurisdiction", "")[-2:] in set(item["states"]):
-                found.append("GLEIF has it in a state it filed from")
-                break
+        # The IRS/GLEIF name-in-state check that used to sit here was no
+        # witness at all: it looked the *employer's name* up in rosters that
+        # know nothing of the matched CIK, so it attested only that some
+        # entity by this name exists in a filing state — which is equally
+        # consistent with the match being wrong. A nonprofit namesake
+        # in-state argues against the SEC identity, and it was counting for
+        # it.
 
         return found
 
@@ -462,57 +505,71 @@ class Identity(Adjudicator):
             return Decision(STAGED, note="already decided by hand",
                             row={**base, "gate": "existing override"})
 
-        if stance == "public" and proposed:
+        # Proposals are tried whenever they were given, whatever the stance
+        # said. The stance is one model output no gate can check, and routing
+        # on it put that output in front of every gate: a wrong "private"
+        # silently kept the matcher from names it would have matched.
+        matcher_refused = ""
+        if proposed:
             cik, cik_match, used = self._match(item, proposed)
             if not cik:
-                return Decision(
-                    STAGED,
-                    note=f"no proposed name cleared the matcher: {', '.join(proposed)}",
-                    row={**base, "gate": "matcher refused"},
+                # Not returned yet: a parent claim on the same row still
+                # deserves its chance below.
+                matcher_refused = (
+                    f"no proposed name cleared the matcher: {', '.join(proposed)}"
                 )
-            # Exhibit 21 of the matched registrant listing this employer
-            # contradicts the claim being made: a company does not appear in
-            # its own subsidiary schedule. The stance is wrong, and the fix
-            # is a parent link rather than an identity, so a person decides.
-            owner = self._listed_exactly(item)
-            if owner and int(owner["parent_cik"]) == cik:
+            else:
+                # Exhibit 21 of the matched registrant listing this employer
+                # contradicts the claim being made: a company does not appear
+                # in its own subsidiary schedule. The right fix is a parent
+                # link rather than an identity, so a person decides.
+                owner = self._listed_exactly(item)
+                if owner and int(owner["parent_cik"]) == cik:
+                    return Decision(
+                        STAGED,
+                        note=f"Exhibit 21 of {owner['parent_name']} lists it as a "
+                             "subsidiary, not as the registrant",
+                        row={**base, "matched_cik": cik, "cik_match": cik_match,
+                             "gate": "listed as its own subsidiary"},
+                    )
+                corroborators = self._corroborate(item, cik, cik_match, parent_cik)
+                witnesses = [text for text, _anchored in corroborators]
+                anchored = [text for text, anchored in corroborators if anchored]
+                row = {
+                    **base, "matched_cik": cik, "cik_match": cik_match,
+                    "corroborated_by": "; ".join(witnesses),
+                }
+                if confidence < self.threshold:
+                    return Decision(STAGED, note=f"confidence {confidence:.2f}",
+                                    row={**row, "gate": "below threshold"})
+                if len(corroborators) < self.min_corroborators or not anchored:
+                    # Two weak witnesses — an old registrant in roughly the
+                    # right industry — are the signature of a namesake, not
+                    # of the same company. Without one witness that names
+                    # the CIK itself, the row is staged for confirmation.
+                    return Decision(
+                        STAGED,
+                        note=(f"only {len(corroborators)} corroborator(s)"
+                              if len(corroborators) < self.min_corroborators
+                              else "no CIK-anchored corroborator"),
+                        row={**row, "gate": "under-corroborated"},
+                    )
                 return Decision(
-                    STAGED,
-                    note=f"Exhibit 21 of {owner['parent_name']} lists it as a "
-                         "subsidiary, not as the registrant",
-                    row={**base, "matched_cik": cik, "cik_match": cik_match,
-                         "gate": "listed as its own subsidiary"},
-                )
-            corroborators = self._corroborate(item, cik, cik_match, parent_cik)
-            row = {
-                **base, "matched_cik": cik, "cik_match": cik_match,
-                "corroborated_by": "; ".join(corroborators),
-            }
-            if confidence < self.threshold:
-                return Decision(STAGED, note=f"confidence {confidence:.2f}",
-                                row={**row, "gate": "below threshold"})
-            if len(corroborators) < self.min_corroborators:
-                return Decision(
-                    STAGED,
-                    note=f"only {len(corroborators)} corroborator(s)",
-                    row={**row, "gate": "under-corroborated"},
-                )
-            return Decision(
-                ACCEPTED,
-                note="; ".join(corroborators),
-                row={
-                    **row,
-                    "override": {
-                        "normalized_name": item["normalized_name"],
-                        "decision": "", "cik": cik, "ein": "", "lei": "",
-                        "wikidata_qid": "",
-                        "note": f"Matched as {used!r} ({cik_match}); "
-                                + "; ".join(corroborators) + f". {note}",
+                    ACCEPTED,
+                    note="; ".join(witnesses),
+                    row={
+                        **row,
+                        "override": {
+                            "normalized_name": item["normalized_name"],
+                            "decision": "", "cik": cik, "ein": "", "lei": "",
+                            "wikidata_qid": "",
+                            "note": f"Matched as {used!r} ({cik_match}); "
+                                    + "; ".join(witnesses) + f". {note}",
+                        },
                     },
-                },
-            )
+                )
 
-        if stance == "subsidiary" and (parent_name or parent_cik):
+        if parent_name or parent_cik:
             owner = self._owner(item)
             if owner:
                 # Exhibit 21 already says this, and the generated table
@@ -571,19 +628,21 @@ class Identity(Adjudicator):
                 },
             )
 
+        if matcher_refused:
+            return Decision(STAGED, note=matcher_refused,
+                            row={**base, "gate": "matcher refused"})
+
         if stance in EMPTY_STANCES and confidence >= self.threshold:
+            # Recorded and staged, never written. The ledger stops the
+            # re-asking; the staging row gives a person the queue of "the
+            # model says nothing is there" claims, ranked by workers, to
+            # promote to reject overrides deliberately. A wrong "private"
+            # written here would be the least-checked answer in the file
+            # made the most permanent.
             return Decision(
                 REJECTED,
                 note=note or f"{stance}: no registrant to find",
-                row={
-                    **base,
-                    "override": {
-                        "normalized_name": item["normalized_name"],
-                        "decision": "reject", "cik": "", "ein": "", "lei": "",
-                        "wikidata_qid": "",
-                        "note": f"{stance}: {note}" if note else stance,
-                    },
-                },
+                row={**base, "gate": "model-rejected"},
             )
 
         return Decision(ABSTAINED, note=note or stance or "no answer", row=None)

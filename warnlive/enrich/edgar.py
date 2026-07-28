@@ -118,7 +118,7 @@ def _edgar_name(raw: str) -> str:
 def refresh(
     cache_dir: Path,
     out_path: Path = REFERENCE_PATH,
-    last_year: int = 2026,
+    last_year: int | None = None,
     keep_cache: bool = False,
 ) -> int:
     """Build the distilled (name, cik, years, ticker) reference file.
@@ -129,8 +129,16 @@ def refresh(
     cache_dir = Path(cache_dir) / "edgar"
     cache_dir.mkdir(parents=True, exist_ok=True)
 
+    from datetime import date as _date
+
+    today = _date.today()
+    current_quarter = (today.year, (today.month - 1) // 3 + 1)
+    if last_year is None:
+        last_year = today.year
+
     # name -> cik -> [first_year, last_year]
     seen: dict[str, dict[int, list[int]]] = defaultdict(dict)
+    failed_quarters: list[str] = []
     for year in range(FIRST_YEAR, last_year + 1):
         for q in (1, 2, 3, 4):
             dest = cache_dir / f"company_{year}_q{q}.idx"
@@ -141,7 +149,16 @@ def refresh(
                     dest.write_bytes(_get(INDEX_URL.format(year=year, q=q)))
                     fetched = True
                 except Exception as exc:  # noqa: BLE001 — future quarters 404
-                    logger.debug("EDGAR %s Q%s unavailable (%s)", year, q, exc)
+                    if (year, q) >= current_quarter:
+                        logger.debug("EDGAR %s Q%s unavailable (%s)", year, q, exc)
+                    else:
+                        # A historical quarter exists; failing to fetch it
+                        # is an outage, and eras built without it shift
+                        # first/last years and change era-gate outcomes.
+                        logger.warning(
+                            "EDGAR %s Q%s fetch failed (%s)", year, q, exc
+                        )
+                        failed_quarters.append(f"{year}Q{q}")
                     continue
             for name, cik in _parse_idx(dest):
                 norm = normalized_employer(_edgar_name(name))
@@ -152,6 +169,16 @@ def refresh(
             if fetched and not keep_cache:
                 dest.unlink(missing_ok=True)
         logger.info("EDGAR %s indexed (%d names so far)", year, len(seen))
+
+    if failed_quarters:
+        # Refusing to write beats overwriting the good committed reference
+        # with one whose eras are quietly wrong.
+        raise RuntimeError(
+            f"EDGAR refresh incomplete: {len(failed_quarters)} historical "
+            f"quarter(s) failed ({', '.join(failed_quarters[:8])}"
+            + ("…" if len(failed_quarters) > 8 else "")
+            + "); the reference file was not rewritten"
+        )
 
     tickers: dict[int, str] = {}
     try:

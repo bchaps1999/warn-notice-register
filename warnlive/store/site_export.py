@@ -140,7 +140,11 @@ def _monthly_series(rows) -> list[dict]:
         )
         entry["notices"] += 1
         entry["workers"] += n["employees_affected"] or 0
-        entry["by_type"][n["layoff_type"]] += 1
+        # NULL or an unforeseen value counts as unknown rather than crashing
+        # the whole site build: the schema allows NULL, and rows written by
+        # paths that bypass the normalizer have no closed-set guarantee.
+        bucket = n["layoff_type"] if n["layoff_type"] in entry["by_type"] else "unknown"
+        entry["by_type"][bucket] += 1
     return [months[m] for m in sorted(months)]
 
 
@@ -436,7 +440,7 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
         cols["employer"].append(n["employer_name"])
         cols["location"].append(n["location"])
         cols["jobs"].append(n["employees_affected"])
-        cols["type"].append(type_idx[n["layoff_type"]])
+        cols["type"].append(type_idx.get(n["layoff_type"], type_idx["unknown"]))
         cols["flags"].append(flags)
         sector = sector_of(n["naics"])
         cols["sector"].append(sector_idx[sector] if sector else -1)

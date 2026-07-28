@@ -107,3 +107,27 @@ def test_new_state_has_nothing_to_regress_against(tmp_path):
         "40,'closure',1,'2020-03-01','2020-03-01')"
     )
     assert regression.check_regressions(conn, snapshot).verdict == "ok"
+
+
+def test_worker_deflation_fails(tmp_path):
+    """Counts read as 1 leave notice counts and null rates untouched while
+    the worker total collapses; growth checks cannot see it."""
+    conn = _db(tmp_path, [("WI", "Acme", "Madison", 500)] * 60)
+    snapshot = regression.build_snapshot(conn)
+    conn.execute("UPDATE notices SET employees_affected = 1")
+    result = regression.check_regressions(conn, snapshot)
+    assert result.verdict == "failed"
+    assert _outcome(result, "state_worker_deflation") == "fail"
+
+
+def test_prehistoric_dates_fail(tmp_path):
+    """A parser emitting epoch dates is inventing history."""
+    conn = _db(tmp_path, [("WI", "Acme", "Madison", 50)] * 60)
+    snapshot = regression.build_snapshot(conn)
+    conn.execute(
+        "UPDATE notices SET notice_date = '1970-01-01' "
+        "WHERE rowid = (SELECT MIN(rowid) FROM notices)"
+    )
+    result = regression.check_regressions(conn, snapshot)
+    assert result.verdict == "failed"
+    assert _outcome(result, "date_bounds") == "fail"

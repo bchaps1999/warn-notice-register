@@ -188,6 +188,15 @@ def sector_from_text(industry: str | None) -> str | None:
     return _SECTOR_BY_NAME.get(_WS_RUN.sub(" ", industry).strip().lower())
 
 
+def _sic_reading_disagrees(code: str) -> bool:
+    """Whether a 4-digit code read as SIC names a different sector than
+    read as NAICS. True means the code is ambiguous between the systems."""
+    crosswalked = load_sic_naics().get(code)
+    if not crosswalked:
+        return False
+    return sector_of(crosswalked) != sector_of(code)
+
+
 def extract_industry(raw: dict) -> tuple[str | None, str | None, str | None]:
     """Return (industry_text, naics_code, naics_basis) from a source raw row.
 
@@ -215,6 +224,17 @@ def extract_industry(raw: dict) -> tuple[str | None, str | None, str | None]:
                 continue
             code = m.group(0)
             if "naics" in kl and code[:2] in _NAICS_SECTORS:
+                # A valid sector prefix does not prove the code is NAICS.
+                # Large SIC ranges collide: SIC 22xx (textiles) reads as
+                # NAICS 22 (Utilities), 42xx (trucking) as 42 (Wholesale),
+                # 48xx (communications) as 48 (Transportation). A 4-digit
+                # code that is also a known SIC naming a *different* sector
+                # could be either system, and the two readings disagree —
+                # so neither is written. Refusing costs one label; guessing
+                # wrong writes basis="source", the most trusted there is,
+                # and prime() spreads it to the employer's other notices.
+                if len(code) == 4 and _sic_reading_disagrees(code):
+                    continue
                 if naics is None:
                     naics, basis = code, "source"
             elif sic is None and len(code) == 4:

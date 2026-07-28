@@ -82,10 +82,15 @@ def _get(url: str) -> bytes | None:
 
 def _latest_annual(cik: int) -> tuple[str, str, str] | None:
     """(accession without dashes, filing year, registrant name) of the
-    newest annual report."""
+    newest annual report; None when the registrant genuinely has none.
+
+    A failed fetch raises instead of returning None: the caller writes a
+    permanent done-marker for a None, and "SEC timed out" recorded as "has
+    no 10-K" excludes the registrant from every future resumed run.
+    """
     raw = _get(SUBMISSIONS_URL.format(cik=cik))
     if raw is None:
-        return None
+        raise RuntimeError(f"submissions fetch failed for CIK {cik}")
     try:
         payload = json.loads(raw)
         recent = payload["filings"]["recent"]
@@ -108,7 +113,9 @@ def _exhibit_names(cik: int, acc: str) -> list[str]:
     base = ARCHIVE_URL.format(cik=cik, acc=acc)
     listing = _get(base + "index.json")
     if listing is None:
-        return []
+        # Transient failure, not "no exhibit" — raising keeps the caller
+        # from writing a done-marker over a registrant it never read.
+        raise RuntimeError(f"filing index fetch failed for CIK {cik}")
     try:
         items = json.loads(listing)["directory"]["item"]
     except (ValueError, KeyError):
@@ -118,7 +125,7 @@ def _exhibit_names(cik: int, acc: str) -> list[str]:
         return []
     body = _get(base + doc)
     if body is None:
-        return []
+        raise RuntimeError(f"exhibit fetch failed for CIK {cik}")
 
     soup = BeautifulSoup(body.decode("utf-8", "replace"), "html.parser")
     names = []

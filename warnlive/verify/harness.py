@@ -124,6 +124,23 @@ def verify_state(
     # date_sanity
     dates = [_parse_iso(r["notice_date"]) for r in norm.records]
     dates = [d for d in dates if d is not None]
+    if n and not dates:
+        # Zero parseable notice dates would otherwise skip date_sanity AND
+        # freshness, and a transformer that broke every date could still
+        # verdict ok. Some sources (GA, PA) never publish a notice date and
+        # carry only effective dates — those still have *a* date per record,
+        # so the fail is reserved for a batch with no dates of either kind.
+        effective = [
+            d for d in (_parse_iso(r["effective_date"]) for r in norm.records)
+            if d is not None
+        ]
+        result.add(
+            "date_sanity",
+            bool(effective),
+            f"none of {n} records has a parseable notice_date"
+            + ("" if effective else " or effective_date"),
+            severity="fail" if not effective else "warn",
+        )
     if dates:
         horizon = today + timedelta(days=MAX_FUTURE_DAYS)
         bad = sum(1 for d in dates if d.year < MIN_YEAR or d > horizon)

@@ -30,7 +30,7 @@ jobs:
         run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb
       - uses: browser-actions/setup-chrome@v1
       - name: Unpack database
-        run: '[ -f data/warn.sqlite.gz ] && gunzip -kf data/warn.sqlite.gz || true'
+        run: .venv/bin/warnlive unpack-db || true
       - name: Scrape all active states
         env:
           ZYTE_API_KEY: ${{ secrets.ZYTE_API_KEY }}
@@ -61,8 +61,11 @@ jobs:
             echo "No data changes."
           else
             git commit -m "Weekly scrape $(date -u +%F)"
-            git pull --rebase origin main
-            git push
+            # Fail rather than rebase: the DB dump is regenerated whole,
+            # so a rebase keeps this runner's copy and silently discards
+            # whatever the concurrent commit changed in it. Re-run the
+            # workflow to rebuild on top of the moved main.
+            git push || { echo "::error::push rejected - main moved during this run; re-run the workflow"; exit 1; }
           fi
       - uses: ./.github/actions/deploy-site
       - name: Sync health issues

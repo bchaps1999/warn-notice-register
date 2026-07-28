@@ -152,10 +152,23 @@ class Annotator:
                 out["ticker"] = (
                     self.matcher.ticker_for(out["cik"]) if self.matcher else None
                 )
+                # The same CIK-keyed joins the automatic tier gets. Without
+                # them, an adjudicated identity — the strongest kind — was
+                # left for the name-keyed label tier to decorate, i.e. the
+                # weakest matcher dressing the best-attested employers.
+                wd = self.wikidata_by_cik.get(out["cik"])
+                if wd:
+                    out["wikidata_qid"], out["wikidata_match"] = wd["qid"], "cik"
+                    out["canonical_name"] = wd["label"] or None
+                    if out["canonical_name"]:
+                        out["canonical_basis"] = "wikidata"
+                    out["parent_company"] = (
+                        wd["parents"].split("||")[0] if wd["parents"] else None
+                    )
             for field in ("ein", "lei", "wikidata_qid"):
                 if decided.get(field):
                     out[field] = decided[field]
-            if out["wikidata_qid"]:
+            if decided.get("wikidata_qid"):
                 out["wikidata_match"] = "override"
 
         if self.matcher is not None and not out["cik"]:
@@ -197,7 +210,13 @@ class Annotator:
                     out["canonical_name"] = entity["legal_name"]
                     out["canonical_basis"] = "gleif"
 
-        if norm and not out["wikidata_qid"]:
+        # The label tier is the weakest matcher here — an exact-normalized
+        # name against Wikidata's org labels — and it must never speak over
+        # a CIK. Left unguarded it did: a CIK-identified employer with no
+        # wikidata_by_cik row picked up a namesake's QID by name, which then
+        # replaced canonical_name, parent_company, and (because the key loop
+        # below prefers QIDs) the employer_key the site groups on.
+        if norm and not out["wikidata_qid"] and not out["cik"]:
             wd = lookup(self.wikidata_by_name)
             if wd:
                 out["wikidata_qid"], out["wikidata_match"] = wd["qid"], "label"

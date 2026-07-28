@@ -10,6 +10,10 @@ from warnlive.registry import Registry
 
 VERDICT_ICON = {"ok": "✅", "degraded": "🟡", "failed": "❌", "skipped": "⏭️"}
 CONSECUTIVE_FAILURES_FOR_BROKEN = 3
+# A degraded state still ingests, so nothing else ever escalates it — a
+# portal that quietly stops updating can sit yellow forever. After this many
+# consecutive degraded runs the report treats it as worth a person's look.
+CONSECUTIVE_DEGRADED_FOR_ATTENTION = 5
 
 
 def build_status(conn: sqlite3.Connection, registry: Registry) -> dict:
@@ -28,6 +32,12 @@ def build_status(conn: sqlite3.Connection, registry: Registry) -> dict:
         for r in rows:
             if r["verdict"] == "failed":
                 streak += 1
+            else:
+                break
+        degraded_streak = 0
+        for r in rows:
+            if r["verdict"] == "degraded":
+                degraded_streak += 1
             else:
                 break
         last_success = conn.execute(
@@ -51,8 +61,13 @@ def build_status(conn: sqlite3.Connection, registry: Registry) -> dict:
             else None,
             "last_success": last_success["finished_at"] if last_success else None,
             "consecutive_failures": streak,
+            "consecutive_degraded": degraded_streak,
             "recommend_broken": streak >= CONSECUTIVE_FAILURES_FOR_BROKEN
             and cfg.status == "active",
+            "chronically_degraded": (
+                degraded_streak >= CONSECUTIVE_DEGRADED_FOR_ATTENTION
+                and cfg.status == "active"
+            ),
         }
     return states
 
@@ -76,6 +91,9 @@ def write_health(conn: sqlite3.Connection, registry: Registry, health_dir: Path)
         note = ""
         if s["recommend_broken"]:
             note = f"**recommend marking broken** ({s['consecutive_failures']} consecutive failures)"
+        elif s["chronically_degraded"]:
+            note = (f"**chronically degraded** ({s['consecutive_degraded']} "
+                    "consecutive degraded runs)")
         elif s["latest_error"]:
             note = s["latest_error"][:120]
         elif s["latest_checks"]:

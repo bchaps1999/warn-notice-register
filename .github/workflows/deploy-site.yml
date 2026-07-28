@@ -10,9 +10,11 @@ on:
       - ".github/workflows/deploy-site.yml"
   workflow_dispatch:
 
+# Same group as the scrape workflows, which also deploy Pages: two
+# concurrent deployments race, and which build wins is timing-dependent.
 concurrency:
-  group: deploy-site
-  cancel-in-progress: true
+  group: scrape
+  cancel-in-progress: false
 
 permissions:
   contents: read
@@ -34,6 +36,6 @@ jobs:
       - name: Install
         run: ./install.sh
       - name: Unpack database
-        run: gunzip -kf data/warn.sqlite.gz
+        run: .venv/bin/warnlive unpack-db
       - uses: ./.github/actions/deploy-site
         id: deploy

@@ -275,8 +275,29 @@ def test_a_match_with_one_witness_is_not_enough(tmp_path):
 
 
 def test_a_match_two_authorities_agree_on_is_written(tmp_path):
-    """The filing calendar and the state-published industry are independent
-    of the proposal and of each other; agreeing twice is worth keeping."""
+    """Wikidata names the CIK itself and the filing calendar covers the
+    notices: an anchored witness plus an independent one is worth keeping."""
+    worker = adj_identity.Identity(min_corroborators=2)
+    worker.matcher = _matcher(tmp_path, [("boeing", 12927, 1994, 2026, "BA")])
+    worker.annotator.sic_by_cik = {}
+    worker.annotator.naics_by_sic = {}
+    worker.annotator.wikidata_by_cik = {
+        12927: {"qid": "Q66", "label": "Boeing", "parents": ""}
+    }
+    got = worker.decide(
+        _identity_item("The Boeing Company"),
+        {"stance": "public", "proposed": ["Boeing"], "parent_name": "",
+         "parent_cik": 0, "confidence": 0.99, "note": "aerospace"},
+    )
+    assert got.outcome == queue_mod.ACCEPTED
+    assert got.row["override"]["cik"] == 12927
+    assert "covering the notices" in got.note and "Wikidata" in got.note
+
+
+def test_two_weak_witnesses_are_the_signature_of_a_namesake(tmp_path):
+    """An old registrant in roughly the right industry is what a wrong
+    same-industry namesake looks like. Without one witness that names the
+    CIK itself, the match is staged for confirmation, not written."""
     worker = adj_identity.Identity(min_corroborators=2)
     worker.matcher = _matcher(tmp_path, [("boeing", 12927, 1994, 2026, "BA")])
     worker.annotator.sic_by_cik = {12927: ("3721", "Aircraft")}
@@ -287,9 +308,11 @@ def test_a_match_two_authorities_agree_on_is_written(tmp_path):
         {"stance": "public", "proposed": ["Boeing"], "parent_name": "",
          "parent_cik": 0, "confidence": 0.99, "note": "aerospace"},
     )
-    assert got.outcome == queue_mod.ACCEPTED
-    assert got.row["override"]["cik"] == 12927
-    assert "covering the notices" in got.note and "industry agrees" in got.note
+    assert got.outcome == queue_mod.STAGED
+    assert got.row["gate"] == "under-corroborated"
+    assert got.note == "no CIK-anchored corroborator"
+    assert "covering the notices" in got.row["corroborated_by"]
+    assert "industry agrees" in got.row["corroborated_by"]
 
 
 def test_an_employer_its_own_registrant_lists_as_a_subsidiary_is_not_that_registrant(tmp_path):
@@ -317,7 +340,9 @@ def test_a_shorter_name_matching_a_subsidiary_does_not_refuse_the_parent(tmp_pat
     that The Boeing Company is somebody's subsidiary."""
     worker = adj_identity.Identity(min_corroborators=1)
     worker.matcher = _matcher(tmp_path, [("boeing", 12927, 1994, 2026, "BA")])
-    worker.annotator.wikidata_by_cik = {}
+    worker.annotator.wikidata_by_cik = {
+        12927: {"qid": "Q66", "label": "Boeing", "parents": ""}
+    }
     worker.subsidiaries.by_name["boeing aerospace operations"] = {
         "normalized_name": "boeing aerospace operations", "parent_cik": "12927",
         "parent_name": "BOEING CO", "source_year": "2026",
@@ -359,9 +384,10 @@ def test_a_parent_cik_no_reference_file_knows_is_refused(tmp_path):
     assert "no reference file" in got.note
 
 
-def test_no_registrant_to_find_is_an_answer_and_is_recorded(tmp_path):
-    """Most WARN employers are private, and saying so is what stops the
-    same employer being re-decided on every run."""
+def test_no_registrant_to_find_is_recorded_but_never_written(tmp_path):
+    """"The model says nothing is there" stops the re-asking (the ledger
+    remembers it) and is staged for a person — it is the one claim in this
+    file nothing can verify, so it must not become a permanent override."""
     worker = adj_identity.Identity()
     worker.matcher = _matcher(tmp_path, [])
     got = worker.decide(_identity_item("Fresno Unified School District"), {
@@ -369,8 +395,42 @@ def test_no_registrant_to_find_is_an_answer_and_is_recorded(tmp_path):
         "parent_cik": 0, "confidence": 0.97, "note": "a public school district",
     })
     assert got.outcome == queue_mod.REJECTED
-    assert got.row["override"]["decision"] == "reject"
-    assert not got.row["override"]["cik"]
+    assert "override" not in got.row
+    assert got.row["gate"] == "model-rejected"
+
+
+def test_proposals_are_tried_whatever_the_stance_said(tmp_path):
+    """The stance is the one model output no gate can check. A wrong
+    "private" must not keep the matcher from a name it would have matched."""
+    worker = adj_identity.Identity(min_corroborators=1)
+    worker.matcher = _matcher(tmp_path, [("boeing", 12927, 1994, 2026, "BA")])
+    worker.annotator.sic_by_cik = {}
+    worker.annotator.naics_by_sic = {}
+    worker.annotator.wikidata_by_cik = {
+        12927: {"qid": "Q66", "label": "Boeing", "parents": ""}
+    }
+    got = worker.decide(
+        _identity_item("The Boeing Company"),
+        {"stance": "private", "proposed": ["Boeing"], "parent_name": "",
+         "parent_cik": 0, "confidence": 0.99, "note": ""},
+    )
+    assert got.outcome == queue_mod.ACCEPTED
+    assert got.row["override"]["cik"] == 12927
+
+
+def test_a_refused_proposal_still_lets_a_parent_claim_be_tried(tmp_path):
+    """One row can carry both a guess at a registration and a parent. The
+    matcher refusing the first is no verdict on the second."""
+    worker = adj_identity.Identity()
+    worker.matcher = _matcher(tmp_path, [("firstgroup", 4321, 1996, 2026, "")])
+    worker.annotator.sic_by_cik = {4321: ("4111", "Transit")}
+    got = worker.decide(_identity_item("First Transit, Inc."), {
+        "stance": "subsidiary", "proposed": ["First Transit Holdings"],
+        "parent_name": "FirstGroup plc", "parent_cik": 4321,
+        "confidence": 0.95, "note": "FirstGroup's US bus arm",
+    })
+    assert got.outcome == queue_mod.ACCEPTED
+    assert got.row["subsidiary"]["parent_cik"] == 4321
 
 
 def test_an_employer_decided_by_hand_is_never_overwritten(tmp_path):
@@ -409,14 +469,15 @@ def test_a_registrant_that_stopped_filing_before_the_notices_is_no_witness(tmp_p
     assert got.row["gate"] == "under-corroborated"
     assert got.row["corroborated_by"] == ""
 
-    # The same registrant, notices inside its filing span.
+    # The same registrant, notices inside its filing span: the calendar
+    # speaks — as a weak witness, recorded but not sufficient on its own.
     covered = worker.decide(
         _identity_item("David's Bridal", years=["2003"]),
         {"stance": "public", "proposed": ["Davids Bridal"], "parent_name": "",
          "parent_cik": 0, "confidence": 0.99, "note": ""},
     )
-    assert covered.outcome == queue_mod.ACCEPTED
-    assert "covering the notices" in covered.note
+    assert covered.outcome == queue_mod.STAGED
+    assert "covering the notices" in covered.row["corroborated_by"]
 
 
 def test_a_third_party_naming_the_registrant_corroborates_a_public_identity(tmp_path):
@@ -446,6 +507,54 @@ def test_a_third_party_naming_the_registrant_corroborates_a_public_identity(tmp_
         "parent_cik": 0, "confidence": 0.99, "note": "",
     })
     assert disagrees.outcome == queue_mod.STAGED
+
+
+def _confirm_item(name, corroborated_by="", **kw):
+    item = _identity_item(name, **{k: v for k, v in kw.items() if k != "cik"})
+    item.update({
+        "matched_cik": kw.get("cik", 12927),
+        "matched_name": name.upper(),
+        "cik_match": "exact",
+        "corroborated_by": corroborated_by,
+    })
+    return item
+
+
+def test_confirmation_supplements_a_corroborator_it_never_replaces_one(tmp_path):
+    """A yes from the confirm queue is written only where an independent
+    witness already spoke. With none, the whole claim would rest on the
+    model's word — the exact thing the identity gate refuses."""
+    from warnlive.adjudicate import confirm as adj_confirm
+
+    worker = adj_confirm.Confirm()
+    worker.matcher = _matcher(tmp_path, [("boeing", 12927, 1994, 2026, "BA")])
+    answer = {"same": True, "confidence": 0.95, "note": "same company"}
+
+    bare = worker.decide(_confirm_item("Boeing"), answer)
+    assert bare.outcome == queue_mod.STAGED
+    assert bare.row["gate"] == "no corroborator"
+
+    witnessed = worker.decide(
+        _confirm_item("Boeing",
+                      corroborated_by="registrant filed 1994-2026, covering the notices"),
+        answer,
+    )
+    assert witnessed.outcome == queue_mod.ACCEPTED
+    assert "covering the notices" in witnessed.row["override"]["note"]
+    assert "confirmed by model" in witnessed.row["override"]["note"]
+
+
+def test_a_refused_confirmation_rejects_the_match_not_the_employer(tmp_path):
+    from warnlive.adjudicate import confirm as adj_confirm
+
+    worker = adj_confirm.Confirm()
+    worker.matcher = _matcher(tmp_path, [("boeing", 12927, 1994, 2026, "BA")])
+    got = worker.decide(
+        _confirm_item("Boeing"),
+        {"same": False, "confidence": 0.9, "note": "a namesake"},
+    )
+    assert got.outcome == queue_mod.REJECTED
+    assert "override" not in got.row
 
 
 def test_sectors_compare_at_the_level_a_warn_form_is_worth():

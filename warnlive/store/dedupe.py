@@ -3,8 +3,18 @@
 from __future__ import annotations
 
 import json
+import logging
 import sqlite3
 from dataclasses import dataclass
+from datetime import date
+
+logger = logging.getLogger("warnlive")
+
+# Two rows under one key whose effective dates sit further apart than this
+# are probably not one notice amended but two notices the key could not
+# tell apart — which happens exactly where notice_date is null and the key
+# runs out of fields. Counted and logged, never merged silently.
+COLLISION_WINDOW_DAYS = 45
 
 # Canonical fields whose values define a version. Order matters for hashing.
 VERSIONED_FIELDS = [
@@ -25,6 +35,9 @@ class IngestStats:
     new: int = 0
     updated: int = 0
     unchanged: int = 0
+    #: updates whose effective dates disagree beyond COLLISION_WINDOW_DAYS —
+    #: likely two distinct notices sharing a key, not an amendment.
+    suspected_collisions: int = 0
 
 
 def ingest(
@@ -42,21 +55,26 @@ def ingest(
     Records absent from the source are untouched; their last_seen simply
     stops advancing.
 
-    Within a single batch, duplicate keys are collapsed to the first
-    occurrence (sources sometimes list a notice twice verbatim).
+    Within a single batch, a duplicate key with the *same* hash is collapsed
+    to the first occurrence (sources sometimes list a notice twice verbatim).
+    A duplicate key with a different hash is a different row — states append
+    amendment rows rather than editing — and goes through the update path,
+    so the later values become the current version instead of being dropped.
     """
     stats = IngestStats()
-    seen_in_batch: set[str] = set()
+    seen_in_batch: dict[str, str] = {}
     cur = conn.cursor()
 
     for rec in records:
         key = rec["dedupe_key"]
-        if key in seen_in_batch:
+        if seen_in_batch.get(key) == rec["raw_record_hash"]:
             continue
-        seen_in_batch.add(key)
+        seen_in_batch[key] = rec["raw_record_hash"]
 
         row = cur.execute(
             "SELECT n.id AS id, n.current_version AS current_version, "
+            "       n.effective_date AS effective_date, "
+            "       n.source_url AS source_url, "
             "       v.raw_record_hash AS current_hash "
             "FROM notices n JOIN notice_versions v "
             "  ON v.notice_id = n.id AND v.version = n.current_version "
@@ -91,12 +109,39 @@ def ingest(
             _insert_version(cur, cur.lastrowid, 1, rec, observed_at)
             stats.new += 1
         elif row["current_hash"] == rec["raw_record_hash"]:
-            cur.execute(
-                "UPDATE notices SET last_seen = ? WHERE id = ?",
-                (observed_at, row["id"]),
-            )
+            # The row is unchanged, but where it was seen may not be: a
+            # notice first ingested from a Wayback backfill keeps pointing
+            # at the archive forever unless the live scraper's URL replaces
+            # it. Refreshed only in the live direction — an archive URL
+            # never displaces a live one.
+            url = rec.get("source_url")
+            if (
+                url and url != row["source_url"]
+                and not ("web.archive.org" in url
+                         and row["source_url"]
+                         and "web.archive.org" not in row["source_url"])
+            ):
+                cur.execute(
+                    "UPDATE notices SET last_seen = ?, source_url = ?, "
+                    "source_notice_id = ? WHERE id = ?",
+                    (observed_at, url, rec.get("source_notice_id"), row["id"]),
+                )
+            else:
+                cur.execute(
+                    "UPDATE notices SET last_seen = ? WHERE id = ?",
+                    (observed_at, row["id"]),
+                )
             stats.unchanged += 1
         else:
+            if _dates_disagree(row["effective_date"], rec["effective_date"]):
+                stats.suspected_collisions += 1
+                logger.warning(
+                    "dedupe: key %s updated with an effective date %s -> %s "
+                    "further than %d days apart — likely two distinct notices "
+                    "sharing a key",
+                    key, row["effective_date"], rec["effective_date"],
+                    COLLISION_WINDOW_DAYS,
+                )
             next_version = row["current_version"] + 1
             _insert_version(cur, row["id"], next_version, rec, observed_at)
             cur.execute(
@@ -126,6 +171,17 @@ def ingest(
 
     conn.commit()
     return stats
+
+
+def _dates_disagree(a: str | None, b: str | None) -> bool:
+    """Whether two effective dates sit further apart than an amendment moves."""
+    if not a or not b:
+        return False
+    try:
+        da, db = date.fromisoformat(a[:10]), date.fromisoformat(b[:10])
+    except ValueError:
+        return False
+    return abs((da - db).days) > COLLISION_WINDOW_DAYS
 
 
 def _insert_version(cur, notice_id, version, rec, observed_at):

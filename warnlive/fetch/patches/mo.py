@@ -40,7 +40,10 @@ def scrape(
 
     def patched(url, **kwargs):
         try:
-            r = original(url, timeout=30)
+            # Upstream's kwargs ride along; only the timeout is overridden.
+            # Dropping them would silently ignore any params or headers a
+            # future upstream revision starts passing.
+            r = original(url, **{**kwargs, "timeout": 30})
             if r.ok and CHALLENGE_MARKER not in r.text:
                 return r
             logger.info("MO: %s served the Incapsula challenge; using Chrome", url)

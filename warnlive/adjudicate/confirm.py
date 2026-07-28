@@ -22,8 +22,17 @@ which stopped flying in 1991, the same company as the registrant that began
 filing in 1997" is answered by reading two dates. The first question is
 where a model guesses; the second is where it is useful.
 
-It runs only where deterministic corroboration failed, so it never overrides
-evidence — it speaks only when there is none.
+It runs only where deterministic corroboration fell short, and it
+supplements evidence rather than replacing it: a yes from the model is
+accepted only where at least one independent witness already spoke.
+A match with no corroborator at all stays staged for a person — the model
+confirming its own family's proposal, over the same roster facts the
+deterministic checks already found wanting, is not a second witness.
+
+For the same reason, run this queue with a different model than the one
+that proposed the matches (--model / --provider): the proposer and the
+confirmer sharing a family share their misconceptions, and the command
+warns when they are the same.
 """
 
 from __future__ import annotations
@@ -170,6 +179,17 @@ class Confirm(Identity):
                 row={**base, "gate": "listed as its own subsidiary"},
             )
 
+        # Confirmation supplements evidence; it does not replace it. With no
+        # independent witness at all, a yes here would rest entirely on the
+        # model's word — the exact thing the identity gate refuses.
+        corroborated_by = (item.get("corroborated_by") or "").strip()
+        if not corroborated_by:
+            return Decision(
+                STAGED,
+                note="confirmed by model, but no independent corroborator",
+                row={**base, "gate": "no corroborator"},
+            )
+
         return Decision(
             ACCEPTED,
             note=f"confirmed: {note}",
@@ -180,8 +200,8 @@ class Confirm(Identity):
                     "decision": "", "cik": cik, "ein": "", "lei": "",
                     "wikidata_qid": "",
                     "note": f"Matched as {item.get('matched_name')!r} "
-                            f"({item.get('cik_match')}); no independent "
-                            f"corroborator, confirmed by model: {note}",
+                            f"({item.get('cik_match')}); {corroborated_by}; "
+                            f"confirmed by model: {note}",
                 },
             },
         )
@@ -216,6 +236,7 @@ def load_queue(conn, ledger, model: str, min_workers: int = 0,
             "matched_cik": int(row["matched_cik"]),
             "matched_name": (row.get("proposed") or "").split("|")[0],
             "cik_match": row.get("cik_match") or "",
+            "corroborated_by": row.get("corroborated_by") or "",
         })
         if limit and len(out) >= limit:
             break

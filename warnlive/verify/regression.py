@@ -37,9 +37,27 @@ STATE_SHRINK_MAX = 0.02
 SHRINK_FLOOR = 50
 # No genuine notice is this large; anything above is a parse artifact.
 MAX_NOTICE_WORKERS = 100_000
-# A state's payroll of affected workers cannot multiply in a week.
+# A state's payroll of affected workers cannot multiply in a week — nor
+# evaporate. Shrink guards the failure growth cannot see: a parser reading
+# every "1,500" as 1 leaves notice counts and null rates untouched while the
+# worker total collapses.
 WORKER_GROWTH_MAX = 5.0
+# Half, not less: a source that stops publishing counts moves the total too
+# (that drift is field_completeness's to warn about); the failure this one
+# owns — every "1,500" read as 1 — takes nearly everything with it.
+WORKER_SHRINK_MAX = 0.50
 WORKER_GROWTH_FLOOR = 1_000
+# Distinct employer names should move with ingest. A jump without one means
+# names are being mangled (each variant minting a "new" employer); a slump
+# means they are being blanked or collapsed. Below the floor, one genuinely
+# new employer is a large ratio.
+EMPLOYER_SHIFT_MAX = 0.20
+EMPLOYER_FLOOR = 50
+# Dates outside these bounds are parse artifacts, not filings: WARN's federal
+# effective date is 1989, and an effective date only reaches a couple of
+# years out.
+FIRST_YEAR_FLOOR = 1988
+LAST_YEAR_SLACK = 2
 # Field completeness shifting this far means the source or parser changed.
 # Past the second threshold a field has essentially emptied or filled, which
 # is a break rather than drift — Wisconsin's locations went to 100% null on a
@@ -161,8 +179,17 @@ def check_regressions(conn: sqlite3.Connection, previous: dict | None) -> Verifi
         f"{previous['notices']:,} -> {current['notices']:,}",
     )
 
-    shrank, grew, drifted, broke = [], [], [], []
+    shrank, grew, deflated, employer_shift, bad_dates = [], [], [], [], []
+    drifted, broke = [], []
+    from datetime import date as _date
+
+    last_year_max = _date.today().year + LAST_YEAR_SLACK
     for postal, now in sorted(current["states"].items()):
+        first, last = now.get("first"), now.get("last")
+        if first and int(first[:4]) < FIRST_YEAR_FLOOR:
+            bad_dates.append(f"{postal} first {first}")
+        if last and int(last[:4]) > last_year_max:
+            bad_dates.append(f"{postal} last {last}")
         before = previous["states"].get(postal)
         if before is None:
             continue  # a newly collected state has nothing to regress against
@@ -176,6 +203,17 @@ def check_regressions(conn: sqlite3.Connection, previous: dict | None) -> Verifi
             and now["workers"] > before["workers"] * WORKER_GROWTH_MAX
         ):
             grew.append(f"{postal} {before['workers']:,}->{now['workers']:,}")
+        if (
+            before["workers"] >= WORKER_GROWTH_FLOOR
+            and now["workers"] < before["workers"] * (1 - WORKER_SHRINK_MAX)
+        ):
+            deflated.append(f"{postal} {before['workers']:,}->{now['workers']:,}")
+        if before.get("employers", 0) >= EMPLOYER_FLOOR:
+            ratio = now["employers"] / before["employers"]
+            if abs(ratio - 1) > EMPLOYER_SHIFT_MAX:
+                employer_shift.append(
+                    f"{postal} {before['employers']:,}->{now['employers']:,}"
+                )
         for field in ("undated", "no_jobs", "no_location", "unplaced"):
             # "unplaced" is absent from snapshots taken before the place
             # roster existed; a missing metric is not a regression.
@@ -198,6 +236,24 @@ def check_regressions(conn: sqlite3.Connection, previous: dict | None) -> Verifi
         "state_worker_totals", not grew,
         f"grew more than {WORKER_GROWTH_MAX:g}x: {', '.join(grew)}" if grew
         else f"no state's worker total grew more than {WORKER_GROWTH_MAX:g}x",
+    )
+    result.add(
+        "state_worker_deflation", not deflated,
+        f"shrank beyond {WORKER_SHRINK_MAX:.0%}: {', '.join(deflated)}" if deflated
+        else f"no state's worker total shrank more than {WORKER_SHRINK_MAX:.0%}",
+    )
+    result.add(
+        "employer_counts", not employer_shift,
+        f"distinct employers moved beyond {EMPLOYER_SHIFT_MAX:.0%}: "
+        f"{', '.join(employer_shift)}" if employer_shift
+        else "distinct employer counts moved with ingest",
+        severity="warn",
+    )
+    result.add(
+        "date_bounds", not bad_dates,
+        f"dates outside {FIRST_YEAR_FLOOR}-{last_year_max}: {', '.join(bad_dates)}"
+        if bad_dates
+        else f"all dates within {FIRST_YEAR_FLOOR}-{last_year_max}",
     )
     result.add(
         "field_emptied", not broke,
