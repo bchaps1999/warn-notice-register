@@ -13,3 +13,7 @@ data/warn.sqlite-shm
 site/public/data/
 # adjudication ledger lock, not data
 data/reference/adjudications.jsonl.lock
+
+# Build output: CI builds and deploys site/dist from the committed DB; a
+# tracked copy is permanently stale and pure conflict fodder.
+site/dist/
