@@ -65,16 +65,6 @@ export function Shell() {
         <Outlet />
       </main>
 
-      <footer className="px-6 py-6 max-w-6xl w-full mx-auto text-xs text-ink-faint border-t border-rule">
-        <p className="font-serif">
-          Data consolidated from state labor agency portals. Fetching builds on{" "}
-          <a className="underline hover:text-ink" href="https://github.com/biglocalnews/warn-scraper">
-            Big Local News&rsquo;s warn-scraper
-          </a>{" "}
-          (Apache-2.0). Coverage and definitions vary by state; consult each state&rsquo;s source
-          before drawing conclusions.
-        </p>
-      </footer>
     </div>
   );
 }

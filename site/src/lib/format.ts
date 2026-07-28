@@ -76,3 +76,66 @@ export function displayName(name: string | null | undefined): string {
     })
     .join(" ");
 }
+
+/** NAICS sector labels, mirroring warnlive/enrich/industry.py. A four-digit
+ *  code has no title in any reference file we carry, but its sector does,
+ *  and a sector beats printing a bare number beside an em-dash. */
+export const SECTOR_LABELS: Record<string, string> = {
+  "11": "Agriculture, forestry, fishing and hunting",
+  "21": "Mining, quarrying, oil and gas",
+  "22": "Utilities",
+  "23": "Construction",
+  "31-33": "Manufacturing",
+  "42": "Wholesale trade",
+  "44-45": "Retail trade",
+  "48-49": "Transportation and warehousing",
+  "51": "Information",
+  "52": "Finance and insurance",
+  "53": "Real estate, rental and leasing",
+  "54": "Professional, scientific and technical services",
+  "55": "Management of companies",
+  "56": "Administrative, support and waste services",
+  "61": "Educational services",
+  "62": "Health care and social assistance",
+  "71": "Arts, entertainment and recreation",
+  "72": "Accommodation and food services",
+  "81": "Other services",
+  "92": "Public administration",
+};
+
+/** The sector a NAICS code belongs to, or null. Ranges ("31-33") are spelled
+ *  as themselves; anything else is read from its first two digits. */
+export function sectorLabel(naics: string | null | undefined): string | null {
+  if (!naics) return null;
+  if (SECTOR_LABELS[naics]) return SECTOR_LABELS[naics];
+  const two = naics.slice(0, 2);
+  for (const [sector, label] of Object.entries(SECTOR_LABELS)) {
+    if (sector === two) return label;
+    if (sector.includes("-")) {
+      const [lo, hi] = sector.split("-").map(Number);
+      const n = Number(two);
+      if (!Number.isNaN(n) && n >= lo && n <= hi) return label;
+    }
+  }
+  return null;
+}
+
+/** How an industry code was arrived at, in words. The bases are pipeline
+ *  vocabulary; a reader needs to know whether a state published this or we
+ *  inferred it. */
+export const NAICS_BASIS_LABEL: Record<string, string> = {
+  source: "as published by the state",
+  "sector-name": "from the sector the state named",
+  "sic-crosswalk": "from the state's SIC code",
+  "sec-sic": "from the SEC's industry for this filer",
+  ntee: "from the IRS activity code",
+  "parent-sic": "from the corporate parent's SEC industry",
+  adjudicated: "inferred from the employer's name",
+  employer: "from this employer's other notices",
+};
+
+/** Whether a code describes the site that filed or the whole company. */
+export const NAICS_LEVEL_LABEL: Record<string, string> = {
+  establishment: "this establishment",
+  enterprise: "the whole company",
+};

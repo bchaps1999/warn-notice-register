@@ -238,6 +238,9 @@ export interface NoticeDetail {
   industry: string | null;
   naics: string | null;
   naics_basis: string | null;
+  naics_level: string | null;
+  canonical_name: string | null;
+  canonical_basis: string | null;
   first_seen: string;
   last_seen: string;
   versions: NoticeVersion[];

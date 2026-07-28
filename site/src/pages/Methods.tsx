@@ -245,6 +245,26 @@ export function Methods() {
         </a>
         .
       </p>
+      <SectionHeading>Sources and credit</SectionHeading>
+      <p className="text-sm font-serif text-ink-muted max-w-2xl leading-relaxed">
+        Every notice here was published by a state labor agency. Fetching builds
+        on{" "}
+        <a
+          className="underline hover:text-ink"
+          href="https://github.com/biglocalnews/warn-scraper"
+          target="_blank" rel="noreferrer"
+        >
+          Big Local News&rsquo;s warn-scraper
+        </a>{" "}
+        (Apache-2.0), whose collectors this project extends and, for several
+        states, replaces where a portal has moved or a format has changed.
+      </p>
+      <p className="text-sm font-serif text-ink-muted max-w-2xl leading-relaxed mt-3">
+        What each state counts as a reportable layoff differs, and so does what
+        it publishes about one. Totals compared across states are therefore
+        comparisons of publishing practice as much as of layoffs, and the
+        per-state pages say what each agency does and does not report.
+      </p>
       <p className="text-xs text-ink-faint font-serif mt-6">
         Built {date(meta.built_at)} · {archiveStates.length} states include
         archive-recovered history.
