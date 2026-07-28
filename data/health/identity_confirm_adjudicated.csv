@@ -1,0 +1,6 @@
+normalized_name,employer_name,states,notices,workers,years,stance,proposed,matched_cik,cik_match,parent_name,parent_cik,confidence,corroborated_by,outcome,gate,note
+haliburton energy services n sam houston,Haliburton Energy Services-N. Sam Houston,TX,2,4484,2020-2020,,Halliburton Company,45012,exact,,,0.9,,rejected,confirmed not a match,"Haliburton Energy Services is a subsidiary of Halliburton Company, not the parent registrant."
+cleveland works ltv steel,Cleveland Works (LTV Steel Company),OH,1,2964,2001-2001,,LTV Steel Company,83264,exact,,,0.99,,staged,no corroborator,"The employer is LTV Steel Company, exactly matching the registrant name."
+sears,Sears,CA|GA|IL|KS|MD|ME|MI|NE|NJ|NV|OH|OK|OR|TN|VA|WA|WI,42,2657,1990-2022,,Sears Holdings Corporation,1310067,exact,,,0.95,,rejected,confirmed not a match,"Sears Holdings was formed in 2004, but WARN notices span 1990-2022, predating its existence."
+montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,,"Montgomery Ward & Co., Incorporated",836974,suffix,,,0.9,,staged,no corroborator,"Montgomery Wards is the common name for Montgomery Ward & Co., Incorporated."
+pfizer pharmacia,Pfizer/Pharmacia,IL,1,1500,2003-2003,,Pfizer Inc.,78003,exact:listed,,,0.7,,rejected,confirmed not a match,Pfizer Inc. is the parent of Pharmacia; the employer may be a subsidiary rather than the parent registrant.

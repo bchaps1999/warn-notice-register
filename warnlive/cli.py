@@ -803,9 +803,12 @@ def adjudicate_confirm(limit, min_workers, dry_run, reask, budget, provider,
     )
     _report(tally, client)
     if write and not dry_run and tally.rows:
-        ids, links, staged = adj_identity.write(tally.rows, decided_by=model_name)
+        ids, links, staged = adj_identity.write(
+            tally.rows, staging_path=adj_confirm.STAGING_PATH,
+            decided_by=model_name,
+        )
         click.echo(f"{adj_identity.OVERRIDES_PATH}: +{ids} identities")
-        click.echo(f"{adj_identity.STAGING_PATH}: {staged} staged for review")
+        click.echo(f"{adj_confirm.STAGING_PATH}: {staged} staged for review")
 
 
 @adjudicate.command("industry")

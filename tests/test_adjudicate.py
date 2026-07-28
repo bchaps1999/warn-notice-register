@@ -998,3 +998,12 @@ def test_a_key_in_the_env_file_is_read_without_overriding_the_shell(tmp_path, mo
 
     # No file is not an error; it is the ordinary case in CI.
     _load_env(tmp_path / "absent")
+
+
+def test_confirm_stages_to_its_own_file_not_identitys():
+    """Identity's write() rewrites the staging file it is given; confirm
+    pointed at identity's would replace two hundred review rows with its
+    handful."""
+    from warnlive.adjudicate import confirm as adj_confirm
+
+    assert adj_confirm.STAGING_PATH != adj_identity.STAGING_PATH

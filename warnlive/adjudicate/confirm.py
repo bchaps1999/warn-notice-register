@@ -38,11 +38,18 @@ warns when they are the same.
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 
 from warnlive.adjudicate.identity import Identity
 from warnlive.adjudicate.queue import ACCEPTED, REJECTED, STAGED, Decision
 
 logger = logging.getLogger("warnlive")
+
+# Confirm's own review file. Identity's write() rewrites whatever staging
+# path it is given, and this queue is a handful of rows — pointed at the
+# identity staging file it would replace two hundred rows of review with
+# them.
+STAGING_PATH = Path("data/health/identity_confirm_adjudicated.csv")
 
 SYSTEM = """\
 You are checking whether an employer named on US WARN layoff notices is the \

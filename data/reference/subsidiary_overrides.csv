@@ -475,3 +475,13 @@ procter and gamble manufacturing,80424,The Procter & Gamble Company,,deepseek/de
 sears teleconsumer resource center unit 9542,319256,"Sears, Roebuck and Co.",,deepseek/deepseek-v4-flash,2026-07-27,"Unit of Sears, which was publicly traded at the time Parent CIK from the EDGAR roster (fuzzy:0.95)."
 bae systems san diego ship repair sdsr,895564,BAE Systems plc,,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of BAE Systems plc, which files with SEC as foreign private issuer. Parent CIK from the EDGAR roster (exact:listed)."
 centerplate sodexo,1169715,Sodexo,,deepseek/deepseek-v4-flash,2026-07-27,"Centerplate is a subsidiary of Sodexo, which files with SEC as foreign private issuer. Parent CIK from the EDGAR roster (exact)."
+united states steel corporation gary and portage,1163302,United States Steel Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"site of US Steel, which is SEC-registered"
+levy,1317627,Compass Group PLC,,deepseek/deepseek-v4-flash,2026-07-27,Levy is a food service provider owned by Compass Group. Parent CIK from the EDGAR roster (exact).
+dollar express louisville 1,935703,"Dollar Tree, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Dollar Express is a discount store chain, likely a subsidiary of Dollar Tree, Inc. Parent CIK from the EDGAR roster (exact)."
+clarcor air filtration campbellsville,76334,Parker-Hannifin Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Clarcor was acquired by Parker-Hannifin in 2017; this facility likely part of that subsidiary.
+us steel tubular products lone star,1163302,United States Steel Corporation,,deepseek/deepseek-v4-flash,2026-07-27,US Steel Tubular Products is a subsidiary of United States Steel Corporation (CIK 1163302).
+gxo logistics supply chain,1852244,"GXO Logistics, Inc.",,deepseek/deepseek-v4-flash,2026-07-27,"Subsidiary of GXO Logistics, Inc."
+gaylord grapevine,1040829,Ryman Hospitality Properties,,deepseek/deepseek-v4-flash,2026-07-27,Gaylord hotels are owned by Ryman Hospitality Properties.
+american airlines statewide statewide fl 00000,6201,AMR Corporation,,deepseek/deepseek-v4-flash,2026-07-27,"American Airlines is a subsidiary of AMR Corporation, which filed for bankruptcy in 2012."
+centinela hospital medical center tenet healthsystem,70318,Tenet Healthcare Corporation,,deepseek/deepseek-v4-flash,2026-07-27,Centinela Hospital is owned by Tenet Healthcare.
+mirro,814453,Newell Brands Inc.,,deepseek/deepseek-v4-flash,2026-07-27,Mirro was owned by Newell Brands.
