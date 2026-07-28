@@ -1,6 +1,6 @@
 {
- "notices": 90355,
- "possible_duplicates": 1503,
+ "notices": 90360,
+ "possible_duplicates": 1505,
  "states": {
   "AK": {
    "employers": 59,
@@ -11,7 +11,7 @@
    "no_location": 0,
    "notices": 66,
    "undated": 0,
-   "unplaced": 19,
+   "unplaced": 17,
    "workers": 9609
   },
   "AL": {
@@ -35,7 +35,7 @@
    "no_location": 18,
    "notices": 1072,
    "undated": 0,
-   "unplaced": 115,
+   "unplaced": 111,
    "workers": 138750
   },
   "CA": {
@@ -43,24 +43,24 @@
    "first": "2000-01-01",
    "last": "2026-07-22",
    "max_workers": 11083,
-   "no_jobs": 2,
+   "no_jobs": 3,
    "no_location": 4340,
    "notices": 25162,
    "undated": 10987,
-   "unplaced": 434,
-   "workers": 2172512
+   "unplaced": 253,
+   "workers": 2161822
   },
   "CO": {
-   "employers": 750,
+   "employers": 751,
    "first": "2014-10-25",
    "last": "2026-08-10",
    "max_workers": 2820,
    "no_jobs": 64,
    "no_location": 54,
-   "notices": 879,
+   "notices": 880,
    "undated": 12,
-   "unplaced": 209,
-   "workers": 89742
+   "unplaced": 196,
+   "workers": 89892
   },
   "CT": {
    "employers": 458,
@@ -71,7 +71,7 @@
    "no_location": 15,
    "notices": 656,
    "undated": 0,
-   "unplaced": 72,
+   "unplaced": 65,
    "workers": 78700
   },
   "DC": {
@@ -99,16 +99,16 @@
    "workers": 16486
   },
   "FL": {
-   "employers": 4008,
+   "employers": 4010,
    "first": "1998-01-09",
-   "last": "2026-07-21",
+   "last": "2026-07-27",
    "max_workers": 10903,
    "no_jobs": 0,
    "no_location": 2568,
-   "notices": 5373,
+   "notices": 5374,
    "undated": 0,
-   "unplaced": 186,
-   "workers": 630396
+   "unplaced": 175,
+   "workers": 636635
   },
   "GA": {
    "employers": 3580,
@@ -119,7 +119,7 @@
    "no_location": 0,
    "notices": 4152,
    "undated": 4152,
-   "unplaced": 195,
+   "unplaced": 167,
    "workers": 501015
   },
   "HI": {
@@ -143,7 +143,7 @@
    "no_location": 0,
    "notices": 952,
    "undated": 0,
-   "unplaced": 7,
+   "unplaced": 5,
    "workers": 59033
   },
   "ID": {
@@ -155,7 +155,7 @@
    "no_location": 1,
    "notices": 193,
    "undated": 0,
-   "unplaced": 23,
+   "unplaced": 21,
    "workers": 21813
   },
   "IL": {
@@ -163,12 +163,12 @@
    "first": "1987-09-01",
    "last": "2026-07-15",
    "max_workers": 14487,
-   "no_jobs": 712,
+   "no_jobs": 711,
    "no_location": 0,
    "notices": 5692,
    "undated": 0,
-   "unplaced": 332,
-   "workers": 777976
+   "unplaced": 50,
+   "workers": 779053
   },
   "IN": {
    "employers": 922,
@@ -179,7 +179,7 @@
    "no_location": 0,
    "notices": 1011,
    "undated": 0,
-   "unplaced": 81,
+   "unplaced": 80,
    "workers": 152037
   },
   "KS": {
@@ -203,7 +203,7 @@
    "no_location": 554,
    "notices": 1756,
    "undated": 12,
-   "unplaced": 48,
+   "unplaced": 50,
    "workers": 274677
   },
   "LA": {
@@ -215,7 +215,7 @@
    "no_location": 2,
    "notices": 629,
    "undated": 1,
-   "unplaced": 72,
+   "unplaced": 76,
    "workers": 87123
   },
   "MA": {
@@ -227,7 +227,7 @@
    "no_location": 0,
    "notices": 553,
    "undated": 4,
-   "unplaced": 131,
+   "unplaced": 53,
    "workers": 58666
   },
   "MD": {
@@ -239,7 +239,7 @@
    "no_location": 1,
    "notices": 1407,
    "undated": 0,
-   "unplaced": 178,
+   "unplaced": 152,
    "workers": 118048
   },
   "ME": {
@@ -263,7 +263,7 @@
    "no_location": 23,
    "notices": 1356,
    "undated": 570,
-   "unplaced": 132,
+   "unplaced": 127,
    "workers": 218669
   },
   "MN": {
@@ -271,12 +271,12 @@
    "first": "2019-02-20",
    "last": "2026-09-01",
    "max_workers": 1100,
-   "no_jobs": 48,
+   "no_jobs": 56,
    "no_location": 49,
    "notices": 968,
    "undated": 645,
-   "unplaced": 58,
-   "workers": 42657
+   "unplaced": 52,
+   "workers": 42330
   },
   "MO": {
    "employers": 467,
@@ -287,7 +287,7 @@
    "no_location": 13,
    "notices": 516,
    "undated": 0,
-   "unplaced": 65,
+   "unplaced": 60,
    "workers": 82906
   },
   "MS": {
@@ -315,16 +315,16 @@
    "workers": 3896
   },
   "NC": {
-   "employers": 909,
+   "employers": 910,
    "first": "2014-01-13",
    "last": "2026-07-22",
    "max_workers": 1953,
    "no_jobs": 6,
    "no_location": 36,
-   "notices": 1199,
+   "notices": 1200,
    "undated": 6,
-   "unplaced": 83,
-   "workers": 123576
+   "unplaced": 48,
+   "workers": 123638
   },
   "ND": {
    "employers": 44,
@@ -347,7 +347,7 @@
    "no_location": 82,
    "notices": 987,
    "undated": 0,
-   "unplaced": 8,
+   "unplaced": 4,
    "workers": 46275
   },
   "NJ": {
@@ -355,12 +355,12 @@
    "first": "2003-05-01",
    "last": "2026-11-01",
    "max_workers": 16000,
-   "no_jobs": 45,
+   "no_jobs": 46,
    "no_location": 2,
    "notices": 2414,
    "undated": 155,
-   "unplaced": 260,
-   "workers": 362276
+   "unplaced": 224,
+   "workers": 360955
   },
   "NM": {
    "employers": 104,
@@ -371,7 +371,7 @@
    "no_location": 0,
    "notices": 115,
    "undated": 1,
-   "unplaced": 11,
+   "unplaced": 3,
    "workers": 14842
   },
   "NV": {
@@ -383,20 +383,20 @@
    "no_location": 1,
    "notices": 296,
    "undated": 1,
-   "unplaced": 25,
-   "workers": 35893
+   "unplaced": 24,
+   "workers": 35892
   },
   "NY": {
-   "employers": 5223,
+   "employers": 5225,
    "first": "2006-03-02",
    "last": "2026-07-21",
    "max_workers": 2301,
    "no_jobs": 1273,
    "no_location": 1141,
-   "notices": 6339,
+   "notices": 6341,
    "undated": 0,
-   "unplaced": 152,
-   "workers": 461995
+   "unplaced": 149,
+   "workers": 462236
   },
   "OH": {
    "employers": 2307,
@@ -407,8 +407,8 @@
    "no_location": 32,
    "notices": 2764,
    "undated": 1,
-   "unplaced": 194,
-   "workers": 424605
+   "unplaced": 170,
+   "workers": 424427
   },
   "OK": {
    "employers": 684,
@@ -419,7 +419,7 @@
    "no_location": 268,
    "notices": 806,
    "undated": 0,
-   "unplaced": 415,
+   "unplaced": 413,
    "workers": 64495
   },
   "OR": {
@@ -443,7 +443,7 @@
    "no_location": 1,
    "notices": 294,
    "undated": 294,
-   "unplaced": 18,
+   "unplaced": 19,
    "workers": 42880
   },
   "RI": {
@@ -467,7 +467,7 @@
    "no_location": 0,
    "notices": 611,
    "undated": 3,
-   "unplaced": 56,
+   "unplaced": 52,
    "workers": 81091
   },
   "SD": {
@@ -491,7 +491,7 @@
    "no_location": 0,
    "notices": 1104,
    "undated": 0,
-   "unplaced": 33,
+   "unplaced": 19,
    "workers": 127390
   },
   "TX": {
@@ -499,12 +499,12 @@
    "first": "1999-01-04",
    "last": "2026-07-22",
    "max_workers": 4500,
-   "no_jobs": 165,
+   "no_jobs": 164,
    "no_location": 10,
    "notices": 7377,
    "undated": 0,
-   "unplaced": 75,
-   "workers": 699678
+   "unplaced": 2,
+   "workers": 700196
   },
   "UT": {
    "employers": 245,
@@ -515,7 +515,7 @@
    "no_location": 0,
    "notices": 281,
    "undated": 0,
-   "unplaced": 15,
+   "unplaced": 14,
    "workers": 35980
   },
   "VA": {
@@ -527,7 +527,7 @@
    "no_location": 0,
    "notices": 1121,
    "undated": 0,
-   "unplaced": 192,
+   "unplaced": 170,
    "workers": 130730
   },
   "VT": {
@@ -552,7 +552,7 @@
    "notices": 1462,
    "undated": 0,
    "unplaced": 260,
-   "workers": 232516
+   "workers": 230132
   },
   "WI": {
    "employers": 2304,
@@ -563,9 +563,9 @@
    "no_location": 9,
    "notices": 3664,
    "undated": 0,
-   "unplaced": 129,
+   "unplaced": 111,
    "workers": 336177
   }
  },
- "workers": 9470910
+ "workers": 9464296
 }

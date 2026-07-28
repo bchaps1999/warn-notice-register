@@ -54,7 +54,9 @@
     },
     "last_success": "2026-07-19T08:07:03Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "AK": {
     "name": "Alaska",
@@ -111,7 +113,9 @@
     },
     "last_success": "2026-07-19T08:06:57Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "AZ": {
     "name": "Arizona",
@@ -168,7 +172,9 @@
     },
     "last_success": "2026-07-19T08:11:55Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "AR": {
     "name": "Arkansas",
@@ -181,7 +187,9 @@
     "latest_checks": null,
     "last_success": null,
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "CA": {
     "name": "California",
@@ -189,7 +197,7 @@
     "source": "upstream",
     "notices": 25162,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-27T12:22:58Z",
+    "latest_run": "2026-07-28T16:35:28Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -222,12 +230,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/17284 notice_dates outside 1988..2026-08-26"
+          "detail": "0/17284 notice_dates outside 1988..2026-08-27"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-22 is 5d old (max 45d)"
+          "detail": "newest notice_date 2026-07-22 is 6d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
@@ -236,17 +244,19 @@
         }
       ]
     },
-    "last_success": "2026-07-27T12:22:58Z",
+    "last_success": "2026-07-28T16:35:28Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "CO": {
     "name": "Colorado",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 879,
+    "notices": 880,
     "latest_verdict": "degraded",
-    "latest_run": "2026-07-27T12:23:09Z",
+    "latest_run": "2026-07-28T16:35:39Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -259,43 +269,45 @@
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "858 raw rows (min 500)"
+          "detail": "859 raw rows (min 500)"
         },
         {
           "name": "schema_drift",
           "outcome": "warn",
-          "detail": "header drifted: ['received_date', 'notes', 'workforce_area', 'begin_date', 'total_notified', 'permanent_job_losses', 'occupations', 'reduced_hours', 'company', 'phone', 'location', 'end_date', 'letter', 'workforce_region', 'reason', 'email', 'at_the_location', 'fein', 'temporary_job_losses', 'jobs', 'contact', 'dropdown', 'naics', 'furloughs', 'notice_date']"
+          "detail": "header drifted: ['permanent_job_losses', 'contact', 'reason', 'occupations', 'email', 'company', 'naics', 'workforce_region', 'total_notified', 'dropdown', 'end_date', 'letter', 'received_date', 'notes', 'workforce_area', 'temporary_job_losses', 'notice_date', 'jobs', 'begin_date', 'reduced_hours', 'location', 'fein', 'phone', 'furloughs', 'at_the_location']"
         },
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/858 rows failed to normalize"
+          "detail": "0/859 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "858/858 records have an employer name"
+          "detail": "859/859 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/847 notice_dates outside 1988..2026-08-26"
+          "detail": "0/848 notice_dates outside 1988..2026-08-27"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-22 is 5d old (max 60d)"
+          "detail": "newest notice_date 2026-07-24 is 4d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "27/858 records share a dedupe key"
+          "detail": "27/859 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-27T12:23:09Z",
+    "last_success": "2026-07-28T16:35:39Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 10,
+    "recommend_broken": false,
+    "chronically_degraded": true
   },
   "CT": {
     "name": "Connecticut",
@@ -352,7 +364,9 @@
     },
     "last_success": "2026-07-19T08:14:02Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "DC": {
     "name": "District of Columbia",
@@ -409,7 +423,9 @@
     },
     "last_success": "2026-07-19T08:14:06Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "DE": {
     "name": "Delaware",
@@ -466,15 +482,17 @@
     },
     "last_success": "2026-07-19T08:14:42Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "FL": {
     "name": "Florida",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 5373,
+    "notices": 5374,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-27T12:31:07Z",
+    "latest_run": "2026-07-28T16:43:19Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -487,7 +505,7 @@
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "3238 raw rows (min 500)"
+          "detail": "3239 raw rows (min 500)"
         },
         {
           "name": "schema_drift",
@@ -497,33 +515,35 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/3238 rows failed to normalize"
+          "detail": "0/3239 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "3238/3238 records have an employer name"
+          "detail": "3239/3239 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/3238 notice_dates outside 1988..2026-08-26"
+          "detail": "0/3239 notice_dates outside 1988..2026-08-27"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-21 is 6d old (max 45d)"
+          "detail": "newest notice_date 2026-07-27 is 1d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "445/3238 records share a dedupe key"
+          "detail": "445/3239 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-27T12:31:07Z",
+    "last_success": "2026-07-28T16:43:19Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "GA": {
     "name": "Georgia",
@@ -570,7 +590,9 @@
     },
     "last_success": "2026-07-26T18:30:32Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 1,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "HI": {
     "name": "Hawaii",
@@ -627,7 +649,9 @@
     },
     "last_success": "2026-07-19T08:15:07Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "ID": {
     "name": "Idaho",
@@ -679,7 +703,9 @@
     },
     "last_success": "2026-07-19T08:15:11Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "IL": {
     "name": "Illinois",
@@ -687,7 +713,7 @@
     "source": "upstream",
     "notices": 5692,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-27T12:31:30Z",
+    "latest_run": "2026-07-28T16:43:40Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -720,12 +746,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "1/4873 notice_dates outside 1988..2026-08-26"
+          "detail": "1/4873 notice_dates outside 1988..2026-08-27"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-15 is 12d old (max 60d)"
+          "detail": "newest notice_date 2026-07-15 is 13d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -734,9 +760,11 @@
         }
       ]
     },
-    "last_success": "2026-07-27T12:31:30Z",
+    "last_success": "2026-07-28T16:43:40Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "IN": {
     "name": "Indiana",
@@ -793,7 +821,9 @@
     },
     "last_success": "2026-07-19T08:15:33Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "IA": {
     "name": "Iowa",
@@ -850,7 +880,9 @@
     },
     "last_success": "2026-07-19T08:15:08Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "KS": {
     "name": "Kansas",
@@ -907,7 +939,9 @@
     },
     "last_success": "2026-07-19T08:19:36Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "KY": {
     "name": "Kentucky",
@@ -964,7 +998,9 @@
     },
     "last_success": "2026-07-26T15:29:12Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "LA": {
     "name": "Louisiana",
@@ -977,7 +1013,9 @@
     "latest_checks": null,
     "last_success": null,
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "MA": {
     "name": "Massachusetts",
@@ -985,7 +1023,7 @@
     "source": "custom",
     "notices": 553,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-27T12:31:34Z",
+    "latest_run": "2026-07-28T16:43:42Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1018,12 +1056,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/374 notice_dates outside 1988..2026-08-26"
+          "detail": "0/374 notice_dates outside 1988..2026-08-27"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-15 is 12d old (max 30d)"
+          "detail": "newest notice_date 2026-07-15 is 13d old (max 30d)"
         },
         {
           "name": "dedupe_sanity",
@@ -1032,9 +1070,11 @@
         }
       ]
     },
-    "last_success": "2026-07-27T12:31:34Z",
+    "last_success": "2026-07-28T16:43:42Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "MD": {
     "name": "Maryland",
@@ -1091,7 +1131,9 @@
     },
     "last_success": "2026-07-19T08:20:21Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "ME": {
     "name": "Maine",
@@ -1148,7 +1190,9 @@
     },
     "last_success": "2026-07-19T08:20:54Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "MI": {
     "name": "Michigan",
@@ -1195,7 +1239,9 @@
     },
     "last_success": "2026-07-26T15:29:13Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "MN": {
     "name": "Minnesota",
@@ -1203,7 +1249,7 @@
     "source": "custom",
     "notices": 968,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-27T12:32:53Z",
+    "latest_run": "2026-07-28T16:45:14Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1236,12 +1282,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "2/335 notice_dates outside 1988..2026-08-26"
+          "detail": "2/335 notice_dates outside 1988..2026-08-27"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-09-01 is -36d old (max 60d)"
+          "detail": "newest notice_date 2026-09-01 is -35d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -1250,9 +1296,11 @@
         }
       ]
     },
-    "last_success": "2026-07-27T12:32:53Z",
+    "last_success": "2026-07-28T16:45:14Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "MO": {
     "name": "Missouri",
@@ -1309,7 +1357,9 @@
     },
     "last_success": "2026-07-26T16:09:32Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "MS": {
     "name": "Mississippi",
@@ -1366,7 +1416,9 @@
     },
     "last_success": "2026-07-26T15:29:35Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "MT": {
     "name": "Montana",
@@ -1423,7 +1475,9 @@
     },
     "last_success": "2026-07-19T08:22:04Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "NE": {
     "name": "Nebraska",
@@ -1480,7 +1534,9 @@
     },
     "last_success": "2026-07-19T08:22:37Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "NV": {
     "name": "Nevada",
@@ -1488,7 +1544,7 @@
     "source": "custom",
     "notices": 296,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-27T12:33:33Z",
+    "latest_run": "2026-07-28T16:45:23Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1521,12 +1577,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/296 notice_dates outside 1988..2026-08-26"
+          "detail": "0/296 notice_dates outside 1988..2026-08-27"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-06-29 is 28d old (max 90d)"
+          "detail": "newest notice_date 2026-06-29 is 29d old (max 90d)"
         },
         {
           "name": "dedupe_sanity",
@@ -1535,9 +1591,11 @@
         }
       ]
     },
-    "last_success": "2026-07-27T12:33:33Z",
+    "last_success": "2026-07-28T16:45:23Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "NH": {
     "name": "New Hampshire",
@@ -1550,7 +1608,9 @@
     "latest_checks": null,
     "last_success": null,
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "NJ": {
     "name": "New Jersey",
@@ -1558,7 +1618,7 @@
     "source": "upstream",
     "notices": 2414,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-27T12:33:28Z",
+    "latest_run": "2026-07-28T16:45:16Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1591,12 +1651,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "1/2345 notice_dates outside 1988..2026-08-26"
+          "detail": "1/2345 notice_dates outside 1988..2026-08-27"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-11-01 is -97d old (max 60d)"
+          "detail": "newest notice_date 2026-11-01 is -96d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -1605,9 +1665,11 @@
         }
       ]
     },
-    "last_success": "2026-07-27T12:33:28Z",
+    "last_success": "2026-07-28T16:45:16Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "NM": {
     "name": "New Mexico",
@@ -1664,15 +1726,17 @@
     },
     "last_success": "2026-07-19T08:22:45Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "NY": {
     "name": "New York",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 6339,
+    "notices": 6341,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-27T12:33:35Z",
+    "latest_run": "2026-07-28T16:45:25Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1685,7 +1749,7 @@
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "178 raw rows (min 100)"
+          "detail": "180 raw rows (min 100)"
         },
         {
           "name": "schema_drift",
@@ -1695,41 +1759,43 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/178 rows failed to normalize"
+          "detail": "0/180 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "178/178 records have an employer name"
+          "detail": "180/180 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/178 notice_dates outside 1988..2026-08-26"
+          "detail": "0/180 notice_dates outside 1988..2026-08-27"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-21 is 6d old (max 45d)"
+          "detail": "newest notice_date 2026-07-21 is 7d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "0/178 records share a dedupe key"
+          "detail": "0/180 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-27T12:33:35Z",
+    "last_success": "2026-07-28T16:45:25Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "NC": {
     "name": "North Carolina",
     "registry_status": "active",
     "source": "custom",
-    "notices": 1199,
+    "notices": 1200,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-27T12:33:26Z",
+    "latest_run": "2026-07-28T16:45:15Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1742,7 +1808,7 @@
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "1390 raw rows (min 50)"
+          "detail": "55 raw rows (min 50)"
         },
         {
           "name": "schema_drift",
@@ -1752,33 +1818,35 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "3/1390 rows failed to normalize; e.g. row has no employer name"
+          "detail": "0/55 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "1387/1387 records have an employer name"
+          "detail": "55/55 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/1202 notice_dates outside 1988..2026-08-26"
+          "detail": "0/55 notice_dates outside 1988..2026-08-27"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-22 is 5d old (max 90d)"
+          "detail": "newest notice_date 2026-07-22 is 6d old (max 90d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "188/1387 records share a dedupe key"
+          "detail": "0/55 records share a dedupe key"
         }
       ]
     },
-    "last_success": "2026-07-27T12:33:26Z",
+    "last_success": "2026-07-28T16:45:15Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "ND": {
     "name": "North Dakota",
@@ -1830,7 +1898,9 @@
     },
     "last_success": "2026-07-19T08:22:29Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "OH": {
     "name": "Ohio",
@@ -1838,7 +1908,7 @@
     "source": "patched",
     "notices": 2764,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-27T12:33:37Z",
+    "latest_run": "2026-07-28T16:45:27Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1871,12 +1941,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/797 notice_dates outside 1988..2026-08-26"
+          "detail": "0/797 notice_dates outside 1988..2026-08-27"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-14 is 13d old (max 60d)"
+          "detail": "newest notice_date 2026-07-14 is 14d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -1885,9 +1955,11 @@
         }
       ]
     },
-    "last_success": "2026-07-27T12:33:37Z",
+    "last_success": "2026-07-28T16:45:27Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "OK": {
     "name": "Oklahoma",
@@ -1944,7 +2016,9 @@
     },
     "last_success": "2026-07-19T08:22:54Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "OR": {
     "name": "Oregon",
@@ -2001,7 +2075,9 @@
     },
     "last_success": "2026-07-19T08:23:23Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "PA": {
     "name": "Pennsylvania",
@@ -2048,7 +2124,9 @@
     },
     "last_success": "2026-07-19T08:23:24Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "PR": {
     "name": "Puerto Rico",
@@ -2061,7 +2139,9 @@
     "latest_checks": null,
     "last_success": null,
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "RI": {
     "name": "Rhode Island",
@@ -2118,7 +2198,9 @@
     },
     "last_success": "2026-07-26T15:39:25Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "SC": {
     "name": "South Carolina",
@@ -2175,7 +2257,9 @@
     },
     "last_success": "2026-07-19T08:23:38Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "SD": {
     "name": "South Dakota",
@@ -2232,7 +2316,9 @@
     },
     "last_success": "2026-07-19T08:23:38Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "TN": {
     "name": "Tennessee",
@@ -2289,7 +2375,9 @@
     },
     "last_success": "2026-07-19T08:24:27Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "TX": {
     "name": "Texas",
@@ -2297,7 +2385,7 @@
     "source": "patched",
     "notices": 7377,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-27T12:34:13Z",
+    "latest_run": "2026-07-28T16:45:56Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2330,12 +2418,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/7572 notice_dates outside 1988..2026-08-26"
+          "detail": "0/7572 notice_dates outside 1988..2026-08-27"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-07-22 is 5d old (max 45d)"
+          "detail": "newest notice_date 2026-07-22 is 6d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
@@ -2344,9 +2432,11 @@
         }
       ]
     },
-    "last_success": "2026-07-27T12:34:13Z",
+    "last_success": "2026-07-28T16:45:56Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "UT": {
     "name": "Utah",
@@ -2403,7 +2493,9 @@
     },
     "last_success": "2026-07-19T08:24:30Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "VA": {
     "name": "Virginia",
@@ -2460,7 +2552,9 @@
     },
     "last_success": "2026-07-19T08:26:27Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "VT": {
     "name": "Vermont",
@@ -2517,7 +2611,9 @@
     },
     "last_success": "2026-07-19T08:25:05Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "WA": {
     "name": "Washington",
@@ -2525,7 +2621,7 @@
     "source": "upstream",
     "notices": 1462,
     "latest_verdict": "ok",
-    "latest_run": "2026-07-27T12:34:23Z",
+    "latest_run": "2026-07-28T16:46:14Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -2558,12 +2654,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "9/1484 notice_dates outside 1988..2026-08-26"
+          "detail": "9/1484 notice_dates outside 1988..2026-08-27"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-12-31 is -157d old (max 60d)"
+          "detail": "newest notice_date 2026-12-31 is -156d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -2572,9 +2668,11 @@
         }
       ]
     },
-    "last_success": "2026-07-27T12:34:23Z",
+    "last_success": "2026-07-28T16:46:14Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "WV": {
     "name": "West Virginia",
@@ -2587,7 +2685,9 @@
     "latest_checks": null,
     "last_success": null,
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "WI": {
     "name": "Wisconsin",
@@ -2644,7 +2744,9 @@
     },
     "last_success": "2026-07-19T08:25:19Z",
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   },
   "WY": {
     "name": "Wyoming",
@@ -2657,6 +2759,8 @@
     "latest_checks": null,
     "last_success": null,
     "consecutive_failures": 0,
-    "recommend_broken": false
+    "consecutive_degraded": 0,
+    "recommend_broken": false,
+    "chronically_degraded": false
   }
 }
