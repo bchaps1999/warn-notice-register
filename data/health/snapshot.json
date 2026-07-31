@@ -1,6 +1,6 @@
 {
- "notices": 90377,
- "possible_duplicates": 1505,
+ "notices": 90397,
+ "possible_duplicates": 1506,
  "states": {
   "AK": {
    "employers": 59,
@@ -39,16 +39,16 @@
    "workers": 138750
   },
   "CA": {
-   "employers": 15866,
+   "employers": 15880,
    "first": "2000-01-01",
-   "last": "2026-07-27",
+   "last": "2026-07-29",
    "max_workers": 11083,
    "no_jobs": 3,
    "no_location": 4340,
-   "notices": 25174,
+   "notices": 25194,
    "undated": 10987,
    "unplaced": 253,
-   "workers": 2162332
+   "workers": 2163047
   },
   "CO": {
    "employers": 751,
@@ -324,7 +324,7 @@
    "notices": 1200,
    "undated": 6,
    "unplaced": 48,
-   "workers": 123638
+   "workers": 123424
   },
   "ND": {
    "employers": 44,
@@ -567,5 +567,5 @@
    "workers": 336177
   }
  },
- "workers": 9466524
+ "workers": 9467025
 }
