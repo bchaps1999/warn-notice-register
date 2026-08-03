@@ -3,7 +3,7 @@ import sqlite3
 import pytest
 
 from warnlive.store import db as db_mod
-from warnlive.store.dedupe import ingest
+from warnlive.store.dedupe import freeze_absent, ingest
 
 
 @pytest.fixture()
@@ -41,7 +41,7 @@ def test_ingest_is_idempotent(conn):
     assert (stats2.new, stats2.updated, stats2.unchanged) == (0, 0, 1)
     row = conn.execute("SELECT first_seen, last_seen, current_version FROM notices").fetchone()
     assert row["first_seen"] == "2026-07-01"
-    assert row["last_seen"] == "2026-07-08"
+    assert row["last_seen"] is None  # NULL means present in the latest run
     assert row["current_version"] == 1
     assert conn.execute("SELECT COUNT(*) c FROM notice_versions").fetchone()["c"] == 1
 
@@ -93,7 +93,7 @@ def test_a_live_url_replaces_an_archive_one_but_never_the_reverse(conn):
     ingest(conn, [record(source_url=archive)], "2026-07-15")
     row = conn.execute("SELECT source_url, last_seen FROM notices").fetchone()
     assert row["source_url"] == "https://example.gov/warn"
-    assert row["last_seen"] == "2026-07-15"
+    assert row["last_seen"] is None
 
 
 def test_far_apart_effective_dates_are_counted_as_a_suspected_collision(conn):
@@ -123,5 +123,27 @@ def test_a_reobserved_older_version_does_not_ping_pong(conn):
     ).fetchone()
     assert row["employees_affected"] == 200
     assert row["current_version"] == 2
-    assert row["last_seen"] == "2026-07-02"
+    assert row["last_seen"] is None
     assert conn.execute("SELECT COUNT(*) c FROM notice_versions").fetchone()["c"] == 2
+
+
+def test_last_seen_freezes_on_disappearance_and_thaws_on_return(conn):
+    """NULL means "present in the latest run"; a date is stamped only when a
+    notice leaves its source — the moment the column learns something. This
+    is what keeps the daily dump from rewriting most of its rows."""
+    ingest(conn, [record(), record(dedupe_key="key-2", employer_name="Beta",
+                                   raw_record_hash="hash-b")], "2026-07-01")
+    # Beta vanishes from the source on the next run.
+    ingest(conn, [record()], "2026-07-08")
+    frozen = freeze_absent(conn, "CT", {"key-1"}, "2026-07-01")
+    assert frozen == 1
+    rows = {r["dedupe_key"]: r["last_seen"] for r in
+            conn.execute("SELECT dedupe_key, last_seen FROM notices")}
+    assert rows == {"key-1": None, "key-2": "2026-07-01"}
+    # Beta returns: unfrozen, written once.
+    ingest(conn, [record(dedupe_key="key-2", employer_name="Beta",
+                         raw_record_hash="hash-b")], "2026-07-15")
+    row = conn.execute(
+        "SELECT last_seen FROM notices WHERE dedupe_key='key-2'"
+    ).fetchone()
+    assert row["last_seen"] is None

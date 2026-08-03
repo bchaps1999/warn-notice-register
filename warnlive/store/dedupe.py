@@ -50,10 +50,15 @@ def ingest(
     Per record (which carries dedupe_key and raw_record_hash from the
     normalizer):
       - unknown key            -> insert notice + version 1
-      - known key, same hash   -> advance last_seen only (idempotent)
+      - known key, same hash   -> idempotent no-op (unfreezes last_seen)
       - known key, new hash    -> add a version, update denormalized fields
-    Records absent from the source are untouched; their last_seen simply
-    stops advancing.
+
+    last_seen is NULL while a notice is present in its source: "still there
+    as of the state's latest run" is one fact about the run, not one fact
+    per row, and stamping a date on every observed row rewrote most of the
+    database (and every export) every day for no information. freeze_absent
+    stamps a date only when a notice disappears — which is the moment the
+    column actually learns something.
 
     Within a single batch, a duplicate key with the *same* hash is collapsed
     to the first occurrence (sources sometimes list a notice twice verbatim).
@@ -74,7 +79,7 @@ def ingest(
         row = cur.execute(
             "SELECT n.id AS id, n.current_version AS current_version, "
             "       n.effective_date AS effective_date, "
-            "       n.source_url AS source_url, "
+            "       n.source_url AS source_url, n.last_seen AS last_seen, "
             "       v.raw_record_hash AS current_hash "
             "FROM notices n JOIN notice_versions v "
             "  ON v.notice_id = n.id AND v.version = n.current_version "
@@ -103,7 +108,7 @@ def ingest(
                     rec["source_url"],
                     rec["source_notice_id"],
                     observed_at,
-                    observed_at,
+                    None,
                 ),
             )
             _insert_version(cur, cur.lastrowid, 1, rec, observed_at)
@@ -122,14 +127,16 @@ def ingest(
                          and "web.archive.org" not in row["source_url"])
             ):
                 cur.execute(
-                    "UPDATE notices SET last_seen = ?, source_url = ?, "
+                    "UPDATE notices SET last_seen = NULL, source_url = ?, "
                     "source_notice_id = ? WHERE id = ?",
-                    (observed_at, url, rec.get("source_notice_id"), row["id"]),
+                    (url, rec.get("source_notice_id"), row["id"]),
                 )
-            else:
+            elif row["last_seen"] is not None:
+                # A frozen notice reappeared (or predates NULL-means-current):
+                # unfreeze it. Written once, not every day.
                 cur.execute(
-                    "UPDATE notices SET last_seen = ? WHERE id = ?",
-                    (observed_at, row["id"]),
+                    "UPDATE notices SET last_seen = NULL WHERE id = ?",
+                    (row["id"],),
                 )
             stats.unchanged += 1
         elif cur.execute(
@@ -141,10 +148,11 @@ def ingest(
             # both every day; treating the original as "new again" would
             # ping-pong two junk versions per key per run, forever. Seen
             # before means seen, whichever version it was.
-            cur.execute(
-                "UPDATE notices SET last_seen = ? WHERE id = ?",
-                (observed_at, row["id"]),
-            )
+            if row["last_seen"] is not None:
+                cur.execute(
+                    "UPDATE notices SET last_seen = NULL WHERE id = ?",
+                    (row["id"],),
+                )
             stats.unchanged += 1
         else:
             if _dates_disagree(row["effective_date"], rec["effective_date"]):
@@ -163,7 +171,7 @@ def ingest(
                      employer_name=?, location=?, notice_date=?, effective_date=?,
                      employees_affected=?, layoff_type=?, is_temporary=?,
                      is_amendment=?, source_url=?, source_notice_id=?,
-                     is_amended=1, current_version=?, last_seen=?
+                     is_amended=1, current_version=?, last_seen=NULL
                    WHERE id=?""",
                 (
                     rec["employer_name"],
@@ -177,7 +185,6 @@ def ingest(
                     rec["source_url"],
                     rec["source_notice_id"],
                     next_version,
-                    observed_at,
                     row["id"],
                 ),
             )
@@ -185,6 +192,43 @@ def ingest(
 
     conn.commit()
     return stats
+
+
+def freeze_absent(
+    conn: sqlite3.Connection,
+    state: str,
+    present_keys: set[str],
+    frozen_at: str,
+) -> int:
+    """Stamp last_seen on the state's notices that left its source.
+
+    Called after a full live fetch of a state, never after a backfill — a
+    historical batch is not the current state of the source, and freezing
+    against one would mark everything it doesn't mention as gone.
+
+    frozen_at should be the date of the *previous* successful run: that is
+    the last date the notice was actually observed. The diff runs in Python
+    because a state's key set can exceed SQLite's bound-parameter limit.
+    """
+    current = conn.execute(
+        "SELECT id, dedupe_key FROM notices WHERE state = ? AND last_seen IS NULL",
+        (state.upper(),),
+    ).fetchall()
+    gone = [r["id"] for r in current if r["dedupe_key"] not in present_keys]
+    for start in range(0, len(gone), 500):
+        chunk = gone[start:start + 500]
+        conn.execute(
+            "UPDATE notices SET last_seen = ? WHERE id IN (%s)"
+            % ",".join("?" * len(chunk)),
+            (frozen_at, *chunk),
+        )
+    if gone:
+        conn.commit()
+        logger.info(
+            "dedupe: %s: %d notices left the source; last_seen frozen at %s",
+            state.upper(), len(gone), frozen_at,
+        )
+    return len(gone)
 
 
 def _dates_disagree(a: str | None, b: str | None) -> bool:

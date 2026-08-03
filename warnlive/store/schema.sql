@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS notices (
     is_amended INTEGER DEFAULT 0,          -- we have observed >1 version
     current_version INTEGER DEFAULT 1,
     first_seen TEXT NOT NULL,
-    last_seen TEXT NOT NULL
+    last_seen TEXT                         -- NULL = present in the state's latest run;
+                                           -- a date = last run that still listed it
 );
 CREATE INDEX IF NOT EXISTS idx_notices_state_date ON notices(state, notice_date);
 

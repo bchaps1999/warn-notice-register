@@ -36,7 +36,8 @@ deduplicates and version-tracks notices, and commits the results here:
 | `source_url` | The state portal the record came from |
 | `source_notice_id` | Content hash from the normalizer (not stable across amendments) |
 | `dedupe_key` | sha1(state \| normalized employer \| notice_date \| normalized location) |
-| `first_seen` / `last_seen` | When this pipeline first/last observed the notice |
+| `first_seen` | When this pipeline first observed the notice |
+| `last_seen` | Blank while the notice is still listed by its source (current as of the state's latest run — see `data/health/status.json`); a date once it disappears, marking the last run that listed it |
 
 Caveats: states disagree about what counts as a notice, how amendments are
 reported, and how employees are counted. Four states (AR, NH, WV, WY) publish

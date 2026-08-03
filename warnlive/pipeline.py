@@ -156,7 +156,22 @@ def _run_one(
 
     # failed runs never ingest; degraded runs do (warn-level findings only)
     if conn is not None and not smoke and norm is not None and outcome.verdict != "failed":
+        # The previous successful run's date, read before this run is
+        # recorded: it is the last date an absent notice was actually seen,
+        # which is what freeze_absent stamps on it.
+        prev = conn.execute(
+            "SELECT MAX(substr(finished_at, 1, 10)) AS d FROM state_runs "
+            "WHERE state = ? AND verdict IN ('ok', 'degraded')",
+            (postal.upper(),),
+        ).fetchone()
         stats = dedupe.ingest(conn, norm.records, observed_at=now_utc()[:10])
         outcome.new, outcome.updated, outcome.unchanged = stats.new, stats.updated, stats.unchanged
+        # A live fetch is the current state of the source, so what it does
+        # not mention has left it. Backfills never come through here.
+        dedupe.freeze_absent(
+            conn, postal,
+            {r["dedupe_key"] for r in norm.records},
+            (prev and prev["d"]) or now_utc()[:10],
+        )
 
     return outcome
