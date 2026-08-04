@@ -1,6 +1,6 @@
 {
- "notices": 90475,
- "possible_duplicates": 1511,
+ "notices": 90482,
+ "possible_duplicates": 1512,
  "states": {
   "AK": {
    "employers": 59,
@@ -324,7 +324,7 @@
    "notices": 1200,
    "undated": 6,
    "unplaced": 48,
-   "workers": 123424
+   "workers": 122360
   },
   "ND": {
    "employers": 44,
@@ -357,10 +357,10 @@
    "max_workers": 16000,
    "no_jobs": 46,
    "no_location": 2,
-   "notices": 2414,
+   "notices": 2415,
    "undated": 155,
    "unplaced": 224,
-   "workers": 360955
+   "workers": 361014
   },
   "NM": {
    "employers": 105,
@@ -495,16 +495,16 @@
    "workers": 127567
   },
   "TX": {
-   "employers": 6276,
+   "employers": 6281,
    "first": "1999-01-04",
-   "last": "2026-07-22",
+   "last": "2026-07-31",
    "max_workers": 4500,
    "no_jobs": 164,
    "no_location": 10,
-   "notices": 7377,
+   "notices": 7382,
    "undated": 0,
    "unplaced": 2,
-   "workers": 700196
+   "workers": 700568
   },
   "UT": {
    "employers": 245,
@@ -543,16 +543,16 @@
    "workers": 15079
   },
   "WA": {
-   "employers": 992,
+   "employers": 993,
    "first": "2004-02-05",
    "last": "2026-12-31",
    "max_workers": 9266,
    "no_jobs": 1,
    "no_location": 1,
-   "notices": 1464,
+   "notices": 1465,
    "undated": 0,
    "unplaced": 260,
-   "workers": 230315
+   "workers": 230416
   },
   "WI": {
    "employers": 2305,
@@ -567,5 +567,5 @@
    "workers": 336196
   }
  },
- "workers": 9488960
+ "workers": 9488428
 }

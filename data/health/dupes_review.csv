@@ -258,6 +258,7 @@ NY,2020-03-13,"WeWork Companies, Inc. (W. 18th Street)","WeWork Companies, Inc. 
 NY,2019-07-18,Spruce & Bond (HBG employees) Bond St.,Spruce & Bond (HBG employees) Amsterdam Ave,New York,0.925,4,1,60081,60083
 NY,2019-03-26,PVH - Tommy Hilfiger (Madison Avenue),PVH - Tommy Hilfiger (Fifth Avenue),New York,0.925,2,76,60199,60200
 OK,2009-01-26,Thermu Tru,Thermu Tru Doors,,0.925,220,220,68138,68139
+TX,2026-07-31,A Metropolis Company (Terminal Link),A Metropolis Company (Main Building),Dallas,0.925,87,6,93014,93016
 CA,2025-10-13,Blue shield of California 601,Blue Shield of California Building C,,0.924,31,18,1668,1669
 CA,2025-10-31,Ceryx Management LLC (Blackstone),Ceryx Management LLC (Hoover),,0.924,39,3,1896,1900
 CA,2025-11-03,CommUnify - Filmore Center,CommUnify - I Center,,0.924,4,6,1860,1861
@@ -822,6 +823,7 @@ NY,2023-05-04,"Home Clean Home, HCH Management - New York City Region","Home Cle
 NY,2022-03-15,Portmore Delivery Service Corp.,Portmore Delivery Service Corp. - New York City Region,,0.915,,,57223,57615
 NY,2020-01-03,Catholic Guardian Services (Payson Ave.),Catholic Guardian Services (1011 Main Office),New York,0.915,30,8,59885,59895
 KY,2023-09-10,Wellmore Energy Company LLC - Surface Minerals #1,Wellmore Energy Company LLC - Elk Creek,Pike,0.915,15,58,67223,67224
+TX,2026-07-31,A Metropolis Company (Express Parking),A Metropolis Company (Rental Car),Dallas,0.915,90,130,93013,93015
 AL,2007-12-10,WESTPOINT HOME-FAIRFAX FABRICATION PLANT,WESTPOINT HOME-FAIRFAX FINISHING PLANT,Valley,0.914,650,200,239,240
 CA,2025-07-14,"Blue Shield of California - Town Center, Building C",Blue Shield of California - Long Beach,,0.914,6,11,1383,1385
 CA,2025-07-14,"Blue shield of California - Town Center, Building B",Blue Shield of California - Long Beach,,0.914,32,11,1384,1385
@@ -1004,6 +1006,7 @@ NY,2020-03-13,"WeWork Companies, Inc. (Avenue of the Americas)","WeWork Companie
 NY,2020-01-24,Fairway Group Holdings Corp. (Corporate Office),Fairway Group Holdings Corp. (Upper West Side),New York,0.911,9,337,59840,59845
 NY,2019-12-03,Oakwood Worldwide (US) LP,Oakwood Worldwide (US) LP (Chelsea Building ),New York,0.911,21,,59920,59921
 NY,2017-04-04,Ralph Lauren Corporation (26th St.),Ralph Lauren Corporation (Madison Ave),New York,0.911,64,8,61053,61054
+TX,2026-07-31,A Metropolis Company (Express Parking),A Metropolis Company (Terminal Link),Dallas,0.911,90,87,93013,93014
 CA,2025-08-15,Adventist Health 1,Adventist Health Simi Valley,,0.91,296,1,1481,1483
 CA,2025-10-31,Ceryx Management LLC (Vermont),Ceryx Management LLC (1904 E 113th),,0.91,8,1,1898,1908
 CA,2025-10-31,Ceryx Management LLC (Western),Ceryx Management LLC (7111 S Hoover),,0.91,13,1,1901,1907
@@ -1653,6 +1656,7 @@ NY,2020-06-10,Hyatt Corporation dba Park South,Hyatt Corporation dba Grand Hyatt
 NY,2020-03-20,Fireman Hospitality Group Café Concepts dba Café Concepts (multiple locations),"Fireman Hospitality Group Café Concepts, Inc. dba Café Concepts (Red Eye Grill, Brooklyn Diner USA)",New York,0.899,563,143,59476,59477
 NY,2019-04-08,"The College of New Rochelle - DC-37 Campus, Manhattan","The College of New Rochelle - Rosa Parks Campus, Harlem",New York,0.899,,,60170,60172
 MO,2020-07-02,Hampton Inn Hotel - St. Louis,Hampton Inn Hotel - Forrest Park,St. Louis (city),0.899,24,18,92991,92992
+TX,2026-07-31,A Metropolis Company (Rental Car),A Metropolis Company (Main Building),Dallas,0.899,130,6,93015,93016
 CA,2025-11-03,CommUnify - Filmore Center,CommUnify - Adam Center,,0.898,4,4,1860,1864
 CA,2025-11-03,CommUnify - Filmore Center,CommUnify - Alvin Center,,0.898,4,6,1860,1865
 CA,2025-11-03,CommUnify - I Center,CommUnify - Maggie Espinoza Center,,0.898,6,5,1861,1876
@@ -2091,6 +2095,7 @@ NY,2020-06-10,Hyatt Corporation dba Park Hyatt,Hyatt Corporation dba Andaz Fifth
 NY,2020-04-08,Del Frisco's of New York LLC dba Del Frisco's - New York,Del Frisco's Grille of New York LLC dba Del Frisco's Grille - New York,New York,0.889,251,101,58778,58779
 NY,2020-04-01,"Catholic Charities Neighborhood Services, Inc. (Brownsville Family Support Center & Brownsville Family Treatment Rehabilitation)","Catholic Charities Neighborhood Services, Inc. (East New York Family Support Center)",Brooklyn,0.889,3,13,58925,58926
 KY,2025-05-05,Dakkota Integrated Systems LLC - Louisville / Chamberlain 2,"Dakkota Integrated Systems, Inc",Jefferson County - Louisville,0.889,41,1,67487,67491
+TX,2026-07-31,A Metropolis Company (Express Parking),A Metropolis Company (Main Building),Dallas,0.889,90,6,93013,93016
 CA,2025-10-23,"San Diego Imaging - Chula Vista, LLC",San Diego Imaging - Kearny Mesa,,0.888,63,32,1755,1756
 CA,2025-10-31,Ceryx Management LLC (Figueroa),Ceryx Management LLC (801 W 70th),,0.888,8,9,1899,1904
 CA,2025-11-03,CommUnify - I Center,CommUnify - Betty Sanchez Center,,0.888,6,1,1861,1877
