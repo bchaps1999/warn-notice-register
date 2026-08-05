@@ -232,7 +232,7 @@ export function Explorer() {
   );
 }
 
-const COLS = "grid grid-cols-[3rem_minmax(14rem,2fr)_minmax(8rem,1.2fr)_7rem_5.5rem_7rem]";
+const COLS = "grid grid-cols-[3rem_minmax(14rem,2fr)_minmax(8rem,1.2fr)_7rem_7rem_5.5rem_7rem]";
 
 function VirtualRows({
   index,
@@ -278,6 +278,7 @@ function VirtualRows({
         <Header label="Employer" k="employer" />
         <Header label="Location" />
         <Header label="Notice date" k="date" />
+        <Header label="Layoff date" k="effective" />
         <Header label="Workers" k="jobs" right />
         <Header label="Type" />
       </div>
@@ -305,6 +306,7 @@ function VirtualRows({
                   {c.location[i] ?? "—"}
                 </span>
                 <span className="tabular text-xs">{date(c.date[i])}</span>
+                <span className="tabular text-xs">{date(c.effective[i])}</span>
                 <span className="tabular text-right">{num(c.jobs[i])}</span>
                 <span>
                   <Stamp tone={index.types[c.type[i]]}>

@@ -151,6 +151,7 @@ export interface NoticeIndex {
     key: string[];
     state: number[];
     date: (string | null)[];
+    effective: (string | null)[];
     employer: string[];
     location: (string | null)[];
     jobs: (number | null)[];

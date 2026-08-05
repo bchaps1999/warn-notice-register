@@ -422,7 +422,7 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
     county_idx = {fips: i for i, (fips, _, _) in enumerate(counties)}
 
     cols: dict[str, list] = {
-        "key": [], "state": [], "date": [], "employer": [],
+        "key": [], "state": [], "date": [], "effective": [], "employer": [],
         "location": [], "jobs": [], "type": [], "flags": [], "sector": [],
         "county": [],
     }
@@ -437,6 +437,7 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
         cols["key"].append(n["dedupe_key"][:prefix_len])
         cols["state"].append(state_idx[n["state"]])
         cols["date"].append(n["display_date"])
+        cols["effective"].append(n["effective_date"])
         cols["employer"].append(n["employer_name"])
         cols["location"].append(n["location"])
         cols["jobs"].append(n["employees_affected"])

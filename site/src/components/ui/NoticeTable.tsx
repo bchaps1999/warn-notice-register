@@ -19,6 +19,7 @@ export function NoticeTable({
             <Th>Employer</Th>
             <Th>Location</Th>
             <Th>Notice date</Th>
+            <Th>Layoff date</Th>
             <Th className="text-right">Workers</Th>
             <Th>Type</Th>
           </tr>
@@ -36,6 +37,7 @@ export function NoticeTable({
               </td>
               <td className="py-2 pr-3 text-ink-muted text-xs font-serif">{n.location ?? "—"}</td>
               <td className="py-2 pr-3 tabular text-xs whitespace-nowrap">{date(n.notice_date)}</td>
+              <td className="py-2 pr-3 tabular text-xs whitespace-nowrap">{date(n.effective_date)}</td>
               <td className="py-2 pr-3 tabular text-right">{num(n.jobs)}</td>
               <td className="py-2">
                 <Stamp tone={n.type}>{TYPE_LABEL[n.type] ?? n.type}</Stamp>

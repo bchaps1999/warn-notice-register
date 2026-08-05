@@ -1,9 +1,9 @@
 import type { NoticeIndex } from "./types";
 
-const HEADER = ["state", "employer", "location", "notice_date", "employees_affected", "layoff_type", "key"];
+const HEADER = ["state", "employer", "location", "notice_date", "effective_date", "employees_affected", "layoff_type", "key"];
 
 export function downloadCsv(index: NoticeIndex, rows: number[], filename: string) {
-  const { key, state, date, employer, location, jobs, type } = index.columns;
+  const { key, state, date, effective, employer, location, jobs, type } = index.columns;
   const esc = (v: unknown) => {
     const s = v === null || v === undefined ? "" : String(v);
     return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
@@ -16,6 +16,7 @@ export function downloadCsv(index: NoticeIndex, rows: number[], filename: string
         esc(employer[i]),
         esc(location[i]),
         date[i] ?? "",
+        effective[i] ?? "",
         jobs[i] ?? "",
         index.types[type[i]],
         key[i],

@@ -15,7 +15,7 @@ export interface Filters {
   dir: "asc" | "desc";
 }
 
-export type SortKey = "date" | "employer" | "jobs" | "state";
+export type SortKey = "date" | "effective" | "employer" | "jobs" | "state";
 
 export const DEFAULT_FILTERS: Filters = {
   q: "",
@@ -44,7 +44,7 @@ export function filtersFromParams(p: URLSearchParams): Filters {
     sector: p.get("sector") ?? "",
     county: p.get("county") ?? "",
     publicOnly: p.get("public") === "1",
-    sort: (["date", "employer", "jobs", "state"] as const).includes(sort as SortKey)
+    sort: (["date", "effective", "employer", "jobs", "state"] as const).includes(sort as SortKey)
       ? (sort as SortKey)
       : "date",
     dir: dir === "asc" ? "asc" : "desc",
@@ -113,13 +113,15 @@ export function applyFilters(
 }
 
 function sortRows(index: NoticeIndex, rows: number[], sort: SortKey, dir: "asc" | "desc") {
-  const { date, employer, jobs, state } = index.columns;
+  const { date, effective, employer, jobs, state } = index.columns;
   const sign = dir === "asc" ? 1 : -1;
   const cmp: (a: number, b: number) => number =
     sort === "employer"
       ? (a, b) => employer[a].localeCompare(employer[b])
       : sort === "jobs"
         ? (a, b) => (jobs[a] ?? -1) - (jobs[b] ?? -1)
+        : sort === "effective"
+          ? (a, b) => (effective[a] ?? "").localeCompare(effective[b] ?? "")
         : sort === "state"
           ? (a, b) => state[a] - state[b] || (date[b] ?? "").localeCompare(date[a] ?? "")
           : (a, b) => (date[a] ?? "").localeCompare(date[b] ?? "");
