@@ -13,6 +13,7 @@ import {
 } from "../lib/explorerFilters";
 import { downloadCsv } from "../lib/csv";
 import { date, num, STATE_NAMES, TYPE_LABEL } from "../lib/format";
+import { FLAG_UNDATED } from "../lib/types";
 import { Stamp } from "../components/ui/Stamp";
 import { ErrorNote, Skeleton } from "../components/ui/Skeleton";
 import { EmptyState } from "../components/ui/EmptyState";
@@ -66,7 +67,7 @@ export function Explorer() {
     <div>
       {/* filter row */}
       <div className="flex flex-wrap items-end gap-3 mb-4">
-        <Field label="Search employer or location" grow>
+        <Field label="Search employer or location" grow className="basis-56 min-w-56">
           <input
             value={qDraft}
             onChange={(e) => setQDraft(e.target.value)}
@@ -106,7 +107,7 @@ export function Explorer() {
           <select
             value={filters.sector}
             onChange={(e) => setFilters({ sector: e.target.value })}
-            className="input"
+            className="input max-w-48"
           >
             <option value="">All</option>
             {index.sectors.map((s) => (
@@ -133,14 +134,6 @@ export function Explorer() {
             className="input w-24"
           />
         </Field>
-        <label className="flex items-center gap-1.5 pb-2 text-xs text-ink-muted cursor-pointer select-none">
-          <input
-            type="checkbox"
-            checked={filters.publicOnly}
-            onChange={(e) => setFilters({ publicOnly: e.target.checked })}
-          />
-          Public companies
-        </label>
       </div>
 
       <div className="flex items-center justify-between border-t border-rule-strong pt-2 mb-1">
@@ -179,7 +172,7 @@ export function Explorer() {
         </div>
 
         {facets && (
-          <aside className="hidden lg:block">
+          <aside className="grid gap-x-8 sm:grid-cols-3 lg:block border-t border-rule-strong pt-4 lg:border-t-0 lg:pt-0">
             <SectionHeading tight>Industry</SectionHeading>
             <FacetList
               facets={facets.sectors}
@@ -206,7 +199,7 @@ export function Explorer() {
               max={10}
               emptyLabel="No notice here names a place a county could be found for"
             />
-            <p className="text-[11px] text-ink-faint font-serif mt-4 leading-relaxed">
+            <p className="text-[11px] text-ink-faint font-serif mt-4 leading-relaxed sm:col-span-3 lg:col-span-1">
               Counts are notices in the current results, each facet counted
               with its own filter lifted. Counties come from resolving the
               filed location; notices whose location names no place — a
@@ -305,7 +298,9 @@ function VirtualRows({
                 <span className="text-xs text-ink-muted font-serif truncate">
                   {c.location[i] ?? "—"}
                 </span>
-                <span className="tabular text-xs">{date(c.date[i])}</span>
+                <span className="tabular text-xs">
+                  {c.flags[i] & FLAG_UNDATED ? "—" : date(c.date[i])}
+                </span>
                 <span className="tabular text-xs">{date(c.effective[i])}</span>
                 <span className="tabular text-right">{num(c.jobs[i])}</span>
                 <span>
@@ -326,13 +321,15 @@ function Field({
   label,
   children,
   grow,
+  className,
 }: {
   label: string;
   children: React.ReactNode;
   grow?: boolean;
+  className?: string;
 }) {
   return (
-    <label className={clsx("block", grow && "flex-1 min-w-56")}>
+    <label className={clsx("block", grow && "flex-1", className)}>
       <span className="smallcaps text-[10px] text-ink-muted block mb-1">{label}</span>
       {children}
     </label>

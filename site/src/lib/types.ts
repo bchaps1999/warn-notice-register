@@ -167,6 +167,7 @@ export const FLAG_AMENDMENT = 2;
 export const FLAG_AMENDED = 4;
 export const FLAG_HAS_LINKS = 8;
 export const FLAG_PUBLIC = 16;
+export const FLAG_UNDATED = 32;
 
 export interface EmployerDetail {
   key: string;

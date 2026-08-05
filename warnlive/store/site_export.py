@@ -30,6 +30,7 @@ FLAG_AMENDMENT = 2
 FLAG_AMENDED = 4
 FLAG_HAS_LINKS = 8
 FLAG_PUBLIC = 16  # matched to an SEC CIK
+FLAG_UNDATED = 32  # no notice_date; the date column carries the effective date
 
 
 def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> dict[str, int]:
@@ -433,6 +434,7 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
             | (FLAG_AMENDED if n["is_amended"] else 0)
             | (FLAG_HAS_LINKS if n["id"] in linked_ids else 0)
             | (FLAG_PUBLIC if n["cik"] else 0)
+            | (FLAG_UNDATED if not n["notice_date"] else 0)
         )
         cols["key"].append(n["dedupe_key"][:prefix_len])
         cols["state"].append(state_idx[n["state"]])
