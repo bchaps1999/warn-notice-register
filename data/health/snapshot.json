@@ -1,5 +1,5 @@
 {
- "notices": 90482,
+ "notices": 90506,
  "possible_duplicates": 1512,
  "states": {
   "AK": {
@@ -39,28 +39,28 @@
    "workers": 137750
   },
   "CA": {
-   "employers": 15880,
+   "employers": 15885,
    "first": "2000-01-01",
-   "last": "2026-07-29",
+   "last": "2026-07-31",
    "max_workers": 11083,
    "no_jobs": 3,
    "no_location": 4340,
-   "notices": 25194,
+   "notices": 25208,
    "undated": 10987,
    "unplaced": 253,
-   "workers": 2163047
+   "workers": 2163754
   },
   "CO": {
-   "employers": 751,
+   "employers": 754,
    "first": "2014-10-25",
    "last": "2026-08-10",
    "max_workers": 2820,
    "no_jobs": 64,
    "no_location": 54,
-   "notices": 880,
+   "notices": 884,
    "undated": 12,
    "unplaced": 196,
-   "workers": 89892
+   "workers": 90408
   },
   "CT": {
    "employers": 458,
@@ -159,16 +159,16 @@
    "workers": 21779
   },
   "IL": {
-   "employers": 4624,
+   "employers": 4625,
    "first": "1987-09-01",
-   "last": "2026-07-15",
+   "last": "2026-07-31",
    "max_workers": 14487,
    "no_jobs": 711,
    "no_location": 0,
-   "notices": 5692,
+   "notices": 5693,
    "undated": 0,
    "unplaced": 50,
-   "workers": 779053
+   "workers": 779294
   },
   "IN": {
    "employers": 923,
@@ -387,28 +387,28 @@
    "workers": 35892
   },
   "NY": {
-   "employers": 5227,
+   "employers": 5228,
    "first": "2006-03-02",
    "last": "2026-07-21",
    "max_workers": 2301,
    "no_jobs": 1273,
    "no_location": 1141,
-   "notices": 6343,
+   "notices": 6344,
    "undated": 0,
    "unplaced": 149,
-   "workers": 462336
+   "workers": 462360
   },
   "OH": {
-   "employers": 2310,
+   "employers": 2313,
    "first": "2001-01-09",
-   "last": "2026-07-30",
+   "last": "2026-08-04",
    "max_workers": 5833,
    "no_jobs": 24,
    "no_location": 32,
-   "notices": 2767,
+   "notices": 2770,
    "undated": 1,
-   "unplaced": 170,
-   "workers": 425981
+   "unplaced": 171,
+   "workers": 426670
   },
   "OK": {
    "employers": 684,
@@ -543,16 +543,16 @@
    "workers": 15079
   },
   "WA": {
-   "employers": 993,
+   "employers": 994,
    "first": "2004-02-05",
    "last": "2026-12-31",
    "max_workers": 9266,
    "no_jobs": 1,
    "no_location": 1,
-   "notices": 1465,
+   "notices": 1466,
    "undated": 0,
    "unplaced": 260,
-   "workers": 230416
+   "workers": 230471
   },
   "WI": {
    "employers": 2305,
@@ -567,5 +567,5 @@
    "workers": 336196
   }
  },
- "workers": 9488428
+ "workers": 9490660
 }
