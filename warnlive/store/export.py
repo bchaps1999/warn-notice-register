@@ -10,6 +10,7 @@ EXPORT_COLUMNS = [
     "state",
     "employer_name",
     "location",
+    "site_address",
     "notice_date",
     "effective_date",
     "employees_affected",

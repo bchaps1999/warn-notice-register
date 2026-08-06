@@ -447,6 +447,357 @@ def repair_dates(states, db_path: Path, dry_run: bool) -> None:
         )
 
 
+@cli.command("il-effective-dates")
+@click.option("--years", default="2019", show_default=True,
+              help="Comma-separated years or ranges, e.g. 2015-2020,2023.")
+@click.option("--workdir", type=click.Path(path_type=Path), default=DEFAULT_WORKDIR)
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--dry-run", is_flag=True, help="Report what would change without writing.")
+def il_effective_dates(years: str, workdir: Path, db_path: Path, dry_run: bool) -> None:
+    """Fill empty IL effective_dates from DCEO monthly WARN activity reports.
+
+    The IEBS export has no layoff date for regular WARN rows (its Impact
+    Date is a Trade Act field). DCEO's monthly reports carry a FIRST
+    LAYOFF DATE per notice; this matches them to stored notices by zip +
+    notified date (fallback: folded employer name + date) and fills
+    effective_date where it is empty. Never overwrites an existing date.
+    """
+    import json as json_mod
+    import re as re_mod
+
+    from warnlive.enrich import il_effective
+    from warnlive.normalize.engine import _fold, _record_hash
+    from warnlive.pipeline import now_utc
+
+    year_set: set[int] = set()
+    for part in years.split(","):
+        part = part.strip()
+        if "-" in part:
+            lo, hi = part.split("-", 1)
+            year_set.update(range(int(lo), int(hi) + 1))
+        elif part:
+            year_set.add(int(part))
+
+    records = il_effective.collect_records(year_set, Path(workdir) / "cache" / "il_reports")
+    by_zip: dict[str, list] = {}
+    by_name: dict[str, list] = {}
+    for rec in records:
+        if not rec.first_layoff or not rec.notified:
+            continue
+        if rec.zip5:
+            by_zip.setdefault(rec.zip5, []).append(rec)
+        by_name.setdefault(_fold(rec.company), []).append(rec)
+    click.echo(f"parsed {len(records)} report records from {len(year_set)} year(s)")
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    now = now_utc()
+    zip_re = re_mod.compile(r"(\d{5})(?:-\d{4})?\s*$")
+
+    rows = conn.execute(
+        """SELECT n.id, n.employer_name, n.location, n.notice_date,
+                  n.current_version, v.fields_json
+           FROM notices n JOIN notice_versions v
+             ON v.notice_id = n.id AND v.version = n.current_version
+           WHERE n.state = 'IL'
+             AND (n.effective_date IS NULL OR n.effective_date = '')
+             AND n.notice_date IS NOT NULL""",
+    ).fetchall()
+
+    import datetime as dt_mod
+    from difflib import SequenceMatcher
+
+    # DCEO logs its notified date up to ~a week after the IEBS report date,
+    # so exact-date joins miss most rows. A ±10-day window with a name check
+    # (same zip alone pairs unrelated employers filing the same week).
+    def _similar(a: str, b: str) -> bool:
+        if not a or not b:
+            return False
+        if a == b or a in b or b in a:
+            return True
+        return SequenceMatcher(None, a, b).ratio() >= 0.75
+
+    filled = amended = unmatched = 0
+    for row in rows:
+        notice_date = dt_mod.date.fromisoformat(row["notice_date"])
+        fold = _fold(row["employer_name"])
+        zm = zip_re.search(row["location"] or "")
+        pool = list(by_name.get(fold, []))
+        if zm:
+            pool.extend(c for c in by_zip.get(zm.group(1), []) if c not in pool)
+        matches = []
+        for c in pool:
+            delta = abs((dt_mod.date.fromisoformat(c.notified) - notice_date).days)
+            # An exact folded-name match earns a wider window: DCEO sometimes
+            # logs the notified date weeks after the IEBS report date, and at
+            # sim 1.0 the unrelated-neighbor risk the tight window guards
+            # against is gone.
+            limit = 45 if _fold(c.company) == fold else 10
+            if delta <= limit and _similar(fold, _fold(c.company)):
+                matches.append((delta, c))
+        if not matches:
+            unmatched += 1
+            continue
+        # Conflicting dates are almost always amendment re-listings in the
+        # cumulative xlsx reports — the same notice re-published with each
+        # revised layoff wave. The earliest first_layoff is the original
+        # schedule, which is the effective date we want.
+        if len({c.first_layoff for _, c in matches}) > 1:
+            amended += 1
+        rec = min((c for _, c in matches), key=lambda c: c.first_layoff)
+        filled += 1
+        if dry_run:
+            continue
+        fields = json_mod.loads(row["fields_json"])
+        fields["effective_date"] = rec.first_layoff
+        fields["raw_record_hash"] = _record_hash(fields)
+        raw = json_mod.loads(fields.get("raw_extra") or "{}")
+        raw["_dceo_report"] = rec.source_file
+        if rec.ending_layoff:
+            raw["_dceo_ending_layoff"] = rec.ending_layoff
+        fields["raw_extra"] = json_mod.dumps(raw, sort_keys=True, ensure_ascii=False)
+        conn.execute(
+            """UPDATE notices SET effective_date = ?,
+                 current_version = current_version + 1, is_amended = 1
+               WHERE id = ?""",
+            (rec.first_layoff, row["id"]),
+        )
+        conn.execute(
+            """INSERT INTO notice_versions
+                 (notice_id, version, raw_record_hash, fields_json, observed_at)
+               VALUES (?, ?, ?, ?, ?)""",
+            (row["id"], row["current_version"] + 1, fields["raw_record_hash"],
+             json_mod.dumps(fields, sort_keys=True, ensure_ascii=False), now),
+        )
+    if not dry_run:
+        conn.commit()
+    label = "would fill" if dry_run else "filled"
+    click.echo(
+        f"IL: {label} {filled} ({amended} via earliest-of-amendments), "
+        f"unmatched {unmatched} (of {len(rows)} empty-effective-date rows)"
+    )
+
+
+@cli.command("surface-addresses")
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--dry-run", is_flag=True, help="Report what would change without writing.")
+def surface_addresses(db_path: Path, dry_run: bool) -> None:
+    """Fill notices.site_address from data we already hold.
+
+    Lifts street addresses out of raw_extra fields the normalizers never
+    mapped (PA, KY, AZ, IA, GA, ME, VT, KS, MI, DE) and copies them from
+    location where that column already is a street address (IL, MD, NC,
+    LA, CT). Rejects values naming a different state (portal rows
+    sometimes carry corporate HQ addresses). site_address is a plain
+    enrichment column — no version bump, safe to re-run.
+    """
+    import json as json_mod
+
+    from warnlive.enrich.site_address import (
+        LOCATION_IS_ADDRESS, RAW_ADDRESS_KEYS, clean_address)
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+
+    for state, keys in sorted(RAW_ADDRESS_KEYS.items()):
+        rows = conn.execute(
+            """SELECT n.id, v.fields_json FROM notices n
+               JOIN notice_versions v
+                 ON v.notice_id = n.id AND v.version = n.current_version
+               WHERE n.state = ? AND n.site_address IS NULL""",
+            (state,),
+        ).fetchall()
+        filled = rejected = 0
+        for row in rows:
+            raw = json_mod.loads(
+                json_mod.loads(row["fields_json"]).get("raw_extra") or "{}")
+            value = next((raw[k] for k in keys if raw.get(k)), None)
+            addr = clean_address(value, state)
+            if addr is None:
+                if value and str(value).strip():
+                    rejected += 1
+                continue
+            filled += 1
+            if not dry_run:
+                conn.execute(
+                    "UPDATE notices SET site_address = ? WHERE id = ?",
+                    (addr, row["id"]),
+                )
+        click.echo(f"{state}: raw fields -> {filled} filled, {rejected} rejected "
+                   f"(of {len(rows)})")
+
+    for state in sorted(LOCATION_IS_ADDRESS):
+        rows = conn.execute(
+            """SELECT id, location FROM notices
+               WHERE state = ? AND site_address IS NULL AND location IS NOT NULL""",
+            (state,),
+        ).fetchall()
+        filled = 0
+        for row in rows:
+            addr = clean_address(row["location"], state)
+            if addr is None:
+                continue
+            filled += 1
+            if not dry_run:
+                conn.execute(
+                    "UPDATE notices SET site_address = ? WHERE id = ?",
+                    (addr, row["id"]),
+                )
+        click.echo(f"{state}: location column -> {filled} filled (of {len(rows)})")
+
+    if not dry_run:
+        conn.commit()
+    total = conn.execute(
+        "SELECT COUNT(*) FROM notices WHERE site_address IS NOT NULL").fetchone()[0]
+    click.echo(f"site_address populated on {total} notices"
+               + (" (dry run: unchanged)" if dry_run else ""))
+
+
+@cli.command("ca-addresses")
+@click.option("--workdir", type=click.Path(path_type=Path), default=DEFAULT_WORKDIR)
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--dry-run", is_flag=True, help="Report what would change without writing.")
+def ca_addresses(workdir: Path, db_path: Path, dry_run: bool) -> None:
+    """Fill CA site_address from EDD fiscal-year WARN reports (FY21-22 on).
+
+    Matches on folded employer name + notice date (±3 days), using the
+    stored city to disambiguate multi-site filings; skips notices whose
+    candidates still disagree on the address.
+    """
+    import datetime as dt_mod
+
+    from warnlive.enrich import ca_address
+    from warnlive.normalize.engine import _fold
+
+    records = ca_address.collect_records(Path(workdir) / "cache" / "ca_reports")
+    by_name: dict[str, list] = {}
+    for rec in records:
+        by_name.setdefault(_fold(rec.company), []).append(rec)
+    click.echo(f"parsed {len(records)} EDD report rows")
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    rows = conn.execute(
+        """SELECT id, employer_name, location, notice_date FROM notices
+           WHERE state = 'CA' AND site_address IS NULL
+             AND notice_date >= '2021-07-01'""",
+    ).fetchall()
+
+    filled = ambiguous = unmatched = 0
+    for row in rows:
+        nd = dt_mod.date.fromisoformat(row["notice_date"])
+        pool = by_name.get(_fold(row["employer_name"]), [])
+        matches = [c for c in pool
+                   if abs((dt_mod.date.fromisoformat(c.notice_date) - nd).days) <= 3]
+        city = (row["location"] or "").split(",")[0].strip().lower()
+        if len({c.address.lower() for c in matches}) > 1 and city:
+            near = [c for c in matches if city in c.address.lower()]
+            matches = near or matches
+        if not matches:
+            unmatched += 1
+            continue
+        addresses = {c.address.lower() for c in matches}
+        if len(addresses) > 1:
+            ambiguous += 1
+            continue
+        filled += 1
+        if not dry_run:
+            conn.execute(
+                "UPDATE notices SET site_address = ? WHERE id = ?",
+                (matches[0].address, row["id"]),
+            )
+    if not dry_run:
+        conn.commit()
+    label = "would fill" if dry_run else "filled"
+    click.echo(
+        f"CA: {label} {filled}, ambiguous {ambiguous}, unmatched {unmatched} "
+        f"(of {len(rows)} address-less CA notices since 2021-07)"
+    )
+
+
+@cli.command("ny-addresses")
+@click.option("--workdir", type=click.Path(path_type=Path), default=DEFAULT_WORKDIR)
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--dry-run", is_flag=True, help="Report what would change without writing.")
+def ny_addresses(workdir: Path, db_path: Path, dry_run: bool) -> None:
+    """Fill NY site_address from the DOL Tableau WARN dataset (per-year CSV).
+
+    Matches on folded employer name + notice date (±3 days), using the
+    stored city or the record's start date to disambiguate multi-site
+    filings; skips notices whose candidates still disagree.
+    """
+    import datetime as dt_mod
+
+    from warnlive.enrich import ny_address
+    from warnlive.normalize.engine import _fold
+
+    from difflib import SequenceMatcher
+
+    records = ny_address.collect_records(Path(workdir) / "cache" / "ny_reports")
+    by_name: dict[str, list] = {}
+    by_date: dict[str, list] = {}
+    for rec in records:
+        by_name.setdefault(_fold(rec.company), []).append(rec)
+        by_date.setdefault(rec.notice_date, []).append(rec)
+    click.echo(f"parsed {len(records)} NY Tableau rows")
+
+    conn = db_mod.connect(db_path)
+    db_mod.init_db(conn)
+    rows = conn.execute(
+        """SELECT id, employer_name, location, notice_date, effective_date
+           FROM notices
+           WHERE state = 'NY' AND site_address IS NULL
+             AND notice_date IS NOT NULL""",
+    ).fetchall()
+
+    filled = ambiguous = unmatched = 0
+    for row in rows:
+        nd = dt_mod.date.fromisoformat(row["notice_date"])
+        fold = _fold(row["employer_name"])
+        pool = by_name.get(fold, [])
+        matches = [c for c in pool
+                   if abs((dt_mod.date.fromisoformat(c.notice_date) - nd).days) <= 3]
+        if not matches:
+            # exact name, wider window (register logs some notices weeks off)
+            matches = [c for c in pool
+                       if abs((dt_mod.date.fromisoformat(c.notice_date) - nd).days) <= 30]
+        if not matches:
+            # near-identical name in the same few days — punctuation and
+            # suffix drift ("d/b/a", "(2008-W323)") between the two registers
+            cands = []
+            for d in range(-3, 4):
+                cands.extend(by_date.get((nd + dt_mod.timedelta(days=d)).isoformat(), []))
+            matches = [c for c in cands
+                       if SequenceMatcher(None, fold, _fold(c.company)).ratio() >= 0.8]
+        if len({c.address.lower() for c in matches}) > 1:
+            city = (row["location"] or "").split(",")[0].strip().lower()
+            if city:
+                near = [c for c in matches if city in c.address.lower()]
+                matches = near or matches
+            if len({c.address.lower() for c in matches}) > 1 and row["effective_date"]:
+                near = [c for c in matches if c.start_date == row["effective_date"]]
+                matches = near or matches
+        if not matches:
+            unmatched += 1
+            continue
+        if len({c.address.lower() for c in matches}) > 1:
+            ambiguous += 1
+            continue
+        filled += 1
+        if not dry_run:
+            conn.execute(
+                "UPDATE notices SET site_address = ? WHERE id = ?",
+                (matches[0].address, row["id"]),
+            )
+    if not dry_run:
+        conn.commit()
+    label = "would fill" if dry_run else "filled"
+    click.echo(
+        f"NY: {label} {filled}, ambiguous {ambiguous}, unmatched {unmatched} "
+        f"(of {len(rows)} address-less NY notices)"
+    )
+
+
 @cli.command("edgar-refresh")
 @click.option("--workdir", type=click.Path(path_type=Path), default=Path("workdir/backfill"))
 def edgar_refresh(workdir: Path) -> None:

@@ -19,8 +19,11 @@ CREATE TABLE IF NOT EXISTS notices (
     is_amended INTEGER DEFAULT 0,          -- we have observed >1 version
     current_version INTEGER DEFAULT 1,
     first_seen TEXT NOT NULL,
-    last_seen TEXT                         -- NULL = present in the state's latest run;
+    last_seen TEXT,                        -- NULL = present in the state's latest run;
                                            -- a date = last run that still listed it
+    site_address TEXT                      -- enrichment: street address of the layoff
+                                           -- site. Kept out of location (and thus the
+                                           -- dedupe key) so daily scrapes keep matching.
 );
 CREATE INDEX IF NOT EXISTS idx_notices_state_date ON notices(state, notice_date);
 

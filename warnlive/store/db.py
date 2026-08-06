@@ -6,7 +6,7 @@ import sqlite3
 from pathlib import Path
 
 SCHEMA_PATH = Path(__file__).parent / "schema.sql"
-SCHEMA_VERSION = 3  # v3: last_seen nullable (NULL = present in latest run)
+SCHEMA_VERSION = 4  # v4: site_address enrichment column
 
 DEFAULT_DB_PATH = Path("data/warn.sqlite")
 
@@ -24,6 +24,7 @@ def connect(db_path: Path | str = DEFAULT_DB_PATH) -> sqlite3.Connection:
 def init_db(conn: sqlite3.Connection) -> None:
     conn.executescript(SCHEMA_PATH.read_text())
     _drop_last_seen_not_null(conn)
+    _add_site_address(conn)
     row = conn.execute("SELECT version FROM schema_version").fetchone()
     if row is None:
         conn.execute("INSERT INTO schema_version (version) VALUES (?)", (SCHEMA_VERSION,))
@@ -37,6 +38,13 @@ def init_db(conn: sqlite3.Connection) -> None:
             f"version {SCHEMA_VERSION}; refusing to write."
         )
     conn.commit()
+
+
+def _add_site_address(conn: sqlite3.Connection) -> None:
+    """v4: additive column; detected from the live table like v3."""
+    cols = {r["name"] for r in conn.execute("PRAGMA table_info(notices)")}
+    if cols and "site_address" not in cols:
+        conn.execute("ALTER TABLE notices ADD COLUMN site_address TEXT")
 
 
 def _drop_last_seen_not_null(conn: sqlite3.Connection) -> None:
