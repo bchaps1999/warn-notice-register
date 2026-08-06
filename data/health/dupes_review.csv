@@ -997,6 +997,7 @@ TX,2025-03-12,Constellis LLC (Laredo Border Station),Constellis LLC (Laredo #2),
 TX,2010-01-12,Radiology Associates - AMI - Four Season's Breast,Radiology Associates - AMI - Crown IR,San Antonio,0.911,10,10,44393,44398
 TX,2010-01-12,Radiology Associates - AMI - Four Season's Breast,Radiology Associates - AMI - Crown MR,San Antonio,0.911,10,11,44393,44401
 TX,2013-08-12,SER Jobs for Progress-Hillcrest Dr,SER Jobs for Progress-Dolorosa,San Antonio,0.911,28,,45116,45122
+WA,2020-05-27,Hyatt Corporation / Hyatt Regency Seattle,Hyatt Corporation / Hyatt at Olive 8,Seattle,0.911,276,29,93539,93541
 NY,2023-04-20,"Sumitovant Biopharma, Inc.","Sumitovant Biopharma, Inc. - Long Island Region",,0.911,,,57406,57456
 NY,2023-03-17,Upward Enterprises Inc. DBA Upward Farms - New York City Region,Upward Enterprises Inc. - New York City Region,,0.911,,,57477,57480
 NY,2020-06-10,Hyatt Corporation dba Hotel 50 Bowery,Hyatt Corporation dba Parker New York,New York,0.911,67,366,58290,58294
@@ -1102,6 +1103,7 @@ NY,2020-01-03,Catholic Guardian Services (Wallace Ave),Catholic Guardian Service
 NY,2019-11-22,"WeWork Companies, Inc. (Beach St.)","WeWork Companies, Inc. (115 Broadway)",New York,0.909,10,16,59938,59947
 NY,2018-03-30,"CAMBA, Inc.- LTW at Cascades High School","CAMBA, Inc.- LTW at Judith S. Kaye High School",New York,0.909,6,5,60652,60654
 NY,2018-03-29,People Inc. (Lincoln Avenue),People Inc. (Walden Avenue),Depew,0.909,9,54,60657,60659
+WA,2025-09-08,Virginia Mason Franciscan Health Virtual Health Services,Virginia Mason Franciscan Health Insurance Verification,Tacoma,0.909,24,6,93174,93175
 CA,2025-08-04,University of Southern California Norris Cancer Hospital,University of Southern California (HC4),,0.908,10,2,1447,1452
 CA,2025-09-08,Kaiser Foundation Hospitals-Antioch,Kaiser Foundation Hospitals - 99 S. Pasadena,,0.908,1,1,1553,1555
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Dublin Physical & Hand Therapy),Agile Physical Therapy (Sutter Health Palo Alto Physical Therapy & Hand Therapy),,0.908,7,30,1591,1598
@@ -1648,6 +1650,7 @@ TX,2013-08-12,SER Jobs for Progress-Hillcrest Dr,SER Jobs for Progress-SW 40th S
 TX,2013-08-12,SER Jobs for Progress-SW 40th Street,SER Jobs for Progress-Walzem Rd.,San Antonio,0.899,4,17,45124,45127
 TX,2015-09-01,ConocoPhillips-Westlake Park2,ConocoPhillips-Post Oak,Houston,0.899,50,50,45530,45539
 TX,2015-09-01,ConocoPhillips-Park Ten Pl.,ConocoPhillips-JFK Blvd.,Houston,0.899,50,50,45534,45540
+WA,2020-05-27,Hyatt Corporation / Grand Hyatt Seattle,Hyatt Corporation / Hyatt at Olive 8,Seattle,0.899,58,29,93540,93541
 VA,2023-07-11,Wellmore Energy Company LLC (Surface Minerals),Wellmore Energy Company LLC (Company Trucks Safety and Engineering),Grundy VA,0.899,15,12,49001,49006
 NY,2020-07-02,Hilton Grand Vacation at Hilton Club New York,Hilton Grand Vacation at West 57th Street by Hilton Club,New York,0.899,141,72,58150,58152
 NY,2020-06-10,Hyatt Corporation The Beekman,Hyatt Corporation dba Park Hyatt,New York,0.899,105,264,58289,58291
@@ -1728,6 +1731,7 @@ TX,2018-03-27,Baker Metal Products-Willowbook,"Baker Metal Products, Inc.",Dalla
 NY,2020-03-25,"TN Apple, LLC","GC Apple, LLC",Brooklyn,0.897,70,63,59284,59293
 NY,2016-06-13,Eastman Kodak Company (Eastman Business Park),Eastman Kodak Company (Rochester Tech Park),Rochester,0.897,2,1,61286,61287
 WI,2026-07-20,"Prairie Farms Dairy, Inc. Shullsburg Creamery","Prairie Farms Dairy, Inc. White Hill Cheese",Shullsburg,0.897,43,54,70795,70796
+WA,2020-06-19,Swissport Fueling,"Swissport USA, Inc",SeaTac,0.897,69,167,93498,93499
 AL,2025-05-07,Bilfinger Inc,Bilfinger Inc Evonik Malbec,Theodore,0.896,143,143,99,68332
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Fremont Physical Therapy & Hand Therapy),Agile Physical Therapy (Sutter Health Mountain View Center),,0.896,24,1,1592,1597
 CA,2025-11-03,CommUnify - Alvin Center,CommUnify - Little Village Center,,0.896,6,8,1865,1868
@@ -1815,6 +1819,7 @@ IN,2018-01-11,Sam's Club - W 86th Street Store,Sam's Club - E. Washington Street
 TX,2015-09-01,ConocoPhillips-Katy Frwy,ConocoPhillips-Park Ten Pl.,Houston,0.895,50,50,45529,45534
 TX,2017-08-01,Snap Kitchen-Bee Cave Rd.,Snap Kitchen- Triangle Ave.,Austin,0.895,23,42,46019,46020
 TX,2019-08-27,AECOM-Flint Energy Services Inc.-Pecos,AECON-Flint Energy Services-Pecos,Pecos,0.895,88,50,46428,70778
+WA,2020-05-29,Hyatt Corporation / Hyatt at Olive 8,Hyatt Corporation / Thompson Seattle,Seattle,0.895,29,50,47279,93533
 MI,2023-10-24,GENERAL MOTORS LLC,"General Motors, Lake Orion Plant",Lake Orion,0.895,945,911,55124,55130
 NY,2020-07-02,Hilton Grand Vacation at Hilton Club New York,Hilton Grand Vacation at The Quin Central Park by Hilton Club,New York,0.895,141,76,58150,58153
 NY,2020-04-22,Visionworks (Mid-Hudson Region),Visionworks (Western Region),,0.895,34,40,58571,58573
@@ -2449,6 +2454,7 @@ NY,2020-02-04,M&T Bank (Long Island),M&T Bank (NYC),New York,0.881,17,28,59823,5
 NY,2018-09-13,Henri Bendel ( Home Office),Henri Bendel (Flagship Store),New York,0.881,42,67,60454,60455
 NY,2016-11-14,Yeshiva University - Israel Henry Beren Campus,Yeshiva University -Brookdale Center,New York,0.881,4,2,61171,61172
 KY,2020-03-20,Communicare Clinic - Lebanon,Communicare Services - Lebanon,Marion,0.881,16,16,67352,67354
+WA,2025-11-14,"The Skillet Group / Skillet SA, LLC","The Skillet Group / Skillet Street Food, Inc. DBA Skillet Diner Harbor Steps",Seattle,0.881,9,20,93126,93128
 CA,2025-11-03,CommUnify - Chapel Office,CommUnify - JC Washington Center,,0.88,13,3,1866,1867
 CA,2026-01-06,Alameda Health System - Wilma Chan Highland Hospital,Alameda Health System - Park Bridge,,0.88,128,3,2000,2006
 CA,2026-01-29,Amazon,Amazon - SNA 16,,0.88,89,24,2097,2099
