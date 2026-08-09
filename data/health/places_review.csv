@@ -2,9 +2,13 @@ state,location,notices,workers,reason
 OR,"ST. PAUL, MN",1,27500,"address is in MN, not OR"
 CT,"82-E Buckland St, Manchester CT / 112-118 Boston Post Road, Orange, CT / 15 Backus Ave, Space 13-15, Danbury CT",2,18496,3 distinct places named
 NJ,Chicago,1,16000,no matching place
+WA,"Seattle, Bellevue",17,7041,2 distinct places named
 VA,Dulles VA,14,5352,no matching place
+WA,"Redmond, Bellevue, Issaquah",6,4368,3 distinct places named
+WA,"Seattle, Kent",4,4354,2 distinct places named
 IN,Gary and Portage,1,3765,2 distinct places named
-WA,"Seattle, Bellevue",8,3491,2 distinct places named
+WA,Redmond and Bellevue,6,3330,2 distinct places named
+WA,"Seatac, Seattle",2,3166,2 distinct places named
 IL,"10990 Roe Ave Overland Park, KS 66211-1213",1,3000,"address is in KS, not IL"
 IL,"501 Commerce Street Suite 1120 Nashville, TN 37209",1,3000,"address is in TN, not IL"
 GA,Fort Benning,14,2999,no matching place
@@ -12,18 +16,17 @@ MI,"Dearborn, Michigan; Farmington Hills, Michigan; Grosse Pointe, Michigan; Roy
 MD,"7002 Arundel Mills Circle Hanover, MD 21076",1,2400,no matching place
 MI,"Ann Arbor, Michigan; Birmingham, Michigan; Canton, Michigan; Clarkston, Michigan; Flint, Michigan; Grand Rapids, Michigan; Grandville, Michigan; Jackson, Michigan; Kalamazoo, Michigan; Kentwood, Michigan; Lansing, Michigan; Livonia, Michigan; Madison Heights, Michigan; Novi, Michigan; Okemos, Michigan; Portage, Michigan; Roseville, Michigan; Saginaw, Michigan, Shelby Township, Michigan; Southfield, Michigan, Southgate, Michigan; Sterling Heights, Michigan; Traverse City, Michigan; and Troy, Michigan",1,2289,23 distinct places named
 WI,"Brookfield, Eau Claire, Glendale, Greendale, Janesville, Madison, Marshfield, Milwaukee, Racine, Wauwatosa",1,2255,10 distinct places named
-WA,"Redmond, Bellevue, Issaquah",3,2184,3 distinct places named
-WA,"Seattle, Kent",2,2177,2 distinct places named
 AZ,Laveen,1,2137,no matching place
 MD,"1430 Sparrows Point Blvd., Sparrows Point, MD",1,1975,no matching place
 NJ,Lawrence Twp,9,1926,no matching place
 WI,"Milwaukee, Wabeno, Crandon",1,1835,2 distinct places named
 MO,St. Louis & Springfield,1,1810,2 distinct places named
+WA,Bangor,4,1774,no matching place
+WA,Malaga,6,1748,no matching place
 WI,"Abbotsford, Adams, Appleton, Arcadia, Ashwaubenon, Beaver Dam, Chippewa Falls, Clintonville, De Pere, Eagle River, Eau Claire, Fond du Lac, Fort Atkinson, Green Bay, Janesville, La Crosse, Lancaster, Marshfield, Mequon, Monroe, Neillsville, Oconto, Onalaska, Oshkosh, Park Falls, Reedsburg, Rice Lake, River Falls, Rothschild, Sister Bay, Spooner, Stanley, Suamico, Tomahawk, Waukesha, Wausau, Wautoma, Wisconsin Rapids",1,1715,38 distinct places named
+WA,"Bothell, Redmond",41,1708,2 distinct places named
 CO,Arapahoe/Douglas (Centennial),2,1700,2 distinct places named
-WA,Redmond and Bellevue,3,1665,2 distinct places named
 MI,"Detroit, Michigan and Troy, Michigan",1,1656,2 distinct places named
-WA,"Seatac, Seattle",1,1583,2 distinct places named
 WI,"Appleton, Greenville, Kimberly, Neenah",1,1546,3 distinct places named
 VA,Ringgold VA,7,1477,no matching place
 IN,"Merrillville, Mishawaka, Fort Wayne, Kokomo, Greenwood, Muncie, Terre Haute, Bloomington, Clarksville, Evansville and Indianapolis",1,1448,11 distinct places named
@@ -31,14 +34,19 @@ LA,"2650 Louisiana Avenue, Bldg. 4386 Fort Polk, LA 71459",5,1422,no matching pl
 AZ,City of Commerce,1,1400,no matching place
 IL,"3311 E Old Shakopee Rd Bloomington, MN 55425-1361",1,1395,"address is in MN, not IL"
 GA,McRae,3,1371,no matching place
+WA,Seattle-Renton,2,1368,no matching place
 MI,"Auburn Hills, Michigan; Birmingham, Michigan; Detroit, Michigan; Farmington Hills, Michigan; Holly, Michigan; Livonia, Michigan; Milford, Michigan; Oscoda, Michigan; Plymouth, Michigan; Mt. Clemens, Michigan; Royal Oak, Michigan; Southgate, Michigan; and St. Clair Shores, Michigan",1,1318,12 distinct places named
 MI,"Belmont, Michigan; Grand Rapids, Michigan; Grandville, Michigan; Lowell, Michigan; Middleville, Michigan; and Wyoming, Michigan",1,1295,5 distinct places named
 CO,Arapahoe Douglas,10,1215,no matching place
+WA,"Kent, Everett, Spokane",2,1200,2 distinct places named
 VA,"Alexandria, Arlington, Fairfax, Falls Church & Vienna VA",1,1141,5 distinct places named
 WI,"Waukesha, Menomonee Falls, Greenfield, Wauwatosa, New Berlin, Mukwonago",1,1100,5 distinct places named
 PA,York and Philadelphia,1,1096,2 distinct places named
+WA,"Bellevue, Kirkland, Redmond, Seattle, Tukwila",2,1090,5 distinct places named
 GA,Ellenwood,5,1072,no matching place
+WA,"Seattle, Bellevue, Redmond",6,1064,3 distinct places named
 MO,Earth City,10,1063,no matching place
+WA,"Seattle, Pullman",2,1062,2 distinct places named
 LA,"5100 Legacy Drive Plano, TX 75024",1,1021,"address is in TX, not LA"
 MA,"Boston, Chestnut Hill & Framingham",1,1019,2 distinct places named
 MD,"1430 Sparrows Point Boulevard, Sparrows Point, MD",1,1012,no matching place
@@ -56,10 +64,8 @@ GA,Midland,5,919,no matching place
 OR,"Portland, Eugene, Medford, Salem",1,919,4 distinct places named
 NY,Buffalo/Amherst/Kenmore/Lancaster/Lockport/Niagara,1,909,4 distinct places named
 OR,"Los Angeles, CA",2,900,"address is in CA, not OR"
-WA,"Bothell, Redmond",23,894,2 distinct places named
-WA,Bangor,2,887,no matching place
 WI,Wilmot,3,884,no matching place
-WA,Malaga,3,874,no matching place
+WA,"Everett, Seattle, Tacoma, E. Wenatchee, Union Gap, Pasco, Spokane",2,874,6 distinct places named
 AL,Adger,3,872,no matching place
 OR,"San Francisco, CA",4,863,"address is in CA, not OR"
 MN,Bentonville,2,840,no matching place
@@ -72,6 +78,7 @@ NJ,Monroe Township,3,812,no matching place
 IL,"PO BOX 516 ST. LOUIS, MO 63166-0516",2,803,"address is in MO, not IL"
 OH,Cleveland & Ashtabula (Cuyahoga & Ashtabula),1,803,2 distinct places named
 OH,Sandusky/ErieMason/Warren,1,802,2 distinct places named
+WA,"Everett, Tukwila, Tacoma, Bellevue, Seattle",2,802,5 distinct places named
 NJ,NEWARK/JERSEY CITY,1,800,2 distinct places named
 TN,Davidson and Shelby County,3,787,no matching place
 OR,"Santa Clara, CA",1,784,"address is in CA, not OR"
@@ -94,7 +101,7 @@ IN,"Indianapolis, Wakarusa, Tipton, Sullivan, Rushville, Peru, LaGrange, and Hun
 VA,"Fairfax, Franconia, Lorton, Alexandria & Falls church VA",1,691,5 distinct places named
 MI,"Grandville, Michigan; Livonia, Michigan; Rochester Hills, Michigan; and Clinton, Michigan",1,688,3 distinct places named
 GA,"3311 E Old Shakopee Rd, Bloomington, Minnesota",1,687,no matching place
-WA,Seattle-Renton,1,684,no matching place
+OH,Hamilton/Butler,9,677,2 distinct places named
 ND,"Watsonville, CA",1,670,"address is in CA, not ND"
 MI,"Bay City, Belleville, Brownstown, Burton, Detroit, Flint, Grand Blanc, Grand Rapids, Lake Orion, Lansing, Milford, Pontiac, Romulus, Saginaw, Swartz Creek, Warren, Waterford, Ypsilanti",1,664,16 distinct places named
 MI,"Bay City, Michigan; Belleville, Michigan; Brownstown, Michigan; Burton, Michigan; Detroit, Michigan; Flint, Michigan; Grand Blanc, Michigan; Grand Rapids, Michigan; Lake Orion, Michigan; Lansing, Michigan; Milford, Michigan; Pontiac, Michigan; Romulus, Michigan; Saginaw, Michigan; Swartz Creek, Michigan; Warren, Michigan; Waterford, Michigan; and Ypsilanti, Michigan",1,664,16 distinct places named
@@ -117,8 +124,8 @@ CA,Moffett Field,9,617,no matching place
 AK,Girdwood,1,616,no matching place
 NJ,Monroe,4,615,no matching place
 WI,"Grafton, Saukville",3,612,2 distinct places named
+WA,"Federal Way, Olympia, Tacoma, Walla Walla, and Bellevue",2,606,4 distinct places named
 MI,"Ann Arbor, Clinton Township, Dearborn, Grand Rapids, Lansing, Livonia, Rochester, and Troy, Counties: Ingham, Kent, Macomb, Oakland, Washtenaw and Wayne, Number Affected: 600",1,600,10 distinct places named
-WA,"Kent, Everett, Spokane",1,600,2 distinct places named
 LA,"116 Roy Baker Road LeMoyen, LA 71356",2,591,no matching place
 CO,Gilpin/Jefferson,2,587,no matching place
 FL,FL 32925,3,585,no place name in the string
@@ -127,24 +134,22 @@ NJ,Hamilton,8,580,no matching place
 WI,"De Pere, Watertown, Beloit, Racine, Kimberly, Kenosha, Monona, Marinette, Sheboygan, Delavan, Rhinelander",1,578,11 distinct places named
 NY,Courtland,1,577,no matching place
 OR,"Denver, CO",1,577,"address is in CO, not OR"
+WA,"Seattle, Des Moines",2,564,2 distinct places named
 NY,East Elmhurst,7,558,no matching place
 WI,"Chippewa Falls, Eau Claire, New Auburn",1,557,2 distinct places named
 CA,Rancho,12,554,no matching place
 VA,Richmond & Glen Allen VA,2,553,2 distinct places named
 NJ,Cleveland,1,550,no matching place
-WA,"Bellevue, Kirkland, Redmond, Seattle, Tukwila",1,545,5 distinct places named
 WI,"Oconomowoc, Watertown",1,542,2 distinct places named
 FL,CHAMPIONSGATE,1,541,no matching place
 AZ,Chicago,2,540,no matching place
 OR,"Lutz, FL",1,539,"address is in FL, not OR"
 IN,"Albion, Avilla & Franklin",1,535,2 distinct places named
 OH,"Steubenville, Martins Ferry, Yorkville (Jefferson & Belmont)",1,534,5 distinct places named
-OH,Hamilton/Butler,8,532,2 distinct places named
-WA,"Seattle, Bellevue, Redmond",3,532,3 distinct places named
 MI,New Hudson,5,531,no matching place
-WA,"Seattle, Pullman",1,531,2 distinct places named
 VA,"Fredericksburg, Virginia Beach, Newport News, Chesapeake & Hampton VA",1,524,5 distinct places named
 CA,"Culver City, Baldwin Park, Montebello",1,517,3 distinct places named
+WA,"Everett, Puyallup",2,516,2 distinct places named
 IN,"Wakarusa, Milford, Warsaw",1,515,3 distinct places named
 WA,"Clarkston, Vancouver",1,508,2 distinct places named
 IN,"Merrillville, Schererville, Portage, Mishawaka, Lafayette, Clarksville, Jeffersonville, Evansville and Indianapolis",1,502,9 distinct places named
@@ -157,6 +162,7 @@ SC,Mount Holly,1,487,no matching place
 KY,Clark / Montgomery,2,484,no matching place
 AZ,Westerville,1,483,no matching place
 VA,Fairfax & Woodbridge VA,2,483,2 distinct places named
+WA,"Moses Lake, Renton",2,480,2 distinct places named
 CA,Mountain Pass,1,474,no matching place
 VA,Norfolk & Virginia Beach VA,4,474,2 distinct places named
 NJ,Fairfield,6,473,no matching place
@@ -164,6 +170,7 @@ MD,"7555 Harmans Road Harmans, MD 21077",3,470,no matching place
 NJ,FAIRFIELD,5,468,no matching place
 FL,PONTE VEDRA BEACH,4,462,no matching place
 NJ,Salisbury,1,460,no matching place
+WA,"King, Pierce, and Snohomish Counties",2,460,no matching place
 VA,"Herndon, Woodbridge, Clifton, Springfield, Fairfax, Arlington & Vienna VA",1,455,6 distinct places named
 IN,Mishawaka and Indianapolis,1,452,2 distinct places named
 MI,"Fruitport, Michigan and Southfield, Michigan",1,451,2 distinct places named
@@ -173,8 +180,8 @@ OH,"Conneaut (Ashtabula), Grafton (Lorain)",1,446,4 distinct places named
 CT,"Stamford, Greenwich, Riverside, New Canaan, Old Lyme, New Canaan, Newington, Mystic, Newington, Waterford, Riverside, Ridgefield, Danbury, Bristol",1,444,10 distinct places named
 NY,Howard Beach,6,443,no matching place
 NJ,Philadelphia,3,442,no matching place
-WA,"Everett, Seattle, Tacoma, E. Wenatchee, Union Gap, Pasco, Spokane",1,437,6 distinct places named
 FL,Cantonment,5,434,no matching place
+WA,"Seattle, Mountlake Terrace",2,432,2 distinct places named
 WI,Delevan,2,431,no matching place
 OR,"Mountain View, CA",1,429,"address is in CA, not OR"
 GA,Kings Bay,3,427,no matching place
@@ -189,7 +196,6 @@ MI,Waterford,3,410,no matching place
 AZ,Salinas,1,407,no matching place
 IL,"650 Liberty Ave IL Statewide COVID furloughs Union, NJ 07083",1,402,"address is in NJ, not IL"
 OR,"Nashville, TN",1,402,"address is in TN, not OR"
-WA,"Everett, Tukwila, Tacoma, Bellevue, Seattle",1,401,5 distinct places named
 GA,Newman,1,400,no matching place
 MI,"Saranac, Michigan and Lake Odessa, Michigan",1,400,2 distinct places named
 NJ,Kentucky,1,400,no matching place
@@ -197,14 +203,19 @@ NJ,scranton,1,400,no matching place
 SD,Sioux Falls /Garretson,1,400,2 distinct places named
 MD,"Maryland House Travel Plaza, I-95, JFK Memorial Highway, Mile Markers 82, Aberdeen, MD & Chesapeake House Travel Plaza, I-95, JFK Memorial Highway, Mile Marker 96.5, North East, MD",1,396,2 distinct places named
 NJ,San Diego,1,390,no matching place
+WA,Eastsound (Orcas Island),2,390,no matching place
+WA,Joint Base Lewis McChord,6,390,no matching place
 GA,Little Rock,1,387,no matching place
 NJ,Haskell,2,385,no matching place
 NJ,"Somers Point, Edgewater Park, North Cape May, Toms River, Clifton, Brickton, South Plainfield, West Deptford, Sicklerville, Middletown, Dover, Barnegat, Cape May Court House, Lumberton, Millville, Hamilton",1,385,10 distinct places named
 NJ,New York,4,384,no matching place
 VA,"Charlottesville, Harrisonburg, Waynesboro, Lynchburg & Danville VA",1,384,5 distinct places named
 GA,Suwannee,3,375,no matching place
+WA,"Kent, Bothell, Bellevue, Fife",2,374,4 distinct places named
+WA,"Lynnwood, Seattle",2,374,2 distinct places named
 CA,EL TORO,5,372,no matching place
 WI,"Deforest, Franklin, Green Bay, Janesville, Kenosha, Onalaska, Rothschild, Waukesha, West Baraboo",1,371,9 distinct places named
+WA,Bothell/Redmond/Bellevue,6,366,3 distinct places named
 IN,"Valparaiso, Franklin and Hanover",1,365,2 distinct places named
 MA,Boston & Somerville,1,364,2 distinct places named
 MD,"1020A Airport 100 Way Hanover, MD 21076",1,362,no matching place
@@ -217,11 +228,15 @@ MI,"Novi, Michigan; Southfield, Michigan; and Taylor, Michigan",1,360,3 distinct
 SC,Columbia/Greer,1,359,2 distinct places named
 CA,"Fremont, Pleasanton",1,350,2 distinct places named
 IL,"424 E Inglefield Road Evansville, IN 47725",1,348,"address is in IN, not IL"
+WA,"Keyport, Silverdale",4,348,2 distinct places named
+WA,"Seattle, Tukwila",2,346,2 distinct places named
 VA,Sweet Briar VA,1,344,no matching place
 GA,Fort Gordon,3,343,no matching place
 CA,"Cupertino, Palo Alto, San Bruno",1,342,3 distinct places named
 KY,"Jefferson, Bullitt, Shelby",2,338,no matching place
 NY,College Point,4,338,no matching place
+WA,"Everett, Kirkland, and Monroe",2,338,3 distinct places named
+WA,"Mount Vernon, Mabton",2,338,2 distinct places named
 AL,Chapman,2,335,no matching place
 CA,KORBEL,3,335,no matching place
 WA,"Westport, Port Angeles, Seattle",1,335,3 distinct places named
@@ -230,6 +245,8 @@ PA,"Somerset County, PA; Garrett County, MD",1,332,"address is in MD, not PA"
 ID,Boise Eagle Boise Nampa Caldwell Meridian,1,328,no matching place
 NJ,"Company Location: Orlando, FL Affected Employees: Woodbridge, Toms River, Wayne, Paramus",1,327,2 distinct places named
 VA,"Richmond, Mechanicsville & Midlothian VA",1,326,3 distinct places named
+WA,Bellevue & Kirkland,2,322,2 distinct places named
+WA,Orondo,4,322,no matching place
 MO,Cassville & Carthage,1,321,2 distinct places named
 OH,Manfield,1,320,no matching place
 VA,"Fredericksburg, Chesapeake, Newport News, Virginia Beach & Williamsburg VA",1,319,5 distinct places named
@@ -240,10 +257,11 @@ WI,"Fitchburg, Kenosha, Madison, Middleton, Waukesha",1,313,5 distinct places na
 WI,Brown Deer and Glendale,3,311,2 distinct places named
 KY,Lewis/Boone,1,309,no matching place
 OH,"Columbus, Worthington",1,309,2 distinct places named
+WA,Bothell/Everett,2,308,2 distinct places named
+WA,"Seattle, Bellevue, Everett, Federal Way, Kennewick",2,308,5 distinct places named
 IN,"Anderson, Columbus, Elkhart, Indianapolis and Marion",1,306,5 distinct places named
 VA,"McLean, Woodbridge, Arlington, Fairfax VA",1,306,3 distinct places named
 UT,Provo and Springville,1,303,2 distinct places named
-WA,"Federal Way, Olympia, Tacoma, Walla Walla, and Bellevue",1,303,4 distinct places named
 CA,TRAVIS AFB,3,302,no matching place
 LA,"41237 Hwy 22 Burnside, LA",1,302,no matching place
 IL,"5 Industrial Loop Hannibal, MO 63401",1,300,"address is in MO, not IL"
@@ -251,20 +269,23 @@ KY,"Letcher , Pike",4,300,no matching place
 MI,"Shelby Township, Michigan; Sterling Heights, Michigan, Washington Township, Michigan",1,300,2 distinct places named
 GA,Pine Mountain Vally,1,298,no matching place
 MD,"7458 New Ridge Road Hanover, MD 21076",2,297,no matching place
+WA,Usk,2,296,no matching place
 CT,"Manchester, Enfield, Milford, North Haven",1,295,3 distinct places named
 PA,"Lehigh, Northampton, Cumberland, York and Luzerne",1,294,3 distinct places named
+WA,"Wenatchee, Spokane, Sunnyside",2,294,2 distinct places named
 AZ,Tuscon,2,293,no matching place
 CA,MOFFETT FIELD,4,293,no matching place
 IN,GoshenElkhart,1,293,no matching place
 VA,Hurley VA,7,293,no matching place
 VA,Wallops Island VA,2,292,no matching place
 VA,"Alexandria, Arlington, Ashburn, Centreville, Fairfax & Gainesville VA",1,291,6 distinct places named
+WA,"Seattle, Woodinville",2,290,2 distinct places named
 NY,Woodside,6,287,no matching place
 TN,"Blount, Knox, Monroe, and Sevier County",1,286,no matching place
 NY,"Bronx, Brooklyn,NYC",1,285,no matching place
 OR,"Lewisville, TX",1,285,"address is in TX, not OR"
+WA,"Lynnwood, Marysville, Pasco, Puyallup, Spokane Valley",2,284,5 distinct places named
 VA,"Henrico, Glen Allen, Chester & Chesapeake VA",1,282,3 distinct places named
-WA,"Seattle, Des Moines",1,282,2 distinct places named
 VA,"Alexandria, Sterling, Warrenton & Winchester VA",1,281,4 distinct places named
 WI,"Marshfield, Stevens Point, Neillsville",1,279,3 distinct places named
 WI,"New Berlin, Muskego, Brookfield",1,279,3 distinct places named
@@ -291,7 +312,6 @@ VA,Norfolk & Portsmouth VA,1,260,2 distinct places named
 WI,"Waukesha, Oak Creek, Milwaukee",1,260,3 distinct places named
 CA,San Ysidro,2,258,no matching place
 VA,Appalachia & St. Charles VA,1,258,2 distinct places named
-WA,"Everett, Puyallup",1,258,2 distinct places named
 GA,Ft. Benning,2,256,no matching place
 NJ,Des Plaines,1,255,no matching place
 NV,"Las Vegas/Sparks/Elko, Clark/Washoe/Elko",1,255,3 distinct places named
@@ -306,20 +326,25 @@ ID,Nampa Boise,1,250,no matching place
 IL,"2597 Highway 61 Fort Madison, IA 52627",1,250,"address is in IA, not IL"
 NC,Cary and,1,250,no matching place
 OR,"New Albany, IN",1,250,"address is in IN, not OR"
+WA,"Auburn, Arlington, Benton City, Spokane",2,250,4 distinct places named
 CA,REDWOOD SHORES,3,249,no matching place
 NY,Brooklyn/NY/Jamaica,1,247,no matching place
 VA,Christianburg VA,2,247,no matching place
+WA,"Mountlake Terrace, Fife",2,246,2 distinct places named
 CA,Edwards,3,245,no matching place
 NJ,FORT MONMOUTH,1,245,no matching place
 OH,Falls,2,244,no matching place
 OR,"Atlanta, GA",1,244,"address is in GA, not OR"
 MA,"Boston, Burlington",1,242,2 distinct places named
+WA,"Lynnwood, Vancouver",2,242,2 distinct places named
 AZ,Spring,1,240,no matching place
 MD,"19710 Observation DriveGermantown, MD 20876",1,240,no matching place
-WA,"Moses Lake, Renton",1,240,2 distinct places named
+WA,Redmond & Kent,2,240,2 distinct places named
+WA,"SeaTac, Tukwila",2,240,2 distinct places named
 GA,Glynco,3,239,no matching place
 IL,"P.O. Box 03930 3400 West Avenue Burlington, IA 50322-3930",1,239,"address is in IA, not IL"
 NY,Irving,2,239,no matching place
+WA,"Des Moines, Auburn, Puyallup",2,238,3 distinct places named
 WI,"Appleton, Greenfield, Kenosha, Madison, Milwaukee, Mount Pleasant, Prairie du Sac, Sheboygan, West Bend",1,238,9 distinct places named
 GA,Mcrae,4,237,no matching place
 NY,"Buffalo, Depew, Orchard Park",1,237,3 distinct places named
@@ -331,7 +356,7 @@ OH,Monroe/Butler,1,233,2 distinct places named
 GA,Mcrea,1,230,no matching place
 OH,Brooklyn and Cleveland,1,230,2 distinct places named
 OH,Richfield and Independence,1,230,2 distinct places named
-WA,"King, Pierce, and Snohomish Counties",1,230,no matching place
+WA,Seattle-Tacoma,2,230,no matching place
 CA,HELM,1,229,no matching place
 FL,PATRICK SFB,1,228,no matching place
 MD,"21 Governors Court Suite 250 Windsor Mill, MD 21244",2,228,no matching place
@@ -343,6 +368,8 @@ VA,"Centreville, Reston, Winchester & Woodbridge VA",1,224,3 distinct places nam
 FL,SPRING HILL,6,223,name matches more than one place
 OH,Middleburg Heights/Berea/Cuyahoga,1,223,2 distinct places named
 SC,CatawbaLancasterJonesville,1,222,no matching place
+WA,Renton and Sumner,2,222,2 distinct places named
+WA,Tacoma/Shelton,2,222,2 distinct places named
 NY,Ridgewood,1,221,no matching place
 MD,"701 Wedeman Avenue Linthicum Heights, MD 21090",1,220,no matching place
 OR,"Chesapeake, VA",1,220,"address is in VA, not OR"
@@ -351,12 +378,14 @@ WI,"Madison, Wauwatosa",1,218,2 distinct places named
 ID,Tamarack,1,217,no matching place
 OH,Willoughby (Lake) and Lorain (Lorain),1,217,2 distinct places named
 NY,Derby,1,216,no matching place
-WA,"Seattle, Mountlake Terrace",1,216,2 distinct places named
 GA,Warrington,1,215,no matching place
 IN,Kentland & North Vernon,1,214,2 distinct places named
 VA,"Vansant, Jewell Ridge & Honaker VA",1,214,3 distinct places named
 MI,"Ann Arbor, Michigan; Auburn Hills, Michigan; Grandville, Michigan; Grand Rapids, Michigan; Holland, Michigan; Muskegon, Michigan; and Stevensville, Michigan",1,213,6 distinct places named
 OH,Center,3,213,no matching place
+WA,"Battleground, Camas, Vancouver",2,212,3 distinct places named
+WA,Seattle and Liberty Lake,2,212,2 distinct places named
+WA,"Seattle, Kirkland",2,212,2 distinct places named
 NY,Far Rockaway,5,211,no matching place
 NY,West Nyack/ Pelham Manor,1,211,2 distinct places named
 WA,"Lynwood, Mukilteo, Lakewood",1,210,2 distinct places named
@@ -378,13 +407,12 @@ KY,Pilaski,1,200,no matching place
 LA,"2800 Post Oak Blvd. Houston, TX 77056",1,200,"address is in TX, not LA"
 MD,"55 Schilling Road Hunt Valley, MD 21031",1,200,no matching place
 VA,Springfield & Newington VA,2,200,2 distinct places named
+WA,"Seattle, Tacoma, Lakewood, Auburn, Bellevue, Burien, Federal Way, Kent, Puyallup",2,200,9 distinct places named
 MO,"High Ridge, Eureka, Grover",2,199,2 distinct places named
 CT,Uncasville,3,197,no matching place
 LA,"One Riverfront Place Newport, KY 41071",2,197,"address is in KY, not LA"
 NJ,Gladstone,1,195,no matching place
 NV,"Re, He, LV, Wa, Cl",2,195,no matching place
-WA,Eastsound (Orcas Island),1,195,no matching place
-WA,Joint Base Lewis McChord,3,195,no matching place
 MD,"8261 Central Avenue Capital Heights, MD 20743",1,194,no matching place
 IN,"Indianapolis, Franklin, Greencastle, Brazil, Batesville, Elkhart, Gary, Valparaiso, Hobart, Michigan City, Mooresville, Brazil",1,193,11 distinct places named
 LA,"4100 Midway, Suite 1110 Carrollton, TX 75007",1,193,"address is in TX, not LA"
@@ -397,22 +425,22 @@ MI,"Waterford, Michigan",1,191,no matching place
 CT,"Westport, West Harford, Stamford",1,190,2 distinct places named
 CT,"westport, West Hartford, Stamford",1,190,3 distinct places named
 MD,"7515 & 7535 Mission Dr, Lanhan-Seabrook and 8800 Greenbelt Road, Geenbelt, MD",1,190,no matching place
+WA,"Bellevue, Seattle, Vancouver",2,190,3 distinct places named
 MD,"7426 New Ridge Road Hanover, MD 21076",1,189,no matching place
 NJ,Lake Saint Louis,1,189,no matching place
 MI,Redford,1,188,no matching place
 NJ,"Jersey City, Rutherford, Short Hills, Paramus,Hoboken, Fort Lee",1,187,6 distinct places named
-WA,"Kent, Bothell, Bellevue, Fife",1,187,4 distinct places named
-WA,"Lynnwood, Seattle",1,187,2 distinct places named
 IN,Indianapolis & Yorktown,2,186,2 distinct places named
 AK,"Fairbanks, North Pole",1,185,2 distinct places named
 LA,"2002 Crow Lane Pelican, LA 71063",2,185,no matching place
 SC,"iGcsr,e eInncv i(l""leRyder"")",1,185,no matching place
 IN,"Delphos, OH",2,184,"address is in OH, not IN"
+WA,"Seattle, Tacoma, Yakima, Spokane, Richland",2,184,5 distinct places named
 MI,Canton,4,183,no matching place
 OH,"Columbus (Franklin), Johnstown (Licking)",1,183,3 distinct places named
-WA,Bothell/Redmond/Bellevue,3,183,3 distinct places named
 CA,West Toluca Lake,1,182,no matching place
 VA,Langley AFB VA,1,182,no matching place
+WA,"Bellevue & Kirkland, WA",2,182,2 distinct places named
 MD,"101 Schilling Road Suite 40 Hunt Valley, MD 21031",1,180,no matching place
 NJ,DEEPWATER,3,180,no matching place
 NJ,Fairfax,1,180,no matching place
@@ -433,20 +461,18 @@ WI,Madison/Fitchburg,1,175,2 distinct places named
 IN,"Gary, Merrillville",1,174,2 distinct places named
 MD,"10900 Old Court Road Woodstock, MD 21163",1,174,no matching place
 VA,"Washington, DC DC",1,174,"address is in DC, not VA"
-WA,"Keyport, Silverdale",2,174,2 distinct places named
 OH,Monroe (Butler),1,173,2 distinct places named
-WA,"Seattle, Tukwila",1,173,2 distinct places named
 CA,NIPTON,1,172,no matching place
 SC,Slater,2,172,no matching place
 AK,Clear,1,171,no matching place
 CA,San Juan,2,171,no matching place
 FL,VENUS,1,170,no matching place
 OR,GILCRIST,1,170,no matching place
-WA,"Everett, Kirkland, and Monroe",1,169,3 distinct places named
-WA,"Mount Vernon, Mabton",1,169,2 distinct places named
+WA,Marysville and Newport,2,170,2 distinct places named
 MD,"10150 York Road, Suite 300 Hunt Valley, MD 21030",1,168,no matching place
 MN,Louisville,1,168,no matching place
 VA,N. Chesterfield VA,1,168,no matching place
+WA,Seattle & Bellevue,2,168,2 distinct places named
 WI,Madison and Menomonee Falls,1,168,2 distinct places named
 AL,Perdue Hill,1,167,no matching place
 GA,Hazelhurst,2,167,no matching place
@@ -455,11 +481,13 @@ NY,Glendale,3,167,no matching place
 OH,Springs,1,167,no matching place
 UT,"Honeyville, Genola, Providence, & Midvale",1,167,4 distinct places named
 IN,Bloomington and Oolitic,1,166,2 distinct places named
+WA,"Vancouver, Tacoma, Poulsbo",2,166,3 distinct places named
 AL,Townley,1,165,no matching place
 MI,"Birmingham, Michigan; Grand Rapids, Michigan; East Grand Rapids, Michigan; Holland, Michigan; Kalamazoo, Michigan; and Northville, Michigan",1,164,5 distinct places named
 NJ,Ortley Beach,1,164,no matching place
 NY,Elmhurst,6,164,no matching place
 VA,Langley-Eustis VI,1,164,no matching place
+WA,Toutle,4,164,no matching place
 GA,"5270 SE 131st St, Starke, Florida",1,163,no matching place
 MD,"6700A Rockledge Drive, Suite 200 Bethesda, Maryland 20817",1,163,2 distinct places named
 MI,"Grand Rapids, Michigan and Detroit, Michigan",1,163,2 distinct places named
@@ -472,8 +500,6 @@ MI,"Flint, Michigan; Taylor, Michigan; and Ypsilanti, Michigan",1,162,3 distinct
 MN,San Antonio,1,162,no matching place
 AK,"North Slope, Kenai Peninsula, And Valdez",1,161,no matching place
 NM,Artecia,2,161,no matching place
-WA,Bellevue & Kirkland,1,161,2 distinct places named
-WA,Orondo,2,161,no matching place
 CA,BRANSCOMB,2,160,no matching place
 NJ,Baskin Ridge,1,160,no matching place
 NJ,Peapack & Gladstone,1,160,no matching place
@@ -481,6 +507,7 @@ NV,"Las Vegas/Sparks, Clark/Washoe",1,160,2 distinct places named
 OH,Fairfield (2) and Hamilton (1)(Butler),1,160,3 distinct places named
 OH,Massillion Bureau of WIA-Rapid,1,160,no matching place
 OH,Philadelphia,1,160,no matching place
+WA,Randle,2,160,no matching place
 LA,"309 North Hamilton Street Dalton, GA 30720",1,159,"address is in GA, not LA"
 MI,"Grand Rapids and Livonia, Counties: Kent and Wayne, Number Affected: 159",1,159,2 distinct places named
 OH,Columbus (Franklin) and Wheelersburg (Scioto),1,159,3 distinct places named
@@ -496,40 +523,35 @@ MI,Lynchburg,2,156,no matching place
 NJ,"Bergen, Burlington, Camden, Cumberland, Essex, Gloucester, Hudson, Mercer, Middlesex, Monmouth, Morris, Ocean, Passaic, Somerset, and Union Counties",1,155,7 distinct places named
 MO,North Kansas CityLiberty,1,154,no matching place
 NY,East Vestal,1,154,no matching place
-WA,Bothell/Everett,1,154,2 distinct places named
-WA,"Seattle, Bellevue, Everett, Federal Way, Kennewick",1,154,5 distinct places named
 MN,Liberty Lake,1,153,no matching place
 MD,"1350 Brass Mill Road Belcamp, MD 21017",1,152,no matching place
 NC,Beaulaville,1,152,no matching place
-KS,Cincinnati,1,151,no matching place
 MI,"Southfield, Michigan; Kalamazoo, Michigan; and Center Line, Michigan",1,151,2 distinct places named
 CA,WARNER SPRINGS,1,150,no matching place
 IN,"Valparaiso, Mishawaka and Indianapolis",1,150,3 distinct places named
 VA,Arlingotn VA,2,150,no matching place
+WA,Everett and Renton,2,150,2 distinct places named
+WA,North Creek & Fairview,2,150,no matching place
 AK,"Anchorage, Fairbanks, Denali National Park and Healy",1,149,2 distinct places named
 AK,"Soldotna, Homer & Seward",1,149,3 distinct places named
 VA,Alexandria & Arlington VA,1,149,2 distinct places named
 AZ,Raleigh,1,148,no matching place
 VA,"Alexandria, Arlington, Falls Church, Sterling, Vienna & Woodbridge VA",1,148,6 distinct places named
-WA,Usk,1,148,no matching place
 CA,BASSETT,1,147,no matching place
 NY,Mount Tremper,1,147,no matching place
 NY,Rosedale,3,147,no matching place
 NY,Springfield Gardens,3,147,no matching place
 TN,Claiborne and Greene County,1,147,no matching place
-WA,"Wenatchee, Spokane, Sunnyside",1,147,2 distinct places named
 WI,"Greenfield, Brookfield, Grand Chute, Madison, Ashwaubenon, Eau Claire",1,147,4 distinct places named
 FL,Lake Worth,2,146,no matching place
 NJ,HAMILTON TOWNSHIP,1,146,no matching place
 GA,Syvania,1,145,no matching place
 MD,"NSA 9800 Savage Road Fort George G Meade, MD 20755",1,145,no matching place
-WA,"Seattle, Woodinville",1,145,2 distinct places named
 GA,Pelhan,1,144,no matching place
 MN,Warrendale,1,144,no matching place
 OH,Hills,1,144,no matching place
 CT,Mashuntucket,2,143,no matching place
 CO,"Denver, Broomfield",3,142,2 distinct places named
-WA,"Lynnwood, Marysville, Pasco, Puyallup, Spokane Valley",1,142,5 distinct places named
 WI,"Janesville, Milton",1,142,2 distinct places named
 AL,Tanner,1,140,no matching place
 GA,Elbertton,1,140,no matching place
@@ -580,6 +602,7 @@ OH,"Cleveland, Parma, North Olmstead",1,130,2 distinct places named
 OH,Jefferson (Ashtabula),1,130,2 distinct places named
 OH,Miamisburg & Dayton(Montgomery and Greene),1,130,3 distinct places named
 VA,Fort Eustis & Fort Story VA,1,130,no matching place
+WA,Smokey Point,2,130,no matching place
 NJ,Blue Anchor,1,128,no matching place
 VA,North Chesterfield VA,3,128,no matching place
 WI,"Rothschild, Monona",1,128,2 distinct places named
@@ -589,15 +612,14 @@ WI,13 Wisconsin,1,127,no matching place
 FL,MAYPORT,2,126,no matching place
 IN,Warsaw and Fort Wayne,1,126,2 distinct places named
 MI,Harbor Springs/Boyne City,1,126,2 distinct places named
+WA,"Seattle, Tacoma",3,126,2 distinct places named
 AZ,Madison,2,125,no matching place
 GA,Bremen/waco,1,125,2 distinct places named
 IN,"Highland, Merrillville, Lafayette, Avon, Carmel, Fishers, Greenwood, Terre Haute, Bloomington, Clarksville, New Albany, Evansville and Indianapolis",1,125,13 distinct places named
 MA,"Lowell Three (3) locations, Northeast",1,125,no matching place
-WA,"Auburn, Arlington, Benton City, Spokane",1,125,4 distinct places named
 MI,"Canton, Michigan",2,124,no matching place
 NJ,For Lee,1,124,no matching place
 IN,"Anderson, Auburn, Bloomington, Columbus, Elkhart, Evansville, Fort Wayne, Gary, Hammond, Indianapolis, Kokomo, Lafayette, Madison, Marion, Merrillville, Michigan City, Muncie, Richmond, South Bend, Terre Haute, Valparaiso, and Vincennes",1,123,22 distinct places named
-WA,"Mountlake Terrace, Fife",1,123,2 distinct places named
 WI,"Appleton, La Crosse, Wauwatosa",1,123,2 distinct places named
 CA,CHINA LAKE,3,122,no matching place
 NJ,Peapack,1,122,no matching place
@@ -605,21 +627,17 @@ NY,"Corfu, West Henrietta, Victor",1,122,2 distinct places named
 SC,Fort Jackson,2,122,no matching place
 CO,"Denver, Boulder",1,121,2 distinct places named
 MI,"Cadillac, Michigan and Novi, Michigan",1,121,2 distinct places named
-WA,"Lynnwood, Vancouver",1,121,2 distinct places named
 IL,"15130 Concord Circle Morgan Hill, CA 95037-5493",1,120,"address is in CA, not IL"
 LA,"13135 South Dairy Ashford Suite 800 Sugarland, Tx 77478",1,120,"address is in TX, not LA"
 NJ,Lombard,1,120,no matching place
 OR,SOUTH AND NORTH SALEM,1,120,no matching place
 PA,Lehigh and Bucks,1,120,no matching place
-WA,Redmond & Kent,1,120,2 distinct places named
-WA,"SeaTac, Tukwila",1,120,2 distinct places named
 CA,Carlotta,1,119,no matching place
 IL,"115 W College Dr Marshall, MN 56258-1747",1,119,"address is in MN, not IL"
 IN,Indianapolis & Plainfield,1,119,2 distinct places named
 MA,"North Easton, Southeast",1,119,no matching place
 OR,"Vancouver, WA",1,119,"address is in WA, not OR"
 VA,Tyson's Corner VA,1,119,no matching place
-WA,"Des Moines, Auburn, Puyallup",1,119,3 distinct places named
 AZ,Oakland,3,118,no matching place
 CA,Korbel,2,118,no matching place
 MA,East Taunton,2,118,no matching place
@@ -639,7 +657,6 @@ LA,"5847 San Felipe Houston, TX 77057",1,115,"address is in TX, not LA"
 MT,Lewis & Clark,2,115,no matching place
 OH,Parma/Cuyahoga and Cleveland Heights/Cuyahoga,1,115,2 distinct places named
 OH,Wellston (Jackson) Hamden (Vinton)and Gallipolis (Gallia),1,115,4 distinct places named
-WA,Seattle-Tacoma,1,115,no matching place
 GA,Plano,1,114,no matching place
 LA,"Ft. Polk U.S. Army Base Bldg 1560 – Alabama Ave Ft. Polk, LA 71459",1,114,no matching place
 MI,Remus,1,114,no matching place
@@ -664,8 +681,6 @@ MO,"Maryland Heights, Bridgeton",1,111,2 distinct places named
 MO,Maryland HeightsBridgeton,1,111,no matching place
 OH,Harrison (Hamilton),1,111,2 distinct places named
 SC,Surfside,1,111,no matching place
-WA,Renton and Sumner,1,111,2 distinct places named
-WA,Tacoma/Shelton,1,111,2 distinct places named
 AZ,Falls Church,1,110,no matching place
 GA,Clarkson,1,110,no matching place
 LA,"2800 Post Oak Blvd. Ste. 5450 Houston, Tx 77056",1,110,"address is in TX, not LA"
@@ -674,7 +689,6 @@ SC,Jenkensville,1,110,no matching place
 SC,LCLhCester,1,110,no matching place
 WI,Albany & Orfordville,1,110,2 distinct places named
 CA,Guistine,1,109,no matching place
-WA,"Seattle, Tacoma",2,109,2 distinct places named
 AZ,Fort Worth,1,108,no matching place
 KS,MacArthur and Oliver,2,108,no matching place
 LA,"Plaquemine, New Orleans, and Hackberry, LA",1,108,3 distinct places named
@@ -688,9 +702,6 @@ CA,EDWARDS AIR FORCE BA,10,106,no matching place
 MD,"7200 Standard Drive, Hanover, MD",1,106,no matching place
 MI,Brownstown,1,106,no matching place
 MI,"Brownstown, Michigan",1,106,no matching place
-WA,"Battleground, Camas, Vancouver",1,106,3 distinct places named
-WA,Seattle and Liberty Lake,1,106,2 distinct places named
-WA,"Seattle, Kirkland",1,106,2 distinct places named
 GA,"1033 South Reynolds Street, Metcalfe, Georgia",1,105,no matching place
 KY,"Bullitt, Jefferson",1,105,no matching place
 MD,"Patuxent River NAS 47758 Ranch Road, Building 1492, Patuxent River, MD 20670",1,105,no matching place
@@ -733,7 +744,6 @@ LA,"1437 South Boulder Ave. Tulsa, Oklahoma 74119",2,100,no matching place
 LA,"192 Ballard Court, Suite 200 Virginia Beach, VA 23462",1,100,"address is in VA, not LA"
 NC,800 S. Douglas Rd Coral Gables FL,1,100,"address is in FL, not NC"
 PA,Lancaster & Lebanon,1,100,2 distinct places named
-WA,"Seattle, Tacoma, Lakewood, Auburn, Bellevue, Burien, Federal Way, Kent, Puyallup",1,100,9 distinct places named
 GA,Ft Benning,2,99,no matching place
 MD,"11350 McCormick Rd. HuntValley, MD 21031",1,99,no matching place
 NJ,Stamford,1,99,no matching place
@@ -753,7 +763,6 @@ PA,Montgomery and Philadelphia,1,96,2 distinct places named
 GA,"935 1st Ave, King of Prussia, Pennsylvania",1,95,no matching place
 OH,North Ridgesville,1,95,no matching place
 VA,Arlington & Alexandria VA,1,95,2 distinct places named
-WA,"Bellevue, Seattle, Vancouver",1,95,3 distinct places named
 CA,Five Points,1,94,no matching place
 MD,"10830 Guilford Road Suite 311 Annapolis Junction, MD 20701-1108",1,94,no matching place
 MD,"11333 McCormick Road, Hunt Valley, MD",2,94,no matching place
@@ -774,7 +783,6 @@ NC,Cherry Point,1,92,no matching place
 OH,Westlake & Berea/Cuyahoga,1,92,2 distinct places named
 TX,Cypress,2,92,no matching place
 VA,Norfolk & Suffolk VA,1,92,2 distinct places named
-WA,"Seattle, Tacoma, Yakima, Spokane, Richland",1,92,5 distinct places named
 IL,"421 Great Circle Rd Nashville, TN 37228-1495",1,91,"address is in TN, not IL"
 IL,"PO BOX 25250 NASHVILLE, TN 37202",1,91,"address is in TN, not IL"
 MA,"Needham Heights, Metro Southwest",1,91,no matching place
@@ -782,7 +790,6 @@ MD,"7005 Security Blvd., Woodlawn, MD",1,91,name matches more than one place
 MO,St. Louis (city)Springfield,1,91,2 distinct places named
 NJ,Liverpool,1,91,no matching place
 NY,Bronx/Brooklyn/Jamaica/NY,1,91,no matching place
-WA,"Bellevue & Kirkland, WA",1,91,2 distinct places named
 AZ,Waddell,1,90,no matching place
 CA,Onizuka Air Station,1,90,no matching place
 ID,Boise Chubbuck Idaho Falls,1,90,no matching place
@@ -817,22 +824,20 @@ AZ,8 - Santa Cruz County One Stop Career Center,1,85,no matching place
 GA,Boulevard,1,85,no matching place
 MO,CottlevilleGarden CityLawsonLexingtonOzarkPeculiarRollaSpringfieldWaverlyWentzville,1,85,no matching place
 VA,"Alexandria, Ashburn, Burke, Fair Oaks, Falls Church, Haymarket, Manassas, McLean, Reston VA",1,85,9 distinct places named
-WA,Marysville and Newport,1,85,2 distinct places named
 CT,"Stamford & Houston, TX",1,84,"address is in TX, not CT"
 MN,Bloominton Minneapolis,1,84,no matching place
 NJ,Boca Raton,1,84,no matching place
 VA,McFall VA,1,84,no matching place
-WA,Seattle & Bellevue,1,84,2 distinct places named
+WA,"Camas, Vancouver",2,84,2 distinct places named
+WA,"Seattle, Shelton",2,84,2 distinct places named
 MD,"10000 Franklin Square Drive Suite 300 Nottingham, MD 21236",1,83,no matching place
 NJ,Yardley,1,83,no matching place
 NY,Purchase,1,83,no matching place
-WA,"Vancouver, Tacoma, Poulsbo",1,83,3 distinct places named
 NE,Oskosh,2,82,no matching place
 NJ,LANDISVILLE,1,82,no matching place
 OR,EUGENE AND BEAVERTON,1,82,no matching place
 SC,"Columbia,Greenville, NorthCharleston",1,82,2 distinct places named
 VA,Hoffman Estates IL,1,82,"address is in IL, not VA"
-WA,Toutle,2,82,no matching place
 AZ,Dallas,1,81,no matching place
 ID,Buhl Buhl Buhl Wendell,1,81,no matching place
 NJ,Rockville Centre,1,81,no matching place
@@ -850,7 +855,6 @@ OR,Bend/Prineville/Redmond,1,80,3 distinct places named
 TN,Davidson and Knox County,1,80,no matching place
 VA,Annadale VA,1,80,no matching place
 VA,Dulles International Airport VA,1,80,no matching place
-WA,Randle,1,80,no matching place
 CA,ALVISO,1,79,no matching place
 NC,Camp Lejeune,1,79,no matching place
 CA,LAKEVIEW TERRACE,2,78,no matching place
@@ -881,8 +885,6 @@ MD,"725 Pittman Road Curtis Bay, MD 21226",1,75,no matching place
 MD,"7442 Shipley Avenue, Harmans MD",1,75,no matching place
 MI,New Boston,1,75,no matching place
 NJ,Bayville,1,75,no matching place
-WA,Everett and Renton,1,75,2 distinct places named
-WA,North Creek & Fairview,1,75,no matching place
 WI,"Green Bay, Manitowoc, Oconto, Shawano",1,75,4 distinct places named
 WI,"Menomonie, Neenah, Rice Lake, Pulaski, Brodhead, Lake Geneva, Appleton, Marinette, Forest Junction, Menasha, Chippewa Falls, Mosinee, Kewaunee, Onalaska, Lake Mills, Rice Lake, Lannon, Beaver Dam, Eden, Fond du Lac, Waupaca, Wisconsin Rapids, Markesan, Janesville, Fennimore, Fort Atkinson, Portage, Marquette, Plover, Reeseville, Amery, Kenosha, East Troy, Sullivan, Beloit, Oak Creek, Spencer",1,75,36 distinct places named
 FL,CLEAR WATER BEACH,1,74,no matching place
@@ -920,6 +922,7 @@ NJ,BIRMINGHAM,1,70,no matching place
 NY,"Hastings on Hudson, Plattekill",1,70,2 distinct places named
 OH,Worthington/Columbus,1,70,2 distinct places named
 VA,Raphine VA,1,70,no matching place
+WA,"Centralia, Chehalis",2,70,2 distinct places named
 WI,Fort McCoy,1,70,no matching place
 WI,Shullsberg,3,70,no matching place
 GA,Faytteville,1,69,no matching place
@@ -957,7 +960,6 @@ NC,s b u r y,1,65,no matching place
 NJ,FT. MONMOUTH,1,65,no matching place
 NY,Cattaragus,1,65,no matching place
 WA,"Seattle, Centralia",1,65,2 distinct places named
-WA,Smokey Point,1,65,no matching place
 AK,Shemya Island,1,64,no matching place
 AL,Quinton,1,64,no matching place
 CA,MCVITTIE,2,64,no matching place
@@ -984,6 +986,7 @@ NJ,Prinecton,1,62,no matching place
 OH,Waterford (Beverly)/Washington,1,62,2 distinct places named
 OR,Umattilla,1,62,no matching place
 VA,Washington DC,1,62,"address is in DC, not VA"
+WA,Peshastin,2,62,no matching place
 WI,Branch,1,62,no matching place
 IN,"Michigan City, Dyer, Crown Point, Munster, Lafayette, Beech Grove, Indianapolis",1,61,7 distinct places named
 MD,"7021 Dorsey Road Hanover, MD 21076",1,61,no matching place
@@ -999,6 +1002,7 @@ LA,"7720 California Avenue Ft. Polk, LA 71459",1,60,no matching place
 MI,"Ann Arbor, Michigan and Dexter, Michigan",1,60,2 distinct places named
 OH,Garfield Heights/Cleveland,1,60,2 distinct places named
 VA,Jetersville VA,1,60,no matching place
+WA,Tulalip,2,60,no matching place
 WI,Brokaw,1,60,no matching place
 WI,"Nekoosa and Scandinavia, WI",1,60,2 distinct places named
 IA,Ashburn,1,59,no matching place
@@ -1028,6 +1032,7 @@ LA,"1541 Kings Hwy Shreveport, LA 71103 Ochsner Monroe FNS-ABM 4864 Jackson Stre
 MD,"48542 Haney Road Bldg. 2657 Patuxent River, MD 20670",1,56,no matching place
 NJ,"Kennesaw, GA",1,56,"address is in GA, not NJ"
 NY,Selkirk,1,56,no matching place
+WA,"Spokane, Vancouver, and Renton",2,56,2 distinct places named
 WI,"Richfield, Wauwatosa",1,56,2 distinct places named
 AL,Mount Meigs,1,55,no matching place
 AZ,Pheonix,1,55,no matching place
@@ -1128,8 +1133,6 @@ GA,Richamond,1,42,no matching place
 NC,2121 Park Place El Segundo CA,1,42,"address is in CA, not NC"
 NY,Sterling Forest,1,42,no matching place
 VA,"Chesapeake, VA Beach, Newport News, Portsmouth & Hampton VA",1,42,4 distinct places named
-WA,"Camas, Vancouver",1,42,2 distinct places named
-WA,"Seattle, Shelton",1,42,2 distinct places named
 FL,GOLDEN OAK,1,41,no matching place
 GA,Ft Gordon,2,41,no matching place
 GA,Hunter Army Airfiel,1,41,no matching place
@@ -1166,7 +1169,6 @@ MD,"6201 Security Blvd Woodlawn, MD 21207",1,35,name matches more than one place
 MI,"Detroit, Michigan and Saline, Michigan",1,35,2 distinct places named
 MN,New York,2,35,no matching place
 NJ,Parlin,1,35,no matching place
-WA,"Centralia, Chehalis",1,35,2 distinct places named
 WI,Shell Lake and New Richmond,1,35,2 distinct places named
 CA,WEST ORANGE,2,34,no matching place
 GA,St. Simons Island,1,34,no matching place
@@ -1181,18 +1183,16 @@ ID,Sioux Falls,1,32,no matching place
 MO,FentonO'FallonRaymore,1,32,no matching place
 NY,Celeron,1,32,no matching place
 WI,"Eau Claire, Marshfield, Rice Lake, Wausau",1,32,3 distinct places named
-WA,Peshastin,1,31,no matching place
 CA,Camp Pendleton,1,30,no matching place
 IL,"102 E Bailie St Kentland, IN 47951-1382",1,30,"address is in IN, not IL"
 MD,"725 Pittman Road Curtis Bay, Md 21226",1,30,no matching place
 ME,New Bedford,1,30,no matching place
-WA,Tulalip,1,30,no matching place
+WA,Bothell/Redmond,2,30,2 distinct places named
 WI,"Dresser, Osceola",1,30,2 distinct places named
 IL,"1901 1st Ave., Sterling 61081 1013 Franklin Grove, Dixon 61021 1261 IL-38 Nechusa, IL 61057",1,29,no matching place
 LA,"6970 W. 70th St. Shreveport, LA 71129 17021 Aldine Westfield Road Houston, TX 77073",1,28,"address is in TX, not LA"
 MD,"979 Corporate Blvd. Linthicum Heights, MD 21090",1,28,no matching place
 MI,"Baraga, Michigan; Marquette, Michigan; and Marenisco, Michigan",1,28,3 distinct places named
-WA,"Spokane, Vancouver, and Renton",1,28,2 distinct places named
 WI,Silver Lake,1,28,no matching place
 WI,"Wautoma, Portage, Delevan, Milwaukee, Sheboygan, Madison, Appleton, Fond du Lac, Beloit, Janesville, West Bend, Green Bay, Eau Claire, Wausau, Marinette, Hudson, Racine, Marshfield, Superior, Shawano",1,28,18 distinct places named
 AK,"Anchorage, Juneau, and Fairbanks",1,27,3 distinct places named
@@ -1264,7 +1264,6 @@ GA,"6900 US-411, Crandall, Georgia",1,15,no matching place
 IL,"PO BOX 1465 MIDLAND ROAD JANESVILLE, WI 53547",1,15,"address is in WI, not IL"
 OR,"Marina Del Rey, CA",2,15,"address is in CA, not OR"
 UT,"St. George, Cedar City, Spanish Fork",1,15,3 distinct places named
-WA,Bothell/Redmond,1,15,2 distinct places named
 AZ,Wilcox,2,14,no matching place
 CT,Nowich,1,14,no matching place
 IN,Lafayette and Indianapolis,1,14,2 distinct places named
@@ -1275,6 +1274,7 @@ NE,Fargo,1,14,no matching place
 NJ,Bensalem,1,14,no matching place
 NJ,HASKELL,1,14,no matching place
 OR,"Orange, CA",2,14,"address is in CA, not OR"
+WA,"Bellevue, Bothell, Kirkland, Monroe, Redmond, Sammamish",2,14,6 distinct places named
 MD,"1701 Twin Springs Road Halethorpe, MD 21227",1,13,no matching place
 MD,"NAS Patuxent River Cafeteria 47123 Buse Road #540 Patuxent River, MD 20607",1,13,no matching place
 MN,Milwaukee,1,13,no matching place
@@ -1320,6 +1320,7 @@ OR,"Arlington, VA",1,8,"address is in VA, not OR"
 OR,Eugen,1,8,no matching place
 SC,Knightsville,1,8,no matching place
 SD,Ellsworth Air Force Base,1,8,no matching place
+WA,"Seattle, Tacoma, Snoqualmie, Spokane",2,8,3 distinct places named
 WI,"Windsor, Waunakee, Deforest",1,8,3 distinct places named
 AZ,Mountain View,2,7,no matching place
 FL,SUMMERFIELD,1,7,no matching place
@@ -1331,13 +1332,13 @@ NY,Slate Hill,1,7,no matching place
 OR,Hillsboro-Portland,1,7,no matching place
 OR,"Morgan Hill, CA",1,7,"address is in CA, not OR"
 TN,"Paulding and Polk counties, Georgia County",1,7,no matching place
-WA,"Bellevue, Bothell, Kirkland, Monroe, Redmond, Sammamish",1,7,6 distinct places named
 FL,NALCREST,1,6,no matching place
 IL,"277 Park Ave New York, NY 10172-0077",1,6,"address is in NY, not IL"
 KS,different locations in Topeka and across the state,1,6,no matching place
 MN,Inver Grove,1,6,no matching place
 NY,Forest Hills,2,6,no matching place
 OR,Rainer,1,6,no matching place
+WA,"Seattle, Tacoma and Vancouver",2,6,3 distinct places named
 CA,MARCH AIR RESERVE BA,1,5,no matching place
 CO,Pikes Peak/Mesa/Adams,1,5,no matching place
 CT,"10 Commerce Dr, North Windham CT 06256",1,5,no matching place
@@ -1378,7 +1379,7 @@ OR,Powell Valley,1,4,no matching place
 OR,"WOBURN, MA",1,4,"address is in MA, not OR"
 TN,Davidson and Williamson County,1,4,no matching place
 VA,Richmond & Mechanicsville VA,1,4,2 distinct places named
-WA,"Seattle, Tacoma, Snoqualmie, Spokane",1,4,3 distinct places named
+WA,"Seattle, Lynden",2,4,2 distinct places named
 AZ,Florham Park,1,3,no matching place
 AZ,Henderson,1,3,no matching place
 AZ,Jeffersonville,1,3,no matching place
@@ -1401,7 +1402,6 @@ NC,767 S Alameda Los Angeles CA,1,3,"address is in CA, not NC"
 NJ,West Creek,1,3,no matching place
 OR,Bridgewater,1,3,no matching place
 TN,Cocke and Shelby County,1,3,no matching place
-WA,"Seattle, Tacoma and Vancouver",1,3,3 distinct places named
 WI,Hagar City,1,3,no matching place
 AZ,Atlanta,1,2,no matching place
 AZ,Phenix,1,2,no matching place
@@ -1434,7 +1434,6 @@ RI,"Minneapolis, MN",1,2,"address is in MN, not RI"
 VA,"Alexandria, Arlington, Ashburn & Reston VA",1,2,4 distinct places named
 VA,Richmond and Midlothian VA,1,2,2 distinct places named
 WA,"Arlington, Fife",1,2,2 distinct places named
-WA,"Seattle, Lynden",1,2,2 distinct places named
 AZ,El Segundo,1,1,no matching place
 AZ,Mc Lean,1,1,no matching place
 AZ,Morgan Hill,1,1,no matching place
@@ -1522,6 +1521,7 @@ IL,"2418 MAIN STREET ROCKY HILL, CT 06067-0801",1,0,"address is in CT, not IL"
 IL,"401 COTTAGE STREET ABILENE, KS 67410",1,0,"address is in KS, not IL"
 IL,"BLDG 16 MIAMI INT'L AIRPORT MIAMI, FL 33122",1,0,"address is in FL, not IL"
 IL,"HWY 54 LOUISIANA, MO 63353",1,0,"address is in MO, not IL"
+KS,Cincinnati,1,0,no matching place
 KS,Fort Smith,1,0,no matching place
 KS,Mountain View,1,0,no matching place
 KS,Northlake,1,0,no matching place

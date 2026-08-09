@@ -1,105 +1,108 @@
 normalized_name,employer_name,states,notices,workers,years,source,candidate_id,candidate_name,ticker,rejected_by,note
-first transit,"First Transit, Inc.",CA|FL|GA|IL|IN|MD|NC|NJ|NV|NY|OH|OK|TN|UT|VA|WA|WI,53,6157,2000-2026,edgar,1737714,first turn,,incompatible-tokens,jaro-winkler 0.918
-first transit,"First Transit, Inc.",CA|FL|GA|IL|IN|MD|NC|NJ|NV|NY|OH|OK|TN|UT|VA|WA|WI,53,6157,2000-2026,edgar,1406026,first trust bank,,incompatible-tokens,jaro-winkler 0.901
-first transit,"First Transit, Inc.",CA|FL|GA|IL|IN|MD|NC|NJ|NV|NY|OH|OK|TN|UT|VA|WA|WI,53,6157,2000-2026,edgar,1692632,first bank trust,,incompatible-tokens,jaro-winkler 0.901
-first transit,"First Transit, Inc.",CA|FL|GA|IL|IN|MD|NC|NJ|NV|NY|OH|OK|TN|UT|VA|WA|WI,53,6157,2000-2026,edgar,2026785,first track,,incompatible-tokens,jaro-winkler 0.902
+first transit,"First Transit, Inc.",CA|FL|GA|IL|IN|MD|NC|NJ|NV|NY|OH|OK|TN|UT|VA|WA|WI,54,6243,2000-2026,edgar,1692632,first bank trust,,incompatible-tokens,jaro-winkler 0.901
+first transit,"First Transit, Inc.",CA|FL|GA|IL|IN|MD|NC|NJ|NV|NY|OH|OK|TN|UT|VA|WA|WI,54,6243,2000-2026,edgar,1406026,first trust bank,,incompatible-tokens,jaro-winkler 0.901
+first transit,"First Transit, Inc.",CA|FL|GA|IL|IN|MD|NC|NJ|NV|NY|OH|OK|TN|UT|VA|WA|WI,54,6243,2000-2026,edgar,1737714,first turn,,incompatible-tokens,jaro-winkler 0.918
+first transit,"First Transit, Inc.",CA|FL|GA|IL|IN|MD|NC|NJ|NV|NY|OH|OK|TN|UT|VA|WA|WI,54,6243,2000-2026,edgar,2026785,first track,,incompatible-tokens,jaro-winkler 0.902
+xpo logistics supply chain,"XPO Logistics Supply Chain, Inc.",CA|GA|IA|IL|MO|TN|TX|WA,14,3670,2017-2021,edgar,1166003,xpo logistics,XPO,incompatible-tokens,jaro-winkler 0.900
 fox sports productions,"Fox Sports Productions, LLC",CA,1,3595,2020-2020,edgar,1848904,fox sports sun,,incompatible-tokens,jaro-winkler 0.913
-xpo logistics supply chain,"XPO Logistics Supply Chain, Inc.",CA|GA|IA|IL|MO|TN|TX|WA,13,3566,2017-2021,edgar,1166003,xpo logistics,XPO,incompatible-tokens,jaro-winkler 0.900
 big bear,Big Bear,OH,16,3203,2002-2003,edgar,1108731,big bear gold,,incompatible-tokens,jaro-winkler 0.923
 big bear,Big Bear,OH,16,3203,2002-2003,edgar,1210074,big oar,,incompatible-tokens,jaro-winkler 0.921
 big bear,Big Bear,OH,16,3203,2002-2003,edgar,1309874,big beat records,,incompatible-tokens,jaro-winkler 0.900
 big bear,Big Bear,OH,16,3203,2002-2003,edgar,1274951,big bear mining,,incompatible-tokens,jaro-winkler 0.907
 cleveland works ltv steel,Cleveland Works (LTV Steel Company),OH,1,2964,2001-2001,edgar,1132090,cleveland russell,,incompatible-tokens,jaro-winkler 0.904
-community development institute head start,Community Development Institute Head Start,AL|CA|CT|GA|IL|IN|LA|MI|NJ|NY|OH|TN|UT|WI,27,2524,2013-2025,edgar,1631180,community development associates,,incompatible-tokens,jaro-winkler 0.906
 community development institute head start,Community Development Institute Head Start,AL|CA|CT|GA|IL|IN|LA|MI|NJ|NY|OH|TN|UT|WI,27,2524,2013-2025,edgar,1649227,community development fund,,incompatible-tokens,jaro-winkler 0.903
+community development institute head start,Community Development Institute Head Start,AL|CA|CT|GA|IL|IN|LA|MI|NJ|NY|OH|TN|UT|WI,27,2524,2013-2025,edgar,1631180,community development associates,,incompatible-tokens,jaro-winkler 0.906
 community development institute head start,Community Development Institute Head Start,AL|CA|CT|GA|IL|IN|LA|MI|NJ|NY|OH|TN|UT|WI,27,2524,2013-2025,edgar,1088633,community development trust,,incompatible-tokens,jaro-winkler 0.914
 kmart store,Kmart Store #,FL|GA,30,2365,1994-2018,edgar,1488844,kmart stores of texas,,incompatible-tokens,jaro-winkler 0.905
 bombardier learjet,Bombardier Learjet,KS,36,2212,2001-2019,edgar,1573086,bombardier janette k,,incompatible-tokens,jaro-winkler 0.913
 morrison healthcare,Morrison Healthcare,CA|FL|GA|IL|IN|LA|NC|OH|PA,19,2095,2014-2025,edgar,1578652,morrison lance a,,incompatible-tokens,jaro-winkler 0.908
-ritz carlton hotel,The Ritz-Carlton Hotel Company LLC,CA|GA|LA|OH,7,2043,2020-2020,edgar,1770983,ritz carlton title,,incompatible-tokens,jaro-winkler 0.943
 ritz carlton hotel,The Ritz-Carlton Hotel Company LLC,CA|GA|LA|OH,7,2043,2020-2020,edgar,1770939,ritz carlton development,,incompatible-tokens,jaro-winkler 0.907
+ritz carlton hotel,The Ritz-Carlton Hotel Company LLC,CA|GA|LA|OH,7,2043,2020-2020,edgar,1770983,ritz carlton title,,incompatible-tokens,jaro-winkler 0.943
 ritz carlton hotel,The Ritz-Carlton Hotel Company LLC,CA|GA|LA|OH,7,2043,2020-2020,edgar,1770945,ritz carlton sales,,incompatible-tokens,jaro-winkler 0.920
 novartis pharmaceuticals,Novartis Pharmaceuticals Corporation,CA|NJ|NY|TX,26,2032,2010-2026,edgar,1443411,novartis capital,,incompatible-tokens,jaro-winkler 0.908
 pinnacle logistics,Pinnacle Logistics,IL|RI|TX,4,1897,2001-2020,edgar,1925470,pinnacle lofts,,incompatible-tokens,jaro-winkler 0.915
-gxo logistics supply chain,"GXO Logistics Supply Chain, Inc.",CA|GA|IL|MD|PA|TN|WI,18,1743,2022-2026,edgar,1852244,gxo logistics,GXO,incompatible-tokens,jaro-winkler 0.900
 gxo logistics supply chain,"GXO Logistics Supply Chain, Inc.",CA|GA|IL|MD|PA|TN|WI,18,1743,2022-2026,edgar,2096205,gxo logistics capital,,incompatible-tokens,jaro-winkler 0.906
+gxo logistics supply chain,"GXO Logistics Supply Chain, Inc.",CA|GA|IL|MD|PA|TN|WI,18,1743,2022-2026,edgar,1852244,gxo logistics,GXO,incompatible-tokens,jaro-winkler 0.900
 national distribution centers,"National Distribution Centers, LLC",AZ|CA|FL|GA|IN|NC|NJ|PA,13,1739,2008-2026,edgar,80172,national presto industries,NPK,incompatible-tokens,jaro-winkler 0.900
-montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1197836,montgomery david r,,incompatible-tokens,jaro-winkler 0.916
-montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1204702,montgomery ronald r,,incompatible-tokens,jaro-winkler 0.908
-montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,893474,montgomery fred,,incompatible-tokens,jaro-winkler 0.936
-montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1020598,montgomery ted j,,incompatible-tokens,jaro-winkler 0.900
-montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1230038,montgomery henry d,,incompatible-tokens,jaro-winkler 0.907
-montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1272798,montgomery david,,incompatible-tokens,jaro-winkler 0.910
-montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1164386,montgomery gail,,incompatible-tokens,jaro-winkler 0.910
 montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1254844,montgomery thomas w,,incompatible-tokens,jaro-winkler 0.908
 montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1198224,montgomery william d,,incompatible-tokens,jaro-winkler 0.915
-montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1240313,montgomery adams carol,,incompatible-tokens,jaro-winkler 0.911
 montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,836974,montgomery ward holding,,incompatible-tokens,jaro-winkler 0.918
+montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1164386,montgomery gail,,incompatible-tokens,jaro-winkler 0.910
+montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1230038,montgomery henry d,,incompatible-tokens,jaro-winkler 0.907
+montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1020598,montgomery ted j,,incompatible-tokens,jaro-winkler 0.900
+montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1272798,montgomery david,,incompatible-tokens,jaro-winkler 0.910
+montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1204702,montgomery ronald r,,incompatible-tokens,jaro-winkler 0.908
+montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1197836,montgomery david r,,incompatible-tokens,jaro-winkler 0.916
+montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,1240313,montgomery adams carol,,incompatible-tokens,jaro-winkler 0.911
 montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,863435,montgomery funds i,,incompatible-tokens,jaro-winkler 0.907
+montgomery wards,Montgomery Wards,KS|OK|OR,7,1677,2001-2001,edgar,893474,montgomery fred,,incompatible-tokens,jaro-winkler 0.936
 ultra foods,Ultra Foods,IL|IN,14,1536,2016-2017,edgar,1422724,ultra oc,,incompatible-tokens,jaro-winkler 0.902
 ritz carlton naples,"The Ritz Carlton, Naples",FL,2,1530,2020-2022,edgar,1770983,ritz carlton title,,incompatible-tokens,jaro-winkler 0.925
 ritz carlton naples,"The Ritz Carlton, Naples",FL,2,1530,2020-2022,edgar,1770945,ritz carlton sales,,incompatible-tokens,jaro-winkler 0.944
+seattle sportservice,Seattle Sportservice Inc,WA,2,1522,2016-2017,edgar,1704254,seattle spinco,,incompatible-tokens,jaro-winkler 0.900
 san diego sportservice,"San Diego Sportservice, Inc",CA,2,1446,2017-2020,edgar,1800649,san diego sycamore reit,,incompatible-tokens,jaro-winkler 0.906
-international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,1611046,international endeavors,MDLK,incompatible-tokens,jaro-winkler 0.918
 international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,1134115,international tower hill mines,THM,incompatible-tokens,jaro-winkler 0.906
-international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,1957197,international battery,,incompatible-tokens,jaro-winkler 0.912
-international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,1355790,international stem cell,ISCO,incompatible-tokens,jaro-winkler 0.906
 international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,51434,international paper,IP,incompatible-tokens,jaro-winkler 0.908
-international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,1100788,international star,,incompatible-tokens,jaro-winkler 0.947
-international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,1683695,international money express,IMXI,incompatible-tokens,jaro-winkler 0.913
 international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,2135856,international hospital,,incompatible-tokens,jaro-winkler 0.913
+international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,1355790,international stem cell,ISCO,incompatible-tokens,jaro-winkler 0.906
+international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,1100788,international star,,incompatible-tokens,jaro-winkler 0.947
 international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,1038277,international isotopes,INIS,incompatible-tokens,jaro-winkler 0.921
+international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,1611046,international endeavors,MDLK,incompatible-tokens,jaro-winkler 0.918
+international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,1957197,international battery,,incompatible-tokens,jaro-winkler 0.912
+international motors,"International Motors, LLC",OH,1,1341,2026-2026,edgar,1683695,international money express,IMXI,incompatible-tokens,jaro-winkler 0.913
 fremont investment loan,Fremont Investment & Loan,CA|IL,15,1266,2007-2008,edgar,1410769,fremont hotel investment,,incompatible-tokens,jaro-winkler 0.900
+brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,16,1216,2000-2004,edgar,936179,brown william e,,incompatible-tokens,jaro-winkler 0.903
+brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,16,1216,2000-2004,edgar,1202539,brown william r,,incompatible-tokens,jaro-winkler 0.903
+brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,16,1216,2000-2004,edgar,1024555,brown william l,,incompatible-tokens,jaro-winkler 0.903
+brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,16,1216,2000-2004,edgar,1312851,brown william f,,incompatible-tokens,jaro-winkler 0.903
+brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,16,1216,2000-2004,edgar,1266526,brown william t,,incompatible-tokens,jaro-winkler 0.925
+brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,16,1216,2000-2004,edgar,1228866,brown william c,,incompatible-tokens,jaro-winkler 0.925
+brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,16,1216,2000-2004,edgar,1362151,brown william g,,incompatible-tokens,jaro-winkler 0.903
+brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,16,1216,2000-2004,edgar,1350633,brown william m,,incompatible-tokens,jaro-winkler 0.903
 ritz carlton lake tahoe,"The Ritz-Carlton, Lake Tahoe",CA,5,1193,2016-2020,edgar,1770983,ritz carlton title,,incompatible-tokens,jaro-winkler 0.904
 ritz carlton lake tahoe,"The Ritz-Carlton, Lake Tahoe",CA,5,1193,2016-2020,edgar,1770945,ritz carlton sales,,incompatible-tokens,jaro-winkler 0.904
-brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,15,1185,2000-2004,edgar,1362151,brown william g,,incompatible-tokens,jaro-winkler 0.903
-brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,15,1185,2000-2004,edgar,1312851,brown william f,,incompatible-tokens,jaro-winkler 0.903
-brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,15,1185,2000-2004,edgar,1266526,brown william t,,incompatible-tokens,jaro-winkler 0.925
-brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,15,1185,2000-2004,edgar,1024555,brown william l,,incompatible-tokens,jaro-winkler 0.903
-brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,15,1185,2000-2004,edgar,1350633,brown william m,,incompatible-tokens,jaro-winkler 0.903
-brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,15,1185,2000-2004,edgar,1228866,brown william c,,incompatible-tokens,jaro-winkler 0.925
-brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,15,1185,2000-2004,edgar,1202539,brown william r,,incompatible-tokens,jaro-winkler 0.903
-brown williamson tobacco,Brown & Williamson Tobacco Corporation,CA|GA|KY|OR|TX|WA|WI,15,1185,2000-2004,edgar,936179,brown william e,,incompatible-tokens,jaro-winkler 0.903
 u s bank,U.S. Bank,CA|MD,52,1183,2009-2026,edgar,1145893,u s bank na,,incompatible-tokens,jaro-winkler 0.945
-capital one plano,Capital One-Plano,TX,3,1157,2017-2018,edgar,1725828,capital constellation,,incompatible-tokens,jaro-winkler 0.906
-capital one plano,Capital One-Plano,TX,3,1157,2017-2018,edgar,1114928,capital counsel,,incompatible-tokens,jaro-winkler 0.901
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1322323,greenpoint mortgage funding trust 2005 he1,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1399452,greenpoint mortgage funding trust 2007 ar3,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1336820,greenpoint mortgage funding trust 2005 he3,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1379392,greenpoint mortgage funding trust 2006 ar6,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1389368,greenpoint mortgage funding trust 2007 he1,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1340444,greenpoint mortgage funding trust 2005 he4,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1382926,greenpoint mortgage funding trust 2006 oh1,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1372211,greenpoint mortgage funding trust 2006 ar4,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1334476,greenpoint mortgage funding trust 2005 hy1,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1373146,greenpoint mortgage funding trust 2006 he1,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1375566,greenpoint mortgage funding trust 2006 ar5,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1353083,greenpoint mortgage funding trust 2005 ar1,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1268185,greenpoint mortgage securities,,incompatible-tokens,jaro-winkler 0.910
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1384024,greenpoint mortgage funding trust 2006 ar8,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1390505,greenpoint mortgage funding trust 2007 ar1,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1380898,greenpoint mortgage funding trust 2006 ar7,,incompatible-tokens,jaro-winkler 0.929
+greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,23,1172,2000-2008,edgar,1394678,greenpoint mortgage funding trust 2007 ar2,,incompatible-tokens,jaro-winkler 0.929
+holland america line,Holland America Line NV,WA,2,1166,2020-2020,edgar,1476482,holland michael a,,incompatible-tokens,jaro-winkler 0.911
+holland america line,Holland America Line NV,WA,2,1166,2020-2020,edgar,1713209,holland james e,,incompatible-tokens,jaro-winkler 0.903
 capital one plano,Capital One-Plano,TX,3,1157,2017-2018,edgar,927628,capital one financial,COF,incompatible-tokens,jaro-winkler 0.906
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1372211,greenpoint mortgage funding trust 2006 ar4,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1382926,greenpoint mortgage funding trust 2006 oh1,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1353083,greenpoint mortgage funding trust 2006 ar1,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1379392,greenpoint mortgage funding trust 2006 ar6,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1390505,greenpoint mortgage funding trust 2007 ar1,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1380898,greenpoint mortgage funding trust 2006 ar7,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1394678,greenpoint mortgage funding trust 2007 ar2,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1384024,greenpoint mortgage funding trust 2006 ar8,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1322323,greenpoint mortgage funding trust 2005 he1,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1334476,greenpoint mortgage funding trust 2005 hy1,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1373146,greenpoint mortgage funding trust 2006 he1,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1268185,greenpoint mortgage securities,,incompatible-tokens,jaro-winkler 0.910
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1336820,greenpoint mortgage funding trust 2005 he3,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1399452,greenpoint mortgage funding trust 2007 ar3,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1375566,greenpoint mortgage funding trust 2006 ar5,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1340444,greenpoint mortgage funding trust 2005 he4,,incompatible-tokens,jaro-winkler 0.929
-greenpoint mortgage funding,"GreenPoint Mortgage Funding, Inc.",CA|GA|IL|OR|WA,22,1131,2000-2008,edgar,1389368,greenpoint mortgage funding trust 2007 he1,,incompatible-tokens,jaro-winkler 0.929
-international paper courtland mill,INTERNATIONAL PAPER-COURTLAND MILL,AL,1,1100,2013-2013,edgar,51434,international paper,IP,incompatible-tokens,jaro-winkler 0.912
+capital one plano,Capital One-Plano,TX,3,1157,2017-2018,edgar,1114928,capital counsel,,incompatible-tokens,jaro-winkler 0.901
+capital one plano,Capital One-Plano,TX,3,1157,2017-2018,edgar,1725828,capital constellation,,incompatible-tokens,jaro-winkler 0.906
 international paper courtland mill,INTERNATIONAL PAPER-COURTLAND MILL,AL,1,1100,2013-2013,edgar,51442,international petroleum,,incompatible-tokens,jaro-winkler 0.903
 international paper courtland mill,INTERNATIONAL PAPER-COURTLAND MILL,AL,1,1100,2013-2013,edgar,1533521,international petroleum,,incompatible-tokens,jaro-winkler 0.903
 international paper courtland mill,INTERNATIONAL PAPER-COURTLAND MILL,AL,1,1100,2013-2013,edgar,1559724,international rail partners,,incompatible-tokens,jaro-winkler 0.900
+international paper courtland mill,INTERNATIONAL PAPER-COURTLAND MILL,AL,1,1100,2013-2013,edgar,51434,international paper,IP,incompatible-tokens,jaro-winkler 0.912
+aramark sports entertainment angel stadium,ARAMARK SPORTS & ENTERTAINMENT-ANGEL STADIUM,CA,1,1088,2013-2013,edgar,1397046,aramark sports entertainment services,,incompatible-tokens,jaro-winkler 0.919
 aramark sports entertainment angel stadium,ARAMARK SPORTS & ENTERTAINMENT-ANGEL STADIUM,CA,1,1088,2013-2013,edgar,1397361,aramark sports entertainment services of texas,,incompatible-tokens,jaro-winkler 0.907
 aramark sports entertainment angel stadium,ARAMARK SPORTS & ENTERTAINMENT-ANGEL STADIUM,CA,1,1088,2013-2013,edgar,1397043,aramark sports entertainment group,,incompatible-tokens,jaro-winkler 0.930
-aramark sports entertainment angel stadium,ARAMARK SPORTS & ENTERTAINMENT-ANGEL STADIUM,CA,1,1088,2013-2013,edgar,1397046,aramark sports entertainment services,,incompatible-tokens,jaro-winkler 0.919
-universal television,Universal Television LLC,CA,4,1065,2020-2020,edgar,1756740,universal invest,,incompatible-tokens,jaro-winkler 0.935
 universal television,Universal Television LLC,CA,4,1065,2020-2020,edgar,1738743,universal ensco,,incompatible-tokens,jaro-winkler 0.912
+universal television,Universal Television LLC,CA,4,1065,2020-2020,edgar,1756740,universal invest,,incompatible-tokens,jaro-winkler 0.935
 universal television,Universal Television LLC,CA,4,1065,2020-2020,edgar,101984,universal electronics,UEIC,incompatible-tokens,jaro-winkler 0.907
 pae,PAE,CA|FL|IA|KS|MI,10,1061,2016-2022,edgar,1720821,pae,,ambiguous-exact,several registrants share this name in this era
 pae,PAE,CA|FL|IA|KS|MI,10,1061,2016-2022,edgar,1870665,pae,,ambiguous-exact,several registrants share this name in this era
 broadway services,Broadway Services LLC,MD,1,1047,2025-2025,edgar,1738692,broadway electric,,incompatible-tokens,jaro-winkler 0.901
 rr donnelley sons,RR DONNELLEY & SONS COMPANY,IL,1,1040,1993-1993,edgar,29669,rr donnelley sons,,pre-era,registrant filed under this name 2006-2022
-elan pharmaceutical management,Elan Pharmaceutical Management Corporation,CA,2,1023,2002-2002,edgar,1279105,elan pharmaceutical investments,,incompatible-tokens,jaro-winkler 0.918
 elan pharmaceutical management,Elan Pharmaceutical Management Corporation,CA,2,1023,2002-2002,edgar,1256814,elan pharmaceutical investments ii,,incompatible-tokens,jaro-winkler 0.903
+elan pharmaceutical management,Elan Pharmaceutical Management Corporation,CA,2,1023,2002-2002,edgar,1279105,elan pharmaceutical investments,,incompatible-tokens,jaro-winkler 0.918
 san jose medical center,San Jose Medical Center,CA,1,1014,2004-2004,edgar,1392753,san jose medical center,,pre-era,registrant filed under this name 2007-2022
-regal cinema,Regal Cinema,NY,9,1004,2020-2020,edgar,1389064,regal cinemedia,,near-spelling,jaro-winkler 0.960
 regal cinema,Regal Cinema,NY,9,1004,2020-2020,edgar,1389063,regal cinemedia holdings,,incompatible-tokens,jaro-winkler 0.900
+regal cinema,Regal Cinema,NY,9,1004,2020-2020,edgar,1389064,regal cinemedia,,near-spelling,jaro-winkler 0.960
 regal cinema,Regal Cinema,NY,9,1004,2020-2020,edgar,905035,regal cinemas,,near-spelling,jaro-winkler 0.985
 regal cinema,Regal Cinema,NY,9,1004,2020-2020,edgar,1172371,regal cinemas,,near-spelling,jaro-winkler 0.985
 frontier enterp rise,Frontier Enterp;rise,TX,1,1000,2020-2020,edgar,1620652,frontier partners,,incompatible-tokens,jaro-winkler 0.923
@@ -108,13 +111,13 @@ arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1363708,arvinm
 arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1399033,arvinmeritor,,ambiguous-exact,several registrants share this name in this era
 arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1400723,arvinmeritor,,ambiguous-exact,several registrants share this name in this era
 arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1477150,arvinmeritor,,ambiguous-exact,several registrants share this name in this era
-arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1477152,arvinmeritor mascot,,incompatible-tokens,jaro-winkler 0.926
 arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1399661,arvinmeritor sweden,,incompatible-tokens,jaro-winkler 0.926
-arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1398912,arvinmeritor inc nev,,incompatible-tokens,jaro-winkler 0.920
-arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1363714,arvinmeritor assembly,,incompatible-tokens,jaro-winkler 0.914
-arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1398909,arvinmeritor holdings,,incompatible-tokens,jaro-winkler 0.914
 arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1398911,arvinmeritor technology,,incompatible-tokens,jaro-winkler 0.904
+arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1398909,arvinmeritor holdings,,incompatible-tokens,jaro-winkler 0.914
 arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1398910,arvinmeritor investments,,incompatible-tokens,jaro-winkler 0.900
+arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1477152,arvinmeritor mascot,,incompatible-tokens,jaro-winkler 0.926
+arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1363714,arvinmeritor assembly,,incompatible-tokens,jaro-winkler 0.914
+arvinmeritor,"ArvinMeritor, Inc.",IL|KY|OH,22,976,2005-2010,edgar,1398912,arvinmeritor inc nev,,incompatible-tokens,jaro-winkler 0.920
 sunstrand,SUNSTRAND,IL,1,960,1991-1991,edgar,1676060,sunstrand,,pre-era,registrant filed under this name 2016-2016
 textron pcd,Textron PCD,IL,2,950,2003-2003,edgar,217346,textron,TXT,near-spelling,jaro-winkler 0.927
 ameristar casino resort spa st charles,Ameristar Casino Resort Spa - St. Charles,MO,1,947,2020-2020,edgar,1136826,ameristar casino st charles,,incompatible-tokens,jaro-winkler 0.905
@@ -125,15 +128,15 @@ consolidation coal rend lake mine,CONSOLIDATION COAL/REND LAKE MINE,IL,6,944,198
 sky chefs,"Sky Chefs, Inc.",GA,1,933,1991-1991,edgar,948065,sky chefs,,pre-era,registrant filed under this name 1996-1998
 levy restaurants,Levy Restaurants,CA|FL,4,926,2016-2017,edgar,1531472,levy stuart,,incompatible-tokens,jaro-winkler 0.901
 valley fresh,Valley Fresh,CA|GA,5,921,2003-2010,edgar,1508764,valley farms 1,,incompatible-tokens,jaro-winkler 0.910
-aramark sports entertainment svcs,"Aramark Sports & Entertainment Svcs, LLC",FL,1,919,2019-2019,edgar,1396773,aramark fhc sports entertainment services,,incompatible-tokens,jaro-winkler 0.900
+aramark sports entertainment svcs,"Aramark Sports & Entertainment Svcs, LLC",FL,1,919,2019-2019,edgar,1397046,aramark sports entertainment services,,incompatible-tokens,jaro-winkler 0.978
 aramark sports entertainment svcs,"Aramark Sports & Entertainment Svcs, LLC",FL,1,919,2019-2019,edgar,1397361,aramark sports entertainment services of texas,,incompatible-tokens,jaro-winkler 0.943
 aramark sports entertainment svcs,"Aramark Sports & Entertainment Svcs, LLC",FL,1,919,2019-2019,edgar,1397043,aramark sports entertainment group,,incompatible-tokens,jaro-winkler 0.946
-aramark sports entertainment svcs,"Aramark Sports & Entertainment Svcs, LLC",FL,1,919,2019-2019,edgar,1397046,aramark sports entertainment services,,incompatible-tokens,jaro-winkler 0.978
-transamerica life ins,Transamerica Life Ins.,IA,2,907,2016-2018,edgar,1669173,transamerica premier life insurance,,incompatible-tokens,jaro-winkler 0.901
+aramark sports entertainment svcs,"Aramark Sports & Entertainment Svcs, LLC",FL,1,919,2019-2019,edgar,1396773,aramark fhc sports entertainment services,,incompatible-tokens,jaro-winkler 0.900
+transamerica life ins,Transamerica Life Ins.,IA,2,907,2016-2018,edgar,1164098,transamerica life insurance,,incompatible-tokens,jaro-winkler 0.956
+transamerica life ins,Transamerica Life Ins.,IA,2,907,2016-2018,edgar,99189,transamerica,,incompatible-tokens,jaro-winkler 0.914
 transamerica life ins,Transamerica Life Ins.,IA,2,907,2016-2018,edgar,787623,transamerica funds,,incompatible-tokens,jaro-winkler 0.930
 transamerica life ins,Transamerica Life Ins.,IA,2,907,2016-2018,edgar,1673996,transamerica etf trust,,incompatible-tokens,jaro-winkler 0.905
-transamerica life ins,Transamerica Life Ins.,IA,2,907,2016-2018,edgar,99189,transamerica,,incompatible-tokens,jaro-winkler 0.914
-transamerica life ins,Transamerica Life Ins.,IA,2,907,2016-2018,edgar,1164098,transamerica life insurance,,incompatible-tokens,jaro-winkler 0.956
+transamerica life ins,Transamerica Life Ins.,IA,2,907,2016-2018,edgar,1669173,transamerica premier life insurance,,incompatible-tokens,jaro-winkler 0.901
 transamerica life ins,Transamerica Life Ins.,IA,2,907,2016-2018,edgar,916943,transamerica variable funds,,incompatible-tokens,jaro-winkler 0.919
 laidlaw transit services,LAIDLAW TRANSIT SERVICES INC,CA|OR,10,902,1999-2001,edgar,1277758,laidlaw transit services,,pre-era,registrant filed under this name 2004-2004
 america on line aol,America On Line (AOL),OK,1,900,2006-2006,edgar,883780,america online,,incompatible-tokens,jaro-winkler 0.947
@@ -144,26 +147,26 @@ smurfit stone container,Smurfit-Stone Container Corp.,CA|IL|OH|VA,7,884,2008-201
 safran cabin,"Safran Cabin, Inc.",CA,3,883,2020-2024,edgar,2108024,safran david,,incompatible-tokens,jaro-winkler 0.900
 schneider electric,Schneider Electric,CA|IL|IN|OH,14,868,2013-2021,edgar,923734,schneider electric,,ambiguous-exact,several registrants share this name in this era
 schneider electric,Schneider Electric,CA|IL|IN|OH,14,868,2013-2021,edgar,1625991,schneider electric,,ambiguous-exact,several registrants share this name in this era
-schneider electric,Schneider Electric,CA|IL|IN|OH,14,868,2013-2021,edgar,1999633,schneider carine,,incompatible-tokens,jaro-winkler 0.902
+schneider electric,Schneider Electric,CA|IL|IN|OH,14,868,2013-2021,edgar,1226510,schneider neal c,,incompatible-tokens,jaro-winkler 0.907
 schneider electric,Schneider Electric,CA|IL|IN|OH,14,868,2013-2021,edgar,1487345,schneider peter w,,incompatible-tokens,jaro-winkler 0.906
 schneider electric,Schneider Electric,CA|IL|IN|OH,14,868,2013-2021,edgar,1781712,schneider travis,,incompatible-tokens,jaro-winkler 0.907
-schneider electric,Schneider Electric,CA|IL|IN|OH,14,868,2013-2021,edgar,1226510,schneider neal c,,incompatible-tokens,jaro-winkler 0.907
-harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1533643,harley davidson motorcycle trust 2011 2,,incompatible-tokens,jaro-winkler 0.908
-harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1033232,harley davidson credit,,incompatible-tokens,jaro-winkler 0.924
-harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1114926,harley davidson customer funding,,incompatible-tokens,jaro-winkler 0.905
-harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1473329,harley davidson motorcycle trust 2009 3,,incompatible-tokens,jaro-winkler 0.908
+schneider electric,Schneider Electric,CA|IL|IN|OH,14,868,2013-2021,edgar,1999633,schneider carine,,incompatible-tokens,jaro-winkler 0.902
 harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,793952,harley davidson,HOG,near-spelling,jaro-winkler 0.943
-harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1427157,harley davidson motorcycle trust 2008 1,,incompatible-tokens,jaro-winkler 0.908
-harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1363677,harley davidson motorcycle trust 2006 2,,incompatible-tokens,jaro-winkler 0.908
+harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1473329,harley davidson motorcycle trust 2009 3,,incompatible-tokens,jaro-winkler 0.908
 harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1526572,harley davidson motorcycle trust 2011 1,,incompatible-tokens,jaro-winkler 0.908
-harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1410639,harley davidson motorcycle trust 2007 3,,incompatible-tokens,jaro-winkler 0.908
-harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1387499,harley davidson motorcycle trust 2007 1,,incompatible-tokens,jaro-winkler 0.908
-harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1505689,harley davidson motorcycle trust 2010 1,,incompatible-tokens,jaro-winkler 0.908
-harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1477488,harley davidson motorcycle trust 2009 4,,incompatible-tokens,jaro-winkler 0.908
-harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1463563,harley davidson motorcycle trust 2009 1,,incompatible-tokens,jaro-winkler 0.908
+harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1363677,harley davidson motorcycle trust 2006 2,,incompatible-tokens,jaro-winkler 0.908
 harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1373117,harley davidson motorcycle trust 2006 3,,incompatible-tokens,jaro-winkler 0.908
 harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1399611,harley davidson motorcycle trust 2007 2,,incompatible-tokens,jaro-winkler 0.908
+harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1505689,harley davidson motorcycle trust 2010 1,,incompatible-tokens,jaro-winkler 0.908
+harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1410639,harley davidson motorcycle trust 2007 3,,incompatible-tokens,jaro-winkler 0.908
 harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1467649,harley davidson motorcycle trust 2009 2,,incompatible-tokens,jaro-winkler 0.908
+harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1387499,harley davidson motorcycle trust 2007 1,,incompatible-tokens,jaro-winkler 0.908
+harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1477488,harley davidson motorcycle trust 2009 4,,incompatible-tokens,jaro-winkler 0.908
+harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1533643,harley davidson motorcycle trust 2011 2,,incompatible-tokens,jaro-winkler 0.908
+harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1033232,harley davidson credit,,incompatible-tokens,jaro-winkler 0.924
+harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1427157,harley davidson motorcycle trust 2008 1,,incompatible-tokens,jaro-winkler 0.908
+harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1114926,harley davidson customer funding,,incompatible-tokens,jaro-winkler 0.905
+harley davidson motor,Harley-Davidson Motor Company,WI,4,866,2009-2009,edgar,1463563,harley davidson motorcycle trust 2009 1,,incompatible-tokens,jaro-winkler 0.908
 kraft foods global,Kraft Foods Global Inc.,CA|IL|WI,4,863,2004-2007,edgar,1103982,kraft foods,MDLZ,near-spelling,jaro-winkler 0.922
 gymboree group,"Gymboree Group, Inc.",CA,5,852,2019-2019,edgar,786110,gymboree,,near-spelling,jaro-winkler 0.914
 jacobs,Jacobs,FL|NM|SC,3,849,2015-2024,edgar,1055544,jacobs,,weak-word,name is a common word
@@ -172,40 +175,44 @@ general dynamics it waco,General Dynamics IT-Waco,TX,1,840,2017-2017,edgar,11654
 general dynamics it waco,General Dynamics IT-Waco,TX,1,840,2017-2017,edgar,40533,general dynamics,GD,incompatible-tokens,jaro-winkler 0.933
 officemax,"OfficeMax, Inc.",IL|OH,3,831,2004-2009,edgar,12978,officemax,,ambiguous-exact,several registrants share this name in this era
 officemax,"OfficeMax, Inc.",IL|OH,3,831,2004-2009,edgar,734618,officemax,,ambiguous-exact,several registrants share this name in this era
+pacificare,PACIFICARE,CA|OR,30,830,2002-2006,edgar,1225835,pacificare of nevada,,incompatible-tokens,jaro-winkler 0.900
 pacificare,PACIFICARE,CA|OR,30,830,2002-2006,edgar,1225840,pacificare of texas,,incompatible-tokens,jaro-winkler 0.905
 pacificare,PACIFICARE,CA|OR,30,830,2002-2006,edgar,1225824,pacificare of oregon,,incompatible-tokens,jaro-winkler 0.900
-pacificare,PACIFICARE,CA|OR,30,830,2002-2006,edgar,1225835,pacificare of nevada,,incompatible-tokens,jaro-winkler 0.900
-shepherd machinery,Shepherd Machinery Company,CA,2,824,2003-2003,edgar,1209492,shepherd j michael,,incompatible-tokens,jaro-winkler 0.920
 shepherd machinery,Shepherd Machinery Company,CA,2,824,2003-2003,edgar,1340821,shepherd michael w,,incompatible-tokens,jaro-winkler 0.920
+shepherd machinery,Shepherd Machinery Company,CA,2,824,2003-2003,edgar,1209492,shepherd j michael,,incompatible-tokens,jaro-winkler 0.920
 trinity north american freight car,"Trinity North American Freight Car, Inc.",GA|TX,2,817,2009-2009,edgar,1297671,trinity north american freight car,,pre-era,registrant filed under this name 2014-2014
 international automotive components,International Automotive Components,KY|OH|WI,7,807,2008-2021,edgar,1721562,international auction partners,,incompatible-tokens,jaro-winkler 0.905
-silver eagle,SILVER EAGLE,IL|OR,2,798,1995-2010,edgar,1426627,silver medical,,incompatible-tokens,jaro-winkler 0.910
 silver eagle,SILVER EAGLE,IL|OR,2,798,1995-2010,edgar,1458845,silver tales,,incompatible-tokens,jaro-winkler 0.913
 silver eagle,SILVER EAGLE,IL|OR,2,798,1995-2010,edgar,850398,silver eagle resources,,incompatible-tokens,jaro-winkler 0.909
+silver eagle,SILVER EAGLE,IL|OR,2,798,1995-2010,edgar,1426627,silver medical,,incompatible-tokens,jaro-winkler 0.910
 silver eagle,SILVER EAGLE,IL|OR,2,798,1995-2010,edgar,1553127,silver teal,,incompatible-tokens,jaro-winkler 0.948
+united natural foods supervalu,United Natural Foods/SUPERVALU,WA,4,792,2019-2019,edgar,1020859,united natural foods,UNFI,near-spelling,jaro-winkler 0.933
+triumph aerospace structures,Triumph Aerospace Structures,CA|OK|WA,8,790,2019-2021,edgar,1497086,triumph aerostructures,,incompatible-tokens,jaro-winkler 0.921
+triumph aerospace structures,Triumph Aerospace Structures,CA|OK|WA,8,790,2019-2021,edgar,1477175,triumph aerospace systems group,,incompatible-tokens,jaro-winkler 0.910
+triumph aerospace structures,Triumph Aerospace Structures,CA|OK|WA,8,790,2019-2021,edgar,1722299,triumph aerostructures tulsa,,incompatible-tokens,jaro-winkler 0.917
 johnson controls interior mfg us,"Johnson Controls Interior Mfg., US, LLC",KY,2,784,2012-2013,edgar,53669,johnson controls,,incompatible-tokens,jaro-winkler 0.900
 global spectrum rose garden,Global Spectrum - Rose Garden,OR,1,780,2008-2008,edgar,1452552,global resource partners,,incompatible-tokens,jaro-winkler 0.901
 good samaritan hospital,Good Samaritan Hospital,CA,3,764,2000-2004,edgar,1395058,good samaritan hospital,,pre-era,registrant filed under this name 2007-2022
-seattle sportservice,Seattle Sportservice Inc,WA,1,761,2017-2017,edgar,1704254,seattle spinco,,incompatible-tokens,jaro-winkler 0.900
+kindred hospital,Kindred Hospital,CA|IN|LA|MI|WA,6,755,2008-2019,edgar,1717602,kindred holdings,,incompatible-tokens,jaro-winkler 0.910
 thermal structures,"Thermal Structures, Inc.",CA,3,751,2018-2020,edgar,1984961,thermal structures,,pre-era,registrant filed under this name 2023-2023
 fresh creative foods,Fresh Creative Foods,OK,2,742,2017-2017,edgar,1753430,fresh prep foods,,incompatible-tokens,jaro-winkler 0.915
-teva pharmaceuticals,Teva Pharmaceuticals,CA|NJ|UT,15,739,2008-2025,edgar,818686,teva pharmaceutical industries,TEVA,incompatible-tokens,jaro-winkler 0.933
 teva pharmaceuticals,Teva Pharmaceuticals,CA|NJ|UT,15,739,2008-2025,edgar,1451275,teva pharmaceutical finance iv,,incompatible-tokens,jaro-winkler 0.917
-teva pharmaceuticals,Teva Pharmaceuticals,CA|NJ|UT,15,739,2008-2025,edgar,1536701,teva pharmaceutical finance v,,incompatible-tokens,jaro-winkler 0.921
 teva pharmaceuticals,Teva Pharmaceuticals,CA|NJ|UT,15,739,2008-2025,edgar,1536702,teva pharmaceutical finance vi,,incompatible-tokens,jaro-winkler 0.917
-nielsen audio,Nielsen Audio Inc.,MD,3,738,2013-2014,edgar,1397410,nielsen,,near-spelling,jaro-winkler 0.908
-nielsen audio,Nielsen Audio Inc.,MD,3,738,2013-2014,edgar,1492633,nielsen,,near-spelling,jaro-winkler 0.908
+teva pharmaceuticals,Teva Pharmaceuticals,CA|NJ|UT,15,739,2008-2025,edgar,818686,teva pharmaceutical industries,TEVA,incompatible-tokens,jaro-winkler 0.933
+teva pharmaceuticals,Teva Pharmaceuticals,CA|NJ|UT,15,739,2008-2025,edgar,1536701,teva pharmaceutical finance v,,incompatible-tokens,jaro-winkler 0.921
 nielsen audio,Nielsen Audio Inc.,MD,3,738,2013-2014,edgar,1343964,nielsen tod,,incompatible-tokens,jaro-winkler 0.916
+nielsen audio,Nielsen Audio Inc.,MD,3,738,2013-2014,edgar,1657082,nielsen jaime,,incompatible-tokens,jaro-winkler 0.908
 nielsen audio,Nielsen Audio Inc.,MD,3,738,2013-2014,edgar,1349063,nielsen paul d,,incompatible-tokens,jaro-winkler 0.926
 nielsen audio,Nielsen Audio Inc.,MD,3,738,2013-2014,edgar,1188032,nielsen claude b,,incompatible-tokens,jaro-winkler 0.907
-nielsen audio,Nielsen Audio Inc.,MD,3,738,2013-2014,edgar,1657082,nielsen jaime,,incompatible-tokens,jaro-winkler 0.908
+nielsen audio,Nielsen Audio Inc.,MD,3,738,2013-2014,edgar,1397410,nielsen,,near-spelling,jaro-winkler 0.908
+nielsen audio,Nielsen Audio Inc.,MD,3,738,2013-2014,edgar,1492633,nielsen,,near-spelling,jaro-winkler 0.908
 sheraton operating,Sheraton Operating Corporation,CA,2,734,2015-2015,edgar,1319707,sheraton partners,,incompatible-tokens,jaro-winkler 0.916
 appleton coated,Appleton Coated LLC,WI,2,723,2001-2017,edgar,1055290,appleton partners,,incompatible-tokens,jaro-winkler 0.901
 united states enrichment,United States Enrichment Corp.,KY,2,721,2000-2000,edgar,1024188,united states enrichment,,pre-era,registrant filed under this name 2014-2014
-united states enrichment,United States Enrichment Corp.,KY,2,721,2000-2000,edgar,880657,united states can,,incompatible-tokens,jaro-winkler 0.909
-united states enrichment,United States Enrichment Corp.,KY,2,721,2000-2000,edgar,350129,united states aircraft,,incompatible-tokens,jaro-winkler 0.903
 united states enrichment,United States Enrichment Corp.,KY,2,721,2000-2000,edgar,101538,united states antimony,UAMY,incompatible-tokens,jaro-winkler 0.910
 united states enrichment,United States Enrichment Corp.,KY,2,721,2000-2000,edgar,1171618,united states semiconductor,,incompatible-tokens,jaro-winkler 0.902
+united states enrichment,United States Enrichment Corp.,KY,2,721,2000-2000,edgar,350129,united states aircraft,,incompatible-tokens,jaro-winkler 0.903
+united states enrichment,United States Enrichment Corp.,KY,2,721,2000-2000,edgar,880657,united states can,,incompatible-tokens,jaro-winkler 0.909
 united states enrichment,United States Enrichment Corp.,KY,2,721,2000-2000,edgar,1163302,united states steel,,incompatible-tokens,jaro-winkler 0.909
 united states enrichment,United States Enrichment Corp.,KY,2,721,2000-2000,edgar,906613,united states leather,,incompatible-tokens,jaro-winkler 0.929
 united states enrichment,United States Enrichment Corp.,KY,2,721,2000-2000,edgar,318025,united states filter,,incompatible-tokens,jaro-winkler 0.908
@@ -213,23 +220,23 @@ wilmington trust m t bank,Wilmington Trust/M&T Bank,DE,1,721,2011-2011,edgar,839
 wilmington trust m t bank,Wilmington Trust/M&T Bank,DE,1,721,2011-2011,edgar,872821,wilmington trust,,incompatible-tokens,jaro-winkler 0.928
 wilmington trust m t bank,Wilmington Trust/M&T Bank,DE,1,721,2011-2011,edgar,905571,wilmington trust,,incompatible-tokens,jaro-winkler 0.928
 wilmington trust m t bank,Wilmington Trust/M&T Bank,DE,1,721,2011-2011,edgar,1458661,wilmington trust,,incompatible-tokens,jaro-winkler 0.928
-wilmington trust m t bank,Wilmington Trust/M&T Bank,DE,1,721,2011-2011,edgar,1010203,wilmington trust fsb,,incompatible-tokens,jaro-winkler 0.924
 wilmington trust m t bank,Wilmington Trust/M&T Bank,DE,1,721,2011-2011,edgar,1451936,wilmington trust capital a,,incompatible-tokens,jaro-winkler 0.904
+wilmington trust m t bank,Wilmington Trust/M&T Bank,DE,1,721,2011-2011,edgar,1010203,wilmington trust fsb,,incompatible-tokens,jaro-winkler 0.924
 startek usa,StarTek USA Inc.,IL|NY|TX,4,719,2008-2025,edgar,1031029,startek,,near-spelling,jaro-winkler 0.927
 weber aircraft,Weber Aircraft,TX,6,700,2001-2004,edgar,1382010,weber richard,,incompatible-tokens,jaro-winkler 0.908
 johnson controls world services,Johnson Controls World Services Inc,GA,1,700,1996-1996,edgar,53669,johnson controls,,incompatible-tokens,jaro-winkler 0.903
-health care group,HEALTH CARE GROUP,CA,6,698,2008-2010,edgar,1457854,health strategies group,,incompatible-tokens,jaro-winkler 0.902
 health care group,HEALTH CARE GROUP,CA,6,698,2008-2010,edgar,766704,health care reit,WELL,incompatible-tokens,jaro-winkler 0.915
-collins aikman rantoul division,"Collins & Aikman, Rantoul Division",IL,1,696,2007-2007,edgar,1171406,collins aikman automotive international,,incompatible-tokens,jaro-winkler 0.901
-collins aikman rantoul division,"Collins & Aikman, Rantoul Division",IL,1,696,2007-2007,edgar,929916,collins aikman products,,incompatible-tokens,jaro-winkler 0.909
-collins aikman rantoul division,"Collins & Aikman, Rantoul Division",IL,1,696,2007-2007,edgar,1171394,collins aikman interiors,,incompatible-tokens,jaro-winkler 0.916
-collins aikman rantoul division,"Collins & Aikman, Rantoul Division",IL,1,696,2007-2007,edgar,1312659,collins aikman automotive asia,,incompatible-tokens,jaro-winkler 0.904
+health care group,HEALTH CARE GROUP,CA,6,698,2008-2010,edgar,1457854,health strategies group,,incompatible-tokens,jaro-winkler 0.902
 collins aikman rantoul division,"Collins & Aikman, Rantoul Division",IL,1,696,2007-2007,edgar,1312657,collins aikman automotive interiors,,incompatible-tokens,jaro-winkler 0.905
+collins aikman rantoul division,"Collins & Aikman, Rantoul Division",IL,1,696,2007-2007,edgar,1171406,collins aikman automotive international,,incompatible-tokens,jaro-winkler 0.901
+collins aikman rantoul division,"Collins & Aikman, Rantoul Division",IL,1,696,2007-2007,edgar,1171394,collins aikman interiors,,incompatible-tokens,jaro-winkler 0.916
+collins aikman rantoul division,"Collins & Aikman, Rantoul Division",IL,1,696,2007-2007,edgar,929916,collins aikman products,,incompatible-tokens,jaro-winkler 0.909
+collins aikman rantoul division,"Collins & Aikman, Rantoul Division",IL,1,696,2007-2007,edgar,1312659,collins aikman automotive asia,,incompatible-tokens,jaro-winkler 0.904
 harrah s,HARRAH'S,IL,1,694,2020-2020,edgar,1536617,harrah midstream,,incompatible-tokens,jaro-winkler 0.900
 international paper savannah mill,International Paper Savannah Mill,GA,1,691,2025-2025,edgar,51434,international paper,IP,incompatible-tokens,jaro-winkler 0.915
 sema4,Sema4,CT,2,687,2022-2022,edgar,1818331,sema4 holdings,WGS,ambiguous-extension,one of several listed companies extending the name
-national express,National Express Corporation,IL|MD|TN,3,678,2020-2022,edgar,1849169,national desk,,incompatible-tokens,jaro-winkler 0.907
 national express,National Express Corporation,IL|MD|TN,3,678,2020-2022,edgar,1049659,national steel,SID,incompatible-tokens,jaro-winkler 0.905
+national express,National Express Corporation,IL|MD|TN,3,678,2020-2022,edgar,1849169,national desk,,incompatible-tokens,jaro-winkler 0.907
 national express,National Express Corporation,IL|MD|TN,3,678,2020-2022,edgar,1800925,national trustee,,incompatible-tokens,jaro-winkler 0.910
 exxon mobil campus,Exxon Mobil Campus,TX,1,677,2020-2020,edgar,34088,exxon mobil,,near-spelling,jaro-winkler 0.922
 regal beloit america,"Regal Beloit America, Inc.",IN|MO|TN|WI,8,676,2019-2020,edgar,2016266,regal beloit america,,pre-era,registrant filed under this name 2024-2024
@@ -240,74 +247,69 @@ st joseph hospital,St. Joseph Hospital,CA|GA,8,653,2005-2019,edgar,1177135,st jo
 bae systems controls,"BAE Systems Controls, Inc.",CA|TX,3,647,2004-2011,edgar,895564,bae systems,BAESY,near-spelling,jaro-winkler 0.910
 bae systems controls,"BAE Systems Controls, Inc.",CA|TX,3,647,2004-2011,edgar,1230244,bae systems,,near-spelling,jaro-winkler 0.910
 viking freight,Viking Freight Inc,GA|IL,3,646,1997-1997,edgar,353537,viking freight,,pre-era,registrant filed under this name 2001-2002
+american garment finishers,American Garment Finishers,TX,2,643,1999-1999,edgar,5133,american greetings,,incompatible-tokens,jaro-winkler 0.908
 american garment finishers,American Garment Finishers,TX,2,643,1999-1999,edgar,1079345,american artists,,incompatible-tokens,jaro-winkler 0.903
 american garment finishers,American Garment Finishers,TX,2,643,1999-1999,edgar,1079348,american artists,,incompatible-tokens,jaro-winkler 0.903
-american garment finishers,American Garment Finishers,TX,2,643,1999-1999,edgar,5133,american greetings,,incompatible-tokens,jaro-winkler 0.908
 xpo logistics worldwide,"XPO Logistics Worldwide, Inc.",CA|GA|KS|MD,5,640,2018-2019,edgar,1166003,xpo logistics,XPO,near-spelling,jaro-winkler 0.913
 express,Express,GA|OH,2,639,2016-2024,edgar,1483510,express,,weak-word,name is a common word
 ritz carlton amelia island,"The Ritz.Carlton, Amelia Island",FL,1,638,2020-2020,edgar,1770945,ritz carlton sales,,incompatible-tokens,jaro-winkler 0.908
 cummins filtration,"Cummins Filtration, Inc.",GA|IA|TN|WI,6,636,2007-2014,edgar,1622862,cummins india,,incompatible-tokens,jaro-winkler 0.901
 united states steel corporation lorain,United States Steel Corporation Lorain,OH,1,636,2015-2015,edgar,1163302,united states steel,,incompatible-tokens,jaro-winkler 0.900
 amazon comksdc,"Amazon.comKSDC, LLC",KS,1,634,2014-2014,edgar,1018724,amazon com,AMZN,incompatible-tokens,jaro-winkler 0.943
-triumph aerospace structures,Triumph Aerospace Structures,CA|OK|WA,5,632,2019-2021,edgar,1722299,triumph aerostructures tulsa,,incompatible-tokens,jaro-winkler 0.917
-triumph aerospace structures,Triumph Aerospace Structures,CA|OK|WA,5,632,2019-2021,edgar,1497086,triumph aerostructures,,incompatible-tokens,jaro-winkler 0.921
-triumph aerospace structures,Triumph Aerospace Structures,CA|OK|WA,5,632,2019-2021,edgar,1477175,triumph aerospace systems group,,incompatible-tokens,jaro-winkler 0.910
 carson pirie scott,CARSON PIRIE SCOTT & COMPANY,IL,4,631,1989-2012,edgar,1579874,carson scott,,near-spelling,jaro-winkler 0.933
 carson pirie scott,CARSON PIRIE SCOTT & COMPANY,IL,4,631,1989-2012,edgar,1363523,carson pirie scott ii,,incompatible-tokens,jaro-winkler 0.971
 coleman,Coleman,CO|KS,8,630,2003-2016,edgar,21627,coleman,,weak-word,name is a common word
-century aluminum of kentucky hawesville,Century Aluminum of Kentucky Hawesville,KY,1,628,2022-2022,edgar,1477847,century aluminum of kentucky general partnership,,incompatible-tokens,jaro-winkler 0.918
 century aluminum of kentucky hawesville,Century Aluminum of Kentucky Hawesville,KY,1,628,2022-2022,edgar,1477846,century aluminum of kentucky,,near-spelling,jaro-winkler 0.944
+century aluminum of kentucky hawesville,Century Aluminum of Kentucky Hawesville,KY,1,628,2022-2022,edgar,1477847,century aluminum of kentucky general partnership,,incompatible-tokens,jaro-winkler 0.918
 century aluminum of kentucky hawesville,Century Aluminum of Kentucky Hawesville,KY,1,628,2022-2022,edgar,1666633,century aluminum of south carolina,,incompatible-tokens,jaro-winkler 0.910
+aramark sports entertainment la convention ctr,ARAMARK SPORTS & ENTERTAINMENT-LA CONVENTION CTR.,CA,1,621,2013-2013,edgar,1397046,aramark sports entertainment services,,incompatible-tokens,jaro-winkler 0.920
 aramark sports entertainment la convention ctr,ARAMARK SPORTS & ENTERTAINMENT-LA CONVENTION CTR.,CA,1,621,2013-2013,edgar,1397361,aramark sports entertainment services of texas,,incompatible-tokens,jaro-winkler 0.913
 aramark sports entertainment la convention ctr,ARAMARK SPORTS & ENTERTAINMENT-LA CONVENTION CTR.,CA,1,621,2013-2013,edgar,1397043,aramark sports entertainment group,,incompatible-tokens,jaro-winkler 0.911
-aramark sports entertainment la convention ctr,ARAMARK SPORTS & ENTERTAINMENT-LA CONVENTION CTR.,CA,1,621,2013-2013,edgar,1397046,aramark sports entertainment services,,incompatible-tokens,jaro-winkler 0.920
 campbell soup supply,"Campbell Soup Supply Company, LLC",CA|OR|TX,3,615,2013-2026,edgar,16732,campbell s,CPB,incompatible-tokens,jaro-winkler 0.900
-fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447452,fleetwood homes of arizona,,incompatible-tokens,jaro-winkler 0.915
-fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447447,fleetwood homes of florida,,incompatible-tokens,jaro-winkler 0.915
-fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447449,fleetwood holdings,,incompatible-tokens,jaro-winkler 0.918
-fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447368,fleetwood homes of virginia,,incompatible-tokens,jaro-winkler 0.911
-fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447367,fleetwood homes of texas,,incompatible-tokens,jaro-winkler 0.925
-fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447369,fleetwood homes of washington,,incompatible-tokens,jaro-winkler 0.903
-fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447448,fleetwood homes of california,,incompatible-tokens,jaro-winkler 0.903
 fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447446,fleetwood homes of georgia,,incompatible-tokens,jaro-winkler 0.915
 fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447444,fleetwood homes of indiana,,incompatible-tokens,jaro-winkler 0.915
-fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447441,fleetwood homes of oregon,,incompatible-tokens,jaro-winkler 0.920
-fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447445,fleetwood homes of idaho,,incompatible-tokens,jaro-winkler 0.925
+fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447367,fleetwood homes of texas,,incompatible-tokens,jaro-winkler 0.925
 fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447443,fleetwood homes of kentucky,,incompatible-tokens,jaro-winkler 0.911
 fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447433,fleetwood homes investment,,incompatible-tokens,jaro-winkler 0.915
+fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447441,fleetwood homes of oregon,,incompatible-tokens,jaro-winkler 0.920
+fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447448,fleetwood homes of california,,incompatible-tokens,jaro-winkler 0.903
+fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447447,fleetwood homes of florida,,incompatible-tokens,jaro-winkler 0.915
+fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447445,fleetwood homes of idaho,,incompatible-tokens,jaro-winkler 0.925
+fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447369,fleetwood homes of washington,,incompatible-tokens,jaro-winkler 0.903
+fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447449,fleetwood holdings,,incompatible-tokens,jaro-winkler 0.918
+fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447368,fleetwood homes of virginia,,incompatible-tokens,jaro-winkler 0.911
+fleetwood homes,Fleetwood Homes,CA|GA|IN|OR,6,605,2002-2009,edgar,1447452,fleetwood homes of arizona,,incompatible-tokens,jaro-winkler 0.915
 case,CASE CORPORATION,IL|WI,3,601,1996-2004,edgar,922321,case,,weak-word,name is a common word
-american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1547530,american boarding,,incompatible-tokens,jaro-winkler 0.901
-american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,864270,american honda finance,,incompatible-tokens,jaro-winkler 0.921
-american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1117057,american lorain,PLAG,incompatible-tokens,jaro-winkler 0.911
-american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1479040,american academy,,incompatible-tokens,jaro-winkler 0.900
-american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1584537,american medical,,incompatible-tokens,jaro-winkler 0.900
-american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,868076,american eco,,incompatible-tokens,jaro-winkler 0.925
-american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1164191,american doctors online,,incompatible-tokens,jaro-winkler 0.902
-american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1580751,american bean,,incompatible-tokens,jaro-winkler 0.909
-american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1567114,american canning,,incompatible-tokens,jaro-winkler 0.900
 american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,809593,american beacon funds,,incompatible-tokens,jaro-winkler 0.903
-american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1096935,american biocare,,incompatible-tokens,jaro-winkler 0.925
+american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,864270,american honda finance,,incompatible-tokens,jaro-winkler 0.921
+american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1584537,american medical,,incompatible-tokens,jaro-winkler 0.900
 american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1057885,american federal,,incompatible-tokens,jaro-winkler 0.900
-american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,774517,american learning,,incompatible-tokens,jaro-winkler 0.901
+american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,868076,american eco,,incompatible-tokens,jaro-winkler 0.925
+american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1567114,american canning,,incompatible-tokens,jaro-winkler 0.900
 american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1289385,american finance,,incompatible-tokens,jaro-winkler 0.940
-keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1513644,keystone marion,,incompatible-tokens,jaro-winkler 0.915
-keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1513654,keystone nps,,incompatible-tokens,jaro-winkler 0.914
-keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1545607,keystone tube,,incompatible-tokens,jaro-winkler 0.902
+american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1580751,american bean,,incompatible-tokens,jaro-winkler 0.909
+american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1096935,american biocare,,incompatible-tokens,jaro-winkler 0.925
+american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1117057,american lorain,PLAG,incompatible-tokens,jaro-winkler 0.911
+american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1547530,american boarding,,incompatible-tokens,jaro-winkler 0.901
+american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1479040,american academy,,incompatible-tokens,jaro-winkler 0.900
+american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,1164191,american doctors online,,incompatible-tokens,jaro-winkler 0.902
+american ordnance,American Ordnance,TN,1,600,2012-2012,edgar,774517,american learning,,incompatible-tokens,jaro-winkler 0.901
 keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1513649,keystone wsnc,,incompatible-tokens,jaro-winkler 0.902
-keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1932314,keystone fund,,incompatible-tokens,jaro-winkler 0.902
-keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,806250,keystone group,,incompatible-tokens,jaro-winkler 0.925
-keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1804381,keystone 27,,incompatible-tokens,jaro-winkler 0.927
 keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1803191,keystone service,,incompatible-tokens,jaro-winkler 0.938
+keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1513644,keystone marion,,incompatible-tokens,jaro-winkler 0.915
 keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1926253,keystone investors,,incompatible-tokens,jaro-winkler 0.904
+keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,806250,keystone group,,incompatible-tokens,jaro-winkler 0.925
 keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1879218,keystone brave,,incompatible-tokens,jaro-winkler 0.957
+keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1932314,keystone fund,,incompatible-tokens,jaro-winkler 0.902
+keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1513654,keystone nps,,incompatible-tokens,jaro-winkler 0.914
+keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1804381,keystone 27,,incompatible-tokens,jaro-winkler 0.927
+keystone rv,Keystone RV Company,IN,2,599,2009-2022,edgar,1545607,keystone tube,,incompatible-tokens,jaro-winkler 0.902
 mortgage bank,Mortgage Bank,SC,2,596,2013-2013,edgar,1468272,mortgage harmony,,incompatible-tokens,jaro-winkler 0.907
 mortgage bank,Mortgage Bank,SC,2,596,2013-2013,edgar,1425410,mortgage shakers,,incompatible-tokens,jaro-winkler 0.907
 cushman wakefield u s inc marine way,Cushman & Wakefield U.S. Inc. - Marine Way,CA,1,594,2023-2023,edgar,1199896,cushman wakefield securities,,incompatible-tokens,jaro-winkler 0.901
 cooper lighting,COOPER LIGHTING,CA|IL,3,590,2000-2003,edgar,1338576,cooper lighting,,pre-era,registrant filed under this name 2006-2018
 cooper lighting,COOPER LIGHTING,CA|IL,3,590,2000-2003,edgar,1191346,cooper flint,,incompatible-tokens,jaro-winkler 0.912
-kindred hospital,Kindred Hospital,CA|IN|LA|MI|WA,5,589,2008-2019,edgar,1717602,kindred holdings,,incompatible-tokens,jaro-winkler 0.910
-holland america line,Holland America Line NV,WA,1,583,2020-2020,edgar,1476482,holland michael a,,incompatible-tokens,jaro-winkler 0.911
-holland america line,Holland America Line NV,WA,1,583,2020-2020,edgar,1713209,holland james e,,incompatible-tokens,jaro-winkler 0.903
+aramark healthcare,ARAMARK HEALTHCARE,NJ|WA,3,581,2005-2007,edgar,1397023,aramark healthcare support services,,incompatible-tokens,jaro-winkler 0.903
 first data financial services,FIRST DATA FINANCIAL SERVICES,IL,1,580,2001-2001,edgar,1442046,first data financial services,,pre-era,registrant filed under this name 2008-2009
 freeport mcmoran sierrita,Freeport-McMoRan Sierrita Inc.,AZ,1,580,2015-2015,edgar,1576853,freeport mcmoran oil gas,,incompatible-tokens,jaro-winkler 0.917
 freeport mcmoran sierrita,Freeport-McMoRan Sierrita Inc.,AZ,1,580,2015-2015,edgar,1645676,freeport mcmoran oil gas,,incompatible-tokens,jaro-winkler 0.917
@@ -315,43 +317,50 @@ freeport mcmoran sierrita,Freeport-McMoRan Sierrita Inc.,AZ,1,580,2015-2015,edga
 ameristar casino hotel kansas city,Ameristar Casino Hotel - Kansas City,MO,1,578,2020-2020,edgar,1136826,ameristar casino st charles,,incompatible-tokens,jaro-winkler 0.922
 ameristar casino hotel kansas city,Ameristar Casino Hotel - Kansas City,MO,1,578,2020-2020,edgar,1136828,ameristar casino kansas city,,near-spelling,jaro-winkler 0.936
 abn amro services,ABN-AMRO Services Company,IL,2,574,2005-2005,edgar,1068807,abn amro trust services,,incompatible-tokens,jaro-winkler 0.901
+seadrill americas,"Seadrill Americas, Inc.",TX,4,574,2015-2020,edgar,1744856,seadrill umbriel,,incompatible-tokens,jaro-winkler 0.900
+seadrill americas,"Seadrill Americas, Inc.",TX,4,574,2015-2020,edgar,1744860,seadrill rhea,,incompatible-tokens,jaro-winkler 0.909
 seadrill americas,"Seadrill Americas, Inc.",TX,4,574,2015-2020,edgar,1745353,seadrill seabras,,incompatible-tokens,jaro-winkler 0.911
 seadrill americas,"Seadrill Americas, Inc.",TX,4,574,2015-2020,edgar,1745354,seadrill seabras,,incompatible-tokens,jaro-winkler 0.911
-seadrill americas,"Seadrill Americas, Inc.",TX,4,574,2015-2020,edgar,1744860,seadrill rhea,,incompatible-tokens,jaro-winkler 0.909
 seadrill americas,"Seadrill Americas, Inc.",TX,4,574,2015-2020,edgar,1744859,seadrill mimas,,incompatible-tokens,jaro-winkler 0.923
-seadrill americas,"Seadrill Americas, Inc.",TX,4,574,2015-2020,edgar,1744856,seadrill umbriel,,incompatible-tokens,jaro-winkler 0.900
 adm,ADM Company,CA|IL|KS|NJ,5,572,2005-2021,edgar,1588014,adm endeavors,ADMQ,ambiguous-extension,one of several listed companies extending the name
 adm,ADM Company,CA|IL|KS|NJ,5,572,2005-2021,edgar,849401,adm tronics,ADMT,ambiguous-extension,one of several listed companies extending the name
 briggs stratton power group,Briggs & Stratton Power Group LLC,WI,13,571,2008-2009,edgar,1080893,briggs stratton power products group,,incompatible-tokens,jaro-winkler 0.943
 briggs stratton power group,Briggs & Stratton Power Group LLC,WI,13,571,2008-2009,edgar,14195,briggs stratton,,incompatible-tokens,jaro-winkler 0.911
+electronic data systems,ELECTRONIC DATA SYSTEMS,AL|CA|GA|IL|WA,7,570,1989-2005,edgar,32232,electronic data systems,,ambiguous-exact,several registrants share this name in this era
+electronic data systems,ELECTRONIC DATA SYSTEMS,AL|CA|GA|IL|WA,7,570,1989-2005,edgar,1007456,electronic data systems,,ambiguous-exact,several registrants share this name in this era
+electronic data systems,ELECTRONIC DATA SYSTEMS,AL|CA|GA|IL|WA,7,570,1989-2005,edgar,1112068,electronic brokerage systems,,incompatible-tokens,jaro-winkler 0.907
+electronic data systems,ELECTRONIC DATA SYSTEMS,AL|CA|GA|IL|WA,7,570,1989-2005,edgar,712515,electronic arts,EA,incompatible-tokens,jaro-winkler 0.908
+electronic data systems,ELECTRONIC DATA SYSTEMS,AL|CA|GA|IL|WA,7,570,1989-2005,edgar,1256215,electronic systems,,near-spelling,jaro-winkler 0.934
 hawks cay resort,Hawks Cay Resort,FL,2,569,2017-2020,edgar,1840842,hawks carney,,incompatible-tokens,jaro-winkler 0.903
+delivery force,Delivery Force,NC|WA,3,568,2020-2020,edgar,1848827,delivery hero,,incompatible-tokens,jaro-winkler 0.939
 crown pacific,CROWN PACIFIC,OR,3,568,1993-1996,edgar,930735,crown pacific partners l p,,incompatible-tokens,jaro-winkler 0.900
+aramark sports entertainment llc honda center,ARAMARK SPORTS & ENTERTAINMENT LLC-HONDA CENTER,CA,1,568,2013-2013,edgar,1397046,aramark sports entertainment services,,incompatible-tokens,jaro-winkler 0.913
 aramark sports entertainment llc honda center,ARAMARK SPORTS & ENTERTAINMENT LLC-HONDA CENTER,CA,1,568,2013-2013,edgar,1397361,aramark sports entertainment services of texas,,incompatible-tokens,jaro-winkler 0.913
 aramark sports entertainment llc honda center,ARAMARK SPORTS & ENTERTAINMENT LLC-HONDA CENTER,CA,1,568,2013-2013,edgar,1397043,aramark sports entertainment group,,incompatible-tokens,jaro-winkler 0.914
-aramark sports entertainment llc honda center,ARAMARK SPORTS & ENTERTAINMENT LLC-HONDA CENTER,CA,1,568,2013-2013,edgar,1397046,aramark sports entertainment services,,incompatible-tokens,jaro-winkler 0.913
-aramark healthcare services,"Aramark Healthcare Services, LLC",LA|TX,2,567,2015-2016,edgar,1397023,aramark healthcare support services,,incompatible-tokens,jaro-winkler 0.932
-aramark healthcare services,"Aramark Healthcare Services, LLC",LA|TX,2,567,2015-2016,edgar,1397360,aramark healthcare support services of texas,,incompatible-tokens,jaro-winkler 0.901
 aramark healthcare services,"Aramark Healthcare Services, LLC",LA|TX,2,567,2015-2016,edgar,1396653,aramark healthcare technologies,,incompatible-tokens,jaro-winkler 0.916
+aramark healthcare services,"Aramark Healthcare Services, LLC",LA|TX,2,567,2015-2016,edgar,1397360,aramark healthcare support services of texas,,incompatible-tokens,jaro-winkler 0.901
+aramark healthcare services,"Aramark Healthcare Services, LLC",LA|TX,2,567,2015-2016,edgar,1397023,aramark healthcare support services,,incompatible-tokens,jaro-winkler 0.932
 jack cooper transport,"Jack Cooper Transport Co., Inc.",KS|KY,4,564,2002-2010,edgar,1655875,jack cooper transport,,pre-era,registrant filed under this name 2016-2017
 south city hospital,South City Hospital,MO,1,563,2023-2023,edgar,2052771,south eighth hospitality,,incompatible-tokens,jaro-winkler 0.909
-american general life companies,AMERICAN GENERAL LIFE COMPANIES,IL|TX|WI,4,562,1999-2009,edgar,4980,american family life insurance,,incompatible-tokens,jaro-winkler 0.903
-american general life companies,AMERICAN GENERAL LIFE COMPANIES,IL|TX|WI,4,562,1999-2009,edgar,943824,american beacon mileage funds,,incompatible-tokens,jaro-winkler 0.901
+american general life companies,AMERICAN GENERAL LIFE COMPANIES,IL|TX|WI,4,562,1999-2009,edgar,718517,american general securities,,incompatible-tokens,jaro-winkler 0.910
 american general life companies,AMERICAN GENERAL LIFE COMPANIES,IL|TX|WI,4,562,1999-2009,edgar,25598,american general finance,,incompatible-tokens,jaro-winkler 0.914
 american general life companies,AMERICAN GENERAL LIFE COMPANIES,IL|TX|WI,4,562,1999-2009,edgar,25600,american general finance,,incompatible-tokens,jaro-winkler 0.914
+american general life companies,AMERICAN GENERAL LIFE COMPANIES,IL|TX|WI,4,562,1999-2009,edgar,4980,american family life insurance,,incompatible-tokens,jaro-winkler 0.903
 american general life companies,AMERICAN GENERAL LIFE COMPANIES,IL|TX|WI,4,562,1999-2009,edgar,5108,american general life insurance,,incompatible-tokens,jaro-winkler 0.940
-american general life companies,AMERICAN GENERAL LIFE COMPANIES,IL|TX|WI,4,562,1999-2009,edgar,718517,american general securities,,incompatible-tokens,jaro-winkler 0.910
+american general life companies,AMERICAN GENERAL LIFE COMPANIES,IL|TX|WI,4,562,1999-2009,edgar,943824,american beacon mileage funds,,incompatible-tokens,jaro-winkler 0.901
 adient usa,Adient USA LLC,MI,3,553,2017-2019,edgar,1670541,adient,ADNT,near-spelling,jaro-winkler 0.920
+simpson lumber,Simpson Lumber Company,WA,2,550,2015-2015,edgar,1242480,simpson leonard,,incompatible-tokens,jaro-winkler 0.904
 international truck engine prepared by odjfs bureau,International Truck & Engine Prepared by ODJFS Bureau,OH,1,550,2001-2001,edgar,51296,international truck engine,,incompatible-tokens,jaro-winkler 0.902
 h r block mortgage,H & R Block Mortgage Corporation,CA|GA|IL,7,548,2006-2007,edgar,12659,h r block,HRB,near-spelling,jaro-winkler 0.900
 teleperformance usa abilene2,Teleperformance USA - Abilene2,TX,2,545,2010-2017,edgar,1450682,teleperformance sa adr,,incompatible-tokens,jaro-winkler 0.925
 green tree servicing,GREEN TREE SERVICING LLC,AL|CA|GA|TN|TX,6,541,2005-2015,edgar,1538292,green tree servicing,,ambiguous-exact,several registrants share this name in this era
 green tree servicing,GREEN TREE SERVICING LLC,AL|CA|GA|TN|TX,6,541,2005-2015,edgar,1538293,green tree servicing,,ambiguous-exact,several registrants share this name in this era
-green tree servicing,GREEN TREE SERVICING LLC,AL|CA|GA|TN|TX,6,541,2005-2015,edgar,1538272,green tree credit,,incompatible-tokens,jaro-winkler 0.913
-green tree servicing,GREEN TREE SERVICING LLC,AL|CA|GA|TN|TX,6,541,2005-2015,edgar,1538290,green tree servertis acquisition,,incompatible-tokens,jaro-winkler 0.909
-green tree servicing,GREEN TREE SERVICING LLC,AL|CA|GA|TN|TX,6,541,2005-2015,edgar,1537876,green earth greens,,incompatible-tokens,jaro-winkler 0.900
-green tree servicing,GREEN TREE SERVICING LLC,AL|CA|GA|TN|TX,6,541,2005-2015,edgar,1538285,green tree licensing,,incompatible-tokens,jaro-winkler 0.927
 green tree servicing,GREEN TREE SERVICING LLC,AL|CA|GA|TN|TX,6,541,2005-2015,edgar,1538291,green tree servertis,,incompatible-tokens,jaro-winkler 0.920
+green tree servicing,GREEN TREE SERVICING LLC,AL|CA|GA|TN|TX,6,541,2005-2015,edgar,1538285,green tree licensing,,incompatible-tokens,jaro-winkler 0.927
+green tree servicing,GREEN TREE SERVICING LLC,AL|CA|GA|TN|TX,6,541,2005-2015,edgar,1538272,green tree credit,,incompatible-tokens,jaro-winkler 0.913
 green tree servicing,GREEN TREE SERVICING LLC,AL|CA|GA|TN|TX,6,541,2005-2015,edgar,1538270,green tree cl,,incompatible-tokens,jaro-winkler 0.905
+green tree servicing,GREEN TREE SERVICING LLC,AL|CA|GA|TN|TX,6,541,2005-2015,edgar,1537876,green earth greens,,incompatible-tokens,jaro-winkler 0.900
+green tree servicing,GREEN TREE SERVICING LLC,AL|CA|GA|TN|TX,6,541,2005-2015,edgar,1538290,green tree servertis acquisition,,incompatible-tokens,jaro-winkler 0.909
 saint james hospital,SAINT JAMES HOSPITAL,NJ,1,541,2008-2008,edgar,758256,saint james,,near-spelling,jaro-winkler 0.910
 wexford health,Wexford Health,FL,1,540,2017-2017,edgar,1472112,wexford,,near-spelling,jaro-winkler 0.900
 tembec usa,"Tembec USA, LLC",LA,1,539,2007-2007,edgar,949011,tembec,,near-spelling,jaro-winkler 0.920
@@ -365,8 +374,8 @@ nationwide,Nationwide,IA|OR,4,528,2008-2020,edgar,1127203,nationwide life ins,,i
 four seasons resort,Four Seasons Resort,AZ|TX,2,522,2020-2020,edgar,1798235,four seasons apartments,,incompatible-tokens,jaro-winkler 0.915
 mammoth tech,"Mammoth Tech, Inc.",OH,1,521,2022-2022,edgar,1830115,mammoth title,,incompatible-tokens,jaro-winkler 0.921
 mammoth tech,"Mammoth Tech, Inc.",OH,1,521,2022-2022,edgar,2011421,mammoth admin tech,,incompatible-tokens,jaro-winkler 0.933
-keystone steel wire,Keystone Steel & Wire,IL,3,517,2009-2018,edgar,1803191,keystone service,,incompatible-tokens,jaro-winkler 0.908
 keystone steel wire,Keystone Steel & Wire,IL,3,517,2009-2018,edgar,1312335,keystone centers,,incompatible-tokens,jaro-winkler 0.908
+keystone steel wire,Keystone Steel & Wire,IL,3,517,2009-2018,edgar,1803191,keystone service,,incompatible-tokens,jaro-winkler 0.908
 dean foods vegetable,Dean Foods Vegetable Co.,WI,3,517,1996-1996,edgar,27500,dean foods,,near-spelling,jaro-winkler 0.900
 cole vision,Cole Vision,OH,1,516,2004-2004,edgar,1350360,cole jason,,incompatible-tokens,jaro-winkler 0.905
 honeywell intelligrated,Honeywell Intelligrated,MD|OH|TX,5,515,2023-2024,edgar,773840,honeywell international,HON,incompatible-tokens,jaro-winkler 0.909
@@ -379,69 +388,69 @@ oracle usa,"Oracle USA, Inc.",CA,10,503,2005-2006,edgar,777676,oracle,,near-spel
 oracle usa,"Oracle USA, Inc.",CA,10,503,2005-2006,edgar,1341439,oracle,ORCL,near-spelling,jaro-winkler 0.920
 metis tps,"Metis TPS, LLC",CA,1,500,2020-2020,edgar,1159279,metis partners,,incompatible-tokens,jaro-winkler 0.906
 hoffman la roche,HOFFMAN-LA ROCHE INC.,NJ,1,500,2010-2010,edgar,1319528,hoffman deborah c,,incompatible-tokens,jaro-winkler 0.924
+hoffman la roche,HOFFMAN-LA ROCHE INC.,NJ,1,500,2010-2010,edgar,1211249,hoffman lawrence r,,incompatible-tokens,jaro-winkler 0.916
 hoffman la roche,HOFFMAN-LA ROCHE INC.,NJ,1,500,2010-2010,edgar,1190834,hoffman gary l,,incompatible-tokens,jaro-winkler 0.905
 hoffman la roche,HOFFMAN-LA ROCHE INC.,NJ,1,500,2010-2010,edgar,1199748,hoffman charles e,,incompatible-tokens,jaro-winkler 0.924
-hoffman la roche,HOFFMAN-LA ROCHE INC.,NJ,1,500,2010-2010,edgar,1211249,hoffman lawrence r,,incompatible-tokens,jaro-winkler 0.916
 bristol meyers squibb,BRISTOL MEYERS SQUIBB,NJ,1,500,2004-2004,edgar,14272,bristol myers squibb,BMY,incompatible-tokens,jaro-winkler 0.980
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,908287,williams clayton w,,incompatible-tokens,jaro-winkler 0.906
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1393671,williams paul o,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1266754,williams joe l,,incompatible-tokens,jaro-winkler 0.910
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1239872,williams kirk o,,incompatible-tokens,jaro-winkler 0.900
 williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1536881,williams alicia,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1048788,williams tim,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1310852,williams duston,,incompatible-tokens,jaro-winkler 0.912
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1587364,williams chad l,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,719955,williams sonoma,WSM,incompatible-tokens,jaro-winkler 0.912
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1399550,williams christopher,,incompatible-tokens,jaro-winkler 0.903
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1498707,williams chad e,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1660215,williams douglas l,,incompatible-tokens,jaro-winkler 0.906
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1716436,williams toby j,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,107263,williams companies,WMB,incompatible-tokens,jaro-winkler 0.933
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1371828,williams thomas j,,incompatible-tokens,jaro-winkler 0.913
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1563638,williams ian,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1446136,williams ronald,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1320730,williams thomas l,,incompatible-tokens,jaro-winkler 0.913
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1573168,williams craig,,incompatible-tokens,jaro-winkler 0.910
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1211689,williams john c,,incompatible-tokens,jaro-winkler 0.912
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1255853,williams douglas p,,incompatible-tokens,jaro-winkler 0.906
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1184847,williams douglas e,,incompatible-tokens,jaro-winkler 0.906
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1605458,williams carl l,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1598814,williams jackie,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1393671,williams paul o,,incompatible-tokens,jaro-winkler 0.900
 williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1554176,williams michael s,,incompatible-tokens,jaro-winkler 0.906
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1672964,williams j douglas,,incompatible-tokens,jaro-winkler 0.906
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1554442,williams jay,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1048788,williams tim,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1641180,williams rich,,incompatible-tokens,jaro-winkler 0.921
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1563638,williams ian,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1587364,williams chad l,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1660215,williams douglas l,,incompatible-tokens,jaro-winkler 0.906
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1421089,williams joseph r,,incompatible-tokens,jaro-winkler 0.913
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1184847,williams douglas e,,incompatible-tokens,jaro-winkler 0.906
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1666387,williams roslynn,,incompatible-tokens,jaro-winkler 0.921
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1375725,williams kim,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1370293,williams omer sj,,incompatible-tokens,jaro-winkler 0.921
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1320730,williams thomas l,,incompatible-tokens,jaro-winkler 0.913
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1721212,williams vicki,,incompatible-tokens,jaro-winkler 0.910
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1211689,williams john c,,incompatible-tokens,jaro-winkler 0.912
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1371828,williams thomas j,,incompatible-tokens,jaro-winkler 0.913
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1255853,williams douglas p,,incompatible-tokens,jaro-winkler 0.906
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1446136,williams ronald,,incompatible-tokens,jaro-winkler 0.900
 williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,940225,williams john a,,incompatible-tokens,jaro-winkler 0.900
 williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1350063,williams john a,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1532856,williams scott k,,incompatible-tokens,jaro-winkler 0.933
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1248338,williams clay c,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1305029,williams rodney,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1666387,williams roslynn,,incompatible-tokens,jaro-winkler 0.921
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1266754,williams joe l,,incompatible-tokens,jaro-winkler 0.910
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1295097,williams carl j,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1375725,williams kim,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1641180,williams rich,,incompatible-tokens,jaro-winkler 0.921
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1669757,williams scott v,,incompatible-tokens,jaro-winkler 0.933
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1421089,williams joseph r,,incompatible-tokens,jaro-winkler 0.913
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1721212,williams vicki,,incompatible-tokens,jaro-winkler 0.910
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1291523,williams john b,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1189006,williams nicole,,incompatible-tokens,jaro-winkler 0.930
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1734814,williams eric m,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1605323,williams scott,,incompatible-tokens,jaro-winkler 0.955
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1253422,williams eric s,,incompatible-tokens,jaro-winkler 0.930
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1733234,williams rhys v,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1594898,williams chris,,incompatible-tokens,jaro-winkler 0.940
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1598814,williams jackie,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1373911,williams joseph l,,incompatible-tokens,jaro-winkler 0.913
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1651791,williams john d,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1216858,williams noel b,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1370293,williams omer sj,,incompatible-tokens,jaro-winkler 0.921
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1413198,williams thomas a,,incompatible-tokens,jaro-winkler 0.913
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1325818,williams charles o,,incompatible-tokens,jaro-winkler 0.917
 williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1105403,williams geoff,,incompatible-tokens,jaro-winkler 0.910
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1277834,williams joseph t,,incompatible-tokens,jaro-winkler 0.913
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1310852,williams duston,,incompatible-tokens,jaro-winkler 0.912
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1734814,williams eric m,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1669757,williams scott v,,incompatible-tokens,jaro-winkler 0.933
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1716436,williams toby j,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1605323,williams scott,,incompatible-tokens,jaro-winkler 0.955
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1373911,williams joseph l,,incompatible-tokens,jaro-winkler 0.913
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1291523,williams john b,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1216858,williams noel b,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1498707,williams chad e,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1573168,williams craig,,incompatible-tokens,jaro-winkler 0.910
 williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1398213,williams carol a,,incompatible-tokens,jaro-winkler 0.921
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1239872,williams kirk o,,incompatible-tokens,jaro-winkler 0.900
-williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1236458,williams paul s,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1189006,williams nicole,,incompatible-tokens,jaro-winkler 0.930
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1672964,williams j douglas,,incompatible-tokens,jaro-winkler 0.906
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,908287,williams clayton w,,incompatible-tokens,jaro-winkler 0.906
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1295097,williams carl j,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1554442,williams jay,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1253422,williams eric s,,incompatible-tokens,jaro-winkler 0.930
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1594898,williams chris,,incompatible-tokens,jaro-winkler 0.940
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1651791,williams john d,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1733234,williams rhys v,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1532856,williams scott k,,incompatible-tokens,jaro-winkler 0.933
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1605458,williams carl l,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1305029,williams rodney,,incompatible-tokens,jaro-winkler 0.900
 williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1328274,williams simon,,incompatible-tokens,jaro-winkler 0.922
 williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1587235,williams simon,,incompatible-tokens,jaro-winkler 0.922
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,719955,williams sonoma,WSM,incompatible-tokens,jaro-winkler 0.912
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1413198,williams thomas a,,incompatible-tokens,jaro-winkler 0.913
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1325818,williams charles o,,incompatible-tokens,jaro-winkler 0.917
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,107263,williams companies,WMB,incompatible-tokens,jaro-winkler 0.933
 williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1593860,williams douglas m,,incompatible-tokens,jaro-winkler 0.906
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1399550,williams christopher,,incompatible-tokens,jaro-winkler 0.903
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1277834,williams joseph t,,incompatible-tokens,jaro-winkler 0.913
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1248338,williams clay c,,incompatible-tokens,jaro-winkler 0.900
+williams cos,Williams Cos.,OK,2,500,2016-2016,edgar,1236458,williams paul s,,incompatible-tokens,jaro-winkler 0.900
 r r donnelley,R.R. Donnelley,IL|OH|WI,4,499,2002-2007,edgar,30419,r h donnelley,,incompatible-tokens,jaro-winkler 0.959
 western medical center anaheim,Western Medical Center - Anaheim,CA,1,497,2005-2005,edgar,1393386,western medical rehab associates,,incompatible-tokens,jaro-winkler 0.905
 delta air lines inc pilot base,"Delta Air Lines, Inc-Pilot Base",GA,1,493,2020-2020,edgar,27904,delta air lines,DAL,incompatible-tokens,jaro-winkler 0.900
@@ -449,44 +458,45 @@ gold kist,"GOLD KIST, INC.",AL,1,490,2003-2003,edgar,215994,gold kist,,ambiguous
 gold kist,"GOLD KIST, INC.",AL,1,490,2003-2003,edgar,1292215,gold kist,,ambiguous-exact,several registrants share this name in this era
 scient,SCIENT CORPORATION,CA|IL|TX,3,490,2001-2001,edgar,1081394,scient,,ambiguous-exact,several registrants share this name in this era
 scient,SCIENT CORPORATION,CA|IL|TX,3,490,2001-2001,edgar,1158019,scient,,ambiguous-exact,several registrants share this name in this era
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1217743,johnson bruce,,incompatible-tokens,jaro-winkler 0.939
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1172944,johnson robert b,,incompatible-tokens,jaro-winkler 0.933
 johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1212827,johnson bruce f,,incompatible-tokens,jaro-winkler 0.915
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1407339,johnson roger,,incompatible-tokens,jaro-winkler 0.926
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1237064,johnson bryce,,incompatible-tokens,jaro-winkler 0.908
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,811507,johnson rice,,incompatible-tokens,jaro-winkler 0.910
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1381854,johnson roger l,,incompatible-tokens,jaro-winkler 0.904
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1287661,johnson robert t,,incompatible-tokens,jaro-winkler 0.921
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1427235,johnson robert e,,incompatible-tokens,jaro-winkler 0.921
 johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1179514,johnson arthur e,,incompatible-tokens,jaro-winkler 0.905
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1427235,johnson robert e,,incompatible-tokens,jaro-winkler 0.921
 johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1262458,johnson w bruce,,incompatible-tokens,jaro-winkler 0.915
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1280869,johnson robert lee,,incompatible-tokens,jaro-winkler 0.905
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1348411,johnson rupert c,,incompatible-tokens,jaro-winkler 0.921
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1192638,johnson robert j,,incompatible-tokens,jaro-winkler 0.921
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1265102,johnson robert j,,incompatible-tokens,jaro-winkler 0.921
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1198584,johnson robert d,,incompatible-tokens,jaro-winkler 0.921
 johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1114957,johnson robert l,,incompatible-tokens,jaro-winkler 0.921
 johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1188283,johnson robert l,,incompatible-tokens,jaro-winkler 0.921
 johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1417577,johnson robert l,,incompatible-tokens,jaro-winkler 0.921
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1171044,johnson bruce m,,incompatible-tokens,jaro-winkler 0.915
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1201741,johnson bruce a,,incompatible-tokens,jaro-winkler 0.915
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1280869,johnson robert lee,,incompatible-tokens,jaro-winkler 0.905
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1407339,johnson roger,,incompatible-tokens,jaro-winkler 0.926
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,903435,johnson robert w,,incompatible-tokens,jaro-winkler 0.921
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1168668,johnson rafer l,,incompatible-tokens,jaro-winkler 0.904
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1182430,johnson robert h,,incompatible-tokens,jaro-winkler 0.921
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1348411,johnson rupert c,,incompatible-tokens,jaro-winkler 0.921
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1381854,johnson roger l,,incompatible-tokens,jaro-winkler 0.904
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1270595,johnson robert g,,incompatible-tokens,jaro-winkler 0.921
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1287661,johnson robert t,,incompatible-tokens,jaro-winkler 0.921
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1217743,johnson bruce,,incompatible-tokens,jaro-winkler 0.939
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1192638,johnson robert j,,incompatible-tokens,jaro-winkler 0.921
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1265102,johnson robert j,,incompatible-tokens,jaro-winkler 0.921
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,811507,johnson rice,,incompatible-tokens,jaro-winkler 0.910
 johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1378838,johnson russell,,incompatible-tokens,jaro-winkler 0.904
 johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1395304,johnson russell,,incompatible-tokens,jaro-winkler 0.904
 johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1205315,johnson l robert,,incompatible-tokens,jaro-winkler 0.921
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1315205,johnson robert v,,incompatible-tokens,jaro-winkler 0.921
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1201741,johnson bruce a,,incompatible-tokens,jaro-winkler 0.915
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1270595,johnson robert g,,incompatible-tokens,jaro-winkler 0.921
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1182430,johnson robert h,,incompatible-tokens,jaro-winkler 0.921
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1172944,johnson robert b,,incompatible-tokens,jaro-winkler 0.933
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1168668,johnson rafer l,,incompatible-tokens,jaro-winkler 0.904
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,903435,johnson robert w,,incompatible-tokens,jaro-winkler 0.921
-johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1171044,johnson bruce m,,incompatible-tokens,jaro-winkler 0.915
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1237064,johnson bryce,,incompatible-tokens,jaro-winkler 0.908
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1198584,johnson robert d,,incompatible-tokens,jaro-winkler 0.921
 johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1180987,johnson bruce d,,incompatible-tokens,jaro-winkler 0.915
 johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1191356,johnson bruce w,,incompatible-tokens,jaro-winkler 0.915
+johnson rubber,Johnson Rubber Company,OH,2,490,2008-2008,edgar,1315205,johnson robert v,,incompatible-tokens,jaro-winkler 0.921
 trinity sports,"Trinity Sports, Inc.",CA,3,488,2013-2014,edgar,1559099,trinity,,near-spelling,jaro-winkler 0.900
-trinity sports,"Trinity Sports, Inc.",CA,3,488,2013-2014,edgar,1056800,trinity securities,,incompatible-tokens,jaro-winkler 0.905
-trinity sports,"Trinity Sports, Inc.",CA,3,488,2013-2014,edgar,1614587,trinity vision partners,,incompatible-tokens,jaro-winkler 0.907
-trinity sports,"Trinity Sports, Inc.",CA,3,488,2013-2014,edgar,1690711,trinity rcp,,incompatible-tokens,jaro-winkler 0.905
 trinity sports,"Trinity Sports, Inc.",CA,3,488,2013-2014,edgar,1538075,trinity hr,,incompatible-tokens,jaro-winkler 0.909
+trinity sports,"Trinity Sports, Inc.",CA,3,488,2013-2014,edgar,1056800,trinity securities,,incompatible-tokens,jaro-winkler 0.905
 trinity sports,"Trinity Sports, Inc.",CA,3,488,2013-2014,edgar,1113275,trinity distributors,,incompatible-tokens,jaro-winkler 0.900
+trinity sports,"Trinity Sports, Inc.",CA,3,488,2013-2014,edgar,1690711,trinity rcp,,incompatible-tokens,jaro-winkler 0.905
+trinity sports,"Trinity Sports, Inc.",CA,3,488,2013-2014,edgar,1614587,trinity vision partners,,incompatible-tokens,jaro-winkler 0.907
 west marine product,"WEST MARINE PRODUCT, INC.",CA,1,488,2007-2007,edgar,912833,west marine,,near-spelling,jaro-winkler 0.916
+mitsubishi aircraft,Mitsubishi Aircraft Corporation,WA,2,480,2020-2020,edgar,67091,mitsubishi,,near-spelling,jaro-winkler 0.905
 novastar mortgage,"NOVASTAR MORTGAGE, INC.",CA|OH,4,480,2007-2007,edgar,1549473,novastar mortgage,,pre-era,registrant filed under this name 2012-2016
 novastar mortgage,"NOVASTAR MORTGAGE, INC.",CA|OH,4,480,2007-2007,edgar,1052549,novastar mortgage funding,,incompatible-tokens,jaro-winkler 0.936
 cuna mutual insurance society,CUNA Mutual Insurance Society,WI,18,479,2005-2007,edgar,916872,cuna mutual life insurance,,incompatible-tokens,jaro-winkler 0.908
@@ -500,50 +510,55 @@ blue sky studios,"Blue Sky Studios, Inc.",CT,1,469,2021-2021,edgar,1981570,blue 
 blue sky studios,"Blue Sky Studios, Inc.",CT,1,469,2021-2021,edgar,1940283,blue sky estates,,incompatible-tokens,jaro-winkler 0.900
 harrison sportservice,Harrison Sportservice Inc.,NJ,1,467,2025-2025,edgar,2059823,harrison peter,,incompatible-tokens,jaro-winkler 0.919
 transamerica life,Transamerica Life,FL,1,465,2018-2018,edgar,316561,transamerica capital,,incompatible-tokens,jaro-winkler 0.913
-transamerica life,Transamerica Life,FL,1,465,2018-2018,edgar,787623,transamerica funds,,incompatible-tokens,jaro-winkler 0.920
-transamerica life,Transamerica Life,FL,1,465,2018-2018,edgar,99189,transamerica,,near-spelling,jaro-winkler 0.941
 transamerica life,Transamerica Life,FL,1,465,2018-2018,edgar,1164098,transamerica life insurance,,incompatible-tokens,jaro-winkler 0.926
+transamerica life,Transamerica Life,FL,1,465,2018-2018,edgar,99189,transamerica,,near-spelling,jaro-winkler 0.941
+transamerica life,Transamerica Life,FL,1,465,2018-2018,edgar,787623,transamerica funds,,incompatible-tokens,jaro-winkler 0.920
 transamerica life,Transamerica Life,FL,1,465,2018-2018,edgar,916943,transamerica variable funds,,incompatible-tokens,jaro-winkler 0.902
 northrop grumman technology,Northrop Grumman Technology,CA,1,462,2017-2017,edgar,1133421,northrop grumman,NOC,near-spelling,jaro-winkler 0.919
 solarworld,SolarWorld,OR,2,460,2013-2017,edgar,1450343,solarworld ag adr,,incompatible-tokens,jaro-winkler 0.918
 international converter division thilmany,"International Converter Division, Thilmany LLC",WI,8,460,2011-2012,edgar,1053598,international environmental,,incompatible-tokens,jaro-winkler 0.902
 eaton hydraulics,EATON HYDRAULICS,IL|OK,4,450,2000-2007,edgar,1583766,eaton hydraulics,,pre-era,registrant filed under this name 2013-2021
-westlake hospital,Westlake Hospital,IL,1,450,2019-2019,edgar,1895322,westlake apts,,incompatible-tokens,jaro-winkler 0.938
-westlake hospital,Westlake Hospital,IL,1,450,2019-2019,edgar,1262844,westlake petrochemicals,,incompatible-tokens,jaro-winkler 0.902
-westlake hospital,Westlake Hospital,IL,1,450,2019-2019,edgar,1262842,westlake olefins,,incompatible-tokens,jaro-winkler 0.900
-westlake hospital,Westlake Hospital,IL,1,450,2019-2019,edgar,1262823,westlake chemical,WLK,incompatible-tokens,jaro-winkler 0.906
 westlake hospital,Westlake Hospital,IL,1,450,2019-2019,edgar,1451047,westlake lisa,,incompatible-tokens,jaro-winkler 0.938
+westlake hospital,Westlake Hospital,IL,1,450,2019-2019,edgar,1262842,westlake olefins,,incompatible-tokens,jaro-winkler 0.900
+westlake hospital,Westlake Hospital,IL,1,450,2019-2019,edgar,1262844,westlake petrochemicals,,incompatible-tokens,jaro-winkler 0.902
+westlake hospital,Westlake Hospital,IL,1,450,2019-2019,edgar,1262823,westlake chemical,WLK,incompatible-tokens,jaro-winkler 0.906
+westlake hospital,Westlake Hospital,IL,1,450,2019-2019,edgar,1895322,westlake apts,,incompatible-tokens,jaro-winkler 0.938
 gmac mortgage,GMAC Mortgage Corporation,CA,1,450,2001-2001,edgar,1332819,gmac mortgage,,pre-era,registrant filed under this name 2005-2013
 honeywell autolite,Honeywell Autolite,OH,2,450,2007-2008,edgar,773840,honeywell international,HON,incompatible-tokens,jaro-winkler 0.901
+prudential insurance,PRUDENTIAL INSURANCE COMPANY,CA|GA|IL,3,449,1990-2002,edgar,1137774,prudential financial,PRU,incompatible-tokens,jaro-winkler 0.920
+prudential insurance,PRUDENTIAL INSURANCE COMPANY,CA|GA|IL,3,449,1990-2002,edgar,729057,prudential insurance co of america,,incompatible-tokens,jaro-winkler 0.918
 prudential insurance,PRUDENTIAL INSURANCE COMPANY,CA|GA|IL,3,449,1990-2002,edgar,809085,prudential,,near-spelling,jaro-winkler 0.900
 prudential insurance,PRUDENTIAL INSURANCE COMPANY,CA|GA|IL,3,449,1990-2002,edgar,898419,prudential,,near-spelling,jaro-winkler 0.900
 prudential insurance,PRUDENTIAL INSURANCE COMPANY,CA|GA|IL,3,449,1990-2002,edgar,1116578,prudential,PUK,near-spelling,jaro-winkler 0.900
 prudential insurance,PRUDENTIAL INSURANCE COMPANY,CA|GA|IL,3,449,1990-2002,edgar,1117407,prudential,,near-spelling,jaro-winkler 0.900
-prudential insurance,PRUDENTIAL INSURANCE COMPANY,CA|GA|IL,3,449,1990-2002,edgar,1137774,prudential financial,PRU,incompatible-tokens,jaro-winkler 0.920
-prudential insurance,PRUDENTIAL INSURANCE COMPANY,CA|GA|IL,3,449,1990-2002,edgar,729057,prudential insurance co of america,,incompatible-tokens,jaro-winkler 0.918
-electronic data systems,ELECTRONIC DATA SYSTEMS,AL|CA|GA|IL|WA,6,448,1989-2005,edgar,32232,electronic data systems,,ambiguous-exact,several registrants share this name in this era
-electronic data systems,ELECTRONIC DATA SYSTEMS,AL|CA|GA|IL|WA,6,448,1989-2005,edgar,1007456,electronic data systems,,ambiguous-exact,several registrants share this name in this era
-electronic data systems,ELECTRONIC DATA SYSTEMS,AL|CA|GA|IL|WA,6,448,1989-2005,edgar,1112068,electronic brokerage systems,,incompatible-tokens,jaro-winkler 0.907
-electronic data systems,ELECTRONIC DATA SYSTEMS,AL|CA|GA|IL|WA,6,448,1989-2005,edgar,712515,electronic arts,EA,incompatible-tokens,jaro-winkler 0.908
-electronic data systems,ELECTRONIC DATA SYSTEMS,AL|CA|GA|IL|WA,6,448,1989-2005,edgar,1256215,electronic systems,,near-spelling,jaro-winkler 0.934
 briggs and stratton,Briggs and Stratton Co.,GA,1,447,2015-2015,edgar,14195,briggs stratton,,near-spelling,jaro-winkler 0.918
 leggett and platt,Leggett and Platt,CO|OH,2,446,2001-2016,edgar,58492,leggett platt,LEG,near-spelling,jaro-winkler 0.938
 nordstrom trunk club,Nordstrom Trunk Club,IL,1,446,2020-2020,edgar,1183469,nordstrom erik b,,incompatible-tokens,jaro-winkler 0.915
 general motors stamping plant,General Motors Stamping Plant,IN,1,443,2010-2010,edgar,804269,general motors financial,,incompatible-tokens,jaro-winkler 0.901
 general motors stamping plant,General Motors Stamping Plant,IN,1,443,2010-2010,edgar,1497345,general motors holdings,,incompatible-tokens,jaro-winkler 0.902
-trinity marine,Trinity Marine,LA|TN,2,443,2015-2016,edgar,1297678,trinity marine products,,incompatible-tokens,jaro-winkler 0.922
 trinity marine,Trinity Marine,LA|TN,2,443,2015-2016,edgar,1639029,trinity homecare,,incompatible-tokens,jaro-winkler 0.905
+trinity marine,Trinity Marine,LA|TN,2,443,2015-2016,edgar,1297678,trinity marine products,,incompatible-tokens,jaro-winkler 0.922
+seattle times,Seattle Times,WA,4,440,2008-2008,edgar,1483210,seattle properties,,incompatible-tokens,jaro-winkler 0.901
+seattle times,Seattle Times,WA,4,440,2008-2008,edgar,1060736,seattle genetics,,incompatible-tokens,jaro-winkler 0.918
+seattle times,Seattle Times,WA,4,440,2008-2008,edgar,1334136,seattle biofuels,,incompatible-tokens,jaro-winkler 0.907
 hanover direct,Hanover Direct,WI,4,440,2004-2005,edgar,320333,hanover direct,,ambiguous-exact,several registrants share this name in this era
 hanover direct,Hanover Direct,WI,4,440,2004-2005,edgar,901274,hanover direct,,ambiguous-exact,several registrants share this name in this era
 hanover direct,Hanover Direct,WI,4,440,2004-2005,edgar,1139323,hanover arden,,incompatible-tokens,jaro-winkler 0.908
 masco bath,Masco Bath,NJ|OR|TN,4,435,2012-2013,edgar,62996,masco,MAS,near-spelling,jaro-winkler 0.900
 timken belts,Timken Belts,KS|MO,2,435,2024-2026,edgar,98362,timken,TKR,near-spelling,jaro-winkler 0.900
 optima bus,"Optima Bus Corp., LLC",KS,2,434,2007-2007,edgar,1425014,optima bank trust,,incompatible-tokens,jaro-winkler 0.918
+american port services,American Port Services,WA,2,434,2007-2007,edgar,4969,american express credit,,incompatible-tokens,jaro-winkler 0.906
+american port services,American Port Services,WA,2,434,2007-2007,edgar,1257324,american property investors,,incompatible-tokens,jaro-winkler 0.908
+american port services,American Port Services,WA,2,434,2007-2007,edgar,1475483,american securities,,incompatible-tokens,jaro-winkler 0.910
+american port services,American Port Services,WA,2,434,2007-2007,edgar,797088,american resource,,incompatible-tokens,jaro-winkler 0.921
+american port services,American Port Services,WA,2,434,2007-2007,edgar,1397600,american pet resort,,incompatible-tokens,jaro-winkler 0.909
+american port services,American Port Services,WA,2,434,2007-2007,edgar,1467411,american bioresources,,incompatible-tokens,jaro-winkler 0.913
+american port services,American Port Services,WA,2,434,2007-2007,edgar,835910,american power conversion,,incompatible-tokens,jaro-winkler 0.902
 charter communications customer contact center,Charter Communications Customer Contact Center,CA,1,430,2024-2024,edgar,1997782,charter communications asc,,incompatible-tokens,jaro-winkler 0.905
-standard parking,Standard Parking Corporation,CA,1,430,2016-2016,edgar,878560,standard pacific,,incompatible-tokens,jaro-winkler 0.900
+standard parking,Standard Parking Corporation,CA,1,430,2016-2016,edgar,1710260,standard raintree,,incompatible-tokens,jaro-winkler 0.900
 standard parking,Standard Parking Corporation,CA,1,430,2016-2016,edgar,1568493,standard partners,,incompatible-tokens,jaro-winkler 0.915
 standard parking,Standard Parking Corporation,CA,1,430,2016-2016,edgar,1593097,standard partners,,incompatible-tokens,jaro-winkler 0.915
-standard parking,Standard Parking Corporation,CA,1,430,2016-2016,edgar,1710260,standard raintree,,incompatible-tokens,jaro-winkler 0.900
+standard parking,Standard Parking Corporation,CA,1,430,2016-2016,edgar,878560,standard pacific,,incompatible-tokens,jaro-winkler 0.900
 sodexo inc,"Sodexo,Inc.",KY,2,430,2016-2016,edgar,1169715,sodexo,,near-spelling,jaro-winkler 0.920
 teleperformance usa,Teleperformance USA,KS|MI|NJ|WI,5,430,2004-2020,edgar,1450682,teleperformance sa adr,,incompatible-tokens,jaro-winkler 0.953
 lpl financial,LPL Financial LLC,CA,5,428,2009-2026,edgar,80386,lpl financial,,ambiguous-exact,several registrants share this name in this era
@@ -554,30 +569,33 @@ mayflower hotel,The Mayflower Hotel,DC,1,426,2020-2020,edgar,1539930,mayflower r
 norfolk southern corporation ns,Norfolk Southern Corporation-NS,VA,1,426,2015-2015,edgar,702165,norfolk southern,NSC,incompatible-tokens,jaro-winkler 0.903
 norfolk southern corporation ns,Norfolk Southern Corporation-NS,VA,1,426,2015-2015,edgar,738347,norfolk southern,,incompatible-tokens,jaro-winkler 0.903
 northrop grumman fort polk,Northrop Grumman Fort Polk,LA,1,426,2015-2015,edgar,1133421,northrop grumman,NOC,incompatible-tokens,jaro-winkler 0.923
+jorgensen forge,Jorgensen Forge,WA,4,424,2016-2018,edgar,1765087,jorgensen nate,,incompatible-tokens,jaro-winkler 0.904
+jorgensen forge,Jorgensen Forge,WA,4,424,2016-2018,edgar,1345109,jorgensen greg,,incompatible-tokens,jaro-winkler 0.944
 first data resources,FIRST DATA RESOURCES,GA|IL|WI,3,423,2000-2005,edgar,1442030,first data resources,,pre-era,registrant filed under this name 2008-2014
-first data resources,FIRST DATA RESOURCES,GA|IL|WI,3,423,2000-2005,edgar,883980,first data,,near-spelling,jaro-winkler 0.900
 first data resources,FIRST DATA RESOURCES,GA|IL|WI,3,423,2000-2005,edgar,1350573,first source data,,incompatible-tokens,jaro-winkler 0.911
+first data resources,FIRST DATA RESOURCES,GA|IL|WI,3,423,2000-2005,edgar,883980,first data,,near-spelling,jaro-winkler 0.900
 darden restaurants inc olive garden,"Darden Restaurants, Inc. Olive Garden",CA,1,422,2020-2020,edgar,940944,darden restaurants,DRI,incompatible-tokens,jaro-winkler 0.903
 bank of america richardson,Bank of America-Richardson,TX,1,421,2013-2013,edgar,70858,bank of america,BAC,near-spelling,jaro-winkler 0.915
+bank of america richardson,Bank of America-Richardson,TX,1,421,2013-2013,edgar,930427,bank of america illinois,,incompatible-tokens,jaro-winkler 0.911
 bank of america richardson,Bank of America-Richardson,TX,1,421,2013-2013,edgar,9586,bank of america na,,incompatible-tokens,jaro-winkler 0.927
 bank of america richardson,Bank of America-Richardson,TX,1,421,2013-2013,edgar,1056941,bank of america na,,incompatible-tokens,jaro-winkler 0.927
 bank of america richardson,Bank of America-Richardson,TX,1,421,2013-2013,edgar,1102113,bank of america na,,incompatible-tokens,jaro-winkler 0.927
-bank of america richardson,Bank of America-Richardson,TX,1,421,2013-2013,edgar,930427,bank of america illinois,,incompatible-tokens,jaro-winkler 0.911
+teck,Teck,WA,2,420,2019-2019,edgar,886986,teck resources,TECK,ambiguous-extension,one of several listed companies extending the name
 weber metals,"Weber Metals, Inc",CA,3,418,2020-2020,edgar,1246146,weber james m,,incompatible-tokens,jaro-winkler 0.901
-express scripts ft worth,Express Scripts-Ft. Worth,TX,1,418,2014-2014,edgar,885721,express scripts,,incompatible-tokens,jaro-winkler 0.925
 express scripts ft worth,Express Scripts-Ft. Worth,TX,1,418,2014-2014,edgar,1465048,express scripts msa,,incompatible-tokens,jaro-winkler 0.902
+express scripts ft worth,Express Scripts-Ft. Worth,TX,1,418,2014-2014,edgar,885721,express scripts,,incompatible-tokens,jaro-winkler 0.925
 express scripts ft worth,Express Scripts-Ft. Worth,TX,1,418,2014-2014,edgar,1357234,express scripts wc,,incompatible-tokens,jaro-winkler 0.931
 west paces medical center,West Paces Medical Center,GA,1,415,1999-1999,edgar,1090807,west anaheim medical center,,incompatible-tokens,jaro-winkler 0.903
-foster gallagher,"FOSTER & GALLAGHER, INC.",IL,1,414,2001-2001,edgar,1050609,foster alan h,,incompatible-tokens,jaro-winkler 0.907
 foster gallagher,"FOSTER & GALLAGHER, INC.",IL,1,414,2001-2001,edgar,1255899,foster greg,,incompatible-tokens,jaro-winkler 0.919
+foster gallagher,"FOSTER & GALLAGHER, INC.",IL,1,414,2001-2001,edgar,1050609,foster alan h,,incompatible-tokens,jaro-winkler 0.907
 shutterfly lifetouch,"Shutterfly Lifetouch, LLC",MD,1,413,2020-2020,edgar,1125920,shutterfly,,near-spelling,jaro-winkler 0.900
 banco popular north america,Banco Popular North America,CA|IL,23,411,2005-2014,edgar,1146032,banco popular de puerto rico,,incompatible-tokens,jaro-winkler 0.902
 utiliquest,UtiliQuest,GA|TX,2,411,2000-2002,edgar,1344049,utiliquest,,pre-era,registrant filed under this name 2005-2026
 johnson johnson consumer products,JOHNSON & JOHNSON CONSUMER PRODUCTS,GA|IL,2,410,1990-2004,edgar,1290934,johnson johnson consumer companies,,incompatible-tokens,jaro-winkler 0.939
 sealy mattress,Sealy Mattress,IL|OR|TX,3,410,2013-2014,edgar,1057040,sealy mattress,,ambiguous-exact,several registrants share this name in this era
 sealy mattress,Sealy Mattress,IL|OR|TX,3,410,2013-2014,edgar,1295735,sealy mattress,,ambiguous-exact,several registrants share this name in this era
-sealy mattress,Sealy Mattress,IL|OR|TX,3,410,2013-2014,edgar,851643,sealy mattress co of memphis,,incompatible-tokens,jaro-winkler 0.900
 sealy mattress,Sealy Mattress,IL|OR|TX,3,410,2013-2014,edgar,851640,sealy mattress co of albany,,incompatible-tokens,jaro-winkler 0.904
+sealy mattress,Sealy Mattress,IL|OR|TX,3,410,2013-2014,edgar,851643,sealy mattress co of memphis,,incompatible-tokens,jaro-winkler 0.900
 sealy mattress,Sealy Mattress,IL|OR|TX,3,410,2013-2014,edgar,851645,sealy mattress manufacturing,,incompatible-tokens,jaro-winkler 0.900
 cheesecake factory restaurants,"The Cheesecake Factory Restaurants, Inc.",CA|MD|TN,3,409,2018-2025,edgar,887596,cheesecake factory,CAKE,near-spelling,jaro-winkler 0.920
 resilience us,"Resilience US, Inc",FL|MA|NC,3,409,2023-2025,edgar,2081452,resilience fund i,,incompatible-tokens,jaro-winkler 0.926
@@ -587,65 +605,68 @@ creation technologies kentucky inc the,"Creation Technologies Kentucky, Inc. (""
 macy s west,MACY'S WEST,CA,12,406,2009-2010,edgar,794367,macy s,M,near-spelling,jaro-winkler 0.909
 fleetwood homes of georgia,"Fleetwood Homes Of Georgia, Inc.",GA,3,403,2000-2001,edgar,1447446,fleetwood homes of georgia,,pre-era,registrant filed under this name 2008-2008
 lsc communications us llc,"LSC Communications US,LLC",SC,1,401,2021-2021,edgar,1669812,lsc communications,,incompatible-tokens,jaro-winkler 0.944
-meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,1016888,meridian gold,,incompatible-tokens,jaro-winkler 0.908
 meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,1281445,meridian perring,,incompatible-tokens,jaro-winkler 0.907
-meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,1236036,meridian medical group,,incompatible-tokens,jaro-winkler 0.903
-meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,1281441,meridian health,,incompatible-tokens,jaro-winkler 0.916
+meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,1281452,meridian valley,,incompatible-tokens,jaro-winkler 0.916
+meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,875023,meridian clearing,,incompatible-tokens,jaro-winkler 0.938
+meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,1135174,meridian,,near-spelling,jaro-winkler 0.923
+meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,717192,meridian national,,incompatible-tokens,jaro-winkler 0.926
 meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,1266529,meridian iq,,incompatible-tokens,jaro-winkler 0.936
 meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,1266538,meridian iq,,incompatible-tokens,jaro-winkler 0.936
-meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,1281452,meridian valley,,incompatible-tokens,jaro-winkler 0.916
-meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,717192,meridian national,,incompatible-tokens,jaro-winkler 0.926
-meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,1135174,meridian,,near-spelling,jaro-winkler 0.923
-meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,875023,meridian clearing,,incompatible-tokens,jaro-winkler 0.938
+meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,1016888,meridian gold,,incompatible-tokens,jaro-winkler 0.908
+meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,1281441,meridian health,,incompatible-tokens,jaro-winkler 0.916
+meridian rail,MERIDIAN RAIL,IL,1,400,2003-2003,edgar,1236036,meridian medical group,,incompatible-tokens,jaro-winkler 0.903
+takeda pharmaceuticals usa,"Takeda Pharmaceuticals USA, Inc.",IL,1,400,2020-2020,edgar,1716229,takeda pharmaceuticals u s a,,incompatible-tokens,jaro-winkler 0.986
 takeda pharmaceuticals usa,"Takeda Pharmaceuticals USA, Inc.",IL,1,400,2020-2020,edgar,1395064,takeda pharmaceutical,TAK,near-spelling,jaro-winkler 0.962
 takeda pharmaceuticals usa,"Takeda Pharmaceuticals USA, Inc.",IL,1,400,2020-2020,edgar,1756672,takeda pharmaceutical,,near-spelling,jaro-winkler 0.962
-takeda pharmaceuticals usa,"Takeda Pharmaceuticals USA, Inc.",IL,1,400,2020-2020,edgar,1716229,takeda pharmaceuticals u s a,,incompatible-tokens,jaro-winkler 0.986
 takeda pharmaceuticals usa,"Takeda Pharmaceuticals USA, Inc.",IL,1,400,2020-2020,edgar,1716226,takeda pharma a,,incompatible-tokens,jaro-winkler 0.902
 takeda pharmaceuticals usa,"Takeda Pharmaceuticals USA, Inc.",IL,1,400,2020-2020,edgar,1688140,takeda pharmaceuticals international,,incompatible-tokens,jaro-winkler 0.918
-cooper tools,Cooper Tools,TX,2,400,2003-2003,edgar,1240045,cooper thomas a,,incompatible-tokens,jaro-winkler 0.900
 cooper tools,Cooper Tools,TX,2,400,2003-2003,edgar,1182242,cooper thomas p,,incompatible-tokens,jaro-winkler 0.900
 cooper tools,Cooper Tools,TX,2,400,2003-2003,edgar,940314,cooper milton,,incompatible-tokens,jaro-winkler 0.901
+cooper tools,Cooper Tools,TX,2,400,2003-2003,edgar,1240045,cooper thomas a,,incompatible-tokens,jaro-winkler 0.900
 cooper tools,Cooper Tools,TX,2,400,2003-2003,edgar,1168296,cooper thomas j,,incompatible-tokens,jaro-winkler 0.900
 turner broadcasting sys cnn group,Turner Broadcasting Sys/cnn Group,GA,1,400,2001-2001,edgar,100240,turner broadcasting system,,incompatible-tokens,jaro-winkler 0.916
-conseco services,"CONSECO SERVICES, LLC",IL|WI,2,399,2002-2002,edgar,880738,conseco securities,,incompatible-tokens,jaro-winkler 0.941
 conseco services,"CONSECO SERVICES, LLC",IL|WI,2,399,2002-2002,edgar,709558,conseco series trust,,incompatible-tokens,jaro-winkler 0.915
+conseco services,"CONSECO SERVICES, LLC",IL|WI,2,399,2002-2002,edgar,880738,conseco securities,,incompatible-tokens,jaro-winkler 0.941
 applied materials addeco svo,Applied Materials-Addeco-SVO,TX,10,397,2001-2013,edgar,6951,applied materials,AMAT,incompatible-tokens,jaro-winkler 0.921
-united natural foods supervalu,United Natural Foods/SUPERVALU,WA,2,396,2019-2019,edgar,1020859,united natural foods,UNFI,near-spelling,jaro-winkler 0.933
 valley health system,VALLEY HEALTH SYSTEM,CA,1,396,2008-2008,edgar,1952280,valley health system,,pre-era,registrant filed under this name 2022-2024
 valley health system,VALLEY HEALTH SYSTEM,CA,1,396,2008-2008,edgar,1435285,valley west realty,,incompatible-tokens,jaro-winkler 0.900
 main street sports group,"Main Street Sports Group, LLC",CA|CT|FL|GA|MI|MO|NY|OH|TX|WI,11,394,2026-2026,edgar,1965796,main street group,,near-spelling,jaro-winkler 0.918
+compass airlines,"Compass Airlines, LLC",WA,2,394,2020-2020,edgar,1948502,compass apartments i,,incompatible-tokens,jaro-winkler 0.901
+compass airlines,"Compass Airlines, LLC",WA,2,394,2020-2020,edgar,1773896,compass allied,,incompatible-tokens,jaro-winkler 0.905
 comprehensive cancer centers,COMPREHENSIVE CANCER CENTERS INC.,CA,2,393,2009-2009,edgar,22872,comprehensive care,,incompatible-tokens,jaro-winkler 0.917
 tribus services,Tribus Services,MI,3,392,2019-2019,edgar,1706573,tribus enterprises,,incompatible-tokens,jaro-winkler 0.902
 t mobile,T-mobile,GA,1,392,2010-2010,edgar,1097609,t mobile usa,,incompatible-tokens,jaro-winkler 0.933
 sanofi aventis u s,sanofi-aventis U.S. Inc.,NJ,1,391,2012-2012,edgar,1121404,sanofi aventis,SNY,incompatible-tokens,jaro-winkler 0.956
 mueller,MUELLER COMPANY,IL,3,388,1991-2008,edgar,1405438,mueller,,weak-word,name is a common word
-mueller,MUELLER COMPANY,IL,3,388,1991-2008,edgar,1350593,mueller water products,MWA,ambiguous-extension,one of several listed companies extending the name
 mueller,MUELLER COMPANY,IL,3,388,1991-2008,edgar,89439,mueller industries,MLI,ambiguous-extension,one of several listed companies extending the name
+mueller,MUELLER COMPANY,IL,3,388,1991-2008,edgar,1350593,mueller water products,MWA,ambiguous-extension,one of several listed companies extending the name
 glenayre electronics,"GLENAYRE ELECTRONICS, INC.",GA|IL,3,388,1989-2001,edgar,808918,glenayre technologies,,incompatible-tokens,jaro-winkler 0.907
 molina hospital management,"Molina Hospital Management, Inc.",CA,1,385,2016-2016,edgar,1682097,molina medical management,,incompatible-tokens,jaro-winkler 0.910
 united technologies automotive,UNITED TECHNOLOGIES AUTOMOTIVE,GA|IL,2,384,1996-1997,edgar,101829,united technologies,RTX,near-spelling,jaro-winkler 0.927
 halliburton elmendorf,Halliburton-Elmendorf,TX,1,384,2020-2020,edgar,45012,halliburton,HAL,near-spelling,jaro-winkler 0.905
 phoenix,The Phoenix Company,NY|OH,3,384,2009-2009,edgar,1384871,phoenix,,weak-word,name is a common word
-phoenix,The Phoenix Company,NY|OH,3,384,2009-2009,edgar,925779,phoenix restaurant group,HIRU,ambiguous-extension,one of several listed companies extending the name
 phoenix,The Phoenix Company,NY|OH,3,384,2009-2009,edgar,883237,phoenix investment partners,VRTS,ambiguous-extension,one of several listed companies extending the name
+phoenix,The Phoenix Company,NY|OH,3,384,2009-2009,edgar,925779,phoenix restaurant group,HIRU,ambiguous-extension,one of several listed companies extending the name
 phoenix,The Phoenix Company,NY|OH,3,384,2009-2009,edgar,1509646,phoenix new media,FENG,ambiguous-extension,one of several listed companies extending the name
+nationstar,Nationstar,NE,5,382,2014-2015,edgar,1508016,nationstar equity,,incompatible-tokens,jaro-winkler 0.918
+nationstar,Nationstar,NE,5,382,2014-2015,edgar,1598862,nationstar funding i,,incompatible-tokens,jaro-winkler 0.900
+nationstar,Nationstar,NE,5,382,2014-2015,edgar,1572962,nationstar sub1,,incompatible-tokens,jaro-winkler 0.933
 nationstar,Nationstar,NE,5,382,2014-2015,edgar,1507955,nationstar capital,,incompatible-tokens,jaro-winkler 0.911
 nationstar,Nationstar,NE,5,382,2014-2015,edgar,1507951,nationstar mortgage,,incompatible-tokens,jaro-winkler 0.905
 nationstar,Nationstar,NE,5,382,2014-2015,edgar,1101203,nationstar funding,,incompatible-tokens,jaro-winkler 0.911
-nationstar,Nationstar,NE,5,382,2014-2015,edgar,1508016,nationstar equity,,incompatible-tokens,jaro-winkler 0.918
-nationstar,Nationstar,NE,5,382,2014-2015,edgar,1572962,nationstar sub1,,incompatible-tokens,jaro-winkler 0.933
-nationstar,Nationstar,NE,5,382,2014-2015,edgar,1598862,nationstar funding i,,incompatible-tokens,jaro-winkler 0.900
 nationstar,Nationstar,NE,5,382,2014-2015,edgar,1572963,nationstar sub2,,incompatible-tokens,jaro-winkler 0.933
 mitchell plastics,Mitchell Plastics,IN,1,380,2020-2020,edgar,1852272,mitchell austin h,,incompatible-tokens,jaro-winkler 0.906
 five star mining,Five Star Mining,IN,1,380,2014-2014,edgar,1159281,five star senior living,,incompatible-tokens,jaro-winkler 0.905
+mckinley paper,McKinley Paper Company,WA,2,380,2024-2024,edgar,2028931,mckinley andrew,,incompatible-tokens,jaro-winkler 0.915
+mckinley paper,McKinley Paper Company,WA,2,380,2024-2024,edgar,1979211,mckinley kate,,incompatible-tokens,jaro-winkler 0.926
 warner brothers,Warner Brothers,CA,1,379,2001-2001,edgar,1074132,warner robert i,,incompatible-tokens,jaro-winkler 0.901
 intercontinental miami,InterContinental Miami,FL,1,377,2020-2020,edgar,755098,intercontinental securities,,incompatible-tokens,jaro-winkler 0.913
 intercontinental miami,InterContinental Miami,FL,1,377,2020-2020,edgar,1571949,intercontinental exchange,ICE,incompatible-tokens,jaro-winkler 0.908
-united plastics group,"UNITED PLASTICS GROUP, INC.",CA|IL|KY|TX,4,377,2000-2006,edgar,881905,united retail group,,incompatible-tokens,jaro-winkler 0.929
-united plastics group,"UNITED PLASTICS GROUP, INC.",CA|IL|KY|TX,4,377,2000-2006,edgar,1328885,united pet group,,incompatible-tokens,jaro-winkler 0.930
-united plastics group,"UNITED PLASTICS GROUP, INC.",CA|IL|KY|TX,4,377,2000-2006,edgar,1094504,united capital group,,incompatible-tokens,jaro-winkler 0.939
 united plastics group,"UNITED PLASTICS GROUP, INC.",CA|IL|KY|TX,4,377,2000-2006,edgar,1038489,united financial group,,incompatible-tokens,jaro-winkler 0.905
+united plastics group,"UNITED PLASTICS GROUP, INC.",CA|IL|KY|TX,4,377,2000-2006,edgar,1094504,united capital group,,incompatible-tokens,jaro-winkler 0.939
+united plastics group,"UNITED PLASTICS GROUP, INC.",CA|IL|KY|TX,4,377,2000-2006,edgar,1328885,united pet group,,incompatible-tokens,jaro-winkler 0.930
 united plastics group,"UNITED PLASTICS GROUP, INC.",CA|IL|KY|TX,4,377,2000-2006,edgar,1434122,united plant products,,incompatible-tokens,jaro-winkler 0.910
+united plastics group,"UNITED PLASTICS GROUP, INC.",CA|IL|KY|TX,4,377,2000-2006,edgar,881905,united retail group,,incompatible-tokens,jaro-winkler 0.929
 joseph campbell,Joseph Campbell Company,GA,1,377,1997-1997,edgar,1018403,joseph pamela,,incompatible-tokens,jaro-winkler 0.928
 cheesecake factory covid19,The Cheesecake Factory COVID19,NC,1,376,2020-2020,edgar,887596,cheesecake factory,CAKE,near-spelling,jaro-winkler 0.938
 hastings entertainment amarillo,Hastings Entertainment-Amarillo,TX,1,375,2016-2016,edgar,1054579,hastings entertainment,,near-spelling,jaro-winkler 0.942
@@ -658,76 +679,78 @@ smurfit stone,Smurfit-Stone Corporation,CA|IL|WI,4,369,2002-2008,edgar,94610,smu
 smurfit stone,Smurfit-Stone Corporation,CA|IL|WI,4,369,2002-2008,edgar,919226,smurfit stone container,,incompatible-tokens,jaro-winkler 0.913
 nco nco financial systems,NCO NCO Financial Systems Inc.,VA,1,368,2010-2010,edgar,1396897,nco financial systems,,near-spelling,jaro-winkler 0.920
 donnelly,Donnelly Corporation,KY,3,366,2001-2002,edgar,805583,donnelly,,weak-word,name is a common word
-donnelly,Donnelly Corporation,KY,3,366,2001-2002,edgar,1233158,donnelly scott c,,incompatible-tokens,jaro-winkler 0.900
-donnelly,Donnelly Corporation,KY,3,366,2001-2002,edgar,1274355,donnelly timothy,,incompatible-tokens,jaro-winkler 0.900
-donnelly,Donnelly Corporation,KY,3,366,2001-2002,edgar,1276874,donnelly kevin,,incompatible-tokens,jaro-winkler 0.914
-donnelly,Donnelly Corporation,KY,3,366,2001-2002,edgar,1312290,donnelly john e,,incompatible-tokens,jaro-winkler 0.907
 donnelly,Donnelly Corporation,KY,3,366,2001-2002,edgar,1207471,donnelly james c,,incompatible-tokens,jaro-winkler 0.900
 donnelly,Donnelly Corporation,KY,3,366,2001-2002,edgar,1215922,donnelly peter p,,incompatible-tokens,jaro-winkler 0.900
+donnelly,Donnelly Corporation,KY,3,366,2001-2002,edgar,1233158,donnelly scott c,,incompatible-tokens,jaro-winkler 0.900
 donnelly,Donnelly Corporation,KY,3,366,2001-2002,edgar,1114725,donnelly jack e,,incompatible-tokens,jaro-winkler 0.907
+donnelly,Donnelly Corporation,KY,3,366,2001-2002,edgar,1276874,donnelly kevin,,incompatible-tokens,jaro-winkler 0.914
+donnelly,Donnelly Corporation,KY,3,366,2001-2002,edgar,1312290,donnelly john e,,incompatible-tokens,jaro-winkler 0.907
+donnelly,Donnelly Corporation,KY,3,366,2001-2002,edgar,1274355,donnelly timothy,,incompatible-tokens,jaro-winkler 0.900
+big al s,Big Al's,CA|WA,3,365,2020-2020,edgar,768835,big lots,,incompatible-tokens,jaro-winkler 0.900
 ritz carlton dallas,Ritz Carlton - Dallas,TX,1,365,2020-2020,edgar,1770983,ritz carlton title,,incompatible-tokens,jaro-winkler 0.903
 ritz carlton dallas,Ritz Carlton - Dallas,TX,1,365,2020-2020,edgar,1770945,ritz carlton sales,,incompatible-tokens,jaro-winkler 0.934
 valid usa,VALID USA,NJ,3,364,2016-2017,edgar,1519011,valid,,near-spelling,jaro-winkler 0.911
+seattle center,Seattle Center,WA,2,364,2020-2020,edgar,1060736,seattle genetics,,incompatible-tokens,jaro-winkler 0.917
 highgate hotels,"Highgate Hotels, L.P",FL,3,363,2020-2026,edgar,1323370,highgate partners,,incompatible-tokens,jaro-winkler 0.901
 marriott international shared services,Marriott International Shared Services,FL|GA|IL|MD,4,362,2020-2020,edgar,1048286,marriott international,MAR,incompatible-tokens,jaro-winkler 0.916
 chevron products,Chevron Products Company,CA|GA,10,362,2003-2010,edgar,109899,chevron usa,,incompatible-tokens,jaro-winkler 0.907
 great american snacks,Great American Snacks,ID|NC,2,360,2018-2024,edgar,924700,great american advisors,,incompatible-tokens,jaro-winkler 0.917
-great american snacks,Great American Snacks,ID|NC,2,360,2018-2024,edgar,882057,great american investors,,incompatible-tokens,jaro-winkler 0.910
-great american snacks,Great American Snacks,ID|NC,2,360,2018-2024,edgar,723258,great american life insurance,,incompatible-tokens,jaro-winkler 0.901
 great american snacks,Great American Snacks,ID|NC,2,360,2018-2024,edgar,43281,great american insurance,,incompatible-tokens,jaro-winkler 0.929
+great american snacks,Great American Snacks,ID|NC,2,360,2018-2024,edgar,882057,great american investors,,incompatible-tokens,jaro-winkler 0.910
 great american snacks,Great American Snacks,ID|NC,2,360,2018-2024,edgar,2140296,great american nnn sale leaseback i,,incompatible-tokens,jaro-winkler 0.901
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1671415,commonwealth joe,,incompatible-tokens,jaro-winkler 0.915
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1611621,commonwealth fund,,incompatible-tokens,jaro-winkler 0.905
+great american snacks,Great American Snacks,ID|NC,2,360,2018-2024,edgar,723258,great american life insurance,,incompatible-tokens,jaro-winkler 0.901
 commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,835012,commonwealth bankshares,,incompatible-tokens,jaro-winkler 0.906
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1413220,commonwealth home care,,incompatible-tokens,jaro-winkler 0.913
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,2022663,commonwealth markets,,incompatible-tokens,jaro-winkler 0.907
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1395728,commonwealth tower,,incompatible-tokens,jaro-winkler 0.917
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1005126,commonwealth bancorp,,incompatible-tokens,jaro-winkler 0.907
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1718044,commonwealth soccer,,incompatible-tokens,jaro-winkler 0.908
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,22620,commonwealth gas,,incompatible-tokens,jaro-winkler 0.938
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,2006580,commonwealth v2,,incompatible-tokens,jaro-winkler 0.903
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,22606,commonwealth edison,,incompatible-tokens,jaro-winkler 0.908
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,803649,commonwealth reit,,incompatible-tokens,jaro-winkler 0.913
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1804103,commonwealth sponsor,,incompatible-tokens,jaro-winkler 0.900
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,2130476,commonwealth glass services,,incompatible-tokens,jaro-winkler 0.910
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1180892,commonwealth bancshares,,incompatible-tokens,jaro-winkler 0.906
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1772803,commonwealth lamar,,incompatible-tokens,jaro-winkler 0.925
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1611621,commonwealth fund,,incompatible-tokens,jaro-winkler 0.905
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1671415,commonwealth joe,,incompatible-tokens,jaro-winkler 0.915
 commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1276011,commonwealth insurance,,incompatible-tokens,jaro-winkler 0.901
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1718044,commonwealth soccer,,incompatible-tokens,jaro-winkler 0.908
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,2006580,commonwealth v2,,incompatible-tokens,jaro-winkler 0.903
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1156443,commonwealth energy,,incompatible-tokens,jaro-winkler 0.947
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,2022663,commonwealth markets,,incompatible-tokens,jaro-winkler 0.907
 commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1607461,commonwealth new era racing,,incompatible-tokens,jaro-winkler 0.902
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1005126,commonwealth bancorp,,incompatible-tokens,jaro-winkler 0.907
 commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1647800,commonwealth capital,,incompatible-tokens,jaro-winkler 0.900
 commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,2003023,commonwealth capital,,incompatible-tokens,jaro-winkler 0.900
 commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,2085860,commonwealth capital,,incompatible-tokens,jaro-winkler 0.900
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1772803,commonwealth lamar,,incompatible-tokens,jaro-winkler 0.925
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1156443,commonwealth energy,,incompatible-tokens,jaro-winkler 0.947
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1804103,commonwealth sponsor,,incompatible-tokens,jaro-winkler 0.900
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1413220,commonwealth home care,,incompatible-tokens,jaro-winkler 0.913
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1395728,commonwealth tower,,incompatible-tokens,jaro-winkler 0.917
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,22606,commonwealth edison,,incompatible-tokens,jaro-winkler 0.908
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,2130476,commonwealth glass services,,incompatible-tokens,jaro-winkler 0.910
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,803649,commonwealth reit,,incompatible-tokens,jaro-winkler 0.913
+commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,22620,commonwealth gas,,incompatible-tokens,jaro-winkler 0.938
 commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,71222,commonwealth electric,,incompatible-tokens,jaro-winkler 0.920
-commonwealth general,Commonwealth General Corp..,KY,1,360,,edgar,1180892,commonwealth bancshares,,incompatible-tokens,jaro-winkler 0.906
 hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,893670,hayes lemmerz international,,ambiguous-exact,several registrants share this name in this era
 hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1237941,hayes lemmerz international,,ambiguous-exact,several registrants share this name in this era
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256626,hayes lemmerz interantional import,,incompatible-tokens,jaro-winkler 0.951
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256600,hayes lemmerz international kentucky,,incompatible-tokens,jaro-winkler 0.950
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256601,hayes lemmerz international mexico,,incompatible-tokens,jaro-winkler 0.959
 hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256615,hayes lommerz international pca,,incompatible-tokens,jaro-winkler 0.930
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256593,hayes lemmerz international commercial highway,,incompatible-tokens,jaro-winkler 0.917
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256599,hayes lemmerz international huntington,,incompatible-tokens,jaro-winkler 0.942
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256621,hayes lommerz international technical center,,incompatible-tokens,jaro-winkler 0.908
 hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256608,hayes lommerz international bristol,,incompatible-tokens,jaro-winkler 0.918
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1409609,hayes lemmerz finance,,incompatible-tokens,jaro-winkler 0.911
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256591,hayes lemmerz international sedalia,,incompatible-tokens,jaro-winkler 0.954
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256603,hayes lemmerz international texas,,incompatible-tokens,jaro-winkler 0.964
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256590,hayes lemmerz international la mirada,,incompatible-tokens,jaro-winkler 0.946
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256597,hayes lemmerz international homer,,incompatible-tokens,jaro-winkler 0.964
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256607,hayes lommerz international cmi,,incompatible-tokens,jaro-winkler 0.930
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256621,hayes lommerz international technical center,,incompatible-tokens,jaro-winkler 0.908
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256611,hayes lommerz international laredo,,incompatible-tokens,jaro-winkler 0.944
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256594,hayes lemmerz international california,,incompatible-tokens,jaro-winkler 0.942
 hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256619,hayes lommerz international southfield,,incompatible-tokens,jaro-winkler 0.927
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256623,hayes lommerz international wabash,,incompatible-tokens,jaro-winkler 0.922
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1409609,hayes lemmerz finance,,incompatible-tokens,jaro-winkler 0.911
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256603,hayes lemmerz international texas,,incompatible-tokens,jaro-winkler 0.964
 hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256598,hayes lemmerz international howell,,incompatible-tokens,jaro-winkler 0.959
 hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256613,hayes lommerz international montague,,incompatible-tokens,jaro-winkler 0.914
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256617,hayes lommerz international petersburg,,incompatible-tokens,jaro-winkler 0.927
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256591,hayes lemmerz international sedalia,,incompatible-tokens,jaro-winkler 0.954
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256590,hayes lemmerz international la mirada,,incompatible-tokens,jaro-winkler 0.946
 hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256602,hayes lemmerz international ohio,,incompatible-tokens,jaro-winkler 0.969
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256595,hayes lemmerz international georgia,,incompatible-tokens,jaro-winkler 0.954
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256609,hayes lommerz international cadillac,,incompatible-tokens,jaro-winkler 0.914
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256601,hayes lemmerz international mexico,,incompatible-tokens,jaro-winkler 0.959
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256626,hayes lemmerz interantional import,,incompatible-tokens,jaro-winkler 0.951
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256599,hayes lemmerz international huntington,,incompatible-tokens,jaro-winkler 0.942
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256617,hayes lommerz international petersburg,,incompatible-tokens,jaro-winkler 0.927
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256597,hayes lemmerz international homer,,incompatible-tokens,jaro-winkler 0.964
 hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256592,hayes lemmerz international bowling green,,incompatible-tokens,jaro-winkler 0.932
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256611,hayes lommerz international laredo,,incompatible-tokens,jaro-winkler 0.944
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256600,hayes lemmerz international kentucky,,incompatible-tokens,jaro-winkler 0.950
-hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256594,hayes lemmerz international california,,incompatible-tokens,jaro-winkler 0.942
-fdc 2024,FDC 2024,MN,1,360,2024-2024,edgar,2027622,fdc mhh 2024 a,,incompatible-tokens,jaro-winkler 0.914
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256623,hayes lommerz international wabash,,incompatible-tokens,jaro-winkler 0.922
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256593,hayes lemmerz international commercial highway,,incompatible-tokens,jaro-winkler 0.917
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256609,hayes lommerz international cadillac,,incompatible-tokens,jaro-winkler 0.914
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256595,hayes lemmerz international georgia,,incompatible-tokens,jaro-winkler 0.954
+hayes lemmerz international,"Hayes Lemmerz International, Inc.",CA|KY,2,360,2001-2005,edgar,1256607,hayes lommerz international cmi,,incompatible-tokens,jaro-winkler 0.930
 fdc 2024,FDC 2024,MN,1,360,2024-2024,edgar,2027631,fdc mhh 2024,,incompatible-tokens,jaro-winkler 0.933
+fdc 2024,FDC 2024,MN,1,360,2024-2024,edgar,2027622,fdc mhh 2024 a,,incompatible-tokens,jaro-winkler 0.914
 suntrust,Suntrust,GA,2,360,2007-2008,edgar,351910,suntrust,,pre-era,registrant filed under this name 2011-2011
 suntrust,Suntrust,GA,2,360,2007-2008,edgar,839552,suntrust bank,,incompatible-tokens,jaro-winkler 0.923
 suntrust,Suntrust,GA,2,360,2007-2008,edgar,1335407,suntrust bank,,incompatible-tokens,jaro-winkler 0.923
@@ -738,27 +761,33 @@ wolverine services,"Wolverine Services, LLC",KY,2,358,2012-2012,edgar,1527097,wo
 grede foundry,Grede Foundry,OK,4,358,2001-2002,edgar,1185671,grede foundries,,near-spelling,jaro-winkler 0.945
 stanley works nail dept,Stanley Works Nail Dept.,RI,3,356,2010-2011,edgar,93556,stanley works,SWK,incompatible-tokens,jaro-winkler 0.913
 osborn group,Osborn Group Inc.,KS,2,354,2001-2001,edgar,1344967,osborn group,,pre-era,registrant filed under this name 2006-2011
+wilcox farms,Wilcox Farms,WA,4,354,2008-2008,edgar,1339473,wilcox karen,,incompatible-tokens,jaro-winkler 0.900
+wilcox farms,Wilcox Farms,WA,4,354,2008-2008,edgar,1286034,wilcox james l,,incompatible-tokens,jaro-winkler 0.910
+wilcox farms,Wilcox Farms,WA,4,354,2008-2008,edgar,1202470,wilcox james r,,incompatible-tokens,jaro-winkler 0.922
+wilcox farms,Wilcox Farms,WA,4,354,2008-2008,edgar,1222257,wilcox gary,,incompatible-tokens,jaro-winkler 0.914
+wilcox farms,Wilcox Farms,WA,4,354,2008-2008,edgar,1356162,wilcox james d,,incompatible-tokens,jaro-winkler 0.910
 milford plaza,Milford Plaza,NY,1,354,2009-2009,edgar,1281457,milford alf,,incompatible-tokens,jaro-winkler 0.916
 apparel group,"The Apparel Group, Ltd.",KY,3,352,1999-2008,edgar,1489499,apparel media group,,incompatible-tokens,jaro-winkler 0.937
 universal logistics insights,Universal Logistics Insights Corp.,MI,1,352,2025-2025,edgar,1308208,universal logistics holdings,ULH,incompatible-tokens,jaro-winkler 0.941
 matsushita battery industrial,Matsushita Battery Industrial Corp,GA,1,351,2001-2001,edgar,63271,matsushita electric industrial,,incompatible-tokens,jaro-winkler 0.923
+intercontinental mag mile,InterContinental Mag Mile,IL,1,350,2020-2020,edgar,1174746,intercontinental exchange holdings,,incompatible-tokens,jaro-winkler 0.902
+intercontinental mag mile,InterContinental Mag Mile,IL,1,350,2020-2020,edgar,1571949,intercontinental exchange,ICE,incompatible-tokens,jaro-winkler 0.910
 intercontinental mag mile,InterContinental Mag Mile,IL,1,350,2020-2020,edgar,1459158,intercontinental capital partners,,incompatible-tokens,jaro-winkler 0.900
 intercontinental mag mile,InterContinental Mag Mile,IL,1,350,2020-2020,edgar,1459159,intercontinental capital partners,,incompatible-tokens,jaro-winkler 0.900
-intercontinental mag mile,InterContinental Mag Mile,IL,1,350,2020-2020,edgar,1571949,intercontinental exchange,ICE,incompatible-tokens,jaro-winkler 0.910
-intercontinental mag mile,InterContinental Mag Mile,IL,1,350,2020-2020,edgar,1174746,intercontinental exchange holdings,,incompatible-tokens,jaro-winkler 0.902
 renaissance chicago hotel,Renaissance Chicago Hotel,IL,1,350,2020-2020,edgar,1037389,renaissance technologies,,incompatible-tokens,jaro-winkler 0.905
-renaissance chicago hotel,Renaissance Chicago Hotel,IL,1,350,2020-2020,edgar,1591476,renaissance oil,,incompatible-tokens,jaro-winkler 0.907
 renaissance chicago hotel,Renaissance Chicago Hotel,IL,1,350,2020-2020,edgar,1535058,renaissance capital,,incompatible-tokens,jaro-winkler 0.903
+renaissance chicago hotel,Renaissance Chicago Hotel,IL,1,350,2020-2020,edgar,1591476,renaissance oil,,incompatible-tokens,jaro-winkler 0.907
 siltronic,Siltronic Corporation,OR,1,350,2012-2012,edgar,1916612,siltronic,,pre-era,registrant filed under this name 2022-2022
-dynamic bdc,Dynamic BDC,MI,2,350,2022-2022,edgar,1999109,dynamic labs,,incompatible-tokens,jaro-winkler 0.914
+lowes,Lowes,WA,2,350,2019-2019,edgar,60667,lowes companies,LOW,ambiguous-extension,one of several listed companies extending the name
 dynamic bdc,Dynamic BDC,MI,2,350,2022-2022,edgar,1936254,dynamic jack,,incompatible-tokens,jaro-winkler 0.914
+dynamic bdc,Dynamic BDC,MI,2,350,2022-2022,edgar,1999109,dynamic labs,,incompatible-tokens,jaro-winkler 0.914
 westpoint stevens dunson,Westpoint Stevens-dunson,GA,1,350,2004-2004,edgar,852952,westpoint stevens,,near-spelling,jaro-winkler 0.942
 mutual group,The Mutual Group,WI,1,350,1996-1996,edgar,1105509,mutual group,,pre-era,registrant filed under this name 2000-2000
 mutual group,The Mutual Group,WI,1,350,1996-1996,edgar,814078,mutual fund group,,incompatible-tokens,jaro-winkler 0.908
 brinker international payroll,"Brinker International Payroll Company, L.P.",CA|NY,4,349,2019-2026,edgar,703351,brinker international,EAT,near-spelling,jaro-winkler 0.945
 champion mortgage,CHAMPION MORTGAGE,NJ,1,349,2006-2006,edgar,1572960,champion mortgage,,pre-era,registrant filed under this name 2013-2013
-general dynamics anteon,GENERAL DYNAMICS/ANTEON CORPORATION,CA,3,349,2006-2006,edgar,40533,general dynamics,GD,near-spelling,jaro-winkler 0.939
 general dynamics anteon,GENERAL DYNAMICS/ANTEON CORPORATION,CA,3,349,2006-2006,edgar,1165493,general dynamics land systems,,incompatible-tokens,jaro-winkler 0.927
+general dynamics anteon,GENERAL DYNAMICS/ANTEON CORPORATION,CA,3,349,2006-2006,edgar,40533,general dynamics,GD,near-spelling,jaro-winkler 0.939
 rust constructors,"RUST CONSTRUCTORS, INC.",AL,2,347,1998-2000,edgar,1563477,rust constructors,,pre-era,registrant filed under this name 2013-2017
 charles schwab,"CHARLES SCHWAB COMPANY, INC.",CA|IL,3,347,1989-2009,edgar,87634,charles schwab,,ambiguous-exact,several registrants share this name in this era
 charles schwab,"CHARLES SCHWAB COMPANY, INC.",CA|IL,3,347,1989-2009,edgar,751448,charles schwab,,ambiguous-exact,several registrants share this name in this era
@@ -766,90 +795,69 @@ charles schwab,"CHARLES SCHWAB COMPANY, INC.",CA|IL,3,347,1989-2009,edgar,130398
 charles schwab,"CHARLES SCHWAB COMPANY, INC.",CA|IL,3,347,1989-2009,edgar,1434523,charles schwab,,ambiguous-exact,several registrants share this name in this era
 charles schwab,"CHARLES SCHWAB COMPANY, INC.",CA|IL,3,347,1989-2009,edgar,1489767,charles coal,,incompatible-tokens,jaro-winkler 0.910
 countrywide,Countrywide,CA,7,347,2001-2008,edgar,1345006,countrywide,,weak-word,name is a common word
-countrywide,Countrywide,CA,7,347,2001-2008,edgar,1162717,countrywide capital v,,incompatible-tokens,jaro-winkler 0.905
-countrywide,Countrywide,CA,7,347,2001-2008,edgar,814509,countrywide home loans,,incompatible-tokens,jaro-winkler 0.900
-countrywide,Countrywide,CA,7,347,2001-2008,edgar,703004,countrywide securities,,incompatible-tokens,jaro-winkler 0.900
+countrywide,Countrywide,CA,7,347,2001-2008,edgar,1286346,countrywide capital vi,,incompatible-tokens,jaro-winkler 0.900
 countrywide,Countrywide,CA,7,347,2001-2008,edgar,25191,countrywide financial,,incompatible-tokens,jaro-winkler 0.905
 countrywide,Countrywide,CA,7,347,2001-2008,edgar,1162716,countrywide capital iv,,incompatible-tokens,jaro-winkler 0.900
 countrywide,Countrywide,CA,7,347,2001-2008,edgar,1379249,countrywide capital ix,,incompatible-tokens,jaro-winkler 0.900
-countrywide,Countrywide,CA,7,347,2001-2008,edgar,1286346,countrywide capital vi,,incompatible-tokens,jaro-winkler 0.900
+countrywide,Countrywide,CA,7,347,2001-2008,edgar,814509,countrywide home loans,,incompatible-tokens,jaro-winkler 0.900
+countrywide,Countrywide,CA,7,347,2001-2008,edgar,703004,countrywide securities,,incompatible-tokens,jaro-winkler 0.900
+countrywide,Countrywide,CA,7,347,2001-2008,edgar,1162717,countrywide capital v,,incompatible-tokens,jaro-winkler 0.905
 northrop grumman electronic systems,Northrop Grumman Electronic Systems,CA,2,347,2004-2007,edgar,1441021,northrop grumman systems finance,,incompatible-tokens,jaro-winkler 0.912
+american medical response pierce county,"American Medical Response, Pierce County",WA,4,346,2022-2023,edgar,1894877,american medical reit,,incompatible-tokens,jaro-winkler 0.908
 cluett peabody,"Cluett, Peabody And Company, Inc.",GA,1,346,1995-1995,edgar,1064974,cluett peabody,,pre-era,registrant filed under this name 1998-1998
 shultz steel,Shultz Steel Company,CA,5,345,2020-2020,edgar,1689173,shultz joseph e,,incompatible-tokens,jaro-winkler 0.900
 harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,734830,harris n a,,ambiguous-exact,several registrants share this name in this era
 harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1397444,harris n a,,ambiguous-exact,several registrants share this name in this era
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1481682,harris dennis o,,incompatible-tokens,jaro-winkler 0.900
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1232965,harris daniel j,,incompatible-tokens,jaro-winkler 0.913
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1318736,harris danny p,,incompatible-tokens,jaro-winkler 0.923
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,202058,harris,LHX,incompatible-tokens,jaro-winkler 0.920
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1379076,harris jerome a,,incompatible-tokens,jaro-winkler 0.900
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1441895,harris ronda,,incompatible-tokens,jaro-winkler 0.930
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1075290,harris joe frank,,incompatible-tokens,jaro-winkler 0.905
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1529511,harris leonard p,,incompatible-tokens,jaro-winkler 0.905
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1295205,harris john h,,incompatible-tokens,jaro-winkler 0.918
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1282174,harris leonard,,incompatible-tokens,jaro-winkler 0.909
 harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1236982,harris c martin,,incompatible-tokens,jaro-winkler 0.900
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1243160,harris john d,,incompatible-tokens,jaro-winkler 0.918
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1459338,harris john n,,incompatible-tokens,jaro-winkler 0.918
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1541552,harris john j,,incompatible-tokens,jaro-winkler 0.918
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1298601,harris susan l,,incompatible-tokens,jaro-winkler 0.923
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1295205,harris john h,,incompatible-tokens,jaro-winkler 0.918
 harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1335963,harris john edward,,incompatible-tokens,jaro-winkler 0.911
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1134583,harris donald a,,incompatible-tokens,jaro-winkler 0.913
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1472352,harris ben h,,incompatible-tokens,jaro-winkler 0.930
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1298599,harris ira c,,incompatible-tokens,jaro-winkler 0.908
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1470077,harris brian g,,incompatible-tokens,jaro-winkler 0.923
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1222848,harris frank w,,incompatible-tokens,jaro-winkler 0.923
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1181686,harris steven j,,incompatible-tokens,jaro-winkler 0.900
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1217165,harris king w,,incompatible-tokens,jaro-winkler 0.918
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1459338,harris john n,,incompatible-tokens,jaro-winkler 0.918
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1128834,harris sidney e,,incompatible-tokens,jaro-winkler 0.900
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1049848,harris john w,,incompatible-tokens,jaro-winkler 0.918
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1223287,harris donald j,,incompatible-tokens,jaro-winkler 0.913
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1277370,harris oscar n,,incompatible-tokens,jaro-winkler 0.923
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1075290,harris joe frank,,incompatible-tokens,jaro-winkler 0.905
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1243160,harris john d,,incompatible-tokens,jaro-winkler 0.918
 harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1201894,harris brent r,,incompatible-tokens,jaro-winkler 0.909
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1482589,harris ray,,incompatible-tokens,jaro-winkler 0.920
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1289902,harris dennis w,,incompatible-tokens,jaro-winkler 0.900
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,202058,harris,LHX,incompatible-tokens,jaro-winkler 0.920
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1529511,harris leonard p,,incompatible-tokens,jaro-winkler 0.905
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1134583,harris donald a,,incompatible-tokens,jaro-winkler 0.913
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1107275,harris jay r,,incompatible-tokens,jaro-winkler 0.908
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1472352,harris ben h,,incompatible-tokens,jaro-winkler 0.930
 harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1202842,harris john,,incompatible-tokens,jaro-winkler 0.905
 harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1264569,harris john,,incompatible-tokens,jaro-winkler 0.905
 harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1370004,harris john,,incompatible-tokens,jaro-winkler 0.905
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1193692,harris ben t,,incompatible-tokens,jaro-winkler 0.930
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1107275,harris jay r,,incompatible-tokens,jaro-winkler 0.908
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1277370,harris oscar n,,incompatible-tokens,jaro-winkler 0.923
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1558749,harris bernard,,incompatible-tokens,jaro-winkler 0.909
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1049848,harris john w,,incompatible-tokens,jaro-winkler 0.918
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1298599,harris ira c,,incompatible-tokens,jaro-winkler 0.908
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1445220,harris nathan,,incompatible-tokens,jaro-winkler 0.918
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1181686,harris steven j,,incompatible-tokens,jaro-winkler 0.900
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1435750,harris steven l,,incompatible-tokens,jaro-winkler 0.900
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1217165,harris king w,,incompatible-tokens,jaro-winkler 0.918
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1423781,harris tonia,,incompatible-tokens,jaro-winkler 0.930
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1351182,harris alan g,,incompatible-tokens,jaro-winkler 0.934
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1128834,harris sidney e,,incompatible-tokens,jaro-winkler 0.900
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1294671,harris paul n,,incompatible-tokens,jaro-winkler 0.934
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1222848,harris frank w,,incompatible-tokens,jaro-winkler 0.923
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1223287,harris donald j,,incompatible-tokens,jaro-winkler 0.913
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1251017,harris kevin m,,incompatible-tokens,jaro-winkler 0.909
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1439713,harris robert a,,incompatible-tokens,jaro-winkler 0.900
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1185944,harris alan f,,incompatible-tokens,jaro-winkler 0.934
 harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1079144,harris john r,,incompatible-tokens,jaro-winkler 0.918
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1232965,harris daniel j,,incompatible-tokens,jaro-winkler 0.913
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1351182,harris alan g,,incompatible-tokens,jaro-winkler 0.934
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1481682,harris dennis o,,incompatible-tokens,jaro-winkler 0.900
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1294671,harris paul n,,incompatible-tokens,jaro-winkler 0.934
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1251017,harris kevin m,,incompatible-tokens,jaro-winkler 0.909
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1558749,harris bernard,,incompatible-tokens,jaro-winkler 0.909
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1439713,harris robert a,,incompatible-tokens,jaro-winkler 0.900
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1282174,harris leonard,,incompatible-tokens,jaro-winkler 0.909
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1482589,harris ray,,incompatible-tokens,jaro-winkler 0.920
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1423781,harris tonia,,incompatible-tokens,jaro-winkler 0.930
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1435750,harris steven l,,incompatible-tokens,jaro-winkler 0.900
 harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1313821,harris nancy l,,incompatible-tokens,jaro-winkler 0.923
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1441895,harris ronda,,incompatible-tokens,jaro-winkler 0.930
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1379076,harris jerome a,,incompatible-tokens,jaro-winkler 0.900
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1318736,harris danny p,,incompatible-tokens,jaro-winkler 0.923
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1298601,harris susan l,,incompatible-tokens,jaro-winkler 0.923
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1185944,harris alan f,,incompatible-tokens,jaro-winkler 0.934
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1193692,harris ben t,,incompatible-tokens,jaro-winkler 0.930
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1289902,harris dennis w,,incompatible-tokens,jaro-winkler 0.900
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1445220,harris nathan,,incompatible-tokens,jaro-winkler 0.918
 harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1382625,harris alan n,,incompatible-tokens,jaro-winkler 0.934
-harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1470077,harris brian g,,incompatible-tokens,jaro-winkler 0.923
+harris n a,Harris N.A.,IL,1,345,2010-2010,edgar,1541552,harris john j,,incompatible-tokens,jaro-winkler 0.918
 worleyparsons group,WorleyParsons Group Inc.,CA,55,344,2009-2015,edgar,1317484,worleyparsons,,near-spelling,jaro-winkler 0.937
 worleyparsons group,WorleyParsons Group Inc.,CA,55,344,2009-2015,edgar,1450021,worleyparsons,,near-spelling,jaro-winkler 0.937
 vroom stafford,Vroom-Stafford,TX,2,342,2020-2024,edgar,1960484,vroom solar,,incompatible-tokens,jaro-winkler 0.905
 first transit austin,First Transit-Austin,TX,1,342,2015-2015,edgar,1277303,first national trust,,incompatible-tokens,jaro-winkler 0.904
 ritz carlton rancho mirage,Ritz-Carlton Rancho Mirage,CA,1,341,2020-2020,edgar,1769161,ritz carlton management,,incompatible-tokens,jaro-winkler 0.901
 gates,Gates Corp.,IA|IL|VA,5,341,2009-2024,edgar,1718512,gates industrial,GTES,ambiguous-extension,one of several listed companies extending the name
-biovail pharm,BIOVAIL PHARM,NJ,1,340,2005-2005,edgar,885590,biovail,BHC,near-spelling,jaro-winkler 0.908
-masonite international,MASONITE INTERNATIONAL CORP.,AL|OH,2,339,2006-2007,edgar,893691,masonite international,,ambiguous-exact,several registrants share this name in this era
-masonite international,MASONITE INTERNATIONAL CORP.,AL|OH,2,339,2006-2007,edgar,1383505,masonite international,,ambiguous-exact,several registrants share this name in this era
-masonite international,MASONITE INTERNATIONAL CORP.,AL|OH,2,339,2006-2007,edgar,1382833,masonite ireland,,incompatible-tokens,jaro-winkler 0.911
-mac one midway,"MAC One Midway, LLC",IL,1,336,2017-2017,edgar,1736885,mac mia,,incompatible-tokens,jaro-winkler 0.900
-aramark healthcare,ARAMARK HEALTHCARE,NJ|WA,2,336,2005-2007,edgar,1397023,aramark healthcare support services,,incompatible-tokens,jaro-winkler 0.903
-cooper bussmann,COOPER BUSSMANN,IL|KY,2,335,1999-2002,edgar,1338574,cooper bussmann,,pre-era,registrant filed under this name 2006-2026
-cooper bussmann,COOPER BUSSMANN,IL|KY,2,335,1999-2002,edgar,1238143,cooper simon,,incompatible-tokens,jaro-winkler 0.900
-premier bankcard,Premier Bankcard,SD,1,335,2011-2011,edgar,1478029,premier bank n a,,incompatible-tokens,jaro-winkler 0.925
-premier bankcard,Premier Bankcard,SD,1,335,2011-2011,edgar,1502777,premier brands,,incompatible-tokens,jaro-winkler 0.933
-premier bankcard,Premier Bankcard,SD,1,335,2011-2011,edgar,836616,premier bancshares,,incompatible-tokens,jaro-winkler 0.931
-tyco healthcare,Tyco Healthcare,GA,1,335,2004-2004,edgar,1385187,tyco healthcare,,pre-era,registrant filed under this name 2007-2007
-johnson johnson consumer,"Johnson & Johnson Consumer, Inc.",CA|NJ|PA,5,334,2019-2023,edgar,1410781,johnson john,,near-spelling,jaro-winkler 0.900
-johnson johnson consumer,"Johnson & Johnson Consumer, Inc.",CA|NJ|PA,5,334,2019-2023,edgar,200406,johnson johnson,JNJ,near-spelling,jaro-winkler 0.925
-johnson johnson consumer,"Johnson & Johnson Consumer, Inc.",CA|NJ|PA,5,334,2019-2023,edgar,1893725,johnson johnson uk treasury,,incompatible-tokens,jaro-winkler 0.905
-wells fargo pvsi,Wells Fargo PVSI,NV,1,334,2018-2018,edgar,809008,wells fargo advisors,,incompatible-tokens,jaro-winkler 0.924
-wells fargo pvsi,Wells Fargo PVSI,NV,1,334,2018-2018,edgar,1417544,wells fargo advisors,,incompatible-tokens,jaro-winkler 0.924
-wells fargo pvsi,Wells Fargo PVSI,NV,1,334,2018-2018,edgar,1224385,wells fargo securities,,incompatible-tokens,jaro-winkler 0.902
-wells fargo pvsi,Wells Fargo PVSI,NV,1,334,2018-2018,edgar,1470801,wells fargo securities,,incompatible-tokens,jaro-winkler 0.902
-wells fargo pvsi,Wells Fargo PVSI,NV,1,334,2018-2018,edgar,1573364,wells fargo egs india,,incompatible-tokens,jaro-winkler 0.908
-wells fargo pvsi,Wells Fargo PVSI,NV,1,334,2018-2018,edgar,72971,wells fargo,WFC,near-spelling,jaro-winkler 0.938
-wells fargo pvsi,Wells Fargo PVSI,NV,1,334,2018-2018,edgar,1304706,wells fargo prime services,,incompatible-tokens,jaro-winkler 0.911

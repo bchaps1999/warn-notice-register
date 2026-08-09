@@ -4641,6 +4641,7 @@ amendment_of,0.976,declared,source flagged is_amendment,IA,Wells Fargo,2026-05-2
 amendment_of,0.987,declared,source flagged is_amendment,IA,Wells Fargo,2026-06-23,Wells Fargo,2026-05-12,239c40d4d7991b9bbc5c133f1db8f779417dba9b,5ec18e31bc9e92733c740828913a583d89cb7923
 amendment_of,0.988,declared,source flagged is_amendment,IA,Wells Fargo,2026-07-07,Wells Fargo,2026-05-12,82148b9b97a78825cc12af04ac39cb2f120df769,5ec18e31bc9e92733c740828913a583d89cb7923
 amendment_of,0.994,declared,source flagged is_amendment,IA,Wells Fargo,2026-07-22,Wells Fargo,2026-07-07,2258474f510bf1635ab0be58bfd60acb9a5d4d0c,82148b9b97a78825cc12af04ac39cb2f120df769
+amendment_of,0.981,declared,source flagged is_amendment,IA,Wells Fargo,2026-08-04,Wells Fargo,2026-07-22,631e06878413696ccf6f8e5df926b81be49f6dc3,2258474f510bf1635ab0be58bfd60acb9a5d4d0c
 possible_duplicate,0.606,amendment,"refiled 26d later, location score 0.44",ID,Simplot Food Group,2014-03-26,Simplot Food Group,2014-02-28,d6d8f6ead7e4ef9ce57485c48b6bd8a8b7d4678a,8d07e08aecb9281d05ca48c9828563b4f20f05f0
 amendment_of,0.97,amendment,"refiled 28d later, same location",ID,DXC Technology,2019-09-27,DXC Technology,2019-08-30,5f7812a5b74c271c08828f53eab51e408460f165,21392cc51997627b832c5b84e081bf30152a1d65
 amendment_of,0.97,amendment,"refiled 12d later, same location",ID,Riverence Holdings (inlcudes Clear Spring Foods),2020-04-15,Riverence Holdings (inlcudes Clear Spring Foods),2020-04-03,19de4d4834cf161681f85c3e2a11531803abc5e0,dc26aa117c530883295f1c5bdc176589d26a64b1
@@ -7222,6 +7223,7 @@ amendment_of,0.994,declared,source flagged is_amendment,KY,HGS CX TECHNOLOGIES I
 amendment_of,0.979,declared,source flagged is_amendment,KY,PARSONS CORPORATION,2026-04-16,PARSONS CORPORATION,2026-01-16,1b0170ca256ec9b2cff29d89a381158b78000cdc,dd299d0fbbff8f4bc4556eaa505116f7675c128e
 amendment_of,0.97,amendment,"refiled 24d later, same location",KY,Marsden Services LLC,2026-05-10,Marsden Services LLC,2026-04-16,68f57c17823b0eeff12524f6a7d1396e330ba3b3,30ce26ab4c6931e525a61dd6ab6c82b416112e9a
 amendment_of,0.994,declared,source flagged is_amendment,KY,Battelle Memorial Institute E3,2026-07-06,Battelle Memorial Institute E3,2026-05-07,bc61b623da6a97301e7962c4c97c61251ffde93b,b1e207f38542c1d9c2774674857a463eebc5276f
+amendment_of,0.88,amendment,"refiled 17d later, same location",KY,Battelle Memorial Institute E3,2026-07-23,Battelle Memorial Institute E3,2026-07-06,1e7119a580bee82222208c2cb69c77bad1219809,bc61b623da6a97301e7962c4c97c61251ffde93b
 amendment_of,0.98,declared,source flagged is_amendment,KY,Levi Strauss & Co,2026-08-30,Levi Strauss & Co.,1999-10-05,857f7763a64751b55ce4fa13812b4239bbf6ae38,a204d3451243ec6f378e3333eafdc476e5c72992
 amendment_of,0.97,amendment,"refiled 35d later, same location",LA,ICF International,2009-03-02,ICF International,2009-01-26,adaf941059edd19cc9b7f48a3857a5da86fa71d0,b6428cba46b67b65a5d825cdb0ad17b68e9f8d82
 amendment_of,0.97,amendment,"refiled 28d later, same location",LA,ICF International,2009-03-30,ICF International,2009-03-02,eab6c174d0725c79c01590d75025de90e95bbd04,adaf941059edd19cc9b7f48a3857a5da86fa71d0
