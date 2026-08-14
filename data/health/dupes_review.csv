@@ -208,6 +208,7 @@ NY,2019-11-22,"WeWork Companies, Inc. (Broad St.)","WeWork Companies, Inc. (1450
 NY,2019-11-22,"WeWork Companies, Inc. (Broad St.)","WeWork Companies, Inc. (1619 Broadway)",New York,0.926,250,73,59936,59945
 NY,2019-11-22,"WeWork Companies, Inc. (49th St.)","WeWork Companies, Inc. (Greenwich St.)",New York,0.926,23,14,59939,59941
 NY,2019-02-28,Kuni's Corporation d/b/a Ikinari Steak (37 West 46th St),Kuni's Corporation d/b/a Ikinari Steak (Lexington),New York,0.926,9,11,60242,60245
+CA,2026-07-30,"San Francisico Pretrial Diversion Project, Inc.","San Francisco Pretrial Diversion Project, Inc.",1200 Folsom Street San Francisco CA 94103,0.926,82,82,94416,94478
 CA,2025-08-15,Adventist Health Glendale,Adventist Health 1,,0.925,58,296,1480,1481
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Dublin Physical & Hand Therapy),Agile Physical Therapy (Sutter Health Fremont Physical Therapy & Hand Therapy),,0.925,7,24,1591,1592
 CA,2026-02-13,De La Pena Eye Clinic - DLP Huntington Park,De La Pena Eye Clinic - DLP Long Beach,,0.925,15,3,2168,2169
@@ -600,6 +601,7 @@ NY,2019-03-13,Instacart (at Whole Foods Market) Greenwich Street,Instacart (at W
 NY,2019-02-28,Kuni's Corporation d/b/a Ikinari Steak (Bleecker),Kuni's Corporation d/b/a Ikinari Steak (368 W 46th St),New York,0.919,10,16,60244,60247
 NY,2017-10-27,Restaurant Associates (Barclays Executive Dining Room),Restaurant Associates (Barclays),New York,0.919,29,8,60820,60821
 NY,2016-06-22,New York Life Insurance Company - Information Technology Operations and Finance Operations,New York Life Insurance Company - Finance Operations and Finance Operations,Sleepy Hollow,0.919,6,1,61273,61274
+CA,2026-08-11,Sharp Metropolitan Medical Campus - Sharp Mary Birch Hospital,Sharp Metropolitan Medical Campus - Sharp Outpatient Pavilion,7901 Frost Street San Diego CA 92123,0.919,7,5,94484,94485
 CA,2025-07-14,Blue Shield of California - Rancho Cordova,Blue Shield of California - Redding,,0.918,3,2,1387,1390
 CA,2025-08-04,University of Southern California Norris Cancer Hospital,University of Southern California HC1,,0.918,10,2,1447,1449
 CA,2025-08-04,University of Southern California Norris Cancer Hospital,University of Southern California HC2,,0.918,10,1,1447,1450
@@ -1353,6 +1355,7 @@ NY,2019-03-13,Instacart (at Whole Foods Market) Greenwich Street,Instacart (at W
 NY,2017-08-10,Eastman Kodak Company (Eastman Business Park),Eastman Kodak Company (Kodak Research Labs),Rochester,0.905,32,4,60919,60920
 NY,2016-05-18,Eastman Kodak Company (Eastman Business Park),Eastman Kodak Company (Kodak Research Labs),Rochester,0.905,1,1,61308,61309
 NY,2016-03-16,Eastman Kodak Company (Eastman Business Park),Eastman Kodak Company (Kodak Research Labs),Rochester,0.905,5,2,61381,61382
+CA,2026-08-11,Sharp Metropolitan Medical Campus - Sharp Memorial Hospital,Sharp Metropolitan Medical Group - Sharp McDonald Center,7901 Frost Street San Diego CA 92123,0.905,20,2,94481,94483
 CA,2025-10-31,Ceryx Management LLC (Figueroa),Ceryx Management LLC (7111 S Hoover),,0.904,8,1,1899,1907
 CA,2025-11-03,CommUnify - Adam Center,CommUnify - Goleta Center,,0.904,4,2,1864,1880
 CA,2026-03-12,Total Storage Solutions (Tri-City Self Storage),Total Storage Solutions (Western States Self Storage),,0.904,3,3,2261,2262
@@ -1660,6 +1663,7 @@ NY,2020-03-20,Fireman Hospitality Group Café Concepts dba Café Concepts (multi
 NY,2019-04-08,"The College of New Rochelle - DC-37 Campus, Manhattan","The College of New Rochelle - Rosa Parks Campus, Harlem",New York,0.899,,,60170,60172
 MO,2020-07-02,Hampton Inn Hotel - St. Louis,Hampton Inn Hotel - Forrest Park,St. Louis (city),0.899,24,18,92991,92992
 TX,2026-07-31,A Metropolis Company (Rental Car),A Metropolis Company (Main Building),Dallas,0.899,130,6,93015,93016
+CA,2026-08-11,Sharp Metropolitan Medical Group - Sharp McDonald Center,Sharp Metropolitan Medical Campus - Sharp Outpatient Pavilion,7901 Frost Street San Diego CA 92123,0.899,2,5,94483,94485
 CA,2025-11-03,CommUnify - Filmore Center,CommUnify - Adam Center,,0.898,4,4,1860,1864
 CA,2025-11-03,CommUnify - Filmore Center,CommUnify - Alvin Center,,0.898,4,6,1860,1865
 CA,2025-11-03,CommUnify - I Center,CommUnify - Maggie Espinoza Center,,0.898,6,5,1861,1876
@@ -2012,6 +2016,7 @@ NY,2019-11-22,"WeWork Companies, Inc. (Greenwich St.)","WeWork Companies, Inc. (
 NY,2019-03-13,Instacart (at Whole Foods Market) Columbus Circle,Instacart (at Whole Foods Market) (95 East Houston Street),New York,0.891,32,21,60214,60215
 NY,2016-11-14,Yeshiva University - Israel Henry Beren Campus,Yeshiva University - Wilf Campus,New York,0.891,4,36,61171,61173
 WI,2008-06-02,"ThyssenKrupp Drauz Nethelfer NA, Inc.","ThyssenKrupp Krause, Inc.",Janesville,0.891,120,42,90343,90344
+CA,2026-08-11,Sharp Metropolitan Medical Group - Sharp McDonald Center,Sharp Metropolitan Medical Campus - Sharp Mary Birch Hospital,7901 Frost Street San Diego CA 92123,0.891,2,7,94483,94484
 CA,2025-11-03,CommUnify - Cuyama Center,CommUnify - Goleta Center,,0.89,2,2,1874,1880
 CA,2026-03-12,Total Storage Solutions (El Monte Stor It Now),Total Storage Solutions (All Size Laguna Niguel),,0.89,3,3,2248,2252
 CA,2026-03-12,Total Storage Solutions (Studebaker Self Storage),Total Storage Solutions (Sun City Mini Storage),,0.89,3,3,2249,2260
@@ -2062,6 +2067,7 @@ NY,2020-04-13,"Bay Ridge Foreign Autos, Inc.","Bay Ridge Nissan, Inc.",Brooklyn,
 NY,2020-03-29,Major Food Group (MFG) dba Parm Upper West LLC,Major Food Group (MFG) 375 Park Food LLC,New York,0.89,48,176,59087,59090
 NY,2019-03-13,Instacart (at Whole Foods Market) Greenwich Street,Instacart (at Whole Foods Market) (808 Columbus Avenue),New York,0.89,26,16,60213,60217
 KY,2025-03-28,BANDO USA INC (CLOSED 3/2025),BANDO USA INC,Warren,0.89,65,65,67130,67471
+CA,2026-08-11,Sharp Metropolitan Medical Campus - Sharp Mesa Vista,Sharp Metropolitan Medical Group - Sharp McDonald Center,7901 Frost Street San Diego CA 92123,0.89,134,2,94482,94483
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Sunnyvale Center (301) Physical Therapy),Agile Physical Therapy (Sutter Health Palo Alto Physical Therapy & Hand Therapy),,0.889,4,30,1596,1598
 CA,2025-11-03,CommUnify - Maple Center,CommUnify - Chapel Office,,0.889,3,13,1862,1866
 CA,2025-11-03,CommUnify - Maple Center,CommUnify - Little Village Center,,0.889,3,8,1862,1868
