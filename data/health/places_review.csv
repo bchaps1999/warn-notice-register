@@ -907,7 +907,6 @@ NY,Getzville,1,72,no matching place
 UT,Kearns,1,72,no matching place
 VA,Newport News & Portsmouth VA,2,72,2 distinct places named
 CA,Gremont,1,71,no matching place
-KS,Cleveland,1,71,no matching place
 KY,McCraken,2,71,no matching place
 MD,"1110 Old Elkridge Landing Rd Linthicum Heights, MD 21090",1,71,no matching place
 CA,Jolon,1,70,no matching place
@@ -928,6 +927,7 @@ WI,Fort McCoy,1,70,no matching place
 WI,Shullsberg,3,70,no matching place
 GA,Faytteville,1,69,no matching place
 IN,"Highland, Merrillville, Michigan City, Portage, Valparaiso, Elkhart, Goshen, Mishawaka, South Bend, Warsaw, Angola, Fort Wayne, Kokomo, Lafayette, Greenwood, Noblesville, Plainfield, Muncie, Richmond, Terre Haute, Jasper, Vincennes, Marion",1,69,23 distinct places named
+MD,"PO Box 60 Barstow, MD 20610",1,69,no matching place
 AZ,Minneapolis,1,68,no matching place
 ID,Post Falls Bonners Ferry,1,68,no matching place
 MD,"118 Shawan Road, Hunt Valley, MD",1,68,no matching place
@@ -1475,8 +1475,6 @@ MD,"318 National Business Pkwy. Annapolis Junction, MD 20701",1,1,no matching pl
 MD,"6320 Quadrangle Drive, Ste. 360, Chapel Hill, NC 27517",1,1,"address is in NC, not MD"
 MD,"7601 Lewinsville Road, Suite 200 McLean, Virginia 22102",1,1,no matching place
 MD,"McCormick Company Store 24 Schilling Road #1 Hunt Valley, MD 21031",1,1,no matching place
-ME,Fresno,1,1,no matching place
-ME,Jeffersonville,1,1,no matching place
 ME,New York,1,1,no matching place
 MI,Madison (Wisconsin),1,1,no matching place
 MI,"New Ulm, Minnesota",1,1,no matching place
@@ -1525,6 +1523,7 @@ IL,"401 COTTAGE STREET ABILENE, KS 67410",1,0,"address is in KS, not IL"
 IL,"BLDG 16 MIAMI INT'L AIRPORT MIAMI, FL 33122",1,0,"address is in FL, not IL"
 IL,"HWY 54 LOUISIANA, MO 63353",1,0,"address is in MO, not IL"
 KS,Cincinnati,1,0,no matching place
+KS,Cleveland,1,0,no matching place
 KS,Fort Smith,1,0,no matching place
 KS,Mountain View,1,0,no matching place
 KS,Northlake,1,0,no matching place
@@ -1536,6 +1535,8 @@ MA,"Randolph, Cohasset, Weymouth, Southeast",1,0,2 distinct places named
 MA,"South Easton, Southeast",1,0,no matching place
 MD,"1111 Pepper Rd., Hunt Valley, MD",1,0,no matching place
 MD,"7566 Ridge Road Hanover, MD 21076",1,0,no matching place
+ME,Fresno,1,0,no matching place
+ME,Jeffersonville,1,0,no matching place
 ME,Norfolk,1,0,no matching place
 ME,Port Clyde,1,0,no matching place
 ME,West Rockport,1,0,no matching place
