@@ -60,6 +60,7 @@ CA,TAHOE CITY,2,979,no matching place
 MI,"Alpine, Michigan; Burton, Michigan; Grand Rapids, Michigan; Lansing, Michigan; Novi, Michigan; Shelby Township, Michigan; and Warren, Michigan",1,979,6 distinct places named
 CA,MCCLELLAN AFB,10,963,no matching place
 MD,"47123 Buse Rd. #540 Patuxent River, MD 20670",1,937,no matching place
+WA,"Yakima, Zillah, Pasco, Burbank, Prescott, Soap Lake, Othello, Mesa",1,928,7 distinct places named
 GA,Midland,5,919,no matching place
 OR,"Portland, Eugene, Medford, Salem",1,919,4 distinct places named
 NY,Buffalo/Amherst/Kenmore/Lancaster/Lockport/Niagara,1,909,4 distinct places named
@@ -251,6 +252,7 @@ MO,Cassville & Carthage,1,321,2 distinct places named
 OH,Manfield,1,320,no matching place
 VA,"Fredericksburg, Chesapeake, Newport News, Virginia Beach & Williamsburg VA",1,319,5 distinct places named
 KY,Perry/Leslie,2,318,no matching place
+MD,"7710 Milestone Parkway Hanover, MD 21076",1,317,no matching place
 CA,RANCHO SANTA MARGARI,4,316,no matching place
 OH,Moraine ODJFS Bureau of WIA-Rapid,1,314,no matching place
 WI,"Fitchburg, Kenosha, Madison, Middleton, Waukesha",1,313,5 distinct places named
@@ -273,7 +275,6 @@ WA,Usk,2,296,no matching place
 CT,"Manchester, Enfield, Milford, North Haven",1,295,3 distinct places named
 PA,"Lehigh, Northampton, Cumberland, York and Luzerne",1,294,3 distinct places named
 WA,"Wenatchee, Spokane, Sunnyside",2,294,2 distinct places named
-AZ,Tuscon,2,293,no matching place
 CA,MOFFETT FIELD,4,293,no matching place
 IN,GoshenElkhart,1,293,no matching place
 VA,Hurley VA,7,293,no matching place
@@ -699,6 +700,7 @@ IN,Mishawaka & New Carlisle,1,107,2 distinct places named
 MO,House Springs,1,107,no matching place
 NJ,"Burlington, Gloucester, Middlesex, Monmouth",1,107,3 distinct places named
 CA,EDWARDS AIR FORCE BA,10,106,no matching place
+DE,New York,1,106,no matching place
 MD,"7200 Standard Drive, Hanover, MD",1,106,no matching place
 MI,Brownstown,1,106,no matching place
 MI,"Brownstown, Michigan",1,106,no matching place
@@ -769,6 +771,7 @@ MD,"10830 Guilford Road Suite 311 Annapolis Junction, MD 20701-1108",1,94,no mat
 MD,"11333 McCormick Road, Hunt Valley, MD",2,94,no matching place
 UT,"Nephi, Provo/Orem",1,94,3 distinct places named
 WA,"Vancouver, Tacoma",1,94,2 distinct places named
+AZ,Tuscon,2,93,no matching place
 ID,Naples,1,93,no matching place
 IN,Crown Point and Munster,1,93,2 distinct places named
 MD,"7455 New Ridge Road, Suite R, Hanover, MD 21076",1,93,no matching place
@@ -872,6 +875,7 @@ CA,Cucamonga,1,77,no matching place
 CA,Rancho Santa,1,77,no matching place
 MD,"10745 DeMarr Road, White Plains, MD 20695",1,77,no matching place
 NJ,"Princeton, Ledgewood, Middletown Township",1,77,2 distinct places named
+WA,"Seattle, Bellingham, Bothell, Vancouver, Bellevue, Kennewick, Tacoma, and Yakima",1,77,7 distinct places named
 CO,San Diego (remote CO Workers),1,76,no matching place
 CT,San Diego,1,76,no matching place
 GA,"9540 Towne Centre Dr, Suite 100, San Diego, California",1,76,no matching place
@@ -1160,6 +1164,7 @@ NJ,"Norwell, ME",1,37,"address is in ME, not NJ"
 UT,Draper & St. George,1,37,2 distinct places named
 CA,EAST RANCHO DOMINGUE,3,36,no matching place
 GA,Atlana,1,36,no matching place
+MN,Fort Worth,2,36,no matching place
 WI,Pickett,1,36,no matching place
 AZ,Englewood,4,35,no matching place
 CA,Anaheim Hills,2,35,no matching place
@@ -1225,7 +1230,6 @@ NJ,Seattle,1,23,no matching place
 TN,"Washington, Madison, Wilson County",1,23,no matching place
 VA,Hampton & Chesapeake VA,1,23,2 distinct places named
 AZ,Naperville,1,22,no matching place
-KS,Falls Church,1,22,no matching place
 PA,"Bucks, Philadelphia, Montgomery, Delaware, Allegheny, Northampton and Chester",1,22,4 distinct places named
 WI,"Baraboo, Wisconsin Dells, Spring Green, Reedsburg",1,22,4 distinct places named
 GA,Agusuta,1,21,no matching place
@@ -1295,7 +1299,6 @@ MD,"Westview Mall 5816 Baltimore National Pike Catonsville, MD 21228",1,10,no ma
 ME,Fort Worth,1,10,no matching place
 MI,Fort Gratiot,1,10,no matching place
 MN,Chicago,2,10,no matching place
-MN,Fort Worth,1,10,no matching place
 MO,RollaSikeston,1,10,no matching place
 VA,"Charlottesville, Harrisonburg, Danville, Martinsville VA",1,10,4 distinct places named
 VA,Richmond and Springfield VA,1,10,2 distinct places named
@@ -1327,6 +1330,7 @@ WA,"Seattle, Tacoma, Snoqualmie, Spokane",2,8,3 distinct places named
 WI,"Windsor, Waunakee, Deforest",1,8,3 distinct places named
 AZ,Mountain View,2,7,no matching place
 FL,SUMMERFIELD,1,7,no matching place
+IL,"277 Park Ave New York, NY 10172-0077",1,7,"address is in NY, not IL"
 MD,"114 Shawan Road Suite 4 Hunt Valley, MD 21030",1,7,no matching place
 MD,"7031 Ridge Road Hanover, MD 21076",2,7,no matching place
 MD,"930 Ridgebrook Road Sparks, MD 21152",1,7,no matching place
@@ -1336,7 +1340,6 @@ OR,Hillsboro-Portland,1,7,no matching place
 OR,"Morgan Hill, CA",1,7,"address is in CA, not OR"
 TN,"Paulding and Polk counties, Georgia County",1,7,no matching place
 FL,NALCREST,1,6,no matching place
-IL,"277 Park Ave New York, NY 10172-0077",1,6,"address is in NY, not IL"
 KS,different locations in Topeka and across the state,1,6,no matching place
 MN,Inver Grove,1,6,no matching place
 NY,Forest Hills,2,6,no matching place
@@ -1524,6 +1527,7 @@ IL,"BLDG 16 MIAMI INT'L AIRPORT MIAMI, FL 33122",1,0,"address is in FL, not IL"
 IL,"HWY 54 LOUISIANA, MO 63353",1,0,"address is in MO, not IL"
 KS,Cincinnati,1,0,no matching place
 KS,Cleveland,1,0,no matching place
+KS,Falls Church,1,0,no matching place
 KS,Fort Smith,1,0,no matching place
 KS,Mountain View,1,0,no matching place
 KS,Northlake,1,0,no matching place

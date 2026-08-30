@@ -4654,6 +4654,7 @@ amendment_of,0.988,declared,source flagged is_amendment,IA,Wells Fargo,2026-07-0
 amendment_of,0.994,declared,source flagged is_amendment,IA,Wells Fargo,2026-07-22,Wells Fargo,2026-07-07,2258474f510bf1635ab0be58bfd60acb9a5d4d0c,82148b9b97a78825cc12af04ac39cb2f120df769
 amendment_of,0.981,declared,source flagged is_amendment,IA,Wells Fargo,2026-08-04,Wells Fargo,2026-07-22,631e06878413696ccf6f8e5df926b81be49f6dc3,2258474f510bf1635ab0be58bfd60acb9a5d4d0c
 amendment_of,0.988,declared,source flagged is_amendment,IA,Wells Fargo,2026-08-18,Wells Fargo,2026-07-22,649813f8c78df55e5bdf8f305525ffb4e21f88f0,2258474f510bf1635ab0be58bfd60acb9a5d4d0c
+amendment_of,1.0,declared,source flagged is_amendment,IA,RTX,2026-08-25,RTX,2026-08-18,d91e6a8fbb2d8aa8b23182f5568ddad697302ea5,3aa045a7cb2e13fea23c288627b7d18eca8c171b
 possible_duplicate,0.606,amendment,"refiled 26d later, location score 0.44",ID,Simplot Food Group,2014-03-26,Simplot Food Group,2014-02-28,d6d8f6ead7e4ef9ce57485c48b6bd8a8b7d4678a,8d07e08aecb9281d05ca48c9828563b4f20f05f0
 amendment_of,0.97,amendment,"refiled 28d later, same location",ID,DXC Technology,2019-09-27,DXC Technology,2019-08-30,5f7812a5b74c271c08828f53eab51e408460f165,21392cc51997627b832c5b84e081bf30152a1d65
 amendment_of,0.97,amendment,"refiled 12d later, same location",ID,Riverence Holdings (inlcudes Clear Spring Foods),2020-04-15,Riverence Holdings (inlcudes Clear Spring Foods),2020-04-03,19de4d4834cf161681f85c3e2a11531803abc5e0,dc26aa117c530883295f1c5bdc176589d26a64b1
@@ -4944,6 +4945,7 @@ amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Boeing,1999-1
 amendment_of,0.883,amendment,"refiled 32d later, same location",KS,Boeing,1999-10-05,Boeing Company,1999-09-03,6f46b35daa3ca43526b2dc691e05d3207dfdbe4f,86998ac18130f1cb367eb58dc50710ea5aad6c9e
 amendment_of,0.925,amendment,"refiled 32d later, same location",KS,Boeing,1999-10-05,Boeing Company,1999-09-03,6f46b35daa3ca43526b2dc691e05d3207dfdbe4f,cd6b4475fb82867f0852f50b6d544ae6824443f6
 amendment_of,0.925,amendment,"refiled 34d later, same location",KS,Boeing,2000-01-17,Boeing,1999-12-14,bfbe2bd3d9fe63840e9243186a8ae83f1ca2a23d,f68b56d61c8051651fbe2d1713841dc80c4e0085
+possible_duplicate,0.683,amendment,"refiled 34d later, location score 0.59",KS,Boeing,2000-01-17,Boeing,1999-12-14,23fe9a61c197815ed9ab68d10e50188155b9bb8f,f68b56d61c8051651fbe2d1713841dc80c4e0085
 amendment_of,0.925,amendment,"refiled 14d later, same location",KS,Eaton Corporation,2001-04-17,Eaton Corporation,2001-04-03,e44c3eccc91fee1f601f8dfce3b038f019406e67,550a8308d3baa0e77b7b32cf3c57631f4a30e73e
 amendment_of,0.915,amendment,"refiled 7d later, same location",KS,Northern Reflections,2001-04-25,Northern Reflections,2001-04-18,83e97f23a791be0a9c184a364cb5f0d2f6a4ae68,e31217e5972ab6a3efc448fd007907731a330ac7
 amendment_of,0.915,amendment,"refiled 16d later, same location",KS,Raytheon Aircraft,2001-09-01,Raytheon Aircraft Co.,2001-08-16,02c57346a43e4dba2e8819d3ef659615fef365a0,6dc0f556a844eec71f02bf9454c91c05db0961a0
