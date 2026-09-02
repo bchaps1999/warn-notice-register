@@ -1703,6 +1703,7 @@ NY,2020-03-17,Manhasset Restaurant LLC dba Cipollini,Manhasset Restaurant LLC db
 KY,2023-07-25,Wellmore Energy Company LLC - Laboratory Department,Wellmore Energy Company LLC - Black Watch #8 Prep Plant,Pike,0.898,2,1,67233,67234
 FL,1998-06-03,"The Hertz Corp (Miami) 2150 N.E 7th Ave Dania, FL 33004","The Hertz Corp.(Westpalm Bch.) 2150 N.E. 7th Ave Dania, FL 33004",,0.898,39,38,71462,71463
 NY,2014-03-31,Empire State Bus Corp.,"Empire State Escorts, Inc.",Kings,0.898,9,1,88295,88296
+CA,2026-08-27,John Muir Health - 2740 Grant Street,John Muir Behavioral Health - 2740 Grant Street,2740 Grant Street Concord CA 94520,0.898,2,1,94643,94649
 CA,2025-09-12,Agile Physical Therapy (Sutter Health Sunnyvale Center 401 Physical Therapy),Agile Physical Therapy (Sutter Health Palo Alto Physical Therapy & Hand Therapy),,0.897,16,30,1595,1598
 CA,2025-10-31,Ceryx Management LLC (Vermont),Ceryx Management LLC (1540 S St. Andrews),,0.897,8,18,1898,1906
 CA,2026-03-12,Total Storage Solutions (Best RV & Self Storage),Total Storage Solutions (El Monte Stor It Now),,0.897,3,3,2246,2248
@@ -2207,6 +2208,7 @@ IL,2023-06-14,United States Navy,United States Coast Guard,"IL Statewide Event S
 FL,1998-06-03,"The Hertz Corp (Fort Lauderdale) 2150 N. E. 7th Ave Dania, FL 33004","The Hertz Corp (Miami) 2150 N.E 7th Ave Dania, FL 33004",,0.887,35,39,71461,71462
 MA,2020-03-16,Wagamama USA LLC - 100 Northern Ave,Wagamama USA LLC - Prudential Center,Boston,0.887,45,63,87498,87499
 OH,2003-11-18,Big Bear Pickerington,Big Bear Wapakoneta,,0.887,92,67,91689,91694
+CA,2026-08-27,John Muir Physician Network - 2700 Grant Street,John Muir Health - 2700 Grant Street,2700 Grant Street Concord CA 94520,0.887,1,1,94648,94650
 CA,2025-10-31,Ceryx Management LLC (Blackstone),Ceryx Management LLC (1904 E 113th),,0.886,39,1,1896,1908
 CA,2025-10-31,Ceryx Management LLC (Hoover),Ceryx Management LLC (1540 S St. Andrews),,0.886,3,18,1900,1906
 CA,2025-11-03,CommUnify - I Center,CommUnify - Jardin de Suenos,,0.886,6,6,1861,1875
@@ -2346,6 +2348,8 @@ NY,2020-04-22,Visionworks (Long Island Region),Visionworks (Mid-Hudson Region),,
 NY,2020-03-30,In Good Co Park Ave Inc.,In Good Company HG Inc.,New York,0.884,60,28,59064,59065
 KY,2025-05-05,Dakkota Integrated Systems LLC - Louisville / Westport 2,"Dakkota Integrated Systems, Inc",Jefferson County - Louisville,0.884,1,1,67486,67491
 IL,2023-06-14,United States Marine Corps,United States Coast Guard,"IL Statewide Event Springfield, IL 62701",0.884,,,68548,68551
+CA,2026-08-27,John Muir Health - 1450 Treat Blvd.,John Muir Physician Network - 1450 Treat Blvd.,1450 Treat Boulevard Walnut Creek CA 94597,0.884,4,6,94639,94646
+CA,2026-08-27,John Muir Health - 1601 Ygnacio Valley Road,John Muir Physician Network - 1601 Ygnacio Valley Road,1601 Ygnacio Valley Road Walnut Creek CA 94597,0.884,15,1,94640,94647
 CA,2025-07-07,Intel Corporation (Robert Noyce Building),Intel Corporation,,0.883,184,174,1332,1340
 CA,2025-07-14,"Blue shield of California - Town Center, Building B",Blue Shield of California - Rancho Cordova,,0.883,32,3,1384,1387
 CA,2025-10-31,Ceryx Management LLC (Sepulveda),Ceryx Management LLC (801 W 70th),,0.883,4,9,1897,1904
