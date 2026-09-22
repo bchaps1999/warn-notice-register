@@ -118,22 +118,21 @@ Current state pages alone are not a complete historical input. Freeze the raw
 snapshots, saved backfills, and cached agency files before trying to rebuild:
 
 ```bash
-python -m warnlive.migrate.source_bundle create --workdir workdir \
-  --out data/source_snapshots/2026-09-22-rebuild.tar.gz --policy-db data/warn.sqlite
 python -m warnlive.migrate.source_bundle verify \
-  data/source_snapshots/2026-09-22-rebuild.tar.gz
+  data/source_snapshots/2026-09-22-ca-nj-refresh.tar.gz
 python -m warnlive.migrate.offline_rebuild \
-  --bundle data/source_snapshots/2026-09-22-rebuild.tar.gz \
+  --bundle data/source_snapshots/2026-09-22-ca-nj-refresh.tar.gz \
   --db /private/tmp/warn-rebuild-candidate.sqlite --observed-at 2026-09-22 \
-  --compare-db data/warn.sqlite --report /private/tmp/warn-rebuild-report.json
+  --report /private/tmp/warn-rebuild-report.json
 ```
 
-The replay does not use the network or write to the existing database. The
+Add `--compare-db data/warn.sqlite` only when comparing with a local database
+snapshot. The replay does not use the network or write to an existing database. The
 bundle includes a transitional policy of historically accepted keys derived
 from the existing database; it is not a fully independent reconstruction of
-past curation. The September 22 source bundle is a local, untracked artifact,
-so a fresh clone cannot reproduce this comparison until the bundle is stored
-and shared. The resulting database is a candidate for reconciliation, **not**
+past curation. The refreshed September 22 bundle is on the
+`codex/frozen-source-replay` branch; the earlier July-based comparison bundle
+remains local and untracked. The resulting database is a candidate for reconciliation, **not**
 a replacement for the published database. See
 [`docs/warn-remediation-2026-09.md`](docs/warn-remediation-2026-09.md) for
 the measured differences and remaining migration work.
