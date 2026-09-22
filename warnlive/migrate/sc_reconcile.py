@@ -58,12 +58,27 @@ def proposed_key(row: dict[str, object]) -> str:
     })
 
 
+def source_identity(row: dict[str, object]) -> str | None:
+    """Return the same artifact/ordinal identity used by SC normalization."""
+    artifact = str(row.get("source") or "").strip()
+    ordinal = str(row.get("source_row") or "").strip()
+    return f"SC:{artifact}:{ordinal}" if artifact and ordinal else None
+
+
+def source_key(row: dict[str, object]) -> str | None:
+    identity = source_identity(row)
+    if not identity:
+        return None
+    return _dedupe_key({"state": "SC", "source_identity": identity})
+
+
 def cached_rows(cache_dir: Path) -> list[dict[str, str]]:
     """Read every cached SC report, attaching its source artifact identifier."""
     rows: list[dict[str, str]] = []
     for path in sorted(Path(cache_dir).glob("*.pdf")):
-        for row in parse_pdf(path):
-            rows.append({**row, "source": f"sc/{path.name}"})
+        for ordinal, row in enumerate(parse_pdf(path), 1):
+            rows.append({**row, "source": f"sc/{path.name}",
+                         "source_row": str(ordinal)})
     return rows
 
 
@@ -89,6 +104,10 @@ class Match:
     def new_key(self) -> str | None:
         return proposed_key(self.candidates[0]) if self.status == "exact" else None
 
+    @property
+    def source_key(self) -> str | None:
+        return source_key(self.candidates[0]) if self.status == "exact" else None
+
 
 @dataclass
 class Report:
@@ -113,9 +132,21 @@ class Report:
         return [
             {"notice_id": match.old.notice_id, "version": match.old.version,
              "old_key": match.old.old_key, "new_key": match.new_key,
-             "source": match.old.source}
+             "source": match.old.source,
+             "source_identity": source_identity(match.candidates[0]),
+             "source_key": match.source_key}
             for match in self.exact
         ]
+
+    @property
+    def source_key_collisions(self) -> dict[str, list[Match]]:
+        """Distinct legacy notices mapped to one actual SC source-row key."""
+        groups: dict[str, list[Match]] = defaultdict(list)
+        for match in self.exact:
+            if match.source_key:
+                groups[match.source_key].append(match)
+        return {key: group for key, group in groups.items()
+                if len({match.old.notice_id for match in group}) > 1}
 
     @property
     def collision_groups(self) -> dict[str, list[Match]]:

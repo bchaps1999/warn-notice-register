@@ -3,6 +3,7 @@ import json
 import sqlite3
 
 from warnlive.migrate.historical_reconcile import reconcile
+from warnlive.normalize.engine import _dedupe_key
 
 
 def _db(state, rows):
@@ -50,6 +51,11 @@ def test_ga_report_distinguishes_exact_raw_from_filing_membership(tmp_path):
     ]
     assert report["summary"]["notices_multiple_explicit_filings"] == 1
     assert report["versions"][1]["candidate_filings"] == ["GA:GA2"]
+    assert report["versions"][1]["source_key"] == _dedupe_key({
+        "state": "GA", "source_identity": "GA:GA2",
+    })
+    assert report["source_rows"][0]["source_key"] == report["versions"][0]["source_key"]
+    assert report["versions"][2]["source_key"] is None
 
 
 def test_ia_report_preserves_duplicate_and_missing_evidence(tmp_path):

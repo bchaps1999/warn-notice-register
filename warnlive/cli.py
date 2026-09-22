@@ -1589,14 +1589,15 @@ def report(db_path: Path, gh_issues: bool) -> None:
 @cli.command("build-site")
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--out", "out_dir", type=click.Path(path_type=Path), default=Path("site/public/data"))
-def build_site(db_path: Path, out_dir: Path) -> None:
+@click.option("--as-of", help="Pin build date (YYYY-MM-DD) for reproducible offline output")
+def build_site(db_path: Path, out_dir: Path, as_of: str | None) -> None:
     """Emit the static JSON dataset consumed by the site/ SPA."""
     from warnlive.store.site_export import build_site as build
 
     registry = load_registry()
     conn = db_mod.connect(db_path)
     db_mod.init_db(conn)
-    counts = build(conn, registry, out_dir)
+    counts = build(conn, registry, out_dir, as_of=as_of)
     for name, size in counts.items():
         click.echo(f"{name}: {size:,} bytes")
 

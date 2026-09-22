@@ -1,7 +1,9 @@
 import json
 import sqlite3
 
-from warnlive.migrate.sc_reconcile import cached_rows, proposed_key, reconcile
+from warnlive.migrate.sc_reconcile import (
+    cached_rows, proposed_key, reconcile, source_identity, source_key,
+)
 
 
 def _db(rows):
@@ -21,7 +23,8 @@ def _db(rows):
 
 def _new(**changes):
     row = {
-        "source": "sc/2026.pdf", "company": "Acme, Inc.", "county": "Richland",
+        "source": "sc/2026.pdf", "source_row": "7",
+        "company": "Acme, Inc.", "county": "Richland",
         "notice_date": "1/2/2026", "effective_date": "3/5/2026",
         "effective_end_date": "", "legacy_date": "", "impacted": "12",
     }
@@ -43,6 +46,9 @@ def test_reconciliation_proposes_only_one_conservative_match():
     }
     assert report.proposed[0]["old_key"] == "old-1"
     assert report.proposed[0]["new_key"] == proposed_key(_new())
+    assert report.proposed[0]["source_identity"] == "SC:sc/2026.pdf:7"
+    assert report.proposed[0]["source_key"] == source_key(_new())
+    assert source_identity(_new()) == "SC:sc/2026.pdf:7"
 
 
 def test_reconciliation_refuses_duplicate_candidates_and_missing_evidence():
@@ -68,6 +74,7 @@ def test_reconciliation_reports_distinct_notices_colliding_on_one_new_key():
     report = reconcile(conn, [_new(company="Acme")])
     assert len(report.exact) == 2
     assert len(report.collision_groups) == 1
+    assert len(report.source_key_collisions) == 1
 
 
 def test_cached_sc_rows_reads_all_cached_pdfs(tmp_path):

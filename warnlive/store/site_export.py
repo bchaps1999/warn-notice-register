@@ -35,7 +35,22 @@ FLAG_UNDATED = 32  # no notice_date; the date column carries the effective date
 FLAG_MONTH_DATE = 64  # reported notice month, with inferred year; no known day
 
 
-def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> dict[str, int]:
+def build_site(
+    conn: sqlite3.Connection, registry: Registry, out_dir: Path, *,
+    as_of: str | None = None,
+) -> dict[str, int]:
+    """Build site data; pin ``as_of`` (YYYY-MM-DD) for an offline replay."""
+    if as_of is not None:
+        try:
+            parsed = datetime.strptime(as_of, "%Y-%m-%d")
+        except ValueError as exc:
+            raise ValueError("as_of must be a valid YYYY-MM-DD date") from exc
+        if parsed.strftime("%Y-%m-%d") != as_of:
+            raise ValueError("as_of must be a valid YYYY-MM-DD date")
+        built_at = f"{as_of}T00:00:00Z"
+    else:
+        built_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        as_of = built_at[:10]
     out_dir = Path(out_dir)
     (out_dir / "states").mkdir(parents=True, exist_ok=True)
     (out_dir / "notices").mkdir(parents=True, exist_ok=True)
@@ -108,8 +123,8 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
     status = build_status(conn, registry)
     counts: dict[str, int] = {}
 
-    counts["meta.json"] = _write(out_dir / "meta.json", _build_meta(notices, status, prefix_len))
-    counts["national.json"] = _write(out_dir / "national.json", _build_national(notices, prefix_len))
+    counts["meta.json"] = _write(out_dir / "meta.json", _build_meta(notices, status, prefix_len, built_at))
+    counts["national.json"] = _write(out_dir / "national.json", _build_national(notices, prefix_len, as_of))
 
     by_state: dict[str, list] = {}
     for n in notices:
@@ -117,7 +132,7 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
     for cfg in registry.all():
         postal = cfg.postal.upper()
         payload = _build_state(
-            postal, by_state.get(postal, []), status.get(postal, {}), cfg, prefix_len
+            postal, by_state.get(postal, []), status.get(postal, {}), cfg, prefix_len, as_of
         )
         counts[f"states/{cfg.postal}.json"] = _write(
             out_dir / "states" / f"{cfg.postal}.json", payload
@@ -254,11 +269,10 @@ def _top_employers(rows, since: str | None, limit: int) -> list[dict]:
     return out[:limit]
 
 
-def _today(notices) -> str:
+def _today(notices, build_date: str) -> str:
     """Anchor 'trailing N months' windows to the newest notice date, clamped
     to the build date — a handful of source typos carry far-future notice
     dates and would otherwise drag every trailing window into the future."""
-    build_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     dates = [n["display_date"] for n in notices if n["display_date"] and n["display_date"] <= build_date]
     return max(dates) if dates else "1970-01-01"
 
@@ -269,7 +283,7 @@ def _shift_months(iso_date: str, months_back: int) -> str:
     return f"{total // 12:04d}-{total % 12 + 1:02d}-01"
 
 
-def _build_meta(notices, status: dict, prefix_len: int) -> dict:
+def _build_meta(notices, status: dict, prefix_len: int, built_at: str) -> dict:
     dates = [n["display_date"] for n in notices if n["display_date"]]
 
     # Per-state completeness, so the site can say what is missing rather
@@ -305,7 +319,7 @@ def _build_meta(notices, status: dict, prefix_len: int) -> dict:
                  "archived", "identified", "placed")}
 
     return {
-        "built_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "built_at": built_at,
         "key_prefix_len": prefix_len,
         "totals": {
             "notices": len(notices),
@@ -371,8 +385,8 @@ def _sector_series(rows) -> list[dict]:
     )
 
 
-def _build_national(notices, prefix_len: int) -> dict:
-    anchor = _today(notices)
+def _build_national(notices, prefix_len: int, as_of: str) -> dict:
+    anchor = _today(notices, as_of)
     t12 = _shift_months(anchor, 12)
     recent_cut = _shift_months(anchor, 3)
     dated = [n for n in notices if n["display_date"]]
@@ -417,9 +431,9 @@ def _build_national(notices, prefix_len: int) -> dict:
     }
 
 
-def _build_state(postal: str, rows, health: dict, cfg, prefix_len: int) -> dict:
+def _build_state(postal: str, rows, health: dict, cfg, prefix_len: int, as_of: str) -> dict:
     dated = [n for n in rows if n["display_date"]]
-    anchor = _today(rows)
+    anchor = _today(rows, as_of)
     recent = sorted(dated, key=lambda n: n["display_date"], reverse=True)[:50]
     return {
         "state": postal,

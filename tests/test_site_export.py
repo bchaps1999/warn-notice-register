@@ -105,6 +105,23 @@ def test_site_excludes_states_outside_csv_publication_scope(conn, tmp_path):
     assert meta["totals"]["notices"] == 1
 
 
+def test_pinned_as_of_makes_site_metadata_and_windows_repeatable(conn, tmp_path):
+    ingest(conn, [record(1, notice_date="2026-07-15")], "2026-07-01")
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    build_site(conn, load_registry(), first, as_of="2026-08-01")
+    build_site(conn, load_registry(), second, as_of="2026-08-01")
+    for filename in ("meta.json", "national.json", "states/ct.json"):
+        assert (first / filename).read_bytes() == (second / filename).read_bytes()
+    assert json.loads((first / "meta.json").read_text())["built_at"] == "2026-08-01T00:00:00Z"
+    assert json.loads((first / "national.json").read_text())["anchor_date"] == "2026-07-15"
+
+
+def test_pinned_as_of_rejects_invalid_date(conn, tmp_path):
+    with pytest.raises(ValueError, match="as_of must be"):
+        build_site(conn, load_registry(), tmp_path / "out", as_of="2026-02-30")
+
+
 def test_multisite_total_is_not_assigned_to_the_first_county():
     rows = [
         {"county_fips": "13067", "county_name": "Cobb", "state": "GA",

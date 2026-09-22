@@ -133,11 +133,15 @@ payloads, and links, excluding database IDs and observation timestamps. The
 bundle includes a transitional policy of historically accepted keys derived
 from the existing database; it is not a fully independent reconstruction of
 past curation. The refreshed September 22 bundle is on the
-`codex/frozen-source-replay` branch; the earlier July-based comparison bundle
-remains local and untracked. The resulting database is a candidate for reconciliation, **not**
-a replacement for the published database. See
-[`docs/warn-remediation-2026-09.md`](docs/warn-remediation-2026-09.md) for
-the measured differences and remaining migration work.
+`reproducible-warn-rebuild` branch; the earlier July-based comparison bundle
+remains local and untracked. The resulting database is a candidate for source-first
+validation, **not** a replacement for the published database. See
+[`docs/rebuild-contract.md`](docs/rebuild-contract.md) for the acceptance
+criteria and [`docs/warn-remediation-2026-09.md`](docs/warn-remediation-2026-09.md)
+for measured historical differences. Matching the old database is diagnostic,
+not the objective; new LLM calls require a separate discussion first.
+For a reproducible site-data build from a candidate DB, pass
+`warnlive build-site --db /private/tmp/warn-rebuild-candidate.sqlite --out /private/tmp/warn-site-candidate --as-of 2026-09-22`.
 
 To compare a newer live capture without overwriting an older source bundle,
 run `warnlive scrape ca nj --smoke --workdir /path/to/fresh`, then create a

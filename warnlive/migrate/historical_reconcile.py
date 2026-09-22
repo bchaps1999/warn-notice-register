@@ -15,6 +15,8 @@ import sqlite3
 from collections import defaultdict
 from pathlib import Path
 
+from warnlive.normalize.engine import _dedupe_key
+
 
 def _digest(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
@@ -41,6 +43,10 @@ def _filing(raw: dict) -> str | None:
     return f"GA:{value}" if value else None
 
 
+def _source_key(filing: str | None) -> str | None:
+    return _dedupe_key({"state": "GA", "source_identity": filing}) if filing else None
+
+
 def reconcile(
     conn: sqlite3.Connection, state: str, source_csv: Path,
 ) -> dict:
@@ -63,6 +69,8 @@ def reconcile(
             "filing": _filing(raw) if state == "GA" else None,
             "raw": raw,
         }
+        if state == "GA":
+            item["source_key"] = _source_key(item["filing"])
         sources.append(item)
         by_raw[item["raw_hash"]].append(ordinal)
         if item["filing"]:
@@ -103,6 +111,7 @@ def reconcile(
             "old_key": row["dedupe_key"],
             "version_hash": _digest(row["fields_json"].encode()),
             "raw_hash": raw_hash, "filing": filing,
+            "source_key": _source_key(filing) if state == "GA" else None,
             "status": status, "candidate_ordinals": candidates,
             "candidate_filings": sorted({
                 sources[ordinal - 1]["filing"] for ordinal in candidates
