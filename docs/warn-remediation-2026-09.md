@@ -71,7 +71,7 @@ Do not treat the September code changes as a historical source-data migration. T
 
 ## Acceptance sequence
 
-1. Store and version the frozen source bundle where a fresh clone can obtain it. Replace the DB-derived accepted-key policy with source-evidence or reviewed curation decisions, then prove two isolated runs from one bundle agree on canonical notice fields. Keep a manifest of unavoidable live-source changes for later snapshots.
+1. The refreshed frozen bundle is on `codex/frozen-source-replay`, and two isolated runs (one from a fresh checkout without `workdir` or a local database) produced identical notice, version-payload, and link-edge fingerprints. Before treating this as an independent source rebuild, replace the DB-derived accepted-key policy with source evidence or reviewed curation decisions, and capture all states contemporaneously rather than mixing July/August inputs with September CA/NJ inputs.
 2. Add source-aware event/phase identity and deterministic, reviewed dry-run migration reports for SC, GA, and IA. Include old-to-new key/ID mappings and ambiguity counts.
 3. Resolve the 6,296 baseline-only and 4,827 candidate-only keys into approved re-keys, genuinely missing source coverage, or erroneous extra records. Reconcile 127 same-key effective dates, 25 locations, and 954 worker counts; test state-level counts and totals, not only national aggregates.
 4. Apply against a backup copy; verify notice/version/link counts, county worker allocation, stable public URLs, and repeated cached ingest. Only then update the committed dump and outputs.

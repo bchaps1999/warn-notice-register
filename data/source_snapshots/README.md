@@ -24,3 +24,13 @@ means this is **not** an independent reconstruction of past curation. The
 rebuild command creates an isolated candidate and must not replace the
 published database without the reconciliation described in
 [`docs/warn-remediation-2026-09.md`](../../docs/warn-remediation-2026-09.md).
+
+Two isolated replays, including one from a fresh checkout with no `workdir` or
+local database, produced identical stable-content fingerprints (database IDs
+and observation timestamps are excluded):
+
+| Table content | SHA-256 |
+| --- | --- |
+| Notices | `64dcff27258cfab676bb9a6e5c70bbf6b9ffc344e6ff7d81114383abc93ade88` |
+| Version payloads | `ef2e2be749f83a6fb0d30a09e7d0ae6fc18f8d36fe5479b0e1135db0868566d5` |
+| Link edges | `98377166f91ec43eab29b82c0b3a4e0a2ac87133c6322d441fe24fd9af998490` |

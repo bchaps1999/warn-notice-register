@@ -128,6 +128,8 @@ python -m warnlive.migrate.offline_rebuild \
 
 Add `--compare-db data/warn.sqlite` only when comparing with a local database
 snapshot. The replay does not use the network or write to an existing database. The
+report includes stable-content SHA-256 fingerprints for notices, version
+payloads, and links, excluding database IDs and observation timestamps. The
 bundle includes a transitional policy of historically accepted keys derived
 from the existing database; it is not a fully independent reconstruction of
 past curation. The refreshed September 22 bundle is on the

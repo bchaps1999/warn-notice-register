@@ -1,9 +1,10 @@
 import json
+import hashlib
 
 import pytest
 
 from warnlive.migrate.offline_rebuild import (
-    _cached_only, _read_policy, _repair_il_from_cache, rebuild,
+    _cached_only, _fingerprints, _read_policy, _repair_il_from_cache, rebuild,
 )
 
 
@@ -60,3 +61,18 @@ def test_il_repair_skips_an_optional_missing_cache(tmp_path):
     )
     assert report["cached_files"] == 0
     assert report["result"].startswith("skipped:")
+
+
+def test_rebuild_fingerprints_exclude_observation_metadata():
+    class FixedRows:
+        def execute(self, query):
+            assert "first_seen" not in query
+            assert "last_seen" not in query
+            assert "observed_at" not in query
+            assert "created_at" not in query
+            return [("key", 1)]
+
+    expected = hashlib.sha256(b'["key",1]\n').hexdigest()
+    assert _fingerprints(FixedRows()) == {
+        "notices": expected, "versions": expected, "links": expected,
+    }

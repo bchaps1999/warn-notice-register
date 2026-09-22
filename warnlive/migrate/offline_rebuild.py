@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import io
 import json
 import logging
@@ -201,6 +202,40 @@ def _metrics(conn) -> dict:
     return {row["state"]: dict(row) for row in rows}
 
 
+_FINGERPRINT_QUERIES = {
+    "notices": (
+        "SELECT dedupe_key,state,employer_name,location,notice_date,effective_date,"
+        "employees_affected,layoff_type,is_temporary,is_amendment,source_url,"
+        "source_notice_id,is_amended,current_version,site_address,effective_date_end,"
+        "notice_date_precision,notice_date_basis,source_identity,source_details "
+        "FROM notices ORDER BY dedupe_key"
+    ),
+    "versions": (
+        "SELECT n.dedupe_key,v.version,v.raw_record_hash,v.fields_json "
+        "FROM notice_versions v JOIN notices n ON n.id=v.notice_id "
+        "ORDER BY n.dedupe_key,v.version"
+    ),
+    "links": (
+        "SELECT a.dedupe_key,b.dedupe_key,l.kind,l.score,l.method,l.detail "
+        "FROM notice_links l JOIN notices a ON a.id=l.notice_id "
+        "JOIN notices b ON b.id=l.related_id ORDER BY 1,2,3,4,5,6"
+    ),
+}
+
+
+def _fingerprints(conn) -> dict[str, str]:
+    """Hash stable content, excluding database IDs and observation timestamps."""
+    result = {}
+    for name, query in _FINGERPRINT_QUERIES.items():
+        digest = hashlib.sha256()
+        for row in conn.execute(query):
+            digest.update(json.dumps(tuple(row), separators=(",", ":"),
+                                     ensure_ascii=False).encode())
+            digest.update(b"\n")
+        result[name] = digest.hexdigest()
+    return result
+
+
 def _repair_il_from_cache(db: Path, cache: Path) -> dict:
     """Replay the existing IL date repair using only frozen monthly reports."""
     if not cache.is_dir():
@@ -256,6 +291,7 @@ def rebuild(bundle: Path, out_db: Path, observed_at: str, compare_db: Path | Non
                 "cached_agencies": agencies, "bln_accepted": accepted_bln,
                 "il_effective_repair": il_repair,
                 "link_rebuild": link_report,
+                "fingerprints": _fingerprints(conn),
                 "states": _metrics(conn),
                 "notices": conn.execute("SELECT COUNT(*) FROM notices").fetchone()[0],
                 "versions": conn.execute("SELECT COUNT(*) FROM notice_versions").fetchone()[0],
