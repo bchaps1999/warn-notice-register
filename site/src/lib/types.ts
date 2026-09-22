@@ -29,6 +29,7 @@ export interface Meta {
     identified: number;
     with_industry: number;
     placed: number;
+    unallocated_workers?: number;
   };
   date_range: { min: string; max: string } | null;
   states: Record<string, StateCoverage>;
@@ -47,7 +48,9 @@ export interface NoticeSummary {
   employer: string;
   location: string | null;
   notice_date: string | null;
+  notice_date_precision?: string | null;
   effective_date: string | null;
+  effective_date_end?: string | null;
   jobs: number | null;
   type: string;
 }
@@ -152,6 +155,7 @@ export interface NoticeIndex {
     state: number[];
     date: (string | null)[];
     effective: (string | null)[];
+    effective_end: (string | null)[];
     employer: string[];
     location: (string | null)[];
     jobs: (number | null)[];
@@ -168,6 +172,7 @@ export const FLAG_AMENDED = 4;
 export const FLAG_HAS_LINKS = 8;
 export const FLAG_PUBLIC = 16;
 export const FLAG_UNDATED = 32;
+export const FLAG_MONTH_DATE = 64;
 
 export interface EmployerDetail {
   key: string;
@@ -209,6 +214,12 @@ export interface NoticeDetail {
   location: string | null;
   notice_date: string | null;
   effective_date: string | null;
+  effective_date_end?: string | null;
+  notice_date_precision?: string | null;
+  notice_date_basis?: string | null;
+  source_identity?: string | null;
+  source_details?: string | null;
+  site_address?: string | null;
   employees_affected: number | null;
   layoff_type: string;
   is_temporary: number | null;

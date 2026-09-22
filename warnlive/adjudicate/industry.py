@@ -40,6 +40,7 @@ from warnlive.adjudicate.queue import (
     Adjudicator,
     Decision,
 )
+from warnlive.adjudicate.client import shape_problem
 from warnlive.enrich.annotate import Annotator
 from warnlive.enrich.industry import (
     OVERRIDES_PATH,
@@ -126,6 +127,7 @@ def _employers(conn, annotator: Annotator, want_labelled: bool) -> list[dict]:
     employers: dict[str, dict] = {}
     for row in conn.execute(
         "SELECT n.employer_name AS employer_name, n.state AS state, "
+        "       n.location AS location, "
         "       COALESCE(n.notice_date, n.effective_date) AS d, "
         "       COALESCE(n.employees_affected, 0) AS jobs, "
         "       (SELECT v.fields_json FROM notice_versions v "
@@ -135,7 +137,10 @@ def _employers(conn, annotator: Annotator, want_labelled: bool) -> list[dict]:
         norm = normalized_employer(row["employer_name"])
         if not norm:
             continue
-        got = annotator.annotate(row["employer_name"], row["d"], row["fields_json"])
+        got = annotator.annotate(
+            row["employer_name"], row["d"], row["fields_json"],
+            state=row["state"], location=row["location"],
+        )
         _, source_naics, basis = industry_from_fields_json(row["fields_json"])
 
         if want_labelled:
@@ -329,6 +334,8 @@ def score(items: list[dict], adj: Industry, ledger, model: str) -> list[dict]:
         if (task != adj.task or model_slug != model
                 or version != adj.prompt_version or key not in by_key):
             continue
+        if shape_problem(entry.answer, adj.required) is not None:
+            continue
         sector, confidence, _ = adj.read(entry.answer)
         graded.append({
             "normalized_name": key,
@@ -351,8 +358,10 @@ def score(items: list[dict], adj: Industry, ledger, model: str) -> list[dict]:
             "rows were settled under a different prompt."
         )
 
-    total = len(graded)
-    total_workers = sum(g["workers"] for g in graded) or 1
+    # Missing model answers are part of the evaluation set, not invisible
+    # successes. Otherwise a partial run can report 100% coverage.
+    total = len(by_key)
+    total_workers = sum(i["workers"] for i in by_key.values()) or 1
     curve = []
     for cut in (0.0, 0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 0.99):
         kept = [g for g in graded if g["predicted"] and g["confidence"] >= cut]
@@ -383,7 +392,8 @@ def score(items: list[dict], adj: Industry, ledger, model: str) -> list[dict]:
         writer.writeheader()
         writer.writerows(curve)
     logger.info(
-        "industry calibration: %d employers graded -> %s", total, CALIBRATION_PATH
+        "industry calibration: %d/%d employers graded -> %s",
+        len(graded), total, CALIBRATION_PATH
     )
     return curve
 

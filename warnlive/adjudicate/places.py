@@ -277,6 +277,17 @@ class Places(Adjudicator):
                      "elsewhere": ",".join(others)},
             )
 
+        # The trial above only proves the proposed destination exists. Since
+        # we inserted the alias ourselves, it cannot establish that the filed
+        # name actually denotes that destination. A model's confidence and
+        # explanation are not independent evidence of equivalence.
+        if fold(location) != fold(census_name):
+            return Decision(
+                STAGED,
+                note=f"{census_name!r} exists, but equivalence needs review",
+                row={**base, "resolved_to": placed, "gate": "uncorroborated alias"},
+            )
+
         return Decision(
             ACCEPTED,
             note=f"resolves to {placed}",

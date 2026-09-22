@@ -4,6 +4,7 @@ import {
   NAICS_BASIS_LABEL,
   NAICS_LEVEL_LABEL,
   date,
+  noticeDate,
   displayName,
   num,
   sectorLabel,
@@ -35,6 +36,16 @@ export function NoticeDetailPage() {
 
   const amendments = n.links.filter((l) => l.kind === "amendment_of");
   const duplicates = n.links.filter((l) => l.kind === "possible_duplicate");
+  let sourceDetails: {
+    dates?: { role: string; date: string | null; source_text: string }[];
+    sites?: { address: string; workers: number | null }[];
+    worker_allocation?: string;
+  } | null = null;
+  try {
+    sourceDetails = n.source_details ? JSON.parse(n.source_details) : null;
+  } catch {
+    // An older malformed detail payload must not break the notice page.
+  }
 
   return (
     <div className="max-w-3xl">
@@ -80,6 +91,7 @@ export function NoticeDetailPage() {
       <SectionHeading>Filing</SectionHeading>
       <dl className="grid grid-cols-[11rem_1fr] gap-y-2 text-sm">
         <Row label="Location">{n.location ?? "—"}</Row>
+        {n.site_address && <Row label="Worksite address">{n.site_address}</Row>}
         {n.county_fips && (
           <Row label="Resolved place">
             <Link
@@ -96,13 +108,48 @@ export function NoticeDetailPage() {
             </span>
           </Row>
         )}
-        <Row label="Notice date">{date(n.notice_date)}</Row>
-        <Row label="Layoff/closure date">{date(n.effective_date)}</Row>
+        <Row label="Notice date">
+          {n.notice_date_precision === "month"
+            ? `${noticeDate(n.notice_date, n.notice_date_precision)} (month reported; year inferred)`
+            : noticeDate(n.notice_date, n.notice_date_precision)}
+        </Row>
+        <Row label="Layoff/closure date">
+          {date(n.effective_date)}
+          {n.effective_date_end && ` – ${date(n.effective_date_end)}`}
+        </Row>
         <Row label="Workers affected">
           <span className="tabular">{num(n.employees_affected)}</span>
         </Row>
         {(n.industry || n.naics) && <IndustryRow n={n} />}
       </dl>
+
+      {sourceDetails?.sites && sourceDetails.sites.length > 0 &&
+        (sourceDetails.sites.length > 1 || !n.site_address) && (
+        <>
+          <SectionHeading>Reported {sourceDetails.sites.length > 1 ? "worksites" : "worksite"}</SectionHeading>
+          <ul className="text-sm list-disc pl-5 space-y-1">
+            {sourceDetails.sites.map((site, i) => (
+              <li key={i}>{site.address}
+                {site.workers != null && ` · ${num(site.workers)} workers`}
+              </li>
+            ))}
+          </ul>
+          {sourceDetails.worker_allocation === "unresolved" && (
+            <p className="text-xs text-ink-muted mt-2">
+              The reported worker total has not been allocated across these sites.
+            </p>
+          )}
+        </>
+      )}
+      {sourceDetails?.dates && sourceDetails.dates.filter((d) => d.role === "separation").length > 1 && (
+        <>
+          <SectionHeading>Reported separation dates</SectionHeading>
+          <p className="text-sm">
+            {sourceDetails.dates.filter((d) => d.role === "separation")
+              .map((d) => d.date ? date(d.date) : d.source_text).join(" · ")}
+          </p>
+        </>
+      )}
 
       {(n.cik || n.ein || n.lei || n.wikidata_qid || n.parent_company) && (
         <>
@@ -353,7 +400,7 @@ function LinkList({ title, links }: { title: string; links: NoticeLink[] }) {
               {l.related.employer}
             </Link>
             <span className="tabular text-xs text-ink-muted">
-              {date(l.related.notice_date)} · {num(l.related.jobs)} workers
+              {noticeDate(l.related.notice_date, l.related.notice_date_precision)} · {num(l.related.jobs)} workers
             </span>
             <span className="text-[10px] text-ink-faint">
               ({l.method}, confidence {Math.round(l.score * 100)}%)

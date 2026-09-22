@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 from dataclasses import dataclass, field
 
 from warnlive.adjudicate.client import (
@@ -140,15 +141,32 @@ def _batch_prompt(adj: Adjudicator, batch: list[dict]) -> str:
 def _answers_by_id(body: dict, size: int) -> dict[int, dict]:
     """Map a batch reply back to the rows that asked, dropping the rest."""
     out: dict[int, dict] = {}
+    duplicates: set[int] = set()
     for entry in body.get("results") or []:
         if not isinstance(entry, dict):
             continue
-        try:
-            rid = int(entry.get("id"))
-        except (TypeError, ValueError):
+        rid = entry.get("id")
+        if type(rid) is not int:
             continue
-        if 1 <= rid <= size and rid not in out:
-            out[rid] = entry
+        confidence = entry.get("confidence")
+        if confidence is not None:
+            try:
+                valid_confidence = (
+                    type(confidence) in (int, float)
+                    and 0 <= confidence <= 1
+                    and math.isfinite(confidence)
+                )
+            except (TypeError, ValueError, OverflowError):
+                valid_confidence = False
+            if not valid_confidence:
+                continue
+        if 1 <= rid <= size:
+            if rid in out:
+                duplicates.add(rid)
+            else:
+                out[rid] = entry
+    for rid in duplicates:
+        out.pop(rid, None)
     return out
 
 
@@ -199,7 +217,11 @@ def run(
             continue
         if known is not None:
             tally.replayed += 1
-            tally.count(adj.decide(item, known.answer))
+            problem = shape_problem(known.answer, adj.required)
+            if problem is not None:
+                tally.count(Decision(FAILED, note=f"invalid stored answer: {problem}"))
+            else:
+                tally.count(adj.decide(item, known.answer))
             continue
         if dry_run or client is None:
             tally.seen -= 1

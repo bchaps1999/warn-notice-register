@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import type { NoticeSummary } from "../../lib/types";
-import { date, num, TYPE_LABEL } from "../../lib/format";
+import { date, noticeDate, num, TYPE_LABEL } from "../../lib/format";
 import { Stamp } from "./Stamp";
 
 export function NoticeTable({
@@ -36,8 +36,10 @@ export function NoticeTable({
                 </Link>
               </td>
               <td className="py-2 pr-3 text-ink-muted text-xs font-serif">{n.location ?? "—"}</td>
-              <td className="py-2 pr-3 tabular text-xs whitespace-nowrap">{date(n.notice_date)}</td>
-              <td className="py-2 pr-3 tabular text-xs whitespace-nowrap">{date(n.effective_date)}</td>
+              <td className="py-2 pr-3 tabular text-xs whitespace-nowrap">{noticeDate(n.notice_date, n.notice_date_precision)}</td>
+              <td className="py-2 pr-3 tabular text-xs whitespace-nowrap">
+                {date(n.effective_date)}{n.effective_date_end && ` – ${date(n.effective_date_end)}`}
+              </td>
               <td className="py-2 pr-3 tabular text-right">{num(n.jobs)}</td>
               <td className="py-2">
                 <Stamp tone={n.type}>{TYPE_LABEL[n.type] ?? n.type}</Stamp>

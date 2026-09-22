@@ -7,6 +7,7 @@ Runs on every scrape (scheduled or manual). `fail` checks block ingest;
 from __future__ import annotations
 
 import csv
+import json
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -171,6 +172,58 @@ def verify_state(
             f"{n - unique_keys}/{n} records share a dedupe key",
             severity="warn",
         )
+
+        if cfg.postal == "sc":
+            # Correcting SC's date roles leaves historical notice_date null.
+            # The old key then collapses independent layoffs at the same
+            # employer/county. Do not ingest until event identity is migrated.
+            by_key: dict[str, set[tuple]] = {}
+            for rec in norm.records:
+                by_key.setdefault(rec["dedupe_key"], set()).add(
+                    (rec["effective_date"], rec["employees_affected"])
+                )
+            conflicts = sum(len(events) > 1 for events in by_key.values())
+            result.add(
+                "sc_event_identity", conflicts == 0,
+                f"{conflicts} dedupe keys cover differing event dates/counts; "
+                "source-aware reconciliation required",
+            )
+        if cfg.postal == "ga":
+            by_key_ids: dict[str, set[str]] = {}
+            for rec in norm.records:
+                identity = rec.get("source_identity")
+                if identity:
+                    by_key_ids.setdefault(rec["dedupe_key"], set()).add(identity)
+            conflicts = sum(len(ids) > 1 for ids in by_key_ids.values())
+            result.add(
+                "ga_filing_identity", conflicts == 0,
+                f"{conflicts} dedupe keys cover different GA WARN IDs; "
+                "source-aware reconciliation required",
+            )
+        if cfg.postal == "ia":
+            # A filing key can contain distinct phases, sites, and revisions.
+            # None of those may safely overwrite one another as versions of
+            # a single current notice until source-row reconciliation exists.
+            by_key_rows: dict[str, set[tuple]] = {}
+            for rec in norm.records:
+                try:
+                    raw = json.loads(rec.get("raw_extra") or "{}")
+                except (TypeError, ValueError):
+                    raw = {}
+                signature = (
+                    (raw.get("Address Line 1") or "").strip().casefold(),
+                    rec.get("effective_date"),
+                    rec.get("employees_affected"),
+                    rec.get("layoff_type"),
+                    rec.get("is_amendment"),
+                )
+                by_key_rows.setdefault(rec["dedupe_key"], set()).add(signature)
+            conflicts = sum(len(rows) > 1 for rows in by_key_rows.values())
+            result.add(
+                "ia_phase_identity", conflicts == 0,
+                f"{conflicts} dedupe keys cover differing source rows; "
+                "phase/amendment reconciliation required",
+            )
 
     return result
 

@@ -7,7 +7,7 @@ def test_registry_loads_and_validates():
     manual = [c for c in reg.all() if c.source == "manual"]
     assert sorted(c.postal for c in manual) == ["ar", "nh", "pr", "wv", "wy"]
     custom = [c for c in reg.all() if c.source == "custom"]
-    assert sorted(c.postal for c in custom) == ["ma", "mn", "nc", "nv"]
+    assert sorted(c.postal for c in custom) == ["ma", "mn", "nc", "nv", "sc"]
 
 
 def test_for_run_explicit_states():

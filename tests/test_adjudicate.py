@@ -73,11 +73,32 @@ def _matcher(tmp_path, rows):
 def _identity_item(name, **kw):
     item = {
         "normalized_name": name.lower(), "employer_name": name,
+        "scope_state": "CA", "scope_year": "2015", "scope_location": "",
         "states": ["CA"], "years": ["2015"], "notices": 4, "workers": 900,
         "source_naics": [], "candidates": [],
     }
     item.update(kw)
     return item
+
+
+def test_subsidiary_evidence_excludes_adjudicated_overrides(tmp_path):
+    from warnlive.enrich.subsidiaries import Index
+
+    source = tmp_path / "subsidiaries.csv.gz"
+    overrides = tmp_path / "subsidiary_overrides.csv"
+    fields = ["normalized_name", "parent_cik", "parent_name", "source_year"]
+    with gzip.open(source, "wt", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=fields)
+        writer.writeheader()
+        writer.writerow(dict(zip(fields, ["cessna aircraft", "22", "Textron", "2015"])))
+    with open(overrides, "w", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=fields)
+        writer.writeheader()
+        writer.writerow(dict(zip(fields, ["first transit", "33", "FirstGroup", "2015"])))
+    index = Index(path=source, overrides_path=overrides)
+    assert index.parent("first transit") is None
+    assert index.sec_parent("first transit") is None
+    assert index.sec_parent("cessna aircraft")["parent_cik"] == "22"
 
 
 # -- places: the gate is the resolver ---------------------------------------
@@ -97,9 +118,8 @@ def test_a_place_the_gazetteer_does_not_have_is_not_written(tmp_path):
     assert invented.row.get("alias") is None
 
 
-def test_a_real_place_resolves_the_string_and_is_written(tmp_path):
-    """An airport names no place a rule will ever find, and names one a
-    person recognises at once. The alias settles the whole filed string."""
+def test_a_real_place_proposal_needs_equivalence_review(tmp_path):
+    """A real destination is not evidence that the filed name denotes it."""
     worker = _places_worker(tmp_path)
     item = _place_item("IL", "O'HARE INTERNATIONAL AIRPORT CHICAGO, IL 60666")
 
@@ -107,9 +127,9 @@ def test_a_real_place_resolves_the_string_and_is_written(tmp_path):
         "kind": "place", "census_name": "Chicago", "confidence": 0.97,
         "note": "O'Hare is within Chicago city limits",
     })
-    assert got.outcome == queue_mod.ACCEPTED
-    assert got.row["alias"]["census_name"] == "Chicago"
-    assert got.row["alias"]["filed_name"] == item["location"]
+    assert got.outcome == queue_mod.STAGED
+    assert got.row["gate"] == "uncorroborated alias"
+    assert got.row.get("alias") is None
 
 
 def test_a_county_answer_is_never_written_on_the_models_word(tmp_path):
@@ -129,11 +149,12 @@ def test_a_county_answer_is_never_written_on_the_models_word(tmp_path):
     # It still records what it would have resolved to, so review is cheap.
     assert got.row["resolved_to"] == "Cook County"
 
-    # A city answer is evidenced, and still written.
+    # A real city is not proof that the filed typo refers to it.
     city = worker.decide(_place_item("IL", "Chicagoo"), {
         "kind": "place", "census_name": "Chicago", "confidence": 0.95, "note": "typo",
     })
-    assert city.outcome == queue_mod.ACCEPTED
+    assert city.outcome == queue_mod.STAGED
+    assert city.row["gate"] == "uncorroborated alias"
 
 
 def test_a_name_that_is_a_place_in_other_states_is_flagged_for_review(tmp_path):
@@ -274,6 +295,84 @@ def test_a_match_with_one_witness_is_not_enough(tmp_path):
     assert got.row["matched_cik"] == 12927
 
 
+def test_all_proposed_names_and_notice_years_must_agree_on_cik(tmp_path):
+    worker = adj_identity.Identity()
+    worker.matcher = _matcher(tmp_path, [
+        ("alpha aerospace", 11, 2000, 2015, ""),
+        ("beta aerospace", 22, 2016, 2026, ""),
+    ])
+    got = worker.decide(_identity_item("Alpha Aerospace", years=["2014", "2020"]), {
+        "stance": "public", "proposed": ["Alpha Aerospace", "Beta Aerospace"],
+        "parent_name": "", "parent_cik": 0, "confidence": 0.99,
+    })
+    assert got.outcome == queue_mod.STAGED
+    assert got.row["gate"] == "conflicting proposed CIKs"
+
+
+def test_model_parent_cannot_corroborate_its_own_identity_guess(tmp_path):
+    worker = adj_identity.Identity(min_corroborators=2)
+    worker.matcher = _matcher(tmp_path, [("alpha aerospace", 11, 2000, 2026, "")])
+    worker.annotator.wikidata_by_cik = {}
+    worker.subsidiaries.sec_by_name["alpha aerospace"] = {
+        "normalized_name": "alpha aerospace", "parent_cik": "22",
+        "parent_name": "Beta Company", "source_year": "2015",
+    }
+    got = worker.decide(_identity_item("Alpha Aerospace"), {
+        "stance": "public", "proposed": ["Alpha Aerospace"],
+        "parent_name": "Beta Company", "parent_cik": 22, "confidence": 0.99,
+    })
+    assert got.outcome == queue_mod.STAGED
+    assert got.row["gate"] == "under-corroborated"
+    assert "Exhibit 21" not in got.row["corroborated_by"]
+
+
+def test_model_parent_requires_sec_ownership_not_prior_override(tmp_path):
+    worker = adj_identity.Identity()
+    worker.matcher = _matcher(tmp_path, [("firstgroup", 4321, 1996, 2026, "")])
+    worker.subsidiaries.by_name["first transit"] = {
+        "normalized_name": "first transit", "parent_cik": "4321",
+        "parent_name": "FirstGroup plc", "source_year": "2015",
+    }
+    got = worker.decide(_identity_item("First Transit, Inc.", normalized_name="first transit"), {
+        "stance": "subsidiary", "proposed": [], "parent_name": "FirstGroup plc",
+        "parent_cik": 4321, "confidence": 0.99,
+    })
+    assert got.row["gate"] == "unsupported parent"
+
+
+def test_parent_filing_after_notice_does_not_prove_historical_ownership(tmp_path):
+    worker = adj_identity.Identity()
+    worker.matcher = _matcher(tmp_path, [("firstgroup", 4321, 1996, 2026, "")])
+    worker.subsidiaries.sec_by_name["first transit"] = {
+        "normalized_name": "first transit", "parent_cik": "4321",
+        "parent_name": "FirstGroup plc", "source_year": "2026",
+    }
+    got = worker.decide(_identity_item("First Transit, Inc.", years=["2015"]), {
+        "stance": "subsidiary", "proposed": [], "parent_name": "FirstGroup plc",
+        "parent_cik": 4321, "confidence": 0.99,
+    })
+    assert got.row["gate"] == "ownership era uncertain"
+
+
+def test_short_sec_subsidiary_alias_requires_review(tmp_path):
+    worker = adj_identity.Identity()
+    worker.matcher = _matcher(tmp_path, [("textron", 217346, 1994, 2026, "TXT")])
+    worker.subsidiaries.sec_by_name.clear()
+    worker.subsidiaries.sec_by_first.clear()
+    worker.subsidiaries.sec_by_name["cessna aircraft company"] = {
+        "normalized_name": "cessna aircraft company", "parent_cik": "217346",
+        "parent_name": "Textron", "source_year": "2015",
+    }
+    worker.subsidiaries.sec_by_first["cessna"].append("cessna aircraft company")
+    got = worker.decide(_identity_item("Cessna", normalized_name="cessna"), {
+        "stance": "subsidiary", "proposed": [], "parent_name": "Textron",
+        "parent_cik": 217346, "confidence": 0.99,
+    })
+    assert got.outcome == queue_mod.STAGED
+    assert got.row["gate"] == "non-exact subsidiary name"
+    assert "subsidiary" not in got.row
+
+
 def test_a_match_two_authorities_agree_on_is_written(tmp_path):
     """Wikidata names the CIK itself and the filing calendar covers the
     notices: an anchored witness plus an independent one is worth keeping."""
@@ -322,7 +421,7 @@ def test_an_employer_its_own_registrant_lists_as_a_subsidiary_is_not_that_regist
     worker = adj_identity.Identity(min_corroborators=1)
     worker.matcher = _matcher(tmp_path, [("textron", 217346, 1994, 2026, "TXT")])
     worker.annotator.wikidata_by_cik = {}
-    worker.subsidiaries.by_name["cessna aircraft"] = {
+    worker.subsidiaries.sec_by_name["cessna aircraft"] = {
         "normalized_name": "cessna aircraft", "parent_cik": "217346",
         "parent_name": "TEXTRON INC", "source_year": "2015",
     }
@@ -362,13 +461,16 @@ def test_a_subsidiary_becomes_a_parent_link_and_not_an_identity(tmp_path):
     worker = adj_identity.Identity()
     worker.matcher = _matcher(tmp_path, [("firstgroup", 4321, 1996, 2026, "")])
     worker.annotator.sic_by_cik = {4321: ("4111", "Transit")}
-    got = worker.decide(_identity_item("First Transit, Inc."), {
+    worker.subsidiaries.sec_by_name["first transit"] = {
+        "normalized_name": "first transit", "parent_cik": "4321",
+        "parent_name": "FirstGroup plc", "source_year": "2015",
+    }
+    got = worker.decide(_identity_item("First Transit, Inc.", normalized_name="first transit"), {
         "stance": "subsidiary", "proposed": [], "parent_name": "FirstGroup plc",
         "parent_cik": 4321, "confidence": 0.95, "note": "FirstGroup's US bus arm",
     })
-    assert got.outcome == queue_mod.ACCEPTED
-    assert "override" not in got.row
-    assert got.row["subsidiary"]["parent_cik"] == 4321
+    assert got.outcome == queue_mod.ABSTAINED
+    assert got.row is None  # already present in the SEC-generated index
 
 
 def test_a_parent_cik_no_reference_file_knows_is_refused(tmp_path):
@@ -381,7 +483,7 @@ def test_a_parent_cik_no_reference_file_knows_is_refused(tmp_path):
         "parent_cik": 99999999, "confidence": 0.95, "note": "",
     })
     assert got.outcome == queue_mod.STAGED
-    assert "no reference file" in got.note
+    assert got.row["gate"] == "parent name/CIK conflict"
 
 
 def test_no_registrant_to_find_is_recorded_but_never_written(tmp_path):
@@ -429,8 +531,8 @@ def test_a_refused_proposal_still_lets_a_parent_claim_be_tried(tmp_path):
         "parent_name": "FirstGroup plc", "parent_cik": 4321,
         "confidence": 0.95, "note": "FirstGroup's US bus arm",
     })
-    assert got.outcome == queue_mod.ACCEPTED
-    assert got.row["subsidiary"]["parent_cik"] == 4321
+    assert got.outcome == queue_mod.STAGED
+    assert got.row["gate"] == "unsupported parent"
 
 
 def test_an_employer_decided_by_hand_is_never_overwritten(tmp_path):
@@ -438,7 +540,11 @@ def test_an_employer_decided_by_hand_is_never_overwritten(tmp_path):
     replace a person's adjudication."""
     worker = adj_identity.Identity()
     worker.matcher = _matcher(tmp_path, [("boeing", 12927, 1994, 2026, "BA")])
-    worker.overrides = {"the boeing company": {"cik": "999"}}
+    worker.overrides = {"the boeing company": [{
+        "normalized_name": "the boeing company", "scope_state": "CA",
+        "scope_year": "2015", "scope_location": "",
+        "decision": "accept", "cik": "999",
+    }]}
     item = _identity_item("The Boeing Company")
     item["normalized_name"] = "the boeing company"
     got = worker.decide(item, {
@@ -528,20 +634,27 @@ def test_confirmation_supplements_a_corroborator_it_never_replaces_one(tmp_path)
 
     worker = adj_confirm.Confirm()
     worker.matcher = _matcher(tmp_path, [("boeing", 12927, 1994, 2026, "BA")])
+    worker.annotator.wikidata_by_cik = {}
     answer = {"same": True, "confidence": 0.95, "note": "same company"}
 
     bare = worker.decide(_confirm_item("Boeing"), answer)
     assert bare.outcome == queue_mod.STAGED
-    assert bare.row["gate"] == "no corroborator"
+    assert bare.row["gate"] == "no anchored corroborator"
 
     witnessed = worker.decide(
         _confirm_item("Boeing",
                       corroborated_by="registrant filed 1994-2026, covering the notices"),
         answer,
     )
-    assert witnessed.outcome == queue_mod.ACCEPTED
-    assert "covering the notices" in witnessed.row["override"]["note"]
-    assert "confirmed by model" in witnessed.row["override"]["note"]
+    assert witnessed.outcome == queue_mod.STAGED
+    assert witnessed.row["gate"] == "no anchored corroborator"
+
+    worker.annotator.wikidata_by_cik = {
+        12927: {"qid": "Q66", "label": "Boeing", "parents": ""}
+    }
+    anchored = worker.decide(_confirm_item("Boeing"), answer)
+    assert anchored.outcome == queue_mod.ACCEPTED
+    assert "Wikidata" in anchored.row["override"]["note"]
 
 
 def test_a_refused_confirmation_rejects_the_match_not_the_employer(tmp_path):
@@ -620,6 +733,28 @@ def test_calibration_scores_employers_not_notices(tmp_path):
     assert top["worker_precision"] == 0.98      # the big one was the right one
 
 
+def test_partial_calibration_uses_all_requested_items_for_coverage(tmp_path):
+    items = [
+        {"normalized_name": "a", "employer_name": "A", "workers": 10, "truth": "62"},
+        {"normalized_name": "b", "employer_name": "B", "workers": 90, "truth": "23"},
+    ]
+    worker = adj_industry.Industry()
+    ledger = Ledger(tmp_path / "led.jsonl.gz")
+    ledger.record(Entry(
+        task="industry", input_key="a", prompt_version=worker.prompt_version,
+        model="m", answer={"naics": "62", "confidence": 0.95}, outcome="",
+    ))
+    old = adj_industry.CALIBRATION_PATH
+    adj_industry.CALIBRATION_PATH = tmp_path / "calibration.csv"
+    try:
+        curve = adj_industry.score(items, worker, ledger, "m")
+    finally:
+        adj_industry.CALIBRATION_PATH = old
+    top = next(row for row in curve if row["threshold"] == 0.9)
+    assert top["coverage"] == 0.5
+    assert top["worker_coverage"] == 0.1
+
+
 # -- the runner: replay, and what a bad reply costs -------------------------
 
 def test_a_stored_answer_is_rejudged_rather_than_rebought(tmp_path):
@@ -638,7 +773,7 @@ def test_a_stored_answer_is_rejudged_rather_than_rebought(tmp_path):
     tally = queue_mod.run(worker, [item], client=None, ledger=ledger,
                           dry_run=True, model=MODEL)
     assert tally.replayed == 1 and tally.asked == 0
-    assert tally.by_outcome[queue_mod.ACCEPTED] == 1
+    assert tally.by_outcome[queue_mod.STAGED] == 1
 
     # Same answer, stricter gate: now it does not clear, and no call is made.
     strict = _places_worker(tmp_path, threshold=0.99)
@@ -765,6 +900,65 @@ def test_an_answer_missing_what_was_asked_for_is_a_failure_not_a_guess():
         == "key 'results' is str, expected list"
     assert shape_problem(["a"], {}) == "expected a JSON object, got list"
     assert shape_problem({"results": []}, {"results": list}) is None
+
+
+@pytest.mark.parametrize(
+    ("answer", "required", "problem"),
+    [
+        ({"confidence": True}, {"confidence": (int, float)},
+         "key 'confidence' is bool, expected int or float"),
+        ({"same": 1}, {"same": bool},
+         "key 'same' is int, expected bool"),
+        ({"id": True}, {"id": int},
+         "key 'id' is bool, expected int"),
+        ({"confidence": float("nan")}, {"confidence": float},
+         "key 'confidence' is not finite"),
+        ({"confidence": float("inf")}, {"confidence": float},
+         "key 'confidence' is not finite"),
+        ({"confidence": 1.01}, {"confidence": float},
+         "key 'confidence' is outside [0, 1]"),
+        ({"confidence": -0.01}, {"confidence": float},
+         "key 'confidence' is outside [0, 1]"),
+    ],
+)
+def test_wire_shape_rejects_boolean_numbers_and_invalid_confidence(
+    answer, required, problem
+):
+    assert shape_problem(answer, required) == problem
+
+
+def test_a_malformed_success_body_is_retried_as_a_failed_reply(monkeypatch):
+    """A proxy can return a 200 HTML/JSON-array body; it must not crash a run."""
+    from warnlive.adjudicate.client import Client
+
+    class Reply:
+        status_code = 200
+        text = "bad response"
+
+        def __init__(self, body):
+            self.body = body
+
+        def json(self):
+            return self.body
+
+    class Session:
+        def __init__(self):
+            self.replies = iter([
+                Reply(["not", "an", "object"]),
+                Reply({"usage": {}, "choices": [{"message": {"content": "{}"}}]}),
+            ])
+
+        def post(self, *args, **kwargs):
+            return next(self.replies)
+
+    client = Client(resolve("deepseek", "flash"))
+    client._key = "test-key"
+    client._session = Session()
+    monkeypatch.setattr("warnlive.adjudicate.client.time.sleep", lambda _: None)
+
+    assert client.complete("system", "user") == "{}"
+    # Only the valid completion is metered.
+    assert client.usage.calls == 1
 
 
 def test_editing_a_prompt_and_bumping_its_version_re_asks(tmp_path):

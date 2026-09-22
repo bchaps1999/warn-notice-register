@@ -290,10 +290,16 @@ def rebuild(conn: sqlite3.Connection, review_path: Path | None = None) -> dict:
     )
     conn.commit()
 
-    if review_path is not None and review:
+    if review_path is not None:
         review_path.parent.mkdir(parents=True, exist_ok=True)
         with open(review_path, "w", newline="") as fh:
-            writer = csv.DictWriter(fh, fieldnames=list(review[0].keys()))
+            writer = csv.DictWriter(
+                fh,
+                fieldnames=list(review[0].keys()) if review else [
+                    "state", "notice_date", "employer_a", "employer_b",
+                    "location", "jw", "jobs_a", "jobs_b", "id_a", "id_b",
+                ],
+            )
             writer.writeheader()
             writer.writerows(sorted(review, key=lambda r: -r["jw"]))
 

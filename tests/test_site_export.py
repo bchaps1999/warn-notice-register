@@ -5,7 +5,9 @@ import pytest
 from warnlive.registry import load_registry
 from warnlive.store import db as db_mod
 from warnlive.store.dedupe import ingest
-from warnlive.store.site_export import build_site
+from warnlive.store.site_export import (
+    FLAG_MONTH_DATE, _build_employer_shards, _county_series, _fnv_shard, build_site,
+)
 
 
 @pytest.fixture()
@@ -34,6 +36,25 @@ def record(i, **overrides):
     }
     base.update(overrides)
     return base
+
+
+def test_old_employer_url_key_reads_the_new_group(tmp_path):
+    redirects = tmp_path / "redirects.csv"
+    redirects.write_text("old_key,new_key\nqid:old,ein:new\n")
+    notice = {
+        "employer_key": "ein:new", "employer_name": "Acme", "canonical_name": "Acme",
+        "display_date": "2026-01-01", "dedupe_key": "a" * 40, "state": "CT",
+        "location": "Hartford", "notice_date": "2026-01-01",
+        "effective_date": "2026-02-01", "employees_affected": 10,
+        "layoff_type": "closure", "cik": None, "ticker": None, "ein": "123",
+        "lei": None, "wikidata_qid": None, "parent_company": None,
+        "sic_description": None,
+    }
+    out = tmp_path / "employers"
+    _build_employer_shards([notice], out, 8, redirects)
+    old = json.loads((out / f"{_fnv_shard('qid:old')}.json").read_text())
+    assert old["qid:old"]["key"] == "ein:new"
+    assert old["qid:old"]["totals"]["notices"] == 1
 
 
 def test_build_site_manifest(conn, tmp_path):
@@ -74,3 +95,39 @@ def test_build_site_manifest(conn, tmp_path):
     # all 256 shards exist
     assert len(list((out / "notices").glob("*.json"))) == 256
     assert counts["index.json"] > 0
+
+
+def test_site_excludes_states_outside_csv_publication_scope(conn, tmp_path):
+    ingest(conn, [record(1), record(2, state="AR")], "2026-07-01")
+    out = tmp_path / "out"
+    build_site(conn, load_registry(), out)
+    meta = json.loads((out / "meta.json").read_text())
+    assert meta["totals"]["notices"] == 1
+
+
+def test_multisite_total_is_not_assigned_to_the_first_county():
+    rows = [
+        {"county_fips": "13067", "county_name": "Cobb", "state": "GA",
+         "employees_affected": 127,
+         "source_details": json.dumps({
+             "worker_allocation": "unresolved",
+             "sites": [{"address": "First"}, {"address": "Second"}],
+         })},
+        {"county_fips": "13067", "county_name": "Cobb", "state": "GA",
+         "employees_affected": 10, "source_details": None},
+    ]
+    assert _county_series(rows) == [{
+        "fips": "13067", "county": "Cobb", "state": "GA",
+        "notices": 1, "workers": 10,
+    }]
+
+
+def test_historical_nj_month_is_not_displayed_as_known_day(conn, tmp_path):
+    ingest(conn, [record(1, state="NJ", notice_date="2026-01-01")], "2026-07-01")
+    out = tmp_path / "out"
+    build_site(conn, load_registry(), out)
+    index = json.loads((out / "index.json").read_text())
+    assert index["columns"]["flags"][0] & FLAG_MONTH_DATE
+    key = record(1)["dedupe_key"]
+    detail = json.loads((out / "notices" / f"{key[:2]}.json").read_text())[key]
+    assert detail["notice_date_precision"] == "month"

@@ -96,6 +96,15 @@ def test_rebuild_is_idempotent(conn):
     assert conn.execute("SELECT COUNT(*) c FROM notice_links").fetchone()["c"] == 1
 
 
+def test_rebuild_clears_stale_review_file(conn, tmp_path):
+    review_path = tmp_path / "dupes_review.csv"
+    review_path.write_text("stale candidate\n")
+    result = rebuild(conn, review_path)
+    assert result["review"] == 0
+    assert "stale candidate" not in review_path.read_text()
+    assert review_path.read_text().startswith("state,notice_date,")
+
+
 def test_rebuild_preserves_links_it_cannot_reproduce(conn):
     """repair-dates and clean-text record key collisions as links; a dupes
     run must not destroy the only record that those rows are duplicates."""

@@ -10,6 +10,11 @@ CREATE TABLE IF NOT EXISTS notices (
     location TEXT,
     notice_date TEXT,                      -- ISO-8601 date or NULL
     effective_date TEXT,
+    effective_date_end TEXT,              -- last known date of a reported interval
+    notice_date_precision TEXT,           -- day | month | unknown
+    notice_date_basis TEXT,               -- reported | inferred_from_effective
+    source_identity TEXT,                 -- stable filing id with source namespace
+    source_details TEXT,                  -- JSON: dated components, sites, phases, issues
     employees_affected INTEGER,
     layoff_type TEXT,                      -- closure | mass_layoff | unknown
     is_temporary INTEGER,                  -- 1/0/NULL

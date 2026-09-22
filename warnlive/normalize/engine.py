@@ -102,12 +102,23 @@ def _to_canonical(validated: dict, raw_row: dict, source_url: str | None) -> dic
             ensure_ascii=False,
         ),
     }
+    from warnlive.normalize.details import extract
+
+    rec.update(extract(state, raw_row, rec))
     rec["dedupe_key"] = _dedupe_key(rec)
     rec["raw_record_hash"] = _record_hash(rec)
     return rec
 
 
 def _dedupe_key(rec: dict) -> str:
+    # These two sources provide a filing/row identity that is stronger than
+    # employer + notice date + place.  In particular GA often omits a notice
+    # date, and historical SC reports have no notice date at all.  Keep the
+    # legacy key for ID-less rows and every other state; only a *fresh* build
+    # may adopt these changed keys until old notices are migrated or archived.
+    source_identity = rec.get("source_identity")
+    if rec["state"] in {"GA", "SC"} and source_identity:
+        return hashlib.sha1(f"{rec['state']}|source|{source_identity}".encode()).hexdigest()
     parts = "|".join(
         [
             rec["state"],
@@ -120,9 +131,11 @@ def _dedupe_key(rec: dict) -> str:
 
 
 def _record_hash(rec: dict) -> str:
-    from warnlive.store.dedupe import VERSIONED_FIELDS
+    from warnlive.store.dedupe import DETAIL_FIELDS, VERSIONED_FIELDS
 
-    payload = json.dumps({f: rec[f] for f in VERSIONED_FIELDS}, sort_keys=True)
+    fields = {f: rec[f] for f in VERSIONED_FIELDS}
+    fields.update({f: rec[f] for f in DETAIL_FIELDS if rec.get(f) is not None})
+    payload = json.dumps(fields, sort_keys=True)
     return hashlib.sha1(payload.encode("utf-8")).hexdigest()
 
 

@@ -13,6 +13,9 @@ export const date = (d: string | null | undefined) => {
   });
 };
 
+export const noticeDate = (d: string | null | undefined, precision?: string | null) =>
+  precision === "month" ? date(d?.slice(0, 7)) : date(d);
+
 export const monthLabel = (m: string) => {
   const [y, mm] = m.split("-").map(Number);
   return new Date(Date.UTC(y, mm - 1)).toLocaleDateString("en-US", {

@@ -23,6 +23,7 @@ from __future__ import annotations
 import csv
 import gzip
 import logging
+import re
 from pathlib import Path
 
 logger = logging.getLogger("warnlive")
@@ -45,6 +46,7 @@ REVIEW_FIELDS = [
 ]
 OVERRIDE_FIELDS = [
     "normalized_name",
+    "scope_state", "scope_year", "scope_location",
     "decision",
     "cik",
     "ein",
@@ -56,14 +58,77 @@ OVERRIDE_FIELDS = [
 ]
 
 
-def load_overrides(path: Path = OVERRIDES_PATH) -> dict[str, dict]:
-    """normalized_name -> adjudication. Absent file means none.
+def scope_location(value: str | None) -> str:
+    """Conservative location key: case/spacing only, never drop geography."""
+    return re.sub(r"\s+", " ", (value or "").casefold()).strip()
 
-    Two kinds of decision live here. One assigns an identity. The other
-    records that a candidate was examined and rejected — "the 1991 Midway
-    Airlines is not the 1997 one" — which carries no identity but must
-    still be remembered, or the same candidate returns in every future
-    review file and is re-decided forever.
+
+def scope_tuple(row: dict) -> tuple[str, str, str, str]:
+    return (
+        row.get("normalized_name") or "",
+        (row.get("scope_state") or "").upper(),
+        str(row.get("scope_year") or ""),
+        scope_location(row.get("scope_location")),
+    )
+
+
+def load_override_rows(path: Path = OVERRIDES_PATH) -> dict[str, list[dict]]:
+    """Preserve every legacy and scoped row; never collapse duplicate names."""
+    out: dict[str, list[dict]] = {}
+    if path.exists():
+        with open(path, newline="") as fh:
+            for row in csv.DictReader(fh):
+                if row.get("normalized_name"):
+                    out.setdefault(row["normalized_name"], []).append(row)
+    return out
+
+
+def select_override(rows: dict[str, list[dict]], normalized_name: str | None,
+                    state: str | None, year: str | int | None,
+                    location: str | None) -> dict | None:
+    """Select one explicit accepted identity in exactly this notice scope.
+
+    An unknown state, year, or location matches only a decision carrying the
+    same unknown value. Legacy unscoped CIK rows and conflicting scoped rows
+    grant nothing, but remain readable for audit.
+    """
+    key = (normalized_name or "", (state or "").upper(),
+           str(year or ""), scope_location(location))
+    matches = [r for r in rows.get(key[0], [])
+               if scope_tuple(r) == key
+               and all(f in r for f in ("scope_state", "scope_year", "scope_location"))
+               and (r.get("decision") or "").strip().lower() == "accept"
+               and any(r.get(f) for f in ("cik", "ein", "lei", "wikidata_qid"))]
+    if not matches:
+        return None
+    values = {tuple(r.get(f) or "" for f in ("cik", "ein", "lei", "wikidata_qid"))
+              for r in matches}
+    return matches[0] if len(values) == 1 else None
+
+
+def conflicting_override(rows: dict[str, list[dict]], normalized_name: str | None,
+                         state: str | None, year: str | int | None,
+                         location: str | None) -> bool:
+    """Whether accepted rows in this exact scope disagree on identity."""
+    key = (normalized_name or "", (state or "").upper(),
+           str(year or ""), scope_location(location))
+    values = {
+        tuple(r.get(f) or "" for f in ("cik", "ein", "lei", "wikidata_qid"))
+        for r in rows.get(key[0], [])
+        if scope_tuple(r) == key
+        and (r.get("decision") or "").strip().lower() == "accept"
+        and any(r.get(f) for f in ("cik", "ein", "lei", "wikidata_qid"))
+    }
+    return len(values) > 1
+
+
+def load_overrides(path: Path = OVERRIDES_PATH) -> dict[str, dict]:
+    """Legacy review suppression, not an identity-selection API.
+
+    Rejections record that a candidate was examined and rejected — "the
+    1991 Midway Airlines is not the 1997 one" — and keep it from returning
+    to the old name-wide review queue. Unscoped historical CIK rows do not
+    enter this map and cannot grant an identity.
 
     A rejection is about the candidates that were on the table, not about
     the employer: it stops the review from asking again, and grants
@@ -77,10 +142,7 @@ def load_overrides(path: Path = OVERRIDES_PATH) -> dict[str, dict]:
             row["normalized_name"]: row
             for row in csv.DictReader(fh)
             if row.get("normalized_name")
-            and (
-                any(row.get(f) for f in ("cik", "ein", "lei", "wikidata_qid"))
-                or (row.get("decision") or "").strip().lower() == "reject"
-            )
+            and (row.get("decision") or "").strip().lower() == "reject"
         }
 
 
@@ -101,6 +163,7 @@ def build(conn, out_path: Path = REVIEW_PATH, limit: int = 3000) -> int:
     employers: dict[str, dict] = {}
     for row in conn.execute(
         "SELECT n.employer_name AS employer_name, n.state AS state, "
+        "       n.location AS location, "
         "       COALESCE(n.notice_date, n.effective_date) AS d, "
         "       COALESCE(n.employees_affected, 0) AS jobs, "
         "       (SELECT v.fields_json FROM notice_versions v "
@@ -110,7 +173,10 @@ def build(conn, out_path: Path = REVIEW_PATH, limit: int = 3000) -> int:
         norm = normalized_employer(row["employer_name"])
         if not norm:
             continue
-        got = annotator.annotate(row["employer_name"], row["d"], row["fields_json"])
+        got = annotator.annotate(
+            row["employer_name"], row["d"], row["fields_json"],
+            state=row["state"], location=row["location"],
+        )
         if got["cik"] or got["ein"] or got["lei"] or got["wikidata_qid"]:
             continue
         e = employers.setdefault(

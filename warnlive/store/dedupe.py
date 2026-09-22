@@ -29,6 +29,14 @@ VERSIONED_FIELDS = [
     "is_amendment",
 ]
 
+# Optional v5 facts. Old records omit them and retain their original hashes;
+# newly extracted evidence changes the semantic version even when scalar
+# start date, workers and employer happen to stay the same.
+DETAIL_FIELDS = [
+    "effective_date_end", "notice_date_precision", "notice_date_basis",
+    "source_identity", "source_details",
+]
+
 
 @dataclass
 class IngestStats:
@@ -44,6 +52,8 @@ def ingest(
     conn: sqlite3.Connection,
     records: list[dict],
     observed_at: str,
+    *,
+    commit: bool = True,
 ) -> IngestStats:
     """Ingest normalized records for one state.
 
@@ -91,9 +101,11 @@ def ingest(
             cur.execute(
                 """INSERT INTO notices
                    (dedupe_key, state, employer_name, location, notice_date,
-                    effective_date, employees_affected, layoff_type, is_temporary,
+                    effective_date, effective_date_end, notice_date_precision,
+                    notice_date_basis, source_identity, source_details,
+                    employees_affected, layoff_type, is_temporary,
                     is_amendment, source_url, source_notice_id, first_seen, last_seen)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     key,
                     rec["state"],
@@ -101,6 +113,11 @@ def ingest(
                     rec["location"],
                     rec["notice_date"],
                     rec["effective_date"],
+                    rec.get("effective_date_end"),
+                    rec.get("notice_date_precision"),
+                    rec.get("notice_date_basis"),
+                    rec.get("source_identity"),
+                    rec.get("source_details"),
                     rec["employees_affected"],
                     rec["layoff_type"],
                     rec["is_temporary"],
@@ -169,6 +186,8 @@ def ingest(
             cur.execute(
                 """UPDATE notices SET
                      employer_name=?, location=?, notice_date=?, effective_date=?,
+                     effective_date_end=?, notice_date_precision=?,
+                     notice_date_basis=?, source_identity=?, source_details=?,
                      employees_affected=?, layoff_type=?, is_temporary=?,
                      is_amendment=?, source_url=?, source_notice_id=?,
                      is_amended=1, current_version=?, last_seen=NULL
@@ -178,6 +197,11 @@ def ingest(
                     rec["location"],
                     rec["notice_date"],
                     rec["effective_date"],
+                    rec.get("effective_date_end"),
+                    rec.get("notice_date_precision"),
+                    rec.get("notice_date_basis"),
+                    rec.get("source_identity"),
+                    rec.get("source_details"),
                     rec["employees_affected"],
                     rec["layoff_type"],
                     rec["is_temporary"],
@@ -190,7 +214,8 @@ def ingest(
             )
             stats.updated += 1
 
-    conn.commit()
+    if commit:
+        conn.commit()
     return stats
 
 
@@ -199,6 +224,8 @@ def freeze_absent(
     state: str,
     present_keys: set[str],
     frozen_at: str,
+    *,
+    commit: bool = True,
 ) -> int:
     """Stamp last_seen on the state's notices that left its source.
 
@@ -223,7 +250,8 @@ def freeze_absent(
             (frozen_at, *chunk),
         )
     if gone:
-        conn.commit()
+        if commit:
+            conn.commit()
         logger.info(
             "dedupe: %s: %d notices left the source; last_seen frozen at %s",
             state.upper(), len(gone), frozen_at,
@@ -244,6 +272,7 @@ def _dates_disagree(a: str | None, b: str | None) -> bool:
 
 def _insert_version(cur, notice_id, version, rec, observed_at):
     fields = {f: rec[f] for f in VERSIONED_FIELDS}
+    fields.update({f: rec[f] for f in DETAIL_FIELDS if rec.get(f) is not None})
     fields["raw_extra"] = rec.get("raw_extra")
     cur.execute(
         "INSERT INTO notice_versions (notice_id, version, raw_record_hash, fields_json, observed_at) "
@@ -256,3 +285,42 @@ def _insert_version(cur, notice_id, version, rec, observed_at):
             observed_at,
         ),
     )
+
+
+def append_repair_version(
+    conn: sqlite3.Connection, notice_id: int, observed_at: str,
+) -> bool:
+    """Version a deliberate canonical repair already applied to notices.
+
+    This is not source ingestion: the source row and its raw_extra remain the
+    same, while a corrected canonical interpretation becomes the next
+    auditable version. Caller owns the surrounding transaction and key/link
+    collision policy.
+    """
+    from warnlive.normalize.engine import _record_hash
+
+    row = conn.execute(
+        "SELECT n.*, v.fields_json, v.raw_record_hash AS current_hash "
+        "FROM notices n JOIN notice_versions v "
+        "ON v.notice_id = n.id AND v.version = n.current_version "
+        "WHERE n.id = ?", (notice_id,),
+    ).fetchone()
+    if row is None:
+        raise ValueError(f"notice {notice_id} has no current version")
+    previous = json.loads(row["fields_json"])
+    rec = {field: row[field] for field in VERSIONED_FIELDS}
+    rec.update({field: row[field] for field in DETAIL_FIELDS if row[field] is not None})
+    rec["raw_extra"] = previous.get("raw_extra")
+    rec["raw_record_hash"] = _record_hash(rec)
+    if rec["raw_record_hash"] == row["current_hash"]:
+        return False
+    next_version = conn.execute(
+        "SELECT COALESCE(MAX(version), 0) + 1 FROM notice_versions WHERE notice_id = ?",
+        (notice_id,),
+    ).fetchone()[0]
+    _insert_version(conn.cursor(), notice_id, next_version, rec, observed_at)
+    conn.execute(
+        "UPDATE notices SET current_version = ?, is_amended = 1 WHERE id = ?",
+        (next_version, notice_id),
+    )
+    return True

@@ -568,16 +568,16 @@ ri:
 
 sc:
   name: South Carolina
-  source: upstream
+  source: custom
   status: active
   tier: hard
   cadence: weekly
   needs_browser: false
   min_rows: 50
   staleness_days: 120
-  expected_columns: [company, location, date, jobs, naics, source]
-  source_url: https://scworks.org/employer/employer-programs/at-risk-of-closing/layoff-notification-reports
-  notes: "HTML list -> monthly PDF reports."
+  expected_columns: [company, county, notice_date, effective_date, effective_end_date, impacted, action_type, address, legacy_date, naics, source, source_page, source_row]
+  source_url: https://scworks.org/employer/employer-programs/risk-closing/layoff-notification-reports
+  notes: "Custom PDF adapter preserves distinct dates and addresses. Ingest remains gated pending legacy event-identity reconciliation."
 
 sd:
   name: South Dakota

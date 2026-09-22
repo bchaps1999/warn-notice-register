@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import re
+
 from warn_transformer.schema import BaseTransformer
+
+_DATE_TOKEN = re.compile(r"(?<!\d)\d{1,2}/\d{1,2}/\d{2,4}(?!\d)")
 
 
 class Transformer(BaseTransformer):
@@ -26,7 +30,8 @@ class Transformer(BaseTransformer):
         # Layoff-date cells are free text at times ("8/15/26 & 11/30/26",
         # "Rolling"); take the first parseable token, else null.
         value = (value or "").strip()
-        for token in value.replace("&", " ").split():
+        for match in _DATE_TOKEN.finditer(value):
+            token = match.group()
             try:
                 result = super().transform_date(token)
             except (KeyError, AssertionError):

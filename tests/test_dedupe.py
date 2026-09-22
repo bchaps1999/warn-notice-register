@@ -3,7 +3,7 @@ import sqlite3
 import pytest
 
 from warnlive.store import db as db_mod
-from warnlive.store.dedupe import freeze_absent, ingest
+from warnlive.store.dedupe import append_repair_version, freeze_absent, ingest
 
 
 @pytest.fixture()
@@ -58,6 +58,40 @@ def test_amendment_creates_version(conn):
     assert row["is_amended"] == 1
     assert row["current_version"] == 2
     assert conn.execute("SELECT COUNT(*) c FROM notice_versions").fetchone()["c"] == 2
+
+
+def test_source_details_are_versioned_and_projected(conn):
+    ingest(conn, [record(effective_date_end="2026-12-31",
+                         source_details='{"dates":["2026-12-31"]}')], "2026-07-01")
+    ingest(conn, [record(effective_date_end="2027-01-31",
+                         source_details='{"dates":["2027-01-31"]}',
+                         raw_record_hash="hash-2")], "2026-07-08")
+    current = conn.execute(
+        "SELECT effective_date_end, source_details FROM notices"
+    ).fetchone()
+    assert current["effective_date_end"] == "2027-01-31"
+    assert "2027-01-31" in current["source_details"]
+    assert conn.execute("SELECT COUNT(*) FROM notice_versions").fetchone()[0] == 2
+
+
+def test_canonical_repair_appends_version_without_losing_source_evidence(conn):
+    from warnlive.normalize.engine import _record_hash
+
+    original = record()
+    original["raw_record_hash"] = _record_hash(original)
+    ingest(conn, [original], "2026-07-01")
+    notice_id = conn.execute("SELECT id FROM notices").fetchone()[0]
+    conn.execute("UPDATE notices SET employer_name = 'Acme Corporation' WHERE id = ?", (notice_id,))
+    assert append_repair_version(conn, notice_id, "2026-09-22")
+    assert not append_repair_version(conn, notice_id, "2026-09-22")
+    row = conn.execute("SELECT current_version, employer_name FROM notices").fetchone()
+    assert (row["current_version"], row["employer_name"]) == (2, "Acme Corporation")
+    fields = conn.execute(
+        "SELECT fields_json FROM notice_versions WHERE notice_id = ? AND version = 2",
+        (notice_id,),
+    ).fetchone()[0]
+    assert '"raw_extra": "{}"' in fields
+    assert '"employer_name": "Acme Corporation"' in fields
 
 
 def test_verbatim_duplicates_within_batch_collapse(conn):

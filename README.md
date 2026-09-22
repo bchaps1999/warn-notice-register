@@ -112,6 +112,37 @@ Scheduled runs: `.github/workflows/scrape-daily.yml` (high-volume states) and
 enables the Zyte proxy for states behind aggressive bot protection (LA, TX
 fallback, MA fallback).
 
+### Rebuild from frozen sources (experimental)
+
+Current state pages alone are not a complete historical input. Freeze the raw
+snapshots, saved backfills, and cached agency files before trying to rebuild:
+
+```bash
+python -m warnlive.migrate.source_bundle create --workdir workdir \
+  --out data/source_snapshots/2026-09-22-rebuild.tar.gz --policy-db data/warn.sqlite
+python -m warnlive.migrate.source_bundle verify \
+  data/source_snapshots/2026-09-22-rebuild.tar.gz
+python -m warnlive.migrate.offline_rebuild \
+  --bundle data/source_snapshots/2026-09-22-rebuild.tar.gz \
+  --db /private/tmp/warn-rebuild-candidate.sqlite --observed-at 2026-09-22 \
+  --compare-db data/warn.sqlite --report /private/tmp/warn-rebuild-report.json
+```
+
+The replay does not use the network or write to the existing database. The
+bundle includes a transitional policy of historically accepted keys derived
+from the existing database; it is not a fully independent reconstruction of
+past curation. The September 22 source bundle is a local, untracked artifact,
+so a fresh clone cannot reproduce this comparison until the bundle is stored
+and shared. The resulting database is a candidate for reconciliation, **not**
+a replacement for the published database. See
+[`docs/warn-remediation-2026-09.md`](docs/warn-remediation-2026-09.md) for
+the measured differences and remaining migration work.
+
+To compare a newer live capture without overwriting an older source bundle,
+run `warnlive scrape ca nj --smoke --workdir /path/to/fresh`, then create a
+*new* bundle with `source_bundle create --raw-overlay /path/to/fresh/raw` in
+addition to the arguments above. The manifest lists each overlaid state CSV.
+
 ### Employer identity and industry
 
 Exports carry derived columns the database never stores — identity (SEC

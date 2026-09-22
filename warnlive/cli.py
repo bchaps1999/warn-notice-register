@@ -1286,62 +1286,144 @@ def clean_text(db_path: Path, dry_run: bool) -> None:
     from warnlive.normalize.engine import _clean_text as clean
     from warnlive.normalize.engine import _dedupe_key
     from warnlive.pipeline import now_utc
+    from warnlive.store.dedupe import DETAIL_FIELDS, VERSIONED_FIELDS, append_repair_version
+    import json
 
     conn = db_mod.connect(db_path)
     db_mod.init_db(conn)
     now = now_utc()
 
-    changed = collided = 0
+    changed = collided = versioned = 0
     rows = conn.execute(
-        "SELECT id, state, employer_name, location, notice_date, dedupe_key "
-        "FROM notices"
+        "SELECT n.*, v.fields_json FROM notices n JOIN notice_versions v "
+        "ON v.notice_id = n.id AND v.version = n.current_version"
     ).fetchall()
     for row in rows:
         employer = clean(row["employer_name"])
         location = clean(row["location"])
-        if employer == row["employer_name"] and location == row["location"]:
+        text_changed = employer != row["employer_name"] or location != row["location"]
+        previous = json.loads(row["fields_json"])
+        version_mismatch = any(
+            (employer if field == "employer_name" else
+             location if field == "location" else row[field]) != previous.get(field)
+            for field in VERSIONED_FIELDS + DETAIL_FIELDS
+            if field in previous or row[field] is not None
+        )
+        if not text_changed and not version_mismatch:
             continue
         if employer is None:
             continue  # never blank out a name during cleanup
-        new_key = _dedupe_key(
-            {
-                "state": row["state"],
-                "employer_name": employer,
-                "notice_date": row["notice_date"],
-                "location": location,
-            }
-        )
-        existing = conn.execute(
-            "SELECT id FROM notices WHERE dedupe_key = ? AND id != ?",
-            (new_key, row["id"]),
-        ).fetchone()
-        if existing is not None:
-            # A clean twin already owns the new key: keep this row's old key
-            # (future re-ingests of the dirty raw row still match it), clean
-            # the display fields anyway, and link the pair.
-            collided += 1
-            new_key = row["dedupe_key"]
-            if not dry_run:
-                conn.execute(
-                    """INSERT OR IGNORE INTO notice_links
-                         (notice_id, related_id, kind, score, method, detail, created_at)
-                       VALUES (?, ?, 'possible_duplicate', 0.9, 'text-cleanup',
-                               'cleaned name collides with existing key', ?)""",
-                    (row["id"], existing["id"], now),
-                )
-        else:
-            changed += 1
+        new_key = row["dedupe_key"]
+        if text_changed:
+            new_key = _dedupe_key(
+                {
+                    "state": row["state"],
+                    "employer_name": employer,
+                    "notice_date": row["notice_date"],
+                    "location": location,
+                }
+            )
+            existing = conn.execute(
+                "SELECT id FROM notices WHERE dedupe_key = ? AND id != ?",
+                (new_key, row["id"]),
+            ).fetchone()
+            if existing is not None:
+                # A clean twin already owns the new key: keep this row's old key
+                # and link the pair rather than merging them.
+                collided += 1
+                new_key = row["dedupe_key"]
+                if not dry_run:
+                    conn.execute(
+                        """INSERT OR IGNORE INTO notice_links
+                             (notice_id, related_id, kind, score, method, detail, created_at)
+                           VALUES (?, ?, 'possible_duplicate', 0.9, 'text-cleanup',
+                                   'cleaned name collides with existing key', ?)""",
+                        (row["id"], existing["id"], now),
+                    )
+            else:
+                changed += 1
+        versioned += 1
         if not dry_run:
             conn.execute(
                 "UPDATE notices SET employer_name = ?, location = ?, dedupe_key = ? "
                 "WHERE id = ?",
                 (employer, location, new_key, row["id"]),
             )
+            append_repair_version(conn, row["id"], now[:10])
     if not dry_run:
         conn.commit()
         _compress_db(db_path)
     label = "would clean" if dry_run else "cleaned"
-    click.echo(f"{label} {changed} rows, collisions linked {collided}")
+    click.echo(
+        f"{label} {changed} rows, collisions linked {collided}, "
+        f"versions synchronized {versioned}"
+    )
+
+
+@cli.command("audit-sc-reconciliation")
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--cache-dir", type=click.Path(path_type=Path), default=Path("workdir/cache/sc"))
+@click.option("--examples", type=int, default=5, show_default=True)
+def audit_sc_reconciliation(db_path: Path, cache_dir: Path, examples: int) -> None:
+    """Read-only report: old SC versions vs the corrected cached PDF rows."""
+    import json
+    import sqlite3
+
+    from warnlive.migrate.sc_reconcile import cached_rows, reconcile
+
+    if not db_path.is_file():
+        raise click.ClickException(f"database not found: {db_path}")
+    if not cache_dir.is_dir():
+        raise click.ClickException(f"SC PDF cache not found: {cache_dir}")
+    conn = sqlite3.connect(f"file:{db_path.resolve()}?mode=ro", uri=True)
+    conn.row_factory = sqlite3.Row
+    try:
+        report = reconcile(conn, cached_rows(cache_dir))
+    finally:
+        conn.close()
+    click.echo(json.dumps(report.summary(), sort_keys=True))
+    for match in report.unmatched[:max(examples, 0)]:
+        click.echo(
+            f"unmatched notice={match.old.notice_id} v={match.old.version} "
+            f"source={match.old.source!r} employer={match.old.employer!r}"
+        )
+    for key, group in list(report.collision_groups.items())[:max(examples, 0)]:
+        click.echo(
+            f"legacy-key collision key={key} notices={sorted({m.old.notice_id for m in group})}"
+        )
+
+
+@cli.command("audit-historical-reconciliation")
+@click.option("--state", type=click.Choice(["GA", "IA"], case_sensitive=False), required=True)
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--raw", "raw_path", type=click.Path(path_type=Path), default=None)
+@click.option("--out", "out_path", type=click.Path(path_type=Path), default=None)
+def audit_historical_reconciliation(
+    state: str, db_path: Path, raw_path: Path | None, out_path: Path | None,
+) -> None:
+    """Read-only GA/IA version-to-source evidence; optional full JSON report."""
+    import json
+    import sqlite3
+
+    from warnlive.migrate.historical_reconcile import reconcile
+
+    state = state.upper()
+    raw_path = raw_path or Path(f"workdir/raw/{state.lower()}.csv")
+    if not db_path.is_file():
+        raise click.ClickException(f"database not found: {db_path}")
+    if not raw_path.is_file():
+        raise click.ClickException(f"raw source not found: {raw_path}")
+    conn = sqlite3.connect(f"file:{db_path.resolve()}?mode=ro", uri=True)
+    conn.row_factory = sqlite3.Row
+    try:
+        report = reconcile(conn, state, raw_path)
+    finally:
+        conn.close()
+    click.echo(json.dumps(report["summary"], sort_keys=True))
+    if out_path is not None:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps(report, sort_keys=True, indent=2) + "\n")
+        click.echo(f"full evidence report: {out_path}")
 
 
 @cli.command("check-regressions")

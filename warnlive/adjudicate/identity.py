@@ -16,9 +16,11 @@ different destination, and that distinction is the point:
 
 - a registrant becomes an identity override, claiming the employer *is* that
   filer;
-- a subsidiary becomes a parent link, claiming only that somebody owns it —
-  First Transit is not FirstGroup, and writing FirstGroup's CIK into its
-  identity would conflate them in every join made afterwards;
+- a subsidiary is linked only when SEC Exhibit 21 proves the ownership in
+  the notice era. Exact SEC names are already in the generated index;
+  shortened aliases are staged for review rather than promoted from a model
+  claim. First Transit is not FirstGroup, and writing FirstGroup's CIK into
+  its identity would conflate them in every join made afterwards;
 - everything else is recorded in the ledger, which stops the same employer
   being re-asked every run, and staged for a person. It does not become an
   override: "the model said private" is the one claim in this file nothing
@@ -47,6 +49,8 @@ from __future__ import annotations
 import csv
 import json
 import logging
+import os
+import tempfile
 from datetime import date
 from pathlib import Path
 
@@ -62,7 +66,8 @@ from warnlive.enrich import places, subsidiaries
 from warnlive.enrich.annotate import Annotator
 from warnlive.enrich.edgar import REFERENCE_PATH, Matcher
 from warnlive.enrich.industry import industry_from_fields_json
-from warnlive.enrich.review import OVERRIDES_PATH, REVIEW_PATH, load_overrides
+from warnlive.enrich import review
+from warnlive.enrich.review import OVERRIDES_PATH, REVIEW_PATH
 from warnlive.normalize.engine import base_employer, normalized_employer
 
 logger = logging.getLogger("warnlive")
@@ -71,16 +76,19 @@ STAGING_PATH = Path("data/health/identity_adjudicated.csv")
 SUBSIDIARY_OVERRIDES = subsidiaries.OVERRIDES_PATH
 
 OVERRIDE_FIELDS = [
-    "normalized_name", "decision", "cik", "ein", "lei", "wikidata_qid",
+    "normalized_name", "scope_state", "scope_year", "scope_location",
+    "decision", "cik", "ein", "lei", "wikidata_qid",
     "decided_by", "decided_at", "note",
 ]
 SUBSIDIARY_FIELDS = [
-    "normalized_name", "parent_cik", "parent_name", "source_year",
+    "normalized_name", "scope_state", "scope_year", "scope_location",
+    "decision", "parent_cik", "parent_name", "source_year",
     "decided_by", "decided_at", "note",
 ]
 STAGING_FIELDS = [
-    "normalized_name", "employer_name", "states", "notices", "workers", "years",
-    "stance", "proposed", "matched_cik", "cik_match", "parent_name", "parent_cik",
+    "normalized_name", "scope_state", "scope_year", "scope_location",
+    "employer_name", "states", "notices", "workers", "years",
+    "stance", "proposed", "matched_cik", "matched_name", "cik_match", "parent_name", "parent_cik",
     "confidence", "corroborated_by", "outcome", "gate", "note",
 ]
 
@@ -163,7 +171,7 @@ def load_queue(conn, min_workers: int = 0, limit: int | None = None) -> list[dic
     """
     annotator = Annotator()
     resolver = places.Resolver() if places.PATH.exists() else None
-    employers: dict[str, dict] = {}
+    employers: dict[tuple[str, str, str, str], dict] = {}
     for row in conn.execute(
         "SELECT n.employer_name AS employer_name, n.state AS state, "
         "       n.location AS location, "
@@ -176,11 +184,22 @@ def load_queue(conn, min_workers: int = 0, limit: int | None = None) -> list[dic
         norm = normalized_employer(row["employer_name"])
         if not norm:
             continue
-        got = annotator.annotate(row["employer_name"], row["d"], row["fields_json"])
+        got = annotator.annotate(
+            row["employer_name"], row["d"], row["fields_json"],
+            state=row["state"], location=row["location"],
+        )
         if got["cik"] or got["ein"] or got["lei"] or got["wikidata_qid"]:
             continue
-        entry = employers.setdefault(norm, {
+        scope_state = (row["state"] or "").upper()
+        scope_year = row["d"][:4] if row["d"] else ""
+        scope_location = review.scope_location(row["location"])
+        scope = (norm, scope_state, scope_year, scope_location)
+        entry = employers.setdefault(scope, {
             "normalized_name": norm,
+            "scope_state": scope_state,
+            "scope_year": scope_year,
+            "scope_location": scope_location,
+            "filed_location": row["location"] or "",
             "employer_name": row["employer_name"],
             "cleaned_name": base_employer(row["employer_name"]),
             "states": set(), "years": set(), "notices": 0, "workers": 0,
@@ -215,9 +234,9 @@ def load_queue(conn, min_workers: int = 0, limit: int | None = None) -> list[dic
         if naics:
             entry["source_naics"].add(naics)
 
-    for name, candidates in _review_candidates().items():
-        if name in employers:
-            employers[name]["candidates"] = candidates
+    review_candidates = _review_candidates()
+    for scope, entry in employers.items():
+        entry["candidates"] = review_candidates.get(scope[0], [])
 
     rows = [
         {
@@ -273,7 +292,7 @@ class Identity(Adjudicator):
     #: stance: proposals are asked for on every row and always tried, so a
     #: wrong "private" can no longer keep the matcher from names it would
     #: have matched — the v2 losses were exactly that failure, one level up.
-    prompt_version = "identity-v4"
+    prompt_version = "identity-v5-scoped"
     required = {"stance": str, "confidence": (int, float)}
     batch_size = 8
     max_tokens_per_row = 200
@@ -285,14 +304,14 @@ class Identity(Adjudicator):
         self.matcher = Matcher() if REFERENCE_PATH.exists() else None
         self.annotator = Annotator()
         self.subsidiaries = subsidiaries.Index()
-        self.overrides = load_overrides()
+        self.overrides = review.load_override_rows()
         self._spans: dict[int, tuple[int, int]] | None = None
 
     def system(self) -> str:
         return SYSTEM
 
     def key(self, item: dict) -> str:
-        return item["normalized_name"]
+        return json.dumps(review.scope_tuple(item), separators=(",", ":"))
 
     def render(self, item: dict) -> dict:
         out = {
@@ -309,6 +328,8 @@ class Identity(Adjudicator):
             "notices": item["notices"],
             "workers": item["workers"],
         }
+        if item.get("filed_location"):
+            out["filed_location"] = item["filed_location"]
         if item.get("sites"):
             out["sites"] = item["sites"][:4]
         if item.get("candidates"):
@@ -320,8 +341,8 @@ class Identity(Adjudicator):
 
     # -- gates ------------------------------------------------------------
 
-    def _match(self, item: dict, proposed: list[str]) -> tuple[int | None, str, str]:
-        """First proposed name that clears the unmodified EDGAR matcher.
+    def _matches(self, item: dict, proposed: list[str]) -> dict[int, tuple[str, str]]:
+        """Resolve every proposal in every notice year, retaining conflicts.
 
         The matcher is not relaxed for a proposal. A name the model supplies
         has to survive the same era, token-compatibility and uniqueness rules
@@ -329,25 +350,28 @@ class Identity(Adjudicator):
         arriving as a confident match.
         """
         if self.matcher is None:
-            return None, "", ""
-        year = int(item["years"][-1]) if item.get("years") else None
+            return {}
+        years = [int(y) for y in item.get("years", []) if str(y).isdigit()] or [None]
+        hits: dict[int, tuple[str, str]] = {}
         for name in proposed:
             name = (name or "").strip()
             if not name:
                 continue
-            hit = self.matcher.match(name, year)
-            if hit:
-                return hit[0], hit[2], name
-        return None, "", ""
+            for year in years:
+                hit = self.matcher.match(name, year)
+                if hit:
+                    hits.setdefault(hit[0], (hit[2], name))
+        return hits
 
     def _owner(self, item: dict) -> dict | None:
         """Whose Exhibit 21 lists this employer, under either of its names."""
-        return next(
-            (o for o in (
-                self.subsidiaries.parent(n) for n in _names(item["employer_name"])
-            ) if o),
-            None,
-        )
+        owners = [
+            owner for name in _names(item["employer_name"])
+            if (owner := self.subsidiaries.sec_parent(name))
+        ]
+        if len({owner["parent_cik"] for owner in owners}) > 1:
+            return None
+        return owners[0] if owners else None
 
     def _filing_span(self, cik: int) -> tuple[int, int] | None:
         """The years a registrant filed under any name, from the roster."""
@@ -376,7 +400,7 @@ class Identity(Adjudicator):
         registrant it most obviously is. Only an exact listing contradicts.
         """
         for name in _names(item["employer_name"]):
-            hit = self.subsidiaries.by_name.get(name)
+            hit = self.subsidiaries.sec_by_name.get(name)
             if hit:
                 return hit
         return None
@@ -387,8 +411,8 @@ class Identity(Adjudicator):
 
         Each entry is (what the witness says, whether it is anchored to the
         CIK). The distinction matters because the witnesses are not equal:
-        Wikidata naming this CIK, or a parent's Exhibit 21, speak about the
-        specific registrant matched. The filing calendar and a 2-digit
+        Wikidata naming this CIK speaks about the specific registrant
+        matched. The filing calendar and a 2-digit
         sector agreement speak only about *a* registrant of this name and
         rough kind — and a same-industry namesake, the likeliest way a
         wrong match arises, passes both of those for free. So acceptance
@@ -431,20 +455,9 @@ class Identity(Adjudicator):
                     (f"Wikidata knows CIK {cik} as {entity['label']!r}", True)
                 )
 
-        # Exhibit 21 of the proposed parent's 10-K lists this employer.
-        #
-        # Only the parent's filing counts, and only when the parent is not
-        # the registrant being claimed. Exhibit 21 says "X owns this", which
-        # corroborates ownership and argues *against* identity: an employer
-        # listed as a subsidiary of the very CIK being assigned to it is a
-        # subsidiary of that company, not that company. Counting it either
-        # way would be the First Transit conflation with extra steps.
-        owner = self._owner(item)
-        if owner and parent_cik and parent_cik != cik:
-            if int(owner["parent_cik"]) == parent_cik:
-                found.append(
-                    (f"Exhibit 21 of {owner['parent_name']} lists it", True)
-                )
+        # Exhibit 21 proves ownership, not independent CIK identity. Never
+        # use it as positive identity corroboration, even if the model named
+        # that same parent.
 
         # The industry the states published for this employer agrees with the
         # industry the SEC assigned the registrant. Weak: twenty sectors,
@@ -487,6 +500,9 @@ class Identity(Adjudicator):
 
         base = {
             "normalized_name": item["normalized_name"],
+            "scope_state": item.get("scope_state") or "",
+            "scope_year": item.get("scope_year") or "",
+            "scope_location": review.scope_location(item.get("scope_location")),
             "employer_name": item["employer_name"],
             "states": "|".join(item["states"]),
             "notices": item["notices"],
@@ -501,7 +517,11 @@ class Identity(Adjudicator):
         }
 
         # An employer somebody already adjudicated is never re-decided here.
-        if item["normalized_name"] in self.overrides:
+        if review.select_override(
+            self.overrides, item["normalized_name"],
+            item.get("scope_state"), item.get("scope_year"),
+            item.get("scope_location"),
+        ):
             return Decision(STAGED, note="already decided by hand",
                             row={**base, "gate": "existing override"})
 
@@ -511,14 +531,21 @@ class Identity(Adjudicator):
         # silently kept the matcher from names it would have matched.
         matcher_refused = ""
         if proposed:
-            cik, cik_match, used = self._match(item, proposed)
-            if not cik:
+            matches = self._matches(item, proposed)
+            if len(matches) > 1:
+                return Decision(
+                    STAGED,
+                    note=f"proposals resolve to different CIKs: {sorted(matches)}",
+                    row={**base, "gate": "conflicting proposed CIKs"},
+                )
+            if not matches:
                 # Not returned yet: a parent claim on the same row still
                 # deserves its chance below.
                 matcher_refused = (
                     f"no proposed name cleared the matcher: {', '.join(proposed)}"
                 )
             else:
+                cik, (cik_match, used) = next(iter(matches.items()))
                 # Exhibit 21 of the matched registrant listing this employer
                 # contradicts the claim being made: a company does not appear
                 # in its own subsidiary schedule. The right fix is a parent
@@ -529,14 +556,16 @@ class Identity(Adjudicator):
                         STAGED,
                         note=f"Exhibit 21 of {owner['parent_name']} lists it as a "
                              "subsidiary, not as the registrant",
-                        row={**base, "matched_cik": cik, "cik_match": cik_match,
+                        row={**base, "matched_cik": cik, "matched_name": used,
+                             "cik_match": cik_match,
                              "gate": "listed as its own subsidiary"},
                     )
                 corroborators = self._corroborate(item, cik, cik_match, parent_cik)
                 witnesses = [text for text, _anchored in corroborators]
                 anchored = [text for text, anchored in corroborators if anchored]
                 row = {
-                    **base, "matched_cik": cik, "cik_match": cik_match,
+                    **base, "matched_cik": cik, "matched_name": used,
+                    "cik_match": cik_match,
                     "corroborated_by": "; ".join(witnesses),
                 }
                 if confidence < self.threshold:
@@ -561,7 +590,10 @@ class Identity(Adjudicator):
                         **row,
                         "override": {
                             "normalized_name": item["normalized_name"],
-                            "decision": "", "cik": cik, "ein": "", "lei": "",
+                            "scope_state": base["scope_state"],
+                            "scope_year": base["scope_year"],
+                            "scope_location": base["scope_location"],
+                            "decision": "accept", "cik": cik, "ein": "", "lei": "",
                             "wikidata_qid": "",
                             "note": f"Matched as {used!r} ({cik_match}); "
                                     + "; ".join(witnesses) + f". {note}",
@@ -571,62 +603,54 @@ class Identity(Adjudicator):
 
         if parent_name or parent_cik:
             owner = self._owner(item)
-            if owner:
-                # Exhibit 21 already says this, and the generated table
-                # already applies it. Nothing to write.
-                return Decision(ABSTAINED, note="Exhibit 21 already links it", row=None)
-            # A parent's CIK is ours to look up, not the model's to recall.
-            #
-            # Asking for a nine-digit number is asking for the one thing a
-            # language model is worst at and the roster is best at, and the
-            # first two hundred rows showed it: forty-three of seventy stalls
-            # were a correctly-named parent with a missing or invented CIK —
-            # First Transit, DHL Supply Chain, USS Posco among them. So the
-            # name goes through the same matcher a proposed registrant does.
-            # That is the design already stated: propose a name, never a fact.
-            # A number the model supplies is still checked, and still has to
-            # be one the reference files have heard of.
-            looked_up = ""
-            if not parent_cik and parent_name and self.matcher is not None:
-                year = int(item["years"][-1]) if item.get("years") else None
-                hit = self.matcher.match(parent_name, year)
-                if hit:
-                    parent_cik, looked_up = hit[0], hit[2]
-            if not parent_cik:
+            if not parent_name or self.matcher is None:
                 return Decision(
                     STAGED,
-                    note=f"parent {parent_name!r} matched no registrant",
+                    note="parent name must resolve to a registrant",
                     row={**base, "gate": "unverifiable parent"},
                 )
-            if parent_cik not in self.annotator.sic_by_cik and (
-                self.matcher is None or not self.matcher.ticker_for(parent_cik)
-            ):
-                # A CIK nobody in the reference files has ever seen is a
-                # number, not a company.
+            resolved = self._matches(item, [parent_name])
+            if len(resolved) != 1:
                 return Decision(
                     STAGED,
-                    note=f"CIK {parent_cik} is in no reference file",
-                    row={**base, "gate": "unknown parent CIK"},
+                    note=f"parent {parent_name!r} did not resolve uniquely",
+                    row={**base, "gate": "unverifiable parent"},
                 )
-            if confidence < self.threshold:
-                return Decision(STAGED, note=f"confidence {confidence:.2f}",
-                                row={**base, "gate": "below threshold"})
-            how = f" (matched {looked_up})" if looked_up else ""
-            return Decision(
-                ACCEPTED,
-                note=f"parent {parent_name} (CIK {parent_cik}){how}",
-                row={
-                    **base, "parent_cik": parent_cik,
-                    "subsidiary": {
-                        "normalized_name": item["normalized_name"],
-                        "parent_cik": parent_cik,
-                        "parent_name": parent_name,
-                        "source_year": "",
-                        "note": f"{note} Parent CIK from the EDGAR roster"
-                                f" ({looked_up})." if looked_up else note,
-                    },
-                },
-            )
+            resolved_cik = next(iter(resolved))
+            if parent_cik and parent_cik != resolved_cik:
+                return Decision(
+                    STAGED,
+                    note=f"supplied parent CIK {parent_cik} disagrees with name CIK {resolved_cik}",
+                    row={**base, "gate": "parent name/CIK conflict"},
+                )
+            parent_cik = resolved_cik
+            if not owner or int(owner["parent_cik"]) != parent_cik:
+                return Decision(
+                    STAGED,
+                    note="no matching SEC Exhibit 21 ownership evidence",
+                    row={**base, "gate": "unsupported parent"},
+                )
+            years = [int(y) for y in item.get("years", []) if str(y).isdigit()]
+            try:
+                source_year = int(owner.get("source_year") or 0)
+            except (TypeError, ValueError):
+                source_year = 0
+            if not years or not source_year or any(abs(y - source_year) > 2 for y in years):
+                return Decision(
+                    STAGED,
+                    note=f"Exhibit 21 year {source_year or 'unknown'} does not cover notice years",
+                    row={**base, "gate": "ownership era uncertain"},
+                )
+            # Exact SEC names are already applied by the generated index.
+            # Prefix lookup ("Cessna" -> "Cessna Aircraft Company") is a
+            # useful candidate, but not enough to adjudicate an alias.
+            if owner["normalized_name"] != item["normalized_name"]:
+                return Decision(
+                    STAGED,
+                    note="Exhibit 21 lists a longer name; alias needs review",
+                    row={**base, "gate": "non-exact subsidiary name"},
+                )
+            return Decision(ABSTAINED, note="SEC Exhibit 21 already links it", row=None)
 
         if matcher_refused:
             return Decision(STAGED, note=matcher_refused,
@@ -686,21 +710,22 @@ def write(rows: list[dict], overrides_path: Path = OVERRIDES_PATH,
     silently, so the conflict is staged and the existing row stands.
     """
     today = date.today().isoformat()
-    decided = _existing(overrides_path, "normalized_name")
-    linked = _existing(subsidiary_path, "normalized_name")
+    decided = _existing(overrides_path)
+    linked = _existing(subsidiary_path)
 
     identities, links, staged = [], [], []
     for row in rows:
         override, subsidiary = row.get("override"), row.get("subsidiary")
-        if override and override["normalized_name"] not in decided:
-            decided.add(override["normalized_name"])
+        if override and review.scope_tuple(override) not in decided:
+            decided.add(review.scope_tuple(override))
             identities.append({
                 **override, "decided_by": decided_by, "decided_at": today,
             })
-        elif subsidiary and subsidiary["normalized_name"] not in linked:
-            linked.add(subsidiary["normalized_name"])
+        elif subsidiary and review.scope_tuple(subsidiary) not in linked:
+            linked.add(review.scope_tuple(subsidiary))
             links.append({
-                **subsidiary, "decided_by": decided_by, "decided_at": today,
+                **subsidiary, "decision": "accept",
+                "decided_by": decided_by, "decided_at": today,
             })
         elif override or subsidiary:
             staged.append({**row, "gate": "already decided"})
@@ -721,18 +746,40 @@ def write(rows: list[dict], overrides_path: Path = OVERRIDES_PATH,
     return len(identities), len(links), len(staged)
 
 
-def _existing(path: Path, column: str) -> set[str]:
+def _existing(path: Path) -> set[tuple[str, str, str, str]]:
     if not path.exists():
         return set()
     with open(path, newline="") as fh:
-        return {r[column] for r in csv.DictReader(fh) if r.get(column)}
+        return {review.scope_tuple(r) for r in csv.DictReader(fh)
+                if r.get("normalized_name")}
 
 
 def _append(path: Path, fields: list[str], rows: list[dict]) -> None:
     if not rows:
         return
-    write_header = not path.exists()
     path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists():
+        with open(path, newline="") as fh:
+            reader = csv.DictReader(fh)
+            old_fields = reader.fieldnames or []
+            if old_fields != fields:
+                existing = list(reader)
+                # Header upgrades preserve every old column and row. Rename
+                # in the same directory so replacement is atomic.
+                all_fields = old_fields + [f for f in fields if f not in old_fields]
+                fd, temp_name = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.")
+                try:
+                    with os.fdopen(fd, "w", newline="") as tmp:
+                        writer = csv.DictWriter(tmp, fieldnames=all_fields)
+                        writer.writeheader()
+                        writer.writerows(existing)
+                        writer.writerows(rows)
+                    os.replace(temp_name, path)
+                finally:
+                    if os.path.exists(temp_name):
+                        os.unlink(temp_name)
+                return
+    write_header = not path.exists()
     with open(path, "a", newline="") as fh:
         writer = csv.DictWriter(fh, fieldnames=fields, extrasaction="ignore")
         if write_header:

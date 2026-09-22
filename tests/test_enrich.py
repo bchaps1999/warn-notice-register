@@ -243,12 +243,17 @@ def test_adjudicated_identity_outranks_automatic_matching(tmp_path):
         w = csv.DictWriter(fh, fieldnames=review.OVERRIDE_FIELDS)
         w.writeheader()
         w.writerow({"normalized_name": "j c penney", "cik": "1166126",
+                    "decision": "accept", "scope_state": "PA",
+                    "scope_year": "2017", "scope_location": "Philadelphia",
                     "decided_by": "test", "decided_at": "2026-07-26",
                     "note": "the operating company named on the notice"})
 
     a = Annotator()
-    a.overrides = review.load_overrides(path)
-    got = a.annotate("J.C. Penney Corporation, Inc.", "2017-01-01", None)
+    a.override_rows = review.load_override_rows(path)
+    got = a.annotate(
+        "J.C. Penney Corporation, Inc.", "2017-01-01", None,
+        state="PA", location="Philadelphia",
+    )
     assert got["cik"] == 1166126
     assert got["cik_match"] == "override"
     assert got["identity_source"] == "override"
@@ -260,6 +265,254 @@ def test_adjudicated_identity_outranks_automatic_matching(tmp_path):
         assert got["employer_key"] == f"qid:{got['wikidata_qid']}"
     else:
         assert got["employer_key"] == "cik:1166126"
+
+
+def test_label_only_qid_does_not_outrank_registered_identity_or_name():
+    from warnlive.enrich.annotate import Annotator
+
+    a = Annotator()
+    a.matcher = None
+    a.nonprofit_by_name = {
+        "acme services": {"ein": "123456789", "ntee": "", "name": "Acme Services Foundation"}
+    }
+    a.gleif_by_name = {}
+    a.wikidata_by_name = {
+        "acme services": {
+            "qid": "Q123", "label": "Acme Services (namesake)",
+            "parents": "Unrelated Parent", "industries": "",
+        }
+    }
+    got = a.annotate("Acme Services", "2020-01-01", None)
+    assert got["ein"] == "123456789"
+    assert got["wikidata_match"] == "label"
+    assert got["employer_key"] == "ein:123456789"
+    assert got["canonical_name"] == "Acme Services Foundation"
+    assert got["canonical_basis"] == "irs"
+
+
+def test_label_only_qid_does_not_replace_gleif_name_or_sec_parent():
+    from warnlive.enrich.annotate import Annotator
+
+    a = Annotator()
+    a.matcher = None
+    a.nonprofit_by_name = {}
+    a.gleif_by_name = {
+        "acme services": {"lei": "LEI123", "legal_name": "ACME Services LLC"}
+    }
+    a.subsidiaries.sec_by_name["acme services"] = {
+        "parent_cik": "42", "parent_name": "Verified Parent",
+        "source_year": "2020",
+    }
+    a.wikidata_by_name = {
+        "acme services": {
+            "qid": "Q123", "label": "Acme namesake",
+            "parents": "Unrelated Parent", "industries": "",
+        }
+    }
+    got = a.annotate("Acme Services", "2020-01-01", None)
+    assert got["employer_key"] == "lei:LEI123"
+    assert got["canonical_name"] == "ACME Services LLC"
+    assert got["parent_company"] == "Verified Parent"
+
+
+def test_model_parent_override_is_not_independent_export_evidence():
+    from warnlive.enrich.annotate import Annotator
+
+    a = Annotator()
+    a.matcher = None
+    a.subsidiaries.by_name["acme services"] = {
+        "parent_cik": "42", "parent_name": "Model-Proposed Parent",
+        "source_year": "",
+    }
+    got = a.annotate("Acme Services", "2020-01-01", None)
+    assert got["parent_cik"] is None
+    assert got["parent_company"] is None
+
+
+def test_old_sec_parent_snapshot_does_not_assert_current_ownership():
+    from warnlive.enrich.annotate import Annotator
+
+    a = Annotator()
+    a.matcher = None
+    a.subsidiaries.sec_by_name["acme services"] = {
+        "parent_cik": "42", "parent_name": "Former Parent",
+        "source_year": "2010",
+    }
+    got = a.annotate("Acme Services", "2020-01-01", None)
+    assert got["parent_cik"] is None
+
+
+def test_conflicting_exact_and_base_identity_decisions_grant_neither():
+    from warnlive.enrich.annotate import Annotator
+
+    a = Annotator()
+    a.matcher = None
+    scope = {"decision": "accept", "scope_state": "PA",
+             "scope_year": "2020", "scope_location": "Philadelphia"}
+    a.override_rows = {
+        "acme services west": [{**scope, "normalized_name": "acme services west", "cik": "11"}],
+        "acme services": [{**scope, "normalized_name": "acme services", "cik": "22"}],
+    }
+    got = a.annotate(
+        "Acme Services - West", "2020-01-01", None,
+        state="PA", location="Philadelphia",
+    )
+    assert got["cik"] is None
+    assert got["identity_source"] == "conflict"
+
+
+def test_scoped_override_conflicting_with_exact_sec_match_is_quarantined(tmp_path):
+    from warnlive.enrich.annotate import Annotator
+
+    a = Annotator()
+    a.matcher = _matcher(tmp_path, [("acme services", 22, 2019, 2021, "")])
+    a.override_rows = {
+        "acme services": [{
+            "normalized_name": "acme services", "decision": "accept",
+            "scope_state": "PA", "scope_year": "2020",
+            "scope_location": "Philadelphia", "cik": "11",
+        }],
+    }
+    got = a.annotate(
+        "Acme Services", "2020-01-01", None,
+        state="PA", location="Philadelphia",
+    )
+    assert got["cik"] is None
+    assert got["identity_source"] == "conflict"
+
+
+def test_parent_override_requires_exact_notice_scope():
+    from warnlive.enrich.annotate import Annotator
+
+    a = Annotator()
+    a.matcher = None
+    a.subsidiaries.override_rows = {
+        "acme services": [{
+            "normalized_name": "acme services", "decision": "accept",
+            "scope_state": "PA", "scope_year": "2020",
+            "scope_location": "Philadelphia", "parent_cik": "42",
+            "parent_name": "Reviewed Parent",
+        }],
+    }
+    matched = a.annotate(
+        "Acme Services", "2020-01-01", None,
+        state="PA", location="Philadelphia",
+    )
+    other = a.annotate(
+        "Acme Services", "2020-01-01", None,
+        state="PA", location="Pittsburgh",
+    )
+    assert matched["parent_cik"] == 42
+    assert other["parent_cik"] is None
+
+
+def test_scoped_parent_conflicting_with_sec_parent_is_quarantined():
+    from warnlive.enrich.annotate import Annotator
+
+    a = Annotator()
+    a.matcher = None
+    a.subsidiaries.sec_by_name["acme services"] = {
+        "parent_cik": "42", "parent_name": "SEC Parent", "source_year": "2020",
+    }
+    a.subsidiaries.override_rows = {
+        "acme services": [{
+            "normalized_name": "acme services", "decision": "accept",
+            "scope_state": "PA", "scope_year": "2020",
+            "scope_location": "Philadelphia", "parent_cik": "99",
+            "parent_name": "Different Parent",
+        }],
+    }
+    got = a.annotate(
+        "Acme Services", "2020-01-01", None,
+        state="PA", location="Philadelphia",
+    )
+    assert got["parent_cik"] is None
+
+
+def test_conflicting_rows_in_one_scope_block_automatic_identity(tmp_path):
+    from warnlive.enrich.annotate import Annotator
+
+    a = Annotator()
+    a.matcher = _matcher(tmp_path, [("acme services", 22, 2019, 2021, "")])
+    scope = {"normalized_name": "acme services", "decision": "accept",
+             "scope_state": "PA", "scope_year": "2020",
+             "scope_location": "Philadelphia"}
+    a.override_rows = {"acme services": [
+        {**scope, "cik": "11"}, {**scope, "cik": "99"},
+    ]}
+    got = a.annotate(
+        "Acme Services", "2020-01-01", None,
+        state="PA", location="Philadelphia",
+    )
+    assert got["cik"] is None
+    assert got["identity_source"] == "conflict"
+
+
+def test_conflicting_parent_rows_block_sec_fallback():
+    from warnlive.enrich.annotate import Annotator
+
+    a = Annotator()
+    a.matcher = None
+    a.subsidiaries.sec_by_name["acme services"] = {
+        "parent_cik": "42", "parent_name": "SEC Parent", "source_year": "2020",
+    }
+    scope = {"normalized_name": "acme services", "decision": "accept",
+             "scope_state": "PA", "scope_year": "2020",
+             "scope_location": "Philadelphia"}
+    a.subsidiaries.override_rows = {"acme services": [
+        {**scope, "parent_cik": "11", "parent_name": "Parent A"},
+        {**scope, "parent_cik": "99", "parent_name": "Parent B"},
+    ]}
+    got = a.annotate(
+        "Acme Services", "2020-01-01", None,
+        state="PA", location="Philadelphia",
+    )
+    assert got["parent_cik"] is None
+
+
+def test_scoped_ein_lei_are_not_overwritten_by_name_matches():
+    from warnlive.enrich.annotate import Annotator
+
+    a = Annotator()
+    a.matcher = None
+    a.override_rows = {"acme services": [{
+        "normalized_name": "acme services", "decision": "accept",
+        "scope_state": "PA", "scope_year": "2020",
+        "scope_location": "Philadelphia",
+        "ein": "123456789", "lei": "REVIEWED",
+    }]}
+    a.nonprofit_by_name = {"acme services": {
+        "ein": "999999999", "ntee": "B2", "name": "Namesake Foundation",
+    }}
+    a.gleif_by_name = {"acme services": {
+        "lei": "NAME_MATCH", "legal_name": "Namesake LLC",
+    }}
+    got = a.annotate(
+        "Acme Services", "2020-01-01", None,
+        state="PA", location="Philadelphia",
+    )
+    assert got["ein"] == "123456789"
+    assert got["lei"] == "REVIEWED"
+    assert got["ntee"] is None
+    assert got["canonical_name"] != "Namesake Foundation"
+    assert got["canonical_name"] != "Namesake LLC"
+    assert got["employer_key"] == "ein:123456789"
+
+
+def test_legacy_cik_disagreement_does_not_flip_to_automatic(tmp_path):
+    from warnlive.enrich.annotate import Annotator
+
+    a = Annotator()
+    a.matcher = _matcher(tmp_path, [("acme services", 22, 2019, 2021, "")])
+    a.override_rows = {"acme services": [{
+        "normalized_name": "acme services", "cik": "11", "decision": "",
+    }]}
+    got = a.annotate(
+        "Acme Services", "2020-01-01", None,
+        state="PA", location="Philadelphia",
+    )
+    assert got["cik"] is None
+    assert got["identity_source"] == "conflict"
 
 
 def test_base_employer_separates_company_from_site():
@@ -352,7 +605,7 @@ def test_rejected_candidate_grants_nothing_and_stops_resurfacing(tmp_path):
     assert "midway airlines" in loaded  # remembered, so review skips it
 
     a = Annotator()
-    a.overrides = loaded
+    a.override_rows = review.load_override_rows(path)
     got = a.annotate("Midway Airlines, Inc", "1991-01-01", None)
     assert got["cik"] is None
     assert got["identity_source"] is None

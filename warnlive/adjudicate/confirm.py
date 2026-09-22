@@ -24,10 +24,10 @@ where a model guesses; the second is where it is useful.
 
 It runs only where deterministic corroboration fell short, and it
 supplements evidence rather than replacing it: a yes from the model is
-accepted only where at least one independent witness already spoke.
-A match with no corroborator at all stays staged for a person — the model
-confirming its own family's proposal, over the same roster facts the
-deterministic checks already found wanting, is not a second witness.
+accepted only where a fresh CIK-anchored witness names that registrant.
+Free-text witness strings and weak filing-span or industry agreement cannot
+promote a match. The model confirming its own family's proposal, over the
+same roster facts, is not a second witness.
 
 For the same reason, run this queue with a different model than the one
 that proposed the matches (--model / --provider): the proposer and the
@@ -42,6 +42,7 @@ from pathlib import Path
 
 from warnlive.adjudicate.identity import Identity
 from warnlive.adjudicate.queue import ACCEPTED, REJECTED, STAGED, Decision
+from warnlive.enrich import review
 
 logger = logging.getLogger("warnlive")
 
@@ -92,7 +93,7 @@ class Confirm(Identity):
     """Asks whether one named registrant is one named employer."""
 
     task = "identity-confirm"
-    prompt_version = "confirm-v1"
+    prompt_version = "confirm-v2-scoped"
     required = {"same": bool, "confidence": (int, float)}
     batch_size = 10
     max_tokens_per_row = 120
@@ -105,7 +106,7 @@ class Confirm(Identity):
         proposes a different registrant must ask again rather than replay an
         answer given about a company it is no longer considering.
         """
-        return f"{item['normalized_name']}|{item['matched_cik']}"
+        return f"{super().key(item)}|{item['matched_cik']}"
 
     def system(self) -> str:
         return SYSTEM
@@ -145,6 +146,9 @@ class Confirm(Identity):
 
         base = {
             "normalized_name": item["normalized_name"],
+            "scope_state": item.get("scope_state") or "",
+            "scope_year": item.get("scope_year") or "",
+            "scope_location": item.get("scope_location") or "",
             "employer_name": item["employer_name"],
             "states": "|".join(item["states"]),
             "notices": item["notices"],
@@ -157,7 +161,11 @@ class Confirm(Identity):
             "note": note,
         }
 
-        if item["normalized_name"] in self.overrides:
+        if any(
+            review.scope_tuple(row) == review.scope_tuple(item)
+            and (row.get("decision") or "").strip().lower() == "accept"
+            for row in self.overrides.get(item["normalized_name"], [])
+        ):
             return Decision(STAGED, note="already decided by hand",
                             row={**base, "gate": "existing override"})
 
@@ -175,6 +183,14 @@ class Confirm(Identity):
             return Decision(STAGED, note=f"confidence {confidence:.2f}",
                             row={**base, "gate": "below threshold"})
 
+        matches = self._matches(item, [item.get("matched_name") or ""])
+        if set(matches) != {cik}:
+            return Decision(
+                STAGED,
+                note="matched name no longer resolves uniquely to this CIK",
+                row={**base, "gate": "stale identity match"},
+            )
+
         # The contradiction check still applies. Exhibit 21 listing this
         # employer under the matched registrant means the registrant owns it
         # rather than is it, and no amount of confirmation changes that.
@@ -186,16 +202,19 @@ class Confirm(Identity):
                 row={**base, "gate": "listed as its own subsidiary"},
             )
 
-        # Confirmation supplements evidence; it does not replace it. With no
-        # independent witness at all, a yes here would rest entirely on the
-        # model's word — the exact thing the identity gate refuses.
-        corroborated_by = (item.get("corroborated_by") or "").strip()
-        if not corroborated_by:
+        # Never trust a serialized witness string supplied by a stale queue
+        # or ledger. Recompute from current evidence, and require an anchor
+        # that names this specific CIK. A filing span or rough industry
+        # agreement cannot turn a model's "same" into an accepted identity.
+        witnesses = self._corroborate(item, cik, base["cik_match"], None)
+        anchored = [description for description, is_anchor in witnesses if is_anchor]
+        if not anchored:
             return Decision(
                 STAGED,
-                note="confirmed by model, but no independent corroborator",
-                row={**base, "gate": "no corroborator"},
+                note="confirmed by model, but no CIK-anchored corroborator",
+                row={**base, "gate": "no anchored corroborator"},
             )
+        corroborated_by = "; ".join(description for description, _ in witnesses)
 
         return Decision(
             ACCEPTED,
@@ -204,7 +223,10 @@ class Confirm(Identity):
                 **base,
                 "override": {
                     "normalized_name": item["normalized_name"],
-                    "decision": "", "cik": cik, "ein": "", "lei": "",
+                    "scope_state": base["scope_state"],
+                    "scope_year": base["scope_year"],
+                    "scope_location": base["scope_location"],
+                    "decision": "accept", "cik": cik, "ein": "", "lei": "",
                     "wikidata_qid": "",
                     "note": f"Matched as {item.get('matched_name')!r} "
                             f"({item.get('cik_match')}); {corroborated_by}; "
@@ -241,7 +263,7 @@ def load_queue(conn, ledger, model: str, min_workers: int = 0,
         out.append({
             **item,
             "matched_cik": int(row["matched_cik"]),
-            "matched_name": (row.get("proposed") or "").split("|")[0],
+            "matched_name": row.get("matched_name") or (row.get("proposed") or "").split("|")[0],
             "cik_match": row.get("cik_match") or "",
             "corroborated_by": row.get("corroborated_by") or "",
         })

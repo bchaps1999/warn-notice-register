@@ -12,7 +12,12 @@ EXPORT_COLUMNS = [
     "location",
     "site_address",
     "notice_date",
+    "notice_date_precision",
+    "notice_date_basis",
     "effective_date",
+    "effective_date_end",
+    "source_identity",
+    "source_details",
     "employees_affected",
     "layoff_type",
     "is_temporary",
@@ -43,8 +48,18 @@ def export_csvs(
     counts: dict[str, int] = {}
 
     def fetch(where: str, params: tuple) -> list[sqlite3.Row]:
+        columns = [
+            "COALESCE(notice_date_precision, CASE WHEN state = 'NJ' "
+            "AND notice_date IS NOT NULL THEN 'month' END) AS notice_date_precision"
+            if name == "notice_date_precision" else
+            "COALESCE(notice_date_basis, CASE WHEN state = 'NJ' "
+            "AND notice_date IS NOT NULL THEN 'inferred_year_from_effective_date' END) "
+            "AS notice_date_basis"
+            if name == "notice_date_basis" else name
+            for name in EXPORT_COLUMNS
+        ]
         return conn.execute(
-            f"SELECT {', '.join(EXPORT_COLUMNS)}, "
+            f"SELECT {', '.join(columns)}, "
             "(SELECT v.fields_json FROM notice_versions v "
             " WHERE v.notice_id = notices.id AND v.version = notices.current_version"
             ") AS fields_json "
@@ -74,7 +89,8 @@ def export_csvs(
 
     def derived(r: sqlite3.Row) -> tuple:
         extra = annotator.annotate(
-            r[1], r[date_idx] or r[eff_idx], r["fields_json"]
+            r[1], r[date_idx] or r[eff_idx], r["fields_json"],
+            state=r[0], location=r[loc_idx],
         )
         extra.update(resolver.resolve(r[0], r[loc_idx], r["fields_json"], r[1]))
         return (

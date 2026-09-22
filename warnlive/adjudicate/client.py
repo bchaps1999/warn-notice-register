@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import os
 import time
 from dataclasses import dataclass, field
@@ -144,18 +145,30 @@ class Usage:
 
     def add(self, model: Model, body: dict) -> float:
         """Fold one response's usage in, and return what that call cost."""
-        u = body.get("usage") or {}
-        total_in = int(u.get("prompt_tokens") or 0)
+        u = body.get("usage")
+        if not isinstance(u, dict):
+            self.unpriced = True
+            u = {}
+        def token_count(value: object) -> int:
+            try:
+                count = int(value or 0)
+                return max(count, 0)
+            except (TypeError, ValueError, OverflowError):
+                self.unpriced = True
+                return 0
+
+        total_in = token_count(u.get("prompt_tokens"))
         # DeepSeek splits the prompt into cached and uncached halves; other
         # providers report neither, in which case none of it was discounted.
-        hit = int(u.get("prompt_cache_hit_tokens") or 0)
-        miss = int(u.get("prompt_cache_miss_tokens") or (total_in - hit))
-        out = int(u.get("completion_tokens") or 0)
+        hit = token_count(u.get("prompt_cache_hit_tokens"))
+        miss = token_count(u.get("prompt_cache_miss_tokens") or (total_in - hit))
+        out = token_count(u.get("completion_tokens"))
         # A reasoning model bills its thinking as output and counts it against
         # max_tokens. Tracked separately because it is usually most of both.
-        self.reasoning += int(
-            (u.get("completion_tokens_details") or {}).get("reasoning_tokens") or 0
-        )
+        details = u.get("completion_tokens_details")
+        if not isinstance(details, dict):
+            details = {}
+        self.reasoning += token_count(details.get("reasoning_tokens"))
 
         self.calls += 1
         self.input_hit += hit
@@ -286,14 +299,41 @@ class Client:
                 last = exc
             else:
                 if r.status_code == 200:
-                    body = r.json()
+                    try:
+                        body = r.json()
+                    except ValueError as exc:
+                        # A 200 from a proxy or a provider error page is not
+                        # a usable completion.  Treat it like the other
+                        # retryable bad replies rather than leaking a JSON
+                        # decoder exception out of a batch.
+                        last = f"response body is not JSON ({exc})"
+                        body = None
+                    if not isinstance(body, dict):
+                        if body is not None:
+                            last = (
+                                "response body is "
+                                f"{type(body).__name__}, expected object"
+                            )
+                        # Do not meter an object we cannot identify as a
+                        # completion: it has no trustworthy usage shape.
+                        continue
                     spent = self.usage.add(self.model, body)
                     logger.debug(
                         "%s: call %d, $%.6f", self.model, self.usage.calls, spent
                     )
-                    choices = body.get("choices") or []
-                    choice = choices[0] if choices else {}
-                    text = (choice.get("message") or {}).get("content")
+                    choices = body.get("choices")
+                    if not isinstance(choices, list) or not choices:
+                        last = "choices is not a nonempty list"
+                        continue
+                    choice = choices[0]
+                    if not isinstance(choice, dict):
+                        last = "first choice is not an object"
+                        continue
+                    message = choice.get("message") or {}
+                    if not isinstance(message, dict):
+                        last = "choice message is not an object"
+                        continue
+                    text = message.get("content")
                     # Stopping at the ceiling is not a bad answer, it is half
                     # an answer, and it looks like malformed JSON downstream.
                     # A reasoning model reaches it easily, because its
@@ -307,9 +347,12 @@ class Client:
                         )
                     # JSON mode is documented to return empty content now and
                     # then. An empty reply is a failed call, not an answer.
-                    if text and text.strip():
+                    if isinstance(text, str) and text.strip():
                         return text
-                    last = "empty content"
+                    last = (
+                        "empty content" if text is None or text == ""
+                        else f"content is {type(text).__name__}, expected string"
+                    )
                 elif r.status_code in RETRY_STATUS:
                     last = f"HTTP {r.status_code}"
                 else:
@@ -374,16 +417,40 @@ class Client:
 def shape_problem(
     parsed: object, required: dict[str, type | tuple[type, ...]]
 ) -> str | None:
-    """None when the object has the required keys at the required types."""
+    """None when the object has the required keys at safe, required types.
+
+    Python considers ``bool`` an ``int``.  That is useful for arithmetic but
+    unsafe for a wire schema: ``true`` must not become a confidence of 1 or a
+    row id.  Confidence is additionally a probability, so NaN, infinity and
+    values outside its documented [0, 1] range are malformed responses.
+    """
     if not isinstance(parsed, dict):
         return f"expected a JSON object, got {type(parsed).__name__}"
     for key, want in required.items():
         if key not in parsed:
             return f"missing key {key!r}"
-        if not isinstance(parsed[key], want):
+        value = parsed[key]
+        if not _matches_wire_type(value, want):
             names = want if isinstance(want, tuple) else (want,)
             return (
-                f"key {key!r} is {type(parsed[key]).__name__}, "
+                f"key {key!r} is {type(value).__name__}, "
                 f"expected {' or '.join(t.__name__ for t in names)}"
             )
+        if key == "confidence":
+            try:
+                confidence = float(value)
+            except (TypeError, ValueError, OverflowError):
+                return f"key {key!r} is not a finite probability"
+            if not math.isfinite(confidence):
+                return f"key {key!r} is not finite"
+            if not 0.0 <= confidence <= 1.0:
+                return f"key {key!r} is outside [0, 1]"
     return None
+
+
+def _matches_wire_type(value: object, want: type | tuple[type, ...]) -> bool:
+    """``isinstance`` semantics without accepting bool where a number was asked."""
+    wants = want if isinstance(want, tuple) else (want,)
+    if isinstance(value, bool):
+        return bool in wants
+    return isinstance(value, wants)

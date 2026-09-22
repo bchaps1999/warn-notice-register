@@ -76,7 +76,7 @@ class Annotator:
         self.nonprofit_by_name = nonprofits.load()
         self.gleif_by_name = gleif.load()
         self.subsidiaries = subsidiaries.Index()
-        self.overrides = review.load_overrides()
+        self.override_rows = review.load_override_rows()
         self.industry_overrides = load_industry_overrides()
         self.naics_by_employer: dict[str, str] = {}
 
@@ -93,13 +93,17 @@ class Annotator:
         """
         by_key: dict[str, set[str]] = {}
         for row in conn.execute(
-            "SELECT n.employer_name AS employer_name, "
+            "SELECT n.employer_name AS employer_name, n.state AS state, "
+            "       n.location AS location, "
             "       COALESCE(n.notice_date, n.effective_date) AS d, "
             "       (SELECT v.fields_json FROM notice_versions v "
             "        WHERE v.notice_id = n.id AND v.version = n.current_version"
             "       ) AS fields_json FROM notices n"
         ):
-            got = self.annotate(row["employer_name"], row["d"], row["fields_json"])
+            got = self.annotate(
+                row["employer_name"], row["d"], row["fields_json"],
+                state=row["state"], location=row["location"],
+            )
             if got["naics"]:
                 by_key.setdefault(got["employer_key"], set()).add(got["naics"])
         self.naics_by_employer = {
@@ -112,6 +116,9 @@ class Annotator:
         employer_name: str | None,
         date: str | None,
         fields_json: str | None,
+        *,
+        state: str | None = None,
+        location: str | None = None,
     ) -> dict:
         """Derived fields for one notice; every key in FIELDS is present."""
         out = dict.fromkeys(FIELDS)
@@ -136,9 +143,51 @@ class Annotator:
 
         # An adjudicated identity outranks every automatic tier: it was
         # decided by someone looking at evidence the matcher cannot see.
-        decided = self.overrides.get(norm or "") or (
-            self.overrides.get(base_norm) if base_norm else None
+        year = date[:4] if date else None
+        exact_decision = review.select_override(
+            self.override_rows, norm, state, year, location
         )
+        base_decision = review.select_override(
+            self.override_rows, base_norm, state, year, location
+        ) if base_norm and base_norm != norm else None
+        id_fields = ("cik", "ein", "lei", "wikidata_qid")
+        conflicting_decisions = bool(
+            exact_decision and base_decision
+            and any((exact_decision.get(f) or "") != (base_decision.get(f) or "")
+                    for f in id_fields)
+        ) or review.conflicting_override(
+            self.override_rows, norm, state, year, location
+        ) or review.conflicting_override(
+            self.override_rows, base_norm, state, year, location
+        )
+        decided = None if conflicting_decisions else exact_decision or base_decision
+        matcher_hit = (
+            self.matcher.match(employer_name, int(year))
+            if self.matcher is not None and year and year.isdigit()
+            else None
+        )
+        # Legacy name-wide CIK overrides are preserved but no longer grant
+        # identity. If an automatic match contradicts one, quarantine the
+        # notice instead of silently flipping it to a different registrant.
+        legacy_ciks = {
+            int(row["cik"])
+            for name in {n for n in (norm, base_norm) if n}
+            for row in self.override_rows.get(name, [])
+            if row.get("cik")
+            and not any(row.get(f) for f in ("scope_state", "scope_year", "scope_location"))
+            and str(row["cik"]).isdigit()
+        }
+        if len(legacy_ciks) > 1 or (
+            matcher_hit and legacy_ciks and matcher_hit[0] not in legacy_ciks
+        ):
+            conflicting_decisions = True
+            decided = None
+        if decided and decided.get("cik") and matcher_hit and matcher_hit[2].startswith("exact"):
+            if int(decided["cik"]) != matcher_hit[0]:
+                conflicting_decisions = True
+                decided = None
+        if conflicting_decisions:
+            out["identity_source"] = "conflict"
         # A rejection is recorded so it is not re-decided; it grants nothing.
         if decided and any(
             decided.get(f) for f in ("cik", "ein", "lei", "wikidata_qid")
@@ -171,8 +220,10 @@ class Annotator:
             if decided.get("wikidata_qid"):
                 out["wikidata_match"] = "override"
 
-        if self.matcher is not None and not out["cik"]:
-            hit = self.matcher.match(employer_name, int(date[:4]) if date else None)
+        if self.matcher is not None and not out["cik"] and not conflicting_decisions:
+            hit = matcher_hit or self.matcher.match(
+                employer_name, int(year) if year and year.isdigit() else None
+            )
             if hit:
                 out["cik"], out["ticker"], out["cik_match"] = hit[0], hit[1] or None, hit[2]
                 sic = self.sic_by_cik.get(out["cik"])
@@ -189,22 +240,50 @@ class Annotator:
                     )
 
         if norm and not out["cik"]:
-            # Not a registrant itself — but Exhibit 21 may show whose
-            # subsidiary it is, which supplies both a corporate parent and,
-            # failing anything better, that parent's industry.
-            owner = next(
-                (o for o in (self.subsidiaries.parent(n) for n in names) if o), None
+            # Parent links affect both the displayed corporate family and
+            # inherited industry. Only an exact SEC filing in the notice era
+            # is independent evidence. Older model-written overrides remain
+            # on disk for review, but cannot assert ownership at export.
+            owners = [self.subsidiaries.sec_by_name[n] for n in names
+                      if n in self.subsidiaries.sec_by_name]
+            owner = owners[0] if owners and len({o["parent_cik"] for o in owners}) == 1 else None
+            try:
+                notice_year = int(date[:4]) if date else None
+                source_year = int(owner["source_year"]) if owner else None
+            except (TypeError, ValueError):
+                notice_year = source_year = None
+            if notice_year is None or source_year is None or abs(notice_year - source_year) > 2:
+                owner = None
+            scoped_owners = [
+                o for n in names
+                if (o := self.subsidiaries.scoped_parent(n, state, year, location))
+            ]
+            scoped_conflict = any(
+                self.subsidiaries.scoped_parent_conflict(n, state, year, location)
+                for n in names
+            ) or len({o["parent_cik"] for o in scoped_owners}) > 1
+            scoped_owner = (
+                scoped_owners[0]
+                if scoped_owners and len({o["parent_cik"] for o in scoped_owners}) == 1
+                else None
             )
+            if scoped_conflict or (
+                scoped_owner and owner and scoped_owner["parent_cik"] != owner["parent_cik"]
+            ):
+                owner = None  # conflicting authoritative claims need review
+            else:
+                owner = scoped_owner or owner
             if owner:
                 out["parent_cik"] = int(owner["parent_cik"])
                 out["parent_company"] = owner["parent_name"] or None
             org = lookup(self.nonprofit_by_name)
-            if org:
-                out["ein"], out["ntee"] = org["ein"], org["ntee"] or None
+            if org and (not out["ein"] or out["ein"] == org["ein"]):
+                out["ein"] = org["ein"]
+                out["ntee"] = org["ntee"] or None
                 if not out["canonical_name"] and org["name"]:
                     out["canonical_name"], out["canonical_basis"] = org["name"], "irs"
             entity = lookup(self.gleif_by_name)
-            if entity:
+            if entity and (not out["lei"] or out["lei"] == entity["lei"]):
                 out["lei"] = entity["lei"]
                 if not out["canonical_name"] and entity["legal_name"]:
                     out["canonical_name"] = entity["legal_name"]
@@ -220,11 +299,13 @@ class Annotator:
             wd = lookup(self.wikidata_by_name)
             if wd:
                 out["wikidata_qid"], out["wikidata_match"] = wd["qid"], "label"
-                if wd["label"]:
+                # A name-only label must not replace a legal name obtained
+                # from an EIN or LEI, nor an evidenced corporate parent.
+                if wd["label"] and not out["canonical_name"]:
                     out["canonical_name"], out["canonical_basis"] = wd["label"], "wikidata"
-                out["parent_company"] = (
-                    wd["parents"].split("||")[0] if wd["parents"] else None
-                )
+                # A label-only QID is a name candidate, not independent
+                # ownership evidence. Its parent claim stays out of the
+                # asserted parent fields.
 
         # Every notice gets a company name, whether or not anyone identified
         # the company.
@@ -275,12 +356,14 @@ class Annotator:
             if adjudicated:
                 out["naics"], out["naics_basis"] = adjudicated, "adjudicated"
 
-        # Identity key for employer-level aggregation and /employers pages:
-        # the strongest available identity wins (a QID survives renames, a
-        # CIK/EIN/LEI survives spelling, a normalized name unifies the rest).
+        # Keep CIK-linked QID keys stable for existing public-company URLs.
+        # A QID found only by label is weaker than a registered CIK/EIN/LEI
+        # and must not outrank one for grouping or industry inheritance.
+        keyed_qid = out["wikidata_qid"] if out["wikidata_match"] == "cik" else None
         for prefix, value in (
-            ("qid", out["wikidata_qid"]), ("cik", out["cik"]),
+            ("qid", keyed_qid), ("cik", out["cik"]),
             ("ein", out["ein"]), ("lei", out["lei"]),
+            ("qid", out["wikidata_qid"]),
         ):
             if value:
                 out["employer_key"] = f"{prefix}:{value}"

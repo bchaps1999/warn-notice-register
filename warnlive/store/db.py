@@ -6,7 +6,7 @@ import sqlite3
 from pathlib import Path
 
 SCHEMA_PATH = Path(__file__).parent / "schema.sql"
-SCHEMA_VERSION = 4  # v4: site_address enrichment column
+SCHEMA_VERSION = 5  # v5: additive source-detail fields
 
 DEFAULT_DB_PATH = Path("data/warn.sqlite")
 
@@ -25,6 +25,7 @@ def init_db(conn: sqlite3.Connection) -> None:
     conn.executescript(SCHEMA_PATH.read_text())
     _drop_last_seen_not_null(conn)
     _add_site_address(conn)
+    _add_source_detail_columns(conn)
     row = conn.execute("SELECT version FROM schema_version").fetchone()
     if row is None:
         conn.execute("INSERT INTO schema_version (version) VALUES (?)", (SCHEMA_VERSION,))
@@ -45,6 +46,17 @@ def _add_site_address(conn: sqlite3.Connection) -> None:
     cols = {r["name"] for r in conn.execute("PRAGMA table_info(notices)")}
     if cols and "site_address" not in cols:
         conn.execute("ALTER TABLE notices ADD COLUMN site_address TEXT")
+
+
+def _add_source_detail_columns(conn: sqlite3.Connection) -> None:
+    """v5: retain source date/site evidence without changing existing IDs."""
+    cols = {r["name"] for r in conn.execute("PRAGMA table_info(notices)")}
+    for name in (
+        "effective_date_end", "notice_date_precision", "notice_date_basis",
+        "source_identity", "source_details",
+    ):
+        if cols and name not in cols:
+            conn.execute(f"ALTER TABLE notices ADD COLUMN {name} TEXT")
 
 
 def _drop_last_seen_not_null(conn: sqlite3.Connection) -> None:

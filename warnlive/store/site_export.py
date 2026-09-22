@@ -13,6 +13,7 @@ builds over the same DB are byte-identical.
 
 from __future__ import annotations
 
+import csv
 import json
 import sqlite3
 from datetime import datetime, timezone
@@ -31,6 +32,7 @@ FLAG_AMENDED = 4
 FLAG_HAS_LINKS = 8
 FLAG_PUBLIC = 16  # matched to an SEC CIK
 FLAG_UNDATED = 32  # no notice_date; the date column carries the effective date
+FLAG_MONTH_DATE = 64  # reported notice month, with inferred year; no known day
 
 
 def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> dict[str, int]:
@@ -42,14 +44,35 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
     # from sources that never published a notice date (CA pre-2014 archive,
     # GA, NJ/PA backfills) fall back to their effective date rather than
     # vanishing from charts and date ranges. The raw fields stay distinct.
+    eligible_states = sorted(
+        cfg.postal.upper() for cfg in registry.all()
+        if cfg.status in ("active", "archive")
+    )
+    placeholders = ",".join("?" for _ in eligible_states)
     notices = [
-        dict(r) | {"display_date": r["notice_date"] or r["effective_date"]}
+        dict(r) | {
+            "display_date": r["notice_date"] or r["effective_date"],
+            # NJ's only filed notice-date field is a month name. Historical
+            # rows predate the v5 precision column; they must not display a
+            # fabricated first day while awaiting source-detail migration.
+            "notice_date_precision": (
+                r["notice_date_precision"] or
+                ("month" if r["state"] == "NJ" and r["notice_date"] else None)
+            ),
+            "notice_date_basis": (
+                r["notice_date_basis"] or
+                ("inferred_year_from_effective_date"
+                 if r["state"] == "NJ" and r["notice_date"] else None)
+            ),
+        }
         for r in conn.execute(
             "SELECT notices.*, "
             "(SELECT v.fields_json FROM notice_versions v "
             " WHERE v.notice_id = notices.id AND v.version = notices.current_version"
             ") AS fields_json "
-            "FROM notices ORDER BY state, notice_date, employer_name, dedupe_key"
+            f"FROM notices WHERE state IN ({placeholders}) "
+            "ORDER BY state, notice_date, employer_name, dedupe_key",
+            eligible_states,
         )
     ]
 
@@ -67,7 +90,10 @@ def build_site(conn: sqlite3.Connection, registry: Registry, out_dir: Path) -> d
         # the location string is being parsed for.
         fields_json = n.pop("fields_json")
         n.update(
-            annotator.annotate(n["employer_name"], n["display_date"], fields_json)
+            annotator.annotate(
+                n["employer_name"], n["display_date"], fields_json,
+                state=n["state"], location=n.get("location"),
+            )
         )
         n.update(resolver.resolve(
             n["state"], n.get("location"), fields_json, n["employer_name"]
@@ -156,10 +182,28 @@ def _notice_summary(n, prefix_len: int) -> dict:
         "employer": n["employer_name"],
         "location": n["location"],
         "notice_date": n["notice_date"],
+        "notice_date_precision": n.get("notice_date_precision"),
         "effective_date": n["effective_date"],
+        "effective_date_end": n.get("effective_date_end"),
         "jobs": n["employees_affected"],
         "type": n["layoff_type"],
     }
+
+
+def _unallocated_multisite(n: dict) -> bool:
+    """A notice total covering multiple sites is not a first-county total."""
+    payload = n.get("source_details")
+    if not payload:
+        return False
+    try:
+        details = json.loads(payload)
+    except (TypeError, ValueError):
+        return False
+    return (
+        isinstance(details, dict)
+        and details.get("worker_allocation") == "unresolved"
+        and len(details.get("sites") or []) > 1
+    )
 
 
 def _county_series(rows, limit: int | None = None) -> list[dict]:
@@ -171,6 +215,8 @@ def _county_series(rows, limit: int | None = None) -> list[dict]:
     """
     agg: dict[str, dict] = {}
     for n in rows:
+        if _unallocated_multisite(n):
+            continue
         fips = n.get("county_fips")
         if not fips:
             continue
@@ -250,7 +296,7 @@ def _build_meta(notices, status: dict, prefix_len: int) -> dict:
             e["archived"] += 1
         if n["cik"] or n["ein"] or n["lei"] or n["wikidata_qid"]:
             e["identified"] += 1
-        if n.get("county_fips"):
+        if n.get("county_fips") and not _unallocated_multisite(n):
             e["placed"] += 1
 
     def quality(rows: dict) -> dict:
@@ -276,7 +322,14 @@ def _build_meta(notices, status: dict, prefix_len: int) -> dict:
                 if n["cik"] or n["ein"] or n["lei"] or n["wikidata_qid"]
             ),
             "with_industry": sum(1 for n in notices if n["naics"]),
-            "placed": sum(1 for n in notices if n.get("county_fips")),
+            "placed": sum(
+                1 for n in notices
+                if n.get("county_fips") and not _unallocated_multisite(n)
+            ),
+            "unallocated_workers": sum(
+                n["employees_affected"] or 0 for n in notices
+                if _unallocated_multisite(n)
+            ),
         },
         "date_range": {"min": min(dates), "max": max(dates)} if dates else None,
         "states": {
@@ -349,7 +402,10 @@ def _build_national(notices, prefix_len: int) -> dict:
         "biggest_recent": [_notice_summary(n, prefix_len) for n in biggest_recent],
         "states_12mo": sorted(state_agg.values(), key=lambda e: -e["workers"]),
         "counties_12mo": _county_series(in_window),
-        "placed_12mo": sum(1 for n in in_window if n.get("county_fips")),
+        "placed_12mo": sum(
+            1 for n in in_window
+            if n.get("county_fips") and not _unallocated_multisite(n)
+        ),
         "sectors_12mo": _sector_series(in_window),
         # The comparable window a year earlier, so the site can say whether
         # the current one is unusual rather than only how big it is.
@@ -389,7 +445,10 @@ def _build_state(postal: str, rows, health: dict, cfg, prefix_len: int) -> dict:
             # How much of this state could be put on a map, so a county view
             # can say what it is leaving out. Kansas files against workforce
             # areas, so its answer is close to none.
-            "placed": sum(1 for n in rows if n.get("county_fips")),
+            "placed": sum(
+                1 for n in rows
+                if n.get("county_fips") and not _unallocated_multisite(n)
+            ),
         },
         "counties": _county_series(rows),
         "monthly": _monthly_series(rows),
@@ -423,7 +482,7 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
     county_idx = {fips: i for i, (fips, _, _) in enumerate(counties)}
 
     cols: dict[str, list] = {
-        "key": [], "state": [], "date": [], "effective": [], "employer": [],
+        "key": [], "state": [], "date": [], "effective": [], "effective_end": [], "employer": [],
         "location": [], "jobs": [], "type": [], "flags": [], "sector": [],
         "county": [],
     }
@@ -435,11 +494,13 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
             | (FLAG_HAS_LINKS if n["id"] in linked_ids else 0)
             | (FLAG_PUBLIC if n["cik"] else 0)
             | (FLAG_UNDATED if not n["notice_date"] else 0)
+            | (FLAG_MONTH_DATE if n.get("notice_date_precision") == "month" else 0)
         )
         cols["key"].append(n["dedupe_key"][:prefix_len])
         cols["state"].append(state_idx[n["state"]])
         cols["date"].append(n["display_date"])
         cols["effective"].append(n["effective_date"])
+        cols["effective_end"].append(n.get("effective_date_end"))
         cols["employer"].append(n["employer_name"])
         cols["location"].append(n["location"])
         cols["jobs"].append(n["employees_affected"])
@@ -536,7 +597,10 @@ def _fnv_shard(key: str) -> str:
     return f"{h & 0xFF:02x}"
 
 
-def _build_employer_shards(notices, out_dir: Path, prefix_len: int) -> int:
+def _build_employer_shards(
+    notices, out_dir: Path, prefix_len: int,
+    redirects_path: Path = Path("data/reference/employer_key_redirects.csv"),
+) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     groups: dict[str, list] = {}
     for n in notices:
@@ -579,6 +643,15 @@ def _build_employer_shards(notices, out_dir: Path, prefix_len: int) -> int:
             "last_date": dated[-1] if dated else None,
             "notices": summaries,
         }
+
+    if redirects_path.exists():
+        with redirects_path.open(newline="") as fh:
+            for row in csv.DictReader(fh):
+                old_key, new_key = row["old_key"], row["new_key"]
+                if old_key in groups or new_key not in groups:
+                    continue
+                target = shards[_fnv_shard(new_key)][new_key]
+                shards.setdefault(_fnv_shard(old_key), {})[old_key] = target
 
     total = 0
     for pp in [f"{i:02x}" for i in range(256)]:

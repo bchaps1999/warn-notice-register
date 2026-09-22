@@ -1,6 +1,11 @@
 from pathlib import Path
 
-from warnlive.normalize.engine import _fold, normalize_file
+import json
+from datetime import date
+
+import pytest
+
+from warnlive.normalize.engine import _dedupe_key, _fold, _to_canonical, normalize_file
 
 FIXTURES = Path(__file__).parent / "fixtures" / "raw"
 
@@ -43,3 +48,85 @@ def test_verify_state_on_fixture():
     # 1/3 rows failed parse -> above 10% threshold -> fail
     assert by_name["parse_failures"] == "fail"
     assert verification.verdict == "failed"
+
+
+def test_range_endpoint_changes_semantic_version():
+    validated = {
+        "postal_code": "SC", "company": "Paper Co", "location": "Georgetown",
+        "notice_date": date(2026, 2, 18), "effective_date": date(2026, 5, 1),
+        "jobs": 126,
+    }
+    raw = {
+        "notice_date": "2/18/2026", "effective_date": "5/1/2026",
+        "effective_end_date": "12/31/2026", "address": "1480 International Dr",
+        "county": "Georgetown", "source": "sc/2026.pdf",
+    }
+    first = _to_canonical(validated, raw, "https://example.gov")
+    changed = _to_canonical(validated, {**raw, "effective_end_date": "1/31/2027"},
+                            "https://example.gov")
+    assert first["effective_date_end"] == "2026-12-31"
+    assert first["dedupe_key"] == changed["dedupe_key"]
+    assert first["raw_record_hash"] != changed["raw_record_hash"]
+
+
+def test_georgia_multisite_details_do_not_guess_site_workers():
+    validated = {
+        "postal_code": "GA", "company": "Example", "location": "Acworth",
+        "notice_date": None, "effective_date": date(2026, 9, 1), "jobs": 127,
+    }
+    raw = {
+        "GA WARN ID": "GA202600004", "First Date of Separation": "09/01/2026",
+        "Second Date of Separation": "10/01/2026",
+        "First Location Address": "1000 Cherokee Pkwy",
+        "Second Location Address": "1300 Cherokee Pkwy",
+    }
+    rec = _to_canonical(validated, raw, "https://example.gov")
+    details = json.loads(rec["source_details"])
+    assert rec["source_identity"] == "GA:GA202600004"
+    assert len(details["dates"]) == 2
+    assert len(details["sites"]) == 2
+    assert details["worker_allocation"] == "unresolved"
+    assert all(site["workers"] is None for site in details["sites"])
+
+
+def test_ga_source_ids_keep_distinct_filings_apart_without_changing_other_states():
+    base = {
+        "state": "GA", "employer_name": "Same Company", "notice_date": None,
+        "location": "Atlanta", "source_identity": "GA:1",
+    }
+    assert _dedupe_key(base) != _dedupe_key({**base, "source_identity": "GA:2"})
+    assert _dedupe_key(base) == _dedupe_key({**base, "employer_name": "New Name"})
+    assert _dedupe_key({**base, "state": "IA"}) == _dedupe_key(
+        {**base, "state": "IA", "source_identity": "GA:2"}
+    )
+
+
+def test_sc_source_rows_keep_undated_events_apart():
+    base = {
+        "state": "SC", "employer_name": "Mill", "notice_date": None,
+        "location": "Richland", "source_identity": "SC:sc/2025.pdf:1",
+    }
+    assert _dedupe_key(base) != _dedupe_key({**base, "source_identity": "SC:sc/2025.pdf:2"})
+
+
+@pytest.mark.parametrize(
+    "state,field,text,interpretation,end",
+    [
+        ("FL", "Layoff Date", "1/31/2019\nthru\n2/28/2019", "interval", "2019-02-28"),
+        ("OH", "Layoff Date(s)", "01/13/2023 to 01/27/2023", "interval", "2023-01-27"),
+        ("MA", "DATE(S) OF LAYOFFS", "6/30/2022; 7/31/2022", "list_or_phases", None),
+        ("NJ", "Effective Date", "3/31/26 (Paramus), 4/30/26 (Livingston)", "list_or_phases", None),
+        ("PA", "date_effective", "Beginning: 2/28/23 - Ending: 12/31/23", "interval", "2023-12-31"),
+    ],
+)
+def test_raw_date_components_preserve_interval_vs_list(state, field, text, interpretation, end):
+    validated = {
+        "postal_code": state, "company": "Example", "location": "Town",
+        "notice_date": date(2023, 1, 1), "effective_date": date(2023, 2, 1),
+        "jobs": 12,
+    }
+    rec = _to_canonical(validated, {field: text}, "https://example.gov")
+    details = json.loads(rec["source_details"])
+    assert details["effective_date_interpretation"] == interpretation
+    assert len(details["dates"]) >= 2
+    assert rec.get("effective_date_end") == end
