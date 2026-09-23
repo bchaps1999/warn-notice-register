@@ -16,6 +16,10 @@ def test_normalize_ct_fixture():
     # One row has a hopeless date not in CT's correction table -> counted failure
     assert result.failed_rows == 1
     assert len(result.records) == 2
+    assert len(result.failures) == 1
+    assert result.failures[0]["prepared_row"] == 3
+    assert "Gamma Logistics" in result.failures[0]["raw_extra"]
+    assert result.failures[0]["source_row_sha256"]
 
     rec = result.records[0]
     assert rec["state"] == "CT"

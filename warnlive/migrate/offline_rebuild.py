@@ -45,15 +45,19 @@ def _read_policy(path: Path) -> dict:
 
 
 def _ingest_groups(conn, groups: dict[str, list[dict]], observed_at: str) -> dict:
-    added = updated = collisions = 0
+    added = updated = unchanged = coalesced = collisions = 0
     for state, records in sorted(groups.items()):
         if not records:
             continue
         stats = ingest(conn, records, observed_at=observed_at)
         added += stats.new
         updated += stats.updated
+        unchanged += stats.unchanged
+        coalesced += stats.coalesced
         collisions += stats.suspected_collisions
-    return {"new": added, "updated": updated, "suspected_collisions": collisions}
+    return {"new": added, "updated": updated, "unchanged": unchanged,
+            "coalesced": coalesced,
+            "suspected_collisions": collisions}
 
 
 def _bln_conservative(conn, source: Path, observed_at: str) -> dict:
@@ -70,12 +74,15 @@ def _bln_conservative(conn, source: Path, observed_at: str) -> dict:
     return report
 
 
-def _backfill_raw(conn, raw_dir: Path, observed_at: str) -> dict:
+def _backfill_raw(
+    conn, raw_dir: Path, observed_at: str, exceptions: list[dict] | None = None,
+) -> dict:
     registry = load_registry()
     seen = {row[0] for row in conn.execute("SELECT dedupe_key FROM notices")}
     report = {"files": 0, "raw_rows": 0, "parse_failures": 0,
               "skipped_existing": 0, "quarantined_conflicts": 0,
-              "quarantined_missing_source_identity": 0}
+              "quarantined_missing_source_identity": 0,
+              "coalesced_identical_rows": 0}
     groups_by_state: dict[str, list[dict]] = defaultdict(list)
     for source in sorted(raw_dir.glob("*.csv")):
         postal = source.stem
@@ -85,20 +92,41 @@ def _backfill_raw(conn, raw_dir: Path, observed_at: str) -> dict:
         report["files"] += 1
         report["raw_rows"] += norm.raw_rows
         report["parse_failures"] += norm.failed_rows
+        if exceptions is not None:
+            exceptions.extend(
+                _exception(f"backfill/raw/{postal}.csv", "parse_failure", failure)
+                for failure in norm.failures
+            )
         by_key: dict[str, list[dict]] = defaultdict(list)
         for rec in norm.records:
             by_key[rec["dedupe_key"]].append(rec)
         for key, rows in by_key.items():
             if postal == "ks" and any(not row.get("source_identity") for row in rows):
                 report["quarantined_missing_source_identity"] += len(rows)
+                if exceptions is not None:
+                    exceptions.extend(
+                        _exception(f"backfill/raw/{postal}.csv", "missing_source_identity", row)
+                        for row in rows
+                    )
             elif key in seen:
                 report["skipped_existing"] += len(rows)
             elif len({row["raw_record_hash"] for row in rows}) > 1:
                 report["quarantined_conflicts"] += len(rows)
+                if exceptions is not None:
+                    exceptions.extend(
+                        _exception(f"backfill/raw/{postal}.csv", "conflicting_same_key", row)
+                        for row in rows
+                    )
             else:
                 groups_by_state[postal.upper()].append(rows[0])
+                report["coalesced_identical_rows"] += len(rows) - 1
                 seen.add(key)
-    return {**report, **_ingest_groups(conn, groups_by_state, observed_at)}
+    stats = _ingest_groups(conn, groups_by_state, observed_at)
+    accounted = sum(report[name] for name in (
+        "parse_failures", "skipped_existing", "quarantined_conflicts",
+        "quarantined_missing_source_identity", "coalesced_identical_rows",
+    )) + sum(stats[name] for name in ("new", "updated", "unchanged", "coalesced"))
+    return {**report, **stats, "unaccounted_rows": report["raw_rows"] - accounted}
 
 
 def _cached_only(_url: str, dest: Path) -> bytes | None:
@@ -111,10 +139,13 @@ def _exception(origin: str, reason: str, rec: dict) -> dict:
         "origin": origin, "reason": reason, "state": rec.get("state"),
         "dedupe_key": rec.get("dedupe_key"),
         "raw_record_hash": rec.get("raw_record_hash"),
+        "source_row_sha256": rec.get("source_row_sha256"),
         "source_identity": rec.get("source_identity"),
         "source_notice_id": rec.get("source_notice_id"),
         "source_url": rec.get("source_url"),
         "raw_extra": rec.get("raw_extra"),
+        "prepared_row": rec.get("prepared_row"),
+        "error": rec.get("error"),
     }
     if origin == "agency-cache:CA":
         try:
@@ -172,7 +203,7 @@ def _cached_agencies(
         for rec in records:
             by_key[rec["dedupe_key"]].append(rec)
         eligible = []
-        skipped = ambiguous = outside_policy = overlap = undated = 0
+        skipped = ambiguous = outside_policy = overlap = undated = coalesced = 0
         for key, rows in by_key.items():
             if key in seen:
                 skipped += len(rows)
@@ -220,13 +251,21 @@ def _cached_agencies(
                     rec["source_url"] = source_urls[key]
                     rec["raw_record_hash"] = _record_hash(rec)
                 eligible.append(rec)
+                coalesced += len(rows) - 1
                 seen.add(key)
         stats = _ingest_groups(conn, {state: eligible}, observed_at)
+        accounted = (
+            skipped + ambiguous + outside_policy + overlap + undated + coalesced
+            + stats["new"] + stats["updated"] + stats["unchanged"]
+            + stats["coalesced"]
+        )
         report[state] = {"parsed": len(records), "already": skipped,
                          "outside_policy": outside_policy,
                          "ambiguous_rows": ambiguous,
+                         "coalesced_identical_rows": coalesced,
                          "source_overlap_rows": overlap,
-                         "undated_rows": undated, **stats}
+                         "undated_rows": undated,
+                         "unaccounted_rows": len(records) - accounted, **stats}
     return report
 
 
@@ -249,22 +288,51 @@ def _bln_unresolved(
         )
     by_state: dict[str, int] = defaultdict(int)
     triage: dict[str, int] = defaultdict(int)
-    invalid = superseded = 0
+    total = represented = invalid = superseded = identity_excluded = 0
+
+    def raw_exception(row: dict, reason: str, error: str | None = None) -> dict:
+        raw_extra = json.dumps(row, sort_keys=True, ensure_ascii=False)
+        return {
+            "origin": "backfill/bln_integrated.csv", "reason": reason,
+            "state": (row.get("postal_code") or "").upper(),
+            "dedupe_key": None,
+            "source_row_sha256": hashlib.sha256(raw_extra.encode()).hexdigest(),
+            "source_notice_id": row.get("hash_id"),
+            "raw_extra": raw_extra, "error": error,
+        }
+
     with source.open(newline="") as fh:
         for row in csv.DictReader(fh):
+            total += 1
             state = (row.get("postal_code") or "").upper()
-            if state in {"GA", "SC", "IA"} or state.lower() not in registry:
+            if state.lower() not in registry:
+                invalid += 1
+                if exceptions is not None:
+                    exceptions.append(raw_exception(row, "unsupported_state"))
                 continue
             if row.get("is_superseded") == "True":
                 superseded += 1
+                if exceptions is not None:
+                    exceptions.append(raw_exception(row, "superseded_source_row"))
+                continue
+            if state in {"GA", "SC", "IA"}:
+                identity_excluded += 1
+                if exceptions is not None:
+                    exceptions.append(raw_exception(row, "source_identity_unresolved"))
                 continue
             try:
                 rec = bln_integrated.to_canonical(row, registry[state.lower()].source_url)
-            except (ValueError, KeyError, TypeError):
+            except (ValueError, KeyError, TypeError) as exc:
                 invalid += 1
+                if exceptions is not None:
+                    exceptions.append(raw_exception(
+                        row, "parse_failure", f"{type(exc).__name__}: {exc}"
+                    ))
                 continue
             if not rec["employer_name"]:
                 invalid += 1
+                if exceptions is not None:
+                    exceptions.append(raw_exception(row, "missing_employer"))
             elif rec["dedupe_key"] not in seen:
                 by_state[state] += 1
                 signature = (
@@ -288,10 +356,16 @@ def _bln_unresolved(
                     item["triage"] = category
                     item["candidate_keys"] = sorted(key for key, _ in matches)
                     exceptions.append(item)
-    return {"unresolved_rows": sum(by_state.values()),
+            else:
+                represented += 1
+    accounted = represented + invalid + superseded + identity_excluded + sum(by_state.values())
+    return {"total_rows": total, "represented_by_key": represented,
+            "unresolved_rows": sum(by_state.values()),
             "by_state": dict(sorted(by_state.items())),
             "triage": dict(sorted(triage.items())),
-            "invalid_rows": invalid, "superseded_rows": superseded}
+            "invalid_rows": invalid, "superseded_rows": superseded,
+            "identity_excluded_rows": identity_excluded,
+            "unaccounted_rows": total - accounted}
 
 
 def _write_exceptions(path: Path, rows: list[dict]) -> dict:
@@ -299,8 +373,10 @@ def _write_exceptions(path: Path, rows: list[dict]) -> dict:
     path.parent.mkdir(parents=True, exist_ok=True)
     digest = hashlib.sha256()
     ordered = sorted(rows, key=lambda r: (
-        r["origin"], r["state"] or "", r["dedupe_key"] or "",
-        r["raw_record_hash"] or "", r["reason"],
+        r.get("origin") or "", r.get("state") or "",
+        r.get("dedupe_key") or "",
+        r.get("raw_record_hash") or r.get("source_row_sha256") or "",
+        r.get("reason") or "", r.get("prepared_row") or 0,
     ))
     created = False
     try:
@@ -434,18 +510,24 @@ def rebuild(
         manifest = extract(bundle, source)
         policy = None if source_only else _read_policy(source / "rebuild_policy.json")
         accepted = None if source_only else set(policy["accepted_keys"])
-        raw_report = build_raw(out_db, source / "raw", source / "cache/sc")
+        exceptions: list[dict] = []
+        raw_report = build_raw(
+            out_db, source / "raw", source / "cache/sc",
+            observed_at=observed_at,
+            exceptions=exceptions if source_only else None,
+        )
         conn = db_mod.connect(out_db)
         try:
             archive_cache = source / "backfill/cache"
-            exceptions: list[dict] = []
             if source_only:
                 # Official agency artifacts and saved state raw snapshots
                 # outrank the transformed BLN copy.
                 agencies = _cached_agencies(
                     conn, archive_cache, None, {}, observed_at, exceptions
                 )
-                backfill_raw = _backfill_raw(conn, source / "backfill/raw", observed_at)
+                backfill_raw = _backfill_raw(
+                    conn, source / "backfill/raw", observed_at, exceptions
+                )
                 backfill = _bln_conservative(
                     conn, source / "backfill/bln_integrated.csv", observed_at
                 )

@@ -131,8 +131,11 @@ That mode prioritizes official archived artifacts and saved state raw files,
 then fills older/empty-month gaps from BLN. It reports uncertain archive and
 BLN overlaps rather than automatically merging them; its output is an audit
 candidate, not publication-ready. It also writes a sorted, checksum-reported
-`<candidate>.exceptions.jsonl` with source references and original rows for
-excluded archive/BLN records.
+`<candidate>.exceptions.jsonl` with source references, original rows, and
+reasons for rejected or unresolved current raw, historical raw, archive, and
+BLN inputs. The report reconciles each input group to represented, coalesced,
+or exception rows; zero unaccounted rows does not imply all interpretations
+are correct.
 
 Add `--compare-db data/warn.sqlite` only when comparing with a local database
 snapshot. The replay does not use the network or write to an existing database. The

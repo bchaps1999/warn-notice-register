@@ -54,9 +54,26 @@ def _ks_conflicts(records: list[dict]) -> set[str]:
     return missing | {key for key, values in signatures.items() if len(values) > 1}
 
 
+def _raw_exception(origin: str, reason: str, rec: dict) -> dict:
+    """Keep the prepared-row pointer and source text for excluded raw data."""
+    return {
+        "origin": origin, "reason": reason, "state": rec.get("state"),
+        "prepared_row": rec.get("prepared_row"),
+        "dedupe_key": rec.get("dedupe_key"),
+        "raw_record_hash": rec.get("raw_record_hash"),
+        "source_row_sha256": rec.get("source_row_sha256"),
+        "source_identity": rec.get("source_identity"),
+        "source_notice_id": rec.get("source_notice_id"),
+        "source_url": rec.get("source_url"),
+        "raw_extra": rec.get("raw_extra"),
+        "error": rec.get("error"),
+    }
+
+
 def build(
     db_path: Path, raw_dir: Path, sc_cache_dir: Path,
     states: set[str] | None = None,
+    *, observed_at: str | None = None, exceptions: list[dict] | None = None,
 ) -> dict:
     db_path = Path(db_path)
     if db_path.exists():
@@ -71,8 +88,18 @@ def build(
     ]
     if selected and selected - {cfg.postal for cfg in configs}:
         raise ValueError(f"unknown or ineligible states: {sorted(selected - {c.postal for c in configs})}")
+    if observed_at is not None:
+        try:
+            parsed = datetime.strptime(observed_at, "%Y-%m-%d")
+        except ValueError as exc:
+            raise ValueError("observed_at must be a valid YYYY-MM-DD date") from exc
+        if parsed.strftime("%Y-%m-%d") != observed_at:
+            raise ValueError("observed_at must be a valid YYYY-MM-DD date")
     db_path.parent.mkdir(parents=True, exist_ok=True)
-    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    now = (
+        f"{observed_at}T00:00:00Z" if observed_at is not None
+        else datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    )
     report: dict = {"policy": POLICY, "database": str(db_path), "states": {}}
     with TemporaryDirectory(prefix="warn-clean-raw-") as scratch:
         sc_raw_dir = Path(scratch)
@@ -90,6 +117,7 @@ def build(
                 report["states"][postal.upper()] = entry
                 source_dir = raw_dir
                 source_path = raw_dir / f"{postal}.csv"
+                origin = "cache/sc" if postal == "sc" else f"raw/{postal}.csv"
                 try:
                     if postal == "sc":
                         source_path = sc_raw_dir / "sc.csv"
@@ -97,10 +125,20 @@ def build(
                         source_dir = sc_raw_dir
                     if not source_path.is_file():
                         entry["status"] = "missing_raw"
+                        if exceptions is not None:
+                            exceptions.append({
+                                "origin": origin, "state": postal.upper(),
+                                "reason": "missing_source_file",
+                            })
                         continue
                     norm = normalize_file(postal, source_dir, cfg.source_url)
                     entry.update(raw_rows=norm.raw_rows, parsed_rows=len(norm.records),
                                  parse_failures=norm.failed_rows)
+                    if exceptions is not None:
+                        exceptions.extend(
+                            _raw_exception(origin, "parse_failure", failure)
+                            for failure in norm.failures
+                        )
                     if postal in {"ga", "ia", "ks"}:
                         conflicts = (
                             _ia_conflicts(norm.records) if postal == "ia"
@@ -111,6 +149,18 @@ def build(
                         entry["quarantined_rows"] = sum(
                             record["dedupe_key"] in conflicts for record in norm.records
                         )
+                        if exceptions is not None:
+                            exceptions.extend(
+                                _raw_exception(
+                                    origin,
+                                    "missing_source_identity" if postal == "ks"
+                                    and not record.get("source_identity")
+                                    else "conflicting_same_key",
+                                    record,
+                                )
+                                for record in norm.records
+                                if record["dedupe_key"] in conflicts
+                            )
                         norm = replace(norm, records=[
                             record for record in norm.records
                             if record["dedupe_key"] not in conflicts
@@ -119,14 +169,30 @@ def build(
                     entry["verification"] = verification.to_dict()
                     if verification.verdict == "failed":
                         entry["status"] = "verification_failed"
+                        if exceptions is not None:
+                            exceptions.extend(
+                                _raw_exception(origin, "verification_failed", record)
+                                for record in norm.records
+                            )
                         continue
                     stats = ingest(conn, norm.records, observed_at=now[:10])
                     entry.update(status="ingested", new=stats.new, updated=stats.updated,
-                                 unchanged=stats.unchanged,
+                                 unchanged=stats.unchanged, coalesced=stats.coalesced,
                                  suspected_collisions=stats.suspected_collisions)
+                    entry["unaccounted_rows"] = (
+                        norm.raw_rows - norm.failed_rows
+                        - entry.get("quarantined_rows", 0)
+                        - stats.new - stats.updated - stats.unchanged
+                        - stats.coalesced
+                    )
                 except Exception as exc:  # one source cannot invalidate other candidates
                     conn.rollback()
                     entry.update(status="error", error=f"{type(exc).__name__}: {exc}")
+                    if exceptions is not None:
+                        exceptions.append({
+                            "origin": origin, "state": postal.upper(),
+                            "reason": "state_error", "error": entry["error"],
+                        })
             report["total_notices"] = conn.execute("SELECT COUNT(*) FROM notices").fetchone()[0]
             report["total_versions"] = conn.execute("SELECT COUNT(*) FROM notice_versions").fetchone()[0]
             report["total_workers"] = conn.execute(
@@ -146,9 +212,11 @@ if __name__ == "__main__":
     parser.add_argument("--sc-cache-dir", type=Path, default=Path("workdir/cache/sc"))
     parser.add_argument("--states", nargs="*")
     parser.add_argument("--report", type=Path)
+    parser.add_argument("--observed-at", help="Pin YYYY-MM-DD for repeatable observations")
     args = parser.parse_args()
     result = build(args.db, args.raw_dir, args.sc_cache_dir,
-                   set(args.states) if args.states else None)
+                   set(args.states) if args.states else None,
+                   observed_at=args.observed_at)
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")

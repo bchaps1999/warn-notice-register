@@ -106,6 +106,8 @@ def older_rows_by_state(
                 continue
             if postal.lower() not in registry:
                 continue
+            if row.get("is_superseded") == "True":
+                continue
             date = row.get("notice_date") or ""
             cutoff = cutoffs.get(postal)
             if not date or (cutoff and date >= cutoff):

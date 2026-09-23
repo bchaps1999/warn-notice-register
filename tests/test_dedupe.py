@@ -97,6 +97,7 @@ def test_canonical_repair_appends_version_without_losing_source_evidence(conn):
 def test_verbatim_duplicates_within_batch_collapse(conn):
     stats = ingest(conn, [record(), record()], "2026-07-01")
     assert (stats.new, stats.updated, stats.unchanged) == (1, 0, 0)
+    assert stats.coalesced == 1
     assert conn.execute("SELECT COUNT(*) c FROM notices").fetchone()["c"] == 1
 
 

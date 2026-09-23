@@ -56,6 +56,7 @@ def test_source_only_archive_excludes_occupied_months_without_old_db_policy(
     def collect(_conn, groups, _observed_at):
         captured.extend(groups.values())
         return {"new": sum(map(len, groups.values())), "updated": 0,
+                "unchanged": 0, "coalesced": 0,
                 "suspected_collisions": 0}
 
     monkeypatch.setattr(offline_rebuild, "_ingest_groups", collect)
@@ -67,6 +68,8 @@ def test_source_only_archive_excludes_occupied_months_without_old_db_policy(
     assert report["WI"]["source_overlap_rows"] == 1
     assert report["WI"]["undated_rows"] == 1
     assert report["WI"]["outside_policy"] == 0
+    assert report["WI"]["coalesced_identical_rows"] == 0
+    assert report["WI"]["unaccounted_rows"] == 0
     assert [item["reason"] for item in exceptions] == [
         "occupied_source_month", "no_date",
     ]
@@ -122,12 +125,69 @@ def test_bln_exception_triage_does_not_auto_merge_same_signature(tmp_path):
                          "location": "Wichita", "notice_date": "2026-02-18", "jobs": "50"})
     exceptions = []
     report = _bln_unresolved(conn, source, exceptions)
+    assert report["total_rows"] == 2
+    assert report["represented_by_key"] == 0
+    assert report["unaccounted_rows"] == 0
     assert report["unresolved_rows"] == 2
     assert report["triage"] == {
         "no_exact_signature": 1, "one_exact_signature_same_location": 1,
     }
     assert exceptions[0]["candidate_keys"] == ["source-key"]
     assert exceptions[1]["candidate_keys"] == []
+
+
+def test_bln_superseded_and_identity_excluded_rows_are_accounted_for(tmp_path):
+    import csv
+    import sqlite3
+
+    conn = sqlite3.connect(":memory:")
+    conn.execute(
+        "CREATE TABLE notices (state TEXT, notice_date TEXT, effective_date TEXT, "
+        "employer_name TEXT, employees_affected INTEGER, dedupe_key TEXT, location TEXT)"
+    )
+    source = tmp_path / "bln.csv"
+    with source.open("w", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=[
+            "postal_code", "company", "notice_date", "is_superseded", "hash_id",
+        ])
+        writer.writeheader()
+        writer.writerow({"postal_code": "KS", "company": "Old Co",
+                         "notice_date": "2001-01-01", "is_superseded": "True",
+                         "hash_id": "old"})
+        writer.writerow({"postal_code": "IA", "company": "Phase Co",
+                         "notice_date": "2020-01-01", "is_superseded": "False",
+                         "hash_id": "phase"})
+    exceptions = []
+    report = _bln_unresolved(conn, source, exceptions)
+    assert report["superseded_rows"] == 1
+    assert report["identity_excluded_rows"] == 1
+    assert [item["reason"] for item in exceptions] == [
+        "superseded_source_row", "source_identity_unresolved",
+    ]
+
+
+def test_bln_older_backfill_never_ingests_superseded_rows(tmp_path):
+    import csv
+    import sqlite3
+    from warnlive.backfill.bln_integrated import older_rows_by_state
+    from warnlive.registry import load_registry
+
+    conn = sqlite3.connect(":memory:")
+    conn.row_factory = sqlite3.Row
+    conn.execute("CREATE TABLE notices (state TEXT, notice_date TEXT)")
+    conn.execute("INSERT INTO notices VALUES ('KS', '2020-01-01')")
+    source = tmp_path / "bln.csv"
+    with source.open("w", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=[
+            "postal_code", "company", "notice_date", "is_superseded",
+        ])
+        writer.writeheader()
+        writer.writerow({"postal_code": "KS", "company": "Old Co",
+                         "notice_date": "2000-01-01", "is_superseded": "True"})
+        writer.writerow({"postal_code": "KS", "company": "Current Co",
+                         "notice_date": "2001-01-01", "is_superseded": "False"})
+    result = older_rows_by_state(source, conn, load_registry(), states=["ks"])
+    assert [record["employer_name"] for record in result["KS"]] == ["Current Co"]
 
 
 def test_offline_rebuild_refuses_to_replace_existing_database(tmp_path):

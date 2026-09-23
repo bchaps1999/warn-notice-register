@@ -25,6 +25,7 @@ class NormalizeResult:
     raw_rows: int = 0
     failed_rows: int = 0
     failure_examples: list[str] = field(default_factory=list)
+    failures: list[dict] = field(default_factory=list)
 
     @property
     def failure_rate(self) -> float:
@@ -50,23 +51,39 @@ def normalize_file(postal: str, input_dir: Path, source_url: str | None) -> Norm
     rows = transformer.prep_row_list(transformer.raw_data)
     result.raw_rows = len(rows)
 
-    for row in rows:
+    for prepared_row, row in enumerate(rows, start=1):
         try:
             data = transformer.transform_row(row)
             validated = transformer.schema().load(data)
+            rec = _to_canonical(validated, row, source_url)
         except Exception as e:  # noqa: BLE001 — any bad row becomes a counted failure
-            result.failed_rows += 1
-            if len(result.failure_examples) < 5:
-                result.failure_examples.append(f"{type(e).__name__}: {e}")
+            _record_failure(result, row, prepared_row, f"{type(e).__name__}: {e}")
             continue
-        rec = _to_canonical(validated, row, source_url)
         if rec["employer_name"] is None:
-            result.failed_rows += 1
-            if len(result.failure_examples) < 5:
-                result.failure_examples.append("row has no employer name")
+            _record_failure(result, row, prepared_row, "row has no employer name")
             continue
+        # This is an ordinal in the transformer's prepared row list, not a
+        # physical CSV line number (quoted fields can span several lines).
+        rec["prepared_row"] = prepared_row
         result.records.append(rec)
     return result
+
+
+def _record_failure(
+    result: NormalizeResult, row: dict, prepared_row: int, error: str,
+) -> None:
+    raw_extra = json.dumps(
+        {(k if k is not None else "_restkey"): v for k, v in row.items()},
+        sort_keys=True, ensure_ascii=False, default=str,
+    )
+    result.failed_rows += 1
+    if len(result.failure_examples) < 5:
+        result.failure_examples.append(error)
+    result.failures.append({
+        "state": result.state, "prepared_row": prepared_row,
+        "source_row_sha256": hashlib.sha256(raw_extra.encode()).hexdigest(),
+        "raw_extra": raw_extra, "error": error,
+    })
 
 
 def _to_canonical(validated: dict, raw_row: dict, source_url: str | None) -> dict:

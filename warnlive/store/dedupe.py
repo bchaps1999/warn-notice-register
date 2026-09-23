@@ -43,6 +43,7 @@ class IngestStats:
     new: int = 0
     updated: int = 0
     unchanged: int = 0
+    coalesced: int = 0  # repeated same-key/same-hash rows within this batch
     #: updates whose effective dates disagree beyond COLLISION_WINDOW_DAYS —
     #: likely two distinct notices sharing a key, not an amendment.
     suspected_collisions: int = 0
@@ -83,6 +84,7 @@ def ingest(
     for rec in records:
         key = rec["dedupe_key"]
         if seen_in_batch.get(key) == rec["raw_record_hash"]:
+            stats.coalesced += 1
             continue
         seen_in_batch[key] = rec["raw_record_hash"]
 
