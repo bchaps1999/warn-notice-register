@@ -30,6 +30,15 @@ def test_la_source_rows_preserve_dates_status_and_location_roles():
     assert ups["status_source_row"] == note["source_row"]
     assert note["applies_to_source_row"] == ups["source_row"]
 
+    gdit = next(row for row in rows if row["source_row"] == "2025.pdf:p2:r16")
+    assert gdit["notice_date"] is None
+    assert gdit["notice_date_text"] == "Not\nspecified"
+    assert gdit["effective_date_start"] == "2025-11-14"
+    safesource = [row for row in rows if row["source_row"] in {
+        "2025.pdf:p2:r7", "2025.pdf:p2:r11", "2025.pdf:p2:r13",
+    }]
+    assert {row["workers_total"] for row in safesource} == {541, 87, 454}
+
     westlake = next(row for row in rows if "Westlake" in row.get("company_text", ""))
     assert westlake["notice_date"] == "2025-12-15"
     assert westlake["report_year"] == 2026

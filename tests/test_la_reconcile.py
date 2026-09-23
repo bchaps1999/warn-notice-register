@@ -1,6 +1,7 @@
 """Louisiana reconciliation is an auditable candidate report, not a merge."""
 
 import csv
+import sqlite3
 from pathlib import Path
 
 from warnlive.migrate.la_reconcile import reconcile
@@ -49,3 +50,28 @@ def test_la_reconciliation_retains_candidates_and_superseded_evidence(tmp_path):
         "one_active_exact_signature": 1,
         "source_annotation": 1,
     }
+
+
+def test_la_reconciliation_can_audit_candidate_db_without_mutating_it(tmp_path):
+    bln = tmp_path / "bln.csv"
+    bln.write_text("postal_code,notice_date,jobs\n")
+    db = tmp_path / "candidate.sqlite"
+    conn = sqlite3.connect(db)
+    conn.execute(
+        "CREATE TABLE notices (dedupe_key TEXT, state TEXT, employer_name TEXT, "
+        "location TEXT, notice_date TEXT, effective_date TEXT, "
+        "employees_affected INTEGER, source_notice_id TEXT)"
+    )
+    conn.execute(
+        "INSERT INTO notices VALUES (?,?,?,?,?,?,?,?)",
+        ("cornerstone", "LA", "Cornerstone Chemical Company", "Waggaman",
+         "2025-05-05", "2025-07-31", 71, "source-a"),
+    )
+    conn.commit()
+    conn.close()
+    before = db.read_bytes()
+    report = reconcile(LA, bln, db)
+    assert report["candidate_db_signature_counts"] == {"0": 37, "1": 1}
+    row = next(item for item in report["rows"] if item["official"]["source_row"] == "2025.pdf:p1:r10")
+    assert row["candidate_db_exact_signature_rows"][0]["dedupe_key"] == "cornerstone"
+    assert db.read_bytes() == before

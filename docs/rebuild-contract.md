@@ -35,6 +35,8 @@ Two replays of the expanded bundle retained the prior notice, version, and link 
 
 Regenerate the row-level Louisiana comparison with `python -m warnlive.migrate.la_reconcile --bundle data/source_snapshots/2026-09-23-la-official.tar.gz --out <new-report.json>`. It records both source checksums and, for every exact notice-date/worker-count BLN candidate, its original data-row ordinal, row hash, employer, location, effective date, superseded/amendment flags, and whether the effective start agrees. Two independent runs yielded the same report SHA-256 (`e039631303e1dc55c6adec08d5f0d30dead1876c97fa5cf397dc6c33f66b16e9`). The three rows with no active exact-signature candidate are 2026 UPS (`2026.pdf:p1:r13`), Mosaic (`p1:r14`), and Elevance (`p1:r15`). This is a comparison to the frozen BLN copy, not proof that the notices are absent from every source or that the other rows are duplicates.
 
+The command also accepts `--db <candidate.sqlite>` for a read-only official-row-to-candidate coverage report. Its first run found 29 official rows with one canonical date/worker signature, three with two, two with three, and four with none. Those buckets are diagnostic only: two IDEA official rows share the same signature. See `docs/la-source-review-2026-09.md` for the source-backed exceptions requiring curation before Louisiana can be promoted.
+
 ## Next implementation sequence
 
 1. Reconcile each official Louisiana notice row against the preserved BLN rows, distinguishing a confirmed same notice, a separate notice, and an unresolved case. Decide whether ambiguous 2025 company/address text and 2026 out-of-state addresses refer to worksites before canonical ingestion; do not allocate multi-site totals without source evidence.
