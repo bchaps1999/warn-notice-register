@@ -511,6 +511,25 @@ def rebuild(
         policy = None if source_only else _read_policy(source / "rebuild_policy.json")
         accepted = None if source_only else set(policy["accepted_keys"])
         exceptions: list[dict] = []
+        la_source_rows: list[dict] = []
+        if (source / "agency/la").is_dir():
+            from warnlive.migrate.la_source import extract as extract_la
+
+            la_source_rows = extract_la(source / "agency/la")
+            if source_only:
+                for row in la_source_rows:
+                    reason = (
+                        "official_source_annotation" if row["kind"] == "annotation"
+                        else "official_source_rescinded" if row["status"] == "rescinded"
+                        else "official_source_unreviewed"
+                    )
+                    exceptions.append({
+                        "origin": row["source_artifact"], "state": "LA",
+                        "reason": reason, "source_row": row["source_row"],
+                        "source_row_sha256": row["source_row_sha256"],
+                        "source_url": row["source_url"],
+                        "raw_extra": json.dumps(row, sort_keys=True, ensure_ascii=False),
+                    })
         raw_report = build_raw(
             out_db, source / "raw", source / "cache/sc",
             observed_at=observed_at,
@@ -554,6 +573,17 @@ def rebuild(
                 "source_bytes": sum(item["size"] for item in manifest["files"]),
                 "policy": "source-only-v1" if source_only else policy["format"],
                 "raw": raw_report["states"],
+                "la_official_source": {
+                    "table_rows": len(la_source_rows),
+                    "notice_rows": sum(row["kind"] == "notice" for row in la_source_rows),
+                    "rescinded_notice_rows": sum(
+                        row.get("status") == "rescinded" for row in la_source_rows
+                    ),
+                    "annotation_rows": sum(
+                        row["kind"] == "annotation" for row in la_source_rows
+                    ),
+                    "ingested_rows": 0,
+                },
                 "bln_conservative": backfill, "backfill_raw": backfill_raw,
                 "cached_agencies": agencies, "bln_accepted": accepted_bln,
                 "il_effective_repair": il_repair,

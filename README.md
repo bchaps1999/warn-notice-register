@@ -119,33 +119,33 @@ snapshots, saved backfills, and cached agency files before trying to rebuild:
 
 ```bash
 python -m warnlive.migrate.source_bundle verify \
-  data/source_snapshots/2026-09-22-ca-nj-refresh.tar.gz
+  data/source_snapshots/2026-09-23-la-official.tar.gz
 python -m warnlive.migrate.offline_rebuild \
-  --bundle data/source_snapshots/2026-09-22-ca-nj-refresh.tar.gz \
+  --bundle data/source_snapshots/2026-09-23-la-official.tar.gz \
   --db /private/tmp/warn-rebuild-candidate.sqlite --observed-at 2026-09-22 \
-  --report /private/tmp/warn-rebuild-report.json
+  --source-only --report /private/tmp/warn-rebuild-report.json
 ```
 
-Add `--source-only` to ignore the bundle's old-database acceptance policy.
-That mode prioritizes official archived artifacts and saved state raw files,
+Source-only mode prioritizes official archived artifacts and saved state raw files,
 then fills older/empty-month gaps from BLN. It reports uncertain archive and
 BLN overlaps rather than automatically merging them; its output is an audit
 candidate, not publication-ready. It also writes a sorted, checksum-reported
 `<candidate>.exceptions.jsonl` with source references, original rows, and
-reasons for rejected or unresolved current raw, historical raw, archive, and
-BLN inputs. The report reconciles each input group to represented, coalesced,
-or exception rows; zero unaccounted rows does not imply all interpretations
-are correct.
+reasons for rejected or unresolved current raw, historical raw, archive, BLN,
+and official Louisiana PDF inputs. The report reconciles each input group to
+represented, coalesced, or exception rows; zero unaccounted rows does not imply
+all interpretations are correct.
 
 Add `--compare-db data/warn.sqlite` only when comparing with a local database
 snapshot. The replay does not use the network or write to an existing database. The
 report includes stable-content SHA-256 fingerprints for notices, version
 payloads, and links, excluding database IDs and observation timestamps. The
-bundle includes a transitional policy of historically accepted keys derived
-from the existing database; it is not a fully independent reconstruction of
-past curation. The refreshed September 22 bundle is on the
-`reproducible-warn-rebuild` branch; the earlier July-based comparison bundle
-remains local and untracked. The resulting database is a candidate for source-first
+older September 22 bundle includes a transitional policy of historically
+accepted keys derived from the existing database. The September 23 source-only
+bundle omits that
+policy and adds two Louisiana official PDFs; their 38 notice rows and one
+annotation are extracted for review but not yet ingested as canonical notices.
+The resulting database is a candidate for source-first
 validation, **not** a replacement for the published database. See
 [`docs/rebuild-contract.md`](docs/rebuild-contract.md) for the acceptance
 criteria and [`docs/warn-remediation-2026-09.md`](docs/warn-remediation-2026-09.md)

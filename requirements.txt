@@ -13,7 +13,7 @@ bln
 click
 beautifulsoup4
 html5lib
-pdfplumber
+pdfplumber==0.11.10  # Louisiana source-table extraction is layout-sensitive
 requests
 openpyxl
 pyopenssl

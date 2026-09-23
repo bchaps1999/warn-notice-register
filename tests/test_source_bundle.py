@@ -1,6 +1,7 @@
 import hashlib
 import json
 import sqlite3
+from pathlib import Path
 
 import pytest
 
@@ -93,3 +94,17 @@ def test_source_bundle_rejects_unexpected_raw_overlay(tmp_path):
     (overlay / "notes.txt").write_text("not raw data")
     with pytest.raises(ValueError, match="unexpected file"):
         create(source, tmp_path / "bad.tar.gz", raw_overlay=overlay)
+
+
+def test_source_bundle_includes_verified_louisiana_documents(tmp_path):
+    source = tmp_path / "workdir"
+    _sources(source)
+    la = Path(__file__).resolve().parents[1] / "data/source_snapshots/la"
+    archive = tmp_path / "with-la.tar.gz"
+    manifest = create(source, archive, agency_artifacts=la)
+    assert {"agency/la/manifest.json", "agency/la/2025.pdf", "agency/la/2026.pdf"} <= {
+        item["path"] for item in manifest["files"]
+    }
+    unpacked = tmp_path / "unpacked"
+    extract(archive, unpacked)
+    assert (unpacked / "agency/la/2025.pdf").read_bytes() == (la / "2025.pdf").read_bytes()

@@ -86,6 +86,7 @@ def _rebuild_policy(db_path: Path) -> bytes:
 def create(
     workdir: Path, out_path: Path, policy_db: Path | None = None,
     raw_overlay: Path | None = None,
+    agency_artifacts: Path | None = None,
 ) -> dict:
     """Create a deterministic bundle; never overwrite an existing snapshot."""
     workdir, out_path = Path(workdir), Path(out_path)
@@ -109,8 +110,25 @@ def create(
         if not overrides:
             raise ValueError("raw overlay contains no state CSVs")
 
+    additional: dict[Path, Path] = {}
+    if agency_artifacts is not None:
+        agency_artifacts = Path(agency_artifacts)
+        if agency_artifacts.is_symlink() or not agency_artifacts.is_dir():
+            raise ValueError(f"invalid agency artifact directory: {agency_artifacts}")
+        for name in ("manifest.json", "2025.pdf", "2026.pdf"):
+            path = agency_artifacts / name
+            if path.is_symlink() or not path.is_file():
+                raise ValueError(f"invalid agency artifact: {path}")
+            additional[Path("agency/la") / name] = path
+        from warnlive.migrate.la_source import extract as extract_la
+
+        extract_la(agency_artifacts)  # verify bytes and layout before freezing
+        if set(additional) & set(files):
+            raise ValueError("agency artifact collides with workdir input")
+        files = sorted(set(files) | set(additional), key=lambda p: p.as_posix())
+
     def source_bytes(rel: Path) -> bytes:
-        return overrides.get(rel, workdir / rel).read_bytes()
+        return overrides.get(rel, additional.get(rel, workdir / rel)).read_bytes()
 
     policy = _rebuild_policy(Path(policy_db)) if policy_db is not None else None
     manifest = {"format": "warn-source-bundle-v1", "files": [],
@@ -211,6 +229,8 @@ if __name__ == "__main__":
                       help="Freeze accepted historical keys and archive URLs from this DB")
     make.add_argument("--raw-overlay", type=Path,
                       help="Directory of freshly captured two-letter state CSVs to replace stale raw inputs")
+    make.add_argument("--agency-artifacts", type=Path,
+                      help="Verified Louisiana manifest and annual PDFs to include under agency/la")
     check = sub.add_parser("verify")
     check.add_argument("bundle", type=Path)
     unpack = sub.add_parser("extract")
@@ -218,7 +238,8 @@ if __name__ == "__main__":
     unpack.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
     result = (
-        create(args.workdir, args.out, args.policy_db, args.raw_overlay) if args.command == "create"
+        create(args.workdir, args.out, args.policy_db, args.raw_overlay,
+               args.agency_artifacts) if args.command == "create"
         else extract(args.bundle, args.out) if args.command == "extract"
         else verify(args.bundle)
     )
