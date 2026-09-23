@@ -125,3 +125,18 @@ def test_old_georgia_rows_cannot_mix_with_source_identity_keys(monkeypatch, tmp_
     assert result.verdict == "failed"
     assert "clean candidate" in result.error
     assert conn.execute("SELECT COUNT(*) FROM notices").fetchone()[0] == 1
+
+
+def test_old_kansas_rows_cannot_mix_with_source_identity_keys(monkeypatch, tmp_path):
+    conn, raw = _setup(monkeypatch, tmp_path, cached=False)
+    conn.execute(
+        "INSERT INTO notices (dedupe_key, state, first_seen) "
+        "VALUES ('old-ks', 'KS', '2026-01-01')"
+    )
+    conn.commit()
+    result = pipeline._run_one(
+        _config("ks"), conn, raw.parent, tmp_path / "cache", False, False,
+    )
+    assert result.verdict == "failed"
+    assert "clean candidate" in result.error
+    assert conn.execute("SELECT COUNT(*) FROM notices").fetchone()[0] == 1

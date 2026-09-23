@@ -4,7 +4,8 @@ import hashlib
 import pytest
 
 from warnlive.migrate.offline_rebuild import (
-    _cached_only, _fingerprints, _read_policy, _repair_il_from_cache, rebuild,
+    _bln_unresolved, _cached_agencies, _cached_only, _exception, _fingerprints, _read_policy,
+    _repair_il_from_cache, _write_exceptions, rebuild,
 )
 
 
@@ -24,12 +25,125 @@ def test_offline_cache_reader_never_fetches(tmp_path):
     assert _cached_only("https://unavailable.example/pdf", source) == b"%PDF fixture"
 
 
+def test_source_only_archive_excludes_occupied_months_without_old_db_policy(
+    tmp_path, monkeypatch,
+):
+    import sqlite3
+    from warnlive.migrate import offline_rebuild
+    from warnlive.backfill import state_archives
+
+    conn = sqlite3.connect(":memory:")
+    conn.execute(
+        "CREATE TABLE notices (dedupe_key TEXT, state TEXT, notice_date TEXT, effective_date TEXT)"
+    )
+    conn.execute("INSERT INTO notices VALUES ('raw', 'WI', '2026-01-12', NULL)")
+    records = [
+        {"dedupe_key": "archive-a", "notice_date": "2025-12-01",
+         "effective_date": None, "raw_record_hash": "a", "source_url": "archive://a"},
+        {"dedupe_key": "archive-b", "notice_date": "2025-12-30",
+         "effective_date": None, "raw_record_hash": "b", "source_url": "archive://b"},
+        {"dedupe_key": "overlap", "notice_date": "2026-01-01",
+         "effective_date": None, "raw_record_hash": "c", "source_url": "archive://c"},
+        {"dedupe_key": "undated", "notice_date": None,
+         "effective_date": None, "raw_record_hash": "d", "source_url": "archive://d"},
+    ]
+    monkeypatch.setitem(state_archives.FETCHERS, "WI", lambda _cache: records)
+    monkeypatch.setattr(offline_rebuild, "_cached_ny", lambda _cache: [])
+    for state in ("FL", "CA", "MA", "OH"):
+        monkeypatch.setitem(state_archives.FETCHERS, state, lambda _cache: [])
+    captured = []
+
+    def collect(_conn, groups, _observed_at):
+        captured.extend(groups.values())
+        return {"new": sum(map(len, groups.values())), "updated": 0,
+                "suspected_collisions": 0}
+
+    monkeypatch.setattr(offline_rebuild, "_ingest_groups", collect)
+    exceptions = []
+    report = _cached_agencies(conn, tmp_path, None, {}, "2026-09-22", exceptions)
+    assert [row["dedupe_key"] for group in captured for row in group] == [
+        "archive-a", "archive-b",
+    ]
+    assert report["WI"]["source_overlap_rows"] == 1
+    assert report["WI"]["undated_rows"] == 1
+    assert report["WI"]["outside_policy"] == 0
+    assert [item["reason"] for item in exceptions] == [
+        "occupied_source_month", "no_date",
+    ]
+
+
+def test_exception_manifest_is_stable_and_never_overwritten(tmp_path):
+    path = tmp_path / "exceptions.jsonl"
+    rows = [
+        {"origin": "b", "state": "WI", "dedupe_key": "2",
+         "raw_record_hash": "b", "reason": "overlap"},
+        {"origin": "a", "state": "CA", "dedupe_key": "1",
+         "raw_record_hash": "a", "reason": "overlap"},
+    ]
+    first = _write_exceptions(path, rows)
+    second = _write_exceptions(tmp_path / "second.jsonl", list(reversed(rows)))
+    assert first["rows"] == 2
+    assert first["sha256"] == second["sha256"]
+    assert json.loads(path.read_text().splitlines()[0])["state"] == "CA"
+    with pytest.raises(FileExistsError):
+        _write_exceptions(path, rows)
+    assert first["sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def test_california_exception_points_to_bundled_pdf():
+    item = _exception("agency-cache:CA", "conflicting_same_key", {
+        "state": "CA", "raw_extra": json.dumps({"year_file": 2007}),
+        "source_url": "cached://annual-pdf",
+    })
+    assert item["bundle_artifact"] == "backfill/cache/archives/ca/2007.pdf"
+
+
+def test_bln_exception_triage_does_not_auto_merge_same_signature(tmp_path):
+    import csv
+    import sqlite3
+
+    conn = sqlite3.connect(":memory:")
+    conn.execute(
+        "CREATE TABLE notices (state TEXT, notice_date TEXT, effective_date TEXT, "
+        "employer_name TEXT, employees_affected INTEGER, dedupe_key TEXT, location TEXT)"
+    )
+    conn.execute(
+        "INSERT INTO notices VALUES ('KS','2026-02-18',NULL,'Same Co',50,'source-key','Wichita')"
+    )
+    source = tmp_path / "bln.csv"
+    with source.open("w", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=[
+            "postal_code", "company", "location", "notice_date", "jobs",
+        ])
+        writer.writeheader()
+        writer.writerow({"postal_code": "KS", "company": "Same Co",
+                         "location": "Wichita", "notice_date": "2026-02-18", "jobs": "50"})
+        writer.writerow({"postal_code": "KS", "company": "Other Co",
+                         "location": "Wichita", "notice_date": "2026-02-18", "jobs": "50"})
+    exceptions = []
+    report = _bln_unresolved(conn, source, exceptions)
+    assert report["unresolved_rows"] == 2
+    assert report["triage"] == {
+        "no_exact_signature": 1, "one_exact_signature_same_location": 1,
+    }
+    assert exceptions[0]["candidate_keys"] == ["source-key"]
+    assert exceptions[1]["candidate_keys"] == []
+
+
 def test_offline_rebuild_refuses_to_replace_existing_database(tmp_path):
     db = tmp_path / "current.sqlite"
     db.write_bytes(b"preserve")
     with pytest.raises(FileExistsError, match="already exists"):
         rebuild(tmp_path / "missing.tar.gz", db, "2026-09-22")
     assert db.read_bytes() == b"preserve"
+
+
+def test_source_only_rejects_exception_path_equal_to_database(tmp_path):
+    db = tmp_path / "candidate.sqlite"
+    with pytest.raises(ValueError, match="must differ"):
+        rebuild(tmp_path / "missing.tar.gz", db, "2026-09-22",
+                source_only=True, exceptions_path=db)
+    assert not db.exists()
 
 
 def test_il_repair_uses_only_cached_reports(tmp_path, monkeypatch):

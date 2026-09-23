@@ -200,6 +200,19 @@ def verify_state(
                 f"{conflicts} dedupe keys cover different GA WARN IDs; "
                 "source-aware reconciliation required",
             )
+        if cfg.postal == "ks":
+            missing = sum(not rec.get("source_identity") for rec in norm.records)
+            by_key_rows: dict[str, set[str]] = {}
+            for rec in norm.records:
+                by_key_rows.setdefault(rec["dedupe_key"], set()).add(
+                    rec["raw_record_hash"]
+                )
+            conflicts = sum(len(rows) > 1 for rows in by_key_rows.values())
+            result.add(
+                "ks_record_identity", missing == 0 and conflicts == 0,
+                f"{missing} rows without a verified Kansas record ID; "
+                f"{conflicts} record IDs cover differing rows",
+            )
         if cfg.postal == "ia":
             # A filing key can contain distinct phases, sites, and revisions.
             # None of those may safely overwrite one another as versions of

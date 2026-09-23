@@ -126,6 +126,14 @@ python -m warnlive.migrate.offline_rebuild \
   --report /private/tmp/warn-rebuild-report.json
 ```
 
+Add `--source-only` to ignore the bundle's old-database acceptance policy.
+That mode prioritizes official archived artifacts and saved state raw files,
+then fills older/empty-month gaps from BLN. It reports uncertain archive and
+BLN overlaps rather than automatically merging them; its output is an audit
+candidate, not publication-ready. It also writes a sorted, checksum-reported
+`<candidate>.exceptions.jsonl` with source references and original rows for
+excluded archive/BLN records.
+
 Add `--compare-db data/warn.sqlite` only when comparing with a local database
 snapshot. The replay does not use the network or write to an existing database. The
 report includes stable-content SHA-256 fingerprints for notices, version

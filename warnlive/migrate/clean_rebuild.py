@@ -42,6 +42,18 @@ def _ga_idless_conflicts(records: list[dict]) -> set[str]:
     return {key for key, values in signatures.items() if len(values) > 1}
 
 
+def _ks_conflicts(records: list[dict]) -> set[str]:
+    """Do not merge distinct source rows or invent a key for an ID-less row."""
+    signatures: dict[str, set[str]] = defaultdict(set)
+    missing = set()
+    for record in records:
+        key = record["dedupe_key"]
+        signatures[key].add(record["raw_record_hash"])
+        if not record.get("source_identity"):
+            missing.add(key)
+    return missing | {key for key, values in signatures.items() if len(values) > 1}
+
+
 def build(
     db_path: Path, raw_dir: Path, sc_cache_dir: Path,
     states: set[str] | None = None,
@@ -89,10 +101,11 @@ def build(
                     norm = normalize_file(postal, source_dir, cfg.source_url)
                     entry.update(raw_rows=norm.raw_rows, parsed_rows=len(norm.records),
                                  parse_failures=norm.failed_rows)
-                    if postal in {"ga", "ia"}:
+                    if postal in {"ga", "ia", "ks"}:
                         conflicts = (
                             _ia_conflicts(norm.records) if postal == "ia"
-                            else _ga_idless_conflicts(norm.records)
+                            else _ga_idless_conflicts(norm.records) if postal == "ga"
+                            else _ks_conflicts(norm.records)
                         )
                         entry["quarantined_keys"] = len(conflicts)
                         entry["quarantined_rows"] = sum(

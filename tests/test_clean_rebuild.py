@@ -1,7 +1,7 @@
 import pytest
 
 from warnlive.migrate.clean_rebuild import (
-    _ga_idless_conflicts, _ia_conflicts, build,
+    _ga_idless_conflicts, _ia_conflicts, _ks_conflicts, build,
 )
 
 
@@ -14,6 +14,7 @@ def test_candidate_quarantines_only_differing_idless_ga_groups():
     ]
     assert _ga_idless_conflicts(rows) == {"no-id"}
     assert _ia_conflicts(rows) == {"no-id", "id"}
+    assert _ks_conflicts(rows) == {"no-id", "id"}
 
 
 def test_candidate_refuses_to_overwrite_existing_database(tmp_path):

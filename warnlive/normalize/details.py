@@ -104,6 +104,17 @@ def extract(state: str, raw: dict, rec: dict) -> dict:
             details["total_workers"] = rec["employees_affected"]
             details["worker_allocation"] = "single_site" if len(sites) == 1 else "unresolved"
 
+    elif state == "KS":
+        record_number = (raw.get("record_number") or "").strip()
+        detail_url = (raw.get("detail_page_url") or "").strip()
+        if record_number.isdecimal() and (
+            not detail_url or detail_url.rstrip("/").endswith(f"/{record_number}")
+        ):
+            result["source_identity"] = f"KS:{record_number}"
+            details["source_record_number"] = record_number
+            if detail_url:
+                details["source_detail_url"] = detail_url
+
     elif state == "NJ" and rec.get("notice_date"):
         result["notice_date_precision"] = "month"
         result["notice_date_basis"] = "inferred_year_from_effective_date"

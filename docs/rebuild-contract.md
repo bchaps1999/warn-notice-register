@@ -21,14 +21,16 @@ Status: work in progress, 2026-09-22. The objective is the best defensible WARN 
 
 ## Current gap and model-call boundary
 
-The committed `2026-09-22-ca-nj-refresh.tar.gz` can be replayed offline, but its `rebuild_policy.json` includes historically accepted keys and archive URLs derived from the old database. Most raw state snapshots predate the CA/NJ refresh. Consequently it proves repeatability of *this candidate*, not yet a fully source-independent build. The old database should be used to find possible missing evidence, not to decide which source rows are valid.
+The committed `2026-09-22-ca-nj-refresh.tar.gz` can be replayed offline. Legacy comparison mode uses its `rebuild_policy.json`, which includes historically accepted keys and archive URLs derived from the old database. `--source-only` ignores that policy and writes a checksummed, row-level archive/BLN exception manifest for uncertain overlap, but it still needs review of excluded source rows before publication. Most raw state snapshots predate the CA/NJ refresh. The old database should be used to find possible missing evidence, not to decide which source rows are valid.
 
 The offline rebuild and export path should not make LLM calls. **Before any new or repeated LLM calls** for employer identity, entity resolution, place decisions, industry, or other classification, agree with the project owner on the exact task, input/evidence contract, prompt and model, evaluation set, acceptance thresholds, maximum call/cost budget, and how decisions will be reviewed and recorded. Running every decision again is acceptable if evaluation justifies it; it is not an automatic step of the rebuild.
 
+The first source-only replay of the mixed-time bundle yielded 86,999 notices and 93,195 versions with SQLite integrity `ok` and zero foreign-key errors. Its row-level archive/BLN exception manifest contains 15,888 rows: 1,332 conflicting archive rows, 301 archive rows in occupied source months, and 14,255 unmatched BLN rows. BLN triage found 2,134 with one exact state/date/employer/worker signature and the same folded location, 2,883 with one exact signature but a different location, 78 with multiple exact signatures, and 9,160 with no exact signature. These are review categories, **not** automatic duplicate or missing-notice determinations. The manifest is at `/private/tmp/warn-source-only-20260922-03.exceptions.jsonl` locally; it is generated, not committed. This run also found LA missing from the raw snapshot, 82 backfill parse failures, and 82 backfill rows quarantined for same-key conflicts. Raw parse failures and backfill conflicts still need row-level exception records, so the current manifest is not a complete source-to-output accounting.
+
 ## Next implementation sequence
 
-1. Make the overlap/curation policy source-evidenced instead of old-DB-derived, retaining a separate read-only old-DB comparison.
-2. Fix source-aware identity and exception reporting for SC, GA, IA, and KS. Complete date-range and location-role coverage with raw-to-output tests.
+1. Review and resolve source-only archive/BLN overlap queues using source evidence or explicit curation decisions; keep the legacy policy only for read-only comparison.
+2. Finish source-aware identity and exception reporting for SC, GA, and IA. Kansas now keys fresh builds by its verified source record number; complete date-range and location-role coverage with raw-to-output tests.
 3. Freeze a contemporaneous capture where possible; declare intentionally historical/missing artifacts in the manifest. Add source-to-output coverage and verify two fresh, isolated database/export/site replays.
 4. Review unresolved classification and matching queues and a held-out sample with the owner. Only then decide whether to reuse, revise, or rerun LLM decisions.
 5. Review the resulting candidate, stage replacement and deployment, then merge to `main` under the owner's Git identity and remove the temporary branch.

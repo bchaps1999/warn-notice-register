@@ -111,13 +111,13 @@ def _to_canonical(validated: dict, raw_row: dict, source_url: str | None) -> dic
 
 
 def _dedupe_key(rec: dict) -> str:
-    # These two sources provide a filing/row identity that is stronger than
-    # employer + notice date + place.  In particular GA often omits a notice
-    # date, and historical SC reports have no notice date at all.  Keep the
-    # legacy key for ID-less rows and every other state; only a *fresh* build
-    # may adopt these changed keys until old notices are migrated or archived.
+    # These sources provide filing/row identity stronger than employer +
+    # notice date + place. GA often omits a notice date, historical SC reports
+    # have none, and KS workforce-area names change while record IDs persist.
+    # Keep legacy keys for ID-less rows and other states; only a fresh build
+    # may adopt changed keys until old notices are migrated or archived.
     source_identity = rec.get("source_identity")
-    if rec["state"] in {"GA", "SC"} and source_identity:
+    if rec["state"] in {"GA", "SC", "KS"} and source_identity:
         return hashlib.sha1(f"{rec['state']}|source|{source_identity}".encode()).hexdigest()
     parts = "|".join(
         [

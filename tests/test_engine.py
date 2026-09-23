@@ -109,6 +109,36 @@ def test_sc_source_rows_keep_undated_events_apart():
     assert _dedupe_key(base) != _dedupe_key({**base, "source_identity": "SC:sc/2025.pdf:2"})
 
 
+def test_kansas_record_number_survives_area_renaming_and_separates_filings():
+    validated = {
+        "postal_code": "KS", "company": "Same Company", "location": "Wichita",
+        "notice_date": date(2026, 2, 18), "effective_date": None, "jobs": 50,
+    }
+    raw = {
+        "record_number": "2300",
+        "detail_page_url": "https://www.kansasworks.com/search/warn_lookups/2300",
+    }
+    first = _to_canonical(validated, raw, "https://example.gov")
+    renamed = _to_canonical(
+        {**validated, "location": "3 - Workforce Partnership"}, raw,
+        "https://example.gov",
+    )
+    other = _to_canonical(
+        validated,
+        {**raw, "record_number": "2301", "detail_page_url": raw["detail_page_url"].replace("2300", "2301")},
+        "https://example.gov",
+    )
+    assert first["source_identity"] == "KS:2300"
+    assert first["dedupe_key"] == renamed["dedupe_key"]
+    assert first["dedupe_key"] != other["dedupe_key"]
+    assert json.loads(first["source_details"])["source_record_number"] == "2300"
+    mismatch = _to_canonical(
+        validated, {**raw, "detail_page_url": raw["detail_page_url"].replace("2300", "2301")},
+        "https://example.gov",
+    )
+    assert not mismatch.get("source_identity")
+
+
 @pytest.mark.parametrize(
     "state,field,text,interpretation,end",
     [

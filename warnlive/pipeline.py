@@ -185,9 +185,9 @@ def _run_one(
     # failed runs never ingest; degraded runs do (warn-level findings only)
     if conn is not None and not smoke and norm is not None and outcome.verdict != "failed":
         # Source-identity keys are intentionally enabled for fresh builds, but
-        # the currently published DB still holds GA/SC rows under legacy keys.
+        # the currently published DB still holds GA/SC/KS rows under legacy keys.
         # Do not mix both policies in one DB: that would duplicate filings.
-        if postal in {"ga", "sc"} and conn.execute(
+        if postal in {"ga", "sc", "ks"} and conn.execute(
             "SELECT 1 FROM notices WHERE state = ? LIMIT 1", (postal.upper(),)
         ).fetchone() and not conn.execute(
             "SELECT 1 FROM runs WHERE trigger = 'clean-rebuild-v1' LIMIT 1"

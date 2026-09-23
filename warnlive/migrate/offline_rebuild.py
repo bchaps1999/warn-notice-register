@@ -1,9 +1,9 @@
 """Rebuild an isolated WARN candidate from a frozen local source bundle.
 
-No network requests are made.  The bundled overlap policy is a transitional
-record of which historical keys were accepted before this rebuild; it keeps
-overlapping BLN/archive inputs from silently creating extra notices.  A
-candidate is never promoted or exported by this command.
+No network requests are made. The default, legacy comparison mode uses a
+bundled old-DB overlap policy. Source-only mode ignores that policy, gives
+agency archives priority over BLN, and quarantines uncertain overlaps. Neither
+mode promotes or exports its candidate.
 """
 
 from __future__ import annotations
@@ -74,7 +74,8 @@ def _backfill_raw(conn, raw_dir: Path, observed_at: str) -> dict:
     registry = load_registry()
     seen = {row[0] for row in conn.execute("SELECT dedupe_key FROM notices")}
     report = {"files": 0, "raw_rows": 0, "parse_failures": 0,
-              "skipped_existing": 0, "quarantined_conflicts": 0}
+              "skipped_existing": 0, "quarantined_conflicts": 0,
+              "quarantined_missing_source_identity": 0}
     groups_by_state: dict[str, list[dict]] = defaultdict(list)
     for source in sorted(raw_dir.glob("*.csv")):
         postal = source.stem
@@ -88,7 +89,9 @@ def _backfill_raw(conn, raw_dir: Path, observed_at: str) -> dict:
         for rec in norm.records:
             by_key[rec["dedupe_key"]].append(rec)
         for key, rows in by_key.items():
-            if key in seen:
+            if postal == "ks" and any(not row.get("source_identity") for row in rows):
+                report["quarantined_missing_source_identity"] += len(rows)
+            elif key in seen:
                 report["skipped_existing"] += len(rows)
             elif len({row["raw_record_hash"] for row in rows}) > 1:
                 report["quarantined_conflicts"] += len(rows)
@@ -100,6 +103,27 @@ def _backfill_raw(conn, raw_dir: Path, observed_at: str) -> dict:
 
 def _cached_only(_url: str, dest: Path) -> bytes | None:
     return dest.read_bytes() if dest.is_file() else None
+
+
+def _exception(origin: str, reason: str, rec: dict) -> dict:
+    """Stable pointer back to a preserved row, without a guessed decision."""
+    item = {
+        "origin": origin, "reason": reason, "state": rec.get("state"),
+        "dedupe_key": rec.get("dedupe_key"),
+        "raw_record_hash": rec.get("raw_record_hash"),
+        "source_identity": rec.get("source_identity"),
+        "source_notice_id": rec.get("source_notice_id"),
+        "source_url": rec.get("source_url"),
+        "raw_extra": rec.get("raw_extra"),
+    }
+    if origin == "agency-cache:CA":
+        try:
+            year = json.loads(rec.get("raw_extra") or "{}").get("year_file")
+        except (TypeError, ValueError):
+            year = None
+        if isinstance(year, int) and 2000 <= year <= 2014:
+            item["bundle_artifact"] = f"backfill/cache/archives/ca/{year}.pdf"
+    return item
 
 
 def _cached_ny(cache: Path) -> list[dict]:
@@ -119,12 +143,23 @@ def _cached_ny(cache: Path) -> list[dict]:
 
 
 def _cached_agencies(
-    conn, cache: Path, accepted: set[str], source_urls: dict[str, str],
-    observed_at: str,
+    conn, cache: Path, accepted: set[str] | None, source_urls: dict[str, str],
+    observed_at: str, exceptions: list[dict] | None = None,
 ) -> dict:
     seen = {row[0] for row in conn.execute("SELECT dedupe_key FROM notices")}
     report = {}
     for state in ("WI", "FL", "CA", "MA", "OH", "NY"):
+        # This is a snapshot of the higher-priority input's occupied months,
+        # not a set updated for each archive row: one archive may legitimately
+        # contain many independent filings in the same month.
+        occupied = {
+            value[:7]
+            for row in conn.execute(
+                "SELECT notice_date, effective_date FROM notices WHERE state = ?",
+                (state,),
+            )
+            for value in row if value
+        } if accepted is None else set()
         if state == "NY":
             records = _cached_ny(cache)
         else:
@@ -137,17 +172,51 @@ def _cached_agencies(
         for rec in records:
             by_key[rec["dedupe_key"]].append(rec)
         eligible = []
-        skipped = ambiguous = outside_policy = 0
+        skipped = ambiguous = outside_policy = overlap = undated = 0
         for key, rows in by_key.items():
             if key in seen:
                 skipped += len(rows)
-            elif key not in accepted:
-                outside_policy += len(rows)
             elif len({row["raw_record_hash"] for row in rows}) > 1:
                 ambiguous += len(rows)
+                if exceptions is not None:
+                    exceptions.extend(
+                        _exception(f"agency-cache:{state}", "conflicting_same_key", row)
+                        for row in rows
+                    )
+            elif accepted is not None and key not in accepted:
+                outside_policy += len(rows)
             else:
                 rec = rows[0]
-                if key in source_urls:
+                if accepted is None:
+                    dates = [rec.get(name) for name in ("notice_date", "effective_date")]
+                    months = {value[:7] for value in dates if value}
+                    if not months:
+                        undated += len(rows)
+                        if exceptions is not None:
+                            exceptions.extend(
+                                _exception(f"agency-cache:{state}", "no_date", row)
+                                for row in rows
+                            )
+                        continue
+                    if months & occupied:
+                        overlap += len(rows)
+                        if exceptions is not None:
+                            exceptions.extend(
+                                _exception(f"agency-cache:{state}", "occupied_source_month", row)
+                                for row in rows
+                            )
+                        continue
+                    if state == "CA" and rec.get("source_url") == "cached://annual-pdf":
+                        artifact = _exception("agency-cache:CA", "included", rec).get(
+                            "bundle_artifact"
+                        )
+                        if artifact:
+                            rec["source_details"] = json.dumps(
+                                {"source_artifact": artifact}, sort_keys=True
+                            )
+                            rec["source_url"] = None
+                            rec["raw_record_hash"] = _record_hash(rec)
+                elif key in source_urls:
                     rec["source_url"] = source_urls[key]
                     rec["raw_record_hash"] = _record_hash(rec)
                 eligible.append(rec)
@@ -155,8 +224,97 @@ def _cached_agencies(
         stats = _ingest_groups(conn, {state: eligible}, observed_at)
         report[state] = {"parsed": len(records), "already": skipped,
                          "outside_policy": outside_policy,
-                         "ambiguous_rows": ambiguous, **stats}
+                         "ambiguous_rows": ambiguous,
+                         "source_overlap_rows": overlap,
+                         "undated_rows": undated, **stats}
     return report
+
+
+def _bln_unresolved(
+    conn, source: Path, exceptions: list[dict] | None = None,
+) -> dict:
+    """Count BLN rows not selected by conservative source-only rules."""
+    from warnlive.normalize.engine import _fold
+
+    registry = load_registry()
+    seen = {row[0] for row in conn.execute("SELECT dedupe_key FROM notices")}
+    signatures: dict[tuple, list[tuple[str, str]]] = defaultdict(list)
+    for row in conn.execute(
+        "SELECT state, COALESCE(notice_date, effective_date), employer_name, "
+        "employees_affected, dedupe_key, location FROM notices"
+    ):
+        state, date, employer, workers, key, location = row
+        signatures[(state, date, _fold(employer), workers)].append(
+            (key, _fold(location))
+        )
+    by_state: dict[str, int] = defaultdict(int)
+    triage: dict[str, int] = defaultdict(int)
+    invalid = superseded = 0
+    with source.open(newline="") as fh:
+        for row in csv.DictReader(fh):
+            state = (row.get("postal_code") or "").upper()
+            if state in {"GA", "SC", "IA"} or state.lower() not in registry:
+                continue
+            if row.get("is_superseded") == "True":
+                superseded += 1
+                continue
+            try:
+                rec = bln_integrated.to_canonical(row, registry[state.lower()].source_url)
+            except (ValueError, KeyError, TypeError):
+                invalid += 1
+                continue
+            if not rec["employer_name"]:
+                invalid += 1
+            elif rec["dedupe_key"] not in seen:
+                by_state[state] += 1
+                signature = (
+                    state, rec["notice_date"] or rec["effective_date"],
+                    _fold(rec["employer_name"]), rec["employees_affected"],
+                )
+                matches = signatures.get(signature, [])
+                if not matches:
+                    category = "no_exact_signature"
+                elif len(matches) > 1:
+                    category = "multiple_exact_signatures"
+                elif matches[0][1] == _fold(rec["location"]):
+                    category = "one_exact_signature_same_location"
+                else:
+                    category = "one_exact_signature_different_location"
+                triage[category] += 1
+                if exceptions is not None:
+                    item = _exception(
+                        "backfill/bln_integrated.csv", "unmatched_after_conservative_fill", rec
+                    )
+                    item["triage"] = category
+                    item["candidate_keys"] = sorted(key for key, _ in matches)
+                    exceptions.append(item)
+    return {"unresolved_rows": sum(by_state.values()),
+            "by_state": dict(sorted(by_state.items())),
+            "triage": dict(sorted(triage.items())),
+            "invalid_rows": invalid, "superseded_rows": superseded}
+
+
+def _write_exceptions(path: Path, rows: list[dict]) -> dict:
+    """Write a reproducible, non-overwriting queue for source review."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    digest = hashlib.sha256()
+    ordered = sorted(rows, key=lambda r: (
+        r["origin"], r["state"] or "", r["dedupe_key"] or "",
+        r["raw_record_hash"] or "", r["reason"],
+    ))
+    created = False
+    try:
+        with path.open("xb") as output:
+            created = True
+            for row in ordered:
+                line = (json.dumps(row, sort_keys=True, ensure_ascii=False) + "\n").encode()
+                output.write(line)
+                digest.update(line)
+    except BaseException:
+        if created:
+            path.unlink(missing_ok=True)
+        raise
+    return {"path": str(path), "rows": len(ordered), "sha256": digest.hexdigest()}
 
 
 def _bln_accepted(conn, source: Path, accepted: set[str], observed_at: str) -> dict:
@@ -258,35 +416,62 @@ def _repair_il_from_cache(db: Path, cache: Path) -> dict:
             "failed_files": failed, "result": output.getvalue().strip()}
 
 
-def rebuild(bundle: Path, out_db: Path, observed_at: str, compare_db: Path | None = None) -> dict:
+def rebuild(
+    bundle: Path, out_db: Path, observed_at: str,
+    compare_db: Path | None = None, *, source_only: bool = False,
+    exceptions_path: Path | None = None,
+) -> dict:
     if out_db.exists():
         raise FileExistsError(f"candidate database already exists: {out_db}")
+    if source_only:
+        exceptions_path = exceptions_path or out_db.with_suffix(".exceptions.jsonl")
+        if exceptions_path.resolve() == out_db.resolve():
+            raise ValueError("exception manifest path must differ from candidate database")
+        if exceptions_path.exists():
+            raise FileExistsError(f"exception manifest already exists: {exceptions_path}")
     with TemporaryDirectory(prefix="warn-rebuild-sources-") as temp:
         source = Path(temp) / "sources"
         manifest = extract(bundle, source)
-        policy = _read_policy(source / "rebuild_policy.json")
-        accepted = set(policy["accepted_keys"])
+        policy = None if source_only else _read_policy(source / "rebuild_policy.json")
+        accepted = None if source_only else set(policy["accepted_keys"])
         raw_report = build_raw(out_db, source / "raw", source / "cache/sc")
         conn = db_mod.connect(out_db)
         try:
-            backfill = _bln_conservative(
-                conn, source / "backfill/bln_integrated.csv", observed_at
-            )
-            backfill_raw = _backfill_raw(conn, source / "backfill/raw", observed_at)
-            agencies = _cached_agencies(
-                conn, source / "backfill/cache", accepted,
-                policy["archive_source_urls"], observed_at,
-            )
-            accepted_bln = _bln_accepted(
-                conn, source / "backfill/bln_integrated.csv", accepted, observed_at,
-            )
+            archive_cache = source / "backfill/cache"
+            exceptions: list[dict] = []
+            if source_only:
+                # Official agency artifacts and saved state raw snapshots
+                # outrank the transformed BLN copy.
+                agencies = _cached_agencies(
+                    conn, archive_cache, None, {}, observed_at, exceptions
+                )
+                backfill_raw = _backfill_raw(conn, source / "backfill/raw", observed_at)
+                backfill = _bln_conservative(
+                    conn, source / "backfill/bln_integrated.csv", observed_at
+                )
+                accepted_bln = _bln_unresolved(
+                    conn, source / "backfill/bln_integrated.csv", exceptions
+                )
+            else:
+                backfill = _bln_conservative(
+                    conn, source / "backfill/bln_integrated.csv", observed_at
+                )
+                backfill_raw = _backfill_raw(conn, source / "backfill/raw", observed_at)
+                agencies = _cached_agencies(
+                    conn, archive_cache, accepted,
+                    policy["archive_source_urls"], observed_at,
+                )
+                accepted_bln = _bln_accepted(
+                    conn, source / "backfill/bln_integrated.csv", accepted, observed_at,
+                )
             conn.commit()
             il_repair = _repair_il_from_cache(out_db, source / "cache/il_reports")
             link_report = links_mod.rebuild(conn)
             report = {
                 "source_files": len(manifest["files"]),
                 "source_bytes": sum(item["size"] for item in manifest["files"]),
-                "policy": policy["format"], "raw": raw_report["states"],
+                "policy": "source-only-v1" if source_only else policy["format"],
+                "raw": raw_report["states"],
                 "bln_conservative": backfill, "backfill_raw": backfill_raw,
                 "cached_agencies": agencies, "bln_accepted": accepted_bln,
                 "il_effective_repair": il_repair,
@@ -302,6 +487,8 @@ def rebuild(bundle: Path, out_db: Path, observed_at: str, compare_db: Path | Non
                 "integrity": conn.execute("PRAGMA integrity_check").fetchone()[0],
                 "foreign_key_errors": len(conn.execute("PRAGMA foreign_key_check").fetchall()),
             }
+            if source_only:
+                report["exceptions"] = _write_exceptions(exceptions_path, exceptions)
         finally:
             conn.close()
         if compare_db is not None:
@@ -364,10 +551,15 @@ if __name__ == "__main__":
     parser.add_argument("--db", type=Path, required=True)
     parser.add_argument("--observed-at", required=True, help="YYYY-MM-DD for synthetic rebuild observations")
     parser.add_argument("--compare-db", type=Path)
+    parser.add_argument("--source-only", action="store_true",
+                        help="Ignore old-DB accepted keys; quarantine uncertain source overlaps")
+    parser.add_argument("--exceptions", type=Path,
+                        help="Source-only JSONL exception manifest (default: beside candidate DB)")
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
     logger.setLevel(logging.ERROR)
-    result = rebuild(args.bundle, args.db, args.observed_at, args.compare_db)
+    result = rebuild(args.bundle, args.db, args.observed_at, args.compare_db,
+                     source_only=args.source_only, exceptions_path=args.exceptions)
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(result, sort_keys=True, indent=2) + "\n")
