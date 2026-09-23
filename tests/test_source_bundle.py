@@ -108,3 +108,20 @@ def test_source_bundle_includes_verified_louisiana_documents(tmp_path):
     unpacked = tmp_path / "unpacked"
     extract(archive, unpacked)
     assert (unpacked / "agency/la/2025.pdf").read_bytes() == (la / "2025.pdf").read_bytes()
+
+
+def test_source_bundle_includes_verified_iowa_event_log(tmp_path):
+    source = tmp_path / "workdir"
+    _sources(source)
+    ia = Path(__file__).resolve().parents[1] / "data/source_snapshots/ia"
+    archive = tmp_path / "with-ia.tar.gz"
+    manifest = create(source, archive, ia_artifacts=ia)
+    assert {"agency/ia/manifest.json", "agency/ia/event-log.xlsx",
+            "agency/ia/historical-2023.pdf"} <= {
+        item["path"] for item in manifest["files"]
+    }
+    unpacked = tmp_path / "unpacked"
+    extract(archive, unpacked)
+    assert (unpacked / "agency/ia/event-log.xlsx").read_bytes() == (
+        ia / "event-log.xlsx"
+    ).read_bytes()

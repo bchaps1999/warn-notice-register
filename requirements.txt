@@ -15,7 +15,7 @@ beautifulsoup4
 html5lib
 pdfplumber==0.11.10  # Louisiana source-table extraction is layout-sensitive
 requests
-openpyxl
+openpyxl==3.1.5  # Iowa official workbook cell interpretation is source-sensitive
 pyopenssl
 retry2
 selenium

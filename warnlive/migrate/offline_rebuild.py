@@ -64,7 +64,11 @@ def _bln_conservative(
     conn, source: Path, observed_at: str, excluded: dict[str, dict] | None = None,
 ) -> dict:
     registry = load_registry()
-    allowed = [cfg.postal for cfg in registry.all() if cfg.postal not in {"ga", "sc"}]
+    # These three states' BLN rows cannot be keyed to a trustworthy source
+    # filing identity.  The unresolved-row ledger already quarantines them;
+    # the importer must enforce the same boundary.
+    allowed = [cfg.postal for cfg in registry.all()
+               if cfg.postal not in {"ga", "sc", "ia"}]
     report = {}
     for label, select in (
         ("older", bln_integrated.older_rows_by_state),
@@ -508,7 +512,9 @@ def _fingerprints(conn) -> dict[str, str]:
     return result
 
 
-def _repair_il_from_cache(db: Path, cache: Path) -> dict:
+def _repair_il_from_cache(
+    db: Path, cache: Path, observed_at: str | None = None,
+) -> dict:
     """Replay the existing IL date repair using only frozen monthly reports."""
     if not cache.is_dir():
         return {"cached_files": 0, "parsed_records": 0, "failed_files": [],
@@ -525,7 +531,7 @@ def _repair_il_from_cache(db: Path, cache: Path) -> dict:
 
     output = io.StringIO()
     with patch.object(il_effective, "collect_records", return_value=records), redirect_stdout(output):
-        il_effective_dates.callback("", cache.parent.parent, db, False)
+        il_effective_dates.callback("", cache.parent.parent, db, False, observed_at)
     return {"cached_files": len(files), "parsed_records": len(records),
             "failed_files": failed, "result": output.getvalue().strip()}
 
@@ -550,7 +556,18 @@ def rebuild(
         accepted = None if source_only else set(policy["accepted_keys"])
         exceptions: list[dict] = []
         la_source_rows: list[dict] = []
+        ia_current_rows: list[dict] = []
+        ia_historical_rows: list[dict] = []
         la_correspondence: dict[str, dict] = {}
+        if (source / "agency/ia").is_dir():
+            from warnlive.migrate import ia_source
+
+            ia_current_rows = ia_source.extract(source / "agency/ia")
+            ia_historical_rows = ia_source.extract_historical(source / "agency/ia")
+            if source_only:
+                exceptions.extend(ia_source.source_exceptions(
+                    ia_current_rows + ia_historical_rows
+                ))
         if (source / "agency/la").is_dir():
             from warnlive.migrate.la_source import extract as extract_la
             from warnlive.migrate import la_overlay
@@ -607,7 +624,9 @@ def rebuild(
                     conn, source / "backfill/bln_integrated.csv", accepted, observed_at,
                 )
             conn.commit()
-            il_repair = _repair_il_from_cache(out_db, source / "cache/il_reports")
+            il_repair = _repair_il_from_cache(
+                out_db, source / "cache/il_reports", observed_at,
+            )
             link_report = links_mod.rebuild(conn)
             report = {
                 "source_files": len(manifest["files"]),
@@ -627,6 +646,12 @@ def rebuild(
                     "held_notice_rows": sum(row.get("source_row") in la_overlay.HELD
                                             for row in la_source_rows) if source_only and la_source_rows else 0,
                     "reviewed_bln_correspondences": len(la_correspondence),
+                },
+                "ia_official_source": {
+                    "current_event_log_rows": len(ia_current_rows),
+                    "historical_log_rows": len(ia_historical_rows),
+                    "held_rows": len(ia_current_rows) + len(ia_historical_rows),
+                    "ingested_rows": 0,
                 },
                 "bln_conservative": backfill, "backfill_raw": backfill_raw,
                 "cached_agencies": agencies, "bln_accepted": accepted_bln,

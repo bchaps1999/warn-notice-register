@@ -87,6 +87,7 @@ def create(
     workdir: Path, out_path: Path, policy_db: Path | None = None,
     raw_overlay: Path | None = None,
     agency_artifacts: Path | None = None,
+    ia_artifacts: Path | None = None,
 ) -> dict:
     """Create a deterministic bundle; never overwrite an existing snapshot."""
     workdir, out_path = Path(workdir), Path(out_path)
@@ -123,9 +124,21 @@ def create(
         from warnlive.migrate.la_source import extract as extract_la
 
         extract_la(agency_artifacts)  # verify bytes and layout before freezing
-        if set(additional) & set(files):
-            raise ValueError("agency artifact collides with workdir input")
-        files = sorted(set(files) | set(additional), key=lambda p: p.as_posix())
+    if ia_artifacts is not None:
+        ia_artifacts = Path(ia_artifacts)
+        if ia_artifacts.is_symlink() or not ia_artifacts.is_dir():
+            raise ValueError(f"invalid Iowa artifact directory: {ia_artifacts}")
+        for name in ("manifest.json", "event-log.xlsx", "historical-2023.pdf"):
+            path = ia_artifacts / name
+            if path.is_symlink() or not path.is_file():
+                raise ValueError(f"invalid Iowa artifact: {path}")
+            additional[Path("agency/ia") / name] = path
+        from warnlive.migrate.ia_source import extract_historical as extract_ia
+
+        extract_ia(ia_artifacts)  # verify both artifacts and row layout before freezing
+    if set(additional) & set(files):
+        raise ValueError("agency artifact collides with workdir input")
+    files = sorted(set(files) | set(additional), key=lambda p: p.as_posix())
 
     def source_bytes(rel: Path) -> bytes:
         return overrides.get(rel, additional.get(rel, workdir / rel)).read_bytes()
@@ -231,6 +244,8 @@ if __name__ == "__main__":
                       help="Directory of freshly captured two-letter state CSVs to replace stale raw inputs")
     make.add_argument("--agency-artifacts", type=Path,
                       help="Verified Louisiana manifest and annual PDFs to include under agency/la")
+    make.add_argument("--ia-artifacts", type=Path,
+                      help="Verified Iowa manifest and event-log workbook to include under agency/ia")
     check = sub.add_parser("verify")
     check.add_argument("bundle", type=Path)
     unpack = sub.add_parser("extract")
@@ -239,7 +254,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     result = (
         create(args.workdir, args.out, args.policy_db, args.raw_overlay,
-               args.agency_artifacts) if args.command == "create"
+               args.agency_artifacts, args.ia_artifacts) if args.command == "create"
         else extract(args.bundle, args.out) if args.command == "extract"
         else verify(args.bundle)
     )

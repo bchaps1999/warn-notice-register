@@ -453,7 +453,12 @@ def repair_dates(states, db_path: Path, dry_run: bool) -> None:
 @click.option("--workdir", type=click.Path(path_type=Path), default=DEFAULT_WORKDIR)
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--dry-run", is_flag=True, help="Report what would change without writing.")
-def il_effective_dates(years: str, workdir: Path, db_path: Path, dry_run: bool) -> None:
+@click.option("--observed-at", default=None,
+              help="Pin the UTC observation date (YYYY-MM-DD) for offline replay.")
+def il_effective_dates(
+    years: str, workdir: Path, db_path: Path, dry_run: bool,
+    observed_at: str | None,
+) -> None:
     """Fill empty IL effective_dates from DCEO monthly WARN activity reports.
 
     The IEBS export has no layoff date for regular WARN rows (its Impact
@@ -491,7 +496,12 @@ def il_effective_dates(years: str, workdir: Path, db_path: Path, dry_run: bool) 
 
     conn = db_mod.connect(db_path)
     db_mod.init_db(conn)
-    now = now_utc()
+    if observed_at is None:
+        now = now_utc()
+    else:
+        import datetime as dt_mod
+
+        now = f"{dt_mod.date.fromisoformat(observed_at).isoformat()}T00:00:00Z"
     zip_re = re_mod.compile(r"(\d{5})(?:-\d{4})?\s*$")
 
     rows = conn.execute(

@@ -1,0 +1,26 @@
+{
+  "format": "warn-ia-source-artifacts-v1",
+  "captured_at_utc_date": "2026-09-22",
+  "publisher": "Iowa Workforce Development",
+  "artifacts": [
+    {
+      "path": "event-log.xlsx",
+      "source_url": "https://workforce.iowa.gov/media/3199/download?inline",
+      "source_page": "https://workforce.iowa.gov/employers/resources/warn/notices",
+      "bytes": 68857,
+      "sha256": "400a81ea38c6e4dd8149e799c9386b3037acc9187771bf3ed6eba737bd5f5973",
+      "sheet": "WARN Log",
+      "header_row": 6,
+      "data_rows": 573
+    },
+    {
+      "path": "historical-2023.pdf",
+      "source_url": "https://workforce.iowa.gov/media/257/download?inline=",
+      "bytes": 659156,
+      "sha256": "8f67fe6392a71608998c9d980ae71285ddb0713826c0b209d76300dc275a568d",
+      "pages": 7,
+      "data_rows_by_page": [57, 58, 58, 55, 58, 58, 18],
+      "coverage_note": "Official historical Iowa WARN log; includes 2018 through 2023 rows. Preserved as evidence pending row-level reconciliation."
+    }
+  ]
+}

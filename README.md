@@ -119,9 +119,9 @@ snapshots, saved backfills, and cached agency files before trying to rebuild:
 
 ```bash
 python -m warnlive.migrate.source_bundle verify \
-  data/source_snapshots/2026-09-23-la-official.tar.gz
+  data/source_snapshots/2026-09-23-ia-la-official.tar.gz
 python -m warnlive.migrate.offline_rebuild \
-  --bundle data/source_snapshots/2026-09-23-la-official.tar.gz \
+  --bundle data/source_snapshots/2026-09-23-ia-la-official.tar.gz \
   --db /private/tmp/warn-rebuild-candidate.sqlite --observed-at 2026-09-22 \
   --source-only --report /private/tmp/warn-rebuild-report.json
 ```
@@ -135,6 +135,9 @@ reasons for rejected or unresolved current raw, historical raw, archive, BLN,
 and official Louisiana PDF inputs. The report reconciles each input group to
 represented, coalesced, or exception rows; zero unaccounted rows does not imply
 all interpretations are correct.
+With the Iowa/Louisiana bundle, all 935 official Iowa workbook/PDF row
+observations also enter the exception ledger until their identities and
+amendment effects are reviewed; they are not added to active totals.
 
 Add `--compare-db data/warn.sqlite` only when comparing with a local database
 snapshot. The replay does not use the network or write to an existing database. The
@@ -142,15 +145,50 @@ report includes stable-content SHA-256 fingerprints for notices, version
 payloads, and links, excluding database IDs and observation timestamps. The
 older September 22 bundle includes a transitional policy of historically
 accepted keys derived from the existing database. The September 23 source-only
-bundle omits that
-policy and adds two Louisiana official PDFs; their 38 notice rows and one
-annotation are extracted for review but not yet ingested as canonical notices.
+bundle omits that policy and adds two Louisiana official PDFs. The later
+Iowa/Louisiana bundle also freezes Iowa's current event-log workbook and a
+historical agency PDF without changing previously bundled source bytes. Iowa
+official rows are evidence-only until amendment and duplicate decisions are
+reviewed; their presence in the bundle does not yet add notices. The reviewed Louisiana
+overlay ingests 31 of their 38 notice rows, holds six IDEA/SafeSource rows for
+filing-level review, and excludes the rescinded UPS row from active totals.
+The annotation and held rows remain in the exception ledger; addresses with
+unverified roles are not assigned to counties.
 To inspect possible BLN counterparts without merging them, run
 `python -m warnlive.migrate.la_reconcile --bundle data/source_snapshots/2026-09-23-la-official.tar.gz --out /private/tmp/la-reconciliation.json`.
 Add `--db /path/to/candidate.sqlite` to audit how many canonical rows share
 each official notice's date and worker count; the database is opened read-only.
 The source-backed findings and decisions still needed are summarized in
 [`docs/la-source-review-2026-09.md`](docs/la-source-review-2026-09.md).
+The importer also quarantines GA, SC, and IA BLN rows consistently with its
+source-identity exception ledger. To inspect historical raw rows that share a
+candidate key but disagree on dates, workers, employer, or location, run the
+read-only field-level audit:
+
+```bash
+python -m warnlive.migrate.overlap_audit \
+  --bundle data/source_snapshots/2026-09-23-la-official.tar.gz \
+  --db /path/to/candidate.sqlite \
+  --report /path/to/new-overlap-report.json \
+  --ledger /path/to/new-overlap-ledger.jsonl
+```
+
+Differences in this ledger are review evidence, not automatic corrections;
+older captures and later source-backed repairs may legitimately disagree.
+For Iowa, generate the separate read-only BLN-to-raw correspondence report:
+
+```bash
+python -m warnlive.migrate.ia_reconcile \
+  --bundle data/source_snapshots/2026-09-23-ia-la-official.tar.gz \
+  --db /path/to/candidate.sqlite \
+  --out /path/to/new-ia-correspondence.json
+```
+
+The report retains row hashes and possible counterparts but does not turn a
+matching transcription, employer/date/worker signature, or content hash into
+a filing identity. When the bundle contains the official workbook it also
+reports correspondence for all 573 official observations. No Iowa BLN-only or
+new official row is admitted automatically.
 The resulting database is a candidate for source-first
 validation, **not** a replacement for the published database. See
 [`docs/rebuild-contract.md`](docs/rebuild-contract.md) for the acceptance

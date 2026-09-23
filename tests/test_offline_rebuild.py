@@ -166,6 +166,24 @@ def test_bln_superseded_and_identity_excluded_rows_are_accounted_for(tmp_path):
     ]
 
 
+def test_source_only_bln_import_enforces_identity_quarantine(monkeypatch):
+    from warnlive.migrate import offline_rebuild
+
+    selected_states = []
+
+    def select(_source, _conn, _registry, *, states):
+        selected_states.append(set(states))
+        return {}
+
+    monkeypatch.setattr(offline_rebuild.bln_integrated, "older_rows_by_state", select)
+    monkeypatch.setattr(offline_rebuild.bln_integrated, "gap_rows_by_state", select)
+    report = offline_rebuild._bln_conservative(None, None, "2026-09-22")
+    assert len(selected_states) == 2
+    assert all(not {"ga", "sc", "ia"} & states for states in selected_states)
+    assert all("ks" in states for states in selected_states)
+    assert report["older"]["input_rows"] == report["empty_months"]["input_rows"] == 0
+
+
 def test_bln_older_backfill_never_ingests_superseded_rows(tmp_path):
     import csv
     import sqlite3
@@ -217,12 +235,13 @@ def test_il_repair_uses_only_cached_reports(tmp_path, monkeypatch):
     parsed = []
     monkeypatch.setattr(il_effective, "parse_report", lambda path: parsed.append(path.name) or [])
 
-    def check_callback(_years, workdir, _db, _dry_run):
+    def check_callback(_years, workdir, _db, _dry_run, observed_at):
         assert workdir == tmp_path
+        assert observed_at == "2026-09-22"
         assert il_effective.collect_records(set(), cache) == []
 
     monkeypatch.setattr(il_effective_dates, "callback", check_callback)
-    report = _repair_il_from_cache(tmp_path / "candidate.sqlite", cache)
+    report = _repair_il_from_cache(tmp_path / "candidate.sqlite", cache, "2026-09-22")
     assert parsed == ["one.PDF"]
     assert report["cached_files"] == 1
     assert report["parsed_records"] == 0
@@ -235,6 +254,47 @@ def test_il_repair_skips_an_optional_missing_cache(tmp_path):
     )
     assert report["cached_files"] == 0
     assert report["result"].startswith("skipped:")
+
+
+def test_il_repair_pins_version_observation_time(tmp_path, monkeypatch):
+    from warnlive.cli import il_effective_dates
+    from warnlive.enrich import il_effective
+    from warnlive.normalize.engine import _dedupe_key, _record_hash
+    from warnlive.store import db
+    from warnlive.store.dedupe import ingest
+
+    path = tmp_path / "candidate.sqlite"
+    conn = db.connect(path)
+    db.init_db(conn)
+    rec = {
+        "state": "IL", "employer_name": "Example Company",
+        "location": "Chicago, IL 60601", "notice_date": "2023-01-30",
+        "effective_date": None, "employees_affected": 100,
+        "layoff_type": "unknown", "is_temporary": None, "is_amendment": 0,
+        "source_url": "https://example.test/notice", "source_notice_id": "one",
+        "raw_extra": "{}",
+    }
+    rec["dedupe_key"] = _dedupe_key(rec)
+    rec["raw_record_hash"] = _record_hash(rec)
+    ingest(conn, [rec], "2026-09-22")
+    conn.close()
+    item = il_effective.ReportRecord(
+        company="Example Company", address="", city_state_zip="Chicago IL 60601",
+        notified="2023-01-30", first_layoff="2023-03-31",
+        ending_layoff=None, source_file="February_2023_Monthly_WARN_Report.xlsx",
+    )
+    monkeypatch.setattr(il_effective, "collect_records", lambda _years, _cache: [item])
+    il_effective_dates.callback("", tmp_path, path, False, "2026-09-22")
+    conn = db.connect(path)
+    try:
+        assert conn.execute(
+            "SELECT effective_date FROM notices WHERE state='IL'"
+        ).fetchone()[0] == "2023-03-31"
+        assert conn.execute(
+            "SELECT observed_at FROM notice_versions WHERE version=2"
+        ).fetchone()[0] == "2026-09-22T00:00:00Z"
+    finally:
+        conn.close()
 
 
 def test_rebuild_fingerprints_exclude_observation_metadata():
