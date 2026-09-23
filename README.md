@@ -145,6 +145,8 @@ accepted keys derived from the existing database. The September 23 source-only
 bundle omits that
 policy and adds two Louisiana official PDFs; their 38 notice rows and one
 annotation are extracted for review but not yet ingested as canonical notices.
+To inspect possible BLN counterparts without merging them, run
+`python -m warnlive.migrate.la_reconcile --bundle data/source_snapshots/2026-09-23-la-official.tar.gz --out /private/tmp/la-reconciliation.json`.
 The resulting database is a candidate for source-first
 validation, **not** a replacement for the published database. See
 [`docs/rebuild-contract.md`](docs/rebuild-contract.md) for the acceptance
