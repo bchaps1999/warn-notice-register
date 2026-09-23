@@ -50,3 +50,12 @@ apply a versioned, source-row-linked Louisiana curation manifest to a fresh
 candidate, rerun coverage and worker-total checks, and compare against this
 read-only report. No model should auto-merge these rows; a held-out model
 evaluation needs independently reviewed labels first.
+
+The public Louisiana Works [WARN resources page](https://www.laworks.net/downloads/downloads_wfd.asp)
+links the annual summary PDFs, but our September 22 search did not locate
+individual IDEA or SafeSource WARN letters there. [IDEA's Louisiana page](https://ideapublicschools.org/states/louisiana/)
+confirms the two named campuses closed, and [SafeSource's contact page](https://www.safesourcedirect.com/contact)
+identifies its two Broussard facilities. Neither resolves whether the repeated
+summary rows are distinct filings or how workers were allocated. Their
+relationships remain open pending filing-level evidence or an explicit,
+reviewed curation decision.
