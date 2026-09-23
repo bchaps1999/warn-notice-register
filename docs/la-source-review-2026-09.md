@@ -1,4 +1,4 @@
-# Louisiana official-source review (provisional)
+# Louisiana official-source review and candidate overlay
 
 The frozen [2025](../data/source_snapshots/la/2025.pdf) and
 [2026](../data/source_snapshots/la/2026.pdf) Louisiana Works tables contain 38
@@ -19,10 +19,10 @@ human-labeled gold set and must not be used as model accuracy ground truth.
 
 ## Candidate database observations
 
-For the September 23 source-only replay (86,936 notices), 29 official rows
+For the pre-overlay September 23 source-only replay (86,936 notices), 29 official rows
 have one canonical date/worker signature, three have two, two have three, and
 four have none. The two IDEA official rows share a signature, so these are
-row-level buckets, not distinct-event counts. The candidate database has not
+row-level buckets, not distinct-event counts. That candidate database had not
 ingested the official PDFs. Running the report against two independently
 rebuilt candidate databases produced the same SHA-256
 (`9227981b091eca636b8eeae3d8feb944f3e6cf6633f9d3959a872141b6d579cf`).
@@ -42,13 +42,52 @@ Other source anomalies also remain visible: Smitty's 2025 notice date follows it
 listed layoff date, and the 2025 table combines employer and address text in a
 single cell. Neither should be silently "corrected" by parsing.
 
+## Source-first candidate overlay
+
+The reviewed overlay in `warnlive/migrate/la_overlay.py` applies only in
+`--source-only` rebuilds of the frozen bundle. It checksum-pins both the
+official PDF manifest and the BLN CSV, plus the 58 reviewed BLN-to-PDF-row
+correspondences. A changed input or correspondence fails closed. Of the 38
+official notice rows, it admits 31, holds both IDEA and four SafeSource rows,
+and excludes the rescinded 177-worker UPS row. The rescission annotation and
+every held/excluded BLN transcription remain in the exception ledger. One
+superseded BLN transcription stays in its original superseded category.
+
+Run an isolated candidate without touching `data/warn.sqlite` or exports:
+
+```bash
+python -m warnlive.migrate.offline_rebuild \
+  --bundle data/source_snapshots/2026-09-23-la-official.tar.gz \
+  --db /path/to/new-source-only-candidate.sqlite \
+  --observed-at 2026-09-22 --source-only \
+  --report /path/to/new-source-only-report.json
+```
+
+The first overlay replay yielded 86,926 notices nationally, including 613
+Louisiana notices and 83,991 Louisiana workers. The previous source-only
+candidate had 623 Louisiana notices and 86,387 workers; those differences
+are **not** a claim that the older counts were true or that all removed rows
+were duplicates. The official rows contribute 5,178 workers. One BLN-only
+2025 Blue Cross Blue Shield row (202 workers, notice date after effective
+date) is now in the exception queue: it does not appear in the annual PDF,
+and the agency's other August notices make that month ineligible for the
+conservative BLN gap-fill. It is not suppressed by the reviewed PDF mapping.
+The remaining Louisiana history is retained by the ordinary backfill rules.
+
+The overlay preserves GDIT's missing notice date, Cornerstone's layoff end
+date, and all three later 2026 notices. It keeps addresses in source details
+with unverified roles and leaves scalar locations unset, including C2's VA
+and Conduent's NJ addresses. Mosaic's two sites and one unallocated 206-worker
+total are explicit; no site receives an invented headcount. No LLM calls are
+part of this replay.
+
 ## Next gate
 
-Review the original filings where available for IDEA and SafeSource. Define
-the canonical handling of rescinded notices and unknown notice dates. Then
-apply a versioned, source-row-linked Louisiana curation manifest to a fresh
-candidate, rerun coverage and worker-total checks, and compare against this
-read-only report. No model should auto-merge these rows; a held-out model
+Review the original filings where available for IDEA and SafeSource. Revisit
+the candidate's active-only handling of rescinded notices and its unknown-date
+representation before publication. Compare its exception queue against filing-level
+evidence, including the BLN-only Blue Cross row. No model should auto-merge
+the unresolved rows; a held-out model
 evaluation needs independently reviewed labels first.
 
 The public Louisiana Works [WARN resources page](https://www.laworks.net/downloads/downloads_wfd.asp)

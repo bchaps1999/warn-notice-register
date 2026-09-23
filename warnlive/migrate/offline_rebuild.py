@@ -60,7 +60,9 @@ def _ingest_groups(conn, groups: dict[str, list[dict]], observed_at: str) -> dic
             "suspected_collisions": collisions}
 
 
-def _bln_conservative(conn, source: Path, observed_at: str) -> dict:
+def _bln_conservative(
+    conn, source: Path, observed_at: str, excluded: dict[str, dict] | None = None,
+) -> dict:
     registry = load_registry()
     allowed = [cfg.postal for cfg in registry.all() if cfg.postal not in {"ga", "sc"}]
     report = {}
@@ -69,7 +71,15 @@ def _bln_conservative(conn, source: Path, observed_at: str) -> dict:
         ("empty_months", bln_integrated.gap_rows_by_state),
     ):
         groups = select(source, conn, registry, states=allowed)
-        report[label] = {"input_rows": sum(map(len, groups.values())),
+        selected_rows = sum(map(len, groups.values()))
+        excluded_rows = 0
+        if excluded:
+            for state, records in groups.items():
+                kept = [rec for rec in records if rec.get("source_notice_id") not in excluded]
+                excluded_rows += len(records) - len(kept)
+                groups[state] = kept
+        report[label] = {"input_rows": selected_rows,
+                         "official_overlay_excluded_rows": excluded_rows,
                          **_ingest_groups(conn, groups, observed_at)}
     return report
 
@@ -271,6 +281,7 @@ def _cached_agencies(
 
 def _bln_unresolved(
     conn, source: Path, exceptions: list[dict] | None = None,
+    excluded: dict[str, dict] | None = None,
 ) -> dict:
     """Count BLN rows not selected by conservative source-only rules."""
     from warnlive.normalize.engine import _fold
@@ -288,7 +299,7 @@ def _bln_unresolved(
         )
     by_state: dict[str, int] = defaultdict(int)
     triage: dict[str, int] = defaultdict(int)
-    total = represented = invalid = superseded = identity_excluded = 0
+    total = represented = invalid = superseded = identity_excluded = overlay_excluded = 0
 
     def raw_exception(row: dict, reason: str, error: str | None = None) -> dict:
         raw_extra = json.dumps(row, sort_keys=True, ensure_ascii=False)
@@ -302,7 +313,7 @@ def _bln_unresolved(
         }
 
     with source.open(newline="") as fh:
-        for row in csv.DictReader(fh):
+        for ordinal, row in enumerate(csv.DictReader(fh), start=1):
             total += 1
             state = (row.get("postal_code") or "").upper()
             if state.lower() not in registry:
@@ -313,7 +324,32 @@ def _bln_unresolved(
             if row.get("is_superseded") == "True":
                 superseded += 1
                 if exceptions is not None:
-                    exceptions.append(raw_exception(row, "superseded_source_row"))
+                    item = raw_exception(row, "superseded_source_row")
+                    mapping = (excluded or {}).get(row.get("hash_id"))
+                    if mapping is not None:
+                        item.update({"source_row": ordinal,
+                                     "official_source_rows": mapping["official_source_rows"],
+                                     "match_basis": mapping["match_basis"]})
+                    exceptions.append(item)
+                continue
+            mapping = (excluded or {}).get(row.get("hash_id"))
+            if mapping is not None:
+                raw = json.dumps(row, sort_keys=True, ensure_ascii=False)
+                if (mapping["source_row"] != ordinal or
+                        mapping["source_row_sha256"] != hashlib.sha256(raw.encode()).hexdigest()):
+                    raise ValueError("Louisiana reviewed BLN row drift")
+                overlay_excluded += 1
+                if exceptions is not None:
+                    reason = {
+                        "accepted": "superseded_by_official_source",
+                        "held": "held_with_official_source",
+                        "rescinded": "rescinded_by_official_source",
+                    }[mapping["disposition"]]
+                    item = raw_exception(row, reason)
+                    item.update({"source_row": ordinal,
+                                 "official_source_rows": mapping["official_source_rows"],
+                                 "match_basis": mapping["match_basis"]})
+                    exceptions.append(item)
                 continue
             if state in {"GA", "SC", "IA"}:
                 identity_excluded += 1
@@ -358,13 +394,15 @@ def _bln_unresolved(
                     exceptions.append(item)
             else:
                 represented += 1
-    accounted = represented + invalid + superseded + identity_excluded + sum(by_state.values())
+    accounted = (represented + invalid + superseded + identity_excluded +
+                 overlay_excluded + sum(by_state.values()))
     return {"total_rows": total, "represented_by_key": represented,
             "unresolved_rows": sum(by_state.values()),
             "by_state": dict(sorted(by_state.items())),
             "triage": dict(sorted(triage.items())),
             "invalid_rows": invalid, "superseded_rows": superseded,
             "identity_excluded_rows": identity_excluded,
+            "official_overlay_excluded_rows": overlay_excluded,
             "unaccounted_rows": total - accounted}
 
 
@@ -512,24 +550,21 @@ def rebuild(
         accepted = None if source_only else set(policy["accepted_keys"])
         exceptions: list[dict] = []
         la_source_rows: list[dict] = []
+        la_correspondence: dict[str, dict] = {}
         if (source / "agency/la").is_dir():
             from warnlive.migrate.la_source import extract as extract_la
+            from warnlive.migrate import la_overlay
 
             la_source_rows = extract_la(source / "agency/la")
             if source_only:
-                for row in la_source_rows:
-                    reason = (
-                        "official_source_annotation" if row["kind"] == "annotation"
-                        else "official_source_rescinded" if row["status"] == "rescinded"
-                        else "official_source_unreviewed"
-                    )
-                    exceptions.append({
-                        "origin": row["source_artifact"], "state": "LA",
-                        "reason": reason, "source_row": row["source_row"],
-                        "source_row_sha256": row["source_row_sha256"],
-                        "source_url": row["source_url"],
-                        "raw_extra": json.dumps(row, sort_keys=True, ensure_ascii=False),
-                    })
+                for path in (source / "raw/la.csv", source / "backfill/raw/la.csv"):
+                    if path.exists():
+                        raise ValueError(f"Louisiana overlay has unreviewed alternate source: {path}")
+                la_correspondence = la_overlay.correspondence(
+                    la_source_rows, source / "agency/la",
+                    source / "backfill/bln_integrated.csv",
+                )
+                exceptions.extend(la_overlay.source_exceptions(la_source_rows))
         raw_report = build_raw(
             out_db, source / "raw", source / "cache/sc",
             observed_at=observed_at,
@@ -547,11 +582,17 @@ def rebuild(
                 backfill_raw = _backfill_raw(
                     conn, source / "backfill/raw", observed_at, exceptions
                 )
+                la_ingest = _ingest_groups(conn, {"LA": [
+                    la_overlay.record(row) for row in la_source_rows
+                    if row["kind"] == "notice" and row["source_row"] in la_overlay.EMPLOYERS
+                ]}, observed_at) if la_source_rows else {"new": 0}
                 backfill = _bln_conservative(
-                    conn, source / "backfill/bln_integrated.csv", observed_at
+                    conn, source / "backfill/bln_integrated.csv", observed_at,
+                    la_correspondence,
                 )
                 accepted_bln = _bln_unresolved(
-                    conn, source / "backfill/bln_integrated.csv", exceptions
+                    conn, source / "backfill/bln_integrated.csv", exceptions,
+                    la_correspondence,
                 )
             else:
                 backfill = _bln_conservative(
@@ -582,7 +623,10 @@ def rebuild(
                     "annotation_rows": sum(
                         row["kind"] == "annotation" for row in la_source_rows
                     ),
-                    "ingested_rows": 0,
+                    "ingested_rows": la_ingest["new"] if source_only else 0,
+                    "held_notice_rows": sum(row.get("source_row") in la_overlay.HELD
+                                            for row in la_source_rows) if source_only and la_source_rows else 0,
+                    "reviewed_bln_correspondences": len(la_correspondence),
                 },
                 "bln_conservative": backfill, "backfill_raw": backfill_raw,
                 "cached_agencies": agencies, "bln_accepted": accepted_bln,
