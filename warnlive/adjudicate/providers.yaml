@@ -9,9 +9,9 @@
 # provider whose prices are omitted still runs, and reports tokens with an
 # unknown cost rather than a confidently wrong one.
 #
-# DeepSeek discounts a cache hit by ~98%, and the cache keys on a shared
-# prefix, so prompts put the fixed instructions first and the variable rows
-# last. That is worth more than any batching tweak.
+# Use conservative peak rates (off-peak is cheaper) from the official
+# 2026-09-22 pricing page: https://api-docs.deepseek.com/quick_start/pricing/
+# Recheck before a paid run. The flash legacy slug currently routes to V4.1.
 
 default_provider: deepseek
 default_model: flash
@@ -23,14 +23,14 @@ providers:
     models:
       flash:
         slug: deepseek-v4-flash
-        input_miss_per_m: 0.14
-        input_hit_per_m: 0.0028
-        output_per_m: 0.28
+        input_miss_per_m: 0.30
+        input_hit_per_m: 0.006
+        output_per_m: 1.20
       pro:
         slug: deepseek-v4-pro
-        input_miss_per_m: 0.435
-        input_hit_per_m: 0.003625
-        output_per_m: 0.87
+        input_miss_per_m: 1.32
+        input_hit_per_m: 0.044
+        output_per_m: 3.96
 
   # Present so a second opinion costs a flag rather than a rewrite. Rates
   # read from OpenRouter's own /models endpoint; no cache-hit rate is

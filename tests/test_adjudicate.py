@@ -1127,7 +1127,8 @@ def test_a_model_with_no_prices_reports_tokens_rather_than_a_wrong_cost():
     metered = Usage()
     metered.add(priced, body)
     assert metered.cost == pytest.approx(
-        (900 * 0.0028 + 100 * 0.14 + 500 * 0.28) / 1_000_000
+        (900 * priced.input_hit_per_m + 100 * priced.input_miss_per_m
+         + 500 * priced.output_per_m) / 1_000_000
     )
     assert not metered.unpriced
 
