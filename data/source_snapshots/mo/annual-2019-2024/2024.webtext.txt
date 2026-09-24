@@ -1,0 +1,93 @@
+# Browser-rendered official agency text via web.open on 2026-09-24
+# URL: https://jobs.mo.gov/warn/2024
+# Total source lines: 91
+L0: Search [Input: ]
+L1: 
+L2: [Input] [Input] [Input]
+L3: ## Google Translate
+L4: 
+L5: Effective March 24, 2023: If you wish to receive further information about the most recent WARN Notice submitted to the Office of Workforce Development (OWD), sign up for our cite0†WARN Notice Mailing List†public.govdelivery.com .  WARN Notice updates will be emailed during business operating hours.
+L6: 
+L7: To receive any previous WARN Notices, submit an open records request to  recordscustodian@dhewd.mo.gov ( recordscustodian@dhewd.mo.gov).
+L8: For all other inquiries, please contact Heather Dolce, Assistant Commissioner for Communications and Outreach at heather.dolce@dhewd.mo.gov ( heather.dolce@dhewd.mo.gov).
+L9: # WARN Notices
+L10: 
+L11: cite1†Click here to learn more about the WARN Notice System L12: 
+L13: Company name [Input]
+L14: 
+L15: Counties [Select]
+L16: 
+L17: Type [Select]
+L18: 
+L19: [Input]
+L20: cite2†Received | cite3†Title | cite4†Industry | Location(s)  | cite5†County | Region  | cite6†Type | Layoff date(s)  | cite7†# affected | Notes
+L21: --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
+L22: 01/10/2024  | Tyson Foods  | Poultry Processing  | Dexter  | Stoddard  | Southeast  | Closing  | 03/01/2024  | 3  |
+L23: 01/11/2024  | Marsden Services, LLC  | Facilities Services/Janitorial  | St. Peters  | St. Charles  | St. Charles County  | Loss of Contract  | 02/20/2024  | 93  |
+L24: 01/30/2024  | Block, Inc.  | Software Publisher  |  |  | Statewide  | Layoff  | 03/30/2024  | 32  |
+L25: 01/31/2024  | Winland Foods  | Food Processing / Manufacturing  | St. Louis (city)  | St. Louis (county)  | St. Louis  | Closing  | 03/31/2024  | 80  |
+L26: 02/02/2024  | Oracle  | Information Technology  | Springfield  | Greene  | Ozark  | Layoff  | 04/01/2024  | 124  |
+L27: 02/07/2024  | Henkel  | Manufacturing  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 02/07/2024  | 102  |
+L28: 02/21/2024  | Ingram Micro, Inc.  | Information Technology  | O'Fallon  | St. Charles  |  | Closing  | 02/23/2024
+L29: 04/26/2024
+L30: 06/28/2024  | 60  |
+L31: 02/26/2024  | Missouri Prime Beef Packers  | Meat Processing  | Pleasant Hope  | Polk  | Southwest  | Closing  | 04/26/2024  | 335  |
+L32: 03/04/2024  | Cygnus Home Service, LLC, d/b/a/ Yelloh  | Direct Food Sales  | Rolla
+L33: Sikeston  |  |  | Layoff  | 05/03/2024  | 10  | 6 in Rolla, 4 in Sikeston
+L34: 03/25/2024
+L35: 04/03/2024 rev  | Student Transportation of America  | Transportation  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 05/29/2024  | 149  | Layoff date has been updated - 04/03/2024
+L36: 03/25/2024  | Missouri Central School Bus (MCSB)  | Transportation  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 06/30/2024  | 332  |
+L37: 04/03/2024  | Block, Inc.  | Software Publisher  |  |  | Statewide  | Layoff  | 06/03/2024  | 14  |
+L38: 04/30/2024  | First Student  | Transportation  | Jefferson City  | Cole  | Central  | Layoff  | 06/30/2024  | 105  |
+L39: 05/06/2024  | Equilibrium Homes of St. Louis, LLC  | Healthcare  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 05/01/2024  | 182  |
+L40: 05/20/2024  | Regency Enterprises Services, LLC  | Property Maintenance  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 08/31/2024  | 183  |
+L41: 05/30/2024  | Cygnus Home Service, LLC, d/b/a/ Yelloh  | Direct Sales  | Carthage
+L42: Columbia
+L43: O'Fallon
+L44: Republic
+L45: Sedalia  |  |  | Layoff  | 07/27/2024  | 44  |
+L46: 06/03/2024  | Oregon Tool  | Manufacturing  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 08/02/2024  | 80  |
+L47: 06/18/2024  | Cherokee Nation Federal Consulting, LLC  | Management Consulting Services  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 06/30/2024  | 187  |
+L48: 06/25/2024  | The Cheesecake Factory  | Restaurant  | Chesterfield  | St. Louis (county)  | St. Louis County  | Closing  | 08/18/2024  | 101  |
+L49: 07/01/2024  | OTSCON  | Restaurant  | Columbia  | Boone  | Central  | Closing  | 10/31/2024  | 160  |
+L50: 08/05/2024  | Omega Healthcare  | Healthcare  | Oak Grove
+L51: Florissant  |  | Statewide  | Layoff  | 09/30/2024  | 2  |
+L52: 08/05/2024  | Southern Glazers  | Wine and Distilled Alcoholic Beverage Merchant Wholesaler  | St. Charles  | St. Charles  | St. Charles County  | Layoff  | 11/01/2024  | 94  |
+L53: 09/13/2024  | Adient  | Automotive Manufacturing  | Riverside  | Platte  | Kansas City & Vicinity  | Layoff  | 11/11/2024
+L54: 01/06/2025  | 172  |
+L55: 09/13/2024  | Signature Psychiatric Hospital  | Healthcare  | North Kansas City
+L56: Liberty  | Clay  | Kansas City & Vicinity  | Closing  | 11/11/2024  | 154  |
+L57: 09/17/2024  | Yanfeng  | Automotive Manufacturing  | Riverside  | Platte  | Kansas City & Vicinity  | Layoff  | 11/15/2024  | 444  |
+L58: 09/25/2024  | Cygnus Home Service, LLC, d/b/a Yelloh  | Mobile Food Services  | Fenton
+L59: O'Fallon
+L60: Raymore  |  |  | Layoff  | 11/22/2024  | 32  |
+L61: 10/02/2024  | Kaleo  | Pharmaceutical Manufacturing  |  |  | Statewide  | Layoff  | 10/02/2024  | 2  |
+L62: 10/11/2024  | Owens & Minor  | Surgical/Medical Instrument Manufacturing  | Kansas City  | Clay  | Kansas City & Vicinity  | Closing  | 12/13/2024  | 67  |
+L63: 10/16/2024  | Output Services Group  | Commercial Printing  | Earth City  | St. Louis (county)  | St. Louis & vicinity  | Closing  | 12/31/2024  | 79  |
+L64: 10/21/2024  | True Value, Kansas City  | Hardware Stores  | Kansas City  | Jackson  | Kansas City & Vicinity  | Closing  | 12/14/2024  | 69  |
+L65: 10/21/2024  | GEHA  | Health and Medical Insurance Carrier  | Lee’s Summit  | Jackson  | Kansas City & Vicinity  | Layoff  | 12/31/2024
+L66: 03/24/2025  | 453  |
+L67: 10/21/2024  | International Paper  | Paper and Allied Products  | Kansas City  | Jackson  | Kansas City & Vicinity  | Closing  | 12/17/2024  | 132  |
+L68: 10/30/2024
+L69: 01/27/2025 rev  | St. Louis Post Dispatch  | Newspaper Publisher  | Maryland Heights  | St. Louis (county)  | St. Louis & vicinity  | Closing  | 01/05/2025
+L70: 03/31/2025  | 75  | This WARN Notice originally affected 73 employees, but has been updated to include an additional two.
+L71: 10/31/2024  | Sodecia Automotive Kansas City, LLC  | Motor Vehicle Parts Manufacturing  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 12/30/2024  | 111  | Temporary Layoff. Return to work 7/1/2025.
+L72: 11/18/2024  | Martinrea  | Motor Vehicle Parts Manufacturing  | Riverside  | Platte  | Kansas City & Vicinity  | Layoff  | 12/06/2024
+L73: 01/17/2025  | 144  |
+L74: 11/20/2024  | The Boeing Company  | Aerospace Product/Parts Manufacturing  | Berkeley
+L75: Hazelwood
+L76: Kansas City
+L77: Kingsville
+L78: Maryland Heights
+L79: O'Fallon
+L80: St. Charles
+L81: St. Louis (city)
+L82: St. Ann  |  |  | Layoff  | 01/07/2025  | 692  |
+L83: 11/22/2024  | Gate Gourmet  | Food Service  | Berkeley  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 01/15/2025  | 102  |
+L84: 11/25/2024  | Hollister  | Surgical/Medical Instrument Manufacturing  | Kirksville  | Adair  | Northeast  | Layoff  | 02/01/2025  | 3  | Further layoffs to come
+L85: 12/03/2024  | Silgan Plastics  | Manufacturing  | Hazelwood  | St. Louis (county)  | St. Louis & vicinity  | Closing  | 02/07/2025  | 33  |
+L86: 12/20/2024
+L87: 12/27/2024 rev  | Vimo, Inc. dba GetInsured  | Insurance Agencies and Brokerages  | Jackson
+L88: Cape Girardeau
+L89: St. Louis (city)  |  |  | Layoff  | 02/19/2025  | 4  | Layoffs will impact 430 US employees, including 4 employees based in Missouri
+L90:  |  |  |  |  |  |  |  | 5240  |

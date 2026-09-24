@@ -1,0 +1,52 @@
+# Browser-rendered official agency text via web.open on 2026-09-24
+# URL: https://jobs.mo.gov/warn/2019
+# Total source lines: 51
+L0: Search [Input: ]
+L1: 
+L2: [Input] [Input] [Input]
+L3: ## Google Translate
+L4: 
+L5: Effective March 24, 2023: If you wish to receive further information about the most recent WARN Notice submitted to the Office of Workforce Development (OWD), sign up for our cite0†WARN Notice Mailing List†public.govdelivery.com .  WARN Notice updates will be emailed during business operating hours.
+L6: 
+L7: To receive any previous WARN Notices, submit an open records request to  recordscustodian@dhewd.mo.gov ( recordscustodian@dhewd.mo.gov).
+L8: For all other inquiries, please contact Heather Dolce, Assistant Commissioner for Communications and Outreach at heather.dolce@dhewd.mo.gov ( heather.dolce@dhewd.mo.gov).
+L9: # WARN Notices
+L10: 
+L11: cite1†Click here to learn more about the WARN Notice System L12: 
+L13: Company name [Input]
+L14: 
+L15: Counties [Select]
+L16: 
+L17: Type [Select]
+L18: 
+L19: [Input]
+L20: cite2†Received | cite3†Title | Location(s)  | cite4†County | Region  | cite5†Type | Layoff date(s)  | cite6†# affected L21: --- | --- | --- | --- | --- | --- | --- | ---
+L22: 01/04/2019  | Beauty Brands  | Kansas City  | Clay  | Kansas City & Vicinity  | Closing  | 01/18/2019  | 81
+L23: 01/08/2019  | DB Schenker  | St. Peters  | St. Charles  | St. Charles County  | Closing  | 03/10/2019  | 144
+L24: 01/17/2019  | Durham Schools Services, L.P.  | Florissant  | St. Louis (county)  | St. Louis County  | Closing  | 06/30/2019  | 254
+L25: 01/23/2019  | TreeHouse Foods, Inc & its subsidiaries Bay Valley Foods LLC & TreeHouse Private Brands  | St. Louis (city)  | St. Louis (county)  | St. Louis County  | Closing  | 06/28/2019  | 131
+L26: 02/13/2019  | Spectrum Pharmaceuticals  |  |  | Multiple Locations  | Closing  | 04/12/2019  | 5
+L27: 02/16/2019  | Receivable Solutions, Inc. (RSi)  | Town & Country  | St. Louis (county)  | St. Louis County  | Closing  | 03/29/2019  | 50
+L28: 02/27/2019  | Crane Freight and Cartage  | Kansas City  | Platte  | Kansas City & Vicinity  | Closing  | 05/30/2019  | 28
+L29: 03/01/2019  | The Results Companies, LLC  | Kansas City  | Platte  | Kansas City & Vicinity  | Closing  | 05/03/2019  | 82
+L30: 03/13/2019  | CVS Health subsidiary companies Aetna Resources LLC and CVS Pharmacy, Inc.  | Kansas City  | Platte  | Kansas City & Vicinity  | Closing  | 05/20/2019  | 138
+L31: 03/15/2019  | PepsiCo, Inc. (Kansas City)  | Kansas City  | Jackson  | Kansas City & Vicinity  | Closing  | 05/17/2019  | 57
+L32: 04/12/2019  | Laird Technologies, Inc.  | Chesterfield  | St. Louis (county)  | St. Louis County  | Closing  | 06/14/2019  | 5
+L33: 05/01/2019  | Aramark Services Inc. and Aramark Sports and Entertainment Services, LLC (St. Louis)  | St. Louis (city)  | St. Louis (county)  | St. Louis County  | Closing  | 06/30/2019  | 95
+L34: 05/10/2019  | First Student Inc. (Kansas City)  | Kansas City  | Jackson  | Kansas City & Vicinity  | Closing  | 06/30/2019  | 293
+L35: 06/06/2019  | Parker Hannifin Hose Products Division (Kennett)  | Kennett  | Dunklin  | Southeast  | Closing  | 09/30/2019  | 92
+L36: 07/08/2019  | Pioneer Services  | Kansas City  | Jackson  | Kansas City & Vicinity  | Closing  | 09/01/2019  | 89
+L37: 07/29/2019  | Sheraton Clayton Plaza Hotel St. Louis  | Clayton  | St. Louis (county)  | St. Louis County  | Layoff  | 10/01/2019
+L38: 10/14/2019  | 82
+L39: 07/29/2019  | Silgan Containers Manufacturing Corporation  | Mount Vernon  | Lawrence  | Southwest  | Closing  | 10/04/2019  | 20
+L40: 09/02/2019  | Nestle USA, Inc. & Nestle Dreyers Ice Cream Company  | Earth City  | St. Louis (county)  | St. Louis County  | Closing  | 12/31/2019  | 56
+L41: 09/18/2019  | Sodexo, Inc., and Affiliates (Kansas City - Children's Mercy Hospital)  | Kansas City  | Jackson  | Kansas City & Vicinity  | Closing  | 11/08/2019  | 96
+L42: 10/02/2019
+L43: 10/30/2020 rev  | Cerner Corporation  |  |  | Multiple Locations  | Closing  | 12/13/2019  | 154
+L44: 10/08/2019  | Haldex Brake Products Corporation  | Blue Springs  | Jackson  | Kansas City & Vicinity  | Closing  | 12/13/2019  | 154
+L45: 10/17/2019  | Union Pacific Neff Diesel Locomotive Shop  | Kansas City  | Jackson  | Kansas City & Vicinity  | Closing  | 12/17/2019  | 89
+L46: 10/24/2019  | Thrift Books  | Maryland Heights  | St. Louis (county)  | St. Louis County  | Closing  | 11/01/2019  | 65
+L47: 10/29/2019  | Cowley Distributing, Inc. (Cape Girardeau, Jefferson City, Maryland Heights, Springfield)  |  |  | Multiple Locations  | Closing  | 12/31/2019  | 115
+L48: 11/01/2019  | Regal Beloit America Inc.  | West Plains  | Howell  | South Central  | Closing  | 05/21/2020  | 204
+L49: 12/06/2019  | ExlService.com, LLC  | Lee’s Summit  | Jackson  | Kansas City & Vicinity  | Closing  | 01/31/2020  | 82
+L50:  |  |  |  |  |  |  | 2661

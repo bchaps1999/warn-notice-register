@@ -163,95 +163,6 @@ def verify(state: str, workdir: Path, use_cache: bool) -> None:
 
 
 @cli.command()
-@click.argument("states", nargs=-1)
-@click.option("--workdir", type=click.Path(path_type=Path), default=Path("workdir/backfill"))
-@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
-@click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
-def backfill(states, workdir: Path, db_path: Path, data_dir: Path) -> None:
-    """Ingest historical data from warn-github-flow branches for STATES
-    (default: all active states)."""
-    from warnlive.backfill import github_flow
-
-    registry = load_registry()
-    if states:
-        configs = registry.for_run(states=list(states))
-    else:
-        configs = [c for c in registry.all() if c.status == "active"]
-
-    raw_dir = Path(workdir) / "raw"
-    downloaded = []
-    for cfg in configs:
-        if github_flow.download_state(cfg.postal, raw_dir) is not None:
-            downloaded.append(cfg)
-        else:
-            click.echo(f"{cfg.postal.upper()}: no upstream history, skipped")
-    if not downloaded:
-        click.echo("Nothing to backfill.", err=True)
-        sys.exit(1)
-
-    conn = db_mod.connect(db_path)
-    db_mod.init_db(conn)
-    report = pipeline.run_states(
-        conn, registry, downloaded, workdir,
-        trigger="backfill", use_cache=True,
-    )
-    export_csvs(conn, Path(data_dir) / "exports", _exportable(registry))
-    write_health(conn, registry, Path(data_dir) / "health")
-    _compress_db(db_path)
-    _print_report(report)
-
-
-@cli.command("backfill-bln")
-@click.argument("states", nargs=-1)
-@click.option("--workdir", type=click.Path(path_type=Path), default=Path("workdir/backfill"))
-@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
-@click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
-@click.option("--gaps", is_flag=True,
-              help="Fill months where a state has zero notices (instead of only "
-                   "rows older than its oldest notice).")
-@click.option("--all-missing", is_flag=True,
-              help="With --gaps: ingest every BLN row lacking a (state, employer, "
-                   "date) match, even in months we already cover. Review "
-                   "health/dupes_review.csv afterwards.")
-def backfill_bln(states, workdir: Path, db_path: Path, data_dir: Path,
-                 gaps: bool, all_missing: bool) -> None:
-    """Deep-history backfill from BLN's accumulated integrated dataset,
-    ingesting only rows older than each state's current oldest notice
-    (or into coverage gaps with --gaps)."""
-    from warnlive.backfill import bln_integrated
-    from warnlive.store.dedupe import ingest
-
-    if all_missing and not gaps:
-        raise click.UsageError("--all-missing requires --gaps")
-
-    registry = load_registry()
-    conn = db_mod.connect(db_path)
-    db_mod.init_db(conn)
-
-    csv_path = bln_integrated.download(Path(workdir))
-    if gaps:
-        per_state = bln_integrated.gap_rows_by_state(
-            csv_path, conn, registry, list(states) or None, all_missing=all_missing
-        )
-    else:
-        per_state = bln_integrated.older_rows_by_state(
-            csv_path, conn, registry, list(states) or None
-        )
-    if not per_state:
-        click.echo("No eligible rows to ingest.")
-        return
-    from warnlive.pipeline import now_utc
-
-    for postal in sorted(per_state):
-        stats = ingest(conn, per_state[postal], observed_at=now_utc()[:10])
-        click.echo(f"{postal}: +{stats.new} new, {stats.unchanged} already present")
-
-    export_csvs(conn, Path(data_dir) / "exports", _exportable(registry))
-    write_health(conn, registry, Path(data_dir) / "health")
-    _compress_db(db_path)
-
-
-@cli.command()
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
 def export(db_path: Path, data_dir: Path) -> None:
@@ -463,14 +374,16 @@ def il_effective_dates(
 
     The IEBS export has no layoff date for regular WARN rows (its Impact
     Date is a Trade Act field). DCEO's monthly reports carry a FIRST
-    LAYOFF DATE per notice; this matches them to stored notices by zip +
-    notified date (fallback: folded employer name + date) and fills
-    effective_date where it is empty. Never overwrites an existing date.
+    LAYOFF DATE per notice; this matches them to IEBS agency report dates by
+    zip + notified date (fallback: folded employer name + date) and fills
+    effective_date where it is empty. Never overwrites an existing date or
+    treats an agency report date as legal employee notice.
     """
     import json as json_mod
     import re as re_mod
 
     from warnlive.enrich import il_effective
+    from warnlive.normalize.details import il_report_day
     from warnlive.normalize.engine import _fold, _record_hash
     from warnlive.pipeline import now_utc
 
@@ -506,12 +419,12 @@ def il_effective_dates(
 
     rows = conn.execute(
         """SELECT n.id, n.employer_name, n.location, n.notice_date,
+                  n.source_details,
                   n.current_version, v.fields_json
            FROM notices n JOIN notice_versions v
              ON v.notice_id = n.id AND v.version = n.current_version
            WHERE n.state = 'IL'
-             AND (n.effective_date IS NULL OR n.effective_date = '')
-             AND n.notice_date IS NOT NULL""",
+             AND (n.effective_date IS NULL OR n.effective_date = '')""",
     ).fetchall()
 
     import datetime as dt_mod
@@ -527,9 +440,23 @@ def il_effective_dates(
             return True
         return SequenceMatcher(None, a, b).ratio() >= 0.75
 
-    filled = amended = unmatched = 0
+    filled = amended = unmatched = missing_anchor = 0
     for row in rows:
-        notice_date = dt_mod.date.fromisoformat(row["notice_date"])
+        details = json_mod.loads(row["source_details"] or "{}")
+        fields = json_mod.loads(row["fields_json"])
+        if details.get("date_evidence_rule") == "il_iebs_agency_dates_v1":
+            anchor = details.get("agency_reported_date")
+        else:
+            # Older databases predate the explicit date-role projection.
+            # Prefer raw IEBS report evidence; retain the old canonical-day
+            # fallback only when that raw field is absent altogether.
+            raw = json_mod.loads(fields.get("raw_extra") or "{}")
+            report_text = (raw.get("Initial Date Reported") or "").strip()
+            anchor = il_report_day(report_text) if report_text else row["notice_date"]
+        if not anchor:
+            missing_anchor += 1
+            continue
+        report_date = dt_mod.date.fromisoformat(anchor)
         fold = _fold(row["employer_name"])
         zm = zip_re.search(row["location"] or "")
         pool = list(by_name.get(fold, []))
@@ -537,7 +464,7 @@ def il_effective_dates(
             pool.extend(c for c in by_zip.get(zm.group(1), []) if c not in pool)
         matches = []
         for c in pool:
-            delta = abs((dt_mod.date.fromisoformat(c.notified) - notice_date).days)
+            delta = abs((dt_mod.date.fromisoformat(c.notified) - report_date).days)
             # An exact folded-name match earns a wider window: DCEO sometimes
             # logs the notified date weeks after the IEBS report date, and at
             # sim 1.0 the unrelated-neighbor risk the tight window guards
@@ -558,7 +485,6 @@ def il_effective_dates(
         filled += 1
         if dry_run:
             continue
-        fields = json_mod.loads(row["fields_json"])
         fields["effective_date"] = rec.first_layoff
         fields["raw_record_hash"] = _record_hash(fields)
         raw = json_mod.loads(fields.get("raw_extra") or "{}")
@@ -584,7 +510,8 @@ def il_effective_dates(
     label = "would fill" if dry_run else "filled"
     click.echo(
         f"IL: {label} {filled} ({amended} via earliest-of-amendments), "
-        f"unmatched {unmatched} (of {len(rows)} empty-effective-date rows)"
+        f"unmatched {unmatched}, missing report anchor {missing_anchor} "
+        f"(of {len(rows)} empty-effective-date rows)"
     )
 
 
@@ -845,22 +772,6 @@ def nonprofit_refresh(db_path: Path) -> None:
     click.echo(f"{nonprofits.PATH}: {n} employers matched to an EIN")
 
 
-@cli.command("identity-review")
-@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
-@click.option("--top", "limit", default=3000,
-              help="How many unidentified employers to collect candidates for.")
-def identity_review(db_path: Path, limit: int) -> None:
-    """Write the near-miss identity candidates the matcher refused, ranked
-    by workers affected, for later adjudication. Decisions go back in
-    data/reference/identity_overrides.csv and outrank automatic matching."""
-    from warnlive.enrich import review
-
-    conn = db_mod.connect(db_path)
-    db_mod.init_db(conn)
-    n = review.build(conn, limit=limit)
-    click.echo(f"{review.REVIEW_PATH}: {n} candidate rows")
-
-
 @cli.command("subsidiary-refresh")
 @click.option("--limit", type=int, default=None,
               help="Crawl at most this many registrants, then stop (resumable).")
@@ -889,369 +800,12 @@ def gleif_refresh(db_path: Path, top_n: int) -> None:
 
 
 @cli.command("places-refresh")
-@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
-@click.option("--review-only", is_flag=True,
-              help="Rebuild only the unresolved-location queue, against the "
-                   "roster already on disk. The Census files change once a "
-                   "year; what can be placed changes every time an alias is "
-                   "added or a notice arrives.")
-def places_refresh(db_path: Path, review_only: bool) -> None:
-    """Rebuild the Census place and county roster used to resolve notice
-    locations, and list the locations it cannot place."""
+def places_refresh() -> None:
+    """Rebuild the Census place and county roster used by deterministic matching."""
     from warnlive.enrich import places
 
-    if not review_only:
-        n = places.refresh()
-        click.echo(f"{places.PATH}: {n} places and counties")
-    elif not places.PATH.exists():
-        raise click.UsageError(
-            f"{places.PATH} does not exist; run without --review-only first"
-        )
-    conn = db_mod.connect(db_path)
-    db_mod.init_db(conn)
-    unresolved = places.review(conn)
-    click.echo(f"{places.REVIEW_PATH}: {unresolved} unresolved locations")
-
-
-@cli.group()
-def adjudicate() -> None:
-    """Ask a model to settle what the deterministic tiers refused.
-
-    Every proposal is judged by the same code that refused in the first
-    place — an alias must make the resolver place the string, a name must
-    clear the EDGAR matcher's gates — so a wrong guess fails rather than
-    landing as a confident match. What survives is appended to the
-    reference files under data/reference with the model named as the
-    decider; what does not is staged under data/health for a person.
-
-    Runs by hand, never in CI: scheduled scrapes read reference files and
-    contact no model. Needs the key named in adjudicate/providers.yaml
-    (DEEPSEEK_API_KEY by default).
-    """
-
-
-def _llm_options(fn):
-    """The options every adjudicate subcommand shares."""
-    for option in reversed([
-        click.option("--limit", type=int, default=None,
-                     help="Stop after this many rows of real work."),
-        click.option("--min-workers", default=0,
-                     help="Ignore rows with fewer workers riding on them."),
-        click.option("--dry-run", is_flag=True,
-                     help="Re-judge the ledger through today's gates; no API calls."),
-        click.option("--reask", is_flag=True,
-                     help="Ask again even where an answer is already on file."),
-        click.option("--budget", type=float, default=None,
-                     help="Hard ceiling in USD, checked before each call."),
-        click.option("--provider", default=None, help="Provider from providers.yaml."),
-        click.option("--model", "model_alias", default=None, help="Model alias, e.g. flash."),
-        click.option("--threshold", default=0.8, show_default=True,
-                     help="Confidence at or above which a cleared proposal is written."),
-        click.option("--write/--no-write", default=True,
-                     help="Whether to write reference and staging files."),
-        click.option("--thinking/--no-thinking", default=True,
-                     help="Let the model reason before answering. Reasoning is "
-                          "billed as output and ran ~3x the answer itself; "
-                          "--no-thinking is cheaper and measurably worse on "
-                          "the judgements the gates cannot check."),
-    ]):
-        fn = option(fn)
-    return fn
-
-
-def _client_for(provider, model_alias, budget, dry_run):
-    """The client to call with, and the model name to replay answers under.
-
-    A dry run has no client and still needs the model's name: the ledger is
-    keyed by it, so replaying without it would match nothing and report an
-    empty queue as though there were no work.
-    """
-    from warnlive.adjudicate.client import Client, resolve
-
-    model = resolve(provider, model_alias)
-    click.echo(f"model: {model}" + (" (dry run, no calls)" if dry_run else ""))
-    if dry_run:
-        return None, str(model)
-    return Client(model, budget=budget), str(model)
-
-
-def _report(tally, client) -> None:
-    click.echo(tally.summary())
-    if client is not None:
-        click.echo(client.usage.summary())
-    if tally.stopped:
-        click.echo(f"stopped: {tally.stopped}")
-
-
-@adjudicate.command("sweep")
-@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
-@click.option("--sample", default=300, show_default=True,
-              help="Employers per configuration, from the tune split.")
-@click.option("--cut", default=0.9, show_default=True,
-              help="Confidence cut the table is ranked at.")
-@click.option("--budget-each", type=float, default=0.10, show_default=True,
-              help="Ceiling per configuration, in USD.")
-@click.option("--prompts", default=None,
-              help="Comma-separated prompt names. Default: every file in "
-                   "adjudicate/prompts.")
-@click.option("--settings", is_flag=True,
-              help="Sweep batch size, thinking and model on the given prompt "
-                   "instead of comparing prompts.")
-def adjudicate_sweep(db_path, sample, cut, budget_each, prompts, settings) -> None:
-    """Compare prompts and settings on the tune split, before trusting one.
-
-    Never touches the test split: that half is scored once, by the winner,
-    and is the only number worth quoting because nothing was changed in
-    response to it."""
-    from warnlive.adjudicate import industry as adj_industry
-    from warnlive.adjudicate import sweep as sweep_mod
-
-    conn = db_mod.connect(db_path)
-    db_mod.init_db(conn)
-    items = adj_industry.load_calibration(conn, sample=sample, split="tune")
-    click.echo(f"{len(items)} employers from the tune split\n")
-
-    names = ([p.strip() for p in prompts.split(",")] if prompts else
-             sorted(p.stem for p in adj_industry.PROMPTS_DIR.glob("*.txt")))
-    if settings:
-        base = names[0]
-        configs = [
-            sweep_mod.Config(base),
-            sweep_mod.Config(base, batch_size=10),
-            sweep_mod.Config(base, thinking=False),
-            sweep_mod.Config(base, model="pro"),
-        ]
-    else:
-        configs = [sweep_mod.Config(n) for n in names]
-
-    results = sweep_mod.run(items, configs, cut=cut, budget_each=budget_each)
-    click.echo("\n" + sweep_mod.table(results, cut))
-    sweep_mod.write(results, cut)
-    click.echo(f"\nwritten to {sweep_mod.RESULTS_PATH}")
-    total = sum(r.cost for r in results)
-    click.echo(f"total spent: ${total:.4f}")
-
-
-@adjudicate.command("places")
-@_llm_options
-@click.option("--auto-county", is_flag=True,
-              help="Also write county-level answers automatically. Off by "
-                   "default: nothing can check one, since the gate only "
-                   "confirms the county exists and every real county does.")
-def adjudicate_places(limit, min_workers, dry_run, reask, budget, provider,
-                      model_alias, threshold, write, thinking, auto_county) -> None:
-    """Resolve the location strings the Census gazetteer could not place.
-
-    A proposal is written into the alias table and the resolver is run again
-    on the original string: either it now names a real Census place or
-    county, or the proposal is worth nothing. Strings that name no geography
-    at all — workforce investment areas, "Various Cities" — are recorded as
-    rejected so they stop returning to the review file."""
-    from warnlive.adjudicate import places as adj_places
-    from warnlive.adjudicate import queue as queue_mod
-
-    items = adj_places.load_queue(min_workers=min_workers)
-    click.echo(f"{adj_places.REVIEW_PATH}: {len(items)} unresolved locations queued")
-    client, model_name = _client_for(provider, model_alias, budget, dry_run)
-    worker = adj_places.Places(threshold=threshold, auto_county=auto_county)
-    worker.thinking = thinking
-    tally = queue_mod.run(
-        worker, items, client=client, limit=limit, dry_run=dry_run,
-        reask=reask, model=model_name,
-    )
-    _report(tally, client)
-    if write and not dry_run and tally.rows:
-        written, staged = adj_places.write(
-            tally.rows, decided_by=model_name
-        )
-        click.echo(f"{adj_places.ALIAS_PATH}: +{written} decided")
-        click.echo(f"{adj_places.STAGING_PATH}: {staged} staged for review")
-
-
-@adjudicate.command("identity")
-@_llm_options
-@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
-@click.option("--corroborators", default=2, show_default=True,
-              help="Independent witnesses a matched CIK must have.")
-def adjudicate_identity(limit, min_workers, dry_run, reask, budget, provider,
-                        model_alias, threshold, write, thinking, db_path, corroborators) -> None:
-    """Identify the employers the EDGAR matcher could not.
-
-    A proposed registrant must clear the unmodified matcher and then be
-    corroborated by evidence the proposal never saw — the filing calendar,
-    a parent's Exhibit 21, the state-published industry, the IRS or GLEIF
-    rosters. A subsidiary becomes a parent link rather than an identity,
-    because First Transit is owned by FirstGroup and is not FirstGroup."""
-    from warnlive.adjudicate import identity as adj_identity
-    from warnlive.adjudicate import queue as queue_mod
-
-    conn = db_mod.connect(db_path)
-    db_mod.init_db(conn)
-    items = adj_identity.load_queue(conn, min_workers=min_workers)
-    click.echo(f"{len(items)} unidentified employers queued")
-    client, model_name = _client_for(provider, model_alias, budget, dry_run)
-    worker = adj_identity.Identity(
-        threshold=threshold, min_corroborators=corroborators
-    )
-    worker.thinking = thinking
-    tally = queue_mod.run(
-        worker, items, client=client, limit=limit, dry_run=dry_run,
-        reask=reask, model=model_name,
-    )
-    _report(tally, client)
-    if write and not dry_run and tally.rows:
-        ids, links, staged = adj_identity.write(
-            tally.rows, decided_by=model_name
-        )
-        click.echo(f"{adj_identity.OVERRIDES_PATH}: +{ids} identities")
-        click.echo(f"{adj_identity.SUBSIDIARY_OVERRIDES}: +{links} parent links")
-        click.echo(f"{adj_identity.STAGING_PATH}: {staged} staged for review")
-
-
-@adjudicate.command("confirm")
-@_llm_options
-@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
-@click.option("--proposer-provider", default=None,
-              help="Provider whose identity answers to confirm (defaults to "
-                   "the configured default provider).")
-@click.option("--proposer-model", default=None,
-              help="Model whose identity answers to confirm. --model names "
-                   "the *confirming* model; use a different one, or the "
-                   "confirmer shares the proposer's misconceptions.")
-def adjudicate_confirm(limit, min_workers, dry_run, reask, budget, provider,
-                       model_alias, threshold, write, thinking, db_path,
-                       proposer_provider, proposer_model) -> None:
-    """Confirm the matches short of independent corroboration.
-
-    `adjudicate identity` writes a match only with corroborators including a
-    CIK-anchored one, and stages the rest. For an obscure employer nothing
-    else knows about, staged means abandoned. This asks the narrower question
-    the staging leaves open — is this named registrant this named employer —
-    with the roster's view of the company beside the notices' view of it.
-
-    A yes is written only where at least one independent corroborator already
-    agreed; with none at all the match stays staged for a person. Run it with
-    a different --model than the one that proposed the matches.
-    """
-    from warnlive.adjudicate import confirm as adj_confirm
-    from warnlive.adjudicate import identity as adj_identity
-    from warnlive.adjudicate import queue as queue_mod
-    from warnlive.adjudicate.client import resolve
-    from warnlive.adjudicate.ledger import Ledger
-
-    conn = db_mod.connect(db_path)
-    db_mod.init_db(conn)
-    client, model_name = _client_for(provider, model_alias, budget, dry_run)
-    # The queue replays the *proposer's* identity answers; the confirming
-    # model is a separate choice. Keying the replay off the confirmer would
-    # make a different-model confirm find an empty queue.
-    proposer_name = str(resolve(proposer_provider, proposer_model))
-    if proposer_name == model_name and not dry_run:
-        click.echo(
-            f"warning: confirming with the model that proposed the matches "
-            f"({model_name}); a shared family shares its misconceptions — "
-            "consider --provider/--model for a second opinion",
-            err=True,
-        )
-    ledger = Ledger()
-    items = adj_confirm.load_queue(conn, ledger, proposer_name, min_workers=min_workers)
-    click.echo(f"{len(items)} uncorroborated matches to confirm")
-    worker = adj_confirm.Confirm(threshold=threshold)
-    worker.thinking = thinking
-    tally = queue_mod.run(
-        worker, items, client=client, ledger=ledger, limit=limit,
-        dry_run=dry_run, reask=reask, model=model_name,
-    )
-    _report(tally, client)
-    if write and not dry_run and tally.rows:
-        ids, links, staged = adj_identity.write(
-            tally.rows, staging_path=adj_confirm.STAGING_PATH,
-            decided_by=model_name,
-        )
-        click.echo(f"{adj_identity.OVERRIDES_PATH}: +{ids} identities")
-        click.echo(f"{adj_confirm.STAGING_PATH}: {staged} staged for review")
-
-
-@adjudicate.command("industry")
-@_llm_options
-@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
-@click.option("--calibrate", is_flag=True,
-              help="Score against states' own published industries instead of "
-                   "writing; prints precision at each confidence cut.")
-@click.option("--prompt", "prompt_name", default=None,
-              help="Which prompt in adjudicate/prompts to use. Its name is "
-                   "the version answers are keyed by, so two variants never "
-                   "blend and switching back replays rather than re-buys.")
-@click.option("--split", type=click.Choice(["tune", "test"]), default="tune",
-              show_default=True,
-              help="Which half of the labelled employers to grade. Compare "
-                   "prompts on 'tune'; score the winner once on 'test'. "
-                   "Iterating against 'test' measures the fit to that sample, "
-                   "not the prompt.")
-@click.option("--sample", type=int, default=1000, show_default=True,
-              help="With --calibrate: how many labelled employers to grade, "
-                   "drawn at random (seeded). The labelled set is ranked by "
-                   "workers, so grading its head would measure the easiest "
-                   "employers and overstate the threshold.")
-def adjudicate_industry(limit, min_workers, dry_run, reask, budget, provider,
-                        model_alias, threshold, write, thinking, db_path, calibrate, sample,
-                        split, prompt_name) -> None:
-    """Assign a NAICS sector to employers no basis reached.
-
-    Nothing can verify a sector the way the resolver verifies a place, so
-    run --calibrate first: it classifies employers whose industry a state
-    already published, with the label hidden, and reports precision at each
-    confidence cut. Pick --threshold off that curve rather than guessing."""
-    from warnlive.adjudicate import industry as adj_industry
-    from warnlive.adjudicate import queue as queue_mod
-    from warnlive.adjudicate.ledger import Ledger
-
-    conn = db_mod.connect(db_path)
-    db_mod.init_db(conn)
-    if calibrate:
-        items = adj_industry.load_calibration(conn, min_workers=min_workers,
-                                              sample=sample, split=split)
-    else:
-        items = adj_industry.load_queue(conn, min_workers=min_workers)
-    click.echo(
-        f"{len(items)} employers "
-        + (f"with a published industry ({split} split)" if calibrate else "queued")
-    )
-    client, model_name = _client_for(provider, model_alias, budget, dry_run)
-    worker = adj_industry.Industry(
-        threshold=threshold,
-        **({'prompt': prompt_name} if prompt_name else {}),
-    )
-    worker.thinking = thinking
-    led = Ledger()
-    tally = queue_mod.run(
-        worker, items, client=client, ledger=led, limit=limit,
-        dry_run=dry_run, reask=reask, model=model_name,
-    )
-    _report(tally, client)
-
-    if calibrate:
-        curve = adj_industry.score(items, worker, led, model_name)
-        click.echo("\n  cut   answered  coverage  precision  worker-precision")
-        for r in curve:
-            click.echo(
-                f"  {r['threshold']:.2f}  {r['answered']:8d}  {r['coverage']:8.1%}"
-                f"  {r['precision']:9.1%}  {r['worker_precision']:16.1%}"
-            )
-        click.echo(f"\nwritten to {adj_industry.CALIBRATION_PATH}")
-        confused = adj_industry.confusions(items, worker, led, model_name)
-        if confused:
-            click.echo("\nmost confused sectors (published -> predicted):")
-            for (truth, pred), n in confused:
-                click.echo(f"  {n:5d}  {truth} -> {pred}")
-        return
-
-    if write and not dry_run and tally.rows:
-        accepted, staged = adj_industry.write(
-            tally.rows, decided_by=model_name
-        )
-        click.echo(f"{adj_industry.OVERRIDES_PATH}: +{accepted} sectors")
-        click.echo(f"{adj_industry.STAGING_PATH}: {staged} staged for review")
+    n = places.refresh()
+    click.echo(f"{places.PATH}: {n} places and counties")
 
 
 @cli.command("wikidata-refresh")
@@ -1485,21 +1039,15 @@ def check_regressions(db_path: Path, data_dir: Path, update_snapshot: bool) -> N
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
 def dupes(db_path: Path, data_dir: Path) -> None:
-    """Detect revision/duplicate links between notices (link, never merge).
-
-    Rebuilds the notice_links table, exports notice_links.csv, and writes
-    gray-zone candidate pairs to health/dupes_review.csv for human review.
-    """
+    """Build deterministic revision and duplicate links between notices."""
     from warnlive.store import links as links_mod
 
     conn = db_mod.connect(db_path)
     db_mod.init_db(conn)
-    stats = links_mod.rebuild(
-        conn, review_path=Path(data_dir) / "health" / "dupes_review.csv"
-    )
+    stats = links_mod.rebuild(conn)
     n = links_mod.export_links_csv(conn, Path(data_dir) / "exports" / "notice_links.csv")
     _compress_db(db_path)
-    click.echo(f"{stats['links']} links ({n} exported), {stats['review']} pairs for review")
+    click.echo(f"{stats['links']} links ({n} exported)")
     for key, count in stats["by_kind_method"].items():
         click.echo(f"  {key}: {count}")
 
@@ -1683,32 +1231,72 @@ def unpack_db(db_path: Path) -> None:
     all the checkout has) and writes the sqlite file the commands use.
     """
     import gzip
+    import os
     import shutil
     import sqlite3 as sqlite3_mod
+    import tempfile
 
     db_path = Path(db_path)
     dump_path = db_path.parent / "warn.sql.gz"
     legacy = Path(f"{db_path}.gz")
-    if dump_path.exists():
-        tmp = db_path.with_name(db_path.name + ".tmp")
-        tmp.unlink(missing_ok=True)
-        conn = sqlite3_mod.connect(tmp)
-        try:
-            with gzip.open(dump_path, "rt") as fh:
-                conn.executescript(fh.read())
-            conn.commit()
-        finally:
-            conn.close()
-        tmp.replace(db_path)
-        click.echo(f"{db_path} restored from {dump_path}")
-    elif legacy.exists():
-        with gzip.open(legacy, "rb") as src, open(db_path, "wb") as dst:
-            shutil.copyfileobj(src, dst)
-        click.echo(f"{db_path} restored from {legacy}")
-    else:
+    if not dump_path.exists() and not legacy.exists():
         raise click.ClickException(
             f"neither {dump_path} nor {legacy} exists; nothing to unpack"
         )
+    source = dump_path if dump_path.exists() else legacy
+    fd, temp_name = tempfile.mkstemp(
+        prefix=f".{db_path.name}.", suffix=".tmp", dir=db_path.parent
+    )
+    os.close(fd)
+    tmp = Path(temp_name)
+    try:
+        if source == dump_path:
+            conn = sqlite3_mod.connect(tmp)
+            try:
+                with gzip.open(dump_path, "rt") as fh:
+                    conn.executescript(fh.read())
+                conn.commit()
+            finally:
+                conn.close()
+        else:
+            with gzip.open(legacy, "rb") as src, open(tmp, "wb") as dst:
+                shutil.copyfileobj(src, dst)
+
+        # A corrupt or truncated dump must never replace a usable working DB.
+        conn = sqlite3_mod.connect(f"file:{tmp}?mode=ro", uri=True)
+        try:
+            integrity = conn.execute("PRAGMA integrity_check").fetchone()[0]
+            foreign_keys = conn.execute("PRAGMA foreign_key_check").fetchall()
+            tables = {row[0] for row in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type = 'table'"
+            )}
+            # Older supported databases acquire the other tables in init_db.
+            required = {"notices", "schema_version"}
+            missing = required - tables
+            notice_count = conn.execute("SELECT COUNT(*) FROM notices").fetchone()[0] if not missing else 0
+            version = conn.execute("SELECT version FROM schema_version").fetchone() if not missing else None
+        finally:
+            conn.close()
+        schema_version = version[0] if version else None
+        valid_version = isinstance(schema_version, int) and 1 <= schema_version <= db_mod.SCHEMA_VERSION
+        if integrity != "ok" or foreign_keys or missing or notice_count == 0 or not valid_version:
+            raise click.ClickException(
+                f"restored database failed validation: integrity={integrity}, "
+                f"foreign_key_errors={len(foreign_keys)}, "
+                f"missing_tables={sorted(missing)}, notices={notice_count}, "
+                f"schema_version={schema_version}"
+            )
+        sidecars = [path for path in (Path(f"{db_path}-wal"), Path(f"{db_path}-shm")) if path.exists()]
+        if sidecars:
+            raise click.ClickException(
+                f"cannot replace {db_path} while SQLite sidecars exist: "
+                f"{', '.join(str(path) for path in sidecars)}; close database users "
+                "and checkpoint the database before retrying"
+            )
+        tmp.replace(db_path)
+    finally:
+        tmp.unlink(missing_ok=True)
+    click.echo(f"{db_path} restored from {source}")
 
 
 def _print_report(report: pipeline.RunReport) -> None:

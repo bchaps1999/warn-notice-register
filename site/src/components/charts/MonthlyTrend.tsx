@@ -66,10 +66,11 @@ export function MonthlyTrend({ monthly, anchor }: { monthly: MonthPoint[]; ancho
       </div>
       <div className="h-72">
         <ResponsiveContainer>
-          <BarChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: 4 }} barCategoryGap="18%">
+          <BarChart key={`${metric}-${range}`} data={data} margin={{ top: 4, right: 4, bottom: 0, left: 4 }} barCategoryGap="18%">
             <CartesianGrid vertical={false} stroke="var(--chart-grid)" />
             <XAxis
               dataKey="month"
+              padding={{ left: 18, right: 18 }}
               tickFormatter={(m: string) => (yearly ? m.slice(0, 4) : monthLabel(m))}
               tick={{ fill: "var(--color-ink-muted)", fontSize: 11, fontFamily: "Inter Variable" }}
               tickLine={false}
@@ -105,14 +106,14 @@ export function MonthlyTrend({ monthly, anchor }: { monthly: MonthPoint[]; ancho
                   iconSize={9}
                 />
                 <Bar dataKey="closure" stackId="n" fill="var(--chart-closure)"
-                     stroke="var(--color-bg)" strokeWidth={1} />
+                     stroke="var(--color-bg)" strokeWidth={1} isAnimationActive={false} />
                 <Bar dataKey="mass_layoff" stackId="n" fill="var(--chart-layoff)"
-                     stroke="var(--color-bg)" strokeWidth={1} />
+                     stroke="var(--color-bg)" strokeWidth={1} isAnimationActive={false} />
                 <Bar dataKey="unknown" stackId="n" fill="var(--chart-unknown)"
-                     stroke="var(--color-bg)" strokeWidth={1} radius={[3, 3, 0, 0]} />
+                     stroke="var(--color-bg)" strokeWidth={1} radius={[3, 3, 0, 0]} isAnimationActive={false} />
               </>
             ) : (
-              <Bar dataKey="workers" fill="var(--color-federal)" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="workers" fill="var(--color-federal)" radius={[3, 3, 0, 0]} isAnimationActive={false} />
             )}
           </BarChart>
         </ResponsiveContainer>
@@ -155,6 +156,6 @@ function cutoffMonth(anchor: string, months: number): string {
   if (!isFinite(months)) return "0000";
   const y = parseInt(anchor.slice(0, 4));
   const m = parseInt(anchor.slice(5, 7));
-  const total = y * 12 + (m - 1) - months;
+  const total = y * 12 + (m - 1) - (months - 1);
   return `${String(Math.floor(total / 12)).padStart(4, "0")}-${String((total % 12) + 1).padStart(2, "0")}`;
 }

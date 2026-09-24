@@ -1,6 +1,8 @@
 """Official Louisiana table extraction preserves evidence and uncertainties."""
 
 from pathlib import Path
+import hashlib
+import json
 
 import pytest
 
@@ -29,6 +31,13 @@ def test_la_source_rows_preserve_dates_status_and_location_roles():
     assert ups["status"] == "rescinded"
     assert ups["status_source_row"] == note["source_row"]
     assert note["applies_to_source_row"] == ups["source_row"]
+    assert ups["rescission_date"] == note["rescission_date"] == "2025-09-05"
+    assert ups["rescission_target_source_row"] == note["rescission_target_source_row"] == ups["source_row"]
+    assert ups["rescission_source_quote"] == note["rescission_source_quote"] == note["annotation_text"]
+    assert note["kind"] == "annotation" and "workers_total" not in note
+    assert "notice_date" not in note and "effective_date_end" not in note
+    assert ups["effective_date_end"] is None
+    assert ups["effective_date_start"] != ups["rescission_date"]
 
     gdit = next(row for row in rows if row["source_row"] == "2025.pdf:p2:r16")
     assert gdit["notice_date"] is None
@@ -56,3 +65,29 @@ def test_la_source_rejects_tampered_pdf(tmp_path):
     (tmp_path / "2026.pdf").write_bytes(b"corrupt")
     with pytest.raises(ValueError, match="checksum mismatch"):
         extract(tmp_path)
+
+
+def test_historical_relationship_diagnostic_is_source_bound_and_unresolved():
+    path = SOURCE.parents[1] / "archive/source-diagnostics/la-relationships-2026-09-23.json"
+    artifact = json.loads(path.read_text())
+    rows = {row["source_row"]: row for row in extract(SOURCE)}
+    assert artifact["source_manifest_sha256"] == hashlib.sha256(
+        (SOURCE / "manifest.json").read_bytes()).hexdigest()
+    assert artifact["source_pdf_sha256"] == hashlib.sha256(
+        (SOURCE / "2025.pdf").read_bytes()).hexdigest()
+    groups = {group["group"]: group for group in artifact["candidate_groups"]}
+    assert set(groups) == {"IDEA", "SafeSource"}
+    assert {row["source_row"] for row in groups["SafeSource"]["observations"]} == {
+        "2025.pdf:p2:r7", "2025.pdf:p2:r11", "2025.pdf:p2:r12",
+        "2025.pdf:p2:r13",
+    }
+    for group in groups.values():
+        assert group["relationship_decision"] == "unresolved"
+        assert group["publication_action"] == "held_for_review"
+        for observation in group["observations"]:
+            source_row = rows[observation["source_row"]]
+            assert observation["source_row_sha256"] == source_row["source_row_sha256"]
+            assert observation["source_pdf_sha256"] == source_row["source_pdf_sha256"]
+            assert observation["workers_total"] == source_row["workers_total"]
+    assert any(evidence["type"] == "arithmetic_equality"
+               for evidence in groups["SafeSource"]["evidence"])

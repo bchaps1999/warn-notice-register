@@ -122,6 +122,21 @@ def _to_canonical(validated: dict, raw_row: dict, source_url: str | None) -> dic
     from warnlive.normalize.details import extract
 
     rec.update(extract(state, raw_row, rec))
+    if state == "NJ":
+        # NJ publishes no filing ID or notice date. Keep distinct raw table
+        # observations distinct; a changed row is a new observation until a
+        # reviewed correspondence establishes an amendment/event identity.
+        # This is deliberately an observation anchor, not a legal filing ID.
+        raw_value = json.loads(rec["raw_extra"])
+        raw_sha = hashlib.sha256(json.dumps(
+            raw_value, sort_keys=True, ensure_ascii=False, default=str,
+            separators=(",", ":"),
+        ).encode()).hexdigest()
+        rec["source_identity"] = f"NJ:raw-row:{raw_sha}"
+        details = json.loads(rec.get("source_details") or "{}")
+        details["identity_basis"] = "raw_row_observation"
+        details["source_row_sha256"] = raw_sha
+        rec["source_details"] = json.dumps(details, sort_keys=True, ensure_ascii=False)
     rec["dedupe_key"] = _dedupe_key(rec)
     rec["raw_record_hash"] = _record_hash(rec)
     return rec
@@ -134,13 +149,22 @@ def _dedupe_key(rec: dict) -> str:
     # Keep legacy keys for ID-less rows and other states; only a fresh build
     # may adopt changed keys until old notices are migrated or archived.
     source_identity = rec.get("source_identity")
-    if rec["state"] in {"GA", "SC", "KS"} and source_identity:
+    if rec["state"] in {"GA", "SC", "IL", "KS", "NJ"} and source_identity:
         return hashlib.sha1(f"{rec['state']}|source|{source_identity}".encode()).hexdigest()
+    # KY, MA, NV, WA, and MN exposed agency receipt (or, in MN, even a
+    # layoff-start fallback) as notice_date. Keep their old internal key date
+    # while clearing the falsely labeled legal notice day. This avoids
+    # collapsing unrelated observations during the date-role correction.
+    key_date = rec["notice_date"]
+    if rec["state"] in {"KY", "MA", "NV", "WA", "MN"}:
+        details = json.loads(rec.get("source_details") or "{}")
+        key_date = (details.get("agency_received_date") or
+                    details.get("legacy_notice_key_date") or key_date)
     parts = "|".join(
         [
             rec["state"],
             _fold(rec["employer_name"]),
-            rec["notice_date"] or "",
+            key_date or "",
             _fold(rec["location"]),
         ]
     )

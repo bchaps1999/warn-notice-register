@@ -1,36 +1,30 @@
-# Frozen WARN source inputs
+# Frozen source inputs for v1.0.0
 
-`2026-09-22-ca-nj-refresh.tar.gz` is a checksum-verified input bundle for the
-offline rebuild. It contains 1,981 files: the locally saved raw state CSVs,
-historical backfills, cached agency artifacts, SC PDFs, IL monthly reports, and
-a transitional historical-overlap policy. California and New Jersey raw CSVs
-were recaptured on September 22, 2026; most other current raw CSVs were last
-captured in July or August 2026. It is therefore a mixed-time comparison
-snapshot, not a complete as-of-September-22 state-site archive.
+The release rebuilds from
+[`2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz`](2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz),
+SHA-256 `858d1493a86f2a8012f2ce50844b316ab36731ee4482987a93893baedc457de7`.
+It contains 2,016 checksum-listed source files and declares
+`admission_inputs = agency-only-v1`. It excludes the integrated Big Local News
+CSV, old BLN GitHub Flow raw rows, and old-database overlap policies.
 
-SHA-256:
-`3410bef41ae2eebc584434b9cf780467597f2bd7a3421ede624b14ace9767741`
+The [replay report](2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1-report.json)
+pins 71,490 notices, 79,261 versions, 7,482,177 reported affected workers,
+zero inferred links, and database integrity `ok`. The
+[compressed exception ledger](2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.exceptions.jsonl.gz)
+accounts for 11,888 held source rows. Two isolated replays produced matching
+stable notice/version fingerprints, exception bytes, and SQLite bytes.
 
-Verify before use:
+The agency artifacts under `ga/`, `il/`, `mo/`, `ny/`, `oh/`, `or/`, `tn/`, and
+`tx/` preserve original or agency-supplied sources and their custody metadata.
+The final bundle, rather than a derived CSV, is the release input. The
+[release notes](../../docs/release-v1-2026-09-24.md) describe admitted and
+excluded coverage, material changes from the former main-branch product, and
+remaining gaps. The [assembly contract](../../docs/rebuild-contract.md)
+defines the replay and output checks.
 
-```bash
-python -m warnlive.migrate.source_bundle verify \
-  data/source_snapshots/2026-09-22-ca-nj-refresh.tar.gz
-```
-
-The bundled overlap policy was generated from the existing database's accepted
-keys and CA/NY archive URLs. It contains no canonical notice rows, but it
-means this is **not** an independent reconstruction of past curation. The
-rebuild command creates an isolated candidate and must not replace the
-published database without the reconciliation described in
-[`docs/warn-remediation-2026-09.md`](../../docs/warn-remediation-2026-09.md).
-
-Two isolated replays, including one from a fresh checkout with no `workdir` or
-local database, produced identical stable-content fingerprints (database IDs
-and observation timestamps are excluded):
-
-| Table content | SHA-256 |
-| --- | --- |
-| Notices | `64dcff27258cfab676bb9a6e5c70bbf6b9ffc344e6ff7d81114383abc93ade88` |
-| Version payloads | `ef2e2be749f83a6fb0d30a09e7d0ae6fc18f8d36fe5479b0e1135db0868566d5` |
-| Link edges | `98377166f91ec43eab29b82c0b3a4e0a2ac87133c6322d441fe24fd9af998490` |
+Two earlier BLN-containing frozen bundles remain as regression fixtures:
+`2026-09-23-ia-la-ny-first-transit-reviewed.tar.gz` and
+`2026-09-23-ia-la-ny-tx-annual-reviewed.tar.gz`. They are **not** v1.0.0
+admission inputs. Historical research reports elsewhere in the repository
+refer to additional local checkpoints; only the final Ohio-inclusive bundle
+is required to rebuild the release.

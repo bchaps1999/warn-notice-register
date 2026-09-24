@@ -15,7 +15,11 @@ EXPORT_COLUMNS = [
     "notice_date_precision",
     "notice_date_basis",
     "effective_date",
+    "effective_date_precision",
+    "effective_date_basis",
     "effective_date_end",
+    "effective_date_end_precision",
+    "effective_date_end_basis",
     "source_identity",
     "source_details",
     "employees_affected",
@@ -30,6 +34,33 @@ EXPORT_COLUMNS = [
     "first_seen",
     "last_seen",
 ]
+
+OBSERVATION_COLUMNS = [
+    "source_bundle_sha256", "state", "observation_kind", "source_artifact",
+    "source_row", "source_row_sha256", "admission_status",
+    "notice_id", "notice_dedupe_key", "deterministic_json", "raw_json",
+]
+
+
+def export_source_observations(conn: sqlite3.Connection, export_dir: Path) -> int:
+    """Export official observations, including excluded rows, apart from notices."""
+    columns = ["n.dedupe_key AS notice_dedupe_key" if name == "notice_dedupe_key"
+               else "CASE WHEN s.admission_status = 'event_review' "
+                    "THEN 'event_unresolved' ELSE s.admission_status END AS admission_status"
+                    if name == "admission_status" else f"s.{name}"
+               for name in OBSERVATION_COLUMNS]
+    rows = conn.execute(
+        f"SELECT {', '.join(columns)} FROM source_observations s "
+        "LEFT JOIN notices n ON n.id=s.notice_id "
+        "ORDER BY s.source_bundle_sha256, s.source_artifact, s.source_row"
+    ).fetchall()
+    path = Path(export_dir) / "source_observations.csv"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(OBSERVATION_COLUMNS)
+        writer.writerows(tuple(row) for row in rows)
+    return len(rows)
 
 
 def export_csvs(
@@ -118,4 +149,6 @@ def export_csvs(
             export_dir / "states" / f"{state.lower()}.csv",
             fetch("state = ?", (state,)),
         )
+    observation_count = export_source_observations(conn, export_dir)
+    counts[str(export_dir / "source_observations.csv")] = observation_count
     return counts

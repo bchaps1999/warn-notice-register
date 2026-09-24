@@ -35,17 +35,11 @@ logger = logging.getLogger(__name__)
 INDEX_URL = "https://www.twc.texas.gov/data-reports/warn-notice"
 ASSET_ROOT = "https://www.twc.texas.gov"
 HREF_PATTERN = re.compile(r"^/sites/default/files/oei/docs/warn-act-listings-")
-# Years covered by the yearly workbooks; earlier years come from the BLN
-# historical file. Upstream keeps 2019+, though the index lists 2020+ now.
-FIRST_YEAR = 2019
-HISTORICAL_URL = (
-    "https://storage.googleapis.com/bln-data-public/warn-layoffs/tx_historical.xlsx"
-)
+# Years covered by the state agency's yearly workbooks.
+FIRST_YEAR = 2020
 
 XLSX_MAGIC = b"PK\x03\x04"
 WAF_CHALLENGE_MARKER = b"awsWafCookie"
-
-
 def scrape(
     data_dir: Path = utils.WARN_DATA_DIR,
     cache_dir: Path = utils.WARN_CACHE_DIR,
@@ -62,7 +56,8 @@ def scrape(
         hrefs = _discover_links(_browser_fetch(session, cache))
 
     if hrefs:
-        candidates = [(_get_year(h), [f"{ASSET_ROOT}{h}"]) for h in hrefs]
+        candidates = [(_get_year(h), [f"{ASSET_ROOT}{h}"]) for h in hrefs
+                      if _get_year(h) >= FIRST_YEAR]
     else:
         # Last resort: the yearly URLs are predictable.
         logger.warning("TX: no links even via browser; probing constructed URLs.")
@@ -104,25 +99,6 @@ def scrape(
     while header and header[-1] in (None, ""):
         header.pop()
     row_list = [row[: len(header)] for row in row_list]
-
-    # Historical data (pre-2019) from BLN's archived workbook, trimmed to the
-    # same columns as the yearly files — unchanged from upstream.
-    excel_path = cache.download("tx/historical.xlsx", HISTORICAL_URL)
-    worksheet = load_workbook(filename=excel_path).worksheets[0]
-    for i, row in enumerate(worksheet.rows):
-        if i == 0:
-            continue
-        select_columns = [
-            row[8],  # NOTICE_DATE
-            row[0],  # JOB_SITE_NAME
-            row[2],  # COUNTY_NAME
-            row[5],  # WDA_NAME
-            row[6],  # TOTAL_LAYOFF_NUMBER
-            row[7],  # LayOff_Date
-            row[11],  # WFDD_RECEIVED_DATE
-            row[1],  # CITY_NAME
-        ]
-        row_list.append([c.value for c in select_columns])
 
     data_path = data_dir / "tx.csv"
     utils.write_rows_to_csv(data_path, row_list)

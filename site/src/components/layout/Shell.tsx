@@ -31,8 +31,8 @@ export function Shell() {
           <ThemeToggle />
         </div>
         <div className="double-rule mt-4" />
-        <div className="flex items-center justify-between py-2.5">
-          <nav className="flex gap-6">
+        <div className="flex items-center justify-between gap-4 py-2.5">
+          <nav className="flex gap-6 overflow-x-auto min-w-0" aria-label="Main navigation">
             {NAV.map((n) => (
               <NavLink
                 key={n.to}
@@ -40,7 +40,7 @@ export function Shell() {
                 end={n.to === "/"}
                 className={({ isActive }) =>
                   clsx(
-                    "smallcaps text-xs py-0.5 border-b-2 transition-colors",
+                    "smallcaps text-xs py-0.5 border-b-2 transition-colors whitespace-nowrap shrink-0",
                     isActive
                       ? "border-oxide text-ink"
                       : "border-transparent text-ink-muted hover:text-ink"

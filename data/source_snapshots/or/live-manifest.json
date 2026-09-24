@@ -1,0 +1,21 @@
+{
+  "artifact": "live.xlsx",
+  "asset_url": "https://ccwd.hecc.oregon.gov/Layoff/Reports/WARNList_205112.xlsx",
+  "bytes": 27627,
+  "data_rows": 325,
+  "format": "warn-or-agency-live-v1",
+  "headers": [
+    "WARN#",
+    "Company Name",
+    "Location",
+    "Layoff Date",
+    "Laid Off",
+    "Layoff Type",
+    "Received Date"
+  ],
+  "publisher": "Oregon Higher Education Coordinating Commission",
+  "retrieved_on_utc": "2026-09-24",
+  "sha256": "b5551ac5f029ac1a863765ccbb7da58da9cae0e592a7546fe84036c8b56d7b70",
+  "sheet_title": "WARNList",
+  "source_url": "https://ccwd.hecc.oregon.gov/Layoff/WARN/Download"
+}

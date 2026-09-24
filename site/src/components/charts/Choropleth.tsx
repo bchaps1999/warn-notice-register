@@ -5,7 +5,7 @@ import type { FeatureCollection, Geometry } from "geojson";
 import statesTopo from "us-atlas/states-10m.json";
 import { useNavigate } from "react-router-dom";
 import { num } from "../../lib/format";
-import { RAMP_DARK, RAMP_LIGHT } from "./ramp";
+import { RAMP } from "./ramp";
 
 // FIPS -> postal for us-atlas state ids
 const FIPS: Record<string, string> = {
@@ -22,17 +22,16 @@ const FIPS: Record<string, string> = {
 
 export function Choropleth({
   values,
-  activeStates,
+  coveredStates,
   label,
 }: {
   values: Record<string, number>; // postal -> workers (trailing 12mo)
-  activeStates: Set<string>;
+  coveredStates: Set<string>;
   label: string;
 }) {
   const navigate = useNavigate();
   const [hover, setHover] = useState<{ postal: string; x: number; y: number } | null>(null);
-  const dark = document.documentElement.classList.contains("dark");
-  const ramp = dark ? RAMP_DARK : RAMP_LIGHT;
+  const ramp = RAMP;
 
   const { features, path } = useMemo(() => {
     const topo = statesTopo as unknown as {
@@ -62,7 +61,7 @@ export function Choropleth({
         {features.map((f) => {
           const postal = FIPS[String(f.id).padStart(2, "0")];
           if (!postal) return null;
-          const active = activeStates.has(postal);
+          const active = coveredStates.has(postal);
           const v = values[postal] ?? 0;
           return (
             <path
@@ -88,9 +87,9 @@ export function Choropleth({
           style={{ left: hover.x + 12, top: hover.y - 8 }}
         >
           <span className="smallcaps text-[10px] text-ink-muted mr-2">{hover.postal}</span>
-          {activeStates.has(hover.postal)
+          {coveredStates.has(hover.postal)
             ? `${num(values[hover.postal] ?? 0)} workers`
-            : "no automated coverage"}
+            : "no admitted notices"}
         </div>
       )}
       <div className="flex items-center gap-3 mt-2">

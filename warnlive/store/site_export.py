@@ -67,9 +67,9 @@ def build_site(
     notices = [
         dict(r) | {
             "display_date": r["notice_date"] or r["effective_date"],
-            # NJ's only filed notice-date field is a month name. Historical
-            # rows predate the v5 precision column; they must not display a
-            # fabricated first day while awaiting source-detail migration.
+            # Legacy NJ rows stored an inferred posting-month placeholder in
+            # notice_date. Keep its precision label when exporting an older
+            # database; new source-first NJ rows leave notice_date blank.
             "notice_date_precision": (
                 r["notice_date_precision"] or
                 ("month" if r["state"] == "NJ" and r["notice_date"] else None)
@@ -199,7 +199,11 @@ def _notice_summary(n, prefix_len: int) -> dict:
         "notice_date": n["notice_date"],
         "notice_date_precision": n.get("notice_date_precision"),
         "effective_date": n["effective_date"],
+        "effective_date_precision": n.get("effective_date_precision"),
+        "effective_date_basis": n.get("effective_date_basis"),
         "effective_date_end": n.get("effective_date_end"),
+        "effective_date_end_precision": n.get("effective_date_end_precision"),
+        "effective_date_end_basis": n.get("effective_date_end_basis"),
         "jobs": n["employees_affected"],
         "type": n["layoff_type"],
     }
@@ -497,6 +501,9 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
 
     cols: dict[str, list] = {
         "key": [], "state": [], "date": [], "effective": [], "effective_end": [], "employer": [],
+        "notice_precision": [], "notice_basis": [],
+        "effective_precision": [], "effective_basis": [],
+        "effective_end_precision": [], "effective_end_basis": [],
         "location": [], "jobs": [], "type": [], "flags": [], "sector": [],
         "county": [],
     }
@@ -513,8 +520,14 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
         cols["key"].append(n["dedupe_key"][:prefix_len])
         cols["state"].append(state_idx[n["state"]])
         cols["date"].append(n["display_date"])
+        cols["notice_precision"].append(n.get("notice_date_precision"))
+        cols["notice_basis"].append(n.get("notice_date_basis"))
         cols["effective"].append(n["effective_date"])
         cols["effective_end"].append(n.get("effective_date_end"))
+        cols["effective_precision"].append(n.get("effective_date_precision"))
+        cols["effective_basis"].append(n.get("effective_date_basis"))
+        cols["effective_end_precision"].append(n.get("effective_date_end_precision"))
+        cols["effective_end_basis"].append(n.get("effective_date_end_basis"))
         cols["employer"].append(n["employer_name"])
         cols["location"].append(n["location"])
         cols["jobs"].append(n["employees_affected"])

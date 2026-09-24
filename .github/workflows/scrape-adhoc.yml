@@ -24,24 +24,41 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    env:
+      REQUESTED_STATES: ${{ inputs.states }}
+      SMOKE_MODE: ${{ inputs.smoke }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
       - name: Install
         run: ./install.sh
       - name: Install browser deps
         run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb
       - uses: browser-actions/setup-chrome@v1
       - name: Unpack database
-        run: .venv/bin/warnlive unpack-db || true
+        run: .venv/bin/warnlive unpack-db
       - name: Scrape
         env:
           ZYTE_API_KEY: ${{ secrets.ZYTE_API_KEY }}
-        run: >
-          .venv/bin/warnlive scrape ${{ inputs.states }}
-          ${{ inputs.smoke && '--smoke' || '' }} --trigger manual
+        run: |
+          read -r -a states <<< "$REQUESTED_STATES"
+          if (( ${#states[@]} == 0 )); then
+            echo "::error::Provide at least one state postal code"
+            exit 1
+          fi
+          for state in "${states[@]}"; do
+            if [[ ! "$state" =~ ^[A-Za-z]{2}$ ]]; then
+              echo "::error::Invalid state postal code"
+              exit 1
+            fi
+          done
+          if [[ "$SMOKE_MODE" == "true" ]]; then
+            .venv/bin/warnlive scrape "${states[@]}" --smoke --trigger manual
+          else
+            .venv/bin/warnlive scrape "${states[@]}" --trigger manual
+          fi
       - name: Detect revisions/duplicates
         if: ${{ !inputs.smoke }}
         run: .venv/bin/warnlive dupes
@@ -60,7 +77,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No data changes."
           else
-            git commit -m "Ad-hoc scrape $(date -u +%F): ${{ inputs.states }}"
+            git commit -m "Ad-hoc scrape $(date -u +%F): $REQUESTED_STATES"
             # Fail rather than rebase: the DB dump is regenerated whole,
             # so a rebase keeps this runner's copy and silently discards
             # whatever the concurrent commit changed in it. Re-run the

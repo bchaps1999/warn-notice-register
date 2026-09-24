@@ -1,0 +1,84 @@
+# Browser-rendered official agency text via web.open on 2026-09-24
+# URL: https://jobs.mo.gov/warn/2023
+# Total source lines: 82
+L0: Search [Input: ]
+L1: 
+L2: [Input] [Input] [Input]
+L3: ## Google Translate
+L4: 
+L5: Effective March 24, 2023: If you wish to receive further information about the most recent WARN Notice submitted to the Office of Workforce Development (OWD), sign up for our cite0†WARN Notice Mailing List†public.govdelivery.com .  WARN Notice updates will be emailed during business operating hours.
+L6: 
+L7: To receive any previous WARN Notices, submit an open records request to  recordscustodian@dhewd.mo.gov ( recordscustodian@dhewd.mo.gov).
+L8: For all other inquiries, please contact Heather Dolce, Assistant Commissioner for Communications and Outreach at heather.dolce@dhewd.mo.gov ( heather.dolce@dhewd.mo.gov).
+L9: # WARN Notices
+L10: 
+L11: cite1†Click here to learn more about the WARN Notice System L12: 
+L13: Company name [Input]
+L14: 
+L15: Counties [Select]
+L16: 
+L17: Type [Select]
+L18: 
+L19: [Input]
+L20: cite2†Received | cite3†Title | cite4†Industry | Location(s)  | cite5†County | Region  | cite6†Type | Layoff date(s)  | cite7†# affected | Notes
+L21: --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
+L22: 01/17/2023  | North America Savings Bank  | Financial Services  | Cottleville
+L23: Garden City
+L24: Lawson
+L25: Lexington
+L26: Ozark
+L27: Peculiar
+L28: Rolla
+L29: Springfield
+L30: Waverly
+L31: Wentzville  |  |  | Layoff  | 03/07/2023  | 85  |
+L32: 01/24/2023  | HealthHelp  | Healthcare  | Independence  | Jackson  | Kansas City & Vicinity  | Closing  | 03/24/2023  | 1  |
+L33: 02/23/2023  | Christian Horizon Living LLC  | Healthcare  | Joplin  | Jasper  | Southwest  | Closing  | 04/22/2023  | 63  |
+L34: 03/07/2023  | CHEP Services, LLC  | Logistics  | Kansas City  | Jackson  | Kansas City & Vicinity  | Loss of Contract  | 05/02/2023  | 100  |
+L35: 03/16/2023  | Bon Appetit Management Company  | Food Service  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Loss of Contract  | 05/18/2023  | 342  |
+L36: 03/23/2023  | DHL eCommerce  | Logistics  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Closing  | 06/03/2023  | 75  |
+L37: 03/27/2023  | Orscheln / Tractor Supply  | Retail  | Moberly  | Randolph  | Northeast  | Closing  | 05/21/2023  | 122  |
+L38: 03/31/2023  | Aspiration  | Information Technology  | Ballwin
+L39: St. Peters
+L40: Maryland Heights  | St. Louis (county)  | St. Louis & vicinity  | Company Restructure  | 05/26/2023  | 4  |
+L41: 03/31/2023  | Cardinal Health  | Manufacturing  | Moberly  | Randolph  | Northeast  | Closing  | 05/31/2023  | 131  |
+L42: 04/17/2023  | David's Bridal  | Retail  | St. Peters
+L43: Blue Springs
+L44: Springfield
+L45: Sunset Hills
+L46: Kansas City
+L47: Columbia  |  | Statewide  | Closing  | 06/12/2023  |  |
+L48: 05/02/2023  | Salt & Smoke  | Food Service  | St. Charles
+L49: St. Louis (city)  |  | St. Louis & vicinity  | Company Restructure  | 06/28/2023  |  |
+L50: 05/05/2023  | Revere Plastics Systems LLC  | Manufacturing  | Poplar Bluff  | Butler  | South Central  | Closing  | 07/02/2023  | 79  |
+L51: 05/11/2023  | Deluxe Corporation  | Corporate Services  | Maryville  | Nodaway  | Northwest  | Closing  | 07/28/2023  | 57  |
+L52: 05/24/2023  | MPW Industrial Services  | Maintenance Services  | Claycomo  | Clay  | Kansas City & Vicinity  | Loss of Contract  | 06/15/2023  | 84  | Return to work 06/16/23 with new contractor
+L53: 05/24/2023  | EDP Enterprises, INC  | Food Service  | Fort Leonard Wood  | Pulaski  | Central  | Loss of Contract  | 06/15/2023  | 948  |
+L54: 06/02/2023  | Windsor Estates  | Healthcare  | St. Charles  | St. Charles  | St. Louis & vicinity  | Closing  | 07/31/2023  | 85  |
+L55: 06/15/2023  | Bitwise Industries  | Information Technology  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 06/14/2023  | 1  |
+L56: 06/23/2023  | GKN Aerospace  | Aerospace Product/Parts Manufacturing  | Hazelwood  | St. Louis (county)  | St. Louis  | Closing  | 08/25/2023
+L57: 10/06/2023
+L58: 12/31/2024  | 715  |
+L59: 07/13/2023  | PBS Radiology  | Healthcare  | Kansas City
+L60: High Ridge  | Jackson  | Jefferson/Franklin Consortium  | Layoff  | 09/06/2023  | 2  |
+L61: 07/14/2023  | WestRock Company  | Manufacturing  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Closing  | 09/15/2023  | 52  |
+L62: 07/24/2023  | Soft Surroundings  | Clothing Distribution  | Mexico  | Audrain  | Central  | Closing  | 09/01/2023  | 80  |
+L63: 08/04/2023  | Smithfield Foods  | Meat Processing  | Lucerne
+L64: Princeton
+L65: Newtown  | Sullivan  | Northwest  | Closing  | 10/08/2023  | 92  |
+L66: 08/08/2023  | Tyson Foods  | Poultry Processing  | Noel  | McDonald  | Southwest  | Closing  | 10/20/2023  | 1513  |
+L67: 08/08/2023  | Tyson Foods  | Poultry Processing  | Dexter  | Stoddard  | Southeast  | Closing  | 10/13/2023  | 683  |
+L68: 08/09/2023  | South City Hospital  | Healthcare  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Closing  | 08/03/2023  | 563  |
+L69: 09/12/2023  | Divvy Homes  | Real Estate  |  |  |  | Company Restructure  | 11/07/2023  | 1  |
+L70: 09/25/2023  | Soft Surroundings  | Clothing Distribution  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Closing  | 11/18/2023  | 181  |
+L71: 10/03/2023  | First Savings Bank  | Financial Services  | Liberty  | Clay  | Kansas City & Vicinity  | Layoff  | 11/30/2023  | 1  | Remote worker
+L72: 10/10/2023  | Propak Logistics, LLC  | Warehouse Logistics  | Jackson  | Cape Girardeau  | Southeast  | Closing  | 12/08/2023  | 93  |
+L73: 10/19/2023  | CareFusion Corporation  | Surgical/Medical Instrument Manufacturing  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 12/18/2023  | 148  |
+L74: 11/07/2023  | Multi-Color Corporation  | Commercial Printing  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Closing  | 12/31/2023  | 44  | Date is TBD, so input date was made 12-31-2023
+L75: 11/09/2023  | Yelloh!  | Food Service  | Parkville  | Platte  | Kansas City & Vicinity  | Closing  | 12/05/2023  | 1  |
+L76: 11/16/2023  | Next Gen Healthcare  | Healthcare  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 01/16/2024  | 84  |
+L77: 12/04/2023  | FSC Edge  | Information Technology  | Kansas City  | Jackson  | Kansas City  | Closing  | 12/01/2023  | 2  |
+L78: 12/04/2023  | Matheson Flight Extenders  | Logistics  | Kansas City  | Platte  | Kansas City & Vicinity  | Closing  | 01/31/2024  | 40  |
+L79: 12/05/2023  | PSSI  | Sanitation Services  | Milan  | Sullivan  | Northwest  | Loss of Contract  | 12/05/2023  | 68  |
+L80: 12/08/2023  | SPS Ventures, Inc.  | Logistics / Delivery Services  | Maryland Heights  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 02/03/2024  | 152  |
+L81:  |  |  |  |  |  |  |  | 6692  |

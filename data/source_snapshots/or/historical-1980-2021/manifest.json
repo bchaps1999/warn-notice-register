@@ -1,0 +1,23 @@
+{
+  "banner": "WARNs Received: 1/1/1980 to 7/14/2021",
+  "bytes": 68321,
+  "data_rows": 1082,
+  "description": "Oregon agency-supplied 2021-07; secondary-hosted exact copy",
+  "file": "or_warnlist_july_2021.xlsx",
+  "format": "agency-sent-historical-workbook-v1",
+  "headers": [
+    "WARN#",
+    "Company Name",
+    "Location",
+    "Layoff Date",
+    "Laid Off",
+    "Layoff Type",
+    "Received Date"
+  ],
+  "provenance_url": "https://warn-scraper.readthedocs.io/en/latest/scrapers/or.html",
+  "retrieved_on_utc": "2026-09-24",
+  "sha256": "86dd5835b4a76906b906435c422fc67b88a24f45e5c795697cf5c6bba892a131",
+  "sheet": "WARNList",
+  "source_url": "https://github.com/biglocalnews/WARN/files/6819514/OR.WARNList.July.2021.xlsx",
+  "status": "pinned source evidence; row admission requires reconciliation"
+}

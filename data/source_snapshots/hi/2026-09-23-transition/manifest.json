@@ -1,0 +1,29 @@
+{
+  "captured_on": "2026-09-23",
+  "files": [
+    {
+      "path": "current-index.html",
+      "url": "https://labor.hawaii.gov/wdd/warn-notices/",
+      "sha256": "f612d1e4af16e767bc281216678e24897ad8a05ba16614e11b3c98c3fd69232a",
+      "bytes": 147336
+    },
+    {
+      "path": "archive-index.html",
+      "url": "https://labor.hawaii.gov/wdc/real-time-warn-updates/",
+      "sha256": "167639d6a329a2b57e56d5ae325c2fc6348aaf54ef24adc0550d1e6b67e57013",
+      "bytes": 62629
+    },
+    {
+      "path": "archive-2026.html",
+      "url": "https://labor.hawaii.gov/wdc/2026-warn-notices/",
+      "sha256": "ae7f9bf3da2522017979642b297216886bb510d8e77a752c96fa47f093d4b078",
+      "bytes": 75578
+    },
+    {
+      "path": "amentum.html",
+      "url": "https://labor.hawaii.gov/wdd/warn-notices/warn-notice-amentum/",
+      "sha256": "8af21f78dfff453c3dea6c7617841f35f76d4a349385723353c01e4aea87bf17",
+      "bytes": 148824
+    }
+  ]
+}

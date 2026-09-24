@@ -154,8 +154,14 @@ export interface NoticeIndex {
     key: string[];
     state: number[];
     date: (string | null)[];
+    notice_precision?: (string | null)[];
+    notice_basis?: (string | null)[];
     effective: (string | null)[];
     effective_end: (string | null)[];
+    effective_precision?: (string | null)[];
+    effective_basis?: (string | null)[];
+    effective_end_precision?: (string | null)[];
+    effective_end_basis?: (string | null)[];
     employer: string[];
     location: (string | null)[];
     jobs: (number | null)[];
@@ -217,6 +223,10 @@ export interface NoticeDetail {
   effective_date_end?: string | null;
   notice_date_precision?: string | null;
   notice_date_basis?: string | null;
+  effective_date_precision?: string | null;
+  effective_date_basis?: string | null;
+  effective_date_end_precision?: string | null;
+  effective_date_end_basis?: string | null;
   source_identity?: string | null;
   source_details?: string | null;
   site_address?: string | null;

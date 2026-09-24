@@ -36,9 +36,9 @@ export function Dashboard() {
   const workers12 = t12.reduce((s, x) => s + x.workers, 0);
   const notices12 = t12.reduce((s, x) => s + x.notices, 0);
   const prior = national.prior_12mo;
-  const activeStates = new Set(
+  const coveredStates = new Set(
     Object.entries(meta.states)
-      .filter(([, s]) => s.status === "active")
+      .filter(([, s]) => s.notices > 0)
       .map(([postal]) => postal)
   );
   const mapValues = Object.fromEntries(t12.map((s) => [s.state, s.workers]));
@@ -70,7 +70,7 @@ export function Dashboard() {
           value={num(workers12)}
           delta={change(workers12, prior.workers)}
           deltaLabel="vs. prior 12 mo"
-          sub={`${activeStates.size} states reporting`}
+          sub={`${meta.totals.states} jurisdictions in the register`}
         />
         <StatTile
           label="Notices on record"
@@ -80,19 +80,19 @@ export function Dashboard() {
         <StatTile
           label="Workers on record"
           value={num(meta.totals.workers)}
-          sub="a floor: 5% of notices omit headcount"
+          sub={`${Math.round(meta.totals.no_jobs / meta.totals.notices * 100)}% omit headcount`}
         />
       </div>
 
       <SectionHeading
-        sub="Notices are placed by filing date, or by layoff date where a state publishes none."
+        sub="Notices are placed by a reported notice date, or by a layoff date when no notice date is established."
         right={
           <Link to="/explore" className="smallcaps text-[10px] text-oxide hover:underline">
             Open explorer →
           </Link>
         }
       >
-        Notices filed by month
+        Notices by reported month
       </SectionHeading>
       <MonthlyTrend monthly={national.monthly} anchor={national.anchor_date} />
 
@@ -101,7 +101,7 @@ export function Dashboard() {
           <SectionHeading
             sub={
               geography === "state"
-                ? "Trailing 12 months. Unshaded states publish no notice-level list."
+                ? "Trailing 12 months. Hatched jurisdictions have no admitted notices in this build."
                 : `Trailing 12 months, across ${num(national.counties_12mo.length)} counties. ` +
                   `${placedShare} of notices in the window name a location a county could be found for.`
             }
@@ -127,7 +127,7 @@ export function Dashboard() {
             Workers affected by {geography}
           </SectionHeading>
           {geography === "state" ? (
-            <Choropleth values={mapValues} activeStates={activeStates}
+            <Choropleth values={mapValues} coveredStates={coveredStates}
               label="workers affected, trailing 12 mo" />
           ) : (
             <Suspense fallback={<Skeleton lines={10} />}>
@@ -225,12 +225,10 @@ export function Dashboard() {
 
       <SectionHeading>Coverage</SectionHeading>
       <p className="text-sm font-serif text-ink-muted max-w-3xl leading-relaxed">
-        This register consolidates notices from {activeStates.size} state portals;{" "}
-        {Object.values(meta.states).filter((s) => s.status === "manual_only").length}{" "}
-        states publish nothing online and are absent. History depth varies —
-        Illinois reaches back to 1987 while some portals expose only the current
-        year — and {Math.round((meta.totals.undated / meta.totals.notices) * 100)}%
-        of notices carry no filing date. What each figure here does and does not
+        This register contains admitted notices from {meta.totals.states} jurisdictions;
+        coverage varies by source and period. The earliest dated record is {meta.date_range ? date(meta.date_range.min) : "unknown"},
+        while {Math.round((meta.totals.undated / meta.totals.notices) * 100)}%
+        of notices have no established legal notice date. What each figure here does and does not
         count is set out in{" "}
         <Link to="/methods" className="underline hover:text-ink">methods</Link>.
       </p>

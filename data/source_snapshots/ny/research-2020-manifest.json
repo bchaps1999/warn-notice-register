@@ -1,0 +1,12 @@
+{
+  "artifact": "ny_warn_2020-live-2026-09-24.csv",
+  "bytes": 431935,
+  "csv_url": "https://public.tableau.com/views/WorkerAdjustmentRetrainingNotificationWARN/WARN.csv?:showVizHome=n&YEAR(Date%20of%20WARN%20Notice)=2020",
+  "format": "ny-dashboard-2020-research-v1",
+  "publisher": "New York State Department of Labor Tableau dashboard",
+  "retrieved_on_utc": "2026-09-24",
+  "sha256": "327ba5725cd89a482be396eab75722c21773c987bd9f206aaf828831d0ca5031",
+  "source_page": "https://dol.ny.gov/warn-dashboard",
+  "source_rows": 2169,
+  "status": "source evidence only; not in candidate bundle"
+}

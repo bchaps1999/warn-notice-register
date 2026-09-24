@@ -74,6 +74,37 @@ def test_source_details_are_versioned_and_projected(conn):
     assert conn.execute("SELECT COUNT(*) FROM notice_versions").fetchone()[0] == 2
 
 
+def test_effective_metadata_is_optional_but_versioned_when_present(conn):
+    from warnlive.normalize.engine import _record_hash
+
+    original = record()
+    baseline_hash = _record_hash(original)
+    assert _record_hash(record(
+        effective_date_precision=None, effective_date_basis=None,
+        effective_date_end_precision=None, effective_date_end_basis=None,
+    )) == baseline_hash
+    original["raw_record_hash"] = baseline_hash
+    ingest(conn, [original], "2026-07-01")
+    revised = record(
+        effective_date_end="2026-08-31",
+        effective_date_precision="day", effective_date_basis="reported",
+        effective_date_end_precision="month",
+        effective_date_end_basis="reported_month",
+    )
+    revised["raw_record_hash"] = _record_hash(revised)
+    assert revised["raw_record_hash"] != baseline_hash
+    assert ingest(conn, [revised], "2026-07-02").updated == 1
+    row = conn.execute("SELECT * FROM notices").fetchone()
+    assert (row["effective_date_precision"], row["effective_date_basis"],
+            row["effective_date_end_precision"], row["effective_date_end_basis"]) == (
+                "day", "reported", "month", "reported_month")
+    fields = conn.execute(
+        "SELECT fields_json FROM notice_versions WHERE notice_id=? AND version=2",
+        (row["id"],),
+    ).fetchone()[0]
+    assert '"effective_date_end_precision": "month"' in fields
+
+
 def test_canonical_repair_appends_version_without_losing_source_evidence(conn):
     from warnlive.normalize.engine import _record_hash
 

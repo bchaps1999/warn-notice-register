@@ -11,6 +11,10 @@ CREATE TABLE IF NOT EXISTS notices (
     notice_date TEXT,                      -- ISO-8601 date or NULL
     effective_date TEXT,
     effective_date_end TEXT,              -- last known date of a reported interval
+    effective_date_precision TEXT,        -- day | month | unknown
+    effective_date_basis TEXT,            -- source-specific interpretation
+    effective_date_end_precision TEXT,    -- day | month | unknown
+    effective_date_end_basis TEXT,        -- source-specific interpretation
     notice_date_precision TEXT,           -- day | month | unknown
     notice_date_basis TEXT,               -- reported | inferred_from_effective
     source_identity TEXT,                 -- stable filing id with source namespace
@@ -78,5 +82,27 @@ CREATE TABLE IF NOT EXISTS notice_links (
     UNIQUE(notice_id, related_id, kind)
 );
 CREATE INDEX IF NOT EXISTS idx_links_notice ON notice_links(notice_id);
+
+-- Retain every official source observation, including excluded rows, separately
+-- from admitted notices. Legacy cleaning columns remain in older databases.
+CREATE TABLE IF NOT EXISTS source_observations (
+    id INTEGER PRIMARY KEY,
+    source_bundle_sha256 TEXT NOT NULL,
+    state TEXT NOT NULL,
+    observation_kind TEXT NOT NULL,
+    source_artifact TEXT NOT NULL,
+    source_row TEXT NOT NULL,
+    source_row_sha256 TEXT NOT NULL,
+    raw_json TEXT NOT NULL,
+    deterministic_json TEXT NOT NULL,
+    admission_status TEXT NOT NULL CHECK (admission_status IN
+        ('admitted', 'event_unresolved', 'rescinded', 'annotation', 'identity_unresolved')),
+    notice_id INTEGER REFERENCES notices(id),
+    CHECK ((admission_status = 'admitted' AND notice_id IS NOT NULL) OR
+           (admission_status <> 'admitted' AND notice_id IS NULL)),
+    UNIQUE(source_bundle_sha256, source_artifact, source_row)
+);
+CREATE INDEX IF NOT EXISTS idx_source_observations_state_status
+    ON source_observations(state, admission_status);
 
 CREATE TABLE IF NOT EXISTS schema_version (version INTEGER NOT NULL);

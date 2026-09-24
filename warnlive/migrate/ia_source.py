@@ -158,7 +158,7 @@ def extract_historical(directory: Path) -> list[dict]:
         for page_number, (page, expected) in enumerate(
             zip(pdf.pages, artifact["data_rows_by_page"], strict=True), start=1
         ):
-            words = page.extract_words(x_tolerance=1, y_tolerance=3)
+            words = page.extract_words(x_tolerance=1, y_tolerance=3, use_text_flow=True)
             anchors = sorted(
                 (word for word in words if 448 <= word["x0"] < 467
                  and word["text"].isdigit()),

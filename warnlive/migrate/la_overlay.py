@@ -78,15 +78,22 @@ def _sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def correspondence(rows: list[dict], la_dir: Path, bln_csv: Path) -> dict[str, dict]:
-    """Return pinned BLN row evidence mapped to official source-row IDs."""
+def validate_source_rows(rows: list[dict], la_dir: Path) -> None:
+    """Pin the reviewed agency table independently of BLN correspondence."""
     if _sha(la_dir / "manifest.json") != LA_MANIFEST_SHA256:
         raise ValueError("Louisiana reviewed source manifest drift")
+    notices = {row["source_row"]: row for row in rows if row["kind"] == "notice"}
+    if (len(rows) != 39 or len(notices) != 38
+            or set(notices) != set(EMPLOYERS) | HELD | {"2025.pdf:p2:r5"}):
+        raise ValueError("Louisiana reviewed source rows drift")
+
+
+def correspondence(rows: list[dict], la_dir: Path, bln_csv: Path) -> dict[str, dict]:
+    """Return pinned BLN row evidence mapped to official source-row IDs."""
+    validate_source_rows(rows, la_dir)
     if _sha(bln_csv) != BLN_SHA256:
         raise ValueError("Louisiana reviewed BLN input drift")
     notices = {row["source_row"]: row for row in rows if row["kind"] == "notice"}
-    if len(rows) != 39 or len(notices) != 38 or set(notices) != set(EMPLOYERS) | HELD | {"2025.pdf:p2:r5"}:
-        raise ValueError("Louisiana reviewed source rows drift")
     signatures: dict[tuple[str, str], list[str]] = defaultdict(list)
     for key, row in notices.items():
         signatures[(row["notice_date"] or "", str(row["workers_total"]))].append(key)

@@ -1,0 +1,51 @@
+# Browser-rendered official agency text via web.open on 2026-09-24
+# URL: https://jobs.mo.gov/warn/2021
+# Total source lines: 49
+L0: Search [Input: ]
+L1: 
+L2: [Input] [Input] [Input]
+L3: ## Google Translate
+L4: 
+L5: Effective March 24, 2023: If you wish to receive further information about the most recent WARN Notice submitted to the Office of Workforce Development (OWD), sign up for our cite0†WARN Notice Mailing List†public.govdelivery.com .  WARN Notice updates will be emailed during business operating hours.
+L6: 
+L7: To receive any previous WARN Notices, submit an open records request to  recordscustodian@dhewd.mo.gov ( recordscustodian@dhewd.mo.gov).
+L8: For all other inquiries, please contact Heather Dolce, Assistant Commissioner for Communications and Outreach at heather.dolce@dhewd.mo.gov ( heather.dolce@dhewd.mo.gov).
+L9: # WARN Notices
+L10: 
+L11: cite1†Click here to learn more about the WARN Notice System L12: 
+L13: Company name [Input]
+L14: 
+L15: Counties [Select]
+L16: 
+L17: Type [Select]
+L18: 
+L19: [Input]
+L20: cite2†Received | cite3†Title | cite4†Industry | Location(s)  | cite5†County | Region  | cite6†Type | Layoff date(s)  | cite7†# affected | Notes
+L21: --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
+L22: 01/14/2021  | Wyndham Vacation Ownership  | Travel - Vacation Rental  | Branson  | Taney  | Branson & vicinity  | Layoff  | 01/08/2021  | 12  |
+L23: 01/21/2021  | ABM Aviation  |  | St. Louis (city)  |  | St. Louis & vicinity  | Layoff  | 02/28/2021  | 85  |
+L24: 02/08/2021  | American Airlines  | Travel - Airline  | St. Louis (city)  | St. Louis (county)  |  | Layoff  | 04/01/2021  | 1173  |
+L25: 02/16/2021  | Graham Packaging  | Manufacturing  | North Kansas City  | Clay  |  | Layoff  | 06/03/2021  | 67  |
+L26: 02/23/2021  | Great Circle  | Residential Treatment  | Webster Groves  |  |  | Layoff  | 05/01/2021  | 117  |
+L27: 03/04/2021  | Pomeroy  |  |  |  |  | Closing  | 04/30/2021  | 16  |
+L28: 03/16/2021  | National Express LLC DBA Durham School Services  | Transportation  | Wright City  | Warren  |  | Layoff  | 07/14/2021  | 47  |
+L29: 03/31/2021
+L30: 10/04/2021 rev  | Pacific Architects and Engineers (PAE)  | Government Services Contractor  | Lee’s Summit  | Warren  |  | Layoff  | 05/31/2021
+L31: 11/30/2021  | 521  |
+L32: 04/16/2021  | ABM Industry Groups, LLC WARN notice 04/2021  | Facilities Services/Janitorial  | St. Louis (city)  | St. Louis (county)  |  | Layoff  | 05/31/2021  | 100  |
+L33: 04/28/2021  | Ascension Technologies  | Healthcare IT Services  | St. Louis (city)  | St. Louis (county)  |  | Layoff  | 08/08/2021  | 651  |
+L34: 05/05/2021  | Masonite Corporation  | Manufacturing  | Springfield  | Greene  |  | Layoff  | 07/02/2021  | 63  |
+L35: 05/11/2021  | Associated Couriers  | Delivery Services  | Hazelwood  | St. Louis (county)  |  | Layoff  | 07/09/2021  | 67  |
+L36: 06/03/2021  | Leadec Corp.  | Manufacturing Services Support  | Wentzville  | St. Charles  | St. Charles County  | Layoff  | 08/01/2021  | 146  |
+L37: 06/22/2021
+L38: 09/14/2021 rev  | Adient  | Automotive Manufacturing  | Riverside  | Platte  |  | Layoff  | 02/05/2021  | 213  |
+L39: 06/30/2021  | Yanfeng USA Automotive Trim Systems, Inc  | Automotive Manufacturing  | Riverside  | Platte  |  | Layoff  | 02/08/2021  | 427  |
+L40: 07/15/2021  | TIMET  | Metal Processing  | Wentzville  | St. Charles  | St. Charles County  | Layoff  | 09/14/2021  | 42  |
+L41: 07/21/2021  | Nesher Pharmaceutical  | Pharmaceutical Production  | Maryland Heights
+L42: Bridgeton  | St. Louis (county)  |  | Layoff  | 08/20/2021  | 111  |
+L43: 07/29/2021  | Rise Baking  | Bakery  | Mexico  | Audrain  |  | Layoff  | 09/30/2021  | 124  |
+L44: 09/15/2021  | Ascension Technologies  | Healthcare Information Technology Services  | St. Louis (city)  | St. Louis (county)  |  | Layoff  | 11/19/2021  | 18  | 330 remote workers (18 located in Missouri)
+L45: 10/01/2021  | PAE - Overland Park  | Government Contractor  | Overland Park, KS  |  |  | Layoff  | 11/30/2021  | 12  |
+L46: 10/04/2021  | Challenge Manufacturing Company  | Automotive Manufacturing  | Bridgeton  | St. Louis (county)  |  | Layoff  | 12/01/2021  | 52  |
+L47: 11/03/2021  | American Botanicals  | Nature and Organic Materials Manufacturing  | Eolia  | Pike  |  | Layoff  | 01/05/2022  | 25  |
+L48:  |  |  |  |  |  |  |  | 4089  |

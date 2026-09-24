@@ -1,0 +1,16 @@
+{
+  "archived_paragraph_rows": {
+    "2021": 22,
+    "2022": 12,
+    "2023": 54,
+    "2024": 55
+  },
+  "artifact": "reports.html",
+  "bytes": 155561,
+  "format": "warn-tn-agency-archive-v1",
+  "publisher": "Tennessee Department of Labor and Workforce Development",
+  "retrieved_at_utc": "2026-09-24",
+  "scope": "2021-2024 archive paragraphs only; 2025-2026 current rows remain in pinned raw/tn.csv",
+  "sha256": "2ac39e4785487feef63e560577674455bc0f82fc52b06da0875ce9e30602e0c3",
+  "source_url": "https://www.tn.gov/workforce/general-resources/major-publications0/major-publications-redirect/reports.html.html"
+}

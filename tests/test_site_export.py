@@ -148,3 +148,32 @@ def test_historical_nj_month_is_not_displayed_as_known_day(conn, tmp_path):
     key = record(1)["dedupe_key"]
     detail = json.loads((out / "notices" / f"{key[:2]}.json").read_text())[key]
     assert detail["notice_date_precision"] == "month"
+
+
+def test_site_exports_effective_start_and_end_metadata(conn, tmp_path):
+    from warnlive.normalize.engine import _record_hash
+
+    rec = record(
+        1, effective_date_end="2026-08-31",
+        notice_date_precision="day", notice_date_basis="reported",
+        effective_date_precision="day", effective_date_basis="reported",
+        effective_date_end_precision="month",
+        effective_date_end_basis="inferred_from_month",
+    )
+    rec["raw_record_hash"] = _record_hash(rec)
+    ingest(conn, [rec], "2026-07-01")
+    out = tmp_path / "out"
+    build_site(conn, load_registry(), out, as_of="2026-09-01")
+    index = json.loads((out / "index.json").read_text())
+    cols = index["columns"]
+    assert (cols["notice_precision"], cols["notice_basis"]) == (["day"], ["reported"])
+    assert (cols["effective_precision"], cols["effective_basis"],
+            cols["effective_end_precision"], cols["effective_end_basis"]) == (
+                ["day"], ["reported"], ["month"], ["inferred_from_month"])
+    key = rec["dedupe_key"]
+    detail = json.loads((out / "notices" / f"{key[:2]}.json").read_text())[key]
+    assert (detail["effective_date_precision"], detail["effective_date_basis"],
+            detail["effective_date_end_precision"], detail["effective_date_end_basis"]) == (
+                "day", "reported", "month", "inferred_from_month")
+    summary, = json.loads((out / "states/ct.json").read_text())["recent"]
+    assert summary["effective_date_end_precision"] == "month"

@@ -1,0 +1,21 @@
+{
+  "acquisition_note": "Copied from local workdir/cache/or/latest.xlsx. Filesystem mtime is not a verified download time. Upstream warn.scrapers.or.scrape stores the agency download as latest.xlsx separately from the BLN historical.xlsx.",
+  "bytes": 29008,
+  "cache_filesystem_mtime": "2026-07-16T15:17:00-04:00",
+  "data_rows": 353,
+  "format": "warn-or-agency-export-v1",
+  "headers": [
+    "WARN#",
+    "Company Name",
+    "Location",
+    "Layoff Date",
+    "Laid Off",
+    "Layoff Type",
+    "Received Date"
+  ],
+  "publisher": "Oregon Higher Education Coordinating Commission",
+  "sha256": "c34302a16cf950fac4a3cb1c9231894fbf9ecd0cf6a60c55a04f4e70ab11bca5",
+  "sheet_title": "WARNList",
+  "source_url": "https://ccwd.hecc.oregon.gov/Layoff/WARN/Download",
+  "workbook": "latest.xlsx"
+}

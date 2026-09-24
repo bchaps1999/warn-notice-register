@@ -16,13 +16,18 @@ runs:
         cache-dependency-path: site/package-lock.json
     - name: Build site data
       shell: bash
-      run: .venv/bin/warnlive build-site --out site/public/data
+      run: |
+        as_of="$(git show -s --format=%cs HEAD)"
+        .venv/bin/warnlive build-site --out site/public/data --as-of "$as_of"
+    - name: Reconcile release data
+      shell: bash
+      run: .venv/bin/python -m warnlive.verify.release --site-data site/public/data
     - name: Build site
       shell: bash
       env:
         SITE_BASE: /warn-notice-register/
       run: |
-        cd site && npm ci && npm run build
+        cd site && npm ci && npm test && npm run build
         cp dist/index.html dist/404.html  # SPA fallback for deep links on Pages
     - name: Configure Pages
       uses: actions/configure-pages@v5

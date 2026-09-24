@@ -26,9 +26,6 @@ CURRENT_URL = (
     "https://jfs.ohio.gov/job-workforce-services/job-programs-and-services/"
     "submit-a-warn-notice/current-public-notices-of-layoffs-and-closures"
 )
-HISTORICAL_URL = (
-    "https://storage.googleapis.com/bln-data-public/warn-layoffs/oh_historical.csv"
-)
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0",
 }
@@ -61,30 +58,6 @@ def scrape(
     masterlist = list(csv.DictReader(StringIO("\n".join(lines[start:]))))
     if not masterlist:
         raise ValueError("Ohio current CSV parsed to zero rows")
-
-    # Meld in the historical mirror (2017-2022), same as upstream.
-    lookup = {
-        "Company": "Company",
-        "DateReceived": "Date Received",
-        "City/County": "City/County",
-        "Potential NumberAffected": "Potential Number Affected",
-        "LayoffDate(s)": "Layoff Date(s)",
-        "PhoneNumber": "Phone Number",
-        "Union": "Union",
-        "Notice ID": "Notice ID",
-    }
-    r = requests.get(HISTORICAL_URL, timeout=120)
-    r.raise_for_status()
-    historical = csv.DictReader(
-        r.content.decode("utf-8-sig", errors="replace").splitlines()
-    )
-    missing = [old for old in lookup if old not in (historical.fieldnames or [])]
-    if missing:
-        # An error body or a reshaped mirror must not silently contribute
-        # zero (or garbage) historical rows while the run reports success.
-        raise ValueError(f"Ohio historical mirror is missing columns: {missing}")
-    for row in historical:
-        masterlist.append({new: row[old] for old, new in lookup.items()})
 
     data_path = data_dir / "oh.csv"
     utils.write_disparate_dict_rows_to_csv(data_path, masterlist)

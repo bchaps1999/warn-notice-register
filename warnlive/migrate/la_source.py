@@ -113,7 +113,20 @@ def extract(directory: Path) -> list[dict]:
     target = next((row for row in result if row["source_row"] == "2025.pdf:p2:r5"), None)
     if target is None or "(*)UPS" not in target["company_and_address_text"]:
         raise ValueError("Louisiana rescission target changed")
+    quote = annotation["annotation_text"]
+    match = re.search(r"\bRescinded on (\d{1,2}/\d{1,2}/\d{2,4})\b", quote)
+    if match is None:
+        raise ValueError("Louisiana rescission date changed")
+    rescission_date = _date(match.group(1))
+    # This is a status event about a notice. It is neither another notice nor
+    # the end of a layoff interval, so keep it in dedicated typed fields.
     target["status"] = "rescinded"
     target["status_source_row"] = annotation["source_row"]
+    target["rescission_date"] = rescission_date
+    target["rescission_target_source_row"] = target["source_row"]
+    target["rescission_source_quote"] = quote
     annotation["applies_to_source_row"] = target["source_row"]
+    annotation["rescission_date"] = rescission_date
+    annotation["rescission_target_source_row"] = target["source_row"]
+    annotation["rescission_source_quote"] = quote
     return result

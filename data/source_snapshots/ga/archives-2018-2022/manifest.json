@@ -1,0 +1,50 @@
+{
+  "archive_folder": "https://www.dropbox.com/sh/ebrunrkg0mym3yz/AACfRhkNrCHIlimR30_jGS5pa?dl=0",
+  "artifacts": [
+    {
+      "bytes": 419493,
+      "file": "2018-ga-warn-filing-report.pdf",
+      "observed_id_rows": 37,
+      "sha256": "b6b6ad29e171e06c67dc5d4e25f6cbaaa5ff516c23a3b2369f600260e12e6449",
+      "url": "https://www.dropbox.com/scl/fo/oqeoy4wusx73tnewkkx7y/AKCu_gTBupUpboCeW2dW1Go/2018%20GA%20WARN%20Filing%20Report.pdf?rlkey=y60u5c79377rwf0voqc27nm0o&dl=0",
+      "year": 2018
+    },
+    {
+      "bytes": 387659,
+      "file": "2019-ga-warn-filing-report.pdf",
+      "observed_id_rows": 77,
+      "sha256": "6272ed7453c155191865e907eeb82c2149d4a12a65ebdc652ae4341e7105547e",
+      "url": "https://www.dropbox.com/scl/fo/oqeoy4wusx73tnewkkx7y/AB-hiQYJSo9noT58f-EJpFg/2019%20GA%20WARN%20Filing%20Report.pdf?rlkey=y60u5c79377rwf0voqc27nm0o&dl=0",
+      "year": 2019
+    },
+    {
+      "bytes": 1087068,
+      "file": "2020-ga-warn-filing-report.pdf",
+      "observed_id_rows": 551,
+      "sha256": "b594f9430d448504e0036db9f86acf932ecb12dee82d7911662bf33412b95641",
+      "url": "https://www.dropbox.com/scl/fo/oqeoy4wusx73tnewkkx7y/AMGu8WDXxCYKdueivIKbjQI/2020%20GA%20WARN%20Filing%20Report.pdf?rlkey=y60u5c79377rwf0voqc27nm0o&dl=0",
+      "year": 2020
+    },
+    {
+      "bytes": 404423,
+      "file": "2021-ga-warn-filing-report.pdf",
+      "observed_id_rows": 64,
+      "sha256": "024f43d40e571e4ba9029cbebe1a7f93c795da85851ef4c621d742b1a31c1397",
+      "url": "https://www.dropbox.com/scl/fo/oqeoy4wusx73tnewkkx7y/ADJWRfj4kpAQWod0kKQFXf8/2021%20GA%20WARN%20Filing%20Report.pdf?rlkey=y60u5c79377rwf0voqc27nm0o&dl=0",
+      "year": 2021
+    },
+    {
+      "bytes": 369230,
+      "file": "2022-ga-warn-filing-report.pdf",
+      "observed_id_rows": 60,
+      "sha256": "bdda9e8cd6d9682a1e455223fb43842521bfebbb9216c1bbb5043b5e9cc73a25",
+      "url": "https://www.dropbox.com/scl/fo/oqeoy4wusx73tnewkkx7y/AKbL8_pYS5bKEO8vEpfY1CQ/2022%20GA%20WARN%20Filing%20Report.pdf?rlkey=y60u5c79377rwf0voqc27nm0o&dl=0",
+      "year": 2022
+    }
+  ],
+  "format": "ga-official-archive-research-v1",
+  "publisher": "Technical College System of Georgia archived Georgia WARN filings",
+  "retrieved_on_utc": "2026-09-24",
+  "source_page": "https://www.tcsg.edu/worksource/rapid-response/",
+  "status": "source evidence only; not projected into candidate"
+}

@@ -11,8 +11,8 @@ export function NoticeTable({
   showState?: boolean;
 }) {
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm">
+    <div className="overflow-x-auto" role="region" aria-label="Notices" tabIndex={0}>
+      <table className="w-full min-w-[48rem] text-sm">
         <thead>
           <tr className="text-left border-b border-rule-strong">
             {showState && <Th>State</Th>}
@@ -59,5 +59,5 @@ function Th({
   children: React.ReactNode;
   className?: string;
 }) {
-  return <th className={`smallcaps text-[10px] text-ink-muted py-2 pr-3 font-semibold ${className}`}>{children}</th>;
+  return <th scope="col" className={`smallcaps text-[10px] text-ink-muted py-2 pr-3 font-semibold whitespace-nowrap ${className}`}>{children}</th>;
 }

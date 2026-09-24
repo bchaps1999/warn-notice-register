@@ -18,6 +18,12 @@
   --chart-layoff: #2f6bb0;
   --chart-unknown: #9c7a2e;
   --chart-grid: #e7dfcd;
+  --map-ramp-1: #f3e2d8;
+  --map-ramp-2: #e5bda9;
+  --map-ramp-3: #d4977c;
+  --map-ramp-4: #c07052;
+  --map-ramp-5: #a84a2e;
+  --map-ramp-6: #8c2f1b;
 }
 .dark {
   --color-bg: #14130f;
@@ -34,6 +40,12 @@
   --chart-layoff: #5a92cf;
   --chart-unknown: #b58e3b;
   --chart-grid: #2b281f;
+  --map-ramp-1: #3a2018;
+  --map-ramp-2: #5a3021;
+  --map-ramp-3: #7c422b;
+  --map-ramp-4: #9e5535;
+  --map-ramp-5: #c06a42;
+  --map-ramp-6: #e08154;
 }
 
 @theme inline {

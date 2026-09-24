@@ -23,7 +23,7 @@ export function Methods() {
   const rows: Row[] = Object.entries(meta.states)
     .map(([postal, s]) => ({ postal, ...s }))
     .sort((a, b) => b.notices - a.notices);
-  const manual = rows.filter((r) => r.status === "manual_only" || r.source === "manual");
+  const noRows = rows.filter((r) => r.notices === 0);
   const archiveStates = rows.filter((r) => r.archived > 0);
 
   const columns: Column<Row>[] = [
@@ -74,7 +74,7 @@ export function Methods() {
     },
     {
       key: "archived",
-      header: "From archives",
+      header: "Archive links",
       numeric: true,
       render: (r) => (
         <span className="text-ink-muted">{r.archived ? pct(r.archived, r.notices) : "—"}</span>
@@ -107,16 +107,17 @@ export function Methods() {
       <p className="text-sm font-serif text-ink-muted mt-2 max-w-2xl leading-relaxed">
         The WARN Act requires 60 days' notice of qualifying plant closings and
         mass layoffs. Notices go to state agencies, and there is no national
-        feed — so this register is assembled from every state that publishes
-        online. What follows is what that assembly does and does not capture.
+        feed — so this register is assembled from available state portals and
+        agency archives. Coverage differs by state and period. What follows is
+        what that assembly does and does not capture.
       </p>
 
       <SectionHeading>What is in the data</SectionHeading>
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-6">
         <StatTile label="Notices" value={num(t.notices)}
           sub={meta.date_range ? `since ${date(meta.date_range.min)}` : undefined} />
-        <StatTile label="States collected" value={String(t.states)}
-          sub={`${manual.length} publish nothing online`} />
+        <StatTile label="Jurisdictions in data" value={String(t.states)}
+          sub={`${noRows.length} have no admitted notices here`} />
         <StatTile label="Employer identified" value={pct(t.identified, t.notices)}
           sub="matched to a company register" />
         <StatTile label="Industry recorded" value={pct(t.with_industry, t.notices)}
@@ -125,7 +126,7 @@ export function Methods() {
           sub="location resolved to Census geography" />
       </div>
 
-      <SectionHeading sub="Every figure on this site inherits these gaps. They are properties of what states publish, not of the collection.">
+      <SectionHeading sub="Every figure on this site inherits gaps in published sources and in what this register can reliably interpret.">
         What is missing
       </SectionHeading>
       <div className="grid sm:grid-cols-3 gap-6 text-sm font-serif">
@@ -133,10 +134,10 @@ export function Methods() {
           <p className="tabular text-2xl">{pct(t.undated, t.notices)}</p>
           <p className="smallcaps text-[10px] text-ink-muted mt-1">No notice date</p>
           <p className="text-ink-muted mt-1.5 leading-relaxed">
-            {num(t.undated)} notices carry no filing date. Some portals publish
-            only the layoff date; California's archived reports never carried
-            one. Those notices are placed by their effective date instead, and
-            still appear in every total.
+            {num(t.undated)} notices have no canonical notice date.
+            Some portals publish only receipt, posting, or layoff dates; those
+            dates cannot be substituted for notice. These records remain in
+            notice totals when their event identity is established.
           </p>
         </div>
         <div>
@@ -145,16 +146,17 @@ export function Methods() {
           <p className="text-ink-muted mt-1.5 leading-relaxed">
             {num(t.no_jobs)} notices report no number of workers. They count as
             notices everywhere on this site and contribute nothing to worker
-            totals, so worker figures are floors, not estimates.
+            totals. Worker totals sum the reported counts; they do not estimate
+            missing headcounts.
           </p>
         </div>
         <div>
           <p className="tabular text-2xl">{pct(t.archived, t.notices)}</p>
-          <p className="smallcaps text-[10px] text-ink-muted mt-1">From archived pages</p>
+          <p className="smallcaps text-[10px] text-ink-muted mt-1">Internet Archive links</p>
           <p className="text-ink-muted mt-1.5 leading-relaxed">
-            {num(t.archived)} notices come from state documents their agencies
-            no longer publish, recovered through the Internet Archive. Each one
-            links to the exact archived artifact it was read from.
+            {num(t.archived)} notices link to Internet Archive pages. Other
+            historical agency workbooks and reports are not counted in this
+            measure. Historical coverage varies by jurisdiction and period.
           </p>
         </div>
       </div>
@@ -162,13 +164,23 @@ export function Methods() {
       <Callout title="Counts are not comparable across states">
         States disagree about what a notice is. Some file one notice per
         location and some per company; some publish amendments as new rows and
-        some overwrite. This register links revisions rather than merging them,
-        so a company that amends a filing appears more than once by design —
-        the notice pages show what is linked to what.
+        some overwrite. Exact duplicate source observations may be combined,
+        while unsupported relationships between apparent revisions remain
+        unlinked. Counts therefore reflect admitted source events and each
+        state's reporting practice.
+      </Callout>
+
+      <Callout title="Coverage limits at the v1 release">
+        The initial v1 build uses pinned agency records and conservative
+        admission rules. Ohio's 2023–25 annual index is missing; Kansas and
+        older Missouri and Georgia coverage remain incomplete. Georgia, Iowa,
+        Kentucky, Oregon, and Tennessee are archive-only while their scheduled
+        collectors are being replaced. A missing live run status means the
+        frozen rebuild did not verify that collector; it is not an all-clear.
       </Callout>
 
       <SectionHeading
-        sub="Sorted by volume. History depth is set by whatever each portal exposes, not by when layoffs happened."
+        sub="Sorted by volume. The history column uses each record's display date: notice date when established, otherwise action date."
         right={
           <Link to="/states" className="smallcaps text-[10px] text-oxide hover:underline">
             State profiles →
@@ -179,29 +191,28 @@ export function Methods() {
       </SectionHeading>
       <DataTable columns={columns} rows={rows} rowKey={(r) => r.postal} />
 
-      {manual.length > 0 && (
-        <Callout title="States absent entirely">
-          {manual.map((r) => STATE_NAMES[r.postal] ?? r.name).join(", ")} publish
-          no notice-level list online. Their notices exist only through records
-          requests and are not in this register at any count.
+      {noRows.length > 0 && (
+        <Callout title="Jurisdictions without admitted notices">
+          {noRows.map((r) => STATE_NAMES[r.postal] ?? r.name).join(", ")} have
+          no admitted source records in this release. Some lack a usable public
+          list; others have source rows whose identity or provenance remains
+          unresolved. They are absent from national notice and worker totals.
         </Callout>
       )}
 
       <SectionHeading>How employers are identified</SectionHeading>
       <p className="text-sm font-serif text-ink-muted max-w-2xl leading-relaxed">
-        Notices name employers as the filer wrote them. To group filings across
-        states and spellings, each is matched against public company registers:
-        SEC filers by name and filing era, IRS exempt organizations by name and
-        state, legal-entity identifiers, and Wikidata. Where a company is
-        somebody's subsidiary, the parent's own SEC filings say so.
+        Notices name employers as the source published them. Separate,
+        deterministic annotations may match a name to a public company or
+        organization register. An identifier or current parent annotation does
+        not by itself establish who owned the filing entity when the notice
+        was given.
       </p>
       <p className="text-sm font-serif text-ink-muted max-w-2xl leading-relaxed mt-3">
-        Every match must be exact after normalization, agree with a second
-        attribute where one exists, and leave exactly one candidate standing.
-        Ambiguity matches nothing, which is why{" "}
-        {pct(t.notices - t.identified, t.notices)} of notices carry no company
-        identifier: most are single-location businesses in no public register,
-        and a wrong identifier would be worse than none.
+        Matching rules require a unique supported candidate and leave
+        ambiguous cases unmatched. {pct(t.notices - t.identified, t.notices)}
+        of notices have no company identifier. These annotations are useful for
+        navigation, but should not be read as a historical ownership ledger.
       </p>
 
       <SectionHeading>How locations become places</SectionHeading>
@@ -231,24 +242,34 @@ export function Methods() {
 
       <SectionHeading>Provenance</SectionHeading>
       <p className="text-sm font-serif text-ink-muted max-w-2xl leading-relaxed">
-        Every notice records the page or document it came from, when it was
-        first seen, and when it was last confirmed at the source. Nothing is
-        merged: notices that look like revisions or duplicates of each other are
-        linked, with the reason recorded, and both remain readable. The whole
-        database, per-state extracts, and the link table are published as{" "}
+        Admitted notices retain a source reference and observation timestamps.
+        The source-only rebuild also records excluded rows and why they were
+        excluded. Apparent revisions are linked only when source evidence
+        establishes the relationship. Download the{" "}
         <a
-          href="https://github.com/bchaps1999/warn-notice-register"
+          href="https://github.com/bchaps1999/warn-notice-register/blob/main/data/exports/warn_notices.csv"
           className="underline hover:text-ink"
           target="_blank" rel="noreferrer"
         >
-          CSV and SQLite
+          notice CSV
         </a>
-        .
+        {" "}or the{" "}
+        <a
+          href="https://github.com/bchaps1999/warn-notice-register/blob/main/data/warn.sql.gz"
+          className="underline hover:text-ink"
+          target="_blank" rel="noreferrer"
+        >
+          compressed SQL dump
+        </a>
+        . After cloning and running <code>./install.sh</code>, run{" "}
+        <code>.venv/bin/warnlive unpack-db</code> to restore the working SQLite
+        database from the dump.
       </p>
       <SectionHeading>Sources and credit</SectionHeading>
       <p className="text-sm font-serif text-ink-muted max-w-2xl leading-relaxed">
-        Every notice here was published by a state labor agency. Fetching builds
-        on{" "}
+        Every admitted notice traces to agency records. Some historical
+        workbooks were supplied by agencies to Big Local News and remain
+        available through its public mirror. Collection code builds on{" "}
         <a
           className="underline hover:text-ink"
           href="https://github.com/biglocalnews/warn-scraper"
@@ -266,8 +287,8 @@ export function Methods() {
         per-state pages say what each agency does and does not report.
       </p>
       <p className="text-xs text-ink-faint font-serif mt-6">
-        Built {date(meta.built_at)} · {archiveStates.length} states include
-        archive-recovered history.
+        Built {date(meta.built_at)} · {archiveStates.length} jurisdictions have
+        at least one Internet Archive source link.
       </p>
     </div>
   );

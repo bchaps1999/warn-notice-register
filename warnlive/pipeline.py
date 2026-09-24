@@ -11,11 +11,14 @@ import logging
 import sqlite3
 import traceback
 from dataclasses import dataclass, field
+from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
 
 from warnlive import fetch
 from warnlive.normalize import engine
+from warnlive.normalize.engine import _dedupe_key
+from warnlive.normalize.admission import exclusion_reasons
 from warnlive.registry import Registry, StateConfig
 from warnlive.store import dedupe
 from warnlive.verify import harness
@@ -67,7 +70,6 @@ def run_states(
     data_dir = workdir / "raw"
     cache_dir = workdir / "cache"
     report = RunReport(trigger=trigger, started_at=now_utc())
-
     run_id = None
     if conn is not None and not smoke:
         cur = conn.execute(
@@ -171,6 +173,9 @@ def _run_one(
     norm = None
     if raw_path is not None:
         try:
+            from warnlive.migrate.source_bundle import validate_agency_raw_file
+
+            validate_agency_raw_file(postal, raw_path)
             norm = engine.normalize_file(postal, raw_path.parent, cfg.source_url)
             outcome.raw_rows = norm.raw_rows
             outcome.normalized_rows = len(norm.records)
@@ -178,12 +183,63 @@ def _run_one(
             outcome.error = f"normalize: {type(e).__name__}: {e}"
             logger.debug("normalize %s failed:\n%s", postal, traceback.format_exc())
 
+    excluded: list[dict] = []
+    if norm is not None:
+        reasons = exclusion_reasons(postal, norm.records)
+        excluded = [
+            {
+                "reason": reasons[record["dedupe_key"]],
+                "prepared_row": record.get("prepared_row"),
+                "dedupe_key": record["dedupe_key"],
+                "raw_record_hash": record.get("raw_record_hash"),
+                "source_url": record.get("source_url"),
+                "raw_extra": record.get("raw_extra"),
+            }
+            for record in norm.records if record["dedupe_key"] in reasons
+        ]
+        norm = replace(norm, records=[
+            record for record in norm.records if record["dedupe_key"] not in reasons
+        ])
     verification = harness.verify_state(cfg, raw_path, norm, fetch_error=fetch_error)
     outcome.checks = verification.to_dict()
+    if norm is not None:
+        outcome.checks["admission"] = {
+            "eligible_rows": len(norm.records),
+            "excluded_rows": len(excluded) + norm.failed_rows,
+            "exclusions": excluded + [
+                {"reason": "parse_failure", **failure}
+                for failure in norm.failures
+            ],
+        }
     outcome.verdict = verification.verdict
 
     # failed runs never ingest; degraded runs do (warn-level findings only)
     if conn is not None and not smoke and norm is not None and outcome.verdict != "failed":
+        if postal == "il":
+            # A generic clean-rebuild marker is insufficient: earlier clean
+            # candidates still used mutable employer/date/place keys for IL.
+            # Refuse a mixed database before any notice is written.
+            existing = conn.execute(
+                "SELECT dedupe_key, source_identity FROM notices WHERE state = 'IL'"
+            ).fetchall()
+            identities = [row["source_identity"] for row in existing]
+            compliant = all(
+                identity and identity.startswith("IL:IEBS:")
+                and identity != "IL:IEBS:"
+                and row["dedupe_key"] == _dedupe_key({
+                    "state": "IL", "source_identity": identity,
+                })
+                for row, identity in zip(existing, identities)
+            ) and len(identities) == len(set(identities))
+            if not compliant:
+                outcome.verdict = "failed"
+                outcome.error = (
+                    "IL source-record keys require a clean candidate or reviewed "
+                    "migration before ingest into this database"
+                )
+                outcome.checks["verdict"] = "failed"
+                outcome.checks["migration"] = outcome.error
+                return outcome
         # Source-identity keys are intentionally enabled for fresh builds, but
         # the currently published DB still holds GA/SC/KS rows under legacy keys.
         # Do not mix both policies in one DB: that would duplicate filings.
@@ -221,17 +277,18 @@ def _run_one(
         ).fetchone()
         try:
             conn.execute("SAVEPOINT state_ingest")
-            stats = dedupe.ingest(conn, norm.records, observed_at=now_utc()[:10], commit=False)
+            records = norm.records
+            stats = dedupe.ingest(conn, records, observed_at=now_utc()[:10], commit=False)
             # Absence is evidence only from a complete, current source snapshot.
             # Cache runs, backfills, and partly unparseable files cannot support it.
             complete_live = (
-                fetched_live and norm.failed_rows == 0
+                fetched_live and norm.failed_rows == 0 and not excluded
                 and trigger != "backfill" and postal not in {"ga", "sc"}
             )
             if complete_live:
                 dedupe.freeze_absent(
                     conn, postal,
-                    {r["dedupe_key"] for r in norm.records},
+                    {r["dedupe_key"] for r in records},
                     (prev and prev["d"]) or now_utc()[:10],
                     commit=False,
                 )

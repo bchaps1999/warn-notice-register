@@ -29,11 +29,13 @@ VERSIONED_FIELDS = [
     "is_amendment",
 ]
 
-# Optional v5 facts. Old records omit them and retain their original hashes;
+# Optional v5/v7 facts. Old records omit them and retain their original hashes;
 # newly extracted evidence changes the semantic version even when scalar
 # start date, workers and employer happen to stay the same.
 DETAIL_FIELDS = [
     "effective_date_end", "notice_date_precision", "notice_date_basis",
+    "effective_date_precision", "effective_date_basis",
+    "effective_date_end_precision", "effective_date_end_basis",
     "source_identity", "source_details",
 ]
 
@@ -104,10 +106,12 @@ def ingest(
                 """INSERT INTO notices
                    (dedupe_key, state, employer_name, location, notice_date,
                     effective_date, effective_date_end, notice_date_precision,
-                    notice_date_basis, source_identity, source_details,
+                    notice_date_basis, effective_date_precision,
+                    effective_date_basis, effective_date_end_precision,
+                    effective_date_end_basis, source_identity, source_details,
                     employees_affected, layoff_type, is_temporary,
                     is_amendment, source_url, source_notice_id, first_seen, last_seen)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     key,
                     rec["state"],
@@ -118,6 +122,10 @@ def ingest(
                     rec.get("effective_date_end"),
                     rec.get("notice_date_precision"),
                     rec.get("notice_date_basis"),
+                    rec.get("effective_date_precision"),
+                    rec.get("effective_date_basis"),
+                    rec.get("effective_date_end_precision"),
+                    rec.get("effective_date_end_basis"),
                     rec.get("source_identity"),
                     rec.get("source_details"),
                     rec["employees_affected"],
@@ -189,7 +197,9 @@ def ingest(
                 """UPDATE notices SET
                      employer_name=?, location=?, notice_date=?, effective_date=?,
                      effective_date_end=?, notice_date_precision=?,
-                     notice_date_basis=?, source_identity=?, source_details=?,
+                     notice_date_basis=?, effective_date_precision=?,
+                     effective_date_basis=?, effective_date_end_precision=?,
+                     effective_date_end_basis=?, source_identity=?, source_details=?,
                      employees_affected=?, layoff_type=?, is_temporary=?,
                      is_amendment=?, source_url=?, source_notice_id=?,
                      is_amended=1, current_version=?, last_seen=NULL
@@ -202,6 +212,10 @@ def ingest(
                     rec.get("effective_date_end"),
                     rec.get("notice_date_precision"),
                     rec.get("notice_date_basis"),
+                    rec.get("effective_date_precision"),
+                    rec.get("effective_date_basis"),
+                    rec.get("effective_date_end_precision"),
+                    rec.get("effective_date_end_basis"),
                     rec.get("source_identity"),
                     rec.get("source_details"),
                     rec["employees_affected"],

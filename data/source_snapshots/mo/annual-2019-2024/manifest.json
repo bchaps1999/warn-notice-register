@@ -1,0 +1,65 @@
+{
+  "agency": "Missouri Office of Workforce Development",
+  "capture_method": "web.run open of official annual page; captured line-numbered rendered text, not raw HTTP HTML; row counts and first/last records cross-checked in in-app browser DOM",
+  "files": [
+    {
+      "agency_table_rows": 26,
+      "bytes": 4972,
+      "file": "2019.webtext.txt",
+      "rendered_source_lines": 51,
+      "sha256": "8b3db262bb269098c9ecf5812f5502383087777928ef999126bb25e649041e7e",
+      "source_url": "https://jobs.mo.gov/warn/2019",
+      "year": 2019
+    },
+    {
+      "agency_table_rows": 162,
+      "bytes": 24251,
+      "file": "2020.webtext.txt",
+      "rendered_source_lines": 226,
+      "sha256": "9f7fa355c09c898ca7317ae5b933f601ac9ebd27b963d854f834a8efc4be5ed4",
+      "source_url": "https://jobs.mo.gov/warn/2020",
+      "year": 2020
+    },
+    {
+      "agency_table_rows": 22,
+      "bytes": 4441,
+      "file": "2021.webtext.txt",
+      "rendered_source_lines": 49,
+      "sha256": "ea9c686a7f920af5f8221d47234a0f0413fe433a856bf2a905ec848202dd210b",
+      "source_url": "https://jobs.mo.gov/warn/2021",
+      "year": 2021
+    },
+    {
+      "agency_table_rows": 10,
+      "bytes": 2814,
+      "file": "2022.webtext.txt",
+      "rendered_source_lines": 35,
+      "sha256": "91d76598f69efbce723d57822f7c1a91b65b8eebe8ecc6dea5a073f2a5f54c7f",
+      "source_url": "https://jobs.mo.gov/warn/2022",
+      "year": 2022
+    },
+    {
+      "agency_table_rows": 37,
+      "bytes": 7013,
+      "file": "2023.webtext.txt",
+      "rendered_source_lines": 82,
+      "sha256": "ff7135591aec402ca7b29832d6582a5b664832681a242327ec2fc87d9a8feca3",
+      "source_url": "https://jobs.mo.gov/warn/2023",
+      "year": 2023
+    },
+    {
+      "agency_table_rows": 40,
+      "bytes": 7873,
+      "file": "2024.webtext.txt",
+      "rendered_source_lines": 91,
+      "sha256": "69e32cd69ace2f0ff882ded9a445f4146117020bd4927d6072985763bf5bdb29",
+      "source_url": "https://jobs.mo.gov/warn/2024",
+      "year": 2024
+    }
+  ],
+  "format": "agency-rendered-annual-warn-text-v1",
+  "index_url": "https://jobs.mo.gov/employer/warn",
+  "observed_utc_date": "2026-09-24",
+  "source_rows": 297,
+  "status": "pinned browser/web-rendered agency table text; projection pending"
+}

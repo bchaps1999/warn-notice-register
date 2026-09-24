@@ -32,17 +32,18 @@ export function DataTable<T>({
 }) {
   if (!rows.length && empty) return <>{empty}</>;
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm border-collapse">
+    <div className="overflow-x-auto" role="region" aria-label="Data table" tabIndex={0}>
+      <table className="w-full min-w-max text-sm border-collapse">
         <thead>
           <tr className="border-b border-rule-strong">
             {columns.map((c) => (
               <th
                 key={c.key}
                 scope="col"
+                aria-sort={sort === c.key ? (dir === "asc" ? "ascending" : "descending") : undefined}
                 style={c.width ? { width: c.width } : undefined}
                 className={clsx(
-                  "smallcaps text-[10px] text-ink-muted font-semibold py-2",
+                  "smallcaps text-[10px] text-ink-muted font-semibold py-2 whitespace-nowrap",
                   c.numeric ? "text-right pl-3" : "text-left pr-3"
                 )}
               >
@@ -50,8 +51,7 @@ export function DataTable<T>({
                   <button
                     type="button"
                     onClick={() => onSort(c.key)}
-                    className="smallcaps hover:text-ink"
-                    aria-sort={sort === c.key ? (dir === "asc" ? "ascending" : "descending") : "none"}
+                    className="smallcaps hover:text-ink whitespace-nowrap"
                   >
                     {c.header}
                     {sort === c.key && (

@@ -21,8 +21,7 @@ The matching rule is the one the identity matcher uses, for the same
 reason: a missing place costs only enrichment, a wrong one poisons every
 join built on it. So a name that could be two places in the state is
 refused rather than resolved to the larger one, matching never crosses a
-state line, and what could not be resolved is written to a review file
-instead of quietly disappearing. Where a state files the county alongside
+state line, and what could not be resolved remains unknown. Where a state files the county alongside
 the city, that county settles names that would otherwise be ambiguous —
 which is why Ohio's "Cincinnati (Hamilton)" is easier to place than
 California's bare "Fremont".
@@ -45,8 +44,6 @@ from warnlive.normalize.engine import filed_address
 logger = logging.getLogger("warnlive")
 
 PATH = Path("data/reference/places.csv.gz")
-ALIAS_PATH = Path("data/reference/place_aliases.csv")
-REVIEW_PATH = Path("data/health/places_review.csv")
 FIELDS = [
     "state", "kind", "key", "name",
     "place_fips", "county_fips", "county_name", "lat", "lon", "incorporated",
@@ -436,101 +433,11 @@ def refresh(out_path: Path = PATH) -> int:
     return len(rows)
 
 
-def load_aliases(path: Path = ALIAS_PATH) -> dict[tuple[str, str], tuple[str, str]]:
-    """(state, folded filed name) -> (folded Census name, kind), by hand.
-
-    The kind pins what the alias means. A neighbourhood that is part of an
-    incorporated city resolves to that city, but an unincorporated community
-    like Universal City is in no city at all, and can only honestly be placed
-    in its county — so its alias says "county" and the place is left empty.
-    """
-    if not path.exists():
-        return {}
-    with open(path, newline="") as fh:
-        return {
-            (r["state"].upper(), fold(r["filed_name"])): (
-                fold(r["census_name"]), (r.get("kind") or "").strip(),
-            )
-            for r in csv.DictReader(fh)
-            if r.get("state") and r.get("filed_name") and r.get("census_name")
-            and (r.get("decision") or "").strip().lower() != "reject"
-        }
-
-
-def load_rejections(path: Path = ALIAS_PATH) -> set[tuple[str, str]]:
-    """(state, folded location) strings settled as naming no place at all.
-
-    The review file is rebuilt from the database on every refresh, so a
-    string nobody can place returns to the top of it forever unless the fact
-    that it was examined is written down. Kansas and Oklahoma file against
-    workforce investment areas, and "Various Cities/Various Counties" names
-    no county in particular; these are not failures to be retried, they are
-    answers. A rejection grants no geography — it only stops the asking.
-    """
-    if not path.exists():
-        return set()
-    with open(path, newline="") as fh:
-        return {
-            (r["state"].upper(), fold(r["filed_name"]))
-            for r in csv.DictReader(fh)
-            if r.get("state") and r.get("filed_name")
-            and (r.get("decision") or "").strip().lower() == "reject"
-        }
-
-
-def review(conn, out_path: Path = REVIEW_PATH,
-           alias_path: Path = ALIAS_PATH) -> int:
-    """Write the location strings that resolved to nothing, worst first.
-
-    A refusal is only defensible if somebody can see it. Most of these are
-    correct — Kansas and Maine file against workforce investment areas, which
-    are not places and never will be — but the rest are the working list for
-    data/reference/place_aliases.csv, ranked by the workers riding on them.
-    """
-    resolver = Resolver(alias_path=alias_path)
-    rejected = load_rejections(alias_path)
-    unresolved: dict[tuple[str, str], dict] = {}
-    for row in conn.execute(
-        "SELECT n.state AS state, n.location AS location, "
-        "       n.employer_name AS employer_name, "
-        "       COALESCE(n.employees_affected, 0) AS jobs, "
-        "       (SELECT v.fields_json FROM notice_versions v "
-        "        WHERE v.notice_id = n.id AND v.version = n.current_version"
-        "       ) AS fields_json FROM notices n "
-        "WHERE n.location IS NOT NULL AND n.location != ''"
-    ):
-        if resolver.resolve(
-            row["state"], row["location"], row["fields_json"], row["employer_name"]
-        )["geo_basis"]:
-            continue
-        if ((row["state"] or "").upper(), fold(row["location"])) in rejected:
-            continue
-        key = (row["state"], row["location"])
-        entry = unresolved.setdefault(key, {"notices": 0, "workers": 0})
-        entry["notices"] += 1
-        entry["workers"] += row["jobs"]
-
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(out_path, "w", newline="") as fh:
-        writer = csv.DictWriter(
-            fh, fieldnames=["state", "location", "notices", "workers", "reason"]
-        )
-        writer.writeheader()
-        for (state, location), entry in sorted(
-            unresolved.items(), key=lambda kv: (-kv[1]["workers"], kv[0])
-        ):
-            writer.writerow({
-                "state": state, "location": location, **entry,
-                "reason": resolver.refusals.get((state, location), ""),
-            })
-    logger.info("places review: %d unresolved locations -> %s", len(unresolved), out_path)
-    return len(unresolved)
-
 
 class Resolver:
     """Resolves a filed location string to a Census place and county."""
 
-    def __init__(self, path: Path = PATH, alias_path: Path = ALIAS_PATH) -> None:
+    def __init__(self, path: Path = PATH) -> None:
         self.places: dict[tuple[str, str], list[dict]] = {}
         self.counties: dict[tuple[str, str], list[dict]] = {}
         self.subdivisions: dict[tuple[str, str], list[dict]] = {}
@@ -543,23 +450,12 @@ class Resolver:
                     table = tables.get(row["kind"])
                     if table is not None:
                         table.setdefault((row["state"], row["key"]), []).append(row)
-        self.aliases = load_aliases(alias_path)
         self._cache: dict[tuple[str, str], dict] = {}
-        # Why each unresolved string failed, for the review file.
+        # Why each unresolved string failed, for deterministic diagnostics.
         self.refusals: dict[tuple[str, str], str] = {}
 
     def _keys(self, state: str, location: str) -> list[tuple[str, str]]:
         """The candidate (folded name, kind) pairs inside a location string."""
-        # An alias may name the whole filed string rather than a name inside
-        # it. Segmenting finds a place only when the string contains one:
-        # "O'HARE INTERNATIONAL AIRPORT CHICAGO, IL 60666" folds to a single
-        # segment that is no place at all, and no rule will ever make it one.
-        # Naming the string outright is the only way to say where it is, and
-        # it settles the whole string rather than a word that might recur
-        # innocently elsewhere.
-        whole = self.aliases.get((state, fold(location)))
-        if whole:
-            return [whole]
         keys = []
         for segment in _SEGMENT.split(location):
             segment = _UNIT.sub(" ", segment or "")
@@ -577,7 +473,7 @@ class Resolver:
                 words.pop()
             key = fold(" ".join(words))
             if key:
-                keys.append(self.aliases.get((state, key), (key, "")))
+                keys.append((key, ""))
         return keys
 
     def _address_tails(self, state: str, location: str) -> list[str]:

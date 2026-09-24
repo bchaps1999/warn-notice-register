@@ -38,7 +38,6 @@ logger = logging.getLogger("warnlive")
 SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik:010d}.json"
 ARCHIVE_URL = "https://www.sec.gov/Archives/edgar/data/{cik}/{acc}/"
 PATH = Path("data/reference/subsidiaries.csv.gz")
-OVERRIDES_PATH = Path("data/reference/subsidiary_overrides.csv")
 PROGRESS_PATH = Path("workdir/backfill/cache/subsidiaries_progress.csv")
 FIELDS = ["normalized_name", "parent_cik", "parent_name", "source_year"]
 
@@ -257,72 +256,30 @@ def refresh(out_path: Path = PATH, progress_path: Path = PROGRESS_PATH,
 
 
 class Index:
-    """SEC subsidiary names and separately scoped override decisions."""
+    """SEC subsidiary names from filed Exhibit 21 documents."""
 
-    def __init__(self, path: Path = PATH, overrides_path: Path = OVERRIDES_PATH):
+    def __init__(self, path: Path = PATH):
         self.by_name: dict[str, dict] = {}
-        # Keep filing evidence separate from adjudicated links. An override
-        # cannot corroborate another model answer (or itself on replay).
         self.sec_by_name: dict[str, dict] = {}
         self.by_first: dict[str, list[str]] = defaultdict(list)
         self.sec_by_first: dict[str, list[str]] = defaultdict(list)
-        self.override_rows: dict[str, list[dict]] = {}
         if path.exists():
             with gzip.open(path, "rt") as fh:
                 for row in csv.DictReader(fh):
                     self.by_name[row["normalized_name"]] = row
                     self.sec_by_name[row["normalized_name"]] = row
-        # Historical and scoped decisions remain readable, but never join
-        # the unscoped SEC lookup. Consumers must call scoped_parent with
-        # the notice's state, year and location.
-        if overrides_path.exists():
-            with open(overrides_path, newline="") as fh:
-                for row in csv.DictReader(fh):
-                    if row.get("normalized_name") and row.get("parent_cik"):
-                        self.override_rows.setdefault(row["normalized_name"], []).append(row)
         for name in self.by_name:
             self.by_first[name.split(" ", 1)[0]].append(name)
         for name in self.sec_by_name:
             self.sec_by_first[name.split(" ", 1)[0]].append(name)
 
     def parent(self, norm: str | None) -> dict | None:
-        """SEC-derived parent by name; overrides require scoped_parent()."""
+        """SEC-derived parent by name."""
         return self._lookup(norm, self.by_name, self.by_first)
 
     def sec_parent(self, norm: str | None) -> dict | None:
         """Only ownership attested by a crawled SEC Exhibit 21."""
         return self._lookup(norm, self.sec_by_name, self.sec_by_first)
-
-    def scoped_parent(self, norm: str | None, state: str | None,
-                      year: str | int | None, location: str | None) -> dict | None:
-        """Select one explicit parent decision in an exact notice scope."""
-        from warnlive.enrich import review
-
-        key = (norm or "", (state or "").upper(), str(year or ""),
-               review.scope_location(location))
-        matches = [r for r in self.override_rows.get(key[0], [])
-                   if all(f in r for f in ("scope_state", "scope_year", "scope_location"))
-                   and review.scope_tuple(r) == key
-                   and (r.get("decision") or "").strip().lower() == "accept"
-                   and r.get("parent_cik")]
-        return matches[0] if len({(r["parent_cik"], r.get("parent_name") or "")
-                                  for r in matches}) == 1 and matches else None
-
-    def scoped_parent_conflict(self, norm: str | None, state: str | None,
-                               year: str | int | None, location: str | None) -> bool:
-        """Conflicting accepted parents must not fall back to a name match."""
-        from warnlive.enrich import review
-
-        key = (norm or "", (state or "").upper(), str(year or ""),
-               review.scope_location(location))
-        values = {
-            (r["parent_cik"], r.get("parent_name") or "")
-            for r in self.override_rows.get(key[0], [])
-            if review.scope_tuple(r) == key
-            and (r.get("decision") or "").strip().lower() == "accept"
-            and r.get("parent_cik")
-        }
-        return len(values) > 1
 
     @staticmethod
     def _lookup(norm: str | None, by_name: dict[str, dict],

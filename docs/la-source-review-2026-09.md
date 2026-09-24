@@ -12,6 +12,15 @@ python -m warnlive.migrate.la_reconcile \
   --out /path/to/new-la-review.json
 ```
 
+The source extractor now records the UPS annotation's typed 2025-09-05
+rescission date, verbatim annotation quote, and target row pointer. These are
+status evidence; the annotation remains outside notice counts and is not a
+layoff-end date. The source-hash-bound
+[`la-relationships-2026-09-23.json`](../data/review/la-relationships-2026-09-23.json)
+keeps both IDEA rows and all four held SafeSource rows unresolved. Its
+`87 + 454 = 541` observation is arithmetic evidence, not a filing or worker
+allocation decision; the 56-worker `Second WARN` row is also explicitly held.
+
 `source_row` uses PDF page/table-row ordinals; BLN `source_row` uses the CSV
 data-row ordinal. A matching notice date and worker count proposes a candidate
 for inspection, **not** a same-notice decision. These observations are not a

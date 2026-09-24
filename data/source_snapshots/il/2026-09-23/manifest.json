@@ -1,0 +1,27 @@
+{
+  "capture": "il-iebs-live-2026-09-23",
+  "captured_at_utc": "2026-09-24T02:23:11+00:00",
+  "distinct_iebs_ids": 4890,
+  "files": [
+    {
+      "path": "export.xlsx",
+      "sha256": "b7ca020fa8186e6b426873829e06ec8ad6a740ec8953b993f49504e287321338",
+      "size": 1202140,
+      "source_url": "https://apps.illinoisworknet.com/iebs/api/public/export?search=&layoffTypes=&trade=0&dateReportedStart=Invalid%20Date&dateReportedEnd=Invalid%20Date&statuses=4&reasons=&eventCauses=&naicsCodes=1&naicIndustries=&naics=&unionsInvolved=0&geolocation=1&cities=&counties=&lwias=&includeAdditionalLwias=false&edrs=&lat=0&lng=0&distance=.5&memberType=1&users=&accessList=&bookmarked=false"
+    },
+    {
+      "path": "il.csv",
+      "sha256": "460d53f49d76623931e3fda9b9cc6521a99af7b92e347b38d1ca70b75fe38477",
+      "size": 2426594,
+      "source_url": "generated from export.xlsx by warn-scraper Illinois parser"
+    },
+    {
+      "path": "guide.pdf",
+      "sha256": "6325a3deea8d33eb976e13565ba798d8aba3c87b9bea8c4249731869de516d36",
+      "size": 2292490,
+      "source_url": "https://www.illinoisworknet.com/DownloadPrint/IEBS%20Guide%20-%20Event%20Creation.pdf"
+    }
+  ],
+  "parser": "warn.scrapers.il.scrape",
+  "raw_rows": 4890
+}

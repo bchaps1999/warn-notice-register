@@ -37,7 +37,7 @@ export function NoticeDetailPage() {
   const amendments = n.links.filter((l) => l.kind === "amendment_of");
   const duplicates = n.links.filter((l) => l.kind === "possible_duplicate");
   let sourceDetails: {
-    dates?: { role: string; date: string | null; source_text: string }[];
+    dates?: { role: string; date: string | null; source_text: string; month?: number | null; year?: number | null }[];
     sites?: { address: string; workers: number | null }[];
     worker_allocation?: string;
   } | null = null;
@@ -46,6 +46,9 @@ export function NoticeDetailPage() {
   } catch {
     // An older malformed detail payload must not break the notice page.
   }
+  const postingMonth = sourceDetails?.dates?.find(
+    (item) => item.role === "posting_month" || (n.state === "NJ" && item.role === "notice_month"),
+  );
 
   return (
     <div className="max-w-3xl">
@@ -67,7 +70,7 @@ export function NoticeDetailPage() {
         </p>
         {n.is_temporary === 1 && <Stamp>Temporary</Stamp>}
         {n.is_amendment === 1 && <Stamp tone="oxide">Filed as amendment</Stamp>}
-        {n.is_amended === 1 && <Stamp tone="oxide">Amended · v{n.current_version}</Stamp>}
+        {n.is_amended === 1 && <Stamp tone="oxide">Updated record · v{n.current_version}</Stamp>}
       </div>
       {/* The company, not the string. States file the same firm many ways —
           "NBCUniversal Media, LLC - 1320" names a building — so the heading
@@ -89,7 +92,7 @@ export function NoticeDetailPage() {
       )}
 
       <SectionHeading>Filing</SectionHeading>
-      <dl className="grid grid-cols-[11rem_1fr] gap-y-2 text-sm">
+      <dl className="grid grid-cols-1 sm:grid-cols-[11rem_minmax(0,1fr)] gap-y-2 text-sm">
         <Row label="Location">{n.location ?? "—"}</Row>
         {n.site_address && <Row label="Worksite address">{n.site_address}</Row>}
         {n.county_fips && (
@@ -109,10 +112,17 @@ export function NoticeDetailPage() {
           </Row>
         )}
         <Row label="Notice date">
-          {n.notice_date_precision === "month"
+          {n.state === "NJ" && n.notice_date_precision === "month"
+            ? "Unknown"
+            : n.notice_date_precision === "month"
             ? `${noticeDate(n.notice_date, n.notice_date_precision)} (month reported; year inferred)`
             : noticeDate(n.notice_date, n.notice_date_precision)}
         </Row>
+        {postingMonth && (
+          <Row label="Posting month">
+            {postingMonth.source_text} (year not reported)
+          </Row>
+        )}
         <Row label="Layoff/closure date">
           {date(n.effective_date)}
           {n.effective_date_end && ` – ${date(n.effective_date_end)}`}
@@ -122,6 +132,29 @@ export function NoticeDetailPage() {
         </Row>
         {(n.industry || n.naics) && <IndustryRow n={n} />}
       </dl>
+
+      {(n.notice_date_basis || n.effective_date_basis || n.effective_date_end_basis ||
+        (sourceDetails?.dates?.length ?? 0) > 0) && (
+        <>
+          <SectionHeading>Date evidence</SectionHeading>
+          <p className="text-sm font-serif text-ink-muted leading-relaxed">
+            Source dates can describe different events. A received or posted date is
+            not treated as the employer&apos;s legal notice date unless the source supports that role.
+          </p>
+          <dl className="grid grid-cols-1 sm:grid-cols-[11rem_minmax(0,1fr)] gap-y-2 text-sm mt-3">
+            {n.notice_date_basis && <Row label="Notice basis">{n.notice_date_basis}</Row>}
+            {n.effective_date_basis && <Row label="Action basis">{n.effective_date_basis}</Row>}
+            {n.effective_date_end_basis && <Row label="End basis">{n.effective_date_end_basis}</Row>}
+            {sourceDetails?.dates?.map((item, i) => (
+              <Row key={`${item.role}-${i}`} label={item.role.replace(/_/g, " ")}>
+                {item.date ? date(item.date) : item.source_text}
+                {item.date && item.source_text && item.source_text !== item.date &&
+                  <span className="text-xs text-ink-faint ml-2">as filed: {item.source_text}</span>}
+              </Row>
+            ))}
+          </dl>
+        </>
+      )}
 
       {sourceDetails?.sites && sourceDetails.sites.length > 0 &&
         (sourceDetails.sites.length > 1 || !n.site_address) && (
@@ -156,7 +189,7 @@ export function NoticeDetailPage() {
           <SectionHeading>
             {n.cik ? "Public company" : n.ein ? "Nonprofit organization" : "Company identity"}
           </SectionHeading>
-          <dl className="grid grid-cols-[11rem_1fr] gap-y-2 text-sm">
+          <dl className="grid grid-cols-1 sm:grid-cols-[11rem_minmax(0,1fr)] gap-y-2 text-sm">
             {n.cik && (
               <Row label="SEC CIK">
                 <a
@@ -233,6 +266,7 @@ export function NoticeDetailPage() {
                     listed this employer as a subsidiary
                   </span>
                 )}
+                <span className="block text-xs text-ink-faint">Current reference annotation; ownership at the filing date is not established here.</span>
               </Row>
             )}
             {n.wikidata_qid && (
@@ -266,8 +300,8 @@ export function NoticeDetailPage() {
                 <p className="smallcaps text-[10px] text-ink-muted">
                   Version {v.version} · observed {date(v.observed_at)}
                 </p>
-                <dl className="grid grid-cols-[11rem_1fr] gap-y-1 text-sm mt-1">
-                  {["employer_name", "location", "notice_date", "effective_date", "employees_affected", "layoff_type"].map(
+                <dl className="grid grid-cols-1 sm:grid-cols-[11rem_minmax(0,1fr)] gap-y-1 text-sm mt-1">
+                  {["employer_name", "location", "notice_date", "notice_date_precision", "notice_date_basis", "effective_date", "effective_date_precision", "effective_date_basis", "effective_date_end", "effective_date_end_precision", "effective_date_end_basis", "employees_affected", "layoff_type"].map(
                     (f) =>
                       v.fields[f] !== undefined && (
                         <Row key={f} label={f.replace(/_/g, " ")}>
@@ -297,15 +331,12 @@ export function NoticeDetailPage() {
  *  same date printed twice: a notice seen once has first_seen == last_seen,
  *  and a reader gains nothing from being shown it under two names.
  *
- *  The dates only say something when they differ, and then what they say is
- *  how long the state kept it posted. So they are written as a span when
- *  there is a span and as one date when there is not. The record key is a
+ *  Observation timestamps do not establish continuous posting. The record key is a
  *  hash for joining exports, not a fact about the layoff, so it moves in
  *  with the raw row where the rest of the plumbing lives.
  */
 function Provenance({ n }: { n: NoticeDetailData }) {
   const from = date(n.first_seen);
-  const to = date(n.last_seen);
   const portal = n.source_url ? (
     <a href={n.source_url} className="underline hover:text-ink" target="_blank" rel="noreferrer">
       {STATE_NAMES[n.state] ?? n.state} state portal
@@ -318,7 +349,8 @@ function Provenance({ n }: { n: NoticeDetailData }) {
       <SectionHeading>Provenance</SectionHeading>
       <p className="text-xs text-ink-faint font-serif">
         Collected from the {portal}
-        {from && to && from !== to ? `, listed ${from} to ${to}.` : from ? ` on ${from}.` : "."}
+        {from ? `; first observed ${from}.` : "."}
+        {n.last_seen && <span> Last observation marker: {date(n.last_seen)}.</span>}
       </p>
       <RawExtra n={n} />
     </>
@@ -439,7 +471,7 @@ function RawExtra({ n }: { n: NoticeDetailData }) {
       <summary className="text-xs smallcaps text-ink-muted cursor-pointer hover:text-ink">
         As filed by the state
       </summary>
-      <dl className="grid grid-cols-[minmax(8rem,14rem)_1fr] gap-y-1.5 text-xs border border-rule p-4 bg-surface mt-2">
+      <dl className="grid grid-cols-1 sm:grid-cols-[minmax(8rem,14rem)_minmax(0,1fr)] gap-y-1.5 text-xs border border-rule p-4 bg-surface mt-2">
         {Object.entries(parsed).map(([k, v]) => (
           <Row key={k} label={k}>
             {String(v ?? "") || "—"}
@@ -457,7 +489,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   return (
     <>
       <dt className="smallcaps text-[10px] text-ink-muted pt-0.5">{label}</dt>
-      <dd className="font-serif break-words">{children}</dd>
+      <dd className="font-serif min-w-0 break-words [overflow-wrap:anywhere] mb-1 sm:mb-0">{children}</dd>
     </>
   );
 }

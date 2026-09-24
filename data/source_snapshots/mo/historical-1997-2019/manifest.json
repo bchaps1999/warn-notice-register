@@ -1,0 +1,152 @@
+{
+  "acquired_utc_date": "2026-09-24",
+  "acquisition_method": "in-app browser download from agency index; direct curl returned an Imperva challenge",
+  "admission_limit": "Fiscal-year sheets contain no consistent notice ID and at least one row describes a job-seeker/media report rather than a confirmed employer WARN filing; source rows require classification and overlap review.",
+  "agency": "Missouri Office of Workforce Development",
+  "bytes": 553366,
+  "data_rows_with_company": 1301,
+  "date_role": "Date Rec\u2019d is agency receipt; Layoff or Closing Date is reported action",
+  "file": "WARN_Data1997-2018.xlsx",
+  "format": "agency-linked-research-workbook-v1",
+  "index_url": "https://jobs.mo.gov/employer/warn",
+  "observed_received_date_max": "2019-06-27",
+  "observed_received_date_min": "1997-07-14",
+  "sha256": "3e783842d6086e7f176c20d81de6906873c1bb2903126a3ceee900adece8141c",
+  "sheet_count": 22,
+  "sheets": [
+    {
+      "data_rows_with_company": 49,
+      "first_data_row": 2,
+      "last_data_row": 50,
+      "name": "1997-98 Data"
+    },
+    {
+      "data_rows_with_company": 75,
+      "first_data_row": 2,
+      "last_data_row": 76,
+      "name": "1998-99 Data"
+    },
+    {
+      "data_rows_with_company": 65,
+      "first_data_row": 2,
+      "last_data_row": 66,
+      "name": "1999-2000 Data"
+    },
+    {
+      "data_rows_with_company": 90,
+      "first_data_row": 2,
+      "last_data_row": 91,
+      "name": "2000-01 Data"
+    },
+    {
+      "data_rows_with_company": 112,
+      "first_data_row": 2,
+      "last_data_row": 113,
+      "name": "2001-02 Data"
+    },
+    {
+      "data_rows_with_company": 74,
+      "first_data_row": 2,
+      "last_data_row": 75,
+      "name": "2002-03 Data"
+    },
+    {
+      "data_rows_with_company": 47,
+      "first_data_row": 2,
+      "last_data_row": 48,
+      "name": "2003-04 Data"
+    },
+    {
+      "data_rows_with_company": 43,
+      "first_data_row": 2,
+      "last_data_row": 44,
+      "name": "2004-05 Data"
+    },
+    {
+      "data_rows_with_company": 52,
+      "first_data_row": 2,
+      "last_data_row": 53,
+      "name": "2005-06 Data"
+    },
+    {
+      "data_rows_with_company": 41,
+      "first_data_row": 2,
+      "last_data_row": 42,
+      "name": "2006-07 Data"
+    },
+    {
+      "data_rows_with_company": 49,
+      "first_data_row": 2,
+      "last_data_row": 50,
+      "name": "2007-08 Data"
+    },
+    {
+      "data_rows_with_company": 84,
+      "first_data_row": 2,
+      "last_data_row": 85,
+      "name": "2008-09 Data"
+    },
+    {
+      "data_rows_with_company": 43,
+      "first_data_row": 2,
+      "last_data_row": 44,
+      "name": "2009-10 Data"
+    },
+    {
+      "data_rows_with_company": 30,
+      "first_data_row": 2,
+      "last_data_row": 31,
+      "name": "2010-11 Data"
+    },
+    {
+      "data_rows_with_company": 46,
+      "first_data_row": 2,
+      "last_data_row": 47,
+      "name": "2011-12 Data"
+    },
+    {
+      "data_rows_with_company": 101,
+      "first_data_row": 2,
+      "last_data_row": 102,
+      "name": "2012-13 Data"
+    },
+    {
+      "data_rows_with_company": 41,
+      "first_data_row": 2,
+      "last_data_row": 42,
+      "name": "2013-14 Data"
+    },
+    {
+      "data_rows_with_company": 37,
+      "first_data_row": 2,
+      "last_data_row": 38,
+      "name": "2014-15 Data"
+    },
+    {
+      "data_rows_with_company": 42,
+      "first_data_row": 2,
+      "last_data_row": 43,
+      "name": "2015-16 Data"
+    },
+    {
+      "data_rows_with_company": 36,
+      "first_data_row": 2,
+      "last_data_row": 37,
+      "name": "2016-17 Data"
+    },
+    {
+      "data_rows_with_company": 38,
+      "first_data_row": 2,
+      "last_data_row": 39,
+      "name": "2017-18 Data"
+    },
+    {
+      "data_rows_with_company": 106,
+      "first_data_row": 2,
+      "last_data_row": 107,
+      "name": "2018-19 Data"
+    }
+  ],
+  "source_url": "https://jobs.mo.gov/sites/g/files/zuston471/files/media/file/2026/03/WARN_Data1997-2018.xlsx",
+  "status": "pinned research evidence; no rows admitted"
+}

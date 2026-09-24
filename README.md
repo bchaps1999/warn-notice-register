@@ -1,22 +1,33 @@
 # WARN Notice Register
 
-A consolidated, normalized, deduplicated dataset of WARN Act layoff notices,
-refreshed automatically from ~47 state portals.
+A consolidated WARN Act notice dataset assembled from available state agency
+portals and archived source material. Coverage varies by state and period.
+
+**v1.0.0 data (September 24, 2026):** the checked-in source-only release
+contains **71,490 admitted notices, 79,261 versions, and 7,482,177 reported
+affected workers**. The database dump, national and state CSVs, and site build
+derive from the same pinned agency bundle. The [release notes](docs/release-v1-2026-09-24.md)
+explain the material coverage change from the previous main-branch data,
+including zero admitted Iowa and Kentucky notices, archive-only collectors,
+and other historical gaps. The [source bundle and replay report](data/source_snapshots/README.md)
+and [assembly contract](docs/rebuild-contract.md) define the evidence and
+rebuild checks. Counts are admitted source events, not an estimate of every
+WARN filing nationally.
 
 ## What this is
 
 The federal WARN Act requires employers to give 60 days' notice of qualifying
 plant closings and mass layoffs. Notices are filed with state agencies; there
-is no national feed. This pipeline scrapes every state that publishes online,
+is no national feed. This pipeline collects available state sources,
 normalizes each state's idiosyncratic format into one canonical schema,
 deduplicates and version-tracks notices, and commits the results here:
 
 - `data/warn.sql.gz` — the full database as a gzipped SQL dump (notices, versions, run telemetry); `warnlive unpack-db` restores the working sqlite file
 - `data/exports/warn_notices.csv` — one row per notice, all active states
 - `data/exports/states/{xx}.csv` — per-state cuts
-- `data/exports/notice_links.csv` — detected revision/duplicate links between notices
-- `data/health/health.md` — per-state pipeline health, updated every run
-- `data/health/dupes_review.csv` — gray-zone duplicate candidates for human review
+- `data/exports/notice_links.csv` — source-backed relationships, when established; v1.0.0 has no inferred links
+- `data/exports/source_observations.csv` — 974 verified Iowa/Louisiana agency observations with admission or exclusion status; the separate exception ledger accounts for other held source rows
+- `data/health/health.md` — a dated per-state collection snapshot, not proof that every configured adapter is currently healthy
 
 ## Data dictionary (`warn_notices.csv`)
 
@@ -25,7 +36,7 @@ deduplicates and version-tracks notices, and commits the results here:
 | `state` | Two-letter postal code |
 | `employer_name` | Employer as reported by the state |
 | `location` | City/location string as reported (formats vary by state) |
-| `notice_date` | Date the notice was filed/received (ISO-8601) |
+| `notice_date` | Source-supported notice date when its role is known (ISO-8601 or null) |
 | `effective_date` | First layoff/closure date (ISO-8601) |
 | `employees_affected` | Reported headcount (null when the state omits it) |
 | `layoff_type` | `closure`, `mass_layoff`, or `unknown` |
@@ -34,15 +45,34 @@ deduplicates and version-tracks notices, and commits the results here:
 | `is_amended` | We have observed more than one version of this notice |
 | `current_version` | Version count (see `notice_versions` in SQLite for history) |
 | `source_url` | The state portal the record came from |
-| `source_notice_id` | Content hash from the normalizer (not stable across amendments) |
-| `dedupe_key` | sha1(state \| normalized employer \| notice_date \| normalized location) |
-| `first_seen` | When this pipeline first observed the notice |
-| `last_seen` | Blank while the notice is still listed by its source (current as of the state's latest run — see `data/health/status.json`); a date once it disappears, marking the last run that listed it |
+| `source_notice_id` | Agency filing ID when available; otherwise a source-specific identifier or content hash |
+| `dedupe_key` | Internal stable record key; source-specific filing identity governs some states, so do not reconstruct it from employer/date/location |
+| `first_seen` | When this pipeline first observed the record; historical replay timestamps may describe the capture used in the build |
+| `last_seen` | Observation lifecycle marker where tracked; blank does not by itself prove the filing is still listed by the agency |
 
-Caveats: states disagree about what counts as a notice, how amendments are
-reported, and how employees are counted. Four states (AR, NH, WV, WY) publish
-nothing online and are absent. Coverage per state starts at whatever history
-its portal exposes; see `data/health/status.json` for per-state status.
+Additional columns retain filed and derived facts: `normalized_name`,
+`canonical_name`, `canonical_basis`, and `employer_key` support employer
+navigation; `industry`, `naics`, `naics_basis`, `naics_level`, `sic`, and
+`sic_description` describe industry evidence; `cik`, `ticker`, `cik_match`,
+`ein`, `ntee`, `lei`, `wikidata_qid`, `wikidata_match`, `parent_company`,
+`parent_cik`, and `identity_source` are optional identity annotations, not
+proof of ownership at the filing date. `place_name`, `place_fips`,
+`county_name`, `county_fips`, `latitude`, `longitude`, and `geo_basis` are
+optional resolved geography; `site_address` is the reported worksite address
+when supported. `notice_date_precision` and `notice_date_basis` qualify the
+legal notice date; `effective_date_precision`, `effective_date_basis`,
+`effective_date_end`, `effective_date_end_precision`, and
+`effective_date_end_basis` qualify reported action dates and intervals.
+`source_identity` and `source_details` preserve source-specific identity and
+structured facts. Empty values mean the corresponding fact is not established
+in this export.
+
+Caveats: jurisdictions disagree about what counts as a notice, how amendments
+are reported, and how employees are counted. Arkansas, New Hampshire,
+West Virginia, and Wyoming have no supported notice-level source in this
+register; Puerto Rico is likewise absent. Coverage per jurisdiction starts
+at whatever supported source history is available; see
+`data/health/status.json` for the collection snapshot.
 
 ## How it works
 
@@ -61,15 +91,11 @@ fetch (per state)  ->  normalize  ->  verify  ->  ingest (SQLite)  ->  export
   success, row counts, header-drift against a snapshot, parse-failure rate,
   employer coverage, date sanity, freshness, duplicate-key rate. A state that
   fails does not ingest; the health report says why.
-- **Revision/duplicate links**: beyond the exact dedupe key, `warnlive dupes`
-  links notices that are revisions or likely duplicates of one another —
-  name markers ("(Amended)", "2nd notice"), source-declared amendments,
-  same-employer refilings within 45 days at the same location, and fuzzy
-  spelling variants — scored with location, effective-date, and headcount
-  evidence. Notices are **linked, never merged**: `notice_links` in SQLite,
-  `notice_links.csv` in exports. Names with conflicting site identifiers
-  (store numbers, warehouse codes, roman numerals) are never linked, and
-  gray-zone pairs go to `dupes_review.csv` instead of the table.
+- **Notice relationships**: source-specific repairs can link notices when
+  preserved agency evidence establishes their relationship. `warnlive dupes`
+  removes legacy links inferred only from name similarity, nearby dates, or
+  amendment markers, then exports the remaining source-backed links. An
+  ambiguous pair is not linked or merged.
 - **Registry**: `warnlive/states.yaml` is the single source of truth for each
   state's adapter, thresholds, cadence, and human-controlled status
   (`unverified` → `active` / `broken`). Only active states enter exports.
@@ -85,7 +111,7 @@ source .venv/bin/activate
 warnlive verify ct               # live-check one state, no DB writes
 warnlive scrape ct il nj         # scrape, verify, ingest, export
 warnlive scrape --cadence weekly # everything active
-warnlive backfill                # historical data from BLN's warn-github-flow
+warnlive backfill-archives       # historical agency archive sources
 warnlive report --gh-issues      # open/close per-state health issues (CI)
 ```
 
@@ -112,91 +138,31 @@ Scheduled runs: `.github/workflows/scrape-daily.yml` (high-volume states) and
 enables the Zyte proxy for states behind aggressive bot protection (LA, TX
 fallback, MA fallback).
 
-### Rebuild from frozen sources (experimental)
+### Rebuild v1.0.0 from frozen agency sources
 
-Current state pages alone are not a complete historical input. Freeze the raw
-snapshots, saved backfills, and cached agency files before trying to rebuild:
+The source bundle freezes current state captures, agency archives, and
+reviewed original-source artifacts. Rebuild into an isolated path:
 
 ```bash
 python -m warnlive.migrate.source_bundle verify \
-  data/source_snapshots/2026-09-23-ia-la-official.tar.gz
+  data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz
 python -m warnlive.migrate.offline_rebuild \
-  --bundle data/source_snapshots/2026-09-23-ia-la-official.tar.gz \
-  --db /private/tmp/warn-rebuild-candidate.sqlite --observed-at 2026-09-22 \
-  --source-only --report /private/tmp/warn-rebuild-report.json
+  --bundle data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz \
+  --db /tmp/warn-v1.sqlite --observed-at 2026-09-24 --source-only \
+  --exceptions /tmp/warn-v1.exceptions.jsonl --report /tmp/warn-v1-report.json
 ```
 
-Source-only mode prioritizes official archived artifacts and saved state raw files,
-then fills older/empty-month gaps from BLN. It reports uncertain archive and
-BLN overlaps rather than automatically merging them; its output is an audit
-candidate, not publication-ready. It also writes a sorted, checksum-reported
-`<candidate>.exceptions.jsonl` with source references, original rows, and
-reasons for rejected or unresolved current raw, historical raw, archive, BLN,
-and official Louisiana PDF inputs. The report reconciles each input group to
-represented, coalesced, or exception rows; zero unaccounted rows does not imply
-all interpretations are correct.
-With the Iowa/Louisiana bundle, all 935 official Iowa workbook/PDF row
-observations also enter the exception ledger until their identities and
-amendment effects are reviewed; they are not added to active totals.
-
-Add `--compare-db data/warn.sqlite` only when comparing with a local database
-snapshot. The replay does not use the network or write to an existing database. The
-report includes stable-content SHA-256 fingerprints for notices, version
-payloads, and links, excluding database IDs and observation timestamps. The
-older September 22 bundle includes a transitional policy of historically
-accepted keys derived from the existing database. The September 23 source-only
-bundle omits that policy and adds two Louisiana official PDFs. The later
-Iowa/Louisiana bundle also freezes Iowa's current event-log workbook and a
-historical agency PDF without changing previously bundled source bytes. Iowa
-official rows are evidence-only until amendment and duplicate decisions are
-reviewed; their presence in the bundle does not yet add notices. The reviewed Louisiana
-overlay ingests 31 of their 38 notice rows, holds six IDEA/SafeSource rows for
-filing-level review, and excludes the rescinded UPS row from active totals.
-The annotation and held rows remain in the exception ledger; addresses with
-unverified roles are not assigned to counties.
-To inspect possible BLN counterparts without merging them, run
-`python -m warnlive.migrate.la_reconcile --bundle data/source_snapshots/2026-09-23-la-official.tar.gz --out /private/tmp/la-reconciliation.json`.
-Add `--db /path/to/candidate.sqlite` to audit how many canonical rows share
-each official notice's date and worker count; the database is opened read-only.
-The source-backed findings and decisions still needed are summarized in
-[`docs/la-source-review-2026-09.md`](docs/la-source-review-2026-09.md).
-The importer also quarantines GA, SC, and IA BLN rows consistently with its
-source-identity exception ledger. To inspect historical raw rows that share a
-candidate key but disagree on dates, workers, employer, or location, run the
-read-only field-level audit:
-
-```bash
-python -m warnlive.migrate.overlap_audit \
-  --bundle data/source_snapshots/2026-09-23-la-official.tar.gz \
-  --db /path/to/candidate.sqlite \
-  --report /path/to/new-overlap-report.json \
-  --ledger /path/to/new-overlap-ledger.jsonl
-```
-
-Differences in this ledger are review evidence, not automatic corrections;
-older captures and later source-backed repairs may legitimately disagree.
-For Iowa, generate the separate read-only BLN-to-raw correspondence report:
-
-```bash
-python -m warnlive.migrate.ia_reconcile \
-  --bundle data/source_snapshots/2026-09-23-ia-la-official.tar.gz \
-  --db /path/to/candidate.sqlite \
-  --out /path/to/new-ia-correspondence.json
-```
-
-The report retains row hashes and possible counterparts but does not turn a
-matching transcription, employer/date/worker signature, or content hash into
-a filing identity. When the bundle contains the official workbook it also
-reports correspondence for all 573 official observations. No Iowa BLN-only or
-new official row is admitted automatically.
-The resulting database is a candidate for source-first
-validation, **not** a replacement for the published database. See
-[`docs/rebuild-contract.md`](docs/rebuild-contract.md) for the acceptance
-criteria and [`docs/warn-remediation-2026-09.md`](docs/warn-remediation-2026-09.md)
-for measured historical differences. Matching the old database is diagnostic,
-not the objective; new LLM calls require a separate discussion first.
-For a reproducible site-data build from a candidate DB, pass
-`warnlive build-site --db /private/tmp/warn-rebuild-candidate.sqlite --out /private/tmp/warn-site-candidate --as-of 2026-09-22`.
+The replay uses no network or model calls. It accounts for admitted,
+coalesced, and excluded source rows; an excluded observation is a conservative
+outcome for the available evidence. Compare its stable content fingerprints,
+counts, and exception checksum to the pinned
+[replay report](data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1-report.json).
+The [release notes](docs/release-v1-2026-09-24.md) state the coverage limits
+and source-policy changes. `source_observations.csv` contains the verified
+Iowa/Louisiana observations; other held source rows are in the exception
+ledger. The [assembly contract](docs/rebuild-contract.md) defines the
+reconciliation checks. For a dated site build, pass
+`warnlive build-site --db /tmp/warn-v1.sqlite --out /tmp/warn-v1-site --as-of 2026-09-24`.
 
 To compare a newer live capture without overwriting an older source bundle,
 run `warnlive scrape ca nj --smoke --workdir /path/to/fresh`, then create a
@@ -240,21 +206,9 @@ like, since it is a weaker claim than the filed name supports outright.
 The filed name is still what gets displayed, and dedupe keys are built
 from it, so notices stay distinct even when their employer resolves.
 
-A refusal is not always an absence, though: often a rule saw a plausible
-registrant and lacked a tiebreaker. `warnlive identity-review` writes
-those near-misses to `data/health/identity_review.csv` — the candidate,
-its filing era, the gate that rejected it, and how many workers ride on
-the answer — for a human or a model to adjudicate from the same facts.
-
-Decisions come back in `data/reference/identity_overrides.csv`:
-
-| Column | Meaning |
-|---|---|
-| `normalized_name` | The employer name as normalized (the review file's first column) |
-| `cik` / `ein` / `lei` / `wikidata_qid` | Whichever identifiers were decided |
-| `decided_by` | Who or what decided (a person, a model, a ticket) |
-| `decided_at` | When |
-| `note` | Why — the evidence that settled it |
+A name that lacks one unambiguous match retains its filed employer name
+and leaves the unsupported identifiers blank. The notice itself remains
+eligible when its source and event identity are established.
 
 ### Where a notice happened
 
@@ -263,8 +217,8 @@ county, a street address, several sites in one field — so `location` on
 its own joins to nothing. `warnlive/enrich/places.py` resolves it against
 the Census rosters of places, counties and townships, adding
 `place_name`, `place_fips`, `county_name`, `county_fips`, `latitude`,
-`longitude` and `geo_basis` to every export. 79% of notices reach a
-county FIPS code, which is the key that joins to BLS and Census data.
+`longitude` and `geo_basis` to every export when the source and Census
+roster establish a place. County FIPS codes can join to BLS and Census data.
 
 `places-refresh` rebuilds `data/reference/places.csv.gz` from four Census
 files. Three are rosters; the fourth is county boundaries, needed because
@@ -287,78 +241,8 @@ to nothing: reading "2323 KENNEDY DRIVE JANESVILLE, WI 53547" against
 Illinois would place the layoff in the Janesville Illinois has, which is a
 wrong answer given confidently rather than a missing one.
 
-Local knowledge that no roster carries goes in
-`data/reference/place_aliases.csv` — NYC boroughs, Los Angeles
-neighbourhoods, abbreviations states use. A `kind` of `county` says the
-alias can only be placed at county level, as for an unincorporated
-community that is in no city at all. An alias may name a whole filed
-string rather than a name inside it, which is the only way to place
-something like "O'HARE INTERNATIONAL AIRPORT CHICAGO, IL 60666", where no
-segment is a place and no rule will make one. A `decision` of `reject`
-records that a string names no geography at all, so it stops returning to
-the review file; it grants nothing.
-
-`places-refresh` also writes `data/health/places_review.csv`, every
-unresolved location ranked by workers at stake; much of the top of that
-file is Kansas, Vermont, Maine and Oklahoma filing against workforce
-investment areas, which are not places and never resolve.
-
-Overrides outrank every automatic tier and are reported as
-`identity_source=override` in exports, so an adjudication can always be
-audited or revoked. Nothing in the pipeline writes these files by itself;
-no adjudication is ever inferred.
-
-### Adjudication
-
-Each of those review files is a queue of things no rule can settle,
-because settling them needs knowledge the corpus does not contain. `warnlive
-adjudicate` works those queues with a model, and every proposal is judged by
-the same code that refused in the first place:
-
-```bash
-warnlive adjudicate places               # unresolved locations
-warnlive adjudicate identity             # unidentified employers
-warnlive adjudicate industry --calibrate # measure before trusting
-warnlive adjudicate industry             # then assign sectors
-```
-
-The model proposes; it never rewrites. A location alias is written into the
-table and the resolver is run again on the original string — either it now
-names a real Census place or the proposal is worth nothing, so an invented
-city fails on the gazetteer rather than on anything the prompt said. A
-proposed registrant must clear the unmodified EDGAR matcher and then be
-corroborated at least twice by evidence the proposal never saw: the filing
-calendar, a parent's Exhibit 21, the state-published industry, the IRS or
-GLEIF rosters. Anything unproven is staged under `data/health/*_adjudicated.csv`
-for a person instead of being written.
-
-A subsidiary becomes a parent link in
-`data/reference/subsidiary_overrides.csv`, never an identity: First Transit
-is owned by FirstGroup and is not FirstGroup, and writing the parent's CIK
-into its identity would conflate the two in every join made afterwards. For
-the same reason an employer that its own proposed registrant lists in
-Exhibit 21 is refused — a company does not appear in its own subsidiary
-schedule.
-
-Industry is the one queue with no authority to check an answer against, so
-its threshold is measured rather than chosen. `--calibrate` classifies the
-employers whose industry a state already published, with the label hidden,
-and writes precision at each confidence cut to
-`data/health/industry_calibration.csv`. Scoring is per employer, never per
-notice. Adjudicated sectors are reported as `naics_basis=adjudicated`,
-ranked below every basis tracing back to an authority.
-
-Every question and answer is appended to
-`data/reference/adjudications.jsonl.gz`, keyed by task, row, prompt version
-and model. A rerun replays it and calls nothing; `--dry-run` re-judges those
-stored answers through today's gates, which is how a change to a gate is
-checked before any money is spent. Refusals are recorded too — that is what
-stops an unanswerable row returning on every refresh.
-
-This runs by hand and never in CI: scheduled scrapes read reference files
-and contact no model. The provider is a base URL and a key name in
-`warnlive/adjudicate/providers.yaml` (DeepSeek by default, needs
-`DEEPSEEK_API_KEY`), so changing models is a flag and changing vendors is a
-config edit. `--budget` caps spending and is checked before each call; a
-model with no prices on file reports tokens and an unknown cost rather than
-a confidently wrong one.
+Locations that the Census roster and source fields cannot place retain
+the filed `location` text and leave derived place and county fields blank.
+Unknown geography does not exclude a source-identifiable notice. Historical
+model decisions and review outputs are preserved under
+`data/archive/retired-adjudication/` and are not loaded by the pipeline.

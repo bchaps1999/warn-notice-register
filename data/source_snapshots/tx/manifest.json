@@ -1,0 +1,156 @@
+{
+  "artifacts": [
+    {
+      "bytes": 82867,
+      "columns": 9,
+      "data_rows": 1209,
+      "headers": [
+        "NOTICE_DATE",
+        "JOB_SITE_NAME",
+        "COUNTY_NAME",
+        "WDA_NAME",
+        "TOTAL_LAYOFF_NUMBER",
+        "LayOff_Date",
+        "WFDD_RECEIVED_DATE",
+        "CITY_NAME"
+      ],
+      "max_row": 1210,
+      "path": "2020.xlsx",
+      "sha256": "1f400545fe625b0265913b4913978d4bd94d4af92706a7288ee9595140ee06e1",
+      "sheet": "qry_Public_Information_Report_W",
+      "source_url": "https://www.twc.texas.gov/sites/default/files/oei/docs/warn-act-listings-2020-twc.xlsx",
+      "year": 2020
+    },
+    {
+      "bytes": 21209,
+      "columns": 8,
+      "data_rows": 123,
+      "headers": [
+        "NOTICE_DATE",
+        "JOB_SITE_NAME",
+        "COUNTY_NAME",
+        "WDA_NAME",
+        "TOTAL_LAYOFF_NUMBER",
+        "LayOff_Date",
+        "WFDD_RECEIVED_DATE",
+        "CITY_NAME"
+      ],
+      "max_row": 124,
+      "path": "2021.xlsx",
+      "sha256": "bd28d292125f430e8bbe36ac4df6594503415a84329c90c30a26afd18ce2141d",
+      "sheet": "qry_Public_Information_Report_W",
+      "source_url": "https://www.twc.texas.gov/sites/default/files/oei/docs/warn-act-listings-2021-twc.xlsx",
+      "year": 2021
+    },
+    {
+      "bytes": 15083,
+      "columns": 8,
+      "data_rows": 86,
+      "headers": [
+        "NOTICE_DATE",
+        "JOB_SITE_NAME",
+        "COUNTY_NAME",
+        "WDA_NAME",
+        "TOTAL_LAYOFF_NUMBER",
+        "LayOff_Date",
+        "WFDD_RECEIVED_DATE",
+        "CITY_NAME"
+      ],
+      "max_row": 87,
+      "path": "2022.xlsx",
+      "sha256": "855ebb054212ef1ad27b6f4aaac6cd891a53ca2b276bd71df006cf1656d220fb",
+      "sheet": "Sheet1",
+      "source_url": "https://www.twc.texas.gov/sites/default/files/oei/docs/warn-act-listings-2022-twc.xlsx",
+      "year": 2022
+    },
+    {
+      "bytes": 24083,
+      "columns": 10,
+      "data_rows": 225,
+      "headers": [
+        "NOTICE_DATE",
+        "JOB_SITE_NAME",
+        "COUNTY_NAME",
+        "WDA_NAME",
+        "TOTAL_LAYOFF_NUMBER",
+        "LayOff_Date",
+        "WFDD_RECEIVED_DATE",
+        "CITY_NAME"
+      ],
+      "max_row": 226,
+      "path": "2023.xlsx",
+      "sha256": "41158ac1badaa08c9b569fd4b8351a437ef3cc489a6b1b908b42ba4bc4354777",
+      "sheet": "Sheet1",
+      "source_url": "https://www.twc.texas.gov/sites/default/files/oei/docs/warn-act-listings-2023-twc.xlsx",
+      "year": 2023
+    },
+    {
+      "bytes": 46006,
+      "columns": 8,
+      "data_rows": 464,
+      "headers": [
+        "NOTICE_DATE",
+        "JOB_SITE_NAME",
+        "COUNTY_NAME",
+        "WDA_NAME",
+        "TOTAL_LAYOFF_NUMBER",
+        "LayOff_Date",
+        "WFDD_RECEIVED_DATE",
+        "CITY_NAME"
+      ],
+      "max_row": 465,
+      "path": "2024.xlsx",
+      "sha256": "26f8c125e37a5b36267812225a036cac164e1933b2a7e0cd04153f620d50a4e4",
+      "sheet": "Sheet1",
+      "source_url": "https://www.twc.texas.gov/sites/default/files/oei/docs/warn-act-listings-2024-twc.xlsx",
+      "year": 2024
+    },
+    {
+      "bytes": 49071,
+      "columns": 22,
+      "data_rows": 289,
+      "headers": [
+        "NOTICE_DATE",
+        "JOB_SITE_NAME",
+        "COUNTY_NAME",
+        "WDA_NAME",
+        "TOTAL_LAYOFF_NUMBER",
+        "LayOff_Date",
+        "WFDD_RECEIVED_DATE",
+        "CITY_NAME"
+      ],
+      "max_row": 754,
+      "path": "2025.xlsx",
+      "sha256": "a37bb622931eafc051a638fc4e4209508a1959a9caace320b95f30ae71a21278",
+      "sheet": "Sheet1",
+      "source_url": "https://www.twc.texas.gov/sites/default/files/oei/docs/warn-act-listings-2025-twc.xlsx",
+      "year": 2025
+    },
+    {
+      "bytes": 23049,
+      "columns": 10,
+      "data_rows": 79,
+      "headers": [
+        "NOTICE_DATE",
+        "JOB_SITE_NAME",
+        "COUNTY_NAME",
+        "WDA_NAME",
+        "TOTAL_LAYOFF_NUMBER",
+        "LayOff_Date",
+        "WFDD_RECEIVED_DATE",
+        "CITY_NAME"
+      ],
+      "max_row": 80,
+      "path": "2026.xlsx",
+      "sha256": "938fc4560099518ecfaba830f0c25280742e5a214a779ca750a52bdf3ac01471",
+      "sheet": "Sheet1",
+      "source_url": "https://www.twc.texas.gov/sites/default/files/oei/docs/warn-act-listings-2026-twc.xlsx",
+      "year": 2026
+    }
+  ],
+  "format": "warn-tx-annual-artifacts-v1",
+  "raw_csv_bytes": 892732,
+  "raw_csv_sha256": "9c3989392d65a241cf8acd66cfacb2a9e1eb8412242c24acdfe1d5c5217a454c",
+  "source_page_snapshot_sha256": "f8f942265e93085d49139326176811979adc1a3a9982ef1d88b94803d0379f8b",
+  "source_page_url": "https://www.twc.texas.gov/data-reports/warn-notice"
+}

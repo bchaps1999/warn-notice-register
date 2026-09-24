@@ -1,0 +1,11 @@
+{
+  "bytes": 603135,
+  "description": "TWC-supplied 2021-08; secondary-hosted exact copy",
+  "file": "tx_historical.xlsx",
+  "format": "agency-sent-historical-workbook-v1",
+  "provenance_url": "https://warn-scraper.readthedocs.io/en/latest/scrapers/tx.html",
+  "retrieved_on_utc": "2026-09-24",
+  "sha256": "0ee280d92a7091d281b6bf8e43a84f38c27bebda3a493545d1cc22a9a799cfc8",
+  "source_url": "https://storage.googleapis.com/bln-data-public/warn-layoffs/tx_historical.xlsx",
+  "status": "pinned source evidence; row admission requires reconciliation"
+}

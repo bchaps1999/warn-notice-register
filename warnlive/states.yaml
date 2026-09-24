@@ -140,7 +140,7 @@ de:
 
 fl:
   name: Florida
-  source: upstream
+  source: patched
   status: active
   tier: hard
   cadence: daily
@@ -149,14 +149,14 @@ fl:
   staleness_days: 45
   expected_columns: [Company Name, State Notification Date, Layoff Date, Employees Affected, Industry]
   source_url: https://reactwarn.floridajobs.org/WarnList/
-  notes: "HTML list + per-notice PDFs. Upstream issue #719; ongoing browser-detection workarounds."
+  notes: "Year-specific 2015–2018 PDFs and 2019-onward REACT HTML pages; direct endpoint patch bypasses the broken landing-page year selector. Live fetch verification remains required."
 
 ga:
   name: Georgia
   source: upstream
-  status: active
+  status: archive
   tier: medium
-  cadence: weekly
+  cadence: null
   needs_browser: false
   min_rows: 100
   staleness_days: 120
@@ -225,9 +225,9 @@ in:
 ia:
   name: Iowa
   source: upstream
-  status: active
+  status: archive
   tier: medium
-  cadence: weekly
+  cadence: null
   needs_browser: false
   min_rows: 50
   staleness_days: 180
@@ -251,9 +251,9 @@ ks:
 ky:
   name: Kentucky
   source: upstream
-  status: active
+  status: archive
   tier: medium
-  cadence: weekly
+  cadence: null
   needs_browser: false
   min_rows: 100
   staleness_days: 120
@@ -492,11 +492,11 @@ oh:
   tier: medium
   cadence: daily
   needs_browser: false
-  min_rows: 200
+  min_rows: 40
   staleness_days: 60
   expected_columns: [Company, Date Received, URL, City/County, Layoff/Closure, Potential Number Affected, Layoff Date(s), Phone Number, Union, Notice ID]
   source_url: https://jfs.ohio.gov/job-services-and-unemployment/job-services/job-programs-and-services/submit-a-warn-notice/current-public-notices-of-layoffs-and-closures
-  notes: "HTML list; page URL moves periodically. Historical CSV mirror exists."
+  notes: "HTML list; page URL moves periodically. BLN historical mirror is excluded from agency-only captures."
 
 ok:
   name: Oklahoma
@@ -514,9 +514,9 @@ ok:
 or:
   name: Oregon
   source: upstream
-  status: active
+  status: archive
   tier: medium
-  cadence: weekly
+  cadence: null
   needs_browser: false
   min_rows: 100
   staleness_days: 120
@@ -595,15 +595,15 @@ sd:
 tn:
   name: Tennessee
   source: upstream
-  status: active
+  status: archive
   tier: medium
-  cadence: weekly
+  cadence: null
   needs_browser: false
-  min_rows: 100
+  min_rows: 60
   staleness_days: 120
   expected_columns: [Notice Date, Effective Date, Received Date, Company, City, County, No. Of Employees, Layoff/Closure, Notice ID]
   source_url: https://www.tn.gov/workforce/general-resources/major-publications0/major-publications-redirect/reports.html
-  notes: "Reports page; historical CSV mirror."
+  notes: "Agency page yields about 92 current rows; BLN historical mirror is excluded. Collector paused until agency-only adapter is available."
 
 tx:
   name: Texas

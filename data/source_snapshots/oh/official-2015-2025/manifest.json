@@ -1,0 +1,86 @@
+{
+  "admission_status": "research-pinned; projection pending",
+  "agency": "Ohio Department of Job and Family Services",
+  "files": [
+    {
+      "bytes": 94059,
+      "capture_url": "https://web.archive.org/web/20200510102316id_/http://jfs.ohio.gov/warn/WARN2015.stm",
+      "file": "WARN2015.pdf",
+      "format": "pdf",
+      "original_agency_url": "http://jfs.ohio.gov/warn/WARN2015.stm",
+      "pages": 6,
+      "sha256": "6ac46aa5ec9e7f06c0a62267338f96054699a141377d7f3e11240831e65d094f",
+      "year": 2015
+    },
+    {
+      "bytes": 112738,
+      "capture_url": "https://web.archive.org/web/20200510102317id_/http://jfs.ohio.gov/warn/WARN2016.stm",
+      "file": "WARN2016.pdf",
+      "format": "pdf",
+      "original_agency_url": "http://jfs.ohio.gov/warn/WARN2016.stm",
+      "pages": 9,
+      "sha256": "8d82c62af53a6363827dc18aac1fc3c3818f9b5984454eb8b13a7dfe41e2af5a",
+      "year": 2016
+    },
+    {
+      "bytes": 113606,
+      "capture_url": "https://web.archive.org/web/20200510102313id_/http://jfs.ohio.gov/warn/WARN2017.stm",
+      "file": "WARN2017.pdf",
+      "format": "pdf",
+      "original_agency_url": "http://jfs.ohio.gov/warn/WARN2017.stm",
+      "pages": 4,
+      "sha256": "2b15fa6cea5f5520ed5c6855d89ee5d5fa9b719db7e3132c5404061345f18e5d",
+      "year": 2017
+    },
+    {
+      "bytes": 432063,
+      "capture_url": "https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN2018.pdf",
+      "file": "WARN2018.pdf",
+      "format": "pdf",
+      "original_agency_url": "https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN2018.pdf",
+      "pages": 4,
+      "sha256": "4f3a7404faf917da5e26276ba228b64b138f6e22b8659377e8fef454039755ac",
+      "year": 2018
+    },
+    {
+      "bytes": 461113,
+      "capture_url": "https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN2019.pdf",
+      "file": "WARN2019.pdf",
+      "format": "pdf",
+      "original_agency_url": "https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN2019.pdf",
+      "pages": 5,
+      "sha256": "5aaf1adfa2852bc2158730d24d95e2a43f0aa6d3ad4698c6d14b67193b7b72f8",
+      "year": 2019
+    },
+    {
+      "bytes": 477561,
+      "capture_url": "https://web.archive.org/web/20210429023021id_/https://jfs.ohio.gov/warn/archive.stm?year=2020",
+      "file": "WARN2020.html",
+      "format": "html",
+      "original_agency_url": "https://jfs.ohio.gov/warn/archive.stm?year=2020",
+      "sha256": "5437fa56779f27ecf5df4ce1df98fd4ab00ab48ac8c3263e3c0e37f6648e65fe",
+      "year": 2020
+    },
+    {
+      "bytes": 522387,
+      "capture_url": "https://web.archive.org/web/20220521120840id_/https://jfs.ohio.gov/warn/archive.stm?year=2021",
+      "file": "WARN2021.html",
+      "format": "html",
+      "original_agency_url": "https://jfs.ohio.gov/warn/archive.stm?year=2021",
+      "sha256": "0f7a1689233dd94267f0d847244e9613939d0d70e6df2f2a4d115531c31d24f5",
+      "year": 2021
+    },
+    {
+      "bytes": 108509,
+      "capture_url": "https://web.archive.org/web/20230504193636id_/https://jfs.ohio.gov/warn/archive.stm?year=2022",
+      "file": "WARN2022.html",
+      "format": "html",
+      "original_agency_url": "https://jfs.ohio.gov/warn/archive.stm?year=2022",
+      "sha256": "52d9f3ece5a102184061befe8deeda727590299e8ea5511999d80bef38c3fad9",
+      "year": 2022
+    }
+  ],
+  "format": "oh-agency-annual-source-v1",
+  "observed_utc_date": "2026-09-24",
+  "scope": "2015-2022 annual tables; PDFs may contain spillover prior-year IDs; 2020-22 HTML table rows include amendments"
+}

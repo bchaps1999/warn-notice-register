@@ -32,10 +32,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
       - name: Install
         run: ./install.sh
       - name: Unpack database
         run: .venv/bin/warnlive unpack-db
+      - name: Run Python tests and data checks
+        run: |
+          .venv/bin/python -m pytest tests/ -q
+          .venv/bin/warnlive check-regressions
       - uses: ./.github/actions/deploy-site
         id: deploy

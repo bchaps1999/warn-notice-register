@@ -291,6 +291,29 @@ def _fl_date(value: str) -> str | None:
     return None
 
 
+_FL_DATE_TOKEN = r"\d{1,2}/\d{1,2}/\d{2,4}"
+_FL_THRU_RANGE = re.compile(
+    rf"^\s*({_FL_DATE_TOKEN})\s+thru\s+({_FL_DATE_TOKEN})\s*$",
+    re.IGNORECASE,
+)
+
+
+def _fl_effective_dates(value: str) -> tuple[str | None, str | None]:
+    """Return Florida's layoff date or an explicitly ordered date interval.
+
+    Reversed ``thru`` pairs are retained in the raw source row, but are not
+    promoted to a canonical start/end interval pending source review.
+    """
+    value = (value or "").strip()
+    match = _FL_THRU_RANGE.fullmatch(value)
+    if match:
+        start, end = (_fl_date(token) for token in match.groups())
+        if start is None or end is None or start > end:
+            return None, None
+        return start, end
+    return _fl_date(value), None
+
+
 def fetch_fl(cache_dir: Path) -> list[dict]:
     records: list[dict] = []
     for year in FL_YEARS:
@@ -320,6 +343,12 @@ def fetch_fl(cache_dir: Path) -> list[dict]:
         if table is None:
             logger.warning("FL %s: no notice table in capture; skipping", year)
             continue
+        header = [" ".join(cell.get_text(" ", strip=True).upper().split())
+                  for cell in table.find("tr").find_all(["td", "th"])]
+        expected_header = ["COMPANY NAME", "NOTICE DATE", "LAYOFF DATE",
+                           "EMPLOYEES AFFECTED", "INDUSTRY"]
+        if header[:5] != expected_header:
+            raise ValueError(f"FL {year} archive date column order changed: {header!r}")
 
         n = 0
         for row in table.find_all("tr")[1:]:
@@ -337,6 +366,18 @@ def fetch_fl(cache_dir: Path) -> list[dict]:
                     cells,
                 )
             )
+            effective_date, effective_date_end = _fl_effective_dates(cells[2])
+            date_details = {
+                "date_evidence_rule": "fl_archive_html_notice_layoff_v1",
+                "notice_date_source_field": "NOTICE DATE",
+                "effective_date_source_field": "LAYOFF DATE",
+                "effective_date_interpretation": "interval" if effective_date_end else "point",
+            }
+            range_match = _FL_THRU_RANGE.fullmatch(cells[2].strip())
+            if range_match and effective_date is None:
+                range_dates = tuple(_fl_date(token) for token in range_match.groups())
+                if all(range_dates) and range_dates[0] > range_dates[1]:
+                    date_details["effective_date_end_status"] = "before_start_review"
             records.append(
                 _canonical(
                     {
@@ -344,7 +385,15 @@ def fetch_fl(cache_dir: Path) -> list[dict]:
                         "employer_name": cells[0],
                         "location": None,
                         "notice_date": notice_date,
-                        "effective_date": _fl_date(cells[2]),
+                        "notice_date_precision": "day",
+                        "notice_date_basis": "reported",
+                        "effective_date": effective_date,
+                        "effective_date_end": effective_date_end,
+                        "effective_date_precision": "day" if effective_date else None,
+                        "effective_date_basis": "reported" if effective_date else None,
+                        "effective_date_end_precision": "day" if effective_date_end else None,
+                        "effective_date_end_basis": "reported" if effective_date_end else None,
+                        "source_details": json.dumps(date_details, sort_keys=True),
                         "employees_affected": int(jobs) if jobs else None,
                         "layoff_type": "unknown",
                         "source_url": url,
@@ -458,9 +507,9 @@ def fetch_ma(cache_dir: Path) -> list[dict]:
     for sheet in wb.sheets():
         for r in range(sheet.nrows):
             row = [sheet.cell_value(r, c) for c in range(sheet.ncols)]
-            notice_date = cell_date(row[0])
+            received_date = cell_date(row[0])
             company = str(row[1]).strip()
-            if notice_date is None or not company or company == "Company Name":
+            if received_date is None or not company or company == "Company Name":
                 continue
             jobs = re.sub(r"[^\d]", "", str(row[4]).split(".")[0])
             records.append(
@@ -469,12 +518,22 @@ def fetch_ma(cache_dir: Path) -> list[dict]:
                         "state": "MA",
                         "employer_name": company,
                         "location": str(row[2]).strip(),
-                        "notice_date": notice_date,
+                        "notice_date": None,
                         "effective_date": cell_date(row[3]),
                         "employees_affected": int(jobs) if jobs else None,
                         "layoff_type": "unknown",
                         "is_amendment": int(company.upper().startswith("UPDATED")),
                         "source_url": MA_FY2020_URL,
+                        "source_details": json.dumps({
+                            "agency_received_date": received_date,
+                            "legacy_notice_key_date": received_date,
+                            "date_evidence_rule": "ma_fy2020_agency_received_role_v1",
+                            "dates": [{
+                                "role": "agency_received", "source_field": "Date Received",
+                                "source_text": str(row[0]), "date": received_date,
+                                "precision": "day", "basis": "reported",
+                            }],
+                        }, sort_keys=True),
                     },
                     {
                         "region_sheet": sheet.name,

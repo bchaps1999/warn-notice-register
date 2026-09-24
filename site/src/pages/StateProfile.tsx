@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { useStateData } from "../lib/hooks";
+import { useMeta, useStateData } from "../lib/hooks";
 import type { TopEmployer } from "../lib/types";
 import { date, num } from "../lib/format";
 import { StatTile } from "../components/ui/StatTile";
@@ -14,11 +14,15 @@ import { NotFound } from "./NotFound";
 export function StateProfile() {
   const { xx } = useParams();
   const { data, error } = useStateData(xx);
+  const { data: meta } = useMeta();
   if (error) return error.includes("404") ? <NotFound /> : <ErrorNote message={error} />;
   if (!data) return <Skeleton lines={8} />;
 
-  const anchor = data.coverage.latest ?? "2026-01-01";
-  const healthy = data.health.latest_verdict === "ok" || data.health.latest_verdict === "degraded";
+  const anchor = meta?.built_at.slice(0, 10) ?? data.coverage.latest ?? "2026-01-01";
+  const collectionStatus = data.health.latest_verdict === "ok" ? "OK"
+    : data.health.latest_verdict === "degraded" ? "Degraded"
+    : data.health.latest_verdict === "failed" ? "Failed"
+    : "Unknown";
 
   return (
     <div>
@@ -29,9 +33,9 @@ export function StateProfile() {
         </h2>
         <Stamp tone={data.source.status === "active" ? "neutral" : "oxide"}>
           {data.source.status === "active"
-            ? `Automated · ${data.source.cadence ?? "weekly"}`
+            ? `Configured · ${data.source.cadence ?? "weekly"}`
             : data.source.status === "archive"
-              ? "Archived data · source fetch blocked"
+              ? "Archived data"
               : data.source.status}
         </Stamp>
       </div>
@@ -39,17 +43,19 @@ export function StateProfile() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-8">
         <StatTile label="Notices on record" value={num(data.coverage.notices)} />
         <StatTile label="Records begin" value={data.coverage.earliest ? date(data.coverage.earliest) : "—"} />
-        <StatTile label="Most recent notice" value={data.coverage.latest ? date(data.coverage.latest) : "—"} />
+        <StatTile label="Latest dated record" value={data.coverage.latest ? date(data.coverage.latest) : "—"} />
         <StatTile
           label="Collection status"
-          value={healthy ? "Current" : data.health.latest_verdict ? "Failing" : "—"}
-          sub={data.health.last_success ? `last success ${date(data.health.last_success.slice(0, 10))}` : undefined}
+          value={collectionStatus}
+          sub={data.health.latest_run
+            ? `last checked ${date(data.health.latest_run.slice(0, 10))}${data.health.last_success ? ` · last success ${date(data.health.last_success.slice(0, 10))}` : ""}`
+            : "No collection run recorded"}
         />
       </div>
 
       {data.monthly.length > 0 && (
         <>
-          <SectionHeading>Notices filed by month</SectionHeading>
+          <SectionHeading>Notices by reported month</SectionHeading>
           <MonthlyTrend monthly={data.monthly} anchor={anchor} />
         </>
       )}

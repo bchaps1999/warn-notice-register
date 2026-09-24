@@ -6,7 +6,7 @@ import sqlite3
 from pathlib import Path
 
 SCHEMA_PATH = Path(__file__).parent / "schema.sql"
-SCHEMA_VERSION = 5  # v5: additive source-detail fields
+SCHEMA_VERSION = 9  # New databases omit model cleaning tables; legacy data stays intact
 
 DEFAULT_DB_PATH = Path("data/warn.sqlite")
 
@@ -26,6 +26,7 @@ def init_db(conn: sqlite3.Connection) -> None:
     _drop_last_seen_not_null(conn)
     _add_site_address(conn)
     _add_source_detail_columns(conn)
+    _add_effective_date_metadata_columns(conn)
     row = conn.execute("SELECT version FROM schema_version").fetchone()
     if row is None:
         conn.execute("INSERT INTO schema_version (version) VALUES (?)", (SCHEMA_VERSION,))
@@ -54,6 +55,17 @@ def _add_source_detail_columns(conn: sqlite3.Connection) -> None:
     for name in (
         "effective_date_end", "notice_date_precision", "notice_date_basis",
         "source_identity", "source_details",
+    ):
+        if cols and name not in cols:
+            conn.execute(f"ALTER TABLE notices ADD COLUMN {name} TEXT")
+
+
+def _add_effective_date_metadata_columns(conn: sqlite3.Connection) -> None:
+    """v7: distinguish verified start/end days from month or unknown dates."""
+    cols = {r["name"] for r in conn.execute("PRAGMA table_info(notices)")}
+    for name in (
+        "effective_date_precision", "effective_date_basis",
+        "effective_date_end_precision", "effective_date_end_basis",
     ):
         if cols and name not in cols:
             conn.execute(f"ALTER TABLE notices ADD COLUMN {name} TEXT")

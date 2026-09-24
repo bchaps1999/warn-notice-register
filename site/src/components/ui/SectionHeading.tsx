@@ -17,7 +17,7 @@ export function SectionHeading({
 }) {
   return (
     <div className={clsx(tight ? "mt-6 mb-3" : "mt-10 mb-4")}>
-      <div className="flex items-baseline justify-between gap-4">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
         <h2 className="smallcaps text-xs text-ink-muted">{children}</h2>
         {right}
       </div>

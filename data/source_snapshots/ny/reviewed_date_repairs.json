@@ -1,0 +1,34 @@
+[
+  {
+    "bln_row_sha256": "4b07074ec767a1f23fe107b5938577b4093a69b8e91e8d4442486afe50f2f7f9",
+    "bln_source_notice_id": "9dd74dc54994f5fc5b49539c70fe04d136a79430515226151a5b901f",
+    "expected_dedupe_key": "ce05dba624c3b38adb8a14cef63d8590f0e17863",
+    "expected_effective_date": null,
+    "expected_employer_name": "3E Logistics NJ, Inc.",
+    "expected_location": null,
+    "expected_notice_date": "2024-09-30",
+    "new_effective_date": "2024-09-30",
+    "new_effective_date_end": "2024-09-30",
+    "new_notice_date": "2024-09-16",
+    "official_document_path": "filings/3e-logistics-2024-0066.pdf",
+    "official_document_sha256": "7a80f7b8fdcf81c81d985b7d0d8a67aca58ed1b1c984b6d1bcee9f02e06418b5",
+    "official_row_sha256": "1fd90409210d1ac56b9c1455d2de0cdf8f69d6dc9a2b6878cdf82c565f71b184",
+    "official_source_row_id": "agency/ny/ny_warn_2024.csv:sha256:9de6dc6dbf82bb89ecee8577a0ac1fdaa83c0591d03f320b9f123abe8c61c0df:row:2:sha256:1fd90409210d1ac56b9c1455d2de0cdf8f69d6dc9a2b6878cdf82c565f71b184"
+  },
+  {
+    "bln_row_sha256": "92ac8c4e1215535800554a40257eccd71e2c20b49e93072a2c591b04ecfb3105",
+    "bln_source_notice_id": "374c4eb61056e8e785b6e49092109e88a1a2c9f48d1a85210d6dc677",
+    "expected_dedupe_key": "ffd1efeee4a5c7585f529804289d14b6f204dda3",
+    "expected_effective_date": null,
+    "expected_employer_name": "First Transit, Inc. a subsidiary of Transdev, North America Inc.",
+    "expected_location": null,
+    "expected_notice_date": "2024-03-27",
+    "new_effective_date": "2024-06-30",
+    "new_effective_date_end": "2024-06-30",
+    "new_notice_date": "2024-03-21",
+    "official_document_path": "filings/first-transit-2023-0298.pdf",
+    "official_document_sha256": "f54f17da946d75673e48a837d537d666baf5c0e92616a91618cc4cfbe7dab46e",
+    "official_row_sha256": "45e7272f3704e04229fd99e876e13c0154badc6fc8ebbbd46d740b87f65aa751",
+    "official_source_row_id": "agency/ny/ny_warn_2024.csv:sha256:9de6dc6dbf82bb89ecee8577a0ac1fdaa83c0591d03f320b9f123abe8c61c0df:row:101:sha256:45e7272f3704e04229fd99e876e13c0154badc6fc8ebbbd46d740b87f65aa751"
+  }
+]

@@ -1,4 +1,4 @@
-import { FLAG_PUBLIC } from "./types";
+import { FLAG_PUBLIC, FLAG_UNDATED } from "./types";
 import type { NoticeIndex } from "./types";
 
 export interface Filters {
@@ -7,6 +7,7 @@ export interface Filters {
   type: string; // closure|mass_layoff|unknown|""
   from: string; // YYYY-MM-DD or ""
   to: string;
+  dateBasis: "notice" | "layoff";
   minJobs: number | null;
   sector: string; // NAICS sector code or ""
   county: string; // county FIPS or ""
@@ -23,6 +24,7 @@ export const DEFAULT_FILTERS: Filters = {
   type: "",
   from: "",
   to: "",
+  dateBasis: "notice",
   minJobs: null,
   sector: "",
   county: "",
@@ -40,6 +42,7 @@ export function filtersFromParams(p: URLSearchParams): Filters {
     type: p.get("type") ?? "",
     from: p.get("from") ?? "",
     to: p.get("to") ?? "",
+    dateBasis: p.get("basis") === "layoff" ? "layoff" : "notice",
     minJobs: p.get("minJobs") ? Number(p.get("minJobs")) : null,
     sector: p.get("sector") ?? "",
     county: p.get("county") ?? "",
@@ -58,6 +61,7 @@ export function paramsFromFilters(f: Filters): URLSearchParams {
   if (f.type) p.set("type", f.type);
   if (f.from) p.set("from", f.from);
   if (f.to) p.set("to", f.to);
+  if (f.dateBasis !== "notice") p.set("basis", f.dateBasis);
   if (f.minJobs !== null) p.set("minJobs", String(f.minJobs));
   if (f.sector) p.set("sector", f.sector);
   if (f.county) p.set("county", f.county);
@@ -98,7 +102,8 @@ export function applyFilters(
   for (let i = 0; i < index.count; i++) {
     if (stateIdx >= 0 && state[i] !== stateIdx) continue;
     if (typeIdx >= 0 && type[i] !== typeIdx) continue;
-    const d = date[i];
+    const d = f.dateBasis === "layoff" ? index.columns.effective[i] :
+      (flags[i] & FLAG_UNDATED ? null : date[i]);
     if (f.from && (!d || d < f.from)) continue;
     if (f.to && (!d || d > f.to)) continue;
     if (f.minJobs !== null && (jobs[i] ?? -1) < f.minJobs) continue;
@@ -113,7 +118,8 @@ export function applyFilters(
 }
 
 function sortRows(index: NoticeIndex, rows: number[], sort: SortKey, dir: "asc" | "desc") {
-  const { date, effective, employer, jobs, state } = index.columns;
+  const { date, effective, employer, jobs, state, flags } = index.columns;
+  const noticeDate = (i: number) => flags[i] & FLAG_UNDATED ? "" : date[i] ?? "";
   const sign = dir === "asc" ? 1 : -1;
   const cmp: (a: number, b: number) => number =
     sort === "employer"
@@ -123,8 +129,8 @@ function sortRows(index: NoticeIndex, rows: number[], sort: SortKey, dir: "asc" 
         : sort === "effective"
           ? (a, b) => (effective[a] ?? "").localeCompare(effective[b] ?? "")
         : sort === "state"
-          ? (a, b) => state[a] - state[b] || (date[b] ?? "").localeCompare(date[a] ?? "")
-          : (a, b) => (date[a] ?? "").localeCompare(date[b] ?? "");
+          ? (a, b) => state[a] - state[b] || noticeDate(b).localeCompare(noticeDate(a))
+          : (a, b) => noticeDate(a).localeCompare(noticeDate(b));
   rows.sort((a, b) => sign * cmp(a, b) || a - b);
 }
 

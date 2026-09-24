@@ -133,7 +133,6 @@ export const NAICS_BASIS_LABEL: Record<string, string> = {
   "sec-sic": "from the SEC's industry for this filer",
   ntee: "from the IRS activity code",
   "parent-sic": "from the corporate parent's SEC industry",
-  adjudicated: "inferred from the employer's name",
   employer: "from this employer's other notices",
 };
 

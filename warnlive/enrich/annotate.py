@@ -28,11 +28,10 @@ can tell a published code from an inferred one.
 
 from __future__ import annotations
 
-from warnlive.enrich import gleif, nonprofits, review, subsidiaries
+from warnlive.enrich import gleif, nonprofits, subsidiaries
 from warnlive.enrich.edgar import REFERENCE_PATH, Matcher, load_sic
 from warnlive.enrich.industry import (
     industry_from_fields_json,
-    load_industry_overrides,
     load_sic_naics,
     naics_level,
 )
@@ -76,8 +75,6 @@ class Annotator:
         self.nonprofit_by_name = nonprofits.load()
         self.gleif_by_name = gleif.load()
         self.subsidiaries = subsidiaries.Index()
-        self.override_rows = review.load_override_rows()
-        self.industry_overrides = load_industry_overrides()
         self.naics_by_employer: dict[str, str] = {}
 
     def prime(self, conn) -> int:
@@ -141,87 +138,9 @@ class Annotator:
             fields_json
         )
 
-        # An adjudicated identity outranks every automatic tier: it was
-        # decided by someone looking at evidence the matcher cannot see.
         year = date[:4] if date else None
-        exact_decision = review.select_override(
-            self.override_rows, norm, state, year, location
-        )
-        base_decision = review.select_override(
-            self.override_rows, base_norm, state, year, location
-        ) if base_norm and base_norm != norm else None
-        id_fields = ("cik", "ein", "lei", "wikidata_qid")
-        conflicting_decisions = bool(
-            exact_decision and base_decision
-            and any((exact_decision.get(f) or "") != (base_decision.get(f) or "")
-                    for f in id_fields)
-        ) or review.conflicting_override(
-            self.override_rows, norm, state, year, location
-        ) or review.conflicting_override(
-            self.override_rows, base_norm, state, year, location
-        )
-        decided = None if conflicting_decisions else exact_decision or base_decision
-        matcher_hit = (
-            self.matcher.match(employer_name, int(year))
-            if self.matcher is not None and year and year.isdigit()
-            else None
-        )
-        # Legacy name-wide CIK overrides are preserved but no longer grant
-        # identity. If an automatic match contradicts one, quarantine the
-        # notice instead of silently flipping it to a different registrant.
-        legacy_ciks = {
-            int(row["cik"])
-            for name in {n for n in (norm, base_norm) if n}
-            for row in self.override_rows.get(name, [])
-            if row.get("cik")
-            and not any(row.get(f) for f in ("scope_state", "scope_year", "scope_location"))
-            and str(row["cik"]).isdigit()
-        }
-        if len(legacy_ciks) > 1 or (
-            matcher_hit and legacy_ciks and matcher_hit[0] not in legacy_ciks
-        ):
-            conflicting_decisions = True
-            decided = None
-        if decided and decided.get("cik") and matcher_hit and matcher_hit[2].startswith("exact"):
-            if int(decided["cik"]) != matcher_hit[0]:
-                conflicting_decisions = True
-                decided = None
-        if conflicting_decisions:
-            out["identity_source"] = "conflict"
-        # A rejection is recorded so it is not re-decided; it grants nothing.
-        if decided and any(
-            decided.get(f) for f in ("cik", "ein", "lei", "wikidata_qid")
-        ):
-            out["identity_source"] = "override"
-            if decided.get("cik"):
-                out["cik"], out["cik_match"] = int(decided["cik"]), "override"
-                sic = self.sic_by_cik.get(out["cik"])
-                if sic:
-                    out["sic"], out["sic_description"] = sic[0] or None, sic[1] or None
-                out["ticker"] = (
-                    self.matcher.ticker_for(out["cik"]) if self.matcher else None
-                )
-                # The same CIK-keyed joins the automatic tier gets. Without
-                # them, an adjudicated identity — the strongest kind — was
-                # left for the name-keyed label tier to decorate, i.e. the
-                # weakest matcher dressing the best-attested employers.
-                wd = self.wikidata_by_cik.get(out["cik"])
-                if wd:
-                    out["wikidata_qid"], out["wikidata_match"] = wd["qid"], "cik"
-                    out["canonical_name"] = wd["label"] or None
-                    if out["canonical_name"]:
-                        out["canonical_basis"] = "wikidata"
-                    out["parent_company"] = (
-                        wd["parents"].split("||")[0] if wd["parents"] else None
-                    )
-            for field in ("ein", "lei", "wikidata_qid"):
-                if decided.get(field):
-                    out[field] = decided[field]
-            if decided.get("wikidata_qid"):
-                out["wikidata_match"] = "override"
-
-        if self.matcher is not None and not out["cik"] and not conflicting_decisions:
-            hit = matcher_hit or self.matcher.match(
+        if self.matcher is not None:
+            hit = self.matcher.match(
                 employer_name, int(year) if year and year.isdigit() else None
             )
             if hit:
@@ -242,8 +161,7 @@ class Annotator:
         if norm and not out["cik"]:
             # Parent links affect both the displayed corporate family and
             # inherited industry. Only an exact SEC filing in the notice era
-            # is independent evidence. Older model-written overrides remain
-            # on disk for review, but cannot assert ownership at export.
+            # is independent evidence.
             owners = [self.subsidiaries.sec_by_name[n] for n in names
                       if n in self.subsidiaries.sec_by_name]
             owner = owners[0] if owners and len({o["parent_cik"] for o in owners}) == 1 else None
@@ -254,25 +172,6 @@ class Annotator:
                 notice_year = source_year = None
             if notice_year is None or source_year is None or abs(notice_year - source_year) > 2:
                 owner = None
-            scoped_owners = [
-                o for n in names
-                if (o := self.subsidiaries.scoped_parent(n, state, year, location))
-            ]
-            scoped_conflict = any(
-                self.subsidiaries.scoped_parent_conflict(n, state, year, location)
-                for n in names
-            ) or len({o["parent_cik"] for o in scoped_owners}) > 1
-            scoped_owner = (
-                scoped_owners[0]
-                if scoped_owners and len({o["parent_cik"] for o in scoped_owners}) == 1
-                else None
-            )
-            if scoped_conflict or (
-                scoped_owner and owner and scoped_owner["parent_cik"] != owner["parent_cik"]
-            ):
-                owner = None  # conflicting authoritative claims need review
-            else:
-                owner = scoped_owner or owner
             if owner:
                 out["parent_cik"] = int(owner["parent_cik"])
                 out["parent_company"] = owner["parent_name"] or None
@@ -342,19 +241,6 @@ class Annotator:
             if parent_sic in self.naics_by_sic:
                 out["naics"] = self.naics_by_sic[parent_sic]
                 out["naics_basis"] = "parent-sic"
-
-        # An adjudicated sector ranks below every basis that traces back to an
-        # authority — a published code, a registrant's SIC, an IRS activity
-        # code — because those say what an employer does on someone's record,
-        # and this says what a model concluded from its name. It ranks above
-        # inheritance from the employer's other notices, which is an
-        # assumption rather than a statement about this employer at all.
-        if out["naics"] is None:
-            adjudicated = self.industry_overrides.get(norm or "") or (
-                self.industry_overrides.get(base_norm) if base_norm else None
-            )
-            if adjudicated:
-                out["naics"], out["naics_basis"] = adjudicated, "adjudicated"
 
         # Keep CIK-linked QID keys stable for existing public-company URLs.
         # A QID found only by label is weaker than a registered CIK/EIN/LEI

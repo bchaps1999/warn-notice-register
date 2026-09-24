@@ -1,0 +1,114 @@
+{
+  "format": "warn-ny-source-artifacts-v1",
+  "publisher": "New York State Department of Labor WARN dashboard via Tableau CSV",
+  "provenance_note": "These files were copied from local workdir/cache/ny_reports. The recorded times are filesystem mtimes of the cached files, not confirmed download or acquisition times.",
+  "artifacts": [
+    {
+      "path": "ny_warn_2022.csv",
+      "year": 2022,
+      "source_url": "https://public.tableau.com/views/WorkerAdjustmentRetrainingNotificationWARN/WARN.csv?:showVizHome=n&YEAR(Date%20of%20WARN%20Notice)=2022",
+      "bytes": 22971,
+      "sha256": "a9c0b70e25030d7f6a7b5deb7c3a9f93b32cde950afc5f3d87c3fc23fc8b3195",
+      "data_rows": 132,
+      "headers": [
+        "Business Legal Name",
+        "Date Layoff/Closure Starts",
+        "Date of WARN Notice ",
+        "Date Posted  ",
+        "Impacted Site Address",
+        "Impacted Site County",
+        "Layoff or Closure?",
+        "Permanent or Temporary Layoff?",
+        "Reason for Layoff/Closure   ",
+        "Index",
+        "Number of Affected Workers ",
+        "Number of Affected Workers "
+      ],
+      "source_cache_filesystem_mtime_utc": "2026-08-06T20:54:01.761882+00:00"
+    },
+    {
+      "path": "ny_warn_2023.csv",
+      "year": 2023,
+      "source_url": "https://public.tableau.com/views/WorkerAdjustmentRetrainingNotificationWARN/WARN.csv?:showVizHome=n&YEAR(Date%20of%20WARN%20Notice)=2023",
+      "bytes": 45090,
+      "sha256": "5a0f63a72ff7afef28554981ca598371ca2ec134503ffd10b442955ab0d24ee5",
+      "data_rows": 285,
+      "headers": [
+        "Business Legal Name",
+        "Date Layoff/Closure Starts",
+        "Date of WARN Notice ",
+        "Date Posted  ",
+        "Impacted Site Address",
+        "Impacted Site County",
+        "Layoff or Closure?",
+        "Permanent or Temporary Layoff?",
+        "Reason for Layoff/Closure   ",
+        "Index",
+        "Number of Affected Workers ",
+        "Number of Affected Workers "
+      ],
+      "source_cache_filesystem_mtime_utc": "2026-08-06T20:54:04.530635+00:00"
+    },
+    {
+      "path": "ny_warn_2024.csv",
+      "year": 2024,
+      "source_url": "https://public.tableau.com/views/WorkerAdjustmentRetrainingNotificationWARN/WARN.csv?:showVizHome=n&YEAR(Date%20of%20WARN%20Notice)=2024",
+      "bytes": 55110,
+      "sha256": "9de6dc6dbf82bb89ecee8577a0ac1fdaa83c0591d03f320b9f123abe8c61c0df",
+      "data_rows": 341,
+      "headers": [
+        "Business Legal Name",
+        "Date Layoff/Closure Starts",
+        "Date of WARN Notice ",
+        "Date Posted  ",
+        "Impacted Site Address",
+        "Impacted Site County",
+        "Layoff or Closure?",
+        "Permanent or Temporary Layoff?",
+        "Reason for Layoff/Closure   ",
+        "Index",
+        "Number of Affected Workers ",
+        "Number of Affected Workers "
+      ],
+      "source_cache_filesystem_mtime_utc": "2026-08-06T20:54:07.846146+00:00"
+    }
+  ],
+  "documents": [
+    {
+      "path": "filings/3e-logistics-2024-0066.pdf",
+      "source_url": "https://dol.ny.gov/system/files/documents/2024/09/warn-nyc-3e-logistics-nj-inc.-9.16.24-2024-0066.pdf",
+      "bytes": 92332,
+      "sha256": "7a80f7b8fdcf81c81d985b7d0d8a67aca58ed1b1c984b6d1bcee9f02e06418b5",
+      "retrieved_at_utc": "2026-09-23T17:58:04.359763+00:00",
+      "event_number": "2024-0066"
+    },
+    {
+      "path": "filings/first-transit-2023-0298.pdf",
+      "source_url": "https://dol.ny.gov/system/files/documents/2024/03/warn-first-transit-transdev-north-america-western-2023-0298-3-27-2024.pdf",
+      "bytes": 118676,
+      "sha256": "f54f17da946d75673e48a837d537d666baf5c0e92616a91618cc4cfbe7dab46e",
+      "retrieved_at_utc": "2026-09-23T19:16:01+00:00",
+      "event_number": "2023-0298"
+    },
+    {
+      "path": "filings/sodexo-suny-polytechnic-2021-0088.pdf",
+      "source_url": "https://dol.ny.gov/system/files/documents/2022/06/warn-sodexo-suny-polytechnic-mohawk-valley-2021-0088-6-30-2022.pdf",
+      "retrieval_url": "https://web.archive.org/web/20240000000000id_/https://dol.ny.gov/system/files/documents/2022/06/warn-sodexo-suny-polytechnic-mohawk-valley-2021-0088-6-30-2022.pdf",
+      "bytes": 79613,
+      "sha256": "eaa6c49739623c3cae0d2a898357e81eb3a7b27dda1e5446f5bfb038f5de52a2",
+      "event_number": "2021-0088"
+    }
+  ],
+  "reviewed_decisions": {
+    "path": "reviewed_date_repairs.json",
+    "bytes": 2081,
+    "sha256": "89277ae2b5d1176a15d476943a4c4e6b288118c94c1bcc5a8d466de5cb404db6",
+    "review_status": "filing_verified_3e_and_first_transit"
+  },
+  "reviewed_event_decisions": {
+    "path": "reviewed_event_decisions.json",
+    "bytes": 2683,
+    "sha256": "cdbf74f2eeb833410455b9ff4b46052444934bbe99e48baaeb6cc4774f1aeb6d",
+    "review_status": "filing_verified_sodexo_duplicate_and_date_roles"
+  }
+}

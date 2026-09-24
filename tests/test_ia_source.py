@@ -60,10 +60,23 @@ def test_iowa_historical_pdf_accounts_for_rows_and_exposes_layout_loss():
     issues = {row["source_row"]: row["layout_issues"]
               for row in rows if row["layout_issues"]}
     assert issues == {
-        "historical-2023.pdf:p5:r52": ["empty_column_3"],
-        "historical-2023.pdf:p6:r22": ["empty_column_3"],
         "historical-2023.pdf:p3:r57": ["invalid_notice_date"],
     }
+    repaired = {row["source_row"]: row for row in rows if row["company_text"] in {
+        "HDS LTD", "Sabre Plumbing",
+    }}
+    assert repaired["historical-2023.pdf:p5:r52"]["raw_cells"][:4] == [
+        "HDS LTD", "8805 Chambers Blvd Ste 300-266", "Johnston", "Polk",
+    ]
+    assert repaired["historical-2023.pdf:p5:r52"]["source_row_sha256"] == (
+        "beaa4688fad643272f86bc6c97898b58d6e3d4a7641589c222bc5270516950e3"
+    )
+    assert repaired["historical-2023.pdf:p6:r22"]["raw_cells"][:4] == [
+        "Sabre Plumbing", "808 South SW Cherry St Suite 111", "Ankeny", "Polk",
+    ]
+    assert repaired["historical-2023.pdf:p6:r22"]["source_row_sha256"] == (
+        "df3be2a687e912253f2e3ba02e13a715270c5e87a53594c06fedb623b1a8e3a2"
+    )
     sorenson = next(row for row in rows if row["notice_date_text"] == "9/1/8/2020")
     assert sorenson["company_text"] == "Sorenson Communications, LLC"
     assert sorenson["notice_date"] is None

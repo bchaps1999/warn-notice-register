@@ -1,0 +1,36 @@
+# Browser-rendered official agency text via web.open on 2026-09-24
+# URL: https://jobs.mo.gov/warn/2022
+# Total source lines: 35
+L0: Search [Input: ]
+L1: 
+L2: [Input] [Input] [Input]
+L3: ## Google Translate
+L4: 
+L5: Effective March 24, 2023: If you wish to receive further information about the most recent WARN Notice submitted to the Office of Workforce Development (OWD), sign up for our cite0†WARN Notice Mailing List†public.govdelivery.com .  WARN Notice updates will be emailed during business operating hours.
+L6: 
+L7: To receive any previous WARN Notices, submit an open records request to  recordscustodian@dhewd.mo.gov ( recordscustodian@dhewd.mo.gov).
+L8: For all other inquiries, please contact Heather Dolce, Assistant Commissioner for Communications and Outreach at heather.dolce@dhewd.mo.gov ( heather.dolce@dhewd.mo.gov).
+L9: # WARN Notices
+L10: 
+L11: cite1†Click here to learn more about the WARN Notice System L12: 
+L13: Company name [Input]
+L14: 
+L15: Counties [Select]
+L16: 
+L17: Type [Select]
+L18: 
+L19: [Input]
+L20: cite2†Received | cite3†Title | cite4†Industry | Location(s)  | cite5†County | Region  | cite6†Type | Layoff date(s)  | cite7†# affected L21: --- | --- | --- | --- | --- | --- | --- | --- | ---
+L22: 01/10/2022  | Nestle Regional GLOBE Office North America, INC (NRGONA)  | Manufacturing  | St. Louis (city)  | St. Louis (county)  | St. Louis  | Layoff  | 03/18/2022  | 138
+L23: 01/28/2022  | Premier Glass USA, LLC  | Manufacturing  | Park Hills  | St. Francois  | Southeast  | Closing  | 03/31/2022  | 243
+L24: 04/01/2022  | Noble Health - Callaway Community Hospital  | Healthcare  | Fulton  | Callaway  | Central  | Furlough  | 04/01/2022  | 68
+L25: 04/08/2022  | Noble Health - Audrain Community Hospital  | Healthcare  | Mexico  | Audrain  | Central  | Furlough  | 04/01/2022  | 113
+L26: 05/17/2022  | StarTek  | Call Center  | Farmington  | St. Francois  | Southeast  | Layoff  | 05/29/2022  | 472
+L27: 05/20/2022  | Pretium Packaging LLC  | Manufacturing  | Hermann  | Gasconade  | Central  | Closing  | 05/20/2022  | 73
+L28: 06/13/2022  | Amentum PAE NBC  | Business Services  | Lee’s Summit  | Jackson  | Kansas City & Vicinity  | Loss of Contract  | 08/13/2022  | 537
+L29: 08/23/2022  | CDI Head Start  | Education  | Clinton  | Henry  | West Central  | Loss of Contract  | 09/30/2022  | 66
+L30: 12/28/2022
+L31: 05/12/2023 rev  | Allied Healthcare Products  | Manufacturing  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Closing  | 02/21/2023
+L32: 07/08/2023  | 160
+L33: 12/30/2022  | HMS Host - Kansas City  | Food Service  | Kansas City  | Platte  | Kansas City & Vicinity  | Loss of Contract  | 02/27/2023  | 170
+L34:  |  |  |  |  |  |  |  | 2040

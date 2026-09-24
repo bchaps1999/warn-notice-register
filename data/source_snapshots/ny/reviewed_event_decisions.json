@@ -1,0 +1,54 @@
+[
+  {
+    "decision_id": "ny-sodexo-suny-polytechnic-2021-0088",
+    "decision_kind": "duplicate_observation_and_date_role_repair",
+    "duplicate": {
+      "bln_row_sha256": "7764bca32856a2c234ae728a48fa59abca536a8f7228be84361e045f21b64ea8",
+      "bln_source_notice_id": "6ed4f110cc192819e1964612865026b9bacd5d0022f24ffb19b7fbfc",
+      "bln_source_row": 25185,
+      "expected_dedupe_key": "0027cc97057002e46ceba372699b3bca6841cf1b",
+      "expected_effective_date": null,
+      "expected_effective_date_end": null,
+      "expected_employer_name": "Sodexo, Inc. (at SUNY Polytechnic Institute)",
+      "expected_location": null,
+      "expected_notice_date": "2022-06-30"
+    },
+    "effective_date_role": "reported_closing_and_action_start",
+    "employee_separation_phases": [
+      {
+        "date": "2022-06-30",
+        "population": "frontline",
+        "precision": "approximate_day",
+        "source_phrase": "on or about June 30, 2022"
+      },
+      {
+        "date": "2022-07-28",
+        "population": "management",
+        "precision": "day",
+        "source_phrase": "on July 28, 2022"
+      }
+    ],
+    "official_document_path": "filings/sodexo-suny-polytechnic-2021-0088.pdf",
+    "official_document_sha256": "eaa6c49739623c3cae0d2a898357e81eb3a7b27dda1e5446f5bfb038f5de52a2",
+    "official_document_url": "https://dol.ny.gov/system/files/documents/2022/06/warn-sodexo-suny-polytechnic-mohawk-valley-2021-0088-6-30-2022.pdf",
+    "official_event_number": "2021-0088",
+    "official_row_sha256": "e6c7d12f20c68712c0c4ae975d68fb587a9b5d646f053f9f3b7af2fc8049a077",
+    "official_source_row_id": "agency/ny/ny_warn_2022.csv:sha256:a9c0b70e25030d7f6a7b5deb7c3a9f93b32cde950afc5f3d87c3fc23fc8b3195:row:105:sha256:e6c7d12f20c68712c0c4ae975d68fb587a9b5d646f053f9f3b7af2fc8049a077",
+    "selected_effective_date": "2022-06-30",
+    "selected_effective_date_end": null,
+    "selected_notice_date": "2022-06-21",
+    "survivor": {
+      "bln_row_sha256": "a1d1fb5b27dfed488c7b767b7e6f3d270728123cde1dde5ba83a8cdb2b763d35",
+      "bln_source_notice_id": "19b795dfd8a389240fc80414f3ee22c39fe5826bad2a93a05d301d37",
+      "bln_source_row": 35714,
+      "expected_dedupe_key": "f945897c0bffcd8df8bde0800ce1f671d397854a",
+      "expected_effective_date": null,
+      "expected_effective_date_end": null,
+      "expected_employer_name": "Sodexo, Inc. (at SUNY Polytechnic Institute) - Mohawk Valley Region",
+      "expected_location": null,
+      "expected_notice_date": "2022-06-21"
+    },
+    "timing_interpretation": "9 days from stated notice to reported closing/action start; not exact employee separation timing",
+    "worker_count_policy": "leave_bln_count_missing"
+  }
+]

@@ -206,67 +206,6 @@ def test_annotator_leaves_conflicting_industries_alone(tmp_path):
     assert a.annotate("Acme", "2020-01-01", json.dumps({"raw_extra": "{}"}))["naics"] is None
 
 
-def test_matcher_reports_candidates_only_when_it_declined(tmp_path):
-    """A near-miss the gates refused is recorded for adjudication; a name
-    that matched needs no second opinion."""
-    m = _matcher(tmp_path, [
-        ("j c penney", 77182, 1994, 2020, ""),
-        ("j c penney", 1166126, 2002, 2026, ""),
-        ("boeing", 12927, 1994, 2026, "BA"),
-    ])
-    assert m.match("J.C. Penney", 2017) is None
-    found = m.candidates("J.C. Penney", 2017)
-    assert {c["cik"] for c in found} == {77182, 1166126}
-    assert {c["rejected_by"] for c in found} == {"ambiguous-exact"}
-    assert m.candidates("Boeing", 2017) == []  # matched, nothing to review
-
-
-def test_matcher_reports_pre_era_candidate(tmp_path):
-    """The backward direction the era rule refuses is exactly the case a
-    human should look at, not a case to guess."""
-    m = _matcher(tmp_path, [("midway airlines", 946323, 1997, 2006, "")])
-    assert m.match("Midway Airlines", 1991) is None
-    found = m.candidates("Midway Airlines", 1991)
-    assert [c["rejected_by"] for c in found] == ["pre-era"]
-
-
-def test_adjudicated_identity_outranks_automatic_matching(tmp_path):
-    """An override is a decision made from evidence the matcher cannot
-    see, so it wins — and says so in identity_source."""
-    import csv
-
-    from warnlive.enrich import review
-    from warnlive.enrich.annotate import Annotator
-
-    path = tmp_path / "identity_overrides.csv"
-    with open(path, "w", newline="") as fh:
-        w = csv.DictWriter(fh, fieldnames=review.OVERRIDE_FIELDS)
-        w.writeheader()
-        w.writerow({"normalized_name": "j c penney", "cik": "1166126",
-                    "decision": "accept", "scope_state": "PA",
-                    "scope_year": "2017", "scope_location": "Philadelphia",
-                    "decided_by": "test", "decided_at": "2026-07-26",
-                    "note": "the operating company named on the notice"})
-
-    a = Annotator()
-    a.override_rows = review.load_override_rows(path)
-    got = a.annotate(
-        "J.C. Penney Corporation, Inc.", "2017-01-01", None,
-        state="PA", location="Philadelphia",
-    )
-    assert got["cik"] == 1166126
-    assert got["cik_match"] == "override"
-    assert got["identity_source"] == "override"
-    # The override gets the same CIK-keyed Wikidata join the automatic tier
-    # gets, so the employer keys agree whichever path identified the CIK —
-    # otherwise one company would split across two keys.
-    if got["wikidata_qid"]:
-        assert got["wikidata_match"] == "cik"
-        assert got["employer_key"] == f"qid:{got['wikidata_qid']}"
-    else:
-        assert got["employer_key"] == "cik:1166126"
-
-
 def test_label_only_qid_does_not_outrank_registered_identity_or_name():
     from warnlive.enrich.annotate import Annotator
 
@@ -342,179 +281,6 @@ def test_old_sec_parent_snapshot_does_not_assert_current_ownership():
     assert got["parent_cik"] is None
 
 
-def test_conflicting_exact_and_base_identity_decisions_grant_neither():
-    from warnlive.enrich.annotate import Annotator
-
-    a = Annotator()
-    a.matcher = None
-    scope = {"decision": "accept", "scope_state": "PA",
-             "scope_year": "2020", "scope_location": "Philadelphia"}
-    a.override_rows = {
-        "acme services west": [{**scope, "normalized_name": "acme services west", "cik": "11"}],
-        "acme services": [{**scope, "normalized_name": "acme services", "cik": "22"}],
-    }
-    got = a.annotate(
-        "Acme Services - West", "2020-01-01", None,
-        state="PA", location="Philadelphia",
-    )
-    assert got["cik"] is None
-    assert got["identity_source"] == "conflict"
-
-
-def test_scoped_override_conflicting_with_exact_sec_match_is_quarantined(tmp_path):
-    from warnlive.enrich.annotate import Annotator
-
-    a = Annotator()
-    a.matcher = _matcher(tmp_path, [("acme services", 22, 2019, 2021, "")])
-    a.override_rows = {
-        "acme services": [{
-            "normalized_name": "acme services", "decision": "accept",
-            "scope_state": "PA", "scope_year": "2020",
-            "scope_location": "Philadelphia", "cik": "11",
-        }],
-    }
-    got = a.annotate(
-        "Acme Services", "2020-01-01", None,
-        state="PA", location="Philadelphia",
-    )
-    assert got["cik"] is None
-    assert got["identity_source"] == "conflict"
-
-
-def test_parent_override_requires_exact_notice_scope():
-    from warnlive.enrich.annotate import Annotator
-
-    a = Annotator()
-    a.matcher = None
-    a.subsidiaries.override_rows = {
-        "acme services": [{
-            "normalized_name": "acme services", "decision": "accept",
-            "scope_state": "PA", "scope_year": "2020",
-            "scope_location": "Philadelphia", "parent_cik": "42",
-            "parent_name": "Reviewed Parent",
-        }],
-    }
-    matched = a.annotate(
-        "Acme Services", "2020-01-01", None,
-        state="PA", location="Philadelphia",
-    )
-    other = a.annotate(
-        "Acme Services", "2020-01-01", None,
-        state="PA", location="Pittsburgh",
-    )
-    assert matched["parent_cik"] == 42
-    assert other["parent_cik"] is None
-
-
-def test_scoped_parent_conflicting_with_sec_parent_is_quarantined():
-    from warnlive.enrich.annotate import Annotator
-
-    a = Annotator()
-    a.matcher = None
-    a.subsidiaries.sec_by_name["acme services"] = {
-        "parent_cik": "42", "parent_name": "SEC Parent", "source_year": "2020",
-    }
-    a.subsidiaries.override_rows = {
-        "acme services": [{
-            "normalized_name": "acme services", "decision": "accept",
-            "scope_state": "PA", "scope_year": "2020",
-            "scope_location": "Philadelphia", "parent_cik": "99",
-            "parent_name": "Different Parent",
-        }],
-    }
-    got = a.annotate(
-        "Acme Services", "2020-01-01", None,
-        state="PA", location="Philadelphia",
-    )
-    assert got["parent_cik"] is None
-
-
-def test_conflicting_rows_in_one_scope_block_automatic_identity(tmp_path):
-    from warnlive.enrich.annotate import Annotator
-
-    a = Annotator()
-    a.matcher = _matcher(tmp_path, [("acme services", 22, 2019, 2021, "")])
-    scope = {"normalized_name": "acme services", "decision": "accept",
-             "scope_state": "PA", "scope_year": "2020",
-             "scope_location": "Philadelphia"}
-    a.override_rows = {"acme services": [
-        {**scope, "cik": "11"}, {**scope, "cik": "99"},
-    ]}
-    got = a.annotate(
-        "Acme Services", "2020-01-01", None,
-        state="PA", location="Philadelphia",
-    )
-    assert got["cik"] is None
-    assert got["identity_source"] == "conflict"
-
-
-def test_conflicting_parent_rows_block_sec_fallback():
-    from warnlive.enrich.annotate import Annotator
-
-    a = Annotator()
-    a.matcher = None
-    a.subsidiaries.sec_by_name["acme services"] = {
-        "parent_cik": "42", "parent_name": "SEC Parent", "source_year": "2020",
-    }
-    scope = {"normalized_name": "acme services", "decision": "accept",
-             "scope_state": "PA", "scope_year": "2020",
-             "scope_location": "Philadelphia"}
-    a.subsidiaries.override_rows = {"acme services": [
-        {**scope, "parent_cik": "11", "parent_name": "Parent A"},
-        {**scope, "parent_cik": "99", "parent_name": "Parent B"},
-    ]}
-    got = a.annotate(
-        "Acme Services", "2020-01-01", None,
-        state="PA", location="Philadelphia",
-    )
-    assert got["parent_cik"] is None
-
-
-def test_scoped_ein_lei_are_not_overwritten_by_name_matches():
-    from warnlive.enrich.annotate import Annotator
-
-    a = Annotator()
-    a.matcher = None
-    a.override_rows = {"acme services": [{
-        "normalized_name": "acme services", "decision": "accept",
-        "scope_state": "PA", "scope_year": "2020",
-        "scope_location": "Philadelphia",
-        "ein": "123456789", "lei": "REVIEWED",
-    }]}
-    a.nonprofit_by_name = {"acme services": {
-        "ein": "999999999", "ntee": "B2", "name": "Namesake Foundation",
-    }}
-    a.gleif_by_name = {"acme services": {
-        "lei": "NAME_MATCH", "legal_name": "Namesake LLC",
-    }}
-    got = a.annotate(
-        "Acme Services", "2020-01-01", None,
-        state="PA", location="Philadelphia",
-    )
-    assert got["ein"] == "123456789"
-    assert got["lei"] == "REVIEWED"
-    assert got["ntee"] is None
-    assert got["canonical_name"] != "Namesake Foundation"
-    assert got["canonical_name"] != "Namesake LLC"
-    assert got["employer_key"] == "ein:123456789"
-
-
-def test_legacy_cik_disagreement_does_not_flip_to_automatic(tmp_path):
-    from warnlive.enrich.annotate import Annotator
-
-    a = Annotator()
-    a.matcher = _matcher(tmp_path, [("acme services", 22, 2019, 2021, "")])
-    a.override_rows = {"acme services": [{
-        "normalized_name": "acme services", "cik": "11", "decision": "",
-    }]}
-    got = a.annotate(
-        "Acme Services", "2020-01-01", None,
-        state="PA", location="Philadelphia",
-    )
-    assert got["cik"] is None
-    assert got["identity_source"] == "conflict"
-
-
 def test_base_employer_separates_company_from_site():
     """WARN forms have one employer field, so states append the plant,
     store or trading name to the company's."""
@@ -584,33 +350,6 @@ def test_matcher_retries_without_the_site_qualifier(tmp_path):
     assert m.match("Some Diner - Main St", 2002) is None
 
 
-def test_rejected_candidate_grants_nothing_and_stops_resurfacing(tmp_path):
-    """A rejection records that candidates were examined and refused. It
-    carries no identity, and it keeps the employer out of the next review
-    file — but it does not veto a rule that later finds the right one."""
-    import csv
-
-    from warnlive.enrich import review
-    from warnlive.enrich.annotate import Annotator
-
-    path = tmp_path / "identity_overrides.csv"
-    with open(path, "w", newline="") as fh:
-        w = csv.DictWriter(fh, fieldnames=review.OVERRIDE_FIELDS)
-        w.writeheader()
-        w.writerow({"normalized_name": "midway airlines", "decision": "reject",
-                    "decided_by": "test", "decided_at": "2026-07-27",
-                    "note": "the 1991 carrier is not the 1997 one"})
-
-    loaded = review.load_overrides(path)
-    assert "midway airlines" in loaded  # remembered, so review skips it
-
-    a = Annotator()
-    a.override_rows = review.load_override_rows(path)
-    got = a.annotate("Midway Airlines, Inc", "1991-01-01", None)
-    assert got["cik"] is None
-    assert got["identity_source"] is None
-
-
 def _places_fixture(tmp_path):
     """A miniature Census roster: the cases the resolver has to get right."""
     import csv
@@ -663,7 +402,7 @@ def test_places_resolve_the_shapes_states_actually_file(tmp_path):
     address, and all three name the same kind of thing."""
     from warnlive.enrich.places import Resolver
 
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    r = Resolver(path=_places_fixture(tmp_path))
 
     got = r.resolve("OH", "Cincinnati (Hamilton)")
     assert got["place_name"] == "Cincinnati city"
@@ -689,7 +428,7 @@ def test_a_city_is_not_placed_in_the_county_that_shares_its_name(tmp_path):
     segment matching both is a coincidence of names, not a filed county."""
     from warnlive.enrich.places import Resolver
 
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    r = Resolver(path=_places_fixture(tmp_path))
 
     houston = r.resolve("TX", "Houston")
     assert houston["county_name"] == "Harris County"
@@ -704,7 +443,7 @@ def test_a_place_name_is_not_eaten_by_the_address_stripper(tmp_path):
     whole words — "fl" must not match the front of "Flower Mound"."""
     from warnlive.enrich.places import Resolver
 
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    r = Resolver(path=_places_fixture(tmp_path))
 
     assert r.resolve("TX", "Flower Mound")["place_name"] == "Flower Mound town"
     assert r.resolve("TX", "Houston, Suite 400")["place_name"] == "Houston city"
@@ -716,7 +455,7 @@ def test_a_street_address_gives_up_its_city(tmp_path):
     still the thing at the end."""
     from warnlive.enrich.places import Resolver
 
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    r = Resolver(path=_places_fixture(tmp_path))
 
     # The street names itself, so it can simply be removed.
     assert (
@@ -747,7 +486,7 @@ def test_urbana_is_a_city_not_a_status_word(tmp_path):
     assert fold("Urbana city") == "urbana"
     assert fold("Zona Urbana Rio Grande") == "riogrande"
 
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    r = Resolver(path=_places_fixture(tmp_path))
     assert r.resolve("IL", "1710 PHILO ROAD URBANA, IL 61801")["place_name"] == (
         "Urbana city"
     )
@@ -758,7 +497,7 @@ def test_places_refuse_rather_than_guess(tmp_path):
     to nothing — and never across a state line."""
     from warnlive.enrich.places import Resolver
 
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    r = Resolver(path=_places_fixture(tmp_path))
 
     # Two Springfields, no county to choose between them.
     assert r.resolve("OH", "Springfield")["county_fips"] is None
@@ -782,7 +521,7 @@ def test_the_components_a_state_published_settle_what_the_string_cannot(tmp_path
 
     from warnlive.enrich.places import Resolver
 
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    r = Resolver(path=_places_fixture(tmp_path))
 
     fields = json.dumps({"raw_extra": {"COUNTY": "Hamilton"}})
     assert r.resolve("OH", "SOME AIRPORT NOBODY CAN PLACE")["geo_basis"] is None
@@ -814,7 +553,7 @@ def test_an_address_in_another_state_is_never_read_against_this_one(tmp_path):
     with full confidence rather than a missing one."""
     from warnlive.enrich.places import Resolver
 
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    r = Resolver(path=_places_fixture(tmp_path))
 
     # The city is reachable by the ordinary segment reading...
     got = r.resolve("TX", "2323 KENNEDY DRIVE HOUSTON, IL 60639")
@@ -835,7 +574,7 @@ def test_an_address_tail_needs_a_street_still_standing_in_front_of_it(tmp_path):
     Burbank; only a house number and a compass point remain in front of it."""
     from warnlive.enrich.places import Resolver
 
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    r = Resolver(path=_places_fixture(tmp_path))
 
     assert r.resolve("CA", "1234 Burbank")["geo_basis"] is None
     assert r.resolve("CA", "2200 E. Burbank")["geo_basis"] is None
@@ -849,7 +588,7 @@ def test_the_city_ends_the_address_not_the_first_fragment_of_it(tmp_path):
     148 NORTH, BOX 566 SESSER, IL 62884", where the city is in the second."""
     from warnlive.enrich.places import Resolver
 
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    r = Resolver(path=_places_fixture(tmp_path))
 
     got = r.resolve("IL", "ROUTE 41 NORTH, BOX 566 CHICAGO, IL 62884")
     assert got["place_name"] == "Chicago city"
@@ -860,7 +599,7 @@ def test_an_abbreviated_saint_is_not_a_street(tmp_path):
     address it gets mined for a trailing city and finds one."""
     from warnlive.enrich.places import Resolver
 
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    r = Resolver(path=_places_fixture(tmp_path))
 
     assert r.resolve("TX", "St. Houston")["geo_basis"] is None
     # A numbered address still reads as one without the bare abbreviation.
@@ -872,7 +611,7 @@ def test_places_prefer_the_municipality_and_fall_back_to_the_township(tmp_path):
     where a state files from townships there is no place at all."""
     from warnlive.enrich.places import Resolver
 
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    r = Resolver(path=_places_fixture(tmp_path))
 
     burbank = r.resolve("CA", "Burbank")
     assert burbank["place_name"] == "Burbank city"
@@ -884,34 +623,12 @@ def test_places_prefer_the_municipality_and_fall_back_to_the_township(tmp_path):
     assert edison["geo_basis"] == "subdivision"
 
 
-def test_place_aliases_can_name_a_county_when_there_is_no_city(tmp_path):
-    """Brooklyn is a borough, not a Census place; aliasing it to a city
-    would be wrong, so the alias names its county instead."""
-    import csv
-
+def test_unmapped_neighborhood_has_unknown_geography(tmp_path):
     from warnlive.enrich.places import Resolver
 
-    alias_path = tmp_path / "aliases.csv"
-    with open(alias_path, "w", newline="") as fh:
-        writer = csv.DictWriter(
-            fh, fieldnames=["state", "filed_name", "census_name", "kind", "note"]
-        )
-        writer.writeheader()
-        writer.writerow({
-            "state": "CA", "filed_name": "Chatsworth",
-            "census_name": "Burbank", "kind": "", "note": "a neighbourhood",
-        })
-        writer.writerow({
-            "state": "CA", "filed_name": "Universal City",
-            "census_name": "Los Angeles County", "kind": "county",
-            "note": "unincorporated",
-        })
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=alias_path)
+    resolver = Resolver(path=_places_fixture(tmp_path))
+    assert resolver.resolve("CA", "Chatsworth")["geo_basis"] is None
 
-    assert r.resolve("CA", "Chatsworth")["place_name"] == "Burbank city"
-    unincorporated = r.resolve("CA", "Universal City")
-    assert unincorporated["place_name"] is None
-    assert unincorporated["county_fips"] == "06037"
 
 
 def test_ohio_column_labels_come_from_the_values(tmp_path):
@@ -993,7 +710,7 @@ def test_an_address_in_the_employer_name_places_a_notice_with_no_location(tmp_pa
     """
     from warnlive.enrich.places import Resolver
 
-    r = Resolver(path=_places_fixture(tmp_path), alias_path=tmp_path / "none.csv")
+    r = Resolver(path=_places_fixture(tmp_path))
 
     got = r.resolve(
         "TX", None, None, "Staples 2305 S.W. 32nd Avenue, Bldg. L Houston, TX 77002"
@@ -1012,3 +729,14 @@ def test_an_address_in_the_employer_name_places_a_notice_with_no_location(tmp_pa
 
     # A company whose name merely contains a number donates no location.
     assert not r.resolve("TX", None, None, "99 Cents Only Store")["geo_basis"]
+
+
+def test_annotator_uses_automatic_match_without_decision_overrides(tmp_path):
+    from warnlive.enrich.annotate import Annotator
+
+    annotator = Annotator()
+    annotator.matcher = _matcher(tmp_path, [("acme services", 22, 2019, 2021, "")])
+    got = annotator.annotate("Acme Services", "2020-01-01", None)
+    assert got["cik"] == 22
+    assert got["identity_source"] == "automatic"
+    assert not hasattr(annotator, "override_rows")

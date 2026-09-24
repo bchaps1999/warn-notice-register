@@ -9,9 +9,15 @@ from __future__ import annotations
 from importlib import import_module
 from pathlib import Path
 
+BLN_MIXED_UPSTREAM = {"ga", "ia", "ky", "or", "tn"}
+
 
 def fetch_state(postal: str, data_dir: Path, cache_dir: Path) -> Path:
     postal = postal.lower()
+    if postal in BLN_MIXED_UPSTREAM:
+        raise ValueError(
+            f"{postal.upper()} collector is paused until its BLN historical append is removed"
+        )
     data_dir = Path(data_dir)
     cache_dir = Path(cache_dir)
     data_dir.mkdir(parents=True, exist_ok=True)

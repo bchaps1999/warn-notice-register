@@ -12,7 +12,7 @@ import {
   type SortKey,
 } from "../lib/explorerFilters";
 import { downloadCsv } from "../lib/csv";
-import { date, num, STATE_NAMES, TYPE_LABEL } from "../lib/format";
+import { date, noticeDate, num, STATE_NAMES, TYPE_LABEL } from "../lib/format";
 import { FLAG_UNDATED } from "../lib/types";
 import { Stamp } from "../components/ui/Stamp";
 import { ErrorNote, Skeleton } from "../components/ui/Skeleton";
@@ -117,6 +117,16 @@ export function Explorer() {
             ))}
           </select>
         </Field>
+        <Field label="Date field">
+          <select
+            value={filters.dateBasis}
+            onChange={(e) => setFilters({ dateBasis: e.target.value as Filters["dateBasis"] })}
+            className="input"
+          >
+            <option value="notice">Notice date</option>
+            <option value="layoff">Layoff date</option>
+          </select>
+        </Field>
         <Field label="From">
           <input type="date" value={filters.from}
             onChange={(e) => setFilters({ from: e.target.value })} className="input" />
@@ -135,8 +145,12 @@ export function Explorer() {
           />
         </Field>
       </div>
+      <p className="text-xs font-serif text-ink-muted mb-4 leading-relaxed">
+        From and To filter the selected date field. Records without that date are excluded when a date range is set.
+        Blank worker counts are omitted from worker totals.
+      </p>
 
-      <div className="flex items-center justify-between border-t border-rule-strong pt-2 mb-1">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-rule-strong pt-2 mb-1">
         <p className="tabular text-xs text-ink-muted">
           {num(rows.length)} of {num(index.count)} notices ·{" "}
           {num(shownWorkers)} workers
@@ -149,15 +163,16 @@ export function Explorer() {
         </button>
       </div>
 
-      <div className="grid lg:grid-cols-[1fr_15rem] gap-8 items-start">
+      <div>
         <div className="min-w-0">
+          <p className="text-xs text-ink-muted mb-2 sm:hidden">Scroll the results sideways to see dates and worker counts →</p>
           {rows.length > 0 ? (
             <VirtualRows index={index} rows={rows} sort={filters.sort}
               dir={filters.dir} onSort={toggleSort} />
           ) : (
             <EmptyState
               title="No notices match these filters"
-              detail="Try widening the date range, lowering the minimum workers, or clearing the industry filter — 35% of notices have no industry recorded and are excluded whenever one is selected."
+              detail="Try widening the date range, changing the date field, lowering the minimum workers, or clearing the industry filter. Notices without a recorded industry are excluded when you select one."
               action={
                 <button
                   type="button"
@@ -172,7 +187,7 @@ export function Explorer() {
         </div>
 
         {facets && (
-          <aside className="grid gap-x-8 sm:grid-cols-3 lg:block border-t border-rule-strong pt-4 lg:border-t-0 lg:pt-0">
+          <aside className="grid gap-x-8 sm:grid-cols-3 border-t border-rule-strong pt-4 mt-7">
             <SectionHeading tight>Industry</SectionHeading>
             <FacetList
               facets={facets.sectors}
@@ -199,7 +214,7 @@ export function Explorer() {
               max={10}
               emptyLabel="No notice here names a place a county could be found for"
             />
-            <p className="text-[11px] text-ink-faint font-serif mt-4 leading-relaxed sm:col-span-3 lg:col-span-1">
+            <p className="text-[11px] text-ink-faint font-serif mt-4 leading-relaxed sm:col-span-3">
               Counts are notices in the current results, each facet counted
               with its own filter lifted. Counties come from resolving the
               filed location; notices whose location names no place — a
@@ -225,7 +240,7 @@ export function Explorer() {
   );
 }
 
-const COLS = "grid grid-cols-[3rem_minmax(14rem,2fr)_minmax(8rem,1.2fr)_7rem_7rem_5.5rem_7rem]";
+const COLS = "grid grid-cols-[3rem_minmax(13rem,2fr)_minmax(9rem,1.2fr)_7rem_12rem_5.5rem_7rem]";
 
 function VirtualRows({
   index,
@@ -254,7 +269,7 @@ function VirtualRows({
       disabled={!k}
       onClick={k ? () => onSort(k) : undefined}
       className={clsx(
-        "smallcaps text-[10px] text-ink-muted py-2 text-left font-semibold",
+        "smallcaps text-[10px] text-ink-muted py-2 text-left font-semibold whitespace-nowrap",
         right && "text-right",
         k && "hover:text-ink cursor-pointer"
       )}
@@ -265,20 +280,21 @@ function VirtualRows({
   );
 
   return (
-    <div>
+    <div className="overflow-x-auto" role="region" aria-label="Notice results" tabIndex={0}>
+      <div className="min-w-[70rem]">
       <div className={clsx(COLS, "gap-3 border-b border-rule-strong")}>
         <Header label="State" k="state" />
         <Header label="Employer" k="employer" />
         <Header label="Location" />
         <Header label="Notice date" k="date" />
-        <Header label="Layoff date" k="effective" />
+        <Header label="Layoff date / range" k="effective" />
         <Header label="Workers" k="jobs" right />
         <Header label="Type" />
       </div>
       <div
         ref={parentRef}
         className="overflow-y-auto"
-        style={{ height: "min(78vh, calc(100vh - 19rem))", minHeight: "24rem" }}
+        style={{ height: "min(70vh, 38rem)", minHeight: "24rem" }}
       >
         <div style={{ height: virtualizer.getTotalSize(), position: "relative" }}>
           {virtualizer.getVirtualItems().map((v) => {
@@ -299,9 +315,12 @@ function VirtualRows({
                   {c.location[i] ?? "—"}
                 </span>
                 <span className="tabular text-xs">
-                  {c.flags[i] & FLAG_UNDATED ? "—" : date(c.date[i])}
+                  {c.flags[i] & FLAG_UNDATED ? "—" : noticeDate(c.date[i], c.notice_precision?.[i])}
                 </span>
-                <span className="tabular text-xs">{date(c.effective[i])}</span>
+                <span className="tabular text-xs whitespace-nowrap">
+                  {date(c.effective[i])}
+                  {c.effective_end[i] && ` – ${date(c.effective_end[i])}`}
+                </span>
                 <span className="tabular text-right">{num(c.jobs[i])}</span>
                 <span>
                   <Stamp tone={index.types[c.type[i]]}>
@@ -312,6 +331,7 @@ function VirtualRows({
             );
           })}
         </div>
+      </div>
       </div>
     </div>
   );

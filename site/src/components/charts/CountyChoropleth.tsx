@@ -4,7 +4,7 @@ import { feature, mesh } from "topojson-client";
 import type { FeatureCollection, Geometry } from "geojson";
 import countiesTopo from "us-atlas/counties-10m.json";
 import { num } from "../../lib/format";
-import { RAMP_DARK, RAMP_LIGHT } from "./ramp";
+import { RAMP } from "./ramp";
 
 /**
  * Workers by county.
@@ -27,8 +27,7 @@ export function CountyChoropleth({
   const [hover, setHover] = useState<
     { fips: string; name: string; x: number; y: number } | null
   >(null);
-  const dark = document.documentElement.classList.contains("dark");
-  const ramp = dark ? RAMP_DARK : RAMP_LIGHT;
+  const ramp = RAMP;
 
   const { features, path, borders } = useMemo(() => {
     const topo = countiesTopo as unknown as {

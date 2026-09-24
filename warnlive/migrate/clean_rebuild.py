@@ -8,8 +8,8 @@ reported, not forced through verification.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
-from collections import defaultdict
 from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
@@ -17,6 +17,7 @@ from tempfile import TemporaryDirectory
 
 from warnlive.fetch.custom.sc import cached_csv
 from warnlive.normalize.engine import normalize_file
+from warnlive.normalize.admission import exclusion_reasons
 from warnlive.registry import load_registry
 from warnlive.store import db as db_mod
 from warnlive.store.dedupe import ingest
@@ -25,49 +26,46 @@ from warnlive.verify.harness import verify_state
 POLICY = "clean-rebuild-v1"
 
 
-def _ia_conflicts(records: list[dict]) -> set[str]:
-    """Set aside whole same-key groups whose original rows disagree."""
-    signatures: dict[str, set[str]] = defaultdict(set)
-    for record in records:
-        signatures[record["dedupe_key"]].add(record["raw_record_hash"])
-    return {key for key, values in signatures.items() if len(values) > 1}
-
-
-def _ga_idless_conflicts(records: list[dict]) -> set[str]:
-    """Do not merge differing GA rows when the state supplied no filing ID."""
-    idless = [record for record in records if not record.get("source_identity")]
-    signatures: dict[str, set[str]] = defaultdict(set)
-    for record in idless:
-        signatures[record["dedupe_key"]].add(record["raw_record_hash"])
-    return {key for key, values in signatures.items() if len(values) > 1}
-
-
-def _ks_conflicts(records: list[dict]) -> set[str]:
-    """Do not merge distinct source rows or invent a key for an ID-less row."""
-    signatures: dict[str, set[str]] = defaultdict(set)
-    missing = set()
-    for record in records:
-        key = record["dedupe_key"]
-        signatures[key].add(record["raw_record_hash"])
-        if not record.get("source_identity"):
-            missing.add(key)
-    return missing | {key for key, values in signatures.items() if len(values) > 1}
-
-
 def _raw_exception(origin: str, reason: str, rec: dict) -> dict:
     """Keep the prepared-row pointer and source text for excluded raw data."""
+    notice_date = rec.get("notice_date")
+    raw_extra = rec.get("raw_extra")
+    source_row_sha256 = rec.get("source_row_sha256")
+    if source_row_sha256 is None and isinstance(raw_extra, str):
+        source_row_sha256 = hashlib.sha256(raw_extra.encode()).hexdigest()
     return {
         "origin": origin, "reason": reason, "state": rec.get("state"),
+        "notice_year": notice_date[:4] if isinstance(notice_date, str)
+        and len(notice_date) >= 5 and notice_date[:4].isdigit()
+        and notice_date[4] == "-" else None,
         "prepared_row": rec.get("prepared_row"),
         "dedupe_key": rec.get("dedupe_key"),
         "raw_record_hash": rec.get("raw_record_hash"),
-        "source_row_sha256": rec.get("source_row_sha256"),
+        "source_row_sha256": source_row_sha256,
         "source_identity": rec.get("source_identity"),
         "source_notice_id": rec.get("source_notice_id"),
         "source_url": rec.get("source_url"),
-        "raw_extra": rec.get("raw_extra"),
+        "raw_extra": raw_extra,
         "error": rec.get("error"),
     }
+
+
+def _coalesced_observations(origin: str, records: list[dict]) -> list[dict]:
+    """Identify rows ingest will collapse under the same key/content hash."""
+    previous_by_key: dict[str, dict] = {}
+    excluded = []
+    for rec in records:
+        prior = previous_by_key.get(rec["dedupe_key"])
+        if prior and prior["raw_record_hash"] == rec["raw_record_hash"]:
+            item = _raw_exception(origin, "coalesced_same_key_content", rec)
+            item.update({
+                "match_basis": "canonical_key_and_content",
+                "survivor_prepared_row": prior.get("prepared_row"),
+            })
+            excluded.append(item)
+        else:
+            previous_by_key[rec["dedupe_key"]] = rec
+    return excluded
 
 
 def build(
@@ -114,6 +112,7 @@ def build(
             for cfg in configs:
                 postal = cfg.postal
                 entry: dict = {}
+                pending_exceptions: list[dict] = []
                 report["states"][postal.upper()] = entry
                 source_dir = raw_dir
                 source_path = raw_dir / f"{postal}.csv"
@@ -126,36 +125,35 @@ def build(
                     if not source_path.is_file():
                         entry["status"] = "missing_raw"
                         if exceptions is not None:
-                            exceptions.append({
+                            pending_exceptions.append({
                                 "origin": origin, "state": postal.upper(),
                                 "reason": "missing_source_file",
                             })
+                            exceptions.extend(pending_exceptions)
                         continue
+                    from warnlive.migrate.source_bundle import validate_agency_raw_file
+
+                    validate_agency_raw_file(postal, source_path)
                     norm = normalize_file(postal, source_dir, cfg.source_url)
                     entry.update(raw_rows=norm.raw_rows, parsed_rows=len(norm.records),
                                  parse_failures=norm.failed_rows)
                     if exceptions is not None:
-                        exceptions.extend(
+                        pending_exceptions.extend(
                             _raw_exception(origin, "parse_failure", failure)
                             for failure in norm.failures
                         )
-                    if postal in {"ga", "ia", "ks"}:
-                        conflicts = (
-                            _ia_conflicts(norm.records) if postal == "ia"
-                            else _ga_idless_conflicts(norm.records) if postal == "ga"
-                            else _ks_conflicts(norm.records)
-                        )
+                    if postal in {"ga", "ia", "il", "ks", "nj"}:
+                        reasons = exclusion_reasons(postal, norm.records)
+                        conflicts = set(reasons)
                         entry["quarantined_keys"] = len(conflicts)
                         entry["quarantined_rows"] = sum(
                             record["dedupe_key"] in conflicts for record in norm.records
                         )
                         if exceptions is not None:
-                            exceptions.extend(
+                            pending_exceptions.extend(
                                 _raw_exception(
                                     origin,
-                                    "missing_source_identity" if postal == "ks"
-                                    and not record.get("source_identity")
-                                    else "conflicting_same_key",
+                                    reasons[record["dedupe_key"]],
                                     record,
                                 )
                                 for record in norm.records
@@ -170,11 +168,14 @@ def build(
                     if verification.verdict == "failed":
                         entry["status"] = "verification_failed"
                         if exceptions is not None:
-                            exceptions.extend(
+                            pending_exceptions.extend(
                                 _raw_exception(origin, "verification_failed", record)
                                 for record in norm.records
                             )
+                            exceptions.extend(pending_exceptions)
                         continue
+                    if exceptions is not None:
+                        pending_exceptions.extend(_coalesced_observations(origin, norm.records))
                     stats = ingest(conn, norm.records, observed_at=now[:10])
                     entry.update(status="ingested", new=stats.new, updated=stats.updated,
                                  unchanged=stats.unchanged, coalesced=stats.coalesced,
@@ -185,14 +186,18 @@ def build(
                         - stats.new - stats.updated - stats.unchanged
                         - stats.coalesced
                     )
+                    if exceptions is not None:
+                        exceptions.extend(pending_exceptions)
                 except Exception as exc:  # one source cannot invalidate other candidates
                     conn.rollback()
                     entry.update(status="error", error=f"{type(exc).__name__}: {exc}")
                     if exceptions is not None:
-                        exceptions.append({
-                            "origin": origin, "state": postal.upper(),
-                            "reason": "state_error", "error": entry["error"],
-                        })
+                        # A source-only release cannot account for a failed batch:
+                        # the transaction may have removed proposed survivors.
+                        # Discard staged dispositions and stop the candidate.
+                        raise RuntimeError(
+                            f"source-only state {postal.upper()} failed: {entry['error']}"
+                        ) from exc
             report["total_notices"] = conn.execute("SELECT COUNT(*) FROM notices").fetchone()[0]
             report["total_versions"] = conn.execute("SELECT COUNT(*) FROM notice_versions").fetchone()[0]
             report["total_workers"] = conn.execute(

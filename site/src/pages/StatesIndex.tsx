@@ -12,7 +12,7 @@ const STATUS_TONE: Record<string, string> = {
   unverified: "unknown",
 };
 const STATUS_LABEL: Record<string, string> = {
-  active: "Automated",
+  active: "Configured",
   archive: "Archived data",
   broken: "Source down",
   manual_only: "No public portal",
@@ -30,6 +30,10 @@ export function StatesIndex() {
   return (
     <div>
       <h2 className="font-display text-2xl mb-6">State coverage</h2>
+      <p className="text-sm font-serif text-ink-muted max-w-2xl mb-5 leading-relaxed">
+        Counts are admitted notices in this build. A configured source may have
+        paused or failed collection; open a profile for its latest recorded check.
+      </p>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10">
         {entries.map(([postal, s]) => (
           <Link

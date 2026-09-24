@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import csv
 import json
+from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -97,10 +98,16 @@ def verify_state(
             severity="warn",
         )
     else:
+        expected = Counter(cfg.expected_columns)
+        observed = Counter(header)
+        same_columns = observed == expected
         result.add(
             "schema_drift",
-            header == cfg.expected_columns,
-            "header matches snapshot" if header == cfg.expected_columns else f"header drifted: {header}",
+            same_columns,
+            ("header matches snapshot" if header == cfg.expected_columns
+             else "same columns in a different order" if same_columns
+             else f"header drifted: missing={list((expected - observed).elements())}, "
+                  f"added={list((observed - expected).elements())}"),
             severity="warn",
         )
 
@@ -122,8 +129,16 @@ def verify_state(
     else:
         result.add("employer_coverage", False, "no records normalized")
 
-    # date_sanity
-    dates = [_parse_iso(r["notice_date"]) for r in norm.records]
+    # Illinois's public export has an agency report date, not a verified
+    # legal notice date. Monitor that source clock without relabeling it.
+    date_label = "agency_reported_date" if cfg.postal == "il" else "notice_date"
+    if cfg.postal == "il":
+        dates = [
+            _parse_iso(json.loads(r.get("source_details") or "{}").get("agency_reported_date"))
+            for r in norm.records
+        ]
+    else:
+        dates = [_parse_iso(r["notice_date"]) for r in norm.records]
     dates = [d for d in dates if d is not None]
     if n and not dates:
         # Zero parseable notice dates would otherwise skip date_sanity AND
@@ -138,7 +153,7 @@ def verify_state(
         result.add(
             "date_sanity",
             bool(effective),
-            f"none of {n} records has a parseable notice_date"
+            f"none of {n} records has a parseable {date_label}"
             + ("" if effective else " or effective_date"),
             severity="fail" if not effective else "warn",
         )
@@ -148,7 +163,7 @@ def verify_state(
         result.add(
             "date_sanity",
             bad / len(dates) <= DATE_SANITY_MAX_BAD,
-            f"{bad}/{len(dates)} notice_dates outside {MIN_YEAR}..{horizon}",
+            f"{bad}/{len(dates)} {date_label} values outside {MIN_YEAR}..{horizon}",
         )
 
         # freshness
@@ -158,7 +173,7 @@ def verify_state(
             result.add(
                 "freshness",
                 age <= cfg.staleness_days,
-                f"newest notice_date {newest} is {age}d old (max {cfg.staleness_days}d)",
+                f"newest {date_label} {newest} is {age}d old (max {cfg.staleness_days}d)",
                 severity="warn",
             )
 

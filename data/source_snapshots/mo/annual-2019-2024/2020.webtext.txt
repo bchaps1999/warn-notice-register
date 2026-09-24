@@ -1,0 +1,227 @@
+# Browser-rendered official agency text via web.open on 2026-09-24
+# URL: https://jobs.mo.gov/warn/2020
+# Total source lines: 226
+L0: Search [Input: ]
+L1: 
+L2: [Input] [Input] [Input]
+L3: ## Google Translate
+L4: 
+L5: Effective March 24, 2023: If you wish to receive further information about the most recent WARN Notice submitted to the Office of Workforce Development (OWD), sign up for our cite0†WARN Notice Mailing List†public.govdelivery.com .  WARN Notice updates will be emailed during business operating hours.
+L6: 
+L7: To receive any previous WARN Notices, submit an open records request to  recordscustodian@dhewd.mo.gov ( recordscustodian@dhewd.mo.gov).
+L8: For all other inquiries, please contact Heather Dolce, Assistant Commissioner for Communications and Outreach at heather.dolce@dhewd.mo.gov ( heather.dolce@dhewd.mo.gov).
+L9: # WARN Notices
+L10: 
+L11: cite1†Click here to learn more about the WARN Notice System L12: 
+L13: Company name [Input]
+L14: 
+L15: Counties [Select]
+L16: 
+L17: Type [Select]
+L18: 
+L19: [Input]
+L20: cite2†Received | cite3†Title | Location(s)  | cite4†County | Region  | cite5†Type | Layoff date(s)  | cite6†# affected L21: --- | --- | --- | --- | --- | --- | --- | ---
+L22: 01/15/2020
+L23: 01/27/2020 rev  | Concentrix CVG Corporation (formerly Convergys)  | Arnold  | Jefferson  | Jefferson/Franklin Consortium  | Closing  | 04/04/2020  | 168
+L24: 02/28/2020  | FedEx Ground Package System, Inc. (Earth City)  | Earth City  | St. Louis (county)  | St. Louis & vicinity  | Closing  | 05/02/2020  | 125
+L25: 03/06/2020  | Hy-Vee Fulfillment Center (Kansas City)  | Kansas City  | Jackson  | Kansas City & Vicinity  | Closing  | 05/06/2020  | 583
+L26: 03/16/2020  | J W Aluminum Inc. (St. Louis)  | St. Louis (city)  | St. Louis (county)  | SLATE  | Closing  | 05/15/2020  | 185
+L27: 03/17/2020  | Major Custom Assemblies, Inc.  | Hazelwood  | St. Louis (county)  | St. Louis County  | Closing  | 03/13/2020  | 95
+L28: 03/18/2020  | Schmidt Restaurant Group LLC d/b/a Salt + Smoke (St. Louis - 75, University City - 84 & St. Charles - 59)  | St. Louis (city)
+L29: University City
+L30: St. Charles  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 03/23/2020  | 218
+L31: 03/18/2020  | Lidia's Kansas City LLC  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 03/16/2020  | 94
+L32: 03/19/2020  | Trans State Airlines, LLC  | Bridgeton
+L33: Hazelwood
+L34: Springfield  |  |  | Closing  | 04/02/2020  | 718
+L35: 03/20/2020
+L36: 05/14/2020 rev  | Amcor Rigid Packaging USA, LLC  | Hazelwood  | St. Louis (county)  | St. Louis County  | Closing  | 07/17/2020  | 93
+L37: 03/22/2020
+L38: 05/22/2020 rev  | Aimbridge Hospitality - Hilton Branson Convention Center  | Branson  | Taney  | Ozark  | Layoff  | 03/20/2020  | 127
+L39: 03/23/2020
+L40: 04/08/2020 rev  | Alamo Drafthouse Cinema - Springfield  | Springfield  | Greene  | Ozark  | Layoff  | 03/16/2020  | 207
+L41: 03/23/2020
+L42: 08/12/2020 rev  | TEI (STLH), LLC (Four Seasons Hotel St. Louis)  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 03/25/2020  | 368
+L43: 03/25/2020  | Schulte Companies and its affiliated companies including Schulte Hospitality Group  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 03/16/2020  | 229
+L44: 03/26/2020  | PLE Enterprises, Inc d/b/a Rolling Hills Auto Plaza  | St. Joseph  | Buchanan  | Northwest  | Layoff  | 03/23/2020  | 52
+L45: 03/26/2020
+L46: 10/16/2020 rev  | Crossroads Hotel - Kansas City (managed by Aparium Hospitality Services LTD  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 03/17/2020  | 173
+L47: 03/26/2020  | Adams Mark Hotel & Conference Center - Kansas City  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 03/17/2020  | 138
+L48: 03/26/2020  | Alsco, Inc Linen & Uniform Rental Services - St. Louis  | St. Louis (city)  | St. Louis (county)  | SLATE  | Layoff  | 03/26/2020  | 39
+L49: 03/26/2020  | Spartan Light Metal Products - Mexico  | Mexico  | Audrain  | Central  | Layoff  | 03/26/2020  | 332
+L50: 03/26/2020  | Spartan Light Metal Products - Hannibal  | Hannibal  | Marion  | Northeast  | Layoff  | 03/26/2020  | 72
+L51: 03/30/2020  | America's Auto Auction - Kansas City  | Kansas City  | Platte  | Kansas City & Vicinity  | Layoff  | 03/17/2020  | 62
+L52: 03/30/2020  | Gaming Partners International  | Blue Springs  | Jackson  | Kansas City & Vicinity  | Closing  | 05/26/2020  | 112
+L53: 03/30/2020
+L54: 07/15/2020 rev  | HGI - Mark Twain LLC  | La Grange  | Lewis  | Northeast  | Layoff  | 04/01/2020
+L55: 04/06/2020  | 139
+L56: 03/30/2020  | Paper Source - St. Louis  | St. Louis (city)  | St. Louis (county)  | St. Louis County  | Layoff  | 03/29/2020  | 13
+L57: 03/30/2020  | Paper Source - Kansas City  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 03/29/2020  | 9
+L58: 03/30/2020  | Robinson Construction  | Bloomfield  | Stoddard  | Southeast  | Layoff  | 03/27/2020  | 80
+L59: 03/31/2020
+L60: 05/14/2020 rev  | HGI - St. Jo LLC (St. Jo Frontier Casino)  | St. Joseph  | Buchanan  | Northwest  | Layoff  | 04/01/2020
+L61: 04/06/2020  | 150
+L62: 03/31/2020  | Rembrandt Enterprises  | Neosho  | Newton  | Southwest  | Closing  | 06/01/2020  | 52
+L63: 03/31/2020  | Welk Resorts  | Branson  | Taney  | Ozark  | Layoff  | 03/20/0202  | 94
+L64: 03/31/2020  | Rawlings Group  | Washington  | Franklin  | Jefferson/Franklin Consortium  | Layoff  | 03/27/2020  | 130
+L65: 03/31/2020  | AutoAlert, LLC  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 03/26/2020  | 200
+L66: 04/05/2020
+L67: 07/15/2020 rev  | Justin Brands Facilities  | Cassville  | Barry  | Southwest  | Layoff  | 04/01/2020  | 321
+L68: 04/05/2020  | Justin Retail  | Monett  | Barry  | Southwest  | Layoff  | 04/01/2020  | 14
+L69: 04/06/2020  | Legget & Platt, Branch One  | Carthage  | Jasper  | Southwest  | Layoff  | 04/03/2020  | 422
+L70: 04/06/2020  | Red Wing Shoe Company  | Potosi  | Washington  | Central  | Layoff  | 04/07/2020  | 198
+L71: 04/06/2020  | Innkeeper Hospitality Services, LLC  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 03/20/2020  | 136
+L72: 04/06/2020  | Wellbridge Athletic Club & Spa  | Clayton  | St. Louis (county)  | St. Louis County  | Layoff  | 03/22/2020  | 213
+L73: 04/07/2020  | Hooters of America, LLC (multiple locations)  |  |  |  | Layoff  | 03/20/2020  | 321
+L74: 04/07/2020  | Isle of Capri Casino Kansas City  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 04/11/2020  | 209
+L75: 04/07/2020  | Isle of Capri Casino Boonville d/b/a IOC-Boonville, Inc  | Boonville  | Cooper  | Central  | Layoff  | 04/11/2020  | 350
+L76: 04/07/2020  | Lumiere Place Casino and Hotels  | St. Louis (city)  | St. Louis (county)  | SLATE  | Layoff  | 04/11/2020  | 646
+L77: 04/08/2020  | Caleres, Inc.  | Clayton  | St. Louis (county)  | St. Louis County  | Layoff  | 03/28/2020  | 368
+L78: 04/08/2020  | SuitSupply St. Louis Inc.  | St. Louis (city)  | St. Louis (county)  | SLATE  | Layoff  | 03/29/2020  | 6
+L79: 04/09/2020  | Asbury Automotive Group - Audi Creve Coeur  | St. Louis (city)  | St. Louis (county)  | St. Louis County  | Layoff  | 04/03/2020  | 24
+L80: 04/09/2020
+L81: 05/05/2020 rev  | Asbury Automotive Group - Landrover Jaguar Creve Coeur  | Creve Coeur  | St. Louis (county)  | St. Louis County  | Layoff  | 04/03/2020  | 43
+L82: 04/09/2020  | Asbury Automotive Group - Mercedes Benz O'Fallon  | O'Fallon  | St. Louis (county)  | St. Louis County  | Layoff  | 04/03/2020  | 11
+L83: 04/09/2020
+L84: 05/05/2020 rev  | Asbury Automotive Group - Plaza BMW Creve Coeur  | Creve Coeur  | St. Louis (county)  | St. Louis County  | Layoff  | 04/03/2020  | 39
+L85: 04/09/2020
+L86: 05/05/2020 rev  | Asbury Automotive Group - Plaza Infiniti Creve Coeur  | Creve Coeur  | St. Louis (county)  | St. Louis County  | Layoff  | 04/03/2020  | 20
+L87: 04/09/2020
+L88: 05/05/2020 rev  | Asbury Automotive Group - Plaza Lexus Creve Coeur  | Creve Coeur  | St. Louis (county)  | St. Louis County  | Layoff  | 04/03/2020  | 51
+L89: 04/09/2020
+L90: 05/05/2020 rev  | Asbury Automotive Group - Mercedes Benz/Smart Creve Coeur  | Creve Coeur  | St. Louis (county)  | St. Louis County  | Layoff  | 04/03/2020  | 54
+L91: 04/10/2020
+L92: 09/04/2020 rev  | Leonard’s Metal, Inc. d/b/a LMI Aerospace - Fountain Lakes  | St. Charles  | St. Charles  | St. Charles County  | Layoff  | 04/13/2020  | 140
+L93: 04/10/2020  | Leonard’s Metal, Inc. d/b/a LMI Aerospace - Highway 94  | St. Charles  | St. Charles  | St. Charles County  | Layoff  | 04/13/2020  | 52
+L94: 04/10/2020  | Ozark Mountain Technologies, LLC  | Cuba  | Crawford  | Central  | Layoff  | 04/13/2020  | 87
+L95: 04/10/2020  | Valent Aerostructures, LLC  | Washington  | Franklin  | Jefferson/Franklin Consortium  | Layoff  | 04/13/2020  | 80
+L96: 04/13/2020  | Kansas City Area Transportation Authority  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 04/13/2020  | 11
+L97: 04/13/2020  | Frontenac Property Owner LLC d/b/a Hilton St. Louis Frontenac Hotel  | Frontenac  | St. Louis (county)  | St. Louis County  | Layoff  | 04/13/2020  | 128
+L98: 04/14/2020  | Silver Dollar City Theme Park, Silver Dollar City Campground, the Showboat Branson Belle, and White Water  | Branson  | Taney  | Ozark  | Layoff  | 04/20/2020  | 257
+L99: 04/15/2020  | Scholastic Book Fairs  | Fenton  | St. Louis (county)  | St. Louis County  | Layoff  | 03/27/2020  | 111
+L100: 04/16/2020  | Marriott Kansas City Country Club Plaza  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 04/30/2020  | 114
+L101: 04/16/2020  | RR Donnelley  | St. Louis (city)  | St. Louis (county)  | SLATE  | Closing  | 04/16/2020  | 72
+L102: 04/17/2020  | Avis Budget Car Rental, LLC and its subsidiaries  |  | St. Louis (county)  | St. Louis County  | Layoff  | 03/02/2020  | 163
+L103: 04/17/2020  | Black Bear Diner - St. Charles  | St. Charles  | St. Charles  | St. Charles County  | Layoff  | 04/09/2020  | 38
+L104: 04/17/2020  | Black Bear Diner - Independence  | Independence  | Jackson  | Kansas City & Vicinity  | Layoff  | 04/09/2020  | 65
+L105: 04/17/2020  | Guitar Center, Inc. (GTRC Services, Inc.)  | Kansas City  | Clay  | Kansas City & Vicinity  | Layoff  | 04/10/2020  | 291
+L106: 04/17/2020  | Pinnacle Healthcare System, Inc.  |  |  | Multiple Locations  | Closing  | 04/10/2020  | 125
+L107: 04/17/2020  | Recovery Management Corporation d/b/a Cargo Largo  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 04/10/2020  | 177
+L108: 04/20/2020
+L109: 12/10/2020 rev  | Dura Automotive Systems, LLC  | Moberly  | Randolph  | Northeast  | Layoff  | 05/01/2020  | 72
+L110: 04/21/2020  | Greater KC LINC, INC - Caring Community Before and After School Program  | Kansas City  | Jackson  | Jackson  | Layoff  | 05/01/2020  | 471
+L111: 04/22/2020  | Leggett & Platt Automotive  | Carthage  | Jasper  | Southwest  | Layoff  | 03/23/2020  | 215
+L112: 04/22/2020  | Visionworks  |  |  | Multiple Locations  | Layoff  | 04/04/2020  | 94
+L113: 04/24/2020  | Dental Arts Laboratories, Inc.  | St. Louis (city)  | St. Louis (county)  | St. Louis County  | Layoff  | 04/09/2020  | 33
+L114: 04/27/2020  | Legget & Platt Wire Mill  | Carthage  | Jasper  | Southwest  | Layoff  | 04/09/2020  | 83
+L115: 04/27/2020  | Great Plains Specialty Finance, Inc.  |  |  | Multiple Locations  | Layoff  | 04/21/2020  | 12
+L116: 04/27/2020  | EAN Services, LLC - St. Louis Contact Center d/b/a Enterprise  | St. Louis (city)  | St. Louis (county)  | St. Louis County  | Layoff  | 04/20/2020  | 820
+L117: 04/27/2020  | OS Restaurant Services LLC (Blooming Brands, d/b/a: Bonefish, Carrabba’s, Flemings, & Outback)  |  |  | Multiple Locations  | Layoff  | 03/20/2020  | 935
+L118: 04/27/2020  | C.R. Metal Products, Inc.  | Creve Coeur  | St. Louis (county)  | St. Louis County  | Layoff  | 04/22/2020  | 106
+L119: 04/27/2020
+L120: 06/30/2020 rev  | EAN Services, LLC  |  | St. Louis (county)  | St. Louis County  | Layoff  | 04/30/2020  | 59
+L121: 04/27/2020
+L122: 06/23/2020 rev  | Enterprise Holdings - Contact Center  |  | St. Louis (county)  | St. Louis County  | Layoff  | 04/30/2020  | 366
+L123: 04/27/2020
+L124: 06/23/2020 rev  | Enterprise Holdings - Corporate  |  | St. Louis (county)  | St. Louis County  | Layoff  | 04/30/2020  | 377
+L125: 04/27/2020  | Enterprise Transport - Various  |  | St. Louis (county)  | Multiple Locations  | Layoff  | 03/23/2020  | 447
+L126: 04/28/2020  | Enterprise Holdings-Enterprise Rent A Car - KC  | Kansas City  | Platte  | Kansas City & Vicinity  | Layoff  | 04/03/2020  | 56
+L127: 04/28/2020  | Enterprise Holdings - National and Alamo Rent A Car  | Kansas City  | Platte  | Kansas City & Vicinity  | Layoff  | 04/30/2020  | 84
+L128: 04/29/2020  | Atrium Hospitality: Chateau on the Lake Resort Spa & Convention Center  | Branson  | Taney  | Ozark  | Layoff  | 03/12/2020  | 115
+L129: 05/01/2020  | First Student - House Springs  | House Springs  | Jefferson  | Jefferson/Franklin Consortium  | Layoff  | 06/30/2020  | 127
+L130: 05/08/2020  | Cox Automotive - Bridgeton  | Bridgeton  | St. Louis (county)  | St. Louis County  | Layoff  | 05/17/2020  | 141
+L131: 05/08/2020  | Cox Automotive - Kansas City  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 05/17/2020  | 174
+L132: 05/11/2020
+L133: 07/01/2020 rev  | TriWest Healthcare Alliance  | Kansas City  | Clay  | Kansas City & Vicinity  | Layoff  | 04/20/2020  | 191
+L134: 05/11/2020  | Atrium Hospitality - St. Charles Embassy Suites  | St. Charles  | St. Charles  | St. Charles County  | Layoff  | 03/12/2020  | 87
+L135: 05/11/2020  | Atrium Hospitality - Springfield University Plaza  | Springfield  | Greene  | Ozark  | Layoff  | 03/12/2020  | 112
+L136: 05/12/2020  | Leggett & Platt - Corporate Offices  | Carthage  | Jasper  | Southwest  | Layoff  | 03/09/2020  | 200
+L137: 05/18/2020  | Atrium Hospitality - Jefferson City Capitol Plaza  | Jefferson City  | Cole  | Central  | Layoff  | 03/12/2020  | 108
+L138: 05/18/2020  | Atrium Hospitality - Kansas City Embassy Suites  | Kansas City  | Platte  | Kansas City & Vicinity  | Layoff  | 03/12/2020  | 92
+L139: 05/19/2020
+L140: 07/17/2020 rev  | Exide Technologies: Canon Hollow Facility  | Forest City  | Holt  | Northwest  | Layoff  | 08/21/2020  | 84
+L141: 05/19/2020  | Kellwood Apparel  | Chesterfield  | St. Louis (county)  | St. Louis County  | Layoff  | 04/01/2020  | 2
+L142: 05/22/2020  | 21c Museum Hotel  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 05/29/2020  | 18
+L143: 05/22/2020  | Ameristar Casino Resort Spa - St. Charles  | St. Charles  | St. Charles  | St. Charles County  | Layoff  | 07/01/2020  | 947
+L144: 05/22/2020  | Ameristar Casino Hotel - Kansas City  | Kansas City  | Clay  | Kansas City & Vicinity  | Layoff  | 07/01/2020  | 578
+L145: 05/22/2020  | Mercy Hospital - Springfield  | Springfield  | Greene  | Ozark  | Layoff  | 07/01/2020  | 696
+L146: 05/22/2020  | Mercy Hospital - St. Louis  |  | St. Louis (county)  | St. Louis County  | Layoff  | 07/01/2020  | 663
+L147: 05/22/2020
+L148: 09/29/2020 rev  | Pacific Architects and Engineers (PAE)  | Lee’s Summit  | Jackson  | Kansas City & Vicinity  | Layoff  | 11/29/2020  | 697
+L149: 05/26/2020  | Merritt Hospitality, LLC - Hilton KC Airport  | Kansas City  | Platte  | Kansas City & Vicinity  | Layoff  | 05/27/2020  | 86
+L150: 06/01/2020  | Piramal Glass USA Inc.  | Park Hills  | St. Francois  | Southeast  | Layoff  | 07/31/2020  | 165
+L151: 06/04/2020
+L152: 06/08/2020 rev  | LM Services Corporation d/b/a: Hilton Garden Inn-O'Fallon, Hilton Garden Inn-Chesterfield, Hilton Garden Inn-St. Louis Airport, Hilton St. Louis at the Ballpark, Holiday Inn Forest Park, Homewood Suites by Hilton-Maryland Heights, Embassy Suites by Hilton  |  |  | Multiple Locations  | Layoff  | 06/12/2020  | 1488
+L153: 06/04/2020
+L154: 08/28/2020 rev  | Westin Crown Plaza Hotel Co. - Sheraton Kansas City Hotel at Crown Center & The Westin Kansas City at Crown Center  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 03/21/2020  | 435
+L155: 06/05/2020  | The Ritz Carlton  | Clayton  | St. Louis (county)  | St. Louis County  | Layoff  | 03/21/2020  | 307
+L156: 06/06/2020
+L157: 07/07/2020 rev  | Argosy Casino Hotel and Spa  | Riverside  | Platte  | Kansas City & Vicinity  | Layoff  | 08/15/2020  | 354
+L158: 06/08/2020  | Marriott International Inc. d/b/a Marriott St. Louis Grand  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 03/21/2020  | 384
+L159: 06/08/2020  | Hyatt Corporation d/b/a Hyatt Regency St. Louis at the Arch  | St. Louis (city)  | St. Louis (county)  | SLATE  | Layoff  | 03/21/2020  | 245
+L160: 06/09/2020  | LMI Aerospace  | St. Charles  | St. Charles  | St. Charles County  | Layoff  | 06/22/2020  | 60
+L161: 06/12/2020  | STL Gaming Ventures, LLC d/b/a Hollywood Casino St. Louis  | Maryland Heights  | St. Louis (county)  | St. Louis County  | Layoff  | 08/12/2020  | 616
+L162: 06/12/2020
+L163: 07/10/2020 rev  | PNK River City d/b/a River City Casino and Hotel  | Lemay  | St. Louis (county)  | St. Louis County  | Layoff  | 08/15/2020  | 480
+L164: 06/12/2020
+L165: 10/30/2020 rev  | Kansas City Downtown Hotel Group, LLC - Marriott Downtown  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 03/20/0202  | 280
+L166: 06/15/2020  | Jacobsen Daniels Enterprises, LLC  | St. Louis (city)  | St. Louis (county)  | St. Louis County  | Layoff  | 06/12/2020  | 1
+L167: 06/24/2020
+L168: 10/30/2020 rev  | Cerner Corporation  |  |  | Kansas City & Vicinity  | Layoff  | 08/25/2020  | 94
+L169: 06/24/2020  | Enterprise Holdings - IT  |  |  | Kansas City & Vicinity  | Layoff  | 06/30/2020  | 23
+L170: 06/24/2020  | Levy  | St. Louis (city)  | St. Louis (county)  | SLATE  | Layoff  | 08/01/2020  | 210
+L171: 07/02/2020  | Towne Suites Hotel  | Liberty  | Clay  | Kansas City & Vicinity  | Layoff  | 06/30/2020  | 10
+L172: 07/02/2020  | Hampton Inn Hotel - Kansas City  | Kansas City  | Clay  | Kansas City & Vicinity  | Layoff  | 06/30/2020  | 14
+L173: 07/02/2020  | Hampton Inn Hotel - St. Louis  | St. Louis (city)  | St. Louis (county)  | St. Louis County  | Layoff  | 06/30/2020  | 24
+L174: 07/02/2020  | Hampton Inn Hotel - Forrest Park  | St. Louis (city)  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 06/30/2020  | 18
+L175: 07/06/2020  | Delaware North, DBA: St. Louis Sportservice, Springfield Sportservice  |  |  | St. Louis City St. Louis County and Ozark Regions  | Layoff  | 03/01/2020  | 1810
+L176: 07/07/2020  | Compass Group  | Kansas City  |  | Kansas City & Vicinity  | Layoff  | 07/15/2020  | 67
+L177: 07/17/2020
+L178: 09/22/2020 rev  | J. C. Penney Corporation, Inc.  | Independence  | Jackson  | Kansas City & Vicinity  | Layoff  | 10/18/2020  | 69
+L179: 07/20/2020  | Northrop Grumman  | Independence  | Jackson  | Kansas City & Vicinity  | Layoff  | 09/30/2020  | 1700
+L180: 07/21/2020  | Heartland Poker Tour  | St. Louis (city)  | St. Louis (county)  | St. Louis County  | Layoff  | 09/20/2020  | 3
+L181: 07/24/2020  | American Queen Steamboat Company  | St. Louis (city)  | St. Louis (county)  | SLATE  | Layoff  | 09/24/2020  | 250
+L182: 07/29/2020  | Carlson Wagonlit Travel Agency, LLC  | Maryland Heights  | St. Louis (county)  | St. Louis County  | Layoff  | 04/01/2020  | 58
+L183: 07/29/2020  | Embassy Suites by Hilton - St. Louis  | St. Louis (city)  | St. Louis (county)  | SLATE  | Layoff  | 03/20/2020  | 31
+L184: 07/30/2020  | GoJet Airlines  | Bridgeton  | St. Louis (county)  | St. Louis County  | Layoff  | 10/01/2020  | 525
+L185: 07/30/2020  | Republic Airways  | Kansas City  | Platte  | Kansas City & Vicinity  | Layoff  | 10/01/2020  | 104
+L186: 07/30/2020  | Wyndham Vacation Ownership  | Branson  | Taney  | Ozark  | Layoff  | 04/01/2020  | 191
+L187: 08/03/2020
+L188: 11/16/2020 rev  | Remington Outdoor Company  | Lexington  | Lafayette  | West Central  | Closing  | 09/29/2020  | 64
+L189: 08/04/2020  | XPO Logistics Supply Chain, Inc.  | Independence  | Jackson  | Kansas City & Vicinity  | Layoff  | 09/30/2020  | 70
+L190: 08/11/2020  | Embassy Suites by Hilton - Kansas City  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 03/18/2020  | 40
+L191: 08/11/2020  | Lozier Corporation  | Joplin  | Jasper  | Southwest  | Layoff  | 10/06/2020  | 127
+L192: 08/12/2020  | HMSHost - Kansas City  | Kansas City  | Platte  | Kansas City & Vicinity  | Layoff  | 10/15/2020  | 229
+L193: 08/12/2020
+L194: 10/20/2020 rev  | Maritz  | Fenton  | St. Louis (county)  | St. Louis County  | Layoff  | 04/16/2020  | 631
+L195: 08/12/2020  | HMSHost - St. Louis  | Bridgeton  | St. Louis (county)  | St. Louis County  | Layoff  | 10/15/2020  | 353
+L196: 08/17/2020  | Aramark  | Florissant  | St. Louis (county)  | St. Louis County  | Layoff  | 09/30/2020  | 81
+L197: 08/24/2020  | Mountain View Fabricators/Royal/Coin Acceptors d/b/a Royal Remanufacturing  | Mountain View  | Howell  | South Central  | Layoff  | 06/10/2020  | 120
+L198: 08/26/2020  | Alamo Drafthouse Cinema - Kansas City  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 03/17/2020  | 75
+L199: 08/28/2020  | Avis Budget Car Rental, LLC  |  |  | Multiple Locations  | Layoff  | 04/01/2020  | 7
+L200: 08/28/2020  | InterContinental Kansas City at the Plaza  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 08/29/2020  | 114
+L201: 09/08/2020  | Airport Management Services/Hudson Group  | St. Louis (city)  | St. Louis (county)  | St. Louis County  | Layoff  | 07/31/2020  | 84
+L202: 09/11/2020  | Chase Park Plaza Royal Sonesta Hotel  | St. Louis (city)  | St. Louis (county)  | SLATE  | Layoff  | 11/10/2020  | 208
+L203: 09/18/2020  | PF Chang's China Bistro - Chesterfield  | Chesterfield  | St. Louis (county)  | St. Louis & vicinity  | Layoff  | 03/15/2020  | 75
+L204: 09/18/2020  | PF Chang's China Bistro - St. Charles  | St. Charles  | St. Charles  | St. Charles County  | Layoff  | 03/15/2020  | 75
+L205: 09/18/2020  | PF Chang's China Bistro - Kansas City  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 03/15/2020  | 75
+L206: 10/12/2020  | Kindred Healthcare  | St. Louis (city)  | St. Louis (county)  | St. Louis County  | Layoff  | 12/20/2020  | 60
+L207: 10/15/2020
+L208: 10/19/2020 rev  | Missouri Walnut  | Neosho  | Newton  | Southwest  | Layoff  | 12/15/2020  | 60
+L209: 10/16/2020  | Aramark-Convention Center  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 10/16/2020  | 57
+L210: 10/16/2020  | Aramark-Kauffman Stadium  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 10/16/2020  | 523
+L211: 10/26/2020  | The Fontaine Hotel  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 06/05/2020  | 63
+L212: 11/04/2020  | Aimbridge Hospitality (Hilton Branson Convention Center Hotel)  | Branson  | Taney  | Ozark  | Layoff  | 12/30/2020  | 102
+L213: 11/04/2020  | Sodexo - University of Missouri Kansas City  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 03/01/2020  | 71
+L214: 11/09/2020  | The McClatchy Company, LLC (Kansas City Star)  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 01/16/2021  | 124
+L215: 11/13/2020
+L216: 11/24/2020 rev  | Meridian Medical Technologies  | St. Louis (city)  | St. Louis (county)  | St. Louis County  | Layoff  | 11/13/2020  | 63
+L217: 11/20/2020  | State Farm Mutual Automobile Insurance Company  | Earth City  | St. Louis (county)  | St. Louis County  | Layoff  | 01/31/2021  | 111
+L218: 11/30/2020  | Automobile Club of Missouri  | Hazelwood  | St. Louis (county)  | St. Louis County  | Layoff  | 02/05/2021  | 95
+L219: 12/01/2020  | Anesthesia Associates of Kansas City  | Kansas City  | Jackson  | Kansas City & Vicinity  | Layoff  | 01/31/2021  | 68
+L220: 12/03/2020
+L221: 01/11/2021 rev  | Southwest Airlines, Co.  |  |  | Multiple Locations  | Layoff  | 01/11/2021  | 0
+L222: 12/28/2020
+L223: 02/24/2021 rev  | Journagan Construction  | Springfield  | Greene  | Springfield Area  | Layoff  | 03/05/2021  | 121
+L224: 12/28/2020  | CEVA Logistics  | Liberty  | Clay  |  | Layoff  | 02/28/2021  | 63
+L225:  |  |  |  |  |  |  | 33787
