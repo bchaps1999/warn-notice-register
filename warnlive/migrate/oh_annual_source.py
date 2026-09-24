@@ -13,7 +13,7 @@ import io
 import json
 import re
 import tarfile
-from collections import Counter, defaultdict
+from collections import Counter
 from datetime import datetime
 from pathlib import Path
 
@@ -22,6 +22,7 @@ from bs4 import BeautifulSoup
 
 from warnlive.migrate.source_bundle import _entry, verify
 from warnlive.normalize.engine import _record_hash
+from warnlive.normalize.revisions import classify_agency_ids
 
 PREFIX = "agency/oh_annual"
 YEARS = range(2015, 2023)
@@ -169,7 +170,6 @@ def project(directory: Path, existing_ids: set[str] | None = None
             ) -> tuple[list[dict], list[dict], dict]:
     rows, _ = read_artifacts(directory)
     existing_ids = {str(x).removeprefix("OH:") for x in (existing_ids or set())}
-    by_id = defaultdict(list)
     for row in rows:
         raw_id = row["raw"]["notice_id"].strip().replace("‐", "-")
         match = ID.fullmatch(raw_id)
@@ -179,16 +179,21 @@ def project(directory: Path, existing_ids: set[str] | None = None
             r"\bUpdated\b|\bRevised\b", row["raw"]["received"], re.I)) or any(
                 re.search(r"\bUpdated\b|\bRevised\b", continuation["cells"][0], re.I)
                 for continuation in row["raw"]["continuation_rows"])
-        if row["id"]:
-            by_id[row["id"]].append(row)
-    # Prefer a clean original over a revised entry; where the captured table
-    # contains only a revised form, prefer the plain ID label.  Tied candidates
-    # are held because an ID collision cannot establish a unique event.
-    selected = {}
-    for ident, group in by_id.items():
-        clean = [r for r in group if not r["amended"]]
-        candidates = clean or [r for r in group if not r["updated_id"]] or group
-        selected[ident] = candidates[0] if len(candidates) == 1 else None
+    def pointer(row: dict) -> str:
+        return (f"{PREFIX}/{row['file']}:sha256:{row['artifact_sha256']}:page:{row['page']}:"
+                f"table_row:{row['table_row']}:ordinal:{row['ordinal']}")
+
+    decisions = classify_agency_ids(
+        rows, row_key=pointer, agency_id=lambda r: r["id"],
+        site=lambda r: r["raw"]["city_county"].casefold().strip(),
+        action=lambda r: _action(r["raw"]["layoff_dates"]),
+        revision=lambda r: r["amended"], content=lambda r: _json(r["raw"]),
+        preferred=lambda r: not r["updated_id"],
+    )
+    revisions_by_original: dict[str, list[str]] = {}
+    for source_row, decision in decisions.items():
+        if decision.kind == "revision" and decision.related_row:
+            revisions_by_original.setdefault(decision.related_row, []).append(source_row)
     records, held = [], []
     for row in rows:
         raw = row["raw"]
@@ -197,28 +202,35 @@ def project(directory: Path, existing_ids: set[str] | None = None
             continuation["cells"][2].strip() or continuation["cells"][3].strip()
             for continuation in raw["continuation_rows"])
         origin = f"{PREFIX}/{row['file']}"
-        pointer = (f"{origin}:sha256:{row['artifact_sha256']}:page:{row['page']}:"
-                   f"table_row:{row['table_row']}:ordinal:{row['ordinal']}")
+        source_pointer = pointer(row)
+        decision = decisions[source_pointer]
         reason = ("invalid_or_multiple_notice_id" if not ident else
                   "already_represented_oh_id" if ident in existing_ids else
-                  "conflicting_original_notice_id" if selected[ident] is None else
-                  "superseding_amendment_observation" if selected[ident] is not row else
+                  "conflicting_original_notice_id" if decision.kind == "unresolved" else
+                  "superseding_amendment_observation" if decision.kind == "revision" else
+                  "duplicate_agency_capture" if decision.kind == "duplicate_capture" else
                   "multiple_sites_in_source_row" if additional_sites else
                   "missing_employer" if not raw["company"].strip() else
                   "missing_location" if not raw["city_county"].strip() else None)
         if reason:
             held.append({"origin": origin, "state": "OH", "reason": reason,
-                         "source_row": pointer, "source_row_sha256": row["source_row_sha256"],
+                         "source_row": source_pointer, "source_row_sha256": row["source_row_sha256"],
+                         "disposition": "unresolved" if decision.kind == "notice" else decision.kind,
+                         "preliminary_disposition": decision.kind,
+                         "disposition_evidence": decision.evidence,
+                         "related_source_row": decision.related_row,
                          "source_notice_id": ident, "source_url": row["source_url"],
                          "notice_year": row["year"], "raw_extra": _json(raw)})
             continue
         affected = raw["affected"].strip().replace(",", "")
         workers = int(affected) if affected.isdigit() else None
         action = _action(raw["layoff_dates"])
-        details = {"origin": origin, "source_row": pointer,
+        details = {"origin": origin, "source_row": source_pointer,
                    "source_row_sha256": row["source_row_sha256"],
                    "source_artifact_sha256": row["artifact_sha256"],
                    "identity_basis": "agency_WARN_or_Notice_ID",
+                   "disposition": decision.kind, "disposition_evidence": decision.evidence,
+                   "related_revision_source_rows": sorted(revisions_by_original.get(source_pointer, [])),
                    "agency_received_date": _date(raw["received"]),
                    "date_roles": {"Date Received": "agency_receipt",
                                   "Layoff Date(s)": "reported_action"},
@@ -242,7 +254,9 @@ def project(directory: Path, existing_ids: set[str] | None = None
                            "held": len(held),
                            "hold_reasons": dict(Counter(x["reason"] for x in held)),
                            "admitted_missing_workers": sum(x["employees_affected"] is None for x in records),
-                           "admitted_missing_action_date": sum(x["effective_date"] is None for x in records)}
+                           "admitted_missing_action_date": sum(x["effective_date"] is None for x in records),
+                           "revision_observations": sum(x["disposition"] == "revision" for x in held),
+                           "duplicate_captures": sum(x["disposition"] == "duplicate_capture" for x in held)}
 
 
 def build(base_bundle: Path, artifacts: Path, out_bundle: Path) -> dict:

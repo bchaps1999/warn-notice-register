@@ -16,6 +16,7 @@ from openpyxl import load_workbook
 from warnlive.migrate.or_source import HEADERS
 from warnlive.migrate.source_bundle import _entry, verify
 from warnlive.normalize.engine import _record_hash
+from warnlive.normalize.revisions import classify_agency_ids
 
 ARTIFACT = "or_warnlist_july_2021.xlsx"
 PREFIX = "agency/or_historical"
@@ -86,7 +87,16 @@ def project(directory: Path, existing_ids: set[str] | None = None) -> tuple[list
     """Admit complete unique WARN numbers absent from both newer captures."""
     rows, manifest = read_artifacts(directory)
     existing = existing_ids or set()
-    counts = Counter(str(row["raw"]["WARN#"] or "").strip() for row in rows)
+    def pointer(row: dict) -> str:
+        return f"{PREFIX}/{ARTIFACT}:sha256:{manifest['sha256']}:row:{row['source_row']}"
+
+    decisions = classify_agency_ids(
+        rows, row_key=pointer,
+        agency_id=lambda r: str(r["raw"]["WARN#"] or "").strip() or None,
+        site=lambda r: str(r["raw"]["Location"] or "").casefold().strip(),
+        action=lambda r: str(r["raw"]["Layoff Date"] or "")[:10] or None,
+        revision=lambda r: False, content=lambda r: _json(r["raw"]),
+    )
     records, held = [], []
     for row in rows:
         raw = row["raw"]
@@ -98,29 +108,36 @@ def project(directory: Path, existing_ids: set[str] | None = None) -> tuple[list
         except ValueError:
             received = effective = None
         workers = raw["Laid Off"]
+        decision = decisions[pointer(row)]
         complete = (ident.isdigit() and employer and received and effective
                     and isinstance(workers, (int, float)) and not isinstance(workers, bool)
                     and workers > 0 and int(workers) == workers)
         reason = ("missing_warn_number" if not ident.isdigit() else
                   "newer_agency_capture_overlap" if ident in existing else
-                  "multi_site_or_phase_identity_unresolved" if counts[ident] != 1 else
+                  "duplicate_agency_capture" if decision.kind == "duplicate_capture" else
+                  "multi_site_or_phase_identity_unresolved" if decision.kind == "unresolved" else
                   "unresolved_employer_in_source" if ident in UNRESOLVED_EMPLOYER_IDS else
                   "incomplete_historical_row" if not complete else None)
-        pointer = f"{PREFIX}/{ARTIFACT}:sha256:{manifest['sha256']}:row:{row['source_row']}"
+        source_pointer = pointer(row)
         if reason:
             held.append({"origin": f"{PREFIX}/{ARTIFACT}", "state": "OR",
-                         "reason": reason, "source_row": pointer,
+                         "reason": reason, "source_row": source_pointer,
+                         "disposition": "unresolved" if decision.kind == "notice" else decision.kind,
+                         "preliminary_disposition": decision.kind,
+                         "disposition_evidence": decision.evidence,
+                         "related_source_row": decision.related_row,
                          "source_row_sha256": row["source_row_sha256"],
                          "source_notice_id": ident or None,
                          "source_url": manifest["source_url"],
                          "notice_year": received[:4] if received else None,
                          "raw_extra": _json(raw)})
             continue
-        details = {"origin": f"{PREFIX}/{ARTIFACT}", "source_row": pointer,
+        details = {"origin": f"{PREFIX}/{ARTIFACT}", "source_row": source_pointer,
                    "source_row_sha256": row["source_row_sha256"],
                    "source_workbook_sha256": manifest["sha256"],
                    "provenance_url": manifest["provenance_url"],
                    "identity_basis": "singleton_agency_warn_number",
+                   "disposition": decision.kind, "disposition_evidence": decision.evidence,
                    "agency_received_date": received,
                    "date_roles": {"Received Date": "agency_receipt",
                                   "Layoff Date": "reported_action"},
@@ -141,7 +158,8 @@ def project(directory: Path, existing_ids: set[str] | None = None) -> tuple[list
         raise ValueError("Oregon historical source accounting mismatch")
     return records, held, {"source_rows": len(rows), "admitted": len(records),
                            "held": len(held),
-                           "hold_reasons": dict(Counter(item["reason"] for item in held))}
+                           "hold_reasons": dict(Counter(item["reason"] for item in held)),
+                           "duplicate_captures": sum(x.get("disposition") == "duplicate_capture" for x in held)}
 
 
 def build(base_bundle: Path, artifacts: Path, out_bundle: Path) -> dict:

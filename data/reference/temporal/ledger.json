@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "source_id": "candidate_extract",
+      "url": "",
+      "local_path": "sources/candidate_notices_2026-09-23.csv",
+      "sha256": "852efa97c13e8e3cc4766a26013e5336d8da53f93fa10fb00b4aae07b2a3e72e",
+      "retrieved_at": "2026-09-23T19:17:47Z",
+      "origin": "Selected rows from read-only candidate /private/tmp/warn-date-fixed-ny-reviewed-rerun-20260923.sqlite"
+    },
+    {
+      "source_id": "sec_sprint_merger_2020",
+      "url": "https://www.sec.gov/Archives/edgar/data/1283699/000119312520093622/d886127d8k.htm",
+      "local_path": "sources/sprint_merger_2020_sec_8k.html",
+      "sha256": "46c17480d1ea0b925e1b8cac60f24aca55822df88585523c737f16fd401953c3",
+      "retrieved_at": "2026-09-23T19:15:05Z",
+      "published_date": "2020-04-01"
+    },
+    {
+      "source_id": "transdev_2023_report",
+      "url": "https://www.transdev.com/uploads/2026/02/2023-transdev-financial-report-2023.pdf",
+      "local_path": "sources/transdev_2023_financial_report.pdf",
+      "sha256": "9fbded7a237ebc56f4010868f92a63125d1824cb856a13742c4385342f53b3aa",
+      "retrieved_at": "2026-09-23T19:16:12Z"
+    },
+    {
+      "source_id": "ny_first_transit_2024",
+      "url": "https://dol.ny.gov/system/files/documents/2024/03/warn-first-transit-transdev-north-america-western-2023-0298-3-27-2024.pdf",
+      "local_path": "sources/first_transit_ny_warn_2024.pdf",
+      "sha256": "f54f17da946d75673e48a837d537d666baf5c0e92616a91618cc4cfbe7dab46e",
+      "retrieved_at": "2026-09-23T19:16:01Z"
+    },
+    {
+      "source_id": "firstgroup_sale_2021",
+      "url": "https://www.firstgroupplc.com/investors/information-for-shareholders/proposed-sale-of-first-student-and-first-transit.aspx",
+      "local_path": "sources/firstgroup_sale_2021.html",
+      "sha256": "548eeb8212369713b3126fcef0fccdae52ae53a43bfb19cd714e55ed88abd9fe",
+      "retrieved_at": "2026-09-23T19:15:06Z"
+    },
+    {
+      "source_id": "transdev_press_2023",
+      "url": "https://www.transdev.com/en/news/canada/press-release/transdev-has-completed-the-acquisition-of-first-transit",
+      "local_path": "sources/transdev_acquisition_2023.html",
+      "sha256": "23df194ba9275af62f884a0fe9aff5b1fd728c097d2b54c693bd4d28377e7003",
+      "retrieved_at": "2026-09-23T19:15:07Z",
+      "published_date": "2023-03-07"
+    },
+    {
+      "source_id": "sec_sprint_2013_successor",
+      "url": "https://www.sec.gov/Archives/edgar/data/101830/000010183014000012/sprintcorp201310-k.htm",
+      "local_path": "sources/sprint_2013_10k.html",
+      "sha256": "29bbf9a1eb3c1e8068b13fd5a23199201e49a5d847652ae9145c079c863f9fcd",
+      "retrieved_at": "2026-09-23T19:37:21Z",
+      "published_date": "2014-02-24"
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "sprint_corporation_kansas_1938",
+      "name": "Sprint Corporation (Kansas predecessor, organized 1938)",
+      "identifiers": {}
+    },
+    {
+      "entity_id": "sprint_corporation_delaware_2012",
+      "name": "Sprint Corporation (Delaware, incorporated 2012)",
+      "identifiers": {
+        "cik": "0000101830"
+      }
+    },
+    {
+      "entity_id": "t_mobile_us",
+      "name": "T-Mobile US, Inc.",
+      "identifiers": {
+        "cik": "0001283699"
+      }
+    },
+    {
+      "entity_id": "first_transit_inc",
+      "name": "First Transit Inc.",
+      "identifiers": {}
+    },
+    {
+      "entity_id": "transdev_north_america_inc",
+      "name": "Transdev North America Inc.",
+      "identifiers": {}
+    },
+    {
+      "entity_id": "transdev_group",
+      "name": "Transdev Group",
+      "identifiers": {}
+    },
+    {
+      "entity_id": "coca_cola_company",
+      "name": "The Coca-Cola Company",
+      "identifiers": {
+        "cik": "0000021344"
+      }
+    }
+  ],
+  "identities": [
+    {
+      "assertion_id": "id_sprint_ks_2001",
+      "source_notice_id": "b4ba7b26b02e4a16608741ed93a51411b795ced1f0a30ff412864d5e",
+      "state": "KS",
+      "filed_name": "Sprint Corporation",
+      "entity_id": "sprint_corporation_kansas_1938",
+      "source_id": "candidate_extract",
+      "evidence_note": "Filed name matches the Kansas Sprint Corporation predecessor; this scoped decision does not identify it with the later Delaware successor registrant.",
+      "review_status": "pilot_provisional",
+      "reviewer": "Codex temporal pilot",
+      "reviewed_at": "2026-09-23"
+    },
+    {
+      "assertion_id": "id_first_transit_ny_2024",
+      "source_notice_id": "374c4eb61056e8e785b6e49092109e88a1a2c9f48d1a85210d6dc677",
+      "state": "NY",
+      "filed_name": "First Transit, Inc. a subsidiary of Transdev, North America Inc.",
+      "entity_id": "first_transit_inc",
+      "source_id": "ny_first_transit_2024",
+      "evidence_note": "State notice names First Transit, Inc. and explicitly names its parent.",
+      "review_status": "pilot_provisional",
+      "reviewer": "Codex temporal pilot",
+      "reviewed_at": "2026-09-23"
+    },
+    {
+      "assertion_id": "id_cocacola_ca_2025",
+      "source_notice_id": "856ce4dd911d31aaf0b992b0eb7713b058f23c9ac119e87a4fe293f3",
+      "state": "CA",
+      "filed_name": "The Coca-Cola Company",
+      "entity_id": "coca_cola_company",
+      "source_id": "candidate_extract",
+      "evidence_note": "Exact legal name in saved California row; reviewed scoped identity only.",
+      "review_status": "pilot_provisional",
+      "reviewer": "Codex temporal pilot",
+      "reviewed_at": "2026-09-23"
+    }
+  ],
+  "relationships": [
+    {
+      "assertion_id": "rel_sprint_tmobile_2020_closing",
+      "child_entity_id": "sprint_corporation_delaware_2012",
+      "parent_entity_id": "t_mobile_us",
+      "relationship_type": "subsidiary_unspecified_depth",
+      "source_id": "sec_sprint_merger_2020",
+      "temporal_scope": {
+        "kind": "snapshot",
+        "as_of": "2020-04-01"
+      },
+      "locator": "Item 2.01; merger transactions",
+      "evidence_note": "Sprint survived merger as wholly owned indirect subsidiary of T-Mobile at close.",
+      "review_status": "pilot_provisional",
+      "reviewer": "Codex temporal pilot",
+      "reviewed_at": "2026-09-23"
+    },
+    {
+      "assertion_id": "rel_first_transit_transdev_2023_closing",
+      "child_entity_id": "first_transit_inc",
+      "parent_entity_id": "transdev_north_america_inc",
+      "relationship_type": "direct_parent",
+      "source_id": "transdev_2023_report",
+      "temporal_scope": {
+        "kind": "snapshot",
+        "as_of": "2023-03-06"
+      },
+      "locator": "Financial Report 2023, consolidated financial statements, Note VI.1.1, PDF page 80 (printed p. 121)",
+      "evidence_note": "Transdev North America acquired 100% of capital stock of First Transit Inc. at close.",
+      "review_status": "pilot_provisional",
+      "reviewer": "Codex temporal pilot",
+      "reviewed_at": "2026-09-23"
+    },
+    {
+      "assertion_id": "rel_transdev_na_group_2023_closing",
+      "child_entity_id": "transdev_north_america_inc",
+      "parent_entity_id": "transdev_group",
+      "relationship_type": "subsidiary_unspecified_depth",
+      "source_id": "transdev_2023_report",
+      "temporal_scope": {
+        "kind": "snapshot",
+        "as_of": "2023-03-06"
+      },
+      "locator": "Financial Report 2023, Note VI.1.1, PDF page 80 (printed p. 121)",
+      "evidence_note": "Report calls Transdev North America a 100%-controlled subsidiary of Transdev Group.",
+      "review_status": "pilot_provisional",
+      "reviewer": "Codex temporal pilot",
+      "reviewed_at": "2026-09-23"
+    },
+    {
+      "assertion_id": "rel_first_transit_transdev_2024_notice",
+      "child_entity_id": "first_transit_inc",
+      "parent_entity_id": "transdev_north_america_inc",
+      "relationship_type": "subsidiary_unspecified_depth",
+      "source_id": "ny_first_transit_2024",
+      "temporal_scope": {
+        "kind": "snapshot",
+        "as_of": "2024-03-21"
+      },
+      "locator": "Business Information; Date of Notice",
+      "evidence_note": "NY WARN calls First Transit Inc. a subsidiary of Transdev North America Inc.; the notice does not establish direct versus indirect ownership.",
+      "review_status": "pilot_provisional",
+      "reviewer": "Codex temporal pilot",
+      "reviewed_at": "2026-09-23"
+    }
+  ]
+}

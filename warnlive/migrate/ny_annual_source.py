@@ -15,6 +15,7 @@ from warnlive.migrate.ny_overlay import _employer_group
 from warnlive.migrate.ny_source import HEADERS, _date
 from warnlive.migrate.source_bundle import _entry, verify
 from warnlive.normalize.engine import _record_hash
+from warnlive.normalize.revisions import classify_idless_events
 
 YEARS = tuple(range(2006, 2027))
 
@@ -76,33 +77,88 @@ def read_artifacts(directory: Path) -> list[dict]:
 
 
 def project(directory: Path, existing_employers: set[str] | None = None,
-            existing_site_actions: set[tuple[str, str, int]] | None = None) -> tuple[list[dict], list[dict], dict]:
-    """Admit a complete row only when its employer and event are unambiguous.
+            existing_site_actions: set[tuple[str, str, int]] | None = None,
+            existing_events: set[tuple[str, str, str]] | None = None,
+            existing_notices: list[dict] | None = None) -> tuple[list[dict], list[dict], dict]:
+    """Admit distinct employer/site/events and retain ambiguous observations.
 
     Existing canonical employers are screened after raw and archive ingestion.
     Dashboard Index is not a filing ID; source observation identity is explicit.
     """
     rows = read_artifacts(directory)
-    existing = {_employer_group(name) for name in (existing_employers or set())}
+    # Names alone cannot identify a filing. Keep this parameter for callers;
+    # event-level overlap is screened through existing_site_actions below.
+    _ = existing_employers
     existing_sites = existing_site_actions or set()
-    employers = Counter(_employer_group(row["company"]) for row in rows)
-    site_actions = Counter((row["address"].casefold().strip(), row["effective_date"], row["posted_date"])
-                           for row in rows)
+    existing_event_keys = existing_events or set()
+    by_notice: dict[tuple[str, str], list[dict]] = {}
+    by_action: dict[tuple[str, str], list[dict]] = {}
+    for prior in existing_notices or []:
+        group = _employer_group(prior.get("employer_name") or "")
+        if group and prior.get("notice_date"):
+            by_notice.setdefault((group, prior["notice_date"]), []).append(prior)
+        if group and prior.get("effective_date"):
+            by_action.setdefault((group, prior["effective_date"]), []).append(prior)
+    decisions = classify_idless_events(
+        rows, row_key=lambda r: r["source_row_id"],
+        employer=lambda r: _employer_group(r["company"]),
+        site=lambda r: r["address"].casefold().strip(),
+        action=lambda r: r["effective_date"], notice=lambda r: r["notice_date"],
+        content=lambda r: _json(r["raw_cells"]),
+    )
+    by_filing_signature: dict[tuple[str, str], list[dict]] = {}
+    for row in rows:
+        # One employer notice may enumerate sites with different phase dates.
+        # The dashboard has no filing ID to prove those are separate filings.
+        signature = (_employer_group(row["company"]), row["notice_date"])
+        by_filing_signature.setdefault(signature, []).append(row)
     records, held = [], []
     for row in rows:
-        group = _employer_group(row["company"])
-        site_action = (row["address"].casefold().strip(), row["effective_date"], row["posted_date"])
+        decision = decisions[row["source_row_id"]]
         worker_text = row["workers"].replace(",", "").strip()
-        complete = (group and worker_text.isdigit() and int(worker_text) > 0
-                    and row["address"].strip() and row["notice_date"] and row["effective_date"])
-        reason = ("incomplete_dashboard_row" if not complete else
-                  "repeated_employer_event_identity_unresolved" if employers[group] != 1 else
-                  "same_site_action_posting_identity_unresolved" if site_actions[site_action] != 1 else
-                  "existing_employer_event_identity_unresolved" if group in existing else
+        workers = int(worker_text) if worker_text.isdigit() and int(worker_text) > 0 else None
+        group = _employer_group(row["company"])
+        matches = {}
+        for prior in by_notice.get((group, row["notice_date"]), []):
+            matches[prior.get("id") or prior.get("source_notice_id")] = prior
+        if row["effective_date"]:
+            for prior in by_action.get((group, row["effective_date"]), []):
+                matches[prior.get("id") or prior.get("source_notice_id")] = prior
+        candidates = list(matches.values())
+        exact_county = [prior for prior in candidates if
+                        prior.get("notice_date") == row["notice_date"] and
+                        prior.get("employees_affected") == workers and
+                        str(prior.get("location") or "").casefold().strip() ==
+                        row["county"].casefold().strip()]
+        correspondence = ("same_employer_notice_date_workers_county" if len(exact_county) == 1 else
+                          "same_employer_notice_or_action_date" if candidates else None)
+        filing_group = by_filing_signature[(group, row["notice_date"])]
+        sites_in_group = {member["address"].casefold().strip() for member in filing_group}
+        multi_site = len(sites_in_group) > 1
+        reason = ("multi_site_filing_identity_unresolved" if multi_site else
+                  "existing_notice_event_correspondence_unresolved" if candidates else
+                  "possible_revision_same_event" if decision.evidence == "possible_revision_same_event" else
+                  "incomplete_dashboard_row" if decision.kind == "unresolved" else
+                  "duplicate_dashboard_capture" if decision.kind == "duplicate_capture" else
+                  "existing_employer_site_action_identity_unresolved" if row["effective_date"] and
+                  (_employer_group(row["company"]), row["address"].casefold().strip(),
+                   row["effective_date"]) in existing_event_keys else
                   "existing_site_action_worker_identity_unresolved" if
-                  (row["address"].casefold().strip(), row["effective_date"], int(worker_text)) in existing_sites else None)
+                  workers is not None and
+                  (row["address"].casefold().strip(), row["effective_date"], workers) in existing_sites else None)
         if reason:
             held.append({"origin": row["artifact"], "state": "NY", "reason": reason,
+                         "disposition": ("unresolved" if multi_site or candidates or decision.kind == "notice"
+                                         else decision.kind),
+                         "preliminary_disposition": decision.kind,
+                         "disposition_evidence": ("same_employer_notice_multiple_sites_or_phases" if multi_site
+                                                  else correspondence or decision.evidence),
+                         "filing_group_rows": len(filing_group) if multi_site else None,
+                         "filing_group_sites": len(sites_in_group) if multi_site else None,
+                         "related_source_row": decision.related_row,
+                         "existing_candidate_ids": [prior.get("source_notice_id") or prior.get("id")
+                                                    for prior in candidates],
+                         "existing_candidate_notice_ids": [prior.get("id") for prior in candidates],
                          "source_row": row["source_row_id"],
                          "source_row_sha256": row["row_sha256"],
                          "source_url": row["source_url"],
@@ -112,7 +168,8 @@ def project(directory: Path, existing_employers: set[str] | None = None,
         details = {"origin": row["artifact"], "source_row": row["source_row_id"],
                    "source_row_sha256": row["row_sha256"],
                    "source_artifact_sha256": row["artifact_sha256"],
-                   "identity_basis": "single_employer_source_observation_not_filing_id",
+                   "identity_basis": "employer_site_action_or_notice_event_not_filing_id",
+                   "disposition": decision.kind, "disposition_evidence": decision.evidence,
                    "agency_posted_date": row["posted_date"],
                    "dashboard_index_not_identity": row["index"],
                    "date_roles": {"Date of WARN Notice": "reported_notice",
@@ -123,8 +180,9 @@ def project(directory: Path, existing_employers: set[str] | None = None,
                "location": row["address"].strip(), "notice_date": row["notice_date"],
                "notice_date_precision": "day", "notice_date_basis": "reported",
                "effective_date": row["effective_date"],
-               "effective_date_precision": "day", "effective_date_basis": "reported",
-               "employees_affected": int(worker_text), "layoff_type": "unknown",
+               "effective_date_precision": "day" if row["effective_date"] else None,
+               "effective_date_basis": "reported" if row["effective_date"] else None,
+               "employees_affected": workers, "layoff_type": "unknown",
                "is_temporary": None, "is_amendment": 0,
                "source_url": row["source_url"], "source_notice_id": row["source_row_id"],
                "source_identity": identity, "source_details": _json(details),
@@ -136,7 +194,14 @@ def project(directory: Path, existing_employers: set[str] | None = None,
         raise ValueError("NY annual source row accounting mismatch")
     return records, held, {"source_rows": len(rows), "admitted": len(records),
                            "held": len(held),
-                           "held_existing_employer": sum(x["reason"] == "existing_employer_event_identity_unresolved" for x in held)}
+                           "held_existing_employer": 0,
+                           "held_existing_notice_correspondence": sum(
+                               x["reason"] == "existing_notice_event_correspondence_unresolved" for x in held),
+                           "held_multi_site_rows": sum(
+                               x["reason"] == "multi_site_filing_identity_unresolved" for x in held),
+                           "hold_reasons": dict(Counter(x["reason"] for x in held)),
+                           "admitted_missing_action_date": sum(r["effective_date"] is None for r in records),
+                           "admitted_missing_workers": sum(r["employees_affected"] is None for r in records)}
 
 
 def build(base_bundle: Path, artifacts: Path, out_bundle: Path) -> dict:

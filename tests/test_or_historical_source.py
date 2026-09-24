@@ -20,10 +20,11 @@ def test_historical_oregon_accounts_for_every_pinned_row():
     rows, _ = read_artifacts(HISTORICAL)
     admitted, held, report = project(HISTORICAL, _current_ids())
     assert len(rows) == 1082
-    assert (len(admitted), len(held)) == (723, 359)
+    assert (len(admitted), len(held)) == (724, 358)
     assert report["hold_reasons"] == {
         "newer_agency_capture_overlap": 80,
-        "multi_site_or_phase_identity_unresolved": 214,
+        "multi_site_or_phase_identity_unresolved": 212,
+        "duplicate_agency_capture": 1,
         "incomplete_historical_row": 58,
         "unresolved_employer_in_source": 6,
         "missing_warn_number": 1,

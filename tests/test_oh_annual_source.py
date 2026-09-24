@@ -34,6 +34,10 @@ def test_ohio_annual_rows_dates_and_ids_are_accounted_for():
                for r in admitted)
     assert report["hold_reasons"]["conflicting_original_notice_id"] == 6
     assert report["hold_reasons"]["multiple_sites_in_source_row"] == 11
+    assert report["revision_observations"] == 25
+    assert all(r["related_source_row"] for r in held if r["disposition"] == "revision")
+    assert all(r["disposition"] != "notice" for r in held)
+    assert next(r for r in admitted if r["source_notice_id"] == "011-20-126")["employees_affected"] == 186
 
 
 def test_ohio_amendment_does_not_create_second_notice():

@@ -1,11 +1,11 @@
-"""Official Iowa workbook evidence stays separate from event decisions."""
+"""Official Iowa observations and conservative event decisions."""
 
 from collections import Counter, defaultdict
 from pathlib import Path
 
 import pytest
 
-from warnlive.migrate.ia_source import extract, extract_historical, source_exceptions
+from warnlive.migrate.ia_source import extract, extract_historical, project
 
 
 SOURCE = Path(__file__).resolve().parents[1] / "data/source_snapshots/ia"
@@ -90,14 +90,31 @@ def test_iowa_historical_pdf_accounts_for_rows_and_exposes_layout_loss():
     assert rows[-1]["address_state_text"] == "CA"
 
 
-def test_iowa_official_rows_are_accounted_without_event_admission():
+def test_iowa_projection_accounts_for_rows_and_keeps_uncertain_revisions_out():
     rows = extract(SOURCE) + extract_historical(SOURCE)
-    held = source_exceptions(rows)
-    assert len(held) == 935
-    assert len({item["source_row"] for item in held}) == 935
-    assert {item["reason"] for item in held} == {
-        "official_iowa_identity_unresolved"
-    }
+    admitted, held, report, related = project(rows)
+    assert report["source_rows"] == 935
+    assert (len(admitted), len(held)) == (399, 536)
+    assert len({item["source_row"] for item in held}) == len(held)
+    assert len({item["source_identity"] for item in admitted}) == len(admitted)
+    assert report["hold_reasons"]["amendment_without_verified_parent"] == 263
+    assert report["hold_reasons"]["duplicate_agency_capture"] == 61
+    assert all(item["source_notice_id"] not in related for item in admitted)
+    assert all(item["related_source_row"] in {rec["source_notice_id"] for rec in admitted}
+               for item in held if item["reason"] == "duplicate_agency_capture")
     assert {item["origin"] for item in held} == {
         "agency/ia/event-log.xlsx", "agency/ia/historical-2023.pdf",
     }
+
+
+def test_iowa_projection_does_not_depend_on_source_iteration_order():
+    rows = extract(SOURCE) + extract_historical(SOURCE)
+    admitted, held, report, related = project(rows)
+    reversed_admitted, reversed_held, reversed_report, reversed_related = project(
+        list(reversed(rows)))
+    assert report == reversed_report
+    assert {row["source_notice_id"] for row in admitted} == {
+        row["source_notice_id"] for row in reversed_admitted}
+    assert {(row["source_row"], row["reason"]) for row in held} == {
+        (row["source_row"], row["reason"]) for row in reversed_held}
+    assert related == reversed_related

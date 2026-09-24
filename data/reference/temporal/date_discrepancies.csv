@@ -1,0 +1,2 @@
+state,source_notice_id,employer_name,candidate_notice_date,source_notice_date,candidate_effective_start,source_effective_start,candidate_effective_end,source_effective_end,source_id,source_locator,status
+NY,374c4eb61056e8e785b6e49092109e88a1a2c9f48d1a85210d6dc677,"First Transit, Inc. a subsidiary of Transdev, North America Inc.",2024-03-27,2024-03-21,,2024-06-30,,2024-06-30,ny_first_transit_2024,"Business Information: Date of Notice; Closure Start Date; Closure End Date",needs_date_reconciliation

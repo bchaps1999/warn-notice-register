@@ -19,7 +19,8 @@ SNAPSHOTS = Path(__file__).resolve().parents[1] / "data/source_snapshots"
 )
 def test_pinned_source_row_accounting(project, directory, source_rows, admitted, held):
     records, exceptions, report = project(SNAPSHOTS / directory)
-    assert report == {"source_rows": source_rows, "admitted": admitted, "held": held}
+    assert {key: report[key] for key in ("source_rows", "admitted", "held")} == {
+        "source_rows": source_rows, "admitted": admitted, "held": held}
     assert len(records) == len({row["source_identity"] for row in records})
     assert len(records) + len(exceptions) == source_rows
     if directory in {"or", "tn"}:

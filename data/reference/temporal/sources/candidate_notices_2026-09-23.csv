@@ -1,0 +1,10 @@
+id,state,employer_name,notice_date,effective_date,effective_date_end,notice_date_precision,source_notice_id,source_url,source_details
+31209,KS,Sprint Corporation,2001-10-17,,,,b4ba7b26b02e4a16608741ed93a51411b795ced1f0a30ff412864d5e,https://www.kansasworks.com/search/warn_lookups,"{""source_detail_url"": ""https://www.kansasworks.com/search/warn_lookups/194"", ""source_record_number"": ""194""}"
+44422,TN,Sprint,2016-01-22,2016-02-05,,,274a5e0e871d1682d15d89cfb96284a2e1e4337f26246265bd88d6e4,https://www.tn.gov/workforce/general-resources/major-publications0/major-publications-redirect/reports.html,
+52317,VA,First Transit,2022-08-05,2022-12-01,,,5ce6a69985f09edbb8fed1ff2e2f1db068222c0561753f2459d6ade9,https://www.virginiaworks.gov/warn-notices/,
+36697,NJ,First Transit,2023-02-01,2023-04-09,,month,222b19f75224ee7a81b293823700801f74dbd139f44a09e5d1c2edcb,https://www.nj.gov/labor/employer-services/warn/,"{""dates"": [{""basis"": ""inferred_year_from_effective_date"", ""date"": ""2023-02-01"", ""precision"": ""month"", ""role"": ""notice_month"", ""source_field"": ""Month Posted"", ""source_text"": ""February""}]}"
+5367,CA,First Transit,2023-04-04,2023-06-10,,,263338069ffeb59a8aab43907bd73f33f0c167ae9d5d32ffe70c9467,https://edd.ca.gov/en/Jobs_and_Training/Layoff_Services_WARN,
+81250,NY,"First Transit, Inc. a subsidiary of Transdev, North America Inc.",2024-03-27,,,,374c4eb61056e8e785b6e49092109e88a1a2c9f48d1a85210d6dc677,https://dol.ny.gov/warn-dashboard,
+3491,CA,The Coca-Cola Company,2025-04-11,2025-06-30,,,856ce4dd911d31aaf0b992b0eb7713b058f23c9ac119e87a4fe293f3,https://edd.ca.gov/en/Jobs_and_Training/Layoff_Services_WARN,
+54339,WA,BCI Coca Cola Bottling Company,2010-01-29,2010-04-01,,,877ee1b54413123fae00ba5990d7df9011572ce5d03a776943434ba9,https://esd.wa.gov/about-employees/WARN,
+41415,OR,First Transit - Portland,2021-07-30,2021-09-30,,,015733504d2b6241fa84b9a8e0084cb12ae03e7d56c1bdbc27ef5bdc,https://ccwd.hecc.oregon.gov/Layoff/WARN,

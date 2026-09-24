@@ -16,6 +16,7 @@ from openpyxl import load_workbook
 
 from warnlive.migrate.source_bundle import _entry, verify
 from warnlive.normalize.engine import _record_hash
+from warnlive.normalize.revisions import Disposition, classify_agency_ids
 
 HEADERS = ("WARN#", "Company Name", "Location", "Layoff Date", "Laid Off",
            "Layoff Type", "Received Date")
@@ -73,23 +74,37 @@ def project(directory: Path) -> tuple[list[dict], list[dict], dict]:
     cached = [row for row in rows if row["snapshot"] == "cached"]
     live = [row for row in rows if row["snapshot"] == "live"]
     cached_ids = {str(row["raw"]["WARN#"] or "") for row in cached}
-    counts = Counter(str(row["raw"]["WARN#"] or "") for row in cached)
-    counts.update(str(row["raw"]["WARN#"] or "") for row in live
-                  if str(row["raw"]["WARN#"] or "") not in cached_ids)
+    candidates = cached + [row for row in live
+                           if str(row["raw"]["WARN#"] or "") not in cached_ids]
+    def pointer(row: dict) -> str:
+        return f"{row['source_artifact']}:row:{row['source_row']}:sha256:{row['source_row_sha256']}"
+
+    decisions = classify_agency_ids(
+        candidates, row_key=pointer,
+        agency_id=lambda r: str(r["raw"]["WARN#"] or "").strip() or None,
+        site=lambda r: str(r["raw"]["Location"] or "").casefold().strip(),
+        action=lambda r: str(r["raw"]["Layoff Date"] or "")[:10] or None,
+        revision=lambda r: False, content=lambda r: _json(r["raw"]),
+    )
     changed_singletons = set()
     for ident in cached_ids:
         older = [row["raw"] for row in cached if str(row["raw"]["WARN#"] or "") == ident]
         newer = [row["raw"] for row in live if str(row["raw"]["WARN#"] or "") == ident]
-        if newer and len(older) == 1 and sorted(map(_json, older)) != sorted(map(_json, newer)):
+        if newer and len(set(map(_json, older))) == 1 and set(map(_json, older)) != set(map(_json, newer)):
             changed_singletons.add(ident)
     records, exceptions = [], []
     for row in rows:
         raw = row["raw"]
         ident = str(raw["WARN#"] or "")
+        decision = decisions.get(pointer(row), Disposition("unresolved", "later_capture_of_existing_warn_number"))
         if row["snapshot"] == "live" and ident in cached_ids:
             exceptions.append({
                 "origin": row["source_artifact"], "state": "OR",
                 "reason": "later_capture_of_existing_warn_number",
+                "disposition": "duplicate_capture" if any(
+                    old["raw"] == raw for old in cached if str(old["raw"]["WARN#"] or "") == ident
+                ) else "unresolved",
+                "disposition_evidence": "same_agency_id_later_capture",
                 "source_row": row["source_row"], "source_row_sha256": row["source_row_sha256"],
                 "source_notice_id": ident or None, "source_url": manifest["source_url"],
                 "notice_year": None, "raw_extra": _json(raw),
@@ -103,12 +118,17 @@ def project(directory: Path) -> tuple[list[dict], list[dict], dict]:
                     and isinstance(effective, str) and len(effective) >= 10
                     and isinstance(workers, (int, float)) and workers > 0
                     and int(workers) == workers)
-        if counts[ident] != 1 or not complete or ident in changed_singletons:
+        if decision.kind != "notice" or not complete or ident in changed_singletons:
             reason = ("changed_between_agency_captures" if ident in changed_singletons else
-                      "multi_site_or_phase_identity_unresolved" if counts[ident] != 1 else
+                      "duplicate_agency_capture" if decision.kind == "duplicate_capture" else
+                      "multi_site_or_phase_identity_unresolved" if decision.kind == "unresolved" else
                       "incomplete_agency_row")
             exceptions.append({
                 "origin": row["source_artifact"], "state": "OR", "reason": reason,
+                "disposition": "unresolved" if decision.kind == "notice" else decision.kind,
+                "preliminary_disposition": decision.kind,
+                "disposition_evidence": decision.evidence,
+                "related_source_row": decision.related_row,
                 "source_row": row["source_row"], "source_row_sha256": row["source_row_sha256"],
                 "source_notice_id": ident or None, "source_url": manifest["source_url"],
                 "notice_year": None, "raw_extra": _json(raw),
@@ -119,6 +139,7 @@ def project(directory: Path) -> tuple[list[dict], list[dict], dict]:
             "source_row_sha256": row["source_row_sha256"],
             "source_workbook_sha256": row["source_sha256"],
             "identity_basis": "singleton_agency_warn_number",
+            "disposition": decision.kind, "disposition_evidence": decision.evidence,
             "agency_received_date": received[:10],
             "date_roles": {"Received Date": "agency_receipt", "Layoff Date": "reported_action"},
             "raw_cells": raw,
@@ -140,7 +161,9 @@ def project(directory: Path) -> tuple[list[dict], list[dict], dict]:
     if len(records) + len(exceptions) != len(rows):
         raise ValueError("Oregon source row accounting mismatch")
     return records, exceptions, {"source_rows": len(rows), "admitted": len(records),
-                                 "held": len(exceptions)}
+                                 "held": len(exceptions),
+                                 "hold_reasons": dict(Counter(x["reason"] for x in exceptions)),
+                                 "duplicate_captures": sum(x.get("disposition") == "duplicate_capture" for x in exceptions)}
 
 
 def build(base_bundle: Path, artifacts: Path, out_bundle: Path) -> dict:

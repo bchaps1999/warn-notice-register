@@ -1,6 +1,6 @@
 # Deterministic WARN assembly contract
 
-The dataset is assembled from preserved agency WARN source rows and documented parser rules. The supported build admits agency-source evidence under explicit source, identity, and date rules. It may use open-source scraper and parser code to collect agency data. The build makes no LLM API calls, does not replay model decisions, and creates no manual review queues. Historical model experiments and their outputs are retained only under `data/archive/retired-adjudication/` and `docs/archive/`.
+The dataset is assembled from preserved agency WARN source rows and documented parser rules. The supported build admits agency-source evidence under explicit source, identity, and date rules. It may use open-source scraper and parser code to collect agency data. The build makes no LLM API calls, does not replay model decisions, and creates no manual review queues. Historical model experiments and their outputs remain outside the public repository.
 
 ## Admission
 

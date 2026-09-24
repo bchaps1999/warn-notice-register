@@ -63,7 +63,7 @@ def test_offline_cache_reader_never_fetches(tmp_path):
     assert _cached_only("https://unavailable.example/pdf", source) == b"%PDF fixture"
 
 
-def test_source_only_archive_excludes_occupied_months_without_old_db_policy(
+def test_source_only_archive_screens_employer_overlap_not_statewide_month(
     tmp_path, monkeypatch,
 ):
     import sqlite3
@@ -72,17 +72,20 @@ def test_source_only_archive_excludes_occupied_months_without_old_db_policy(
 
     conn = sqlite3.connect(":memory:")
     conn.execute(
-        "CREATE TABLE notices (dedupe_key TEXT, state TEXT, notice_date TEXT, "
+        "CREATE TABLE notices (dedupe_key TEXT, state TEXT, employer_name TEXT, notice_date TEXT, "
         "effective_date TEXT, source_details TEXT)"
     )
-    conn.execute("INSERT INTO notices VALUES ('raw', 'WI', '2026-01-12', NULL, NULL)")
+    conn.execute("INSERT INTO notices VALUES ('raw', 'WI', 'Acme', '2026-01-12', NULL, NULL)")
     records = [
         {"dedupe_key": "archive-a", "notice_date": "2025-12-01",
          "effective_date": None, "raw_record_hash": "a", "source_url": "archive://a"},
         {"dedupe_key": "archive-b", "notice_date": "2025-12-30",
          "effective_date": None, "raw_record_hash": "b", "source_url": "archive://b"},
-        {"dedupe_key": "overlap", "notice_date": "2026-01-01",
+        {"dedupe_key": "overlap", "employer_name": "Acme", "notice_date": "2026-01-01",
          "effective_date": None, "raw_record_hash": "c", "source_url": "archive://c"},
+        {"dedupe_key": "same-month-other-employer", "employer_name": "Other Co",
+         "notice_date": "2026-01-15", "effective_date": None,
+         "raw_record_hash": "e", "source_url": "archive://e"},
         {"dedupe_key": "undated", "notice_date": None,
          "effective_date": None, "raw_record_hash": "d", "source_url": "archive://d"},
     ]
@@ -102,7 +105,7 @@ def test_source_only_archive_excludes_occupied_months_without_old_db_policy(
     exceptions = []
     report = _cached_agencies(conn, tmp_path, None, {}, "2026-09-22", exceptions)
     assert [row["dedupe_key"] for group in captured for row in group] == [
-        "archive-a", "archive-b",
+        "archive-a", "archive-b", "same-month-other-employer",
     ]
     assert report["WI"]["source_overlap_rows"] == 1
     assert report["WI"]["undated_rows"] == 1
@@ -110,7 +113,7 @@ def test_source_only_archive_excludes_occupied_months_without_old_db_policy(
     assert report["WI"]["coalesced_identical_rows"] == 0
     assert report["WI"]["unaccounted_rows"] == 0
     assert [item["reason"] for item in exceptions] == [
-        "occupied_source_month", "no_date",
+        "possible_employer_month_overlap", "no_date",
     ]
 
 
@@ -123,10 +126,10 @@ def test_florida_archive_overlap_uses_notice_month_when_range_is_parsed(
 
     conn = sqlite3.connect(":memory:")
     conn.execute(
-        "CREATE TABLE notices (dedupe_key TEXT, state TEXT, notice_date TEXT, "
+        "CREATE TABLE notices (dedupe_key TEXT, state TEXT, employer_name TEXT, notice_date TEXT, "
         "effective_date TEXT, source_details TEXT)"
     )
-    conn.execute("INSERT INTO notices VALUES ('raw', 'FL', '2015-03-01', '2015-01-20', NULL)")
+    conn.execute("INSERT INTO notices VALUES ('raw', 'FL', 'Acme', '2015-03-01', '2015-01-20', NULL)")
     archive = {
         "dedupe_key": "distinct-archive", "state": "FL",
         "notice_date": "2014-11-12", "effective_date": "2015-01-09",
@@ -159,15 +162,15 @@ def test_massachusetts_archive_overlap_keeps_received_month_after_role_change(
 
     conn = sqlite3.connect(":memory:")
     conn.execute(
-        "CREATE TABLE notices (dedupe_key TEXT, state TEXT, notice_date TEXT, "
+        "CREATE TABLE notices (dedupe_key TEXT, state TEXT, employer_name TEXT, notice_date TEXT, "
         "effective_date TEXT, source_details TEXT)"
     )
-    conn.execute("INSERT INTO notices VALUES (?, ?, ?, ?, ?)", (
-        "current", "MA", None, "2025-08-01",
+    conn.execute("INSERT INTO notices VALUES (?, ?, ?, ?, ?, ?)", (
+        "current", "MA", "Acme", None, "2025-08-01",
         json.dumps({"agency_received_date": "2025-06-12"}),
     ))
     archive = {
-        "dedupe_key": "distinct-archive", "state": "MA", "notice_date": None,
+        "dedupe_key": "distinct-archive", "state": "MA", "employer_name": "Acme", "notice_date": None,
         "effective_date": "2025-09-01", "raw_record_hash": "archive",
         "source_url": "archive://ma",
         "source_details": json.dumps({"agency_received_date": "2025-06-01"}),

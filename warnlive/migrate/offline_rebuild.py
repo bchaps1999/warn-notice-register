@@ -24,7 +24,7 @@ from warnlive.backfill import bln_integrated, state_archives
 from warnlive.enrich import il_effective
 from warnlive.migrate.clean_rebuild import build as build_raw
 from warnlive.migrate.source_bundle import extract
-from warnlive.normalize.engine import _record_hash, normalize_file
+from warnlive.normalize.engine import _fold, _record_hash, normalize_file
 from warnlive.registry import load_registry
 from warnlive.store import db as db_mod
 from warnlive.store import links as links_mod
@@ -263,13 +263,13 @@ def _cached_agencies(
     seen = {row[0] for row in conn.execute("SELECT dedupe_key FROM notices")}
     report = {}
     for state in ("WI", "FL", "CA", "MA", "OH", "NY"):
-        # This is a snapshot of the higher-priority input's occupied months,
-        # not a set updated for each archive row: one archive may legitimately
-        # contain many independent filings in the same month.
-        occupied = set()
+        # A statewide occupied month says nothing about whether two employers'
+        # rows describe the same notice. Screen only a plausible employer/event
+        # overlap; leave source-specific identity review to the projector.
+        occupied: set[tuple[str, str]] = set()
         if accepted is None:
-            for notice, effective, detail_text in conn.execute(
-                "SELECT notice_date, effective_date, source_details "
+            for employer, notice, effective, detail_text in conn.execute(
+                "SELECT employer_name, notice_date, effective_date, source_details "
                 "FROM notices WHERE state = ?", (state,),
             ):
                 dates = [notice, effective]
@@ -279,7 +279,7 @@ def _cached_agencies(
                     detail = json.loads(detail_text or "{}")
                     dates.append(detail.get("agency_received_date") or
                                  detail.get("legacy_notice_key_date"))
-                occupied.update(value[:7] for value in dates if value)
+                occupied.update((_fold(employer), value[:7]) for value in dates if value)
         if state == "NY":
             records = _cached_ny(cache)
         else:
@@ -337,11 +337,12 @@ def _cached_agencies(
                                 for row in rows
                             )
                         continue
-                    if months & occupied:
+                    employer = _fold(rec.get("employer_name"))
+                    if any((employer, month) in occupied for month in months):
                         overlap += len(rows)
                         if exceptions is not None:
                             exceptions.extend(
-                                _exception(f"agency-cache:{state}", "occupied_source_month", row)
+                                _exception(f"agency-cache:{state}", "possible_employer_month_overlap", row)
                                 for row in rows
                             )
                         continue
@@ -776,6 +777,9 @@ def rebuild(
         la_source_rows: list[dict] = []
         ia_current_rows: list[dict] = []
         ia_historical_rows: list[dict] = []
+        ia_records: list[dict] = []
+        ia_source_report = None
+        ia_related: dict[str, str] = {}
         or_records: list[dict] = []
         or_source_report = None
         or_historical_dir = source / "agency/or_historical"
@@ -811,9 +815,9 @@ def rebuild(
             ia_current_rows = ia_source.extract(source / "agency/ia")
             ia_historical_rows = ia_source.extract_historical(source / "agency/ia")
             if source_only:
-                exceptions.extend(ia_source.source_exceptions(
-                    ia_current_rows + ia_historical_rows
-                ))
+                ia_records, ia_held, ia_source_report, ia_related = ia_source.project(
+                    ia_current_rows + ia_historical_rows)
+                exceptions.extend(ia_held)
         if (source / "agency/la").is_dir():
             from warnlive.migrate.la_source import extract as extract_la
             from warnlive.migrate import la_overlay
@@ -842,6 +846,9 @@ def rebuild(
                     la_overlay.record(row) for row in la_source_rows
                     if row["kind"] == "notice" and row["source_row"] in la_overlay.EMPLOYERS
                 ]}, observed_at) if la_source_rows else {"new": 0}
+                ia_ingest = _ingest_groups(conn, {"IA": ia_records}, observed_at)
+                if ia_source_report is not None and ia_ingest["new"] != len(ia_records):
+                    raise ValueError("Iowa source rows did not produce unique notices")
                 or_ingest = _ingest_groups(conn, {"OR": or_records}, observed_at)
                 if or_source_report is not None and or_ingest["new"] != len(or_records):
                     raise ValueError("Oregon agency rows did not produce unique notices")
@@ -973,8 +980,12 @@ def rebuild(
                             "SELECT location,effective_date,employees_affected FROM notices WHERE state='NY'")
                         if row["location"] and row["effective_date"] and row["employees_affected"] is not None
                     }
+                    existing_ny_notices = [dict(row) for row in conn.execute(
+                        "SELECT id, employer_name, location, notice_date, effective_date, "
+                        "employees_affected, source_notice_id FROM notices WHERE state='NY'")]
                     ny_records, ny_held, ny_source_report = project_ny_annual(
-                        ny_annual_dir, existing_ny, existing_ny_sites)
+                        ny_annual_dir, existing_ny, existing_ny_sites,
+                        existing_notices=existing_ny_notices)
                     exceptions.extend(ny_held)
                 ny_ingest = _ingest_groups(conn, {"NY": ny_records}, observed_at)
                 if ny_source_report is not None and ny_ingest["new"] != len(ny_records):
@@ -997,10 +1008,20 @@ def rebuild(
                 from warnlive.store.observations import store_observations
                 from warnlive.migrate import la_overlay
 
-                admission = {
-                    row["source_row"]: ("identity_unresolved", None)
-                    for row in ia_current_rows + ia_historical_rows
+                ia_notice_ids = {
+                    row["source_notice_id"]: conn.execute(
+                        "SELECT id FROM notices WHERE source_identity=?",
+                        (row["source_identity"],)).fetchone()[0]
+                    for row in ia_records
                 }
+                admission = {}
+                for row in ia_current_rows + ia_historical_rows:
+                    pointer = row["source_row"]
+                    target = ia_related.get(pointer, pointer)
+                    if target in ia_notice_ids:
+                        admission[pointer] = ("admitted", ia_notice_ids[target])
+                    else:
+                        admission[pointer] = ("identity_unresolved", None)
                 for row in la_source_rows:
                     pointer = row["source_row"]
                     if row["kind"] == "annotation":
@@ -1045,8 +1066,9 @@ def rebuild(
                 "ia_official_source": {
                     "current_event_log_rows": len(ia_current_rows),
                     "historical_log_rows": len(ia_historical_rows),
-                    "held_rows": len(ia_current_rows) + len(ia_historical_rows),
-                    "ingested_rows": 0,
+                    "held_rows": ia_source_report["held"] if ia_source_report else 0,
+                    "ingested_rows": ia_ingest["new"] if source_only else 0,
+                    "hold_reasons": ia_source_report["hold_reasons"] if ia_source_report else {},
                 },
                 "or_official_source": ({**or_source_report, "ingested_rows": or_ingest["new"]}
                                        if or_source_report is not None else None),

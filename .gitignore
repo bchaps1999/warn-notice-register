@@ -19,3 +19,13 @@ data/reference/adjudications.jsonl.lock
 # Build output: CI builds and deploys site/dist from the committed DB; a
 # tracked copy is permanently stale and pure conflict fodder.
 site/dist/
+
+# Local research output and retired internal experiments are not public data.
+output/
+docs/archive/
+data/archive/retired-adjudication/
+data/archive/source-diagnostics/ny-dates/
+
+# Superseded intermediate bundles without a published replay reference.
+data/source_snapshots/2026-09-24-agency-only-ny-annual-v1.tar.gz
+data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-v1.tar.gz

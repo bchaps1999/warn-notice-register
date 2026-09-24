@@ -145,7 +145,9 @@ fallback, MA fallback).
 ### Rebuild v1.0.1 from frozen agency sources
 
 The source bundle freezes current state captures, agency archives, and
-reviewed original-source artifacts. Rebuild into an isolated path:
+reviewed original-source artifacts. To reproduce the published 71,490-notice
+data with expanded date-precision metadata, use the release-code commit
+`b941649` and rebuild into an isolated path:
 
 ```bash
 python -m warnlive.migrate.source_bundle verify \
@@ -158,9 +160,16 @@ python -m warnlive.migrate.offline_rebuild \
 
 The replay uses no network or model calls. It accounts for admitted,
 coalesced, and excluded source rows; an excluded observation is a conservative
-outcome for the available evidence. Compare its stable content fingerprints,
-counts, and exception checksum to the pinned
-[replay report](data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1-report.json).
+outcome for the available evidence. Compare its counts and content fingerprints
+to the [date-precision replay checkpoint](docs/date-precision-automation-2026-09-24.md).
+The older [v1 source report](data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1-report.json)
+predates that metadata change and has different content fingerprints.
+
+The current development branch also has revision-aware admission rules. Running
+the same command with those later rules creates an isolated
+[revision-admission candidate](docs/revision-admission-candidate-2026-09-24.md),
+whose notice totals differ from the released database; it does not replace the
+release artifacts.
 The [release notes](docs/release-v1-2026-09-24.md) state the coverage limits
 and source-policy changes. `source_observations.csv` contains the verified
 Iowa/Louisiana observations; other held source rows are in the exception
@@ -248,5 +257,5 @@ wrong answer given confidently rather than a missing one.
 Locations that the Census roster and source fields cannot place retain
 the filed `location` text and leave derived place and county fields blank.
 Unknown geography does not exclude a source-identifiable notice. Historical
-model decisions and review outputs are preserved under
-`data/archive/retired-adjudication/` and are not loaded by the pipeline.
+model experiments remain outside the public repository and are not loaded by
+the pipeline.

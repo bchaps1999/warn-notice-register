@@ -1,8 +1,8 @@
-"""Extract official Iowa WARN event-log observations without asserting event identity.
+"""Extract and conservatively project official Iowa WARN observations.
 
 An Excel row is an evidence pointer, not necessarily an additive layoff. Some
-rows describe phases; others amend dates or worker counts. This module never
-merges or imports them into the canonical database.
+rows describe phases; others amend dates or worker counts. A source row is
+admitted only where its event identity is unambiguous.
 """
 
 from __future__ import annotations
@@ -10,11 +10,15 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from collections import Counter, defaultdict
 from datetime import date, datetime
 from pathlib import Path
 
 import pdfplumber
 from openpyxl import load_workbook
+
+from warnlive.normalize.engine import _fold, _record_hash
+from warnlive.normalize.revisions import classify_idless_events
 
 HEADERS = (
     "Company", "Street Address", "City", "County", "State", "ZIP",
@@ -51,6 +55,11 @@ def _pdf_date(value: str) -> str | None:
         except ValueError:
             pass
     return None
+
+
+def _is_amendment(value: str) -> bool:
+    text = value.casefold()
+    return any(marker in text for marker in ("amend", "additional employees", "change in"))
 
 
 def extract(directory: Path) -> list[dict]:
@@ -217,21 +226,110 @@ def extract_historical(directory: Path) -> list[dict]:
     return result
 
 
-def source_exceptions(rows: list[dict]) -> list[dict]:
-    """Account for official rows held outside active totals pending review."""
-    return [{
-        "origin": row["source_artifact"],
-        "reason": "official_iowa_identity_unresolved",
-        "state": "IA",
-        "source_row": row["source_row"],
-        "source_row_sha256": row["source_row_sha256"],
-        "source_url": row["source_url"],
-        "notice_date": row["notice_date"],
-        "effective_date": row["effective_date"],
-        "workers_reported": row["workers_reported"],
-        "address_state_text": row["address_state_text"],
-        "notice_type_text": row["notice_type_text"],
-        "layout_issues": row.get("layout_issues", []),
-        "raw_extra": json.dumps(row["raw_cells"], sort_keys=True,
-                                ensure_ascii=False, separators=(",", ":")),
-    } for row in rows]
+def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, str]]:
+    """Admit uniquely identified ordinary rows; retain amendment and site questions.
+
+    The two agency artifacts overlap. A printed PDF row and an Excel row with
+    the same employer, dates, city and worker count are capture observations of
+    one event, not two notices. Differing sites or worker allocations remain
+    unresolved unless an agency filing identifier establishes their meaning.
+    """
+    if len({row["source_row"] for row in rows}) != len(rows):
+        raise ValueError("duplicate Iowa source row pointer")
+    families: dict[tuple[str, str | None, str | None], list[dict]] = defaultdict(list)
+    for row in rows:
+        families[(_fold(row["company_text"]), row["notice_date"],
+                  row["effective_date"])].append(row)
+    status: dict[str, str] = {}
+    related: dict[str, str] = {}
+    candidates: list[dict] = []
+    for group in families.values():
+        ordinary = [row for row in group if not _is_amendment(row["notice_type_text"])]
+        for row in group:
+            if _is_amendment(row["notice_type_text"]):
+                status[row["source_row"]] = "amendment_without_verified_parent"
+            elif row.get("layout_issues") or not row["notice_date"] or not row["effective_date"]:
+                status[row["source_row"]] = "unresolved_source_layout_or_date"
+        ordinary = [row for row in ordinary if row["source_row"] not in status]
+        # Multiple worker totals or locations under one employer/date pair may
+        # be sites, phases, or revisions. Do not sum or publish them separately.
+        workers = {row["workers_reported"] for row in ordinary}
+        cities = {_fold(row["city_text"]) for row in ordinary}
+        addresses = {_fold(row["street_address_text"]) for row in ordinary}
+        if len(workers) > 1 or len(cities) > 1 or len(addresses) > 1:
+            for row in ordinary:
+                status[row["source_row"]] = "site_phase_or_worker_allocation_unresolved"
+            continue
+        if ordinary:
+            # Prefer the structured, current agency log when a historical PDF
+            # prints the same event. Distinct rows in the same artifact remain
+            # unresolved because matching totals do not prove one filing.
+            by_artifact = Counter(row["source_artifact"] for row in ordinary)
+            if any(count > 1 for count in by_artifact.values()):
+                for row in ordinary:
+                    status[row["source_row"]] = "repeated_source_event_unresolved"
+                continue
+            preferred = sorted(ordinary, key=lambda row:
+                               (row["source_artifact"] != "agency/ia/event-log.xlsx",
+                                row["source_row"]))[0]
+            candidates.append(preferred)
+            for row in ordinary:
+                if row is not preferred:
+                    status[row["source_row"]] = "duplicate_agency_capture"
+                    related[row["source_row"]] = preferred["source_row"]
+
+    decisions = classify_idless_events(
+        candidates, row_key=lambda row: row["source_row"],
+        employer=lambda row: _fold(row["company_text"]),
+        site=lambda row: _fold(row["street_address_text"] or row["city_text"]),
+        action=lambda row: row["effective_date"],
+        notice=lambda row: row["notice_date"],
+        content=lambda row: json.dumps((row["notice_date"], row["effective_date"],
+                                        row["workers_reported"])),
+    )
+    for pointer, decision in decisions.items():
+        status[pointer] = ("admitted" if decision.kind == "notice" else
+                           "possible_revision_same_event" if decision.kind == "unresolved" else
+                           "duplicate_agency_capture")
+        if decision.related_row:
+            related[pointer] = decision.related_row
+    records, held = [], []
+    for row in rows:
+        pointer = row["source_row"]
+        reason = status[pointer]
+        row["disposition"] = reason
+        if pointer in related:
+            row["related_source_row"] = related[pointer]
+        if reason != "admitted":
+            held.append({"origin": row["source_artifact"], "state": "IA", "reason": reason,
+                         "source_row": pointer, "source_row_sha256": row["source_row_sha256"],
+                         "source_url": row["source_url"], "notice_year":
+                         row["notice_date"][:4] if row["notice_date"] else None,
+                         "related_source_row": related.get(pointer),
+                         "raw_extra": json.dumps(row["raw_cells"], ensure_ascii=False, default=str)})
+            continue
+        identity = f"IA:agency-observation:{hashlib.sha256(pointer.encode()).hexdigest()}"
+        details = {"source_artifact": row["source_artifact"], "source_row": pointer,
+                   "source_row_sha256": row["source_row_sha256"],
+                   "identity_basis": "unique_agency_event_observation_not_filing_id",
+                   "notice_type_text": row["notice_type_text"],
+                   "address_role": "unverified", "street_address_text": row["street_address_text"],
+                   "city_text": row["city_text"], "county_text": row["county_text"],
+                   "address_state_text": row["address_state_text"]}
+        rec = {"state": "IA", "employer_name": row["company_text"].strip(),
+               "location": None,
+               "notice_date": row["notice_date"], "notice_date_precision": "day",
+               "notice_date_basis": "reported", "effective_date": row["effective_date"],
+               "effective_date_precision": "day", "effective_date_basis": "reported",
+               "employees_affected": row["workers_reported"] or None,
+               "layoff_type": "unknown", "is_temporary": None, "is_amendment": 0,
+               "source_url": row["source_url"], "source_notice_id": pointer,
+               "source_identity": identity, "source_details": json.dumps(details, sort_keys=True),
+               "raw_extra": json.dumps(row["raw_cells"], ensure_ascii=False, default=str),
+               "dedupe_key": hashlib.sha1(identity.encode()).hexdigest()}
+        rec["raw_record_hash"] = _record_hash(rec)
+        records.append(rec)
+    if len(records) + len(held) != len(rows):
+        raise ValueError("Iowa source row accounting mismatch")
+    return records, held, {"source_rows": len(rows), "admitted": len(records),
+                           "held": len(held), "hold_reasons": dict(Counter(x["reason"] for x in held))}, related
