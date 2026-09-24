@@ -27,6 +27,7 @@ runs:
       env:
         SITE_BASE: /warn-notice-register/
       run: |
+        export VITE_DATA_VERSION="$(sha256sum data/warn.sql.gz | cut -c1-16)"
         cd site && npm ci && npm test && npm run build
         cp dist/index.html dist/404.html  # SPA fallback for deep links on Pages
     - name: Configure Pages

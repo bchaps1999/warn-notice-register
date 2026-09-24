@@ -3,7 +3,7 @@
 A consolidated WARN Act notice dataset assembled from available state agency
 portals and archived source material. Coverage varies by state and period.
 
-**v1.0.0 data (September 24, 2026):** the checked-in source-only release
+**v1.0.1 data (September 24, 2026):** the checked-in source-only release
 contains **71,490 admitted notices, 79,261 versions, and 7,482,177 reported
 affected workers**. The database dump, national and state CSVs, and site build
 derive from the same pinned agency bundle. The [release notes](docs/release-v1-2026-09-24.md)
@@ -13,6 +13,8 @@ and other historical gaps. The [source bundle and replay report](data/source_sna
 and [assembly contract](docs/rebuild-contract.md) define the evidence and
 rebuild checks. Counts are admitted source events, not an estimate of every
 WARN filing nationally.
+The [v1.0.1 patch note](docs/release-v1.0.1-cache-fix-2026-09-24.md) explains
+the site cache fix; the source data did not change from v1.0.0.
 
 ## What this is
 
@@ -25,7 +27,7 @@ deduplicates and version-tracks notices, and commits the results here:
 - `data/warn.sql.gz` — the full database as a gzipped SQL dump (notices, versions, run telemetry); `warnlive unpack-db` restores the working sqlite file
 - `data/exports/warn_notices.csv` — one row per notice, all active states
 - `data/exports/states/{xx}.csv` — per-state cuts
-- `data/exports/notice_links.csv` — source-backed relationships, when established; v1.0.0 has no inferred links
+- `data/exports/notice_links.csv` — source-backed relationships, when established; v1.0.1 has no inferred links
 - `data/exports/source_observations.csv` — 974 verified Iowa/Louisiana agency observations with admission or exclusion status; the separate exception ledger accounts for other held source rows
 - `data/health/health.md` — a dated per-state collection snapshot, not proof that every configured adapter is currently healthy
 
@@ -138,7 +140,7 @@ Scheduled runs: `.github/workflows/scrape-daily.yml` (high-volume states) and
 enables the Zyte proxy for states behind aggressive bot protection (LA, TX
 fallback, MA fallback).
 
-### Rebuild v1.0.0 from frozen agency sources
+### Rebuild v1.0.1 from frozen agency sources
 
 The source bundle freezes current state captures, agency archives, and
 reviewed original-source artifacts. Rebuild into an isolated path:

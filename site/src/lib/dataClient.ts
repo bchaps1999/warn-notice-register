@@ -1,12 +1,14 @@
-// Data files are immutable per deploy; cache fetched JSON for the session.
+// Data files are versioned by the deployed database; cache fetched JSON for the session.
 const cache = new Map<string, Promise<unknown>>();
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+const DATA_VERSION = import.meta.env.VITE_DATA_VERSION;
+const VERSION_QUERY = DATA_VERSION ? `?v=${encodeURIComponent(DATA_VERSION)}` : "";
 
 export function fetchJson<T>(path: string): Promise<T> {
   let hit = cache.get(path);
   if (!hit) {
-    hit = fetch(BASE + path).then((r) => {
+    hit = fetch(BASE + path + VERSION_QUERY).then((r) => {
       if (!r.ok) throw new Error(`${r.status} loading ${path}`);
       return r.json();
     });

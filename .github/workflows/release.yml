@@ -3,7 +3,7 @@ name: Publish release
 on:
   push:
     tags:
-      - "v1.0.0"
+      - "v1.0.1"
 
 permissions:
   contents: write
@@ -29,5 +29,5 @@ jobs:
             data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.exceptions.jsonl.gz \
             data/warn.sql.gz \
             --verify-tag \
-            --title 'WARN Notice Register v1.0.0 — source-only' \
-            --notes 'The agency-source-only register contains 71,490 notices and 7,482,177 reported affected workers. Coverage limits and the state-by-state comparison are documented in docs/release-v1-2026-09-24.md at this tag. The attached source bundle is the frozen replay input; the report and exception ledger account for admitted and held rows.'
+            --title "WARN Notice Register ${GITHUB_REF_NAME} — source-only" \
+            --notes 'Patch release: site data requests now use a database-derived version to avoid showing cached pre-release totals to returning visitors. The agency-source-only register contains 71,490 notices and 7,482,177 reported affected workers. Coverage limits and the state-by-state comparison are documented in docs/release-v1-2026-09-24.md at this tag. The attached source bundle is the frozen replay input; the report and exception ledger account for admitted and held rows.'
