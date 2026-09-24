@@ -1,0 +1,33 @@
+name: Publish release
+
+on:
+  push:
+    tags:
+      - "v1.0.0"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify frozen assets
+        run: |
+          echo '858d1493a86f2a8012f2ce50844b316ab36731ee4482987a93893baedc457de7  data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz' | sha256sum -c -
+          test -s data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1-report.json
+          test -s data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.exceptions.jsonl.gz
+          test -s data/warn.sql.gz
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz \
+            data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1-report.json \
+            data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.exceptions.jsonl.gz \
+            data/warn.sql.gz \
+            --verify-tag \
+            --title 'WARN Notice Register v1.0.0 — source-only' \
+            --notes 'The agency-source-only register contains 71,490 notices and 7,482,177 reported affected workers. Coverage limits and the state-by-state comparison are documented in docs/release-v1-2026-09-24.md at this tag. The attached source bundle is the frozen replay input; the report and exception ledger account for admitted and held rows.'
