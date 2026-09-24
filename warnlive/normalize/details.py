@@ -43,6 +43,64 @@ _NJ_PAIR = re.compile(
 )
 _NJ_PAIR_CANDIDATE = re.compile(r"[-–—]|\band\b", re.I)
 
+# These labels identify the date's role in the agency row. A full ISO value
+# alone is not evidence of either role or precision. Keep this allowlist
+# narrow: receipt, posting, and notification activity fields are excluded.
+_REPORTED_DAY_FIELDS = {
+    "AL": {"notice_date": ("date_notice",), "effective_date": ("date_action",)},
+    "CA": {"notice_date": ("notice_date",), "effective_date": ("effective_date",)},
+    "CO": {"notice_date": ("notice_date",), "effective_date": ("begin_date",),
+           "effective_date_end": ("end_date",)},
+    "ID": {"notice_date": ("Date of Letter",),
+           "effective_date": ("Effective or Commencing Date",)},
+    "IN": {"notice_date": ("Notice Date",), "effective_date": ("LO/CL Date",)},
+    "MA": {"effective_date": ("DATE(S) OF LAYOFFS",)},
+    "MD": {"notice_date": ("Notice Date",), "effective_date": ("Effective Date",)},
+    "MN": {"effective_date": ("Layoff Start",)},
+    "MS": {"notice_date": ("date_notice",), "effective_date": ("date_effective",)},
+    "NC": {"notice_date": ("Date of Notice",), "effective_date": ("Effective Date",)},
+    "NY": {"notice_date": ("Date of Notice", "Date of WARN Notice "),
+           "effective_date": ("Layoff Date", "Closing Date", "Date Layoff/Closure Starts")},
+    "OH": {"effective_date": ("Layoff Date", "Layoff Date(s)")},
+    "UT": {"notice_date": ("Date of Notice",)},
+    "VA": {"notice_date": ("Notice Date",), "effective_date": ("Impact Date",)},
+    "WA": {"effective_date": ("Layoff Start Date",)},
+}
+
+
+def _add_reported_day_evidence(state: str, raw: dict, rec: dict,
+                               result: dict, details: dict) -> None:
+    """Mark a scalar day only when an allowed whole source cell matches it."""
+    if state == "CA" and not (
+        isinstance(raw.get("source_file"), str)
+        and raw.get("company") and raw.get("num_employees")
+        and "received_date" in raw and "notice_date" in raw
+        and "effective_date" in raw
+    ):
+        return
+    for role, fields in _REPORTED_DAY_FIELDS.get(state, {}).items():
+        selected = result.get(role, rec.get(role))
+        if not selected or result.get(f"{role}_precision") or rec.get(f"{role}_precision"):
+            continue
+        if any(isinstance(details.get(flag), str) and
+               any(word in details[flag] for word in ("review", "conflict", "invalid"))
+               for flag in ("notice_date_status", "effective_date_status",
+                            "effective_date_end_status", "date_role_status")):
+            continue
+        matches = [field for field in fields
+                   if isinstance(raw.get(field), str) and _date(raw[field]) == selected]
+        if len(matches) != 1:
+            continue
+        field = matches[0]  # The raw cell remains in the version's raw_extra.
+        result[f"{role}_precision"] = "day"
+        result[f"{role}_basis"] = "reported"
+        details.setdefault("date_precision_evidence", {})[role] = {
+            "rule": "labeled_source_day_match_v1",
+            "source_field": field,
+            "matched_day": selected,
+        }
+        details.setdefault("date_evidence_rule", "labeled_source_day_match_v1")
+
 
 def _date(value: str | None) -> str | None:
     value = (value or "").strip()
@@ -443,6 +501,7 @@ def extract(state: str, raw: dict, rec: dict) -> dict:
             details["effective_date_source_field"] = "Effective Date"
             details["effective_date_source_text"] = source_text
 
+    _add_reported_day_evidence(state, raw, rec, result, details)
     if details:
         result["source_details"] = json.dumps(details, sort_keys=True, ensure_ascii=False)
     return result

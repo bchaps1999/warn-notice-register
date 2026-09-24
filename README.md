@@ -68,6 +68,8 @@ legal notice date; `effective_date_precision`, `effective_date_basis`,
 `source_identity` and `source_details` preserve source-specific identity and
 structured facts. Empty values mean the corresponding fact is not established
 in this export.
+The [date-precision expansion](docs/date-precision-automation-2026-09-24.md)
+describes the automatic source-cell checks and remaining unassessed dates.
 
 Caveats: jurisdictions disagree about what counts as a notice, how amendments
 are reported, and how employees are counted. Arkansas, New Hampshire,

@@ -10,6 +10,8 @@ Each canonical scalar date has a nullable `precision` and `basis`. `day`, `month
 
 The existing notice fields are `notice_date_precision` and `notice_date_basis`. The storage rollout added the same two fields for `effective_date` and `effective_date_end`. It does **not** backfill `day` just because a stored date has `YYYY-MM-DD` form. In older candidates, New Jersey's inferred posting-month placeholder is marked `month` and excluded from timing. The latest staged source-first correction removes that placeholder from canonical `notice_date` and keeps the yearless posting month in `source_details`.
 
+The normalizer now detects additional day precision from an explicit state/field allowlist. It parses the **entire** labeled source cell and requires equality with the selected canonical date before setting `day`/`reported`; each assignment records the field, matched day, and versioned rule in `source_details.date_precision_evidence`. The original cell remains in the version's `raw_extra`. Existing evidence and review holds take precedence. Receipt and posting columns are excluded even when they contain valid days. California's historical PDF layoff column is checked against its table header; Wisconsin's historical action date is converted with the workbook's own Excel date mode. These rules run during source replay, so checked-in exports change only after an isolated replay and the release reconciliation gates.
+
 ## Timing outputs
 
 `python -m warnlive.verify.timing <isolated-candidate.sqlite> --out-dir <new-dir>` is read-only. It keeps the legacy `provisional_day_timing_cohort.csv` for comparison. That output accepts null notice precision provisionally and is not a source-verified research sample.

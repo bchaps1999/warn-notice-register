@@ -263,6 +263,19 @@ def fetch_wi(cache_dir: Path) -> list[dict]:
                         else None,
                         "notice_date": notice_date.isoformat(),
                         "effective_date": effective,
+                        "effective_date_precision": "day" if effective else None,
+                        "effective_date_basis": "reported" if effective else None,
+                        "source_details": json.dumps({
+                            "date_evidence_rule": "wi_archive_dislocation_workbook_v1",
+                            "date_precision_evidence": {
+                                "effective_date": {
+                                    "rule": "wi_archive_dislocation_workbook_v1",
+                                    "source_field": "Schedule of Dislocations",
+                                    "source_text": str(eff),
+                                    "workbook_datemode": wb.datemode,
+                                }
+                            },
+                        }, sort_keys=True) if effective else None,
                         "employees_affected": int(jobs)
                         if isinstance(jobs, float) and jobs > 0
                         else None,
@@ -417,6 +430,10 @@ CA_YEARS = range(2000, 2015)
 PDF_MAGIC = b"%PDF"
 
 
+def _ca_header_token(value: str | None) -> str:
+    return re.sub(r"[^a-z]", "", (value or "").replace("(cid:10)", " ").lower())
+
+
 def fetch_ca(cache_dir: Path) -> list[dict]:
     import pdfplumber
 
@@ -443,38 +460,59 @@ def fetch_ca(cache_dir: Path) -> list[dict]:
 
         n = 0
         with pdfplumber.open(dest) as pdf:
-            for page in pdf.pages:
-                for table in page.find_tables():
-                    for cells in table.extract():
-                        cells = [" ".join((c or "").split()) for c in cells]
-                        if len(cells) < 4 or cells[0] in ("", "Company Name"):
-                            continue
-                        effective = _fl_date(cells[3])
-                        if effective is None:
-                            continue
-                        jobs = re.sub(r"[^\d]", "", cells[2])
-                        records.append(
-                            _canonical(
-                                {
-                                    "state": "CA",
-                                    "employer_name": cells[0],
-                                    "location": cells[1],
-                                    "notice_date": None,
-                                    "effective_date": effective,
-                                    "employees_affected": int(jobs) if jobs else None,
-                                    "layoff_type": "unknown",
-                                    "source_url": url,
-                                },
-                                {
-                                    "year_file": year,
-                                    "Company Name": cells[0],
-                                    "Location": cells[1],
-                                    "Employees Affected": cells[2],
-                                    "Layoff Date": cells[3],
-                                },
-                            )
+            tables = [table.extract() for page in pdf.pages for table in page.find_tables()]
+            headings = [
+                [_ca_header_token(cell) for cell in cells[:4]]
+                for rows in tables for cells in rows
+                if cells and _ca_header_token(cells[0]) == "companyname"
+            ]
+            if not headings or any(head != [
+                "companyname", "location", "employeesaffected", "layoffdate",
+            ] for head in headings):
+                raise ValueError(f"CA {year}: layoff date column order changed")
+            for rows in tables:
+                for cells in rows:
+                    cells = [" ".join((c or "").split()) for c in cells]
+                    if len(cells) < 4 or cells[0] in ("", "Company Name"):
+                        continue
+                    effective = _fl_date(cells[3])
+                    if effective is None:
+                        continue
+                    jobs = re.sub(r"[^\d]", "", cells[2])
+                    records.append(
+                        _canonical(
+                            {
+                                "state": "CA",
+                                "employer_name": cells[0],
+                                "location": cells[1],
+                                "notice_date": None,
+                                "effective_date": effective,
+                                "effective_date_precision": "day",
+                                "effective_date_basis": "reported",
+                                "source_details": json.dumps({
+                                    "date_evidence_rule": "ca_archive_pdf_layoff_day_v1",
+                                    "date_precision_evidence": {
+                                        "effective_date": {
+                                            "rule": "ca_archive_pdf_layoff_day_v1",
+                                            "source_field": "Layoff Date",
+                                            "source_text": cells[3],
+                                        }
+                                    },
+                                }, sort_keys=True),
+                                "employees_affected": int(jobs) if jobs else None,
+                                "layoff_type": "unknown",
+                                "source_url": url,
+                            },
+                            {
+                                "year_file": year,
+                                "Company Name": cells[0],
+                                "Location": cells[1],
+                                "Employees Affected": cells[2],
+                                "Layoff Date": cells[3],
+                            },
                         )
-                        n += 1
+                    )
+                    n += 1
         logger.info("CA %s: %d archive rows", year, n)
     return records
 
