@@ -1,0 +1,127 @@
+{
+  "schema": "la-relationship-candidates-v1",
+  "source_manifest_sha256": "bbdd7a445f406f4f8b8153a4514b8eadf048a8653505b585d62d737e138ef6b7",
+  "source_artifact": "agency/la/2025.pdf",
+  "source_pdf_sha256": "29e3c7966e335bf158b00abc2bbd1f49fd566dd3c825687019ba4fb93b769510",
+  "candidate_groups": [
+    {
+      "group": "IDEA",
+      "relationship_decision": "unresolved",
+      "publication_action": "held_for_review",
+      "observations": [
+        {
+          "source_row": "2025.pdf:p1:r7",
+          "source_row_sha256": "d01058f508f7db68baf9b94ecfaa9b86a3eff41af355260ebe3b0a45949bde95",
+          "source_pdf_sha256": "29e3c7966e335bf158b00abc2bbd1f49fd566dd3c825687019ba4fb93b769510",
+          "notice_date": "2025-04-07",
+          "effective_date_start": "2025-05-24",
+          "workers_total": 212,
+          "company_and_address_text": "IDEA Southern Louisiana\nIdea Innovation\n(7800 Innovation Park Drive,\nBaton Rouge, LA 70820)\nIdea Bridge\n(1500 N. Airway Drive,\nBaton Rouge, LA 70815)"
+        },
+        {
+          "source_row": "2025.pdf:p1:r8",
+          "source_row_sha256": "9c94cfe3d91675f335a6990e3d3dd228e943010b92221a9e3463181e84e5c092",
+          "source_pdf_sha256": "29e3c7966e335bf158b00abc2bbd1f49fd566dd3c825687019ba4fb93b769510",
+          "notice_date": "2025-04-07",
+          "effective_date_start": "2025-05-24",
+          "workers_total": 212,
+          "company_and_address_text": "IDEA Public Schools\n(IDEA Innovation & IDEA Bridge)\n7800 Innovation Park Drive\n& 1500 N. Airway Drive\nBaton Rouge, LA"
+        }
+      ],
+      "evidence": [
+        {
+          "type": "shared_notice_date",
+          "value": "2025-04-07"
+        },
+        {
+          "type": "shared_effective_date",
+          "value": "2025-05-24"
+        },
+        {
+          "type": "equal_reported_worker_totals",
+          "value": 212
+        },
+        {
+          "type": "overlapping_named_sites",
+          "value": [
+            "IDEA Innovation",
+            "IDEA Bridge"
+          ]
+        }
+      ],
+      "open_question": "Determine whether these are separate filings, a revision, or two summary descriptions of one filing. Equality of dates and totals does not establish filing identity or site allocation."
+    },
+    {
+      "group": "SafeSource",
+      "relationship_decision": "unresolved",
+      "publication_action": "held_for_review",
+      "observations": [
+        {
+          "source_row": "2025.pdf:p2:r7",
+          "source_row_sha256": "3ad909bd131faacb4efe628964acfaa874ca4c1c3ea824c1e1c5289d57991a24",
+          "source_pdf_sha256": "29e3c7966e335bf158b00abc2bbd1f49fd566dd3c825687019ba4fb93b769510",
+          "notice_date": "2025-08-22",
+          "effective_date_start": "2025-10-21",
+          "workers_total": 541,
+          "company_and_address_text": "SafeSource Direct L.L.C.\n200 St. Nazaire Rd.\nBroussard, LA, 70518\n142 Lake Talon Rd.\nBroussard, LA 70518"
+        },
+        {
+          "source_row": "2025.pdf:p2:r11",
+          "source_row_sha256": "e2751718bf18f2eb770fd0624cfff9e5817ced848afedd9fc2cec5fcd14e5468",
+          "source_pdf_sha256": "29e3c7966e335bf158b00abc2bbd1f49fd566dd3c825687019ba4fb93b769510",
+          "notice_date": "2025-08-22",
+          "effective_date_start": "2025-10-21",
+          "workers_total": 87,
+          "company_and_address_text": "SafeSource Direct, L.L.C. –\nMMF PPE Manufacturing Facility"
+        },
+        {
+          "source_row": "2025.pdf:p2:r12",
+          "source_row_sha256": "7925c4a8652df179c2a4f4590b14803f096657f1f6b57e6fadd6796c0ae6f929",
+          "source_pdf_sha256": "29e3c7966e335bf158b00abc2bbd1f49fd566dd3c825687019ba4fb93b769510",
+          "notice_date": "2025-09-16",
+          "effective_date_start": "2025-11-25",
+          "workers_total": 56,
+          "company_and_address_text": "SafeSource Direct, L.L.C. –\nMMF Facility (Second WARN)"
+        },
+        {
+          "source_row": "2025.pdf:p2:r13",
+          "source_row_sha256": "9bdb8e373b08f244bee9029f05425f3f8d3e3adaf604f7c55750afe907e4996a",
+          "source_pdf_sha256": "29e3c7966e335bf158b00abc2bbd1f49fd566dd3c825687019ba4fb93b769510",
+          "notice_date": "2025-08-22",
+          "effective_date_start": "2025-10-21",
+          "workers_total": 454,
+          "company_and_address_text": "SafeSource Direct, L.L.C. –\nNitrile Plant Facility"
+        }
+      ],
+      "evidence": [
+        {
+          "type": "arithmetic_equality",
+          "expression": "87 + 454 = 541",
+          "source_rows": [
+            "2025.pdf:p2:r11",
+            "2025.pdf:p2:r13",
+            "2025.pdf:p2:r7"
+          ]
+        },
+        {
+          "type": "shared_notice_and_effective_dates",
+          "source_rows": [
+            "2025.pdf:p2:r7",
+            "2025.pdf:p2:r11",
+            "2025.pdf:p2:r13"
+          ],
+          "notice_date": "2025-08-22",
+          "effective_date_start": "2025-10-21"
+        },
+        {
+          "type": "separate_second_warn_label",
+          "source_row": "2025.pdf:p2:r12",
+          "notice_date": "2025-09-16",
+          "effective_date_start": "2025-11-25",
+          "workers_total": 56
+        }
+      ],
+      "open_question": "Determine whether 541 aggregates the two facility rows, whether the 56-worker Second WARN is a separate filing or phase, and which facilities any filing covers. Numerical equality does not establish filing identity, and no worker total is allocated to a site."
+    }
+  ]
+}
