@@ -20,7 +20,7 @@ from warnlive.normalize.engine import normalize_file
 from warnlive.normalize.admission import exclusion_reasons
 from warnlive.registry import load_registry
 from warnlive.store import db as db_mod
-from warnlive.store.dedupe import ingest
+from warnlive.store.dedupe import CollisionError, ingest, preflight_collisions
 from warnlive.verify.harness import verify_state
 
 POLICY = "clean-rebuild-v1"
@@ -66,6 +66,25 @@ def _coalesced_observations(origin: str, records: list[dict]) -> list[dict]:
         else:
             previous_by_key[rec["dedupe_key"]] = rec
     return excluded
+
+
+def _quarantine_date_collisions(conn, origin: str, records: list[dict]) -> tuple[list[dict], list[dict], int]:
+    """Hold an entire ambiguous key group with pointers to every source row."""
+    try:
+        preflight_collisions(conn, records)
+    except CollisionError as exc:
+        keys = {item["dedupe_key"] for item in exc.collisions}
+        held = []
+        for rec in records:
+            if rec["dedupe_key"] in keys:
+                item = _raw_exception(origin, "suspected_same_key_collision", rec)
+                item["date_conflicts"] = [
+                    conflict for conflict in exc.collisions
+                    if conflict["dedupe_key"] == rec["dedupe_key"]
+                ]
+                held.append(item)
+        return [rec for rec in records if rec["dedupe_key"] not in keys], held, len(keys)
+    return records, [], 0
 
 
 def build(
@@ -163,6 +182,14 @@ def build(
                             record for record in norm.records
                             if record["dedupe_key"] not in conflicts
                         ])
+                    safe_records, collision_holds, collision_keys = _quarantine_date_collisions(
+                        conn, origin, norm.records,
+                    )
+                    if collision_keys:
+                        entry["quarantined_keys"] = entry.get("quarantined_keys", 0) + collision_keys
+                        entry["quarantined_rows"] = entry.get("quarantined_rows", 0) + len(collision_holds)
+                        pending_exceptions.extend(collision_holds)
+                        norm = replace(norm, records=safe_records)
                     verification = verify_state(cfg, source_path, norm)
                     entry["verification"] = verification.to_dict()
                     if verification.verdict == "failed":

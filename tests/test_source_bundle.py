@@ -5,7 +5,9 @@ from pathlib import Path
 
 import pytest
 
-from warnlive.migrate.source_bundle import create, extract, validate_agency_raw, verify
+from warnlive.migrate.source_bundle import (
+    create, extract, overlay_raw_bundle, validate_agency_raw, verify,
+)
 
 
 def _sources(root):
@@ -116,6 +118,28 @@ def test_source_bundle_can_layer_fresh_raw_without_changing_base(tmp_path):
     extract(archive, unpacked)
     assert (unpacked / "raw/al.csv").read_bytes() == b"Company\nUpdated\n"
     assert (source / "raw/al.csv").read_bytes() == b"Company\nAcme\n"
+
+
+def test_frozen_bundle_overlay_changes_only_named_raw_source(tmp_path):
+    source = tmp_path / "workdir"
+    _sources(source)
+    base = tmp_path / "base.tar.gz"
+    original = create(source, base)
+    replacement = tmp_path / "al.csv"
+    replacement.write_bytes(b"Company\nNew agency row\n")
+    evidence = tmp_path / "agency-pages.tar.gz"
+    evidence.write_bytes(b"frozen source evidence")
+    out = tmp_path / "updated.tar.gz"
+    manifest = overlay_raw_bundle(base, replacement, out, evidence)
+    assert manifest["raw_overrides"] == ["raw/al.csv"]
+    assert manifest["companion_evidence"]["name"] == evidence.name
+    assert manifest["companion_evidence"]["raw_member"] == "raw/al.csv"
+    before = {item["path"]: item["sha256"] for item in original["files"]}
+    after = {item["path"]: item["sha256"] for item in manifest["files"]}
+    assert {name for name in before if before[name] != after[name]} == {"raw/al.csv"}
+    assert verify(out) == manifest
+    with pytest.raises(FileExistsError):
+        overlay_raw_bundle(base, replacement, out)
 
 
 def test_source_bundle_rejects_unexpected_raw_overlay(tmp_path):

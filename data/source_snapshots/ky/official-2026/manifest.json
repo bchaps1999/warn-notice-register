@@ -1,0 +1,28 @@
+{
+  "agency": "Kentucky Career Center",
+  "bytes": 9365,
+  "file": "WARN-Report-2026-09-16.csv",
+  "format": "ky-agency-report-capture-v1",
+  "in_state_rows": 33,
+  "observed_utc_date": "2026-09-24",
+  "out_of_state_hold_rows": [
+    {
+      "county": "Out of the State County",
+      "employees": "1",
+      "employer": "SMBC Manubank",
+      "notice_id": "Notice 2833"
+    },
+    {
+      "county": "Out of the State County",
+      "employees": "2",
+      "employer": "C2 Technologies",
+      "notice_id": "Notice 2778"
+    }
+  ],
+  "rows": 35,
+  "scope": "Current linked 2026 report; includes four rows received in 2025. Not proof of complete 2025 or 2026 coverage.",
+  "sha256": "a40a050d1b10a2ea4d1ec54302d548c4499534d1e16411840b9c383d5d2b2da5",
+  "source_page": "https://kcc.ky.gov/Pages/News.aspx",
+  "source_url": "https://kcc.ky.gov/WARN%20notices/WARN%20Notices%202026/WARN%20Report-2026-09-16-09-00-01.csv",
+  "unique_notice_numbers": 35
+}

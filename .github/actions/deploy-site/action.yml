@@ -9,6 +9,9 @@ outputs:
 runs:
   using: composite
   steps:
+    - name: Check Kansas publication holds
+      shell: bash
+      run: .venv/bin/warnlive check-kansas-holds
     - uses: actions/setup-node@v4
       with:
         node-version: 22
@@ -17,7 +20,7 @@ runs:
     - name: Build site data
       shell: bash
       run: |
-        as_of="$(git show -s --format=%cs HEAD)"
+        as_of="$(date -u +%F)"
         .venv/bin/warnlive build-site --out site/public/data --as-of "$as_of"
     - name: Reconcile release data
       shell: bash
@@ -27,7 +30,7 @@ runs:
       env:
         SITE_BASE: /warn-notice-register/
       run: |
-        export VITE_DATA_VERSION="$(sha256sum data/warn.sql.gz | cut -c1-16)"
+        export VITE_DATA_VERSION="$(find site/public/data -type f -name '*.json' -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -c1-16)"
         cd site && npm ci && npm test && npm run build
         cp dist/index.html dist/404.html  # SPA fallback for deep links on Pages
     - name: Configure Pages

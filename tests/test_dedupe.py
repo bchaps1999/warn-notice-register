@@ -3,7 +3,7 @@ import sqlite3
 import pytest
 
 from warnlive.store import db as db_mod
-from warnlive.store.dedupe import append_repair_version, freeze_absent, ingest
+from warnlive.store.dedupe import CollisionError, append_repair_version, freeze_absent, ingest
 
 
 @pytest.fixture()
@@ -162,18 +162,44 @@ def test_a_live_url_replaces_an_archive_one_but_never_the_reverse(conn):
     assert row["last_seen"] is None
 
 
-def test_far_apart_effective_dates_are_counted_as_a_suspected_collision(conn):
+def test_far_apart_effective_dates_fail_before_any_write(conn):
     """An undated source can hash two distinct filings to one key; the
     second arrives looking like an amendment. The disagreement in effective
-    dates is the one visible symptom, so it is counted, not swallowed."""
+    dates must stop the entire batch before any write."""
     ingest(conn, [record(notice_date=None, dedupe_key="k")], "2026-07-01")
-    stats = ingest(
-        conn,
-        [record(notice_date=None, dedupe_key="k", effective_date="2027-03-01",
-                raw_record_hash="hash-2")],
-        "2026-07-08",
-    )
-    assert stats.suspected_collisions == 1
+    with pytest.raises(CollisionError) as caught:
+        ingest(conn, [
+            record(dedupe_key="unrelated", raw_record_hash="new"),
+            record(notice_date=None, dedupe_key="k", effective_date="2027-03-01",
+                   raw_record_hash="hash-2", is_amendment=1),
+        ], "2026-07-08")
+    assert caught.value.collisions == [{
+        "dedupe_key": "k", "scope": "stored_version",
+        "earlier_date": "2026-08-01", "incoming_date": "2027-03-01",
+    }]
+    assert conn.execute("SELECT COUNT(*) FROM notices").fetchone()[0] == 1
+    assert conn.execute("SELECT COUNT(*) FROM notice_versions").fetchone()[0] == 1
+
+
+def test_far_apart_dates_within_batch_fail_even_if_marked_amendment(conn):
+    with pytest.raises(CollisionError) as caught:
+        ingest(conn, [
+            record(),
+            record(effective_date="2027-03-01", raw_record_hash="hash-2",
+                   is_amendment=1),
+        ], "2026-07-01")
+    assert caught.value.collisions[0]["scope"] == "batch"
+    assert conn.execute("SELECT COUNT(*) FROM notices").fetchone()[0] == 0
+
+
+def test_new_version_checks_all_stored_dates_not_only_current(conn):
+    ingest(conn, [record()], "2026-07-01")
+    ingest(conn, [record(effective_date="2026-09-10", raw_record_hash="hash-2")],
+           "2026-07-08")
+    with pytest.raises(CollisionError):
+        ingest(conn, [record(effective_date="2026-10-20", raw_record_hash="hash-3")],
+               "2026-07-15")
+    assert conn.execute("SELECT COUNT(*) FROM notice_versions").fetchone()[0] == 2
 
 
 def test_a_reobserved_older_version_does_not_ping_pong(conn):

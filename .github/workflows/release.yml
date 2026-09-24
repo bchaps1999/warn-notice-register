@@ -3,7 +3,7 @@ name: Publish release
 on:
   push:
     tags:
-      - "v1.0.1"
+      - "v1.1.0"
 
 permissions:
   contents: write
@@ -15,19 +15,21 @@ jobs:
       - uses: actions/checkout@v4
       - name: Verify frozen assets
         run: |
-          echo '858d1493a86f2a8012f2ce50844b316ab36731ee4482987a93893baedc457de7  data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz' | sha256sum -c -
-          test -s data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1-report.json
-          test -s data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.exceptions.jsonl.gz
+          echo '746745a066cb5e3c6ad5fc4263b83b27b3bba4a0d25115d46d78341e1df42070  data/source_snapshots/2026-09-24-strict-ks-ky-source-bundle.tar.gz' | sha256sum -c -
+          test -s data/source_snapshots/2026-09-24-strict-ks-ky-candidate-report.json
+          test -s data/source_snapshots/2026-09-24-strict-ks-ky-candidate.exceptions.jsonl.gz
+          test -s data/source_snapshots/2026-09-24-ks-ky-review-release-manifest.json
           test -s data/warn.sql.gz
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz \
-            data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1-report.json \
-            data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.exceptions.jsonl.gz \
+            data/source_snapshots/2026-09-24-strict-ks-ky-source-bundle.tar.gz \
+            data/source_snapshots/2026-09-24-strict-ks-ky-candidate-report.json \
+            data/source_snapshots/2026-09-24-strict-ks-ky-candidate.exceptions.jsonl.gz \
+            data/source_snapshots/2026-09-24-ks-ky-review-release-manifest.json \
             data/warn.sql.gz \
             --verify-tag \
-            --title "WARN Notice Register ${GITHUB_REF_NAME} — source-only" \
-            --notes 'Patch release: site data requests now use a database-derived version to avoid showing cached pre-release totals to returning visitors. The agency-source-only register contains 71,490 notices and 7,482,177 reported affected workers. Coverage limits and the state-by-state comparison are documented in docs/release-v1-2026-09-24.md at this tag. The attached source bundle is the frozen replay input; the report and exception ledger account for admitted and held rows.'
+            --title "WARN Notice Register ${GITHUB_REF_NAME} — strict source replay" \
+            --notes 'The agency-source register contains 74,828 admitted notices and 7,815,994 reported affected workers. Kansas portal coverage expanded; 33 Kentucky agency rows were admitted. Identity-ambiguous and out-of-state rows remain held. Coverage limits and release checks are documented in docs/release-v1.1.0-2026-09-24.md at this tag. The attached source bundle is the frozen replay input; the report, exception ledger, and manifest preserve the accounting.'

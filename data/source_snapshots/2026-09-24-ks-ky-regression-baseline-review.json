@@ -1,0 +1,55 @@
+{
+  "checks": [
+    {
+      "detail": "largest single notice reports 27,500 workers (OR); ceiling 100,000",
+      "name": "notice_size_ceiling",
+      "outcome": "pass"
+    },
+    {
+      "detail": "71,490 -> 74,828",
+      "name": "total_notices",
+      "outcome": "pass"
+    },
+    {
+      "detail": "shrank beyond 2%: MI 103->100",
+      "name": "state_notice_counts",
+      "outcome": "fail"
+    },
+    {
+      "detail": "grew more than 5x: KS 12,851->120,009",
+      "name": "state_worker_totals",
+      "outcome": "fail"
+    },
+    {
+      "detail": "no state's worker total shrank more than 50%",
+      "name": "state_worker_deflation",
+      "outcome": "pass"
+    },
+    {
+      "detail": "distinct employers moved beyond 20%: KS 163->508, NY 3,940->5,306",
+      "name": "employer_counts",
+      "outcome": "warn"
+    },
+    {
+      "detail": "all dates within 1987-2028",
+      "name": "date_bounds",
+      "outcome": "pass"
+    },
+    {
+      "detail": "a field emptied or filled: KS no_jobs 65%",
+      "name": "field_emptied",
+      "outcome": "fail"
+    },
+    {
+      "detail": "no field's null rate moved more than 20%",
+      "name": "field_completeness",
+      "outcome": "pass"
+    },
+    {
+      "detail": "possible duplicates +0 on 3,338 new notices (allowed 33)",
+      "name": "duplicate_links",
+      "outcome": "pass"
+    }
+  ],
+  "verdict": "failed"
+}

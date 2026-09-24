@@ -780,6 +780,17 @@ def rebuild(
         ia_records: list[dict] = []
         ia_source_report = None
         ia_related: dict[str, str] = {}
+        ky_source_rows: list[dict] = []
+        ky_records: list[dict] = []
+        ky_source_report = None
+        if (source / "agency/ky").is_dir():
+            from warnlive.migrate.ky_source import read_artifacts as read_ky, project as project_ky
+
+            ky_source_rows = read_ky(source / "agency/ky")
+            ky_records, ky_held, ky_source_report = project_ky(source / "agency/ky")
+            if len(ky_records) + len(ky_held) != len(ky_source_rows):
+                raise ValueError("Kentucky agency rows are not fully accounted for")
+            exceptions.extend(ky_held)
         or_records: list[dict] = []
         or_source_report = None
         or_historical_dir = source / "agency/or_historical"
@@ -849,6 +860,9 @@ def rebuild(
                 ia_ingest = _ingest_groups(conn, {"IA": ia_records}, observed_at)
                 if ia_source_report is not None and ia_ingest["new"] != len(ia_records):
                     raise ValueError("Iowa source rows did not produce unique notices")
+                ky_ingest = _ingest_groups(conn, {"KY": ky_records}, observed_at)
+                if ky_source_report is not None and ky_ingest["new"] != len(ky_records):
+                    raise ValueError("Kentucky agency rows did not produce unique notices")
                 or_ingest = _ingest_groups(conn, {"OR": or_records}, observed_at)
                 if or_source_report is not None and or_ingest["new"] != len(or_records):
                     raise ValueError("Oregon agency rows did not produce unique notices")
@@ -1022,6 +1036,18 @@ def rebuild(
                         admission[pointer] = ("admitted", ia_notice_ids[target])
                     else:
                         admission[pointer] = ("identity_unresolved", None)
+                for row in ky_source_rows:
+                    source_id = str(row["raw"]["Notice: Notice Number"]).strip()
+                    if row["raw"]["County"].strip() == "Out of the State County":
+                        admission[row["source_row"]] = ("identity_unresolved", None)
+                    else:
+                        matches = conn.execute(
+                            "SELECT id FROM notices WHERE source_identity = ?",
+                            (f"KY:{source_id.removeprefix('Notice ').strip()}",),
+                        ).fetchall()
+                        if len(matches) != 1:
+                            raise ValueError(f"Kentucky observation has no unique notice: {source_id}")
+                        admission[row["source_row"]] = ("admitted", matches[0]["id"])
                 for row in la_source_rows:
                     pointer = row["source_row"]
                     if row["kind"] == "annotation":
@@ -1041,13 +1067,14 @@ def rebuild(
                     else:
                         raise ValueError(f"unclassified Louisiana observation: {pointer}")
                 observation_report = store_observations(
-                    conn, ia_current_rows + ia_historical_rows + la_source_rows,
+                    conn, ia_current_rows + ia_historical_rows + ky_source_rows + la_source_rows,
                     admission, source_bundle_sha256,
                 )
                 conn.commit()
             report = {
                 "source_files": len(manifest["files"]),
                 "source_bytes": sum(item["size"] for item in manifest["files"]),
+                "companion_evidence": manifest.get("companion_evidence"),
                 "policy": "agency-only-v1",
                 "raw": raw_report["states"],
                 "la_official_source": {
@@ -1070,6 +1097,8 @@ def rebuild(
                     "ingested_rows": ia_ingest["new"] if source_only else 0,
                     "hold_reasons": ia_source_report["hold_reasons"] if ia_source_report else {},
                 },
+                "ky_official_source": ({**ky_source_report, "ingested_rows": ky_ingest["new"]}
+                                       if ky_source_report is not None else None),
                 "or_official_source": ({**or_source_report, "ingested_rows": or_ingest["new"]}
                                        if or_source_report is not None else None),
                 "or_historical_source": ({**or_historical_report,

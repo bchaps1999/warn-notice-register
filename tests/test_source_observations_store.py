@@ -64,3 +64,24 @@ def test_observation_store_rejects_changed_source_on_replay(tmp_path):
     with pytest.raises(ValueError, match="stored source observation changed"):
         store_observations(conn, [changed], admission, "bundle")
     assert conn.execute("SELECT COUNT(*) FROM source_observations").fetchone()[0] == 1
+
+
+def test_kentucky_observation_keeps_out_of_state_row_separate(tmp_path):
+    conn = db.connect(tmp_path / "candidate.sqlite")
+    db.init_db(conn)
+    row = {
+        "source_artifact": "agency/ky/WARN-Report-2026-09-16.csv",
+        "source_row": "agency/ky/WARN-Report-2026-09-16.csv:row:4",
+        "source_row_sha256": "row-hash",
+        "kind": "notice",
+        "company_text": "Example",
+        "raw": {"County": "Out of the State County"},
+    }
+    store_observations(conn, [row], {row["source_row"]: ("identity_unresolved", None)}, "bundle")
+    saved = conn.execute(
+        "SELECT state, admission_status, notice_id, raw_json FROM source_observations"
+    ).fetchone()
+    assert (saved["state"], saved["admission_status"], saved["notice_id"]) == (
+        "KY", "identity_unresolved", None,
+    )
+    assert "Out of the State County" in saved["raw_json"]

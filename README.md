@@ -3,18 +3,14 @@
 A consolidated WARN Act notice dataset assembled from available state agency
 portals and archived source material. Coverage varies by state and period.
 
-**v1.0.1 data (September 24, 2026):** the checked-in source-only release
-contains **71,490 admitted notices, 79,261 versions, and 7,482,177 reported
-affected workers**. The database dump, national and state CSVs, and site build
-derive from the same pinned agency bundle. The [release notes](docs/release-v1-2026-09-24.md)
-explain the material coverage change from the previous main-branch data,
-including zero admitted Iowa and Kentucky notices, archive-only collectors,
-and other historical gaps. The [source bundle and replay report](data/source_snapshots/README.md)
-and [assembly contract](docs/rebuild-contract.md) define the evidence and
-rebuild checks. Counts are admitted source events, not an estimate of every
-WARN filing nationally.
-The [v1.0.1 patch note](docs/release-v1.0.1-cache-fix-2026-09-24.md) explains
-the site cache fix; the source data did not change from v1.0.0.
+**v1.1.0 data (September 24, 2026):** the source-backed release contains
+**74,828 admitted notices, 82,241 versions, and 7,815,994 reported affected
+workers**. The database dump and CSVs derive from the pinned agency bundle;
+the site build derives from that database. The [release notes](docs/release-v1.1.0-2026-09-24.md)
+explain the strict identity rule, Kansas portal expansion, Kentucky agency
+projection, and remaining historical gaps. The [source evidence](data/source_snapshots/README.md)
+and [assembly contract](docs/rebuild-contract.md) define the replay checks.
+Counts are admitted source events, not an estimate of every WARN filing nationally.
 
 ## What this is
 
@@ -27,8 +23,8 @@ deduplicates and version-tracks notices, and commits the results here:
 - `data/warn.sql.gz` — the full database as a gzipped SQL dump (notices, versions, run telemetry); `warnlive unpack-db` restores the working sqlite file
 - `data/exports/warn_notices.csv` — one row per notice, all active states
 - `data/exports/states/{xx}.csv` — per-state cuts
-- `data/exports/notice_links.csv` — source-backed relationships, when established; v1.0.1 has no inferred links
-- `data/exports/source_observations.csv` — 974 verified Iowa/Louisiana agency observations with admission or exclusion status; the separate exception ledger accounts for other held source rows
+- `data/exports/notice_links.csv` — source-backed relationships, when established; v1.1.0 has no notice links
+- `data/exports/source_observations.csv` — 1,009 verified agency observations, including 35 Kentucky rows, with admission or exclusion status; the separate exception ledger accounts for other held source rows
 - `data/health/health.md` — a dated per-state collection snapshot, not proof that every configured adapter is currently healthy
 
 ## Data dictionary (`warn_notices.csv`)
@@ -142,10 +138,30 @@ Scheduled runs: `.github/workflows/scrape-daily.yml` (high-volume states) and
 enables the Zyte proxy for states behind aggressive bot protection (LA, TX
 fallback, MA fallback).
 
-### Rebuild v1.0.1 from frozen agency sources
+### Rebuild v1.1.0 from frozen agency sources
 
-The source bundle freezes current state captures, agency archives, and
-reviewed original-source artifacts. To reproduce the published 71,490-notice
+The current release uses a frozen agency-only bundle with Kansas portal pages
+and Kentucky's pinned official CSV. Rebuild in an isolated path and compare
+the result with the [release manifest](data/source_snapshots/2026-09-24-ks-ky-review-release-manifest.json):
+
+```bash
+python -m warnlive.migrate.source_bundle verify \
+  data/source_snapshots/2026-09-24-strict-ks-ky-source-bundle.tar.gz
+python -m warnlive.migrate.offline_rebuild \
+  --bundle data/source_snapshots/2026-09-24-strict-ks-ky-source-bundle.tar.gz \
+  --db /tmp/warn-v1.1.sqlite --observed-at 2026-09-24 --source-only \
+  --exceptions /tmp/warn-v1.1.exceptions.jsonl --report /tmp/warn-v1.1-report.json
+```
+
+The [replay report](data/source_snapshots/2026-09-24-strict-ks-ky-candidate-report.json)
+and [release notes](docs/release-v1.1.0-2026-09-24.md) describe admitted and
+held rows. The two held Kentucky rows are source observations; the 76 held
+Kansas portal IDs are preserved in their companion source archive.
+
+### Rebuild the historical v1.0.1 release from frozen agency sources
+
+The earlier source bundle freezes state captures, agency archives, and
+reviewed original-source artifacts. To reproduce the v1.0.1 71,490-notice
 data with expanded date-precision metadata, use the release-code commit
 `b941649` and rebuild into an isolated path:
 
@@ -165,16 +181,16 @@ to the [date-precision replay checkpoint](docs/date-precision-automation-2026-09
 The older [v1 source report](data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1-report.json)
 predates that metadata change and has different content fingerprints.
 
-The current development branch also has revision-aware admission rules. Running
-the same command with those later rules creates an isolated
+Later revision-aware admission rules changed the result. Running
+the same command with those rules creates an isolated
 [revision-admission candidate](docs/revision-admission-candidate-2026-09-24.md),
-whose notice totals differ from the released database; it does not replace the
-release artifacts.
-The [release notes](docs/release-v1-2026-09-24.md) state the coverage limits
-and source-policy changes. `source_observations.csv` contains the verified
-Iowa/Louisiana observations; other held source rows are in the exception
-ledger. The [assembly contract](docs/rebuild-contract.md) defines the
-reconciliation checks. For a dated site build, pass
+whose notice totals differ from v1.0.1; it is not the v1.1.0 release.
+The [system review and strict replay](docs/system-review-2026-09-24.md) records
+the subsequent same-key collision guard, the promoted strict candidate, and
+the remaining coverage opportunities.
+The [v1.0.1 release notes](docs/release-v1-2026-09-24.md) state that release's
+coverage limits. The [v1.1.0 release notes](docs/release-v1.1.0-2026-09-24.md)
+describe the current data. For a dated site build, pass
 `warnlive build-site --db /tmp/warn-v1.sqlite --out /tmp/warn-v1-site --as-of 2026-09-24`.
 
 To compare a newer live capture without overwriting an older source bundle,

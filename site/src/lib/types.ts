@@ -71,6 +71,7 @@ export interface SectorPoint {
 
 export interface National {
   anchor_date: string;
+  date_basis_12mo: { notice: number; action_fallback: number };
   monthly: MonthPoint[];
   top_employers_12mo: TopEmployer[];
   biggest_recent: NoticeSummary[];
@@ -135,6 +136,7 @@ export interface StateData {
     notices: number;
     earliest: string | null;
     latest: string | null;
+    action_date_fallback: number;
     placed: number;
   };
   counties: CountyPoint[];

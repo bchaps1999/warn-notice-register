@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from datetime import date
 from pathlib import Path
 
 from warnlive.registry import Registry
@@ -14,10 +15,14 @@ CONSECUTIVE_FAILURES_FOR_BROKEN = 3
 # portal that quietly stops updating can sit yellow forever. After this many
 # consecutive degraded runs the report treats it as worth a person's look.
 CONSECUTIVE_DEGRADED_FOR_ATTENTION = 5
+LAST_SUCCESS_MAX_AGE_DAYS = {"daily": 3, "weekly": 14}
 
 
-def build_status(conn: sqlite3.Connection, registry: Registry) -> dict:
+def build_status(
+    conn: sqlite3.Connection, registry: Registry, today: date | None = None,
+) -> dict:
     """Latest outcome + failure streak per state, from state_runs history."""
+    today = today or date.today()
     states = {}
     for cfg in registry.all():
         postal = cfg.postal.upper()
@@ -45,6 +50,16 @@ def build_status(conn: sqlite3.Connection, registry: Registry) -> dict:
             "WHERE state = ? AND verdict IN ('ok','degraded') ORDER BY id DESC LIMIT 1",
             (postal,),
         ).fetchone()
+        success_day = (
+            date.fromisoformat(last_success["finished_at"][:10])
+            if last_success and last_success["finished_at"] else None
+        )
+        success_age = (today - success_day).days if success_day else None
+        success_max_age = LAST_SUCCESS_MAX_AGE_DAYS.get(cfg.cadence)
+        success_overdue = (
+            cfg.status == "active" and success_max_age is not None
+            and (success_age is None or success_age > success_max_age)
+        )
         notices = conn.execute(
             "SELECT COUNT(*) AS c FROM notices WHERE state = ?", (postal,)
         ).fetchone()["c"]
@@ -60,6 +75,9 @@ def build_status(conn: sqlite3.Connection, registry: Registry) -> dict:
             if latest and latest["checks_json"]
             else None,
             "last_success": last_success["finished_at"] if last_success else None,
+            "last_success_age_days": success_age,
+            "last_success_max_age_days": success_max_age,
+            "last_success_overdue": success_overdue,
             "consecutive_failures": streak,
             "consecutive_degraded": degraded_streak,
             "recommend_broken": streak >= CONSECUTIVE_FAILURES_FOR_BROKEN
@@ -72,10 +90,13 @@ def build_status(conn: sqlite3.Connection, registry: Registry) -> dict:
     return states
 
 
-def write_health(conn: sqlite3.Connection, registry: Registry, health_dir: Path) -> dict:
+def write_health(
+    conn: sqlite3.Connection, registry: Registry, health_dir: Path,
+    today: date | None = None,
+) -> dict:
     health_dir = Path(health_dir)
     health_dir.mkdir(parents=True, exist_ok=True)
-    status = build_status(conn, registry)
+    status = build_status(conn, registry, today=today)
 
     (health_dir / "status.json").write_text(json.dumps(status, indent=2) + "\n")
 
@@ -91,6 +112,14 @@ def write_health(conn: sqlite3.Connection, registry: Registry, health_dir: Path)
         note = ""
         if s["recommend_broken"]:
             note = f"**recommend marking broken** ({s['consecutive_failures']} consecutive failures)"
+        elif s["last_success_overdue"]:
+            note = (
+                f"**last successful collection overdue** "
+                f"({s['last_success_age_days']}d ago, "
+                f"max {s['last_success_max_age_days']}d)"
+                if s["last_success_age_days"] is not None
+                else "**no successful collection recorded**"
+            )
         elif s["chronically_degraded"]:
             note = (f"**chronically degraded** ({s['consecutive_degraded']} "
                     "consecutive degraded runs)")

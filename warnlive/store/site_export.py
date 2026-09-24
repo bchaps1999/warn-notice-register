@@ -16,7 +16,8 @@ from __future__ import annotations
 import csv
 import json
 import sqlite3
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
+from calendar import monthrange
 from pathlib import Path
 
 from warnlive.registry import Registry
@@ -37,9 +38,23 @@ FLAG_MONTH_DATE = 64  # reported notice month, with inferred year; no known day
 
 def build_site(
     conn: sqlite3.Connection, registry: Registry, out_dir: Path, *,
-    as_of: str | None = None,
+    as_of: str | None = None, built_at: str | None = None,
 ) -> dict[str, int]:
-    """Build site data; pin ``as_of`` (YYYY-MM-DD) for an offline replay."""
+    """Build site data; pin ``as_of`` for an offline replay.
+
+    ``built_at`` reproduces an already published unpinned build exactly during
+    release verification. New callers normally leave it unset.
+    """
+    if built_at is not None:
+        try:
+            stamp = datetime.strptime(built_at, "%Y-%m-%dT%H:%M:%SZ")
+        except ValueError as exc:
+            raise ValueError("built_at must be a UTC YYYY-MM-DDTHH:MM:SSZ timestamp") from exc
+        if stamp.strftime("%Y-%m-%dT%H:%M:%SZ") != built_at:
+            raise ValueError("built_at must be a UTC YYYY-MM-DDTHH:MM:SSZ timestamp")
+        if as_of is not None and built_at[:10] != as_of:
+            raise ValueError("built_at date must match as_of")
+        as_of = built_at[:10]
     if as_of is not None:
         try:
             parsed = datetime.strptime(as_of, "%Y-%m-%d")
@@ -47,7 +62,7 @@ def build_site(
             raise ValueError("as_of must be a valid YYYY-MM-DD date") from exc
         if parsed.strftime("%Y-%m-%d") != as_of:
             raise ValueError("as_of must be a valid YYYY-MM-DD date")
-        built_at = f"{as_of}T00:00:00Z"
+        built_at = built_at or f"{as_of}T00:00:00Z"
     else:
         built_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         as_of = built_at[:10]
@@ -250,12 +265,14 @@ def _county_series(rows, limit: int | None = None) -> list[dict]:
     return ranked[:limit] if limit else ranked
 
 
-def _top_employers(rows, since: str | None, limit: int) -> list[dict]:
+def _top_employers(rows, since: str | None, limit: int, through: str | None = None) -> list[dict]:
     """Aggregate by identity key (not raw spelling), labeled with the
     group's most common raw name."""
     agg: dict[str, dict] = {}
     for n in rows:
-        if since and (n["display_date"] or "") < since:
+        if (since and (n["display_date"] or "") <= since) or (
+            through and (n["display_date"] or "") > through
+        ):
             continue
         e = agg.setdefault(
             n["employer_key"],
@@ -273,18 +290,13 @@ def _top_employers(rows, since: str | None, limit: int) -> list[dict]:
     return out[:limit]
 
 
-def _today(notices, build_date: str) -> str:
-    """Anchor 'trailing N months' windows to the newest notice date, clamped
-    to the build date — a handful of source typos carry far-future notice
-    dates and would otherwise drag every trailing window into the future."""
-    dates = [n["display_date"] for n in notices if n["display_date"] and n["display_date"] <= build_date]
-    return max(dates) if dates else "1970-01-01"
-
-
 def _shift_months(iso_date: str, months_back: int) -> str:
-    y, m = int(iso_date[:4]), int(iso_date[5:7])
+    """Return the calendar anniversary, clamping month-end days when needed."""
+    original = date.fromisoformat(iso_date)
+    y, m = original.year, original.month
     total = y * 12 + (m - 1) - months_back
-    return f"{total // 12:04d}-{total % 12 + 1:02d}-01"
+    year, month = total // 12, total % 12 + 1
+    return date(year, month, min(original.day, monthrange(year, month)[1])).isoformat()
 
 
 def _build_meta(notices, status: dict, prefix_len: int, built_at: str) -> dict:
@@ -390,9 +402,9 @@ def _sector_series(rows) -> list[dict]:
 
 
 def _build_national(notices, prefix_len: int, as_of: str) -> dict:
-    anchor = _today(notices, as_of)
+    anchor = as_of
     t12 = _shift_months(anchor, 12)
-    recent_cut = _shift_months(anchor, 3)
+    recent_cut = (date.fromisoformat(anchor) - timedelta(days=89)).isoformat()
     dated = [n for n in notices if n["display_date"]]
 
     biggest_recent = sorted(
@@ -402,21 +414,25 @@ def _build_national(notices, prefix_len: int, as_of: str) -> dict:
 
     state_agg: dict[str, dict] = {}
     for n in dated:
-        if not (t12 <= n["display_date"] <= anchor):
+        if not (t12 < n["display_date"] <= anchor):
             continue
         e = state_agg.setdefault(n["state"], {"state": n["state"], "notices": 0, "workers": 0})
         e["notices"] += 1
         e["workers"] += n["employees_affected"] or 0
 
-    in_window = [n for n in dated if t12 <= n["display_date"] <= anchor]
+    in_window = [n for n in dated if t12 < n["display_date"] <= anchor]
     prior = [
         n for n in dated
-        if _shift_months(anchor, 24) <= n["display_date"] < t12
+        if _shift_months(anchor, 24) < n["display_date"] <= t12
     ]
     return {
         "anchor_date": anchor,
         "monthly": _monthly_series(notices),
-        "top_employers_12mo": _top_employers(dated, t12, 25),
+        "top_employers_12mo": _top_employers(dated, t12, 25, anchor),
+        "date_basis_12mo": {
+            "notice": sum(1 for n in in_window if n["notice_date"]),
+            "action_fallback": sum(1 for n in in_window if not n["notice_date"]),
+        },
         "biggest_recent": [_notice_summary(n, prefix_len) for n in biggest_recent],
         "states_12mo": sorted(state_agg.values(), key=lambda e: -e["workers"]),
         "counties_12mo": _county_series(in_window),
@@ -437,8 +453,11 @@ def _build_national(notices, prefix_len: int, as_of: str) -> dict:
 
 def _build_state(postal: str, rows, health: dict, cfg, prefix_len: int, as_of: str) -> dict:
     dated = [n for n in rows if n["display_date"]]
-    anchor = _today(rows, as_of)
-    recent = sorted(dated, key=lambda n: n["display_date"], reverse=True)[:50]
+    anchor = as_of
+    recent = sorted(
+        (n for n in dated if n["display_date"] <= anchor),
+        key=lambda n: n["display_date"], reverse=True,
+    )[:50]
     return {
         "state": postal,
         "name": cfg.name,
@@ -460,6 +479,7 @@ def _build_state(postal: str, rows, health: dict, cfg, prefix_len: int, as_of: s
             "notices": len(rows),
             "earliest": min((n["display_date"] for n in dated), default=None),
             "latest": max((n["display_date"] for n in dated), default=None),
+            "action_date_fallback": sum(1 for n in dated if not n["notice_date"]),
             # How much of this state could be put on a map, so a county view
             # can say what it is leaving out. Kansas files against workforce
             # areas, so its answer is close to none.
@@ -471,7 +491,7 @@ def _build_state(postal: str, rows, health: dict, cfg, prefix_len: int, as_of: s
         "counties": _county_series(rows),
         "monthly": _monthly_series(rows),
         "top_employers": _top_employers(dated, None, 20),
-        "top_employers_24mo": _top_employers(dated, _shift_months(anchor, 24), 20),
+        "top_employers_24mo": _top_employers(dated, _shift_months(anchor, 24), 20, anchor),
         "recent": [_notice_summary(n, prefix_len) for n in recent],
     }
 

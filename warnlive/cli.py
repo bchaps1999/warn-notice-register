@@ -86,8 +86,12 @@ def init_db(db_path: Path) -> None:
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
 @click.option("--trigger", default="manual", help="Run trigger label (manual/scheduled/backfill).")
-def scrape(states, cadence, include_unverified, smoke, use_cache, workdir, db_path, data_dir, trigger):
+@click.option("--run-report", type=click.Path(path_type=Path), default=None,
+              help="Write machine-readable outcomes for this invocation.")
+def scrape(states, cadence, include_unverified, smoke, use_cache, workdir, db_path, data_dir, trigger, run_report):
     """Scrape STATES (or all active states for --cadence), verify, ingest, export."""
+    if run_report is not None:
+        Path(run_report).unlink(missing_ok=True)
     registry = load_registry()
     configs = registry.for_run(
         states=list(states) or None,
@@ -106,7 +110,12 @@ def scrape(states, cadence, include_unverified, smoke, use_cache, workdir, db_pa
     report = pipeline.run_states(
         conn, registry, configs, workdir,
         trigger=trigger, smoke=smoke, use_cache=use_cache,
+        durable_policy_path=Path(data_dir) / "ks_portal_holds.json",
     )
+    if run_report is not None:
+        from warnlive.verify.run_report import write_run_report
+
+        write_run_report(report, [cfg.postal for cfg in configs], run_report)
 
     if conn is not None:
         # The regression gate runs before anything is written to data/: a
@@ -138,6 +147,47 @@ def scrape(states, cadence, include_unverified, smoke, use_cache, workdir, db_pa
     # Exit nonzero only if EVERY state failed (systemic problem);
     # individual failures are health-report business, not run failures.
     if report.outcomes and all(o.verdict == "failed" for o in report.outcomes):
+        sys.exit(1)
+
+
+@cli.command("check-run-report")
+@click.argument("path", type=click.Path(path_type=Path))
+def check_run_report(path: Path) -> None:
+    """Fail when any selected state failed during a scrape invocation."""
+    from warnlive.verify.run_report import check_run_report as check
+
+    ok, detail = check(path)
+    click.echo(detail)
+    if not ok:
+        sys.exit(1)
+
+
+@cli.command("check-publication-gate")
+@click.argument("path", type=click.Path(path_type=Path))
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
+def check_publication_gate(path: Path, db_path: Path, data_dir: Path) -> None:
+    """Fail before publication when a held event exists in the database."""
+    from warnlive.verify.run_report import check_publication_gate as check
+
+    ok, detail = check(path, db_path, Path(data_dir) / "ks_portal_holds.json")
+    click.echo(detail)
+    if not ok:
+        sys.exit(1)
+
+
+@cli.command("check-kansas-holds")
+@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
+@click.option("--data-dir", type=click.Path(path_type=Path), default=DEFAULT_DATA_DIR)
+def check_kansas_holds(db_path: Path, data_dir: Path) -> None:
+    """Fail when unresolved Kansas portal rows exist in the release database."""
+    from warnlive.verify.run_report import check_kansas_database_holds
+
+    ok, detail = check_kansas_database_holds(
+        db_path, Path(data_dir) / "ks_portal_holds.json",
+    )
+    click.echo(detail)
+    if not ok:
         sys.exit(1)
 
 
@@ -1055,7 +1105,7 @@ def dupes(db_path: Path, data_dir: Path) -> None:
 @cli.command()
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--gh-issues", is_flag=True,
-              help="Open a GitHub issue per newly-failing active state and close on recovery (needs gh CLI or GH_TOKEN in CI).")
+              help="Sync failure, degradation, and overdue-collection GitHub issues (needs gh CLI or GH_TOKEN in CI).")
 def report(db_path: Path, gh_issues: bool) -> None:
     """Print per-state health; optionally sync GitHub issues."""
     import json as json_mod
@@ -1078,6 +1128,9 @@ def report(db_path: Path, gh_issues: bool) -> None:
     # quietly stopped updating sitting yellow forever with no escalation.
     chronic = {
         postal: s for postal, s in status.items() if s["chronically_degraded"]
+    }
+    overdue = {
+        postal: s for postal, s in status.items() if s["last_success_overdue"]
     }
     for postal, s in sorted(status.items()):
         if s["latest_verdict"]:
@@ -1127,6 +1180,20 @@ def report(db_path: Path, gh_issues: bool) -> None:
         gh("issue", "create", "--title", title, "--body", body, "--label", "state-health")
         click.echo(f"opened issue: {title}")
 
+    for postal, s in overdue.items():
+        title = f"[health] {postal} collection overdue"
+        if title in open_issues:
+            continue
+        last_success = s["last_success"] or "none recorded"
+        body = (
+            f"State {postal} ({s['name']}) has no successful collection within "
+            f"its {s['last_success_max_age_days']}-day {s['registry_status']} "
+            f"collector window. Last success: {last_success}.\n\n"
+            "Check the scheduled workflow, source availability, and state run history."
+        )
+        gh("issue", "create", "--title", title, "--body", body, "--label", "state-health")
+        click.echo(f"opened issue: {title}")
+
     for title, number in open_issues.items():
         if title.endswith(" failing"):
             postal = title.removeprefix("[health] ").removesuffix(" failing")
@@ -1141,6 +1208,13 @@ def report(db_path: Path, gh_issues: bool) -> None:
             if s and s["latest_verdict"] == "ok":
                 gh("issue", "close", str(number), "--comment",
                    f"{postal} recovered: latest run verdict is ok.")
+                click.echo(f"closed issue: {title}")
+        elif title.endswith(" collection overdue"):
+            postal = title.removeprefix("[health] ").removesuffix(" collection overdue")
+            s = status.get(postal)
+            if s and not s["last_success_overdue"]:
+                gh("issue", "close", str(number), "--comment",
+                   f"{postal} recovered: successful collection is within its cadence window.")
                 click.echo(f"closed issue: {title}")
 
 

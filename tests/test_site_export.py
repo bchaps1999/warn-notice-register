@@ -6,7 +6,8 @@ from warnlive.registry import load_registry
 from warnlive.store import db as db_mod
 from warnlive.store.dedupe import ingest
 from warnlive.store.site_export import (
-    FLAG_MONTH_DATE, _build_employer_shards, _county_series, _fnv_shard, build_site,
+    FLAG_MONTH_DATE, _build_employer_shards, _county_series, _fnv_shard, _shift_months,
+    build_site,
 )
 
 
@@ -114,7 +115,61 @@ def test_pinned_as_of_makes_site_metadata_and_windows_repeatable(conn, tmp_path)
     for filename in ("meta.json", "national.json", "states/ct.json"):
         assert (first / filename).read_bytes() == (second / filename).read_bytes()
     assert json.loads((first / "meta.json").read_text())["built_at"] == "2026-08-01T00:00:00Z"
-    assert json.loads((first / "national.json").read_text())["anchor_date"] == "2026-07-15"
+    assert json.loads((first / "national.json").read_text())["anchor_date"] == "2026-08-01"
+
+
+def test_site_reproduces_unpinned_build_timestamp(conn, tmp_path):
+    ingest(conn, [record(1)], "2026-07-01")
+    first, second = tmp_path / "first", tmp_path / "second"
+    build_site(conn, load_registry(), first)
+    built_at = json.loads((first / "meta.json").read_text())["built_at"]
+    build_site(conn, load_registry(), second, built_at=built_at)
+    assert (first / "meta.json").read_bytes() == (second / "meta.json").read_bytes()
+    assert (first / "national.json").read_bytes() == (second / "national.json").read_bytes()
+
+
+@pytest.mark.parametrize("anchor,months,expected", [
+    ("2026-09-24", 12, "2025-09-24"),
+    ("2024-02-29", 12, "2023-02-28"),
+    ("2024-03-31", 1, "2024-02-29"),
+    ("2026-03-31", 1, "2026-02-28"),
+])
+def test_calendar_anniversary_clamps_month_end(anchor, months, expected):
+    assert _shift_months(anchor, months) == expected
+
+
+def test_trailing_windows_use_build_day_and_exclude_future_action_dates(conn, tmp_path):
+    ingest(conn, [
+        record(1, notice_date="2026-01-01", effective_date="2026-12-01"),
+        record(2, notice_date=None, effective_date="2026-09-23"),
+        record(3, notice_date=None, effective_date="2026-10-01"),
+        record(4, notice_date="2020-01-01", effective_date="2020-02-01"),
+    ], "2026-09-24")
+    out = tmp_path / "out"
+    build_site(conn, load_registry(), out, as_of="2026-09-24")
+    national = json.loads((out / "national.json").read_text())
+    state = json.loads((out / "states" / "ct.json").read_text())
+    assert national["anchor_date"] == "2026-09-24"
+    assert national["date_basis_12mo"] == {"notice": 1, "action_fallback": 1}
+    assert sum(row["notices"] for row in national["states_12mo"]) == 2
+    assert sum(row["notices"] for row in national["top_employers_12mo"]) == 2
+    assert sum(row["notices"] for row in state["top_employers_24mo"]) == 2
+    assert state["coverage"]["action_date_fallback"] == 2
+    assert not any(
+        record(3)["dedupe_key"].startswith(row["key"])
+        for row in state["recent"]
+    )
+
+
+def test_trailing_window_is_empty_when_state_has_only_old_records(conn, tmp_path):
+    ingest(conn, [record(1, notice_date="2020-01-01")], "2020-01-01")
+    out = tmp_path / "out"
+    build_site(conn, load_registry(), out, as_of="2026-09-24")
+    national = json.loads((out / "national.json").read_text())
+    state = json.loads((out / "states" / "ct.json").read_text())
+    assert national["anchor_date"] == "2026-09-24"
+    assert national["states_12mo"] == []
+    assert state["top_employers_24mo"] == []
 
 
 def test_pinned_as_of_rejects_invalid_date(conn, tmp_path):

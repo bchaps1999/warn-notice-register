@@ -62,7 +62,7 @@ def store_observations(conn: sqlite3.Connection, rows: list[dict],
             status, notice_id = _admission(admission[row["source_row"]])
             artifact = row["source_artifact"]
             parts = artifact.split("/")
-            if len(parts) < 3 or parts[0] != "agency" or parts[1].upper() not in {"IA", "LA"}:
+            if len(parts) < 3 or parts[0] != "agency" or parts[1].upper() not in {"IA", "KY", "LA"}:
                 raise ValueError(f"unexpected official source artifact: {artifact}")
             state = parts[1].upper()
             kind = row.get("kind", "notice")

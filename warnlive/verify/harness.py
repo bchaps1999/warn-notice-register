@@ -100,15 +100,16 @@ def verify_state(
     else:
         expected = Counter(cfg.expected_columns)
         observed = Counter(header)
-        same_columns = observed == expected
+        missing = list((expected - observed).elements())
+        added = list((observed - expected).elements())
+        same_columns = not missing and not added
         result.add(
             "schema_drift",
             same_columns,
             ("header matches snapshot" if header == cfg.expected_columns
              else "same columns in a different order" if same_columns
-             else f"header drifted: missing={list((expected - observed).elements())}, "
-                  f"added={list((observed - expected).elements())}"),
-            severity="warn",
+             else f"header drifted: missing={missing}, added={added}"),
+            severity="fail" if missing else "warn",
         )
 
     # map_coverage: parse failures + employer coverage
@@ -129,53 +130,58 @@ def verify_state(
     else:
         result.add("employer_coverage", False, "no records normalized")
 
-    # Illinois's public export has an agency report date, not a verified
-    # legal notice date. Monitor that source clock without relabeling it.
-    date_label = "agency_reported_date" if cfg.postal == "il" else "notice_date"
-    if cfg.postal == "il":
-        dates = [
-            _parse_iso(json.loads(r.get("source_details") or "{}").get("agency_reported_date"))
-            for r in norm.records
-        ]
-    else:
-        dates = [_parse_iso(r["notice_date"]) for r in norm.records]
+    # A configured source clock may be a legal notice date, an agency date,
+    # or an action date. Its label is kept in each check; none is recast as
+    # a legal notice date. Action dates can legitimately lie in the future.
+    date_label = cfg.freshness_field
+    dates = [_parse_iso(_source_date(r, date_label)) for r in norm.records]
     dates = [d for d in dates if d is not None]
     if n and not dates:
-        # Zero parseable notice dates would otherwise skip date_sanity AND
-        # freshness, and a transformer that broke every date could still
-        # verdict ok. Some sources (GA, PA) never publish a notice date and
-        # carry only effective dates — those still have *a* date per record,
-        # so the fail is reserved for a batch with no dates of either kind.
         effective = [
-            d for d in (_parse_iso(r["effective_date"]) for r in norm.records)
+            d for d in (_parse_iso(r.get("effective_date")) for r in norm.records)
             if d is not None
         ]
         result.add(
             "date_sanity",
-            bool(effective),
+            bool(effective) and date_label == "notice_date",
             f"none of {n} records has a parseable {date_label}"
             + ("" if effective else " or effective_date"),
-            severity="fail" if not effective else "warn",
+            severity="warn" if effective and date_label == "notice_date" else "fail",
         )
     if dates:
         horizon = today + timedelta(days=MAX_FUTURE_DAYS)
-        bad = sum(1 for d in dates if d.year < MIN_YEAR or d > horizon)
+        bad = sum(
+            1 for d in dates
+            if d.year < MIN_YEAR or (date_label != "effective_date" and d > horizon)
+        )
         result.add(
             "date_sanity",
             bad / len(dates) <= DATE_SANITY_MAX_BAD,
-            f"{bad}/{len(dates)} {date_label} values outside {MIN_YEAR}..{horizon}",
+            f"{bad}/{len(dates)} {date_label} values outside "
+            + (f"{MIN_YEAR}..{horizon}" if date_label != "effective_date"
+               else f"years >= {MIN_YEAR}"),
         )
 
-        # freshness
-        if cfg.staleness_days is not None:
-            newest = max(dates)
+    if cfg.staleness_days is not None:
+        # Future action dates do not prove a source was recently updated.
+        eligible = ([d for d in dates if d <= today]
+                    if date_label == "effective_date" else dates)
+        if eligible:
+            newest = max(eligible)
             age = (today - newest).days
             result.add(
                 "freshness",
                 age <= cfg.staleness_days,
-                f"newest {date_label} {newest} is {age}d old (max {cfg.staleness_days}d)",
+                f"newest {date_label} {newest} is {age}d old "
+                f"(max {cfg.staleness_days}d)"
+                + (f"; {len(dates) - len(eligible)} future action dates excluded"
+                   if len(eligible) != len(dates) else ""),
                 severity="warn",
             )
+        else:
+            result.add("freshness", False,
+                       f"no usable {date_label} at or before {today}",
+                       severity="warn")
 
     # dedupe_sanity
     if n:
@@ -264,8 +270,18 @@ def _read_header(path: Path) -> list[str]:
             return []
 
 
+def _source_date(record: dict, field: str) -> str | None:
+    if not field.startswith("source_details."):
+        return record.get(field)
+    try:
+        details = json.loads(record.get("source_details") or "{}")
+    except (TypeError, ValueError):
+        return None
+    return details.get(field.partition(".")[2]) if isinstance(details, dict) else None
+
+
 def _parse_iso(value: str | None) -> date | None:
-    if not value:
+    if not isinstance(value, str) or not value:
         return None
     try:
         return datetime.strptime(value, "%Y-%m-%d").date()

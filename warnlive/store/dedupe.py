@@ -13,7 +13,7 @@ logger = logging.getLogger("warnlive")
 # Two rows under one key whose effective dates sit further apart than this
 # are probably not one notice amended but two notices the key could not
 # tell apart — which happens exactly where notice_date is null and the key
-# runs out of fields. Counted and logged, never merged silently.
+# runs out of fields. Such a batch must be reviewed before it is ingested.
 COLLISION_WINDOW_DAYS = 45
 
 # Canonical fields whose values define a version. Order matters for hashing.
@@ -51,6 +51,64 @@ class IngestStats:
     suspected_collisions: int = 0
 
 
+class CollisionError(ValueError):
+    """Distinct source rows share a key but have incompatible action dates."""
+
+    def __init__(self, collisions: list[dict]):
+        self.collisions = collisions
+        first = collisions[0]
+        super().__init__(
+            f"{len(collisions)} suspected collision(s); first key "
+            f"{first['dedupe_key']}: {first['earlier_date']} vs "
+            f"{first['incoming_date']} ({first['scope']})"
+        )
+
+
+def preflight_collisions(conn: sqlite3.Connection, records: list[dict]) -> None:
+    """Reject incompatible same-key dates before changing any notice.
+
+    Compare distinct rows in the batch and new versions against *all* stored
+    versions, since the current projection alone may hide an earlier action
+    date. Reobserving an already stored version is safe and stays idempotent.
+    """
+    by_key: dict[str, dict[str, dict]] = {}
+    for rec in records:
+        by_key.setdefault(rec["dedupe_key"], {}).setdefault(rec["raw_record_hash"], rec)
+
+    collisions: list[dict] = []
+    for key, incoming in by_key.items():
+        stored = conn.execute(
+            "SELECT v.raw_record_hash, v.fields_json FROM notices n "
+            "JOIN notice_versions v ON v.notice_id = n.id "
+            "WHERE n.dedupe_key = ?",
+            (key,),
+        ).fetchall()
+        stored_dates = {
+            row["raw_record_hash"]: json.loads(row["fields_json"]).get("effective_date")
+            for row in stored
+        }
+        incoming_rows = list(incoming.values())
+        for index, rec in enumerate(incoming_rows):
+            for previous in incoming_rows[:index]:
+                if _dates_disagree(previous.get("effective_date"), rec.get("effective_date")):
+                    collisions.append({
+                        "dedupe_key": key, "scope": "batch",
+                        "earlier_date": previous.get("effective_date"),
+                        "incoming_date": rec.get("effective_date"),
+                    })
+            if rec["raw_record_hash"] in stored_dates:
+                continue
+            for previous_date in stored_dates.values():
+                if _dates_disagree(previous_date, rec.get("effective_date")):
+                    collisions.append({
+                        "dedupe_key": key, "scope": "stored_version",
+                        "earlier_date": previous_date,
+                        "incoming_date": rec.get("effective_date"),
+                    })
+    if collisions:
+        raise CollisionError(collisions)
+
+
 def ingest(
     conn: sqlite3.Connection,
     records: list[dict],
@@ -79,6 +137,7 @@ def ingest(
     amendment rows rather than editing — and goes through the update path,
     so the later values become the current version instead of being dropped.
     """
+    preflight_collisions(conn, records)
     stats = IngestStats()
     seen_in_batch: dict[str, str] = {}
     cur = conn.cursor()
@@ -182,15 +241,6 @@ def ingest(
                 )
             stats.unchanged += 1
         else:
-            if _dates_disagree(row["effective_date"], rec["effective_date"]):
-                stats.suspected_collisions += 1
-                logger.warning(
-                    "dedupe: key %s updated with an effective date %s -> %s "
-                    "further than %d days apart — likely two distinct notices "
-                    "sharing a key",
-                    key, row["effective_date"], rec["effective_date"],
-                    COLLISION_WINDOW_DAYS,
-                )
             next_version = row["current_version"] + 1
             _insert_version(cur, row["id"], next_version, rec, observed_at)
             cur.execute(

@@ -13,6 +13,12 @@ SOURCES = {"upstream", "patched", "custom", "manual"}
 STATUSES = {"unverified", "active", "broken", "manual_only", "archive"}
 TIERS = {"easy", "medium", "hard", None}
 CADENCES = {"daily", "weekly", None}
+FRESHNESS_FIELDS = {
+    "notice_date", "effective_date",
+    "source_details.agency_reported_date",
+    "source_details.agency_received_date",
+    "source_details.agency_posted_date",
+}
 
 
 @dataclass
@@ -29,6 +35,7 @@ class StateConfig:
     expected_columns: list[str] | None
     source_url: str | None
     notes: str = ""
+    freshness_field: str = "notice_date"
 
     @property
     def scrapable(self) -> bool:
@@ -97,6 +104,8 @@ def load_registry(path: Path | None = None) -> Registry:
             (cfg.status in STATUSES, f"bad status {cfg.status!r}"),
             (cfg.tier in TIERS, f"bad tier {cfg.tier!r}"),
             (cfg.cadence in CADENCES, f"bad cadence {cfg.cadence!r}"),
+            (cfg.freshness_field in FRESHNESS_FIELDS,
+             f"bad freshness_field {cfg.freshness_field!r}"),
             (
                 (cfg.source == "manual") == (cfg.status == "manual_only"),
                 "manual source and manual_only status must go together",

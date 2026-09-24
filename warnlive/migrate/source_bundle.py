@@ -271,6 +271,62 @@ def verify(bundle: Path) -> dict:
     return manifest
 
 
+def overlay_raw_bundle(bundle: Path, raw_file: Path, out_path: Path,
+                       evidence_archive: Path | None = None) -> dict:
+    """Replace one state CSV in a verified frozen bundle without changing other inputs."""
+    bundle, raw_file, out_path = Path(bundle), Path(raw_file), Path(out_path)
+    if out_path.exists():
+        raise FileExistsError(f"source bundle already exists: {out_path}")
+    if raw_file.is_symlink() or not raw_file.is_file() or not re.fullmatch(
+        r"[a-z]{2}\.csv", raw_file.name
+    ):
+        raise ValueError(f"invalid raw overlay: {raw_file}")
+    postal = raw_file.stem
+    validate_agency_raw_file(postal, raw_file)
+    replacement = raw_file.read_bytes()
+    manifest = verify(bundle)
+    member_name = f"raw/{raw_file.name}"
+    if member_name not in {item["path"] for item in manifest["files"]}:
+        raise ValueError(f"raw overlay has no base member: {member_name}")
+    manifest = json.loads(json.dumps(manifest))
+    for item in manifest["files"]:
+        if item["path"] == member_name:
+            item["size"] = len(replacement)
+            item["sha256"] = hashlib.sha256(replacement).hexdigest()
+    manifest["raw_overrides"] = sorted(set(manifest.get("raw_overrides", [])) | {member_name})
+    if evidence_archive is not None:
+        evidence_archive = Path(evidence_archive)
+        if not evidence_archive.is_file() or evidence_archive.is_symlink():
+            raise ValueError(f"invalid companion evidence archive: {evidence_archive}")
+        manifest["companion_evidence"] = {
+            "name": evidence_archive.name,
+            "sha256": hashlib.sha256(evidence_archive.read_bytes()).hexdigest(),
+            "raw_member": member_name,
+            "raw_sha256": hashlib.sha256(replacement).hexdigest(),
+        }
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with tarfile.open(bundle, mode="r:gz") as old, out_path.open("xb") as raw, \
+                gzip.GzipFile(fileobj=raw, mode="wb", filename="", mtime=0) as zipped, \
+                tarfile.open(fileobj=zipped, mode="w") as new:
+            meta = (json.dumps(manifest, sort_keys=True, indent=2) + "\n").encode()
+            new.addfile(_entry("manifest.json", meta), io.BytesIO(meta))
+            for item in manifest["files"]:
+                name = item["path"]
+                if name == member_name:
+                    content = replacement
+                else:
+                    source = old.extractfile(name)
+                    if source is None:
+                        raise ValueError(f"unreadable base source: {name}")
+                    content = source.read()
+                new.addfile(_entry(name, content), io.BytesIO(content))
+    except BaseException:
+        out_path.unlink(missing_ok=True)
+        raise
+    return verify(out_path)
+
+
 def agency_only(bundle: Path, out_path: Path) -> dict:
     """Derive an immutable agency-input bundle from a verified older bundle."""
     original = verify(bundle)
@@ -449,6 +505,11 @@ if __name__ == "__main__":
     agency = sub.add_parser("agency-only")
     agency.add_argument("bundle", type=Path)
     agency.add_argument("--out", type=Path, required=True)
+    overlay = sub.add_parser("overlay-raw")
+    overlay.add_argument("bundle", type=Path)
+    overlay.add_argument("--raw-file", type=Path, required=True)
+    overlay.add_argument("--out", type=Path, required=True)
+    overlay.add_argument("--evidence-archive", type=Path)
     unpack = sub.add_parser("extract")
     unpack.add_argument("bundle", type=Path)
     unpack.add_argument("--out", type=Path, required=True)
@@ -458,6 +519,8 @@ if __name__ == "__main__":
                args.agency_artifacts, args.ia_artifacts,
                args.ny_artifacts, args.tx_artifacts) if args.command == "create"
         else agency_only(args.bundle, args.out) if args.command == "agency-only"
+        else overlay_raw_bundle(args.bundle, args.raw_file, args.out, args.evidence_archive)
+        if args.command == "overlay-raw"
         else extract(args.bundle, args.out) if args.command == "extract"
         else verify(args.bundle)
     )

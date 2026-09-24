@@ -1,0 +1,1593 @@
+{
+  "basis": "published and strict Kansas candidate canonical dedupe keys",
+  "candidate_only_by_state": {
+    "CA": 216,
+    "FL": 83,
+    "IA": 399,
+    "KS": 655,
+    "NY": 2075,
+    "OR": 1
+  },
+  "caution": "A dedupe key is a canonical identity decision, not proof that two source observations represent separate legal filings. Kansas held rows are in its portal evidence archive; other holds are in the strict exception ledger.",
+  "counts": {
+    "candidate": 74795,
+    "candidate_only": 3429,
+    "net": 3305,
+    "published": 71490,
+    "published_only": 124,
+    "shared_keys": 71366
+  },
+  "published_only_by_state": {
+    "AL": 3,
+    "CA": 75,
+    "FL": 1,
+    "KS": 27,
+    "MI": 3,
+    "MN": 7,
+    "MT": 1,
+    "NC": 2,
+    "PA": 2,
+    "WA": 3
+  },
+  "published_only_rows": [
+    {
+      "dedupe_key": "353d589593c389a2de7c23fa0b1815ae3c366160",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2011-12-02",
+      "employees_affected": 149,
+      "employer_name": "CR COMPRESSORS LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2009-08-17",
+      "source_identity": null,
+      "state": "AL"
+    },
+    {
+      "dedupe_key": "3fd348bcbde6cc4357b8515fc4dd7412230528f6",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2007-01-12",
+      "employees_affected": 220,
+      "employer_name": "DESOTO MILLS (RUSSELL CORPORATION)",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2006-01-24",
+      "source_identity": null,
+      "state": "AL"
+    },
+    {
+      "dedupe_key": "d96e890dd86408670561c625279df070af13d3ae",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2009-02-11",
+      "employees_affected": 60,
+      "employer_name": "W.Y. SHUGART & SONS, INC.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2008-12-15",
+      "source_identity": null,
+      "state": "AL"
+    },
+    {
+      "dedupe_key": "02f7f61f98747d5e7652c23fc1d6084217bd27dc",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-04-17",
+      "employees_affected": 361,
+      "employer_name": "L.A. Specialty Produce Company, dba Vesta Foodservice",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-04-17",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "093c9d9bdd5207a6338739490d5bf13704e05f79",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2015-06-30",
+      "employees_affected": 8,
+      "employer_name": "Head Start Child Development",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2015-04-30",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "0acbdbde91410b0721d3200ff1b36ceadfea2a54",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2022-12-31",
+      "employees_affected": 19,
+      "employer_name": "Providien LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2021-08-10",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "13a6a89dd35ab61d40ed729bc1d51418a2f94bd1",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-10-02",
+      "employees_affected": 3,
+      "employer_name": "Company 3 Method Inc. fka Deluxe Creative Services Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-09-24",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "1480b8f4d00a3a3647261552b486b2c28e7b04a9",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-04-24",
+      "employees_affected": 215,
+      "employer_name": "Golden Gate National Parks Conservancy",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-04-10",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "178b405bb601c322f2128a7789f54928026ff453",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-06-15",
+      "employees_affected": 22,
+      "employer_name": "Tree Island Wire, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-01-09",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "1d41c52b4979863780bd4d1f7dc98db2d7d3fac4",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-10-24",
+      "employees_affected": 21,
+      "employer_name": "Rieke LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-06-16",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "2631f528963c456474003545f544846d7a353eab",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-01-03",
+      "employees_affected": 1,
+      "employer_name": "Cedars-Sinai Medical Center",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-04-20",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "26925523d888820636b4075ecf4b94b21743c9a5",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2021-12-31",
+      "employees_affected": 1,
+      "employer_name": "Gallo Sales Company Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2021-07-13",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "2887baf4dded3e7f0a0f1898fa3c7515e204e0f9",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2021-08-27",
+      "employees_affected": 5,
+      "employer_name": "Perspecta Inc. dba Peraton Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2021-07-06",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "2aba616fbe61a76c3afb083920ac524e3e3efe73",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-03-31",
+      "employees_affected": 2,
+      "employer_name": "Scale AI, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-01-09",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "2d4708175ea9de587381d06934003e13d8fca14f",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-05-29",
+      "employees_affected": 19,
+      "employer_name": "Berry Global, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-01-10",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "30a3570b97b3367913f4cc9f02da66586c7c63f2",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2022-03-25",
+      "employees_affected": 13,
+      "employer_name": "Fresenius Medical Care dba Spectra Laboratories Inc. and National Medical Care Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2021-09-29",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "338dfb140e0f7fdb4feb1675d729d751ee656dae",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2014-12-29",
+      "employees_affected": 57,
+      "employer_name": "Advanced Micro Devices, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2014-10-28",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "33d08205e0119295fcb41893c675d734eca2932d",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2025-07-24",
+      "employees_affected": 9,
+      "employer_name": "Planned Parenthood Mar Monte, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2025-07-24",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "34c0cc79c63fd20d65225ba032fa3689d961a622",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-04-07",
+      "employees_affected": 2,
+      "employer_name": "JUUL Labs, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2022-11-18",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "3f79dcb6346fe3c5f89952182c7b7a64c6be3db6",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-04-24",
+      "employees_affected": 33,
+      "employer_name": "Graphite Bio",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-03-01",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "442658f16e13909b7d9c434813482000a5da89ce",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2024-01-02",
+      "employees_affected": 72,
+      "employer_name": "Ademco Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-04-10",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "45dbda9105d486c2edc49d6cd466538354ce0efa",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-03-15",
+      "employees_affected": 1,
+      "employer_name": "Gilead Sciences",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-10-04",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "4605bb4c0b0e6a9af54cfb72fa39b88e0c85a175",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2026-04-30",
+      "employees_affected": 7,
+      "employer_name": "Henkel Corporation",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2025-11-20",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "46991366787995d0762769aab43280211fe5932b",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-10-29",
+      "employees_affected": 39,
+      "employer_name": "DT Employer LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-10-15",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "47e539c03b3ee28b33db4df42e78bc3e49b8df53",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-11-06",
+      "employees_affected": 23,
+      "employer_name": "Universal City Studios, LLC dba Universal Studios Hollywood",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-09-03",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "4ba82c0d82249ae1d4757a2f7957562df48d0504",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2015-08-31",
+      "employees_affected": 34,
+      "employer_name": "Apollo Education Group, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2015-03-30",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "4f28a7cd6cc43346e354aa440cdb011e7be1af84",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2025-03-08",
+      "employees_affected": 11,
+      "employer_name": "Advance Stores Company, Incorporated and its subsidiary, Golden State Supply LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2024-11-14",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "5161fb2797ad9946d1b63e22de3e78e765d4cd5d",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-05-28",
+      "employees_affected": 29,
+      "employer_name": "Pioneer Hi-Bred International, Inc. (\u201cCorteva Agriscience or \u201cCorteva\u201d)",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2022-12-12",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "51720b2445e11437ab00ce94f9fc77b862c8c2a2",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2024-04-26",
+      "employees_affected": 246,
+      "employer_name": "Boardriders Wholesale, LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2024-02-01",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "5be36e91de7e92e5ff6e1ced234bdf6ac28036e7",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-10-10",
+      "employees_affected": 2,
+      "employer_name": "Anaplan, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-06-21",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "60f09b2fa3740827c8983a80c952eb9227d1d8b7",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2016-01-18",
+      "employees_affected": 54,
+      "employer_name": "Citrix Systems, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2015-11-17",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "64e065930c74cd9a5533621bc2fa782a6106a029",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-06-14",
+      "employees_affected": 10,
+      "employer_name": "Deluxe Entertainment Services Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-06-26",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "6857aabbf54066b1f5195a184ea5b59122e3aec6",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-11-13",
+      "employees_affected": 35,
+      "employer_name": "WVC RANCHO MIRAGE, INC.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2021-01-29",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "82bb1ea83a939a0d9d6c4fdc57109b79515f968c",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2024-09-20",
+      "employees_affected": 1,
+      "employer_name": "USRA at ARC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2022-09-09",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "886747fd0dbdd3d566f1b28bf2d21d5756d48641",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-07-01",
+      "employees_affected": 46,
+      "employer_name": "Nordstrom",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-05-02",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "8a8aea98da80d57ff7441822af709e39abc0a5ff",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2024-06-05",
+      "employees_affected": 12,
+      "employer_name": "Aura Management Co.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2024-04-18",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "9195b0acc9b32ee63eaae4aae8c6c43cd41929aa",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2024-02-04",
+      "employees_affected": 139,
+      "employer_name": "Boardriders Wholesale, LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-12-06",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "92b4f535e317843bad45873f2da160d4ce17bc9d",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-09-30",
+      "employees_affected": 132,
+      "employer_name": "Hotel Nia",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-09-18",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "946d1b2e044ee40d2a40396e6cfd6dd07ef97936",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-12-05",
+      "employees_affected": 1,
+      "employer_name": "LendingClub Bank",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-10-12",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "995df587eb777499abbd13b390d802384aff0294",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-12-01",
+      "employees_affected": 1,
+      "employer_name": "JUUL Labs - 271",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-08-24",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "9b362ad92596db3aa3269e6449a601257fae58dd",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2025-10-31",
+      "employees_affected": 16,
+      "employer_name": "Downtown Streets, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2025-08-29",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "9bd63f9701c833c0d5891d2cb226f4281ad2af8c",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-06-30",
+      "employees_affected": 3,
+      "employer_name": "Prime-Line Products",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-01-09",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "9d2d6f455f08ca57d2f0af7ee672fe9e3ed09477",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-06-30",
+      "employees_affected": 3,
+      "employer_name": "U.S. Bank (1296)",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-07-05",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "9f5f0b2f49f278408837ce8f8d11ae4603affb6c",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-10-27",
+      "employees_affected": 10,
+      "employer_name": "Scenario-Cockram USA, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-06-28",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "a1ad3721228265c92d24027297530a5c34033704",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2024-07-01",
+      "employees_affected": 6,
+      "employer_name": "ForgeRock, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-11-07",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "a3d821e23fda9d5edae7cb82482cfa94e9189239",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-05-09",
+      "employees_affected": 2,
+      "employer_name": "Golden Valley Health Centers",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-06-30",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "a79b73c5bfe5b09aedc192331e7f772b9b2e6711",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2025-06-20",
+      "employees_affected": 6,
+      "employer_name": "Fresenius USA, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2024-05-16",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "a899e3e5ceb068cb121adf1fcb4eb54b65548e47",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-05-31",
+      "employees_affected": 62,
+      "employer_name": "Pentair Water Pool and Spa, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-02-02",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "a8dcc93a041f1e87bf7f479838495184796924a0",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2025-03-31",
+      "employees_affected": 8,
+      "employer_name": "Surveillance Security Inc. of Unarmed Security Guards",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2025-01-31",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "ab335585358d66a74541cb78216dc254f1b99af7",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-09-29",
+      "employees_affected": 5,
+      "employer_name": "Borrego Energy, LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2022-12-07",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "abfba1744d4bbfcc4ed015ab9a9fcf16d4a4331f",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-10-27",
+      "employees_affected": 9,
+      "employer_name": "Petco Animal Supplies Stores",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-07-24",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "b2e6f9ce55a9a4be52119a3a957504fc87c71ffc",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-03-31",
+      "employees_affected": 11,
+      "employer_name": "Apeel Technology, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2022-11-16",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "bd22b290d38c4edffa6e73ea9bd88ee9e9a02354",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-03-19",
+      "employees_affected": 81,
+      "employer_name": "VStyles Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-03-18",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "bef80e3c1a10c178ac3e398eae981d51316eea7e",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-06-30",
+      "employees_affected": 43,
+      "employer_name": "DELUXE CREATIVE SERVICES",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-06-30",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "c1ad85ee5aa2a4870206937bb9afbf38eb349be4",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-07-01",
+      "employees_affected": 181,
+      "employer_name": "agilon health of California",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-05-01",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "c3e0efb5d374d4f6bd2b1b8cab352096b2f3328d",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-12-31",
+      "employees_affected": 2,
+      "employer_name": "Tropitone Furniture Company, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-06-15",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "c4fbb9176476be45c073331a41dd471b53fd0f86",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-01-07",
+      "employees_affected": 45,
+      "employer_name": "Phillips 66",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2022-12-19",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "ca1ca6c996b5c88e5682cba0d4d3b15abe7a9a4c",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-09-08",
+      "employees_affected": 23,
+      "employer_name": "U.S. Bank",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-07-05",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "cb7a893630fddb69c78dae26d03762483103aa40",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-04-01",
+      "employees_affected": 42,
+      "employer_name": "Instil Bio, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-01-31",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "ce08b392d39c95b287c68615be5a9da7c1d3dc33",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-04-14",
+      "employees_affected": 4,
+      "employer_name": "Rivian Automotive, LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-02-01",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "ce478780c23a5740bbf6b7c209946bf13a8a9fde",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2022-01-31",
+      "employees_affected": 42,
+      "employer_name": "Spectra Laboratories Inc. and National Medical Care Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2021-08-10",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "ce6c2c84494e3e2dfdf18d16fdcd379a051c276d",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-11-13",
+      "employees_affected": 123,
+      "employer_name": "Vistana California Management Inc",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2021-01-29",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "cf653e4d7b90dc1f0275540e073554c6b13d2246",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2026-12-18",
+      "employees_affected": 107,
+      "employer_name": "FormFactor, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2026-01-06",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "d51c5b355dc7db913523295b5736f5857839e6f0",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2024-05-01",
+      "employees_affected": 2,
+      "employer_name": "Trove Recommerce",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-12-21",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "db5239200fad30099b20359f3642a5660870d3e1",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2021-01-31",
+      "employees_affected": 16,
+      "employer_name": "Deluxe Media Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2021-03-16",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "dde766d085bb9079fc0347437d17e9ca0a6f9757",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-07-11",
+      "employees_affected": 72,
+      "employer_name": "Adventist Health Bakersfield",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-05-08",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "e1525c57fd6437dea5fe869521035f2bad50fd67",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-10-19",
+      "employees_affected": 38,
+      "employer_name": "Lehigh Southwest Cement Company",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-08-20",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "e1b1becc668a7bc8d5bbf85170887822904f435e",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2021-11-26",
+      "employees_affected": 1,
+      "employer_name": "Flying Food Group, LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2021-10-29",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "e353a95b63bba0dc12db08f573f52038b153ac90",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-01-31",
+      "employees_affected": 5,
+      "employer_name": "USRA at AFRC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2022-09-01",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "e9d541410d2f59be98e0e83732d9301fdfb649d6",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-12-29",
+      "employees_affected": 44,
+      "employer_name": "NH Research, LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-01-11",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "eda9a2478c3758de19071ecd31e40b0795374488",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-10-31",
+      "employees_affected": 1,
+      "employer_name": "JUUL Labs - 270",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-08-24",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "edb72925ec47f5c2bec9a7ed54e8f10d05b928d1",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2026-10-03",
+      "employees_affected": 80,
+      "employer_name": "Optum Care, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2026-06-01",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "efe0d5ad23809f3f9451940e9da11f80c80737c8",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-06-30",
+      "employees_affected": 14,
+      "employer_name": "U.S. Bank (1289)",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-07-05",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "f15d2474090af803aabe409b8760f35d8940b9d6",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2022-10-24",
+      "employees_affected": 120,
+      "employer_name": "Silgan Containers",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2022-06-02",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "f7f6f50ae143ccad78fc7cda2f0687a3eaee8fc8",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-11-17",
+      "employees_affected": 1,
+      "employer_name": "Farmers Group, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2023-08-28",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "fc50391da45b7af854cdd49ff5cbcb1f16879762",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-10-02",
+      "employees_affected": 4,
+      "employer_name": "Company 3 Method Inc. fka Deluxe Creative Services Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-09-24",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "fd1a20398b8ed9659e2967e706ea01c3a23cdfa9",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-08-21",
+      "employees_affected": 5,
+      "employer_name": "NBCUniversal Media, LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-09-10",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "fe091d17f8ec60da5cf989ec9dbc9bfe2e16ebf8",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-04-20",
+      "employees_affected": 61,
+      "employer_name": "PIH Health Hospital - Whittier",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-06-09",
+      "source_identity": null,
+      "state": "CA"
+    },
+    {
+      "dedupe_key": "52b36e4f688a2facea8804582e5461c8f3ba3997",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-10-31",
+      "employees_affected": 2,
+      "employer_name": "Hotelbeds",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-09-04",
+      "source_identity": null,
+      "state": "FL"
+    },
+    {
+      "dedupe_key": "139448e2714bec6e4716da7a0127fc1466d4aeb8",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "Leonard's Metal, Inc., dba LMI Aerospace",
+      "exception_reasons": [],
+      "notice_date": "2020-04-10",
+      "source_identity": "KS:2069",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "21438065e06934e0c3b28ba827ad7d34de794560",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "Rusty Eck Ford, Inc.",
+      "exception_reasons": [],
+      "notice_date": "2020-03-24",
+      "source_identity": "KS:2056",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "365c12029ebd6e429da8fc5d5ac6f9b851faa456",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": 177,
+      "employer_name": "Boeing Co.",
+      "exception_reasons": [],
+      "notice_date": "1998-11-30",
+      "source_identity": "KS:40",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "377bf1ac7be5207264ebe0532d28501dfe3527ef",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "CertainTeed",
+      "exception_reasons": [],
+      "notice_date": "2006-10-31",
+      "source_identity": "KS:902",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "3e8db6c879af0cdf259fc50f3372be1ce8a663c0",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "YMCA",
+      "exception_reasons": [],
+      "notice_date": "2020-03-20",
+      "source_identity": "KS:2060",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "3f6e70d686398ab6d5dfe99632a32a677f0aa683",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": 25,
+      "employer_name": "Hawker Beechcraft",
+      "exception_reasons": [],
+      "notice_date": "2012-03-02",
+      "source_identity": "KS:1473",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "48812947c1491e487ef653250050a34d6329486e",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "Boeing Co.",
+      "exception_reasons": [],
+      "notice_date": "1998-11-30",
+      "source_identity": "KS:31",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "4c4734ba820761069fe8716bfc0ca5ae5be9771a",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "First Brands Group, LLC (Hopkins)",
+      "exception_reasons": [],
+      "notice_date": "2026-02-23",
+      "source_identity": "KS:2299",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "509f5782fd7f867c458bb9b18b7fc0b4d377e447",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": 19,
+      "employer_name": "Cowley Distributing, Inc.",
+      "exception_reasons": [],
+      "notice_date": "2019-10-29",
+      "source_identity": "KS:2010",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "53a8730db2d24d359dee5683fd102688b356a91e",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "Leonard's Metal, Inc. dba LMI Aerospace",
+      "exception_reasons": [],
+      "notice_date": "2020-04-10",
+      "source_identity": "KS:2067",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "58c499c204e7bda6a419d2b73f33aab34c308614",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": 130,
+      "employer_name": "First Brands Group, LLC (Hopkins)",
+      "exception_reasons": [],
+      "notice_date": "2026-02-23",
+      "source_identity": "KS:2300",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "58f6a073c3712e6d3526b8525babaaf283206367",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": 45,
+      "employer_name": "Rusty Eck Ford",
+      "exception_reasons": [],
+      "notice_date": "2020-03-24",
+      "source_identity": "KS:2059",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "623e1fe54947bbff3ffdf527246eb0fa4985cde2",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "Hawker Beechcraft",
+      "exception_reasons": [],
+      "notice_date": "2009-02-06",
+      "source_identity": "KS:1071",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "699a0e240e3e467eaaf3fdfe1931c11b7bef9764",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "Boeing Co.",
+      "exception_reasons": [],
+      "notice_date": "1998-11-30",
+      "source_identity": "KS:30",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "6befa731da598308a8c5d7d31713d679760414b6",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": 66,
+      "employer_name": "Cowley Distributing, Inc",
+      "exception_reasons": [],
+      "notice_date": "2019-10-29",
+      "source_identity": "KS:2009",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "99977db3acacde9b1f98d979190e013f2430524a",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": 127,
+      "employer_name": "Ryan International Airlines",
+      "exception_reasons": [],
+      "notice_date": "2006-05-12",
+      "source_identity": "KS:875",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "a3ff904e808b342918accfac247456e211445d5d",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": 407,
+      "employer_name": "Boeing Co.",
+      "exception_reasons": [],
+      "notice_date": "1998-11-30",
+      "source_identity": "KS:41",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "b50a2d064d75fca9f2afae5d64d8dd2c1246fdfb",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "Hawker Beechcraft",
+      "exception_reasons": [],
+      "notice_date": "2009-02-06",
+      "source_identity": "KS:1075",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "bb5316480009ebfd96043ef51311decafc258fe5",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "Dillon Stores",
+      "exception_reasons": [],
+      "notice_date": "2008-01-29",
+      "source_identity": "KS:958",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "d066f78bf7faec1b65ac8ad82cae9f6e967de9a5",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "Boeing Co.",
+      "exception_reasons": [],
+      "notice_date": "1998-11-30",
+      "source_identity": "KS:37",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "de00b3e90be30f2010abe151684f41a41bbef8fa",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": 281,
+      "employer_name": "Boeing Co.",
+      "exception_reasons": [],
+      "notice_date": "1998-11-30",
+      "source_identity": "KS:44",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "de9e6344659a7373451c46e4e533cbcb32fe2998",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "CertainTeed Corporation",
+      "exception_reasons": [],
+      "notice_date": "2006-10-31",
+      "source_identity": "KS:915",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "dff22c2519eb872f0ba6993e37d20a1f52eae212",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "Ryan International Airlines",
+      "exception_reasons": [],
+      "notice_date": "2006-05-12",
+      "source_identity": "KS:874",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "e8d1083ea8d80267dd65831eeb9d48bab342ca26",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": 10,
+      "employer_name": "Hawker Beechcraft",
+      "exception_reasons": [],
+      "notice_date": "2012-03-02",
+      "source_identity": "KS:1474",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "f6c5085688785dc1025ed9897be13db9ccc373bb",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": 1381,
+      "employer_name": "Greater Wichita YMCA",
+      "exception_reasons": [],
+      "notice_date": "2020-03-20",
+      "source_identity": "KS:2057",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "fc6ff69448b1c2bb988fd8480a10339daf7f4c87",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": null,
+      "employer_name": "Boeing Co.",
+      "exception_reasons": [],
+      "notice_date": "1998-11-30",
+      "source_identity": "KS:45",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "ff13d5175728282db46475a551c8f1389e5ab20a",
+      "disposition": "held_kansas_portal_identity",
+      "effective_date": null,
+      "employees_affected": 96,
+      "employer_name": "Dillon Stores",
+      "exception_reasons": [],
+      "notice_date": "2008-01-29",
+      "source_identity": "KS:959",
+      "state": "KS"
+    },
+    {
+      "dedupe_key": "62faaee4449f2a1303e3fe4773270b1aeaedbd46",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2025-07-01",
+      "employees_affected": 244,
+      "employer_name": "Compass Group USA, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "MI"
+    },
+    {
+      "dedupe_key": "8b823ace44b8df008060267708647051672b452e",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2025-04-22",
+      "employees_affected": 424,
+      "employer_name": "Flagstar Bank, N.A.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "MI"
+    },
+    {
+      "dedupe_key": "ac24478157c02bbba1ee2d1360280468ebfb5172",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2026-07-01",
+      "employees_affected": 502,
+      "employer_name": "Fifth Third Bank",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "MI"
+    },
+    {
+      "dedupe_key": "00c4bf37afbaae3496fee43b2ce321183b201fa1",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2021-04-26",
+      "employees_affected": 45,
+      "employer_name": "American Beverage Corp",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "MN"
+    },
+    {
+      "dedupe_key": "1f06f3c9d71ad381ca6ceb84bd2a789e187fd078",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2022-11-18",
+      "employees_affected": 5,
+      "employer_name": "Nordstrom Rack IDS 2022",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "MN"
+    },
+    {
+      "dedupe_key": "26f436aef3edeb10ea465f966c7caf8c29052242",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2024-01-30",
+      "employees_affected": 1,
+      "employer_name": "Kaleo Inc",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "MN"
+    },
+    {
+      "dedupe_key": "29456d04e941100a06cf69b86337e543c807947a",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2022-11-15",
+      "employees_affected": 40,
+      "employer_name": "MN DFL 2022",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "MN"
+    },
+    {
+      "dedupe_key": "8c03514f6ea419f423ebecf809f8d3aabc028d75",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2024-02-08",
+      "employees_affected": null,
+      "employer_name": "McDonalds's",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "MN"
+    },
+    {
+      "dedupe_key": "f14d1428b5eae64df2eb8fce6a70b014baae5674",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-06-02",
+      "employees_affected": 1007,
+      "employer_name": "HyLife Foods Windom 2023",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "MN"
+    },
+    {
+      "dedupe_key": "f8f66eb9ccdb6fe8abc464adaf118db321f1fc62",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2023-12-12",
+      "employees_affected": null,
+      "employer_name": "Mayo Clinic Le Sueur 2023",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "MN"
+    },
+    {
+      "dedupe_key": "035f95e0733ee91b1510815611cf2b4758fd8ec6",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2021-02-01",
+      "employees_affected": 59,
+      "employer_name": "Decker Coal",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2020-12-09",
+      "source_identity": null,
+      "state": "MT"
+    },
+    {
+      "dedupe_key": "7a5662bdbdac18e542e6da5c98e3e1b6336790b0",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2019-12-31",
+      "employees_affected": 8,
+      "employer_name": "Valley Fine Foods",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2019-08-19",
+      "source_identity": null,
+      "state": "NC"
+    },
+    {
+      "dedupe_key": "f12f8a8c89d8cb43813175a6af259859666496d9",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2018-06-30",
+      "employees_affected": 41,
+      "employer_name": "RSC Chemical Solutions",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": "2018-01-11",
+      "source_identity": null,
+      "state": "NC"
+    },
+    {
+      "dedupe_key": "4ae720b7479eda2429a835fc95ab090a1fda1bd1",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2025-02-17",
+      "employees_affected": 70,
+      "employer_name": "FedEx Supply Chain, Inc.",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "PA"
+    },
+    {
+      "dedupe_key": "61a3c17fd411f863133fd076c4914ffe1ae0c632",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2025-12-04",
+      "employees_affected": 128,
+      "employer_name": "S&S Activewear",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "PA"
+    },
+    {
+      "dedupe_key": "7bbe1c445adac498c25e64434947c7bc930dc61e",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-03-20",
+      "employees_affected": 167,
+      "employer_name": "Swissport USA, Inc",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "WA"
+    },
+    {
+      "dedupe_key": "b43e3c797a9d9b16cfced1437eb317ff4330e58e",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-08-27",
+      "employees_affected": 6,
+      "employer_name": "Embassy Suites Employer LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "WA"
+    },
+    {
+      "dedupe_key": "c8d8667cda98cd6b285353e0aea364a0864d63c4",
+      "disposition": "held_strict_same_key_collision",
+      "effective_date": "2020-07-31",
+      "employees_affected": 6,
+      "employer_name": "Hilton Hotel Employer LLC",
+      "exception_reasons": [
+        "suspected_same_key_collision"
+      ],
+      "notice_date": null,
+      "source_identity": null,
+      "state": "WA"
+    }
+  ],
+  "unaccounted_published_only": 0
+}

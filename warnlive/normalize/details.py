@@ -404,6 +404,23 @@ def extract(state: str, raw: dict, rec: dict) -> dict:
             details["source_record_number"] = record_number
             if detail_url:
                 details["source_detail_url"] = detail_url
+        # The portal's City/ZIP can identify the employer's out-of-state
+        # contact rather than a Kansas layoff site (e.g. Charlotte 28203).
+        # Keep that source text, but display only the Kansas workforce area
+        # until a site-specific address is established.
+        listed_zip = re.sub(r"\D", "", raw.get("zip") or "")[:5]
+        if listed_zip and not listed_zip.startswith(("66", "67")):
+            result["location"] = (raw.get("lwib_area") or "").strip() or None
+            details["listed_contact_city"] = raw.get("city") or None
+            details["listed_contact_zip"] = raw.get("zip") or None
+            details["location_basis"] = "workforce_area_out_of_state_contact_zip"
+        elif not (raw.get("city") or "").strip() and re.match(
+            r"^\s*(?:p\.?\s*o\.?\s*(?:box|#)|post office box)(?:\s|$)",
+            raw.get("address") or "", re.I,
+        ):
+            result["location"] = (raw.get("lwib_area") or "").strip() or None
+            details["listed_postal_address"] = raw.get("address") or None
+            details["location_basis"] = "workforce_area_postal_address_only"
 
     elif state == "NJ" and "Month Posted" in raw:
         posted = raw.get("Month Posted") or ""

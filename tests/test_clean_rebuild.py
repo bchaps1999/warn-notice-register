@@ -1,7 +1,7 @@
 import pytest
 
 from warnlive.migrate.clean_rebuild import (
-    _coalesced_observations, _raw_exception, build,
+    _coalesced_observations, _quarantine_date_collisions, _raw_exception, build,
 )
 from warnlive.normalize.admission import exclusion_reasons
 
@@ -63,6 +63,27 @@ def test_coalesced_raw_row_has_pointer_without_hiding_later_versions():
     assert [(r["prepared_row"], r["survivor_prepared_row"]) for r in excluded] == [(2, 1)]
     assert excluded[0]["reason"] == "coalesced_same_key_content"
     assert excluded[0]["source_row_sha256"] is not None
+
+
+def test_far_apart_same_key_source_rows_are_held_with_both_pointers(tmp_path):
+    from warnlive.store import db
+
+    conn = db.connect(tmp_path / "candidate.sqlite")
+    db.init_db(conn)
+    rows = [
+        {"state": "AL", "dedupe_key": "ambiguous", "raw_record_hash": "a",
+         "effective_date": "2008-02-11", "prepared_row": 1, "raw_extra": "{}"},
+        {"state": "AL", "dedupe_key": "ambiguous", "raw_record_hash": "b",
+         "effective_date": "2009-02-11", "prepared_row": 2, "raw_extra": "{}"},
+        {"state": "AL", "dedupe_key": "distinct", "raw_record_hash": "c",
+         "effective_date": "2009-02-11", "prepared_row": 3, "raw_extra": "{}"},
+    ]
+    kept, held, keys = _quarantine_date_collisions(conn, "raw/al.csv", rows)
+    assert keys == 1
+    assert [row["dedupe_key"] for row in kept] == ["distinct"]
+    assert [row["prepared_row"] for row in held] == [1, 2]
+    assert {row["reason"] for row in held} == {"suspected_same_key_collision"}
+    assert all(row["date_conflicts"] for row in held)
 
 
 def test_candidate_refuses_to_overwrite_existing_database(tmp_path):

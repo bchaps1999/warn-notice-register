@@ -55,7 +55,7 @@ export function StateProfile() {
 
       {data.monthly.length > 0 && (
         <>
-          <SectionHeading>Notices by reported month</SectionHeading>
+          <SectionHeading sub={`${num(data.coverage.action_date_fallback)} dated records use layoff date because a notice date is unavailable. Recent windows end on the site's build date.`}>WARN records by displayed month</SectionHeading>
           <MonthlyTrend monthly={data.monthly} anchor={anchor} />
         </>
       )}
@@ -108,7 +108,7 @@ export function StateProfile() {
         </>
       )}
 
-      <SectionHeading>Most recent notices</SectionHeading>
+      <SectionHeading sub="Sorted by notice date, or layoff date when notice date is unavailable; future dates are excluded.">Most recent WARN records</SectionHeading>
       <NoticeTable notices={data.recent} showState={false} />
 
       <SectionHeading>Source</SectionHeading>

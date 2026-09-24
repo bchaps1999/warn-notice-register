@@ -1,4 +1,8 @@
-# Frozen source inputs for v1.0.0
+# Frozen source inputs
+
+The current v1.1.0 data release uses the [strict Kansas and Kentucky source bundle](2026-09-24-strict-ks-ky-source-bundle.tar.gz). Its [replay report](2026-09-24-strict-ks-ky-candidate-report.json), [exception ledger](2026-09-24-strict-ks-ky-candidate.exceptions.jsonl.gz), and [release manifest](2026-09-24-ks-ky-review-release-manifest.json) preserve the candidate's source and output accounting. The [v1.1.0 release notes](../../docs/release-v1.1.0-2026-09-24.md) explain the admitted totals and remaining limits.
+
+## Historical v1.0.0 input
 
 The release rebuilds from
 [`2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz`](2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz),

@@ -70,7 +70,7 @@ export function Dashboard() {
           value={num(workers12)}
           delta={change(workers12, prior.workers)}
           deltaLabel="vs. prior 12 mo"
-          sub={`${meta.totals.states} jurisdictions in the register`}
+          sub={`${num(national.date_basis_12mo.action_fallback)} notices use layoff dates`}
         />
         <StatTile
           label="Notices on record"
@@ -85,7 +85,7 @@ export function Dashboard() {
       </div>
 
       <SectionHeading
-        sub="Notices are placed by a reported notice date, or by a layoff date when no notice date is established."
+        sub={`The trailing window contains ${num(national.date_basis_12mo.notice)} records placed by notice date and ${num(national.date_basis_12mo.action_fallback)} by layoff date when notice date is unknown. These dates describe different events.`}
         right={
           <Link to="/explore" className="smallcaps text-[10px] text-oxide hover:underline">
             Open explorer →

@@ -55,10 +55,23 @@ jobs:
             fi
           done
           if [[ "$SMOKE_MODE" == "true" ]]; then
-            .venv/bin/warnlive scrape "${states[@]}" --smoke --trigger manual
+            .venv/bin/warnlive scrape "${states[@]}" --smoke --trigger manual --run-report workdir/reports/current-run.json
           else
-            .venv/bin/warnlive scrape "${states[@]}" --trigger manual
+            .venv/bin/warnlive scrape "${states[@]}" --trigger manual --run-report workdir/reports/current-run.json
           fi
+      - name: Persist newly unresolved Kansas portal rows
+        if: ${{ always() && !inputs.smoke }}
+        run: |
+          if [[ -n "$(git status --porcelain -- data/ks_portal_holds.json)" ]]; then
+            git config user.name "warn-register bot"
+            git config user.email "actions@users.noreply.github.com"
+            git add data/ks_portal_holds.json
+            git commit -m "Preserve unresolved Kansas WARN portal rows"
+            git push
+          fi
+      - name: Block publication on source admission conflict
+        if: ${{ !inputs.smoke }}
+        run: .venv/bin/warnlive check-publication-gate workdir/reports/current-run.json
       - name: Detect revisions/duplicates
         if: ${{ !inputs.smoke }}
         run: .venv/bin/warnlive dupes
@@ -84,3 +97,16 @@ jobs:
             # workflow to rebuild on top of the moved main.
             git push || { echo "::error::push rejected - main moved during this run; re-run the workflow"; exit 1; }
           fi
+      - name: Upload run report and Kansas evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-${{ github.run_id }}
+          path: |
+            workdir/reports/current-run.json
+            workdir/cache/ks/*.tar.gz
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Check selected state outcomes
+        if: always()
+        run: .venv/bin/warnlive check-run-report workdir/reports/current-run.json

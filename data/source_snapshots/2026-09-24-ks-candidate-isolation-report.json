@@ -1,0 +1,1020 @@
+{
+  "changed_states": [
+    "KS"
+  ],
+  "method": "SHA-256 over ordered canonical JSON lines; exclude surrogate id and notice_id; base strict replay used KS min_rows=20 to admit the original 206-row frozen raw source",
+  "states": {
+    "AK": {
+      "base_strict": {
+        "notices": {
+          "rows": 66,
+          "sha256": "be443799dcf60534b6c8c55c95c6384042c810c1db5b271a7e1c7390f7b20431"
+        },
+        "versions": {
+          "rows": 66,
+          "sha256": "bcea583402141458722ab5ade1216d697b990e22419a250d6da2a4e4f4f60e51"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 66,
+          "sha256": "be443799dcf60534b6c8c55c95c6384042c810c1db5b271a7e1c7390f7b20431"
+        },
+        "versions": {
+          "rows": 66,
+          "sha256": "bcea583402141458722ab5ade1216d697b990e22419a250d6da2a4e4f4f60e51"
+        }
+      }
+    },
+    "AL": {
+      "base_strict": {
+        "notices": {
+          "rows": 1031,
+          "sha256": "0faf2ba937c1ff86821e9ecdc748c2901123ed61f5958714b754c4c19c71c895"
+        },
+        "versions": {
+          "rows": 1050,
+          "sha256": "9193002b5655f24bd87b1c140b3fb897930762256ebd6dde3d9ea10ec7fdaa92"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 1031,
+          "sha256": "0faf2ba937c1ff86821e9ecdc748c2901123ed61f5958714b754c4c19c71c895"
+        },
+        "versions": {
+          "rows": 1050,
+          "sha256": "9193002b5655f24bd87b1c140b3fb897930762256ebd6dde3d9ea10ec7fdaa92"
+        }
+      }
+    },
+    "AZ": {
+      "base_strict": {
+        "notices": {
+          "rows": 189,
+          "sha256": "a640ad82f5c0cdbe31735404554352b50e0aa394280d93f7984b091fa6d0698c"
+        },
+        "versions": {
+          "rows": 199,
+          "sha256": "5922ac878b3863e93f90ad2e77123f089619a8181da029204fe912bf92990e8b"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 189,
+          "sha256": "a640ad82f5c0cdbe31735404554352b50e0aa394280d93f7984b091fa6d0698c"
+        },
+        "versions": {
+          "rows": 199,
+          "sha256": "5922ac878b3863e93f90ad2e77123f089619a8181da029204fe912bf92990e8b"
+        }
+      }
+    },
+    "CA": {
+      "base_strict": {
+        "notices": {
+          "rows": 25176,
+          "sha256": "ed540e4e9c4ab96d9c8224db17ac163907924b84acc43773d68cb1f71b55fbee"
+        },
+        "versions": {
+          "rows": 27297,
+          "sha256": "5859f6b39a2c6d274f5095c36a8c419305106e56d778fd78a8ab368aaf2b10ad"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 25176,
+          "sha256": "ed540e4e9c4ab96d9c8224db17ac163907924b84acc43773d68cb1f71b55fbee"
+        },
+        "versions": {
+          "rows": 27297,
+          "sha256": "5859f6b39a2c6d274f5095c36a8c419305106e56d778fd78a8ab368aaf2b10ad"
+        }
+      }
+    },
+    "CO": {
+      "base_strict": {
+        "notices": {
+          "rows": 827,
+          "sha256": "8f5940826472979596b74ee01cdebc1c1b79063575ab428b392b4efd1a51630c"
+        },
+        "versions": {
+          "rows": 840,
+          "sha256": "5af4d7a6119c73f12e5e9b3aae33e298507941a6e2bb8f98d1f81b9179ae8d5d"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 827,
+          "sha256": "8f5940826472979596b74ee01cdebc1c1b79063575ab428b392b4efd1a51630c"
+        },
+        "versions": {
+          "rows": 840,
+          "sha256": "5af4d7a6119c73f12e5e9b3aae33e298507941a6e2bb8f98d1f81b9179ae8d5d"
+        }
+      }
+    },
+    "CT": {
+      "base_strict": {
+        "notices": {
+          "rows": 28,
+          "sha256": "df902ebda723fbd94a65a8998aebeffa7fdb2fe92837a5e48dbd687e86895fc8"
+        },
+        "versions": {
+          "rows": 28,
+          "sha256": "76488ccdafae0c05075657214954fd4933ec2124eb5c42620369b7e162c37392"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 28,
+          "sha256": "df902ebda723fbd94a65a8998aebeffa7fdb2fe92837a5e48dbd687e86895fc8"
+        },
+        "versions": {
+          "rows": 28,
+          "sha256": "76488ccdafae0c05075657214954fd4933ec2124eb5c42620369b7e162c37392"
+        }
+      }
+    },
+    "DC": {
+      "base_strict": {
+        "notices": {
+          "rows": 140,
+          "sha256": "508898d94607763b468d49a23955e884f9f0fc4a79a647069714976fd29f02a3"
+        },
+        "versions": {
+          "rows": 140,
+          "sha256": "7e15663bb884bf8bc48872ba112eb096c4ba2959b769044ba7c17942965c3055"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 140,
+          "sha256": "508898d94607763b468d49a23955e884f9f0fc4a79a647069714976fd29f02a3"
+        },
+        "versions": {
+          "rows": 140,
+          "sha256": "7e15663bb884bf8bc48872ba112eb096c4ba2959b769044ba7c17942965c3055"
+        }
+      }
+    },
+    "DE": {
+      "base_strict": {
+        "notices": {
+          "rows": 46,
+          "sha256": "628312d92c00f89605e1f00a96fd7ad82332e67f731680aeb6d4686822b12f2d"
+        },
+        "versions": {
+          "rows": 46,
+          "sha256": "363b490ef0932e828696be301495ee2a557d4a99dde84d6da291f27b77c86a1e"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 46,
+          "sha256": "628312d92c00f89605e1f00a96fd7ad82332e67f731680aeb6d4686822b12f2d"
+        },
+        "versions": {
+          "rows": 46,
+          "sha256": "363b490ef0932e828696be301495ee2a557d4a99dde84d6da291f27b77c86a1e"
+        }
+      }
+    },
+    "FL": {
+      "base_strict": {
+        "notices": {
+          "rows": 5435,
+          "sha256": "7a99f39521339d809d681c1500d515c1d9ac13ba97f89d6114227197056e8ab9"
+        },
+        "versions": {
+          "rows": 5726,
+          "sha256": "98f1f45d0ab53bd61be42267c66e4dd446a172e5deb2ebc8ff789093716a1866"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 5435,
+          "sha256": "7a99f39521339d809d681c1500d515c1d9ac13ba97f89d6114227197056e8ab9"
+        },
+        "versions": {
+          "rows": 5726,
+          "sha256": "98f1f45d0ab53bd61be42267c66e4dd446a172e5deb2ebc8ff789093716a1866"
+        }
+      }
+    },
+    "GA": {
+      "base_strict": {
+        "notices": {
+          "rows": 934,
+          "sha256": "572c650d9aa53ad3a0bbb633443f2bbc02f4e2161173d6e7f67f493b04a9998a"
+        },
+        "versions": {
+          "rows": 934,
+          "sha256": "bf111f9d80ad9cdb1708abeb54627e8df94da532b9e88bd78d87479c29fd0535"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 934,
+          "sha256": "572c650d9aa53ad3a0bbb633443f2bbc02f4e2161173d6e7f67f493b04a9998a"
+        },
+        "versions": {
+          "rows": 934,
+          "sha256": "bf111f9d80ad9cdb1708abeb54627e8df94da532b9e88bd78d87479c29fd0535"
+        }
+      }
+    },
+    "HI": {
+      "base_strict": {
+        "notices": {
+          "rows": 452,
+          "sha256": "5ba4ef75d0869281cfc06c757f71c61b1567692b7529218246c463004bc35801"
+        },
+        "versions": {
+          "rows": 452,
+          "sha256": "39b52e5b0fa11f70114d8f0b105f9eac97f550d9d748ae77eb39ebc01147a543"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 452,
+          "sha256": "5ba4ef75d0869281cfc06c757f71c61b1567692b7529218246c463004bc35801"
+        },
+        "versions": {
+          "rows": 452,
+          "sha256": "39b52e5b0fa11f70114d8f0b105f9eac97f550d9d748ae77eb39ebc01147a543"
+        }
+      }
+    },
+    "IA": {
+      "base_strict": {
+        "notices": {
+          "rows": 399,
+          "sha256": "e2c3ea5d4b8b57f998fd0ae346edf2cab885cb6c9c00ede01be3869b32c4cb7b"
+        },
+        "versions": {
+          "rows": 399,
+          "sha256": "1bf55b6dc367267cc0e536e0837a970564f6f8356218c261d16f13a66c3c8a68"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 399,
+          "sha256": "e2c3ea5d4b8b57f998fd0ae346edf2cab885cb6c9c00ede01be3869b32c4cb7b"
+        },
+        "versions": {
+          "rows": 399,
+          "sha256": "1bf55b6dc367267cc0e536e0837a970564f6f8356218c261d16f13a66c3c8a68"
+        }
+      }
+    },
+    "ID": {
+      "base_strict": {
+        "notices": {
+          "rows": 193,
+          "sha256": "a8de5a0b29108ae3fe8553a076defa1e003f6e152407b94fa7cfc6f8cded760a"
+        },
+        "versions": {
+          "rows": 198,
+          "sha256": "1a32e1d8ffae3f067eaf0db98e29f79a37df3c3b05a11d07811397ffbae378c8"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 193,
+          "sha256": "a8de5a0b29108ae3fe8553a076defa1e003f6e152407b94fa7cfc6f8cded760a"
+        },
+        "versions": {
+          "rows": 198,
+          "sha256": "1a32e1d8ffae3f067eaf0db98e29f79a37df3c3b05a11d07811397ffbae378c8"
+        }
+      }
+    },
+    "IL": {
+      "base_strict": {
+        "notices": {
+          "rows": 4890,
+          "sha256": "29c4d8329cf7857e3c9025400451caa3f78641259118a3d6205fe95645a111e2"
+        },
+        "versions": {
+          "rows": 7423,
+          "sha256": "06b539c97244d2af739e4198b8dd8f38781b057d5613862707d741c37e83ee59"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 4890,
+          "sha256": "29c4d8329cf7857e3c9025400451caa3f78641259118a3d6205fe95645a111e2"
+        },
+        "versions": {
+          "rows": 7423,
+          "sha256": "06b539c97244d2af739e4198b8dd8f38781b057d5613862707d741c37e83ee59"
+        }
+      }
+    },
+    "IN": {
+      "base_strict": {
+        "notices": {
+          "rows": 1011,
+          "sha256": "33db92899f0163a61dad07c0d682950744fff0a32d5cad8c9fdce98d564602f5"
+        },
+        "versions": {
+          "rows": 1012,
+          "sha256": "36203b794dad11ce3095b3a557365fd146a4cace80874150ff9b4dcdc60c96ca"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 1011,
+          "sha256": "33db92899f0163a61dad07c0d682950744fff0a32d5cad8c9fdce98d564602f5"
+        },
+        "versions": {
+          "rows": 1012,
+          "sha256": "36203b794dad11ce3095b3a557365fd146a4cace80874150ff9b4dcdc60c96ca"
+        }
+      }
+    },
+    "KS": {
+      "base_strict": {
+        "notices": {
+          "rows": 206,
+          "sha256": "62d7ba4f7a91c9126f455c0a716157959987d2f93feae227d1a8e9430421478c"
+        },
+        "versions": {
+          "rows": 206,
+          "sha256": "43f9eebd274668d67d8629c3a9b8f8195ca26ed90f20e4f327bbc0308a067b37"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 834,
+          "sha256": "06ccca15dbef85c5db92460bb740ee6e27256d49108475e12c15f746ec2c72d1"
+        },
+        "versions": {
+          "rows": 834,
+          "sha256": "61ed5d7231bf3e899add9790137a12a8771c6c66023d1739cdf8a7b7a6556728"
+        }
+      }
+    },
+    "LA": {
+      "base_strict": {
+        "notices": {
+          "rows": 31,
+          "sha256": "1128d3d9184bd747ead8ed199ff9000e5e09e11c94f580453b0bbd9b980e3dbd"
+        },
+        "versions": {
+          "rows": 31,
+          "sha256": "ca4735a702920cdc93d4b16c8b6cb612a7e56b667b4a3ce1556bb567d945ba3b"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 31,
+          "sha256": "1128d3d9184bd747ead8ed199ff9000e5e09e11c94f580453b0bbd9b980e3dbd"
+        },
+        "versions": {
+          "rows": 31,
+          "sha256": "ca4735a702920cdc93d4b16c8b6cb612a7e56b667b4a3ce1556bb567d945ba3b"
+        }
+      }
+    },
+    "MA": {
+      "base_strict": {
+        "notices": {
+          "rows": 550,
+          "sha256": "399d95dcad388fb0760e46adab8e5c5617b1d8c4b455795a0a9f045e67f8e1f2"
+        },
+        "versions": {
+          "rows": 550,
+          "sha256": "5356cac9b6586712dab8cd27b5c6b2822fbec7e5c91d545e995350d3a61b2659"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 550,
+          "sha256": "399d95dcad388fb0760e46adab8e5c5617b1d8c4b455795a0a9f045e67f8e1f2"
+        },
+        "versions": {
+          "rows": 550,
+          "sha256": "5356cac9b6586712dab8cd27b5c6b2822fbec7e5c91d545e995350d3a61b2659"
+        }
+      }
+    },
+    "MD": {
+      "base_strict": {
+        "notices": {
+          "rows": 1398,
+          "sha256": "e335c8ed80f80c8f57f07dbcf50943ea90d938f817d3cc9fbe22e272efe06e72"
+        },
+        "versions": {
+          "rows": 1400,
+          "sha256": "6494922c156338e80834e91e86bc42abdbe4ec835fc6e8e280ec1f2650677bb8"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 1398,
+          "sha256": "e335c8ed80f80c8f57f07dbcf50943ea90d938f817d3cc9fbe22e272efe06e72"
+        },
+        "versions": {
+          "rows": 1400,
+          "sha256": "6494922c156338e80834e91e86bc42abdbe4ec835fc6e8e280ec1f2650677bb8"
+        }
+      }
+    },
+    "ME": {
+      "base_strict": {
+        "notices": {
+          "rows": 9,
+          "sha256": "d74eebccb699ee9989782cbfc7c157b9e2dbd5159b07a5731b99bf08715e2a7b"
+        },
+        "versions": {
+          "rows": 9,
+          "sha256": "f82fdf26090bdeaf1b43d32946728fa87e6949a60726b4fc95ec3a903fd06ee3"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 9,
+          "sha256": "d74eebccb699ee9989782cbfc7c157b9e2dbd5159b07a5731b99bf08715e2a7b"
+        },
+        "versions": {
+          "rows": 9,
+          "sha256": "f82fdf26090bdeaf1b43d32946728fa87e6949a60726b4fc95ec3a903fd06ee3"
+        }
+      }
+    },
+    "MI": {
+      "base_strict": {
+        "notices": {
+          "rows": 100,
+          "sha256": "e14ae2aca18b48b2874c9f79c58e91baad24b8286b83482eb5e25b5263fe326e"
+        },
+        "versions": {
+          "rows": 100,
+          "sha256": "2c0cdaf102780102917a375450fef30decd8bdc7f8959661a94a4e39b424e411"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 100,
+          "sha256": "e14ae2aca18b48b2874c9f79c58e91baad24b8286b83482eb5e25b5263fe326e"
+        },
+        "versions": {
+          "rows": 100,
+          "sha256": "2c0cdaf102780102917a375450fef30decd8bdc7f8959661a94a4e39b424e411"
+        }
+      }
+    },
+    "MN": {
+      "base_strict": {
+        "notices": {
+          "rows": 962,
+          "sha256": "f945155e66e09f95c760eeef800538e9c2553f263eec38368d7531f6d8c3b9f4"
+        },
+        "versions": {
+          "rows": 1078,
+          "sha256": "635ab517df9282561ddb9f903b236149d91b2e51d80c50c0dc50d8b9f0630e26"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 962,
+          "sha256": "f945155e66e09f95c760eeef800538e9c2553f263eec38368d7531f6d8c3b9f4"
+        },
+        "versions": {
+          "rows": 1078,
+          "sha256": "635ab517df9282561ddb9f903b236149d91b2e51d80c50c0dc50d8b9f0630e26"
+        }
+      }
+    },
+    "MO": {
+      "base_strict": {
+        "notices": {
+          "rows": 384,
+          "sha256": "0baf46263add1b44d158d8e86d4b89d5cb5da3c671eced01992d371744178cf1"
+        },
+        "versions": {
+          "rows": 384,
+          "sha256": "2fe55c9e542dc441890fd5166c990623f512179bddbe9d995f399f41afaa5674"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 384,
+          "sha256": "0baf46263add1b44d158d8e86d4b89d5cb5da3c671eced01992d371744178cf1"
+        },
+        "versions": {
+          "rows": 384,
+          "sha256": "2fe55c9e542dc441890fd5166c990623f512179bddbe9d995f399f41afaa5674"
+        }
+      }
+    },
+    "MS": {
+      "base_strict": {
+        "notices": {
+          "rows": 142,
+          "sha256": "8e5b6be2b75cb66a1854a20fd31023b31b6ac21d9df67a0cedeb0781457d17e3"
+        },
+        "versions": {
+          "rows": 143,
+          "sha256": "a7d3e7e329add7b72921d834b22d97f43e8b4da8490ebf654b497ee697c7f4a4"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 142,
+          "sha256": "8e5b6be2b75cb66a1854a20fd31023b31b6ac21d9df67a0cedeb0781457d17e3"
+        },
+        "versions": {
+          "rows": 143,
+          "sha256": "a7d3e7e329add7b72921d834b22d97f43e8b4da8490ebf654b497ee697c7f4a4"
+        }
+      }
+    },
+    "MT": {
+      "base_strict": {
+        "notices": {
+          "rows": 42,
+          "sha256": "1408fd925ec96b24f2d62edc34b742678a941dd54134eec2049b289ffdf6d287"
+        },
+        "versions": {
+          "rows": 42,
+          "sha256": "6befca720969ed0386c83b903ee7a07ceba2b7bf5cd1a1d9faa58dfb0f5b2c48"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 42,
+          "sha256": "1408fd925ec96b24f2d62edc34b742678a941dd54134eec2049b289ffdf6d287"
+        },
+        "versions": {
+          "rows": 42,
+          "sha256": "6befca720969ed0386c83b903ee7a07ceba2b7bf5cd1a1d9faa58dfb0f5b2c48"
+        }
+      }
+    },
+    "NC": {
+      "base_strict": {
+        "notices": {
+          "rows": 1197,
+          "sha256": "a007881713e3cfa0e59206ec16f0e19539647dbb98b4201a0e5ac6eacdbc66b8"
+        },
+        "versions": {
+          "rows": 1202,
+          "sha256": "645b73442409dc55b553b28f01128f8e27aabae501db393b377b461360ef7a41"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 1197,
+          "sha256": "a007881713e3cfa0e59206ec16f0e19539647dbb98b4201a0e5ac6eacdbc66b8"
+        },
+        "versions": {
+          "rows": 1202,
+          "sha256": "645b73442409dc55b553b28f01128f8e27aabae501db393b377b461360ef7a41"
+        }
+      }
+    },
+    "ND": {
+      "base_strict": {
+        "notices": {
+          "rows": 54,
+          "sha256": "be1f8763420582cc6dc35731b593d7179c26a2ad7c8db8646ba5d93efa598941"
+        },
+        "versions": {
+          "rows": 54,
+          "sha256": "c7f3dfdcc182ae487e14702f43099c7841d227d99e8e8d0676670899e1c3905d"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 54,
+          "sha256": "be1f8763420582cc6dc35731b593d7179c26a2ad7c8db8646ba5d93efa598941"
+        },
+        "versions": {
+          "rows": 54,
+          "sha256": "c7f3dfdcc182ae487e14702f43099c7841d227d99e8e8d0676670899e1c3905d"
+        }
+      }
+    },
+    "NE": {
+      "base_strict": {
+        "notices": {
+          "rows": 933,
+          "sha256": "036020e7a4db35b5421bdabd53509c5de42c8a116e4d97d74583b532975df266"
+        },
+        "versions": {
+          "rows": 952,
+          "sha256": "f9c8a56503a3441f52c53ae1437d02d7b6e42be7adb84c4681e9e26ada012738"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 933,
+          "sha256": "036020e7a4db35b5421bdabd53509c5de42c8a116e4d97d74583b532975df266"
+        },
+        "versions": {
+          "rows": 952,
+          "sha256": "f9c8a56503a3441f52c53ae1437d02d7b6e42be7adb84c4681e9e26ada012738"
+        }
+      }
+    },
+    "NJ": {
+      "base_strict": {
+        "notices": {
+          "rows": 2327,
+          "sha256": "c5d8615b7e01b921599eff57b025ef16714aadcbc81d1d64b6db4829a6a20c31"
+        },
+        "versions": {
+          "rows": 2327,
+          "sha256": "b9fd1fe33f4b38550062099d24ff0e2badb34bf7a91dd84b453077dc88a38f1d"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 2327,
+          "sha256": "c5d8615b7e01b921599eff57b025ef16714aadcbc81d1d64b6db4829a6a20c31"
+        },
+        "versions": {
+          "rows": 2327,
+          "sha256": "b9fd1fe33f4b38550062099d24ff0e2badb34bf7a91dd84b453077dc88a38f1d"
+        }
+      }
+    },
+    "NM": {
+      "base_strict": {
+        "notices": {
+          "rows": 115,
+          "sha256": "e2389c91ae1f6cf533105bf6c96f143e0cbde83ab42cca5c799b5bbeee06b7c3"
+        },
+        "versions": {
+          "rows": 115,
+          "sha256": "415549f8cf4219858f654d04d3cac7f6ec60b7cf5aeba76747b54e5f94c6d6b7"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 115,
+          "sha256": "e2389c91ae1f6cf533105bf6c96f143e0cbde83ab42cca5c799b5bbeee06b7c3"
+        },
+        "versions": {
+          "rows": 115,
+          "sha256": "415549f8cf4219858f654d04d3cac7f6ec60b7cf5aeba76747b54e5f94c6d6b7"
+        }
+      }
+    },
+    "NV": {
+      "base_strict": {
+        "notices": {
+          "rows": 296,
+          "sha256": "adc66390b6d4780dc8a662934a9324005a5d0e785b32acf3d07b96e957cd025f"
+        },
+        "versions": {
+          "rows": 297,
+          "sha256": "adaf22a0d283e2d7577ca6faca572832493ded056bc4ed8fc7ca4c2c74d92c83"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 296,
+          "sha256": "adc66390b6d4780dc8a662934a9324005a5d0e785b32acf3d07b96e957cd025f"
+        },
+        "versions": {
+          "rows": 297,
+          "sha256": "adaf22a0d283e2d7577ca6faca572832493ded056bc4ed8fc7ca4c2c74d92c83"
+        }
+      }
+    },
+    "NY": {
+      "base_strict": {
+        "notices": {
+          "rows": 6315,
+          "sha256": "90a541b329fc5ac1386b45283e9df0da2544e69ec2726b73427cf7ea9688be61"
+        },
+        "versions": {
+          "rows": 6315,
+          "sha256": "f33e18037d6bf215730c093343553425935e8707f31551de977cc43e44ab83d4"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 6315,
+          "sha256": "90a541b329fc5ac1386b45283e9df0da2544e69ec2726b73427cf7ea9688be61"
+        },
+        "versions": {
+          "rows": 6315,
+          "sha256": "f33e18037d6bf215730c093343553425935e8707f31551de977cc43e44ab83d4"
+        }
+      }
+    },
+    "OH": {
+      "base_strict": {
+        "notices": {
+          "rows": 2438,
+          "sha256": "53fb9a8dc9a0a1fe013166ea04e4afd7689d7882e9b5cbb7e3788b83c2496837"
+        },
+        "versions": {
+          "rows": 2438,
+          "sha256": "cedfee384d6ceff66e1fd4b314cd928891d29e72dc8f7e5f006db0382304cba5"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 2438,
+          "sha256": "53fb9a8dc9a0a1fe013166ea04e4afd7689d7882e9b5cbb7e3788b83c2496837"
+        },
+        "versions": {
+          "rows": 2438,
+          "sha256": "cedfee384d6ceff66e1fd4b314cd928891d29e72dc8f7e5f006db0382304cba5"
+        }
+      }
+    },
+    "OK": {
+      "base_strict": {
+        "notices": {
+          "rows": 200,
+          "sha256": "1d5c3496b826f3a0e2cbe13550b7047aa4a7f09c8cc1bb0c74e66f4fc82899af"
+        },
+        "versions": {
+          "rows": 200,
+          "sha256": "437baf2a5d371f17ef77491ac9eb027178f5a86daf320e51f70a929ccce04c39"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 200,
+          "sha256": "1d5c3496b826f3a0e2cbe13550b7047aa4a7f09c8cc1bb0c74e66f4fc82899af"
+        },
+        "versions": {
+          "rows": 200,
+          "sha256": "437baf2a5d371f17ef77491ac9eb027178f5a86daf320e51f70a929ccce04c39"
+        }
+      }
+    },
+    "OR": {
+      "base_strict": {
+        "notices": {
+          "rows": 877,
+          "sha256": "9a60c290c31c0d72d940617b1c093e4f7912d411531adc777fa49f484bbc3378"
+        },
+        "versions": {
+          "rows": 877,
+          "sha256": "d08b7e1ad74778bf19f825f45eb97bd21037bdc8498e2ec56ff08548fc8f35d0"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 877,
+          "sha256": "9a60c290c31c0d72d940617b1c093e4f7912d411531adc777fa49f484bbc3378"
+        },
+        "versions": {
+          "rows": 877,
+          "sha256": "d08b7e1ad74778bf19f825f45eb97bd21037bdc8498e2ec56ff08548fc8f35d0"
+        }
+      }
+    },
+    "PA": {
+      "base_strict": {
+        "notices": {
+          "rows": 289,
+          "sha256": "618aa40c12786c371afb5119a20c9b1d753bf1e1c516e19c582b17db422c9c30"
+        },
+        "versions": {
+          "rows": 291,
+          "sha256": "bc987973c126208ef647dddfb071ee3c18adf2989dacd6a2e2589d00d2448430"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 289,
+          "sha256": "618aa40c12786c371afb5119a20c9b1d753bf1e1c516e19c582b17db422c9c30"
+        },
+        "versions": {
+          "rows": 291,
+          "sha256": "bc987973c126208ef647dddfb071ee3c18adf2989dacd6a2e2589d00d2448430"
+        }
+      }
+    },
+    "RI": {
+      "base_strict": {
+        "notices": {
+          "rows": 125,
+          "sha256": "3971b76a0e8f10989fa38eb74a5bde5ce58cf0f95ae347ace00fccf61ddb80a5"
+        },
+        "versions": {
+          "rows": 125,
+          "sha256": "e87d67951f21d2ca45a387156cd32122827ee346178e0bacceb577c5872d2a1b"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 125,
+          "sha256": "3971b76a0e8f10989fa38eb74a5bde5ce58cf0f95ae347ace00fccf61ddb80a5"
+        },
+        "versions": {
+          "rows": 125,
+          "sha256": "e87d67951f21d2ca45a387156cd32122827ee346178e0bacceb577c5872d2a1b"
+        }
+      }
+    },
+    "SC": {
+      "base_strict": {
+        "notices": {
+          "rows": 599,
+          "sha256": "811d81d2671beb758a250115454b931669191f2817680d8ce4fcc12634832d88"
+        },
+        "versions": {
+          "rows": 599,
+          "sha256": "b6eab8c2dab8df8a2607f420a73c552f027386972d18abd2b7985b326f1576db"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 599,
+          "sha256": "811d81d2671beb758a250115454b931669191f2817680d8ce4fcc12634832d88"
+        },
+        "versions": {
+          "rows": 599,
+          "sha256": "b6eab8c2dab8df8a2607f420a73c552f027386972d18abd2b7985b326f1576db"
+        }
+      }
+    },
+    "SD": {
+      "base_strict": {
+        "notices": {
+          "rows": 79,
+          "sha256": "f011f155bff05cde5539a3d59b4cc62bdd710d334fc1cc96e2b72ec564a323c5"
+        },
+        "versions": {
+          "rows": 79,
+          "sha256": "8c5d817e6c5f81522e8a07f4bc93af6d9133f434072d64f80632e3fd1fea148e"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 79,
+          "sha256": "f011f155bff05cde5539a3d59b4cc62bdd710d334fc1cc96e2b72ec564a323c5"
+        },
+        "versions": {
+          "rows": 79,
+          "sha256": "8c5d817e6c5f81522e8a07f4bc93af6d9133f434072d64f80632e3fd1fea148e"
+        }
+      }
+    },
+    "TN": {
+      "base_strict": {
+        "notices": {
+          "rows": 231,
+          "sha256": "d723547e663406ee09071193e0acf2946d789a4ed31af3e6d2a57dfaadf2350e"
+        },
+        "versions": {
+          "rows": 231,
+          "sha256": "830257fa64d4609d7b8dfdc7830de5ca96e794ec1932c3938f2aceea4fb80509"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 231,
+          "sha256": "d723547e663406ee09071193e0acf2946d789a4ed31af3e6d2a57dfaadf2350e"
+        },
+        "versions": {
+          "rows": 231,
+          "sha256": "830257fa64d4609d7b8dfdc7830de5ca96e794ec1932c3938f2aceea4fb80509"
+        }
+      }
+    },
+    "TX": {
+      "base_strict": {
+        "notices": {
+          "rows": 7330,
+          "sha256": "8b2f951d7a353ec984455caf5afe6940a1294c31e7a61496b878501b595290d9"
+        },
+        "versions": {
+          "rows": 9574,
+          "sha256": "f5666dc8533a6fc4ace3f3d66b56b86f5219e8ca7349d7efc865529116a2ba17"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 7330,
+          "sha256": "8b2f951d7a353ec984455caf5afe6940a1294c31e7a61496b878501b595290d9"
+        },
+        "versions": {
+          "rows": 9574,
+          "sha256": "f5666dc8533a6fc4ace3f3d66b56b86f5219e8ca7349d7efc865529116a2ba17"
+        }
+      }
+    },
+    "UT": {
+      "base_strict": {
+        "notices": {
+          "rows": 280,
+          "sha256": "f8d4a9cba703693ebae83a7afb43b872fa93bbd40774e1a55dfc383080915753"
+        },
+        "versions": {
+          "rows": 280,
+          "sha256": "b02e944fd5d0441799618c42dfe51f6264a572f18f864132e4bdd91843a247f6"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 280,
+          "sha256": "f8d4a9cba703693ebae83a7afb43b872fa93bbd40774e1a55dfc383080915753"
+        },
+        "versions": {
+          "rows": 280,
+          "sha256": "b02e944fd5d0441799618c42dfe51f6264a572f18f864132e4bdd91843a247f6"
+        }
+      }
+    },
+    "VA": {
+      "base_strict": {
+        "notices": {
+          "rows": 1114,
+          "sha256": "3471c08a688cb60997932300ef3d1d32cafff0bdfa6b96eac8b615db49840bca"
+        },
+        "versions": {
+          "rows": 1119,
+          "sha256": "06c8c65e3014d75788370422d060ab53712e165e4bcbb5aa950bd72ba02eca55"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 1114,
+          "sha256": "3471c08a688cb60997932300ef3d1d32cafff0bdfa6b96eac8b615db49840bca"
+        },
+        "versions": {
+          "rows": 1119,
+          "sha256": "06c8c65e3014d75788370422d060ab53712e165e4bcbb5aa950bd72ba02eca55"
+        }
+      }
+    },
+    "VT": {
+      "base_strict": {
+        "notices": {
+          "rows": 29,
+          "sha256": "a3636ab0924a11f51b28e13e7215a1de4a89c50354b9eda2872efb41ad7adec9"
+        },
+        "versions": {
+          "rows": 29,
+          "sha256": "d390de390cfb5fa91f536cb651176898b48493d2afbccc2e7a7c41aabb4d26b3"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 29,
+          "sha256": "a3636ab0924a11f51b28e13e7215a1de4a89c50354b9eda2872efb41ad7adec9"
+        },
+        "versions": {
+          "rows": 29,
+          "sha256": "d390de390cfb5fa91f536cb651176898b48493d2afbccc2e7a7c41aabb4d26b3"
+        }
+      }
+    },
+    "WA": {
+      "base_strict": {
+        "notices": {
+          "rows": 1456,
+          "sha256": "f37b9572ae7151b4c184cf91928838b5440ef7740973aa3821c600ce708ad080"
+        },
+        "versions": {
+          "rows": 1476,
+          "sha256": "aa1e808001a4166c9d6bad48a9505059696f0d8a9d441bec47f0c0a5b2f3c4df"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 1456,
+          "sha256": "f37b9572ae7151b4c184cf91928838b5440ef7740973aa3821c600ce708ad080"
+        },
+        "versions": {
+          "rows": 1476,
+          "sha256": "aa1e808001a4166c9d6bad48a9505059696f0d8a9d441bec47f0c0a5b2f3c4df"
+        }
+      }
+    },
+    "WI": {
+      "base_strict": {
+        "notices": {
+          "rows": 3242,
+          "sha256": "fe9f51b11526e87fd5653b496b42bd1d26fb5f1ee7b71f796ca2fe55df28036b"
+        },
+        "versions": {
+          "rows": 3247,
+          "sha256": "709a54854ceb550ba43bc9bb6ec4ff68ccd934f1e0fc81a64470e0c99cff2597"
+        }
+      },
+      "ks_candidate": {
+        "notices": {
+          "rows": 3242,
+          "sha256": "fe9f51b11526e87fd5653b496b42bd1d26fb5f1ee7b71f796ca2fe55df28036b"
+        },
+        "versions": {
+          "rows": 3247,
+          "sha256": "709a54854ceb550ba43bc9bb6ec4ff68ccd934f1e0fc81a64470e0c99cff2597"
+        }
+      }
+    }
+  }
+}

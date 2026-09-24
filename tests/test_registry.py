@@ -1,3 +1,6 @@
+import pytest
+import yaml
+
 from warnlive.registry import load_registry
 
 
@@ -7,7 +10,21 @@ def test_registry_loads_and_validates():
     manual = [c for c in reg.all() if c.source == "manual"]
     assert sorted(c.postal for c in manual) == ["ar", "nh", "pr", "wv", "wy"]
     custom = [c for c in reg.all() if c.source == "custom"]
-    assert sorted(c.postal for c in custom) == ["ma", "mn", "nc", "nv", "sc"]
+    assert sorted(c.postal for c in custom) == ["ks", "ma", "mn", "nc", "nv", "sc"]
+    assert reg["il"].freshness_field == "source_details.agency_reported_date"
+    assert reg["pa"].freshness_field == "effective_date"
+    assert reg["ct"].freshness_field == "notice_date"
+    assert reg["tn"].freshness_field == "notice_date"
+
+
+def test_registry_rejects_unrecognized_freshness_field(tmp_path):
+    raw = {"ct": vars(load_registry()["ct"]).copy()}
+    del raw["ct"]["postal"]
+    raw["ct"]["freshness_field"] = "source_details.unknown_date"
+    path = tmp_path / "states.yaml"
+    path.write_text(yaml.safe_dump(raw))
+    with pytest.raises(ValueError, match="bad freshness_field"):
+        load_registry(path)
 
 
 def test_for_run_explicit_states():

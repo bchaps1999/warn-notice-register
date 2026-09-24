@@ -81,6 +81,72 @@ def test_header_reordering_is_not_source_schema_drift(tmp_path):
     assert schema.detail == "same columns in a different order"
 
 
+@pytest.mark.parametrize("header,expected", [
+    ("a,c\n1,2\n", "fail"),
+    ("a,b,c\n1,2,3\n", "warn"),
+])
+def test_required_header_missing_fails_but_extra_header_warns(tmp_path, header, expected):
+    from dataclasses import replace
+    from warnlive.normalize.engine import NormalizeResult
+    from warnlive.registry import load_registry
+    from warnlive.verify.harness import verify_state
+
+    raw = tmp_path / "source.csv"
+    raw.write_text(header)
+    cfg = replace(load_registry()["co"], min_rows=1,
+                  expected_columns=["a", "b"], staleness_days=None)
+    norm = NormalizeResult(state="CO", raw_rows=1, records=[{
+        "employer_name": "Example", "notice_date": "2026-09-01",
+        "effective_date": "2026-10-01", "dedupe_key": "one",
+    }])
+    result = verify_state(cfg, raw, norm, today=date(2026, 9, 23))
+    assert next(c for c in result.checks if c.name == "schema_drift").outcome == expected
+
+
+def test_effective_date_freshness_excludes_future_actions(tmp_path):
+    from dataclasses import replace
+    from warnlive.normalize.engine import NormalizeResult
+    from warnlive.registry import load_registry
+    from warnlive.verify.harness import verify_state
+
+    raw = tmp_path / "pa.csv"
+    raw.write_text("company\nExample\n")
+    cfg = replace(load_registry()["pa"], min_rows=1,
+                  expected_columns=["company"], staleness_days=90)
+    norm = NormalizeResult(state="PA", raw_rows=2, records=[
+        {"employer_name": "Past", "notice_date": None,
+         "effective_date": "2026-01-01", "dedupe_key": "old"},
+        {"employer_name": "Future", "notice_date": None,
+         "effective_date": "2027-06-01", "dedupe_key": "future"},
+    ])
+    checks = {c.name: c for c in verify_state(
+        cfg, raw, norm, today=date(2026, 9, 23)).checks}
+    assert checks["date_sanity"].outcome == "pass"
+    assert checks["freshness"].outcome == "warn"
+    assert "future action dates excluded" in checks["freshness"].detail
+
+
+def test_missing_configured_source_clock_records_freshness_warning(tmp_path):
+    from dataclasses import replace
+    from warnlive.normalize.engine import NormalizeResult
+    from warnlive.registry import load_registry
+    from warnlive.verify.harness import verify_state
+
+    raw = tmp_path / "wa.csv"
+    raw.write_text("company\nExample\n")
+    cfg = replace(load_registry()["wa"], min_rows=1,
+                  expected_columns=["company"])
+    norm = NormalizeResult(state="WA", raw_rows=1, records=[{
+        "employer_name": "Example", "notice_date": None,
+        "effective_date": "2026-10-01", "source_details": "{}",
+        "dedupe_key": "one",
+    }])
+    checks = {c.name: c for c in verify_state(
+        cfg, raw, norm, today=date(2026, 9, 23)).checks}
+    assert checks["date_sanity"].outcome == "fail"
+    assert checks["freshness"].outcome == "warn"
+
+
 def test_range_endpoint_changes_semantic_version():
     validated = {
         "postal_code": "SC", "company": "Paper Co", "location": "Georgetown",
@@ -302,6 +368,38 @@ def test_kansas_record_number_survives_area_renaming_and_separates_filings():
         "https://example.gov",
     )
     assert not mismatch.get("source_identity")
+
+
+def test_kansas_out_of_state_contact_city_is_not_displayed_as_layoff_site():
+    validated = {
+        "postal_code": "KS", "company": "First Student", "location": "Cincinnati",
+        "notice_date": date(2026, 5, 1), "effective_date": None, "jobs": 50,
+    }
+    raw = {
+        "record_number": "2304", "city": "Cincinnati", "zip": "45202",
+        "lwib_area": "1 - Kansas WorkforceONE",
+        "detail_page_url": "https://www.kansasworks.com/search/warn_lookups/2304",
+    }
+    rec = _to_canonical(validated, raw, "https://www.kansasworks.com")
+    assert rec["location"] == "1 - Kansas WorkforceONE"
+    detail = json.loads(rec["source_details"])
+    assert detail["listed_contact_city"] == "Cincinnati"
+    assert detail["listed_contact_zip"] == "45202"
+    assert detail["location_basis"] == "workforce_area_out_of_state_contact_zip"
+    kansas = _to_canonical({**validated, "location": "Iola"},
+                           {**raw, "city": "Iola", "zip": "66749"},
+                           "https://www.kansasworks.com")
+    assert kansas["location"] == "Iola"
+    postal = _to_canonical(
+        {**validated, "location": "P.O. # 98"},
+        {**raw, "record_number": "920", "city": "", "zip": "",
+         "address": "P.O. # 98", "detail_page_url": raw["detail_page_url"].replace("2304", "920")},
+        "https://www.kansasworks.com",
+    )
+    assert postal["location"] == "1 - Kansas WorkforceONE"
+    assert json.loads(postal["source_details"])["location_basis"] == (
+        "workforce_area_postal_address_only"
+    )
 
 
 def test_illinois_export_id_survives_revisions_and_separates_records():

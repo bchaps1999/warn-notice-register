@@ -1,0 +1,117 @@
+{
+  "candidate": {
+    "KS": {
+      "employers": 508,
+      "first": "1998-08-04",
+      "last": "2026-05-01",
+      "max_workers": 8116,
+      "no_jobs": 4,
+      "no_location": 0,
+      "notices": 834,
+      "undated": 0,
+      "unplaced": 758,
+      "workers": 120009
+    },
+    "MI": {
+      "employers": 96,
+      "first": "2024-11-29",
+      "last": "2026-09-04",
+      "max_workers": 1140,
+      "no_jobs": 0,
+      "no_location": 16,
+      "notices": 100,
+      "undated": 100,
+      "unplaced": 6,
+      "workers": 11994
+    },
+    "notices": 74795,
+    "workers": 7811678
+  },
+  "candidate_snapshot": "data/health/snapshot.json",
+  "checks": [
+    {
+      "detail": "largest single notice reports 27,500 workers (OR); ceiling 100,000",
+      "name": "notice_size_ceiling",
+      "outcome": "pass"
+    },
+    {
+      "detail": "71,490 -> 74,795",
+      "name": "total_notices",
+      "outcome": "pass"
+    },
+    {
+      "detail": "shrank beyond 2%: MI 103->100",
+      "name": "state_notice_counts",
+      "outcome": "fail"
+    },
+    {
+      "detail": "grew more than 5x: KS 12,851->120,009",
+      "name": "state_worker_totals",
+      "outcome": "fail"
+    },
+    {
+      "detail": "no state's worker total shrank more than 50%",
+      "name": "state_worker_deflation",
+      "outcome": "pass"
+    },
+    {
+      "detail": "distinct employers moved beyond 20%: KS 163->508, NY 3,940->5,306",
+      "name": "employer_counts",
+      "outcome": "warn"
+    },
+    {
+      "detail": "all dates within 1987-2028",
+      "name": "date_bounds",
+      "outcome": "pass"
+    },
+    {
+      "detail": "a field emptied or filled: KS no_jobs 65%",
+      "name": "field_emptied",
+      "outcome": "fail"
+    },
+    {
+      "detail": "no field's null rate moved more than 20%",
+      "name": "field_completeness",
+      "outcome": "pass"
+    },
+    {
+      "detail": "possible duplicates +0 on 3,305 new notices (allowed 33)",
+      "name": "duplicate_links",
+      "outcome": "pass"
+    }
+  ],
+  "previous": {
+    "KS": {
+      "employers": 163,
+      "first": "1998-08-04",
+      "last": "2026-05-01",
+      "max_workers": 2796,
+      "no_jobs": 135,
+      "no_location": 0,
+      "notices": 206,
+      "undated": 0,
+      "unplaced": 191,
+      "workers": 12851
+    },
+    "MI": {
+      "employers": 98,
+      "first": "2024-11-29",
+      "last": "2026-09-04",
+      "max_workers": 1140,
+      "no_jobs": 0,
+      "no_location": 18,
+      "notices": 103,
+      "undated": 103,
+      "unplaced": 6,
+      "workers": 13164
+    },
+    "notices": 71490,
+    "workers": 7482177
+  },
+  "published_snapshot": "data/health/snapshot.json",
+  "reviewed_exception_evidence": {
+    "KS": "The 910-ID full portal capture yields 834 staged notices and 76 held IDs; the source-ID reconciliation accounts for all current published IDs.",
+    "MI": "Three published same-key groups are held in raw/mi.csv; source rows and conflicting action dates are recorded in the strict candidate exception ledger."
+  },
+  "verdict": "failed"
+}

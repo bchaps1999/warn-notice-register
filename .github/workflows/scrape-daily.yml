@@ -32,7 +32,7 @@ jobs:
       - name: Scrape active daily states
         env:
           ZYTE_API_KEY: ${{ secrets.ZYTE_API_KEY }}
-        run: .venv/bin/warnlive scrape --cadence daily --trigger scheduled
+        run: .venv/bin/warnlive scrape --cadence daily --trigger scheduled --run-report workdir/reports/current-run.json
       - name: Detect revisions/duplicates
         run: .venv/bin/warnlive dupes
       - name: Check for data regressions
@@ -40,6 +40,8 @@ jobs:
         # with wrong values in them, which per-state verification cannot see.
         # Failing here leaves the repo and the published site untouched.
         run: .venv/bin/warnlive check-regressions --update-snapshot
+      - name: Check publication gate
+        run: .venv/bin/warnlive check-publication-gate workdir/reports/current-run.json
       - name: Commit data
         run: |
           git config user.name "warn-register bot"
@@ -62,12 +64,18 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh label create state-health --force --color D93F0B --description "Per-state scrape health" || true
-          .venv/bin/warnlive report --gh-issues || true
+          .venv/bin/warnlive report --gh-issues
       - name: Upload raw scrapes + logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: raw-${{ github.run_id }}
-          path: workdir/raw/
+          path: |
+            workdir/raw/
+            workdir/cache/ks/*.tar.gz
+            workdir/reports/current-run.json
           retention-days: 14
           if-no-files-found: ignore
+      - name: Check selected state outcomes
+        if: always()
+        run: .venv/bin/warnlive check-run-report workdir/reports/current-run.json

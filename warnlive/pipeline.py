@@ -7,6 +7,7 @@ state_runs and surfaced in the health report.
 from __future__ import annotations
 
 import json
+import hashlib
 import logging
 import sqlite3
 import traceback
@@ -18,7 +19,11 @@ from pathlib import Path
 from warnlive import fetch
 from warnlive.normalize import engine
 from warnlive.normalize.engine import _dedupe_key
-from warnlive.normalize.admission import exclusion_reasons
+from warnlive.normalize.admission import (
+    exclusion_reasons, ks_ambiguity_reasons,
+    ks_event_signature,
+    load_ks_hold_policy, persist_ks_hold_policy,
+)
 from warnlive.registry import Registry, StateConfig
 from warnlive.store import dedupe
 from warnlive.verify import harness
@@ -59,6 +64,7 @@ def run_states(
     trigger: str = "manual",
     smoke: bool = False,
     use_cache: bool = False,
+    durable_policy_path: Path = Path("data/ks_portal_holds.json"),
 ) -> RunReport:
     """Run the pipeline for each state config.
 
@@ -87,7 +93,7 @@ def run_states(
                 conn.execute("BEGIN")
             outcome = _run_one(
                 cfg, conn, data_dir, cache_dir, smoke, use_cache, trigger,
-                commit_state=False,
+                commit_state=False, durable_policy_path=durable_policy_path,
             )
         except Exception as e:  # noqa: BLE001 — one broken state never ends the run
             if conn is not None and not smoke:
@@ -151,6 +157,7 @@ def _run_one(
     use_cache: bool,
     trigger: str = "manual",
     commit_state: bool = True,
+    durable_policy_path: Path = Path("data/ks_portal_holds.json"),
 ) -> StateOutcome:
     postal = cfg.postal
     outcome = StateOutcome(state=postal.upper(), verdict="failed")
@@ -186,6 +193,65 @@ def _run_one(
     excluded: list[dict] = []
     if norm is not None:
         reasons = exclusion_reasons(postal, norm.records)
+        if postal == "ks":
+            try:
+                durable_path = Path(durable_policy_path)
+                held_ids, held_signatures = load_ks_hold_policy()
+                if durable_path.exists():
+                    durable_ids, durable_signatures = load_ks_hold_policy(
+                        durable_path
+                    )
+                    held_ids |= durable_ids
+                    held_signatures |= durable_signatures
+                current_ids: set[str] = set()
+                current_signatures: set[tuple[str, str]] = set()
+                current_path = data_dir / "ks.hold_policy.json"
+                if fetched_live and cfg.source == "custom" and not current_path.is_file():
+                    raise ValueError("complete Kansas collector omitted current hold policy")
+                if current_path.is_file():
+                    current = json.loads(current_path.read_text())
+                    raw_digest = hashlib.sha256(raw_path.read_bytes()).hexdigest()
+                    if current.get("raw_sha256") != raw_digest:
+                        raise ValueError("Kansas current hold policy does not match raw CSV")
+                    current_ids, current_signatures = load_ks_hold_policy(current_path)
+                    held_ids |= current_ids
+                    held_signatures |= current_signatures
+                    if fetched_live and not smoke:
+                        held_ids, held_signatures = persist_ks_hold_policy(
+                            current_path, durable_path
+                        )
+                existing = []
+                if conn is not None:
+                    existing = [dict(row) for row in conn.execute(
+                        "SELECT source_identity, employer_name, notice_date "
+                        "FROM notices WHERE state = 'KS'"
+                    )]
+                conflicts = sorted(
+                    row["source_identity"] or "(missing source ID)" for row in existing
+                    if row["source_identity"] in held_ids
+                    or ks_event_signature(
+                        row["employer_name"], row["notice_date"]
+                    ) in held_signatures
+                )
+                if conflicts:
+                    outcome.error = (
+                        "Kansas portal holds existing canonical IDs: "
+                        + ", ".join(conflicts[:12])
+                    )
+                    outcome.checks = {"verdict": "failed", "admission": {
+                        "publication_blocked": True,
+                        "reason": "held_event_already_published",
+                        "source_identities": conflicts,
+                    }}
+                    return outcome
+                for key, reason in ks_ambiguity_reasons(
+                    norm.records, existing, held_ids, held_signatures
+                ).items():
+                    reasons.setdefault(key, reason)
+            except (OSError, ValueError) as e:
+                outcome.error = f"Kansas admission policy: {e}"
+                outcome.checks = {"verdict": "failed", "admission": outcome.error}
+                return outcome
         excluded = [
             {
                 "reason": reasons[record["dedupe_key"]],
@@ -283,7 +349,7 @@ def _run_one(
             # Cache runs, backfills, and partly unparseable files cannot support it.
             complete_live = (
                 fetched_live and norm.failed_rows == 0 and not excluded
-                and trigger != "backfill" and postal not in {"ga", "sc"}
+                and trigger != "backfill" and postal not in {"ga", "sc", "ks"}
             )
             if complete_live:
                 dedupe.freeze_absent(
@@ -309,6 +375,13 @@ def _run_one(
             outcome.error = f"ingest: {type(e).__name__}: {e}"
             outcome.checks["verdict"] = "failed"
             outcome.checks["ingest"] = {"error": outcome.error}
+            if isinstance(e, dedupe.CollisionError):
+                outcome.checks["identity"] = {
+                    "status": "failed",
+                    "reason": "suspected_same_key_collision",
+                    "collision_window_days": dedupe.COLLISION_WINDOW_DAYS,
+                    "collisions": e.collisions,
+                }
             logger.exception("ingest %s failed", postal)
 
     return outcome
