@@ -44,8 +44,8 @@
       "sha256": "88bbd8c31f7caed25c349fe681b89f443eef9903527d0dedf3d6a5918e8af648"
     },
     ".github/workflows/test.yml": {
-      "bytes": 2111,
-      "sha256": "7c24e330a5f645770445863ed632d9c42c0f3145d31a55f85289bc44dd2e4619"
+      "bytes": 2460,
+      "sha256": "c4ec6c40477855c757d27123f92dece5fbc13f301376c7356788d899d4776b6c"
     },
     "data/ks_portal_holds.json": {
       "bytes": 3508,

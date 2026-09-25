@@ -2,7 +2,7 @@
 
 **Status:** Assembled and verified in `/private/tmp/ks-ky-review-release`, then promoted into the local v1.1.0 repository artifacts. This staging note records the checks before promotion; remote deployment and tagging are separate.
 
-The [manifest](../data/source_snapshots/2026-09-24-ks-ky-review-release-manifest.json) (SHA-256 `86bd462a0c41f419fc95493a74c37eb8715833b7810048ca42239d939862ec10`) records the staged SQL dump, 50 CSVs, 568 site JSON files, health files, source bundle, official source captures, reference files, and code inputs. Site output is pinned to 2026-09-24. The staging directory is temporary; the preserved source bundle and manifest support rebuilding it.
+The [manifest](../data/source_snapshots/2026-09-24-ks-ky-review-release-manifest.json) (SHA-256 `2fb35ce33fbb2c1cba9b2024909fb352b9bc3e4e9f4c0d79ea557957c0098a2f`) records the staged SQL dump, 50 CSVs, 568 site JSON files, health files, source bundle, official source captures, reference files, and code inputs. Site output is pinned to 2026-09-24. The staging directory is temporary; the preserved source bundle and manifest support rebuilding it.
 
 | Measure | Published | Candidate | Change |
 | --- | ---: | ---: | ---: |
