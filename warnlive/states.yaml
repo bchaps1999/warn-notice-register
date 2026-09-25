@@ -148,6 +148,7 @@ fl:
   needs_browser: false
   min_rows: 500
   staleness_days: 45
+  freshness_field: source_details.agency_notification_date
   expected_columns: [Company Name, State Notification Date, Layoff Date, Employees Affected, Industry]
   source_url: https://reactwarn.floridajobs.org/WarnList/
   notes: "Year-specific 2015–2018 PDFs and 2019-onward REACT HTML pages; direct endpoint patch bypasses the broken landing-page year selector. Live fetch verification remains required."
@@ -703,6 +704,7 @@ wi:
   needs_browser: false
   min_rows: 100
   staleness_days: 90
+  freshness_field: source_details.agency_received_date
   expected_columns: [Company, City, Affected Workers, Notice Received, Original Notice Type / Update Type, Layoff Begin Date, NAICS Description, CountyWorkforce Development Area]
   source_url: https://dwd.wisconsin.gov/dislocatedworker/warn/
   notes: "Per-year HTML backed by Google Sheets API. Upstream issue #718."

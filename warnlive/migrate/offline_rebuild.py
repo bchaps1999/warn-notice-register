@@ -273,11 +273,12 @@ def _cached_agencies(
                 "FROM notices WHERE state = ?", (state,),
             ):
                 dates = [notice, effective]
-                if state == "MA":
+                if state in {"MA", "WI", "FL"}:
                     # Preserve the old month-overlap boundary while moving
-                    # agency receipt out of legal notice_date.
+                    # agency receipt/notification out of legal notice_date.
                     detail = json.loads(detail_text or "{}")
                     dates.append(detail.get("agency_received_date") or
+                                 detail.get("agency_notification_date") or
                                  detail.get("legacy_notice_key_date"))
                 occupied.update((_fold(employer), value[:7]) for value in dates if value)
         if state == "NY":
@@ -324,9 +325,10 @@ def _cached_agencies(
                         dates = [rec["notice_date"]]
                     else:
                         dates = [rec.get(name) for name in ("notice_date", "effective_date")]
-                        if state == "MA":
+                        if state in {"MA", "WI", "FL"}:
                             detail = json.loads(rec.get("source_details") or "{}")
                             dates.append(detail.get("agency_received_date") or
+                                         detail.get("agency_notification_date") or
                                          detail.get("legacy_notice_key_date"))
                     months = {value[:7] for value in dates if value}
                     if not months:
@@ -739,6 +741,7 @@ def rebuild(
     bundle: Path, out_db: Path, observed_at: str,
     compare_db: Path | None = None, *, source_only: bool = True,
     exceptions_path: Path | None = None,
+    quality_evidence_dir: Path | None = None,
 ) -> dict:
     if not source_only:
         raise ValueError("legacy overlap-policy rebuild retired; use --source-only")
@@ -1016,6 +1019,13 @@ def rebuild(
             il_repair = _repair_il_from_cache(
                 out_db, source / "cache/il_reports", observed_at,
             )
+            quality_report = None
+            if quality_evidence_dir is not None:
+                from warnlive.migrate.quality_evidence import apply as apply_quality_evidence
+
+                quality_report = apply_quality_evidence(
+                    conn, quality_evidence_dir, observed_at,
+                )
             link_report = links_mod.rebuild(conn)
             observation_report = None
             if source_only:
@@ -1125,6 +1135,7 @@ def rebuild(
                 "cached_agencies": agencies,
                 "il_effective_repair": il_repair,
                 "tx_annual_date_evidence": tx_evidence,
+                "quality_evidence": quality_report,
                 "link_rebuild": link_report,
                 "fingerprints": _fingerprints(conn),
                 "states": _metrics(conn),
@@ -1210,11 +1221,14 @@ if __name__ == "__main__":
                         help="Build from agency sources only (the default)")
     parser.add_argument("--exceptions", type=Path,
                         help="Source-only JSONL exception manifest (default: beside candidate DB)")
+    parser.add_argument("--quality-evidence-dir", type=Path,
+                        help="Pinned supplemental official letters and agency reports")
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
     logger.setLevel(logging.ERROR)
     result = rebuild(args.bundle, args.db, args.observed_at, args.compare_db,
-                     source_only=args.source_only, exceptions_path=args.exceptions)
+                     source_only=args.source_only, exceptions_path=args.exceptions,
+                     quality_evidence_dir=args.quality_evidence_dir)
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(result, sort_keys=True, indent=2) + "\n")

@@ -40,6 +40,14 @@ export function NoticeDetailPage() {
     dates?: { role: string; date: string | null; source_text: string; month?: number | null; year?: number | null }[];
     sites?: { address: string; workers: number | null }[];
     worker_allocation?: string;
+    quality_evidence?: {
+      status?: string;
+      location_role?: string;
+      employer_name_verbatim?: string;
+      sites?: { role: string; address?: string; city?: string; state?: string; workers?: number | null }[];
+      dates?: { role: string; date: string; source_field?: string }[];
+      sources?: { url: string; artifact?: string; row?: string; page?: number; retrieved_on?: string }[];
+    };
   } | null = null;
   try {
     sourceDetails = n.source_details ? JSON.parse(n.source_details) : null;
@@ -49,6 +57,12 @@ export function NoticeDetailPage() {
   const postingMonth = sourceDetails?.dates?.find(
     (item) => item.role === "posting_month" || (n.state === "NJ" && item.role === "notice_month"),
   );
+  const quality = sourceDetails?.quality_evidence;
+  const supportedSites = quality?.sites ?? [];
+  const affectedSites = supportedSites.filter((site) =>
+    site.role === "affected_worksite" || site.role === "remote_worker_location",
+  );
+  const mailingSites = supportedSites.filter((site) => site.role === "employer_mailing");
 
   return (
     <div className="max-w-3xl">
@@ -93,8 +107,28 @@ export function NoticeDetailPage() {
 
       <SectionHeading>Filing</SectionHeading>
       <dl className="grid grid-cols-1 sm:grid-cols-[11rem_minmax(0,1fr)] gap-y-2 text-sm">
-        <Row label="Location">{n.location ?? "—"}</Row>
-        {n.site_address && <Row label="Worksite address">{n.site_address}</Row>}
+        {quality?.location_role === "employer_mailing" ? (
+          <Row label="Agency listing location">
+            {n.location ?? "—"}
+            <span className="block text-xs text-ink-faint">Employer mailing location; it does not identify the affected worksite.</span>
+          </Row>
+        ) : (
+          <Row label="Location">{n.location ?? "—"}</Row>
+        )}
+        {n.site_address && !affectedSites.some((site) => site.address === n.site_address) && (
+          <Row label="Affected site address">{n.site_address}</Row>
+        )}
+        {affectedSites.map((site, i) => (
+          <Row key={`${site.role}-${i}`} label={site.role === "remote_worker_location" ? "Affected worker location" : "Affected worksite"}>
+            {[site.address, [site.city, site.state].filter(Boolean).join(", ")].filter(Boolean).join(" · ") || "—"}
+            {site.workers != null && <span className="text-xs text-ink-muted ml-2">{num(site.workers)} workers</span>}
+          </Row>
+        ))}
+        {mailingSites.map((site, i) => (
+          <Row key={`mailing-${i}`} label="Employer mailing address">
+            {site.address ?? [site.city, site.state].filter(Boolean).join(", ")}
+          </Row>
+        ))}
         {n.county_fips && (
           <Row label="Resolved place">
             <Link
@@ -133,7 +167,22 @@ export function NoticeDetailPage() {
         {(n.industry || n.naics) && <IndustryRow n={n} />}
       </dl>
 
+      {quality?.status === "specific_source_not_recovered_in_audit" && (
+        <p className="text-xs text-ink-muted mt-3">
+          A specific original letter or agency report row was not recovered in the
+          September 24, 2026 sample audit. This does not change the notice’s
+          admission status.
+        </p>
+      )}
+      {quality?.status === "site_address_ambiguous" && (
+        <p className="text-xs text-ink-muted mt-3">
+          The agency address cell contains conflicting or repeated locations.
+          An affected site has not been assigned from that cell.
+        </p>
+      )}
+
       {(n.notice_date_basis || n.effective_date_basis || n.effective_date_end_basis ||
+        (quality?.dates?.length ?? 0) > 0 ||
         (sourceDetails?.dates?.length ?? 0) > 0) && (
         <>
           <SectionHeading>Date evidence</SectionHeading>
@@ -152,7 +201,33 @@ export function NoticeDetailPage() {
                   <span className="text-xs text-ink-faint ml-2">as filed: {item.source_text}</span>}
               </Row>
             ))}
+            {quality?.dates?.map((item, i) => (
+              <Row key={`quality-${item.role}-${i}`} label={item.role.replace(/_/g, " ")}>
+                {date(item.date)}
+                {item.source_field && <span className="text-xs text-ink-faint ml-2">source field: {item.source_field}</span>}
+              </Row>
+            ))}
           </dl>
+        </>
+      )}
+
+      {quality?.sources && quality.sources.length > 0 && (
+        <>
+          <SectionHeading>Source evidence</SectionHeading>
+          <ul className="text-xs text-ink-muted space-y-1">
+            {quality.sources.map((source, i) => (
+              <li key={`${source.url}-${i}`}>
+                <a href={source.url} className="underline hover:text-ink" target="_blank" rel="noreferrer">
+                  Supporting source {i + 1}
+                </a>
+                {[source.row, source.page != null ? `page ${source.page}` : null, source.artifact, source.retrieved_on]
+                  .filter(Boolean).join(" · ") && (
+                  <span className="ml-2">{[source.row, source.page != null ? `page ${source.page}` : null, source.artifact, source.retrieved_on]
+                    .filter(Boolean).join(" · ")}</span>
+                )}
+              </li>
+            ))}
+          </ul>
         </>
       )}
 

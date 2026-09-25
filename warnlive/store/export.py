@@ -106,24 +106,34 @@ def export_csvs(
     # wikidata-refresh); see warnlive.enrich.annotate.
     from warnlive.enrich.annotate import FIELDS as IDENTITY_COLUMNS, Annotator
     from warnlive.enrich.places import RESULT_FIELDS as PLACE_COLUMNS, Resolver
+    from warnlive.enrich.notice_quality import (
+        FIELDS as QUALITY_COLUMNS, _quality, geo_location, project,
+    )
 
     annotator = Annotator()
     annotator.prime(conn)
     # Geography belongs to the notice rather than the employer, so it is
     # resolved separately and merged in beside the identity columns.
     resolver = Resolver()
-    DERIVED_COLUMNS = IDENTITY_COLUMNS + PLACE_COLUMNS
+    DERIVED_COLUMNS = IDENTITY_COLUMNS + PLACE_COLUMNS + list(QUALITY_COLUMNS)
     header = EXPORT_COLUMNS[:2] + DERIVED_COLUMNS + EXPORT_COLUMNS[2:]
     date_idx = EXPORT_COLUMNS.index("notice_date")
     eff_idx = EXPORT_COLUMNS.index("effective_date")
     loc_idx = EXPORT_COLUMNS.index("location")
 
     def derived(r: sqlite3.Row) -> tuple:
+        row = dict(r)
         extra = annotator.annotate(
             r[1], r[date_idx] or r[eff_idx], r["fields_json"],
             state=r[0], location=r[loc_idx],
         )
-        extra.update(resolver.resolve(r[0], r[loc_idx], r["fields_json"], r[1]))
+        quality = _quality(row)
+        if (quality.get("sites") or quality.get("location_role") == "employer_mailing"
+                or quality.get("status") == "site_address_ambiguous"):
+            extra.update(resolver.resolve(r[0], geo_location(row)))
+        else:
+            extra.update(resolver.resolve(r[0], r[loc_idx], r["fields_json"], r[1]))
+        extra.update(project(row))
         return (
             r[0], r[1],
             *(extra[f] if extra[f] is not None else "" for f in DERIVED_COLUMNS),

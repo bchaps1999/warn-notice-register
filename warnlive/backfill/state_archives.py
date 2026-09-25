@@ -253,6 +253,25 @@ def fetch_wi(cache_dir: Path) -> list[dict]:
                 code = _sheet_code(sheet.cell_value(r, cols["naics"]))
                 if code:
                     raw["NAICS Code" if code[:2] in _NAICS_SECTORS else "SIC Code"] = code
+            date_details = {
+                "agency_received_date": notice_date.isoformat(),
+                "legacy_notice_key_date": notice_date.isoformat(),
+                "date_evidence_rule": "wi_archive_notice_received_role_v1",
+                "dates": [{
+                    "role": "agency_received", "source_field": "Notice Received",
+                    "source_text": notice_date.isoformat(), "date": notice_date.isoformat(),
+                    "precision": "day", "basis": "reported",
+                }],
+            }
+            if effective:
+                date_details["date_precision_evidence"] = {
+                    "effective_date": {
+                        "rule": "wi_archive_dislocation_workbook_v1",
+                        "source_field": "Schedule of Dislocations",
+                        "source_text": str(eff),
+                        "workbook_datemode": wb.datemode,
+                    }
+                }
             records.append(
                 _canonical(
                     {
@@ -261,21 +280,11 @@ def fetch_wi(cache_dir: Path) -> list[dict]:
                         "location": str(sheet.cell_value(r, cols["location"])).strip()
                         if "location" in cols
                         else None,
-                        "notice_date": notice_date.isoformat(),
+                        "notice_date": None,
                         "effective_date": effective,
                         "effective_date_precision": "day" if effective else None,
                         "effective_date_basis": "reported" if effective else None,
-                        "source_details": json.dumps({
-                            "date_evidence_rule": "wi_archive_dislocation_workbook_v1",
-                            "date_precision_evidence": {
-                                "effective_date": {
-                                    "rule": "wi_archive_dislocation_workbook_v1",
-                                    "source_field": "Schedule of Dislocations",
-                                    "source_text": str(eff),
-                                    "workbook_datemode": wb.datemode,
-                                }
-                            },
-                        }, sort_keys=True) if effective else None,
+                        "source_details": json.dumps(date_details, sort_keys=True),
                         "employees_affected": int(jobs)
                         if isinstance(jobs, float) and jobs > 0
                         else None,

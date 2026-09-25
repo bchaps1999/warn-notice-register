@@ -20,6 +20,7 @@ from datetime import date, datetime, timedelta, timezone
 from calendar import monthrange
 from pathlib import Path
 
+from warnlive.enrich.notice_quality import display_location
 from warnlive.registry import Registry
 from warnlive.verify.report import build_status
 
@@ -110,6 +111,7 @@ def build_site(
     # the detail shards via dict(n), and CIK presence into FLAG_PUBLIC.
     from warnlive.enrich.annotate import Annotator
     from warnlive.enrich.places import Resolver
+    from warnlive.enrich.notice_quality import _quality, geo_location, project
 
     annotator = Annotator()
     annotator.prime(conn)
@@ -125,9 +127,15 @@ def build_site(
                 state=n["state"], location=n.get("location"),
             )
         )
-        n.update(resolver.resolve(
-            n["state"], n.get("location"), fields_json, n["employer_name"]
-        ))
+        quality = _quality(n)
+        if (quality.get("sites") or quality.get("location_role") == "employer_mailing"
+                or quality.get("status") == "site_address_ambiguous"):
+            n.update(resolver.resolve(n["state"], geo_location(n)))
+        else:
+            n.update(resolver.resolve(
+                n["state"], n.get("location"), fields_json, n["employer_name"]
+            ))
+        n.update(project(n))
     linked_ids = {
         r["notice_id"] for r in conn.execute("SELECT DISTINCT notice_id FROM notice_links")
     } | {
@@ -210,7 +218,7 @@ def _notice_summary(n, prefix_len: int) -> dict:
         "key": n["dedupe_key"][:prefix_len],
         "state": n["state"],
         "employer": n["employer_name"],
-        "location": n["location"],
+        "location": display_location(n),
         "notice_date": n["notice_date"],
         "notice_date_precision": n.get("notice_date_precision"),
         "effective_date": n["effective_date"],
@@ -549,7 +557,7 @@ def _build_index(notices, linked_ids: set, prefix_len: int) -> dict:
         cols["effective_end_precision"].append(n.get("effective_date_end_precision"))
         cols["effective_end_basis"].append(n.get("effective_date_end_basis"))
         cols["employer"].append(n["employer_name"])
-        cols["location"].append(n["location"])
+        cols["location"].append(display_location(n))
         cols["jobs"].append(n["employees_affected"])
         cols["type"].append(type_idx.get(n["layoff_type"], type_idx["unknown"]))
         cols["flags"].append(flags)

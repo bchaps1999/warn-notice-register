@@ -1,0 +1,82 @@
+{
+  "artifact_sha256": {
+    "data/health/snapshot.json": {
+      "bytes": 12289,
+      "sha256": "a10dee48976b6c7ace6754b1724b8241d63561b3072a8943b49375cdce7de78c"
+    },
+    "data/source_snapshots/2026-09-25-quality-candidate-report.json": {
+      "bytes": 455009,
+      "sha256": "79ad276a4b014f1f03a555b32b93d144a7994edff0eb78a39abc98dec5852325"
+    },
+    "data/source_snapshots/2026-09-25-quality-candidate.exceptions.jsonl.gz": {
+      "bytes": 1438050,
+      "sha256": "acb3696f33fc092a3469785d254bee243994e1a8239b38d05b845caae55ba77e"
+    },
+    "data/warn.sql.gz": {
+      "bytes": 19385841,
+      "sha256": "8471c32a0f88eb6d9f2e7cef89408ee005653ee8f6d53dcae8632497c8fe5828"
+    }
+  },
+  "build_date": "2026-09-24",
+  "checks": {
+    "foreign_key_errors": 0,
+    "independent_source_replays": "pass: identical notice/version/link/exception fingerprints",
+    "promoted_release_reconciliation": "pass: 74,828 notices; 7,815,994 workers; 47 represented states; 1,009 source observations",
+    "python_tests": "443 passed",
+    "regression_baseline": "pass",
+    "site_build": "pass",
+    "site_tests": "3 passed",
+    "sql_dump_roundtrip_all_tables": "pass",
+    "sqlite_integrity": "ok"
+  },
+  "counts": {
+    "ca_exact_address_matches": 4309,
+    "exception_rows": 9668,
+    "held_ambiguous_nc_sites": 30,
+    "links": 0,
+    "nc_md_labeled_sites": 2160,
+    "notices": 74828,
+    "represented_states": 47,
+    "source_observations": 1009,
+    "versions": 88748,
+    "workers": 7815994
+  },
+  "exception_sha256": "7ef90cd61cb2b6c66461b115add4c2f9d6b962e55042d61f78bf523e0707133b",
+  "fingerprints": {
+    "links": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "notices": "ff481618ad11085252844f9aee412522c9ae9bc203e61e2635e0341d6c9e90a6",
+    "versions": "39664f452b11693480d4729987e0ff33b1e6c4fd47b2ede65b053828440a0216"
+  },
+  "format": "warn-quality-release-manifest-v1",
+  "git_base": "39571d7a848a97885bb2bf0b55a10d75a67cd2fb",
+  "input_sha256": {
+    "data/source_snapshots/2026-09-24-quality-evidence/manifest.json": {
+      "bytes": 2945,
+      "sha256": "ba49ced716e02b1fb5663de29362bdf47b08c5b2adf5d0653a483c420faac8c0"
+    },
+    "data/source_snapshots/2026-09-24-strict-ks-ky-source-bundle.tar.gz": {
+      "bytes": 39978738,
+      "sha256": "746745a066cb5e3c6ad5fc4263b83b27b3bba4a0d25115d46d78341e1df42070"
+    },
+    "docs/notice-quality-handoff-2026-09-24.md": {
+      "bytes": 8112,
+      "sha256": "9278cc88dd38bad27eb6e27b00dac81b2f1133b65901508c122abfccbea2cc42"
+    }
+  },
+  "release": "v1.1.1",
+  "release_date": "2026-09-25",
+  "reproduced_output_trees": {
+    "csv_files": 50,
+    "csv_tree_sha256": "4a84cb60e4900fd2960341728522ef72a4c42685ccab4eac26981911ac5b5f47",
+    "site_json_files": 568,
+    "site_tree_sha256": "fb9346a491b67dda9732404f22e4cc1b54e447f34bd4ef42be4eae83c3490e24"
+  },
+  "source_row_accounting": {
+    "agency_cache": {
+      "excluded_rows": 1476
+    },
+    "current_raw": {
+      "excluded_rows": 1550
+    }
+  }
+}

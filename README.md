@@ -3,12 +3,12 @@
 A consolidated WARN Act notice dataset assembled from available state agency
 portals and archived source material. Coverage varies by state and period.
 
-**v1.1.0 data (September 24, 2026):** the source-backed release contains
-**74,828 admitted notices, 82,241 versions, and 7,815,994 reported affected
-workers**. The database dump and CSVs derive from the pinned agency bundle;
-the site build derives from that database. The [release notes](docs/release-v1.1.0-2026-09-24.md)
-explain the strict identity rule, Kansas portal expansion, Kentucky agency
-projection, and remaining historical gaps. The [source evidence](data/source_snapshots/README.md)
+**v1.1.1 data (September 25, 2026):** the source-backed release contains
+**74,828 admitted notices, 88,748 versions, and 7,815,994 reported affected
+workers**. The database dump and CSVs derive from the pinned agency bundle and
+the dated notice-quality evidence; the site build derives from that database.
+The [release notes](docs/release-v1.1.1-2026-09-25.md) explain the address,
+date-role, and provenance corrections. The [source evidence](data/source_snapshots/README.md)
 and [assembly contract](docs/rebuild-contract.md) define the replay checks.
 Counts are admitted source events, not an estimate of every WARN filing nationally.
 
@@ -23,7 +23,7 @@ deduplicates and version-tracks notices, and commits the results here:
 - `data/warn.sql.gz` — the full database as a gzipped SQL dump (notices, versions, run telemetry); `warnlive unpack-db` restores the working sqlite file
 - `data/exports/warn_notices.csv` — one row per notice, all active states
 - `data/exports/states/{xx}.csv` — per-state cuts
-- `data/exports/notice_links.csv` — source-backed relationships, when established; v1.1.0 has no notice links
+- `data/exports/notice_links.csv` — source-backed relationships, when established; v1.1.1 has no notice links
 - `data/exports/source_observations.csv` — 1,009 verified agency observations, including 35 Kentucky rows, with admission or exclusion status; the separate exception ledger accounts for other held source rows
 - `data/health/health.md` — a dated per-state collection snapshot, not proof that every configured adapter is currently healthy
 
@@ -32,8 +32,8 @@ deduplicates and version-tracks notices, and commits the results here:
 | Column | Meaning |
 |---|---|
 | `state` | Two-letter postal code |
-| `employer_name` | Employer as reported by the state |
-| `location` | City/location string as reported (formats vary by state) |
+| `employer_name` | Employer label in the agency listing; an original letter may give a fuller legal name |
+| `location` | Agency listing's location text (formats and roles vary by state); it is retained even when a letter establishes a different affected place |
 | `notice_date` | Source-supported notice date when its role is known (ISO-8601 or null) |
 | `effective_date` | First layoff/closure date (ISO-8601) |
 | `employees_affected` | Reported headcount (null when the state omits it) |
@@ -41,7 +41,7 @@ deduplicates and version-tracks notices, and commits the results here:
 | `is_temporary` | 1 if the state flagged it temporary, else 0/blank |
 | `is_amendment` | Source flagged this filing as amending an earlier one |
 | `is_amended` | We have observed more than one version of this notice |
-| `current_version` | Version count (see `notice_versions` in SQLite for history) |
+| `current_version` | Latest version number (see `notice_versions` in SQLite for history) |
 | `source_url` | The state portal the record came from |
 | `source_notice_id` | Agency filing ID when available; otherwise a source-specific identifier or content hash |
 | `dedupe_key` | Internal stable record key; source-specific filing identity governs some states, so do not reconstruct it from employer/date/location |
@@ -62,8 +62,19 @@ legal notice date; `effective_date_precision`, `effective_date_basis`,
 `effective_date_end`, `effective_date_end_precision`, and
 `effective_date_end_basis` qualify reported action dates and intervals.
 `source_identity` and `source_details` preserve source-specific identity and
-structured facts. Empty values mean the corresponding fact is not established
-in this export.
+structured facts. `affected_site_address`, `affected_site_city`, and
+`site_role` are supported affected-place projections;
+`employer_mailing_address` is separate from them. `employer_name_verbatim`
+retains a fuller name from an original document when available. `letter_date`,
+`agency_received_date`, `agency_notification_date`, and
+`agency_processed_date` keep those events apart
+from `notice_date`. `source_record_urls`, `source_locators`, and `source_status`
+identify attached official rows or letters and their adjudication; the
+state-level `source_url` remains the agency listing. `timing_qc` marks a
+source-supported negative, same-day, or 300-day-or-longer notice-to-action
+interval for review, without changing either date. Empty values mean the
+corresponding fact is not established in this export. A blank site field does
+not establish that no site was reported or that the event had no physical site.
 The [date-precision expansion](docs/date-precision-automation-2026-09-24.md)
 describes the automatic source-cell checks and remaining unassessed dates.
 
@@ -140,7 +151,7 @@ fallback, MA fallback).
 
 ### Rebuild v1.1.0 from frozen agency sources
 
-The current release uses a frozen agency-only bundle with Kansas portal pages
+The v1.1.0 release uses a frozen agency-only bundle with Kansas portal pages
 and Kentucky's pinned official CSV. Rebuild in an isolated path and compare
 the result with the [release manifest](data/source_snapshots/2026-09-24-ks-ky-review-release-manifest.json):
 
@@ -157,6 +168,27 @@ The [replay report](data/source_snapshots/2026-09-24-strict-ks-ky-candidate-repo
 and [release notes](docs/release-v1.1.0-2026-09-24.md) describe admitted and
 held rows. The two held Kentucky rows are source observations; the 76 held
 Kansas portal IDs are preserved in their companion source archive.
+
+To reproduce v1.1.1 in an isolated path, add
+`--quality-evidence-dir data/source_snapshots/2026-09-24-quality-evidence`
+to the v1.1.0 replay command above.
+That dated directory pins the original Volta letters and California EDD
+reports by URL and hash. The strict attachment pass preserves notice keys and
+agency listing text, attaches only unambiguous source rows, and reports held
+California address candidates by reason. An address in the EDD report is not
+automatically an affected site when its geography conflicts with the reported
+county. The [quality release report](data/source_snapshots/2026-09-25-quality-candidate-report.json)
+records the reconciled replay and its held-row accounting. The
+[release manifest](data/source_snapshots/2026-09-25-quality-release-manifest.json)
+pins inputs, artifacts, counts, and validation results.
+
+The v1.1.1 release also separates Wisconsin's `Notice Received` and
+Florida's current `State Notification Date` from legal `notice_date`. Their
+typed agency dates remain in `source_details` and the export, and their old
+date components continue to anchor stable dedupe keys. Florida's historical
+HTML tables have a separately labeled `NOTICE DATE` and retain it. A dated
+original letter establishes `letter_date`, not necessarily the date employees
+received notice.
 
 ### Rebuild the historical v1.0.1 release from frozen agency sources
 
@@ -190,7 +222,7 @@ the subsequent same-key collision guard, the promoted strict candidate, and
 the remaining coverage opportunities.
 The [v1.0.1 release notes](docs/release-v1-2026-09-24.md) state that release's
 coverage limits. The [v1.1.0 release notes](docs/release-v1.1.0-2026-09-24.md)
-describe the current data. For a dated site build, pass
+describe that earlier data. For a dated site build, pass
 `warnlive build-site --db /tmp/warn-v1.sqlite --out /tmp/warn-v1-site --as-of 2026-09-24`.
 
 To compare a newer live capture without overwriting an older source bundle,

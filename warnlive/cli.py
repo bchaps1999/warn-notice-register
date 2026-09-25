@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import json
 import os
 import sys
 from pathlib import Path
@@ -118,6 +119,21 @@ def scrape(states, cadence, include_unverified, smoke, use_cache, workdir, db_pa
         write_run_report(report, [cfg.postal for cfg in configs], run_report)
 
     if conn is not None:
+        # Reapply pinned official-document facts after a source row changes so
+        # a later scrape cannot replace a verified site or date role with the
+        # agency listing's coarser interpretation.
+        quality_states = {cfg.postal.upper() for cfg in configs} & {
+            "CA", "FL", "WI", "CO", "NC", "MD",
+        }
+        if quality_states:
+            from warnlive.migrate.quality_evidence import DEFAULT_ROOT, apply
+
+            if DEFAULT_ROOT.is_dir():
+                quality_report = apply(
+                    conn, DEFAULT_ROOT, now_utc()[:10],
+                    states=quality_states, require_volta=False,
+                )
+                click.echo(f"quality evidence: {quality_report}")
         # The regression gate runs before anything is written to data/: a
         # failed gate must leave no bad exports, health report or DB dump
         # sitting in the working tree looking legitimate. CI runs
@@ -221,6 +237,10 @@ def export(db_path: Path, data_dir: Path) -> None:
     conn = db_mod.connect(db_path)
     db_mod.init_db(conn)
     counts = export_csvs(conn, Path(data_dir) / "exports", _exportable(registry))
+    from warnlive.store.links import export_links_csv
+
+    counts[Path(data_dir) / "exports" / "notice_links.csv"] = export_links_csv(
+        conn, Path(data_dir) / "exports" / "notice_links.csv")
     write_health(conn, registry, Path(data_dir) / "health")
     _compress_db(db_path)
     for path, n in counts.items():
@@ -645,61 +665,25 @@ def surface_addresses(db_path: Path, dry_run: bool) -> None:
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--dry-run", is_flag=True, help="Report what would change without writing.")
 def ca_addresses(workdir: Path, db_path: Path, dry_run: bool) -> None:
-    """Fill CA site_address from EDD fiscal-year WARN reports (FY21-22 on).
+    """Apply pinned EDD report evidence with the strict source-row matcher."""
+    import sqlite3
 
-    Matches on folded employer name + notice date (±3 days), using the
-    stored city to disambiguate multi-site filings; skips notices whose
-    candidates still disagree on the address.
-    """
-    import datetime as dt_mod
+    from warnlive.migrate.quality_evidence import apply
 
-    from warnlive.enrich import ca_address
-    from warnlive.normalize.engine import _fold
-
-    records = ca_address.collect_records(Path(workdir) / "cache" / "ca_reports")
-    by_name: dict[str, list] = {}
-    for rec in records:
-        by_name.setdefault(_fold(rec.company), []).append(rec)
-    click.echo(f"parsed {len(records)} EDD report rows")
-
-    conn = db_mod.connect(db_path)
-    db_mod.init_db(conn)
-    rows = conn.execute(
-        """SELECT id, employer_name, location, notice_date FROM notices
-           WHERE state = 'CA' AND site_address IS NULL
-             AND notice_date >= '2021-07-01'""",
-    ).fetchall()
-
-    filled = ambiguous = unmatched = 0
-    for row in rows:
-        nd = dt_mod.date.fromisoformat(row["notice_date"])
-        pool = by_name.get(_fold(row["employer_name"]), [])
-        matches = [c for c in pool
-                   if abs((dt_mod.date.fromisoformat(c.notice_date) - nd).days) <= 3]
-        city = (row["location"] or "").split(",")[0].strip().lower()
-        if len({c.address.lower() for c in matches}) > 1 and city:
-            near = [c for c in matches if city in c.address.lower()]
-            matches = near or matches
-        if not matches:
-            unmatched += 1
-            continue
-        addresses = {c.address.lower() for c in matches}
-        if len(addresses) > 1:
-            ambiguous += 1
-            continue
-        filled += 1
-        if not dry_run:
-            conn.execute(
-                "UPDATE notices SET site_address = ? WHERE id = ?",
-                (matches[0].address, row["id"]),
-            )
-    if not dry_run:
-        conn.commit()
-    label = "would fill" if dry_run else "filled"
-    click.echo(
-        f"CA: {label} {filled}, ambiguous {ambiguous}, unmatched {unmatched} "
-        f"(of {len(rows)} address-less CA notices since 2021-07)"
-    )
+    source = db_mod.connect(db_path)
+    if dry_run:
+        conn = sqlite3.connect(":memory:")
+        conn.row_factory = sqlite3.Row
+        source.backup(conn)
+    else:
+        conn = source
+    report = apply(conn, states={"CA"}, require_volta=False)
+    click.echo(json.dumps(report["ca"], sort_keys=True))
+    if dry_run:
+        click.echo("dry run: database unchanged")
+    conn.close()
+    if dry_run:
+        source.close()
 
 
 @cli.command("ny-addresses")

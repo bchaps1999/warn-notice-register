@@ -36,7 +36,7 @@ DETAIL_FIELDS = [
     "effective_date_end", "notice_date_precision", "notice_date_basis",
     "effective_date_precision", "effective_date_basis",
     "effective_date_end_precision", "effective_date_end_basis",
-    "source_identity", "source_details",
+    "source_identity", "source_details", "site_address",
 ]
 
 
@@ -153,6 +153,7 @@ def ingest(
             "SELECT n.id AS id, n.current_version AS current_version, "
             "       n.effective_date AS effective_date, "
             "       n.source_url AS source_url, n.last_seen AS last_seen, "
+            "       n.source_details AS source_details, n.site_address AS site_address, "
             "       v.raw_record_hash AS current_hash "
             "FROM notices n JOIN notice_versions v "
             "  ON v.notice_id = n.id AND v.version = n.current_version "
@@ -241,6 +242,16 @@ def ingest(
                 )
             stats.unchanged += 1
         else:
+            # A new source version invalidates an address attached to the
+            # previous version by the quality pass. The pass will restore it
+            # only when the amended row still matches verified site evidence.
+            old_details = json.loads(row["source_details"] or "{}")
+            old_quality = old_details.get("quality_evidence") or {}
+            quality_addresses = {site.get("address") for site in old_quality.get("sites", [])
+                                 if isinstance(site, dict)
+                                 and site.get("role") in {"affected_worksite", "remote_worker_location"}}
+            site_address = (None if row["site_address"] in quality_addresses
+                            else row["site_address"])
             next_version = row["current_version"] + 1
             _insert_version(cur, row["id"], next_version, rec, observed_at)
             cur.execute(
@@ -250,6 +261,7 @@ def ingest(
                      notice_date_basis=?, effective_date_precision=?,
                      effective_date_basis=?, effective_date_end_precision=?,
                      effective_date_end_basis=?, source_identity=?, source_details=?,
+                     site_address=?,
                      employees_affected=?, layoff_type=?, is_temporary=?,
                      is_amendment=?, source_url=?, source_notice_id=?,
                      is_amended=1, current_version=?, last_seen=NULL
@@ -268,6 +280,7 @@ def ingest(
                     rec.get("effective_date_end_basis"),
                     rec.get("source_identity"),
                     rec.get("source_details"),
+                    site_address,
                     rec["employees_affected"],
                     rec["layoff_type"],
                     rec["is_temporary"],

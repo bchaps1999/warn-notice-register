@@ -1,7 +1,9 @@
 import pytest
 import yaml
+import json
 
 from warnlive.registry import load_registry
+from warnlive.verify.harness import _source_date
 
 
 def test_registry_loads_and_validates():
@@ -15,6 +17,17 @@ def test_registry_loads_and_validates():
     assert reg["pa"].freshness_field == "effective_date"
     assert reg["ct"].freshness_field == "notice_date"
     assert reg["tn"].freshness_field == "notice_date"
+    assert reg["wi"].freshness_field == "source_details.agency_received_date"
+    assert reg["fl"].freshness_field == "source_details.agency_notification_date"
+
+
+def test_wi_fl_freshness_uses_typed_agency_dates():
+    reg = load_registry()
+    for state, field in (("wi", "agency_received_date"),
+                         ("fl", "agency_notification_date")):
+        row = {"notice_date": None,
+               "source_details": json.dumps({field: "2026-09-23"})}
+        assert _source_date(row, reg[state].freshness_field) == "2026-09-23"
 
 
 def test_registry_rejects_unrecognized_freshness_field(tmp_path):

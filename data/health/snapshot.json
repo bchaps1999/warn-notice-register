@@ -101,12 +101,12 @@
     "FL": {
       "employers": 4073,
       "first": "1998-01-09",
-      "last": "2026-07-16",
+      "last": "2026-10-03",
       "max_workers": 10903,
       "no_jobs": 0,
       "no_location": 2648,
       "notices": 5435,
-      "undated": 0,
+      "undated": 2787,
       "unplaced": 186,
       "workers": 646598
     },
@@ -556,13 +556,13 @@
     },
     "WI": {
       "employers": 2073,
-      "first": "1996-01-06",
-      "last": "2026-07-14",
+      "first": "1996-01-29",
+      "last": "2026-10-31",
       "max_workers": 1835,
       "no_jobs": 91,
       "no_location": 7,
       "notices": 3242,
-      "undated": 0,
+      "undated": 3242,
       "unplaced": 94,
       "workers": 293476
     }

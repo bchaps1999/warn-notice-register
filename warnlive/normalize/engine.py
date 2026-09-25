@@ -151,15 +151,22 @@ def _dedupe_key(rec: dict) -> str:
     source_identity = rec.get("source_identity")
     if rec["state"] in {"GA", "SC", "IL", "KS", "NJ"} and source_identity:
         return hashlib.sha1(f"{rec['state']}|source|{source_identity}".encode()).hexdigest()
-    # KY, MA, NV, WA, and MN exposed agency receipt (or, in MN, even a
-    # layoff-start fallback) as notice_date. Keep their old internal key date
-    # while clearing the falsely labeled legal notice day. This avoids
+    # Some source rows exposed agency receipt/notification (or, in MN, even
+    # a layoff-start fallback) as notice_date. Keep their old internal key
+    # date while clearing the falsely labeled legal notice day. This avoids
     # collapsing unrelated observations during the date-role correction.
     key_date = rec["notice_date"]
-    if rec["state"] in {"KY", "MA", "NV", "WA", "MN"}:
+    if rec["state"] in {"KY", "MA", "NV", "WA", "MN", "WI", "FL"}:
         details = json.loads(rec.get("source_details") or "{}")
-        key_date = (details.get("agency_received_date") or
-                    details.get("legacy_notice_key_date") or key_date)
+        if rec["state"] in {"WI", "FL"}:
+            # This is exactly the old transformed date, even if a malformed
+            # source cell fails the stricter typed-date parser.
+            key_date = (details.get("legacy_notice_key_date") or
+                        details.get("agency_received_date") or
+                        details.get("agency_notification_date") or key_date)
+        else:
+            key_date = (details.get("agency_received_date") or
+                        details.get("legacy_notice_key_date") or key_date)
     parts = "|".join(
         [
             rec["state"],

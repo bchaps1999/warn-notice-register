@@ -137,6 +137,7 @@ def extract(state: str, raw: dict, rec: dict) -> dict:
     details: dict = {}
     result: dict = {}
 
+
     if state == "HI" and raw.get("source_kind") in {"wdd_detail", "wdc_archive"}:
         kind = raw["source_kind"]
         result["source_identity"] = raw.get("source_identity") or None
@@ -232,6 +233,47 @@ def extract(state: str, raw: dict, rec: dict) -> dict:
                     result.get("effective_date_precision") or
                     result.get("effective_date_end_precision")):
                 details["date_evidence_rule"] = "sc_2026_report_notice_layoff_v1"
+
+    elif state == "WI" and "Notice Received" in raw:
+        # The Wisconsin roster gives an agency receipt day, not the date the
+        # employer's letter was sent or delivered. Preserve it for identity.
+        source_text = (raw.get("Notice Received") or "").strip()
+        try:
+            received = datetime.strptime(source_text, "%Y%m%d").date().isoformat()
+        except ValueError:
+            received = _date(source_text)
+        details["agency_received_date"] = received
+        details["legacy_notice_key_date"] = rec.get("notice_date")
+        details["date_evidence_rule"] = "wi_notice_received_role_v1"
+        details["dates"] = [{
+            "role": "agency_received", "source_field": "Notice Received",
+            "source_text": source_text, "date": received,
+            "precision": "day" if received else "unknown", "basis": "reported",
+        }]
+        if received != rec.get("notice_date"):
+            details["date_role_status"] = "received_date_mismatch_review"
+        result["notice_date"] = None
+
+    elif state == "FL" and "State Notification Date" in raw:
+        # This current portal field says when the state was notified. Older
+        # Florida archive tables have a distinct, labeled NOTICE DATE and
+        # must retain their source-supported canonical notice day.
+        source_text = (raw.get("State Notification Date") or "").strip()
+        try:
+            notification = datetime.strptime(source_text, "%m-%d-%y").date().isoformat()
+        except ValueError:
+            notification = _date(source_text)
+        details["agency_notification_date"] = notification
+        details["legacy_notice_key_date"] = rec.get("notice_date")
+        details["date_evidence_rule"] = "fl_state_notification_role_v1"
+        details["dates"] = [{
+            "role": "agency_notification", "source_field": "State Notification Date",
+            "source_text": source_text, "date": notification,
+            "precision": "day" if notification else "unknown", "basis": "reported",
+        }]
+        if notification != rec.get("notice_date"):
+            details["date_role_status"] = "notification_date_mismatch_review"
+        result["notice_date"] = None
 
     elif state == "KY" and "date_received" in raw:
         # The state field is receipt at a workforce unit, not the employer's

@@ -45,7 +45,7 @@ LOCATION_IS_ADDRESS = {"IL", "MD", "NC", "LA", "CT"}
 # GA-32..."). Requiring a street-type suffix instead rejects too much real
 # data — "1111 East McDowell", "224 E. Broadway" — so the number anchors it
 # and a junk blacklist handles the rest.
-_STREETISH = re.compile(r"^\d{1,6}[\w./-]*\s+[A-Za-z]")
+_STREETISH = re.compile(r"^\d{1,6}[\w./-]*\s+(?:\d{1,3}(?:st|nd|rd|th)\s+)?[A-Za-z]", re.I)
 _JUNK = re.compile(
     r"\bP\.?\s?O\.?\s*Box\b|\d+\s+(Stores?|Locations?|Sites?|Counties)\b"
     r"|no physical site|remote work|\bN/?A\b|\bUnknown\b|\bSeveral\b"

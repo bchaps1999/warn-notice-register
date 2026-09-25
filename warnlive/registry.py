@@ -17,6 +17,7 @@ FRESHNESS_FIELDS = {
     "notice_date", "effective_date",
     "source_details.agency_reported_date",
     "source_details.agency_received_date",
+    "source_details.agency_notification_date",
     "source_details.agency_posted_date",
 }
 
