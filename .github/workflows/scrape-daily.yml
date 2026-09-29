@@ -17,16 +17,16 @@ permissions:
 
 jobs:
   scrape:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
       - name: Install
         run: ./install.sh
-      - uses: browser-actions/setup-chrome@v1 # TX needs headless Chrome for the AWS WAF challenge
+      - uses: browser-actions/setup-chrome@v2 # TX needs headless Chrome for the AWS WAF challenge
       - name: Unpack database
         run: .venv/bin/warnlive unpack-db
       - name: Scrape active daily states
@@ -67,7 +67,7 @@ jobs:
           .venv/bin/warnlive report --gh-issues
       - name: Upload raw scrapes + logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: raw-${{ github.run_id }}
           path: |

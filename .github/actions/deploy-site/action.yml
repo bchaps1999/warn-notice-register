@@ -12,7 +12,7 @@ runs:
     - name: Check Kansas publication holds
       shell: bash
       run: .venv/bin/warnlive check-kansas-holds
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v5
       with:
         node-version: 22
         cache: npm
@@ -34,13 +34,13 @@ runs:
         cd site && npm ci && npm test && npm run build
         cp dist/index.html dist/404.html  # SPA fallback for deep links on Pages
     - name: Configure Pages
-      uses: actions/configure-pages@v5
+      uses: actions/configure-pages@v6
       with:
         enablement: true
     - name: Upload Pages artifact
-      uses: actions/upload-pages-artifact@v3
+      uses: actions/upload-pages-artifact@v5
       with:
         path: site/dist
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@v4
+      uses: actions/deploy-pages@v5

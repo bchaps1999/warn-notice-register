@@ -22,21 +22,21 @@ concurrency:
 
 jobs:
   scrape:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 120
     env:
       REQUESTED_STATES: ${{ inputs.states }}
       SMOKE_MODE: ${{ inputs.smoke }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
       - name: Install
         run: ./install.sh
       - name: Install browser deps
         run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb
-      - uses: browser-actions/setup-chrome@v1
+      - uses: browser-actions/setup-chrome@v2
       - name: Unpack database
         run: .venv/bin/warnlive unpack-db
       - name: Scrape
@@ -99,7 +99,7 @@ jobs:
           fi
       - name: Upload run report and Kansas evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: run-${{ github.run_id }}
           path: |
