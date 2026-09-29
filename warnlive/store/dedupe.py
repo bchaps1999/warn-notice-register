@@ -109,6 +109,27 @@ def preflight_collisions(conn: sqlite3.Connection, records: list[dict]) -> None:
         raise CollisionError(collisions)
 
 
+def split_collisions(
+    conn: sqlite3.Connection, records: list[dict],
+) -> tuple[list[dict], list[dict], list[dict]]:
+    """Separate whole key groups whose dates collide from the ingestible rows.
+
+    Returns (safe_records, held_records, collisions). Every row sharing a
+    colliding key is held, not just the conflicting one: which row is the
+    notice and which is a different filing is exactly what is unresolved.
+    The live scrape and the offline rebuild both use this so that the same
+    source rows are held on either path.
+    """
+    try:
+        preflight_collisions(conn, records)
+    except CollisionError as exc:
+        keys = {item["dedupe_key"] for item in exc.collisions}
+        safe = [rec for rec in records if rec["dedupe_key"] not in keys]
+        held = [rec for rec in records if rec["dedupe_key"] in keys]
+        return safe, held, exc.collisions
+    return records, [], []
+
+
 def ingest(
     conn: sqlite3.Connection,
     records: list[dict],

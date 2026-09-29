@@ -503,7 +503,7 @@ oh:
   needs_browser: false
   min_rows: 40
   staleness_days: 60
-  expected_columns: [Company, Date Received, URL, City/County, Layoff/Closure, Potential Number Affected, Layoff Date(s), Phone Number, Union, Notice ID]
+  expected_columns: [Company, Date Received, URL, City/County, Layoff/Closure, Potential Number Affected, Layoff Date(s), Phone Number, Union]
   source_url: https://jfs.ohio.gov/job-services-and-unemployment/job-services/job-programs-and-services/submit-a-warn-notice/current-public-notices-of-layoffs-and-closures
   notes: "HTML list; page URL moves periodically. BLN historical mirror is excluded from agency-only captures."
 

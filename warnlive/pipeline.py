@@ -343,7 +343,32 @@ def _run_one(
         ).fetchone()
         try:
             conn.execute("SAVEPOINT state_ingest")
-            records = norm.records
+            # Hold key groups whose dates collide instead of failing the whole
+            # state, exactly as the offline rebuild does; the held rows are
+            # reported as exclusions and the state is degraded, not failed.
+            records, held, collisions = dedupe.split_collisions(conn, norm.records)
+            if held:
+                held_keys = {rec["dedupe_key"] for rec in held}
+                admission = outcome.checks.setdefault("admission", {})
+                admission.setdefault("exclusions", []).extend(
+                    {
+                        "reason": "suspected_same_key_collision",
+                        "prepared_row": rec.get("prepared_row"),
+                        "dedupe_key": rec["dedupe_key"],
+                        "raw_record_hash": rec.get("raw_record_hash"),
+                        "source_url": rec.get("source_url"),
+                        "raw_extra": rec.get("raw_extra"),
+                        "date_conflicts": [
+                            c for c in collisions if c["dedupe_key"] == rec["dedupe_key"]
+                        ],
+                    }
+                    for rec in held
+                )
+                admission["excluded_rows"] = admission.get("excluded_rows", 0) + len(held)
+                admission["eligible_rows"] = len(records)
+                if outcome.verdict == "ok":
+                    outcome.verdict = "degraded"
+                    outcome.checks["verdict"] = "degraded"
             stats = dedupe.ingest(conn, records, observed_at=now_utc()[:10], commit=False)
             # Absence is evidence only from a complete, current source snapshot.
             # Cache runs, backfills, and partly unparseable files cannot support it.
@@ -352,9 +377,11 @@ def _run_one(
                 and trigger != "backfill" and postal not in {"ga", "sc", "ks"}
             )
             if complete_live:
+                # Held rows are still present in the source, so their stored
+                # notices must not be stamped as having disappeared.
                 dedupe.freeze_absent(
                     conn, postal,
-                    {r["dedupe_key"] for r in records},
+                    {r["dedupe_key"] for r in norm.records},
                     (prev and prev["d"]) or now_utc()[:10],
                     commit=False,
                 )
@@ -366,6 +393,8 @@ def _run_one(
             outcome.checks["ingest"] = {
                 "suspected_collisions": stats.suspected_collisions,
                 "absence_frozen": complete_live,
+                "held_collision_keys": len({rec["dedupe_key"] for rec in held}),
+                "held_collision_rows": len(held),
             }
         except Exception as e:  # noqa: BLE001 — state writes must be all-or-nothing
             conn.execute("ROLLBACK TO SAVEPOINT state_ingest")

@@ -122,38 +122,45 @@ def test_ingest_and_absence_are_atomic(monkeypatch, tmp_path):
     assert conn.execute("SELECT COUNT(*) FROM notices").fetchone()[0] == 0
 
 
-def test_collision_fails_only_its_state_and_does_not_freeze_absence(monkeypatch, tmp_path):
+def test_collision_holds_only_its_key_group_and_degrades_state(monkeypatch, tmp_path):
     conn, raw = _setup(monkeypatch, tmp_path, cached=False)
     original = _record()
     old = {**original, "dedupe_key": "absent", "raw_record_hash": "old"}
     pipeline.dedupe.ingest(conn, [original, old], "2026-01-01")
     changed = {**original, "effective_date": "2027-03-01",
                "raw_record_hash": "hash-2", "is_amendment": 1}
+    fresh = {**original, "dedupe_key": "key-new", "raw_record_hash": "hash-new",
+             "source_notice_id": "source-new"}
     ny = {**original, "state": "NY", "dedupe_key": "ny-key",
           "raw_record_hash": "ny-hash"}
     monkeypatch.setattr(
         pipeline.engine, "normalize_file",
         lambda postal, *_: NormalizeResult(
-            state=postal.upper(), records=[changed] if postal == "ct" else [ny],
-            raw_rows=1,
+            state=postal.upper(),
+            records=[changed, fresh] if postal == "ct" else [ny],
+            raw_rows=2 if postal == "ct" else 1,
         ),
     )
     report = pipeline.run_states(conn, None, [_config("ct"), _config("ny")], tmp_path)
-    assert [out.verdict for out in report.outcomes] == ["failed", "ok"]
-    failed = report.outcomes[0]
-    assert failed.new == failed.updated == 0
-    assert failed.checks["identity"]["reason"] == "suspected_same_key_collision"
-    assert failed.checks["identity"]["collisions"][0]["dedupe_key"] == "key-1"
+    assert [out.verdict for out in report.outcomes] == ["degraded", "ok"]
+    ct = report.outcomes[0]
+    assert (ct.new, ct.updated) == (1, 0)
+    held = [row for row in ct.checks["admission"]["exclusions"]
+            if row["reason"] == "suspected_same_key_collision"]
+    assert [row["dedupe_key"] for row in held] == ["key-1"]
+    assert held[0]["date_conflicts"][0]["incoming_date"] == "2027-03-01"
+    assert ct.checks["ingest"]["held_collision_rows"] == 1
     rows = {row["dedupe_key"]: row for row in conn.execute("SELECT * FROM notices")}
-    assert set(rows) == {"key-1", "absent", "ny-key"}
+    assert set(rows) == {"key-1", "absent", "key-new", "ny-key"}
+    # The held notice keeps its stored version and is not marked absent;
+    # the notice genuinely missing from the complete live source is.
     assert rows["key-1"]["effective_date"] == "2026-03-01"
-    assert rows["absent"]["last_seen"] is None
-    assert conn.execute("SELECT COUNT(*) FROM notice_versions").fetchone()[0] == 3
+    assert rows["key-1"]["last_seen"] is None
+    assert rows["absent"]["last_seen"] is not None
     saved = conn.execute(
-        "SELECT verdict, checks_json FROM state_runs WHERE state='CT'"
+        "SELECT verdict FROM state_runs WHERE state='CT'"
     ).fetchone()
-    assert saved["verdict"] == "failed"
-    assert json.loads(saved["checks_json"])["identity"]["status"] == "failed"
+    assert saved["verdict"] == "degraded"
 
 
 def test_telemetry_failure_rolls_back_state_data(monkeypatch, tmp_path):

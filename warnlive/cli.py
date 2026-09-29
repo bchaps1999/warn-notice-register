@@ -130,7 +130,7 @@ def scrape(states, cadence, include_unverified, smoke, use_cache, workdir, db_pa
 
             if DEFAULT_ROOT.is_dir():
                 quality_report = apply(
-                    conn, DEFAULT_ROOT, now_utc()[:10],
+                    conn, DEFAULT_ROOT, pipeline.now_utc()[:10],
                     states=quality_states, require_volta=False,
                 )
                 click.echo(f"quality evidence: {quality_report}")
