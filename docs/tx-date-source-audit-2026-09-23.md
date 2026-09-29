@@ -79,5 +79,5 @@ dates, and 2,234 source-backed anticipated layoff dates. It holds two source
 rows and three corrected effective dates; one anomalous raw-year row lies
 outside this annual corpus. It flags 812 negative source intervals. The
 strict timing cohort therefore gains 2,234 Texas starts but no Texas range
-ends. The [v6 state summary](date-eligibility-state-summary-2026-09-23-v6.md)
+ends. The [v6 state summary](https://github.com/bchaps1999/warn-notice-register/blob/9af83bd/docs/date-eligibility-state-summary-2026-09-23-v6.md)
 and [progress log](rebuild-progress.md) record the combined checkpoint.
