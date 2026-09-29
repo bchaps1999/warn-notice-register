@@ -10,6 +10,7 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
+  actions: write # re-queue this workflow when main moves mid-run
   contents: write
   issues: write
   pages: write
@@ -67,7 +68,13 @@ jobs:
             # so a rebase keeps this runner's copy and silently discards
             # whatever the concurrent commit changed in it. Re-run the
             # workflow to rebuild on top of the moved main.
-            git push || { echo "::error::push rejected - main moved during this run; re-run the workflow"; exit 1; }
+            # A queued re-run shares the scrape concurrency group, so it
+            # starts from the moved main once this run has finished.
+            git push || {
+              echo "::error::push rejected - main moved during this run; queued a re-run"
+              GH_TOKEN="${{ github.token }}" gh workflow run "${{ github.workflow }}" --ref main || true
+              exit 1
+            }
           fi
       - uses: ./.github/actions/deploy-site
       - name: Sync health issues
@@ -91,3 +98,15 @@ jobs:
       - name: Check selected state outcomes
         if: always()
         run: .venv/bin/warnlive check-run-report workdir/reports/current-run.json
+      - name: Alert on failed scheduled run
+        if: (failure() || cancelled()) && github.event_name == 'schedule'
+        uses: ./.github/actions/scrape-alert
+        with:
+          outcome: failure
+          token: ${{ github.token }}
+      - name: Clear failed-run alert
+        if: success() && github.event_name != 'pull_request'
+        uses: ./.github/actions/scrape-alert
+        with:
+          outcome: success
+          token: ${{ github.token }}

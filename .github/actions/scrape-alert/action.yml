@@ -1,0 +1,39 @@
+name: Scheduled scrape alert
+description: >
+  Open (or comment on) one "Scheduled scrape failing" issue when a scheduled
+  scrape fails or times out, and close it after the next clean scheduled run.
+  Per-state health issues cannot show a run that crashes before reporting,
+  which is how four days of failed scrapes went unnoticed in September 2026.
+inputs:
+  outcome:
+    description: "failure or success"
+    required: true
+  token:
+    description: GitHub token with issues:write
+    required: true
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        OUTCOME: ${{ inputs.outcome }}
+        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        WORKFLOW: ${{ github.workflow }}
+      run: |
+        gh label create scrape-failure --force --color B60205 \
+          --description "A scheduled scrape run failed" >/dev/null || true
+        open=$(gh issue list --label scrape-failure --state open --json number --jq '.[0].number // empty')
+        if [[ "$OUTCOME" == "failure" ]]; then
+          body="$WORKFLOW failed on $(date -u +%F): $RUN_URL"
+          if [[ -n "$open" ]]; then
+            gh issue comment "$open" --body "$body"
+          else
+            gh issue create --title "Scheduled scrape failing" --label scrape-failure \
+              --body "$body
+
+        The published register is not updating while scheduled scrapes fail. This issue closes after the next clean scheduled run."
+          fi
+        elif [[ -n "$open" ]]; then
+          gh issue close "$open" --comment "$WORKFLOW succeeded on $(date -u +%F): $RUN_URL"
+        fi

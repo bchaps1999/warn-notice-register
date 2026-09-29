@@ -100,9 +100,24 @@ def write_health(
 
     (health_dir / "status.json").write_text(json.dumps(status, indent=2) + "\n")
 
+    rebuild = conn.execute(
+        "SELECT MAX(started_at) AS at FROM runs WHERE trigger LIKE 'clean-rebuild%'"
+    ).fetchone()["at"]
+    rebuilt_on = rebuild[:10] if rebuild else None
     lines = [
         "# WARN pipeline health",
         "",
+    ]
+    if rebuilt_on:
+        # A rebuilt database carries no scrape history, so every state reads as
+        # never collected until live runs accumulate; say so rather than let
+        # the table suggest every collector is broken.
+        lines += [
+            f"The database was rebuilt from a frozen source bundle on {rebuilt_on}. "
+            "Run history below covers live scrapes since then only.",
+            "",
+        ]
+    lines += [
         "| State | Registry | Latest run | Verdict | Notices | Fail streak | Notes |",
         "|---|---|---|---|---|---|---|",
     ]
@@ -118,7 +133,9 @@ def write_health(
                 f"({s['last_success_age_days']}d ago, "
                 f"max {s['last_success_max_age_days']}d)"
                 if s["last_success_age_days"] is not None
-                else "**no successful collection recorded**"
+                else ("no live collection since the "
+                      f"{rebuilt_on} rebuild" if rebuilt_on
+                      else "**no successful collection recorded**")
             )
         elif s["chronically_degraded"]:
             note = (f"**chronically degraded** ({s['consecutive_degraded']} "

@@ -137,6 +137,12 @@ Regenerating exports from a stale local `data/warn.sqlite` silently reverts
 whatever CI collected in the meantime — the row counts still look right, because
 the loss is of notices you never had. Push promptly for the same reason.
 
+Push release or data commits to `main` only while no scrape run is in
+progress (Actions, the `scrape` concurrency group). A scrape whose push is
+rejected because `main` moved queues a fresh run of itself rather than
+rebasing the regenerated database dump. A failed or timed-out scheduled
+scrape opens a `scrape-failure` issue, which the next clean run closes.
+
 Every scheduled run ends with `warnlive check-regressions`, which compares the
 whole database against `data/health/snapshot.json` from the last published run:
 notices are only ever added, no state's history shrinks, no single notice covers
