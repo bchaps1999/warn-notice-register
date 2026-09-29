@@ -1,0 +1,126 @@
+{
+ "ak": {
+  "count": 11,
+  "sha256": "53eb0b13d8268312595ab473d1baa58f9cc75c5f94e6dd3aa235367bee6f078a"
+ },
+ "al": {
+  "count": 1,
+  "sha256": "90dea655e79b56d27ed7d4aec566ad98c43aabf5d36e1849ccd8b09ebef49254"
+ },
+ "ca": {
+  "count": 4,
+  "sha256": "79c64c9b953a67e80fb46e70f57b3797fc6d8bfa881f416f9394b62d3ae80ecf"
+ },
+ "co": {
+  "count": 65,
+  "sha256": "032e20f70226ee23e927407984f20da3954f141cbf74a7049654614a872f256b"
+ },
+ "ct": {
+  "count": 94,
+  "sha256": "11e2ad42db32c1e7f4637dbc7bb0ce83bc28e674ce86513e2947a6e45535878a"
+ },
+ "dc": {
+  "count": 36,
+  "sha256": "b2b54ffc417881bae776f9792fc46e2f065fecb1df2230e88e38e241c0a219cd"
+ },
+ "hi": {
+  "count": 23,
+  "sha256": "96db25fe78f679a817615e694093c20bd18ecb53d1a15ec7b21af40a9b602d96"
+ },
+ "ia": {
+  "count": 10,
+  "sha256": "b6afc4a9cea4e5a185e78a175310400dc0bf25551d230c75f77cd03fc48e057e"
+ },
+ "id": {
+  "count": 5,
+  "sha256": "c6ce559520ceb76eb89a3723ef858a4f87d127174c493038a23b26a17d5f8e9c"
+ },
+ "in": {
+  "count": 30,
+  "sha256": "2931009f15f719f445a1ee922fb7219dace9765a5ec77b81b9cff980826c5945"
+ },
+ "ky": {
+  "count": 145,
+  "sha256": "0fc89db10e7676437e9b86eea85e74896a37a83dde59ad27a2e810d11cc3cdff"
+ },
+ "la": {
+  "count": 13,
+  "sha256": "d03f9f3cbbca50bb095e1d82ed62ceccc354f4e845813c695f36ec6ce334e34c"
+ },
+ "md": {
+  "count": 52,
+  "sha256": "362dfc32fdbd476515f724df61405da38021a7f9ce3927eb090da8c04573f48b"
+ },
+ "mi": {
+  "count": 173,
+  "sha256": "733492721a7e938fcdf8c2cd6874a9f7d636b4157914f2db54aaf5c1f3da8baa"
+ },
+ "mo": {
+  "count": 4,
+  "sha256": "6be4600811e9b734f074913094f1ca213d74fe017b4783925536e3a3a951b798"
+ },
+ "ms": {
+  "count": 48,
+  "sha256": "d39a343eea1ef2dc5b57ca93f5fcd8d30e506a4b30857363ccdbab8d9e14a276"
+ },
+ "mt": {
+  "count": 5,
+  "sha256": "d6c3fc363efaa15dcb8c5d0403ccdecedc6472ad01e26c06622252c11b3295bf"
+ },
+ "nd": {
+  "count": 15,
+  "sha256": "3d4d6f1388345dd1208ee16825d365610bb67f2c0a89e254a453f0075d6e729f"
+ },
+ "ne": {
+  "count": 3,
+  "sha256": "bb316f4c3b0a93b5cd6e23d374bdd6e84c4f15e131da022ac354bbb6f34a2864"
+ },
+ "nj": {
+  "count": 178,
+  "sha256": "25ba2dd8b99f3e4c17fe832949545277d2b3893ae382fe77e3df889644bb5dbd"
+ },
+ "nm": {
+  "count": 2,
+  "sha256": "d769b3e4ecb2e6cae2c3d3e3c279f7a09776f631e9b29fac8fc01f8de8ee0421"
+ },
+ "ny": {
+  "count": 10,
+  "sha256": "4175d26144d18fb77e2f2c8798682c9f4316da6d998f066f55e0215edc11a46b"
+ },
+ "oh": {
+  "count": 58,
+  "sha256": "312f535ec735de420069a79e3d63f2c005cd006765e6e5b1bd7ce5710e3f56b4"
+ },
+ "or": {
+  "count": 2,
+  "sha256": "405fffd1d957c73889d432ce4166614e9df2a1d1ff5f1382a7951ce205472357"
+ },
+ "pa": {
+  "count": 140,
+  "sha256": "b4cea675c3b2f99374cef7e44615370192d0ae21aba766583e8954625d439712"
+ },
+ "ri": {
+  "count": 3,
+  "sha256": "af81bee5bb6176e74c7efcf916bd54425110ae40ef687b524fa161057ba2d752"
+ },
+ "tn": {
+  "count": 40,
+  "sha256": "55d8cb30441d004c084d818b664fe403fb7f54f7554edbf3b80be286febcdf97"
+ },
+ "tx": {
+  "count": 4,
+  "sha256": "8a0c147bbb559892b30e9e617625a7f9d8e20b8f7f07738083def383afdeff09"
+ },
+ "ut": {
+  "count": 7,
+  "sha256": "609ccbd23ba885b33dff0e958cb2f48e08c3c7f85a81851a0c88ccfbb4bbd9fc"
+ },
+ "va": {
+  "count": 1,
+  "sha256": "a32aaadfa839fad4aff7d22b9e9971fccaf622b30254b1665f4a58ccea7ca485"
+ },
+ "wi": {
+  "count": 2,
+  "sha256": "9ddcb48bebcf09dcc84ff705f7093548fc859fa17ecf0b33e8e3df6e76ea155c"
+ }
+}

@@ -226,6 +226,29 @@ def extract_historical(directory: Path) -> list[dict]:
     return result
 
 
+def _layoff_type(text: str | None) -> str:
+    """The agency's Notice Type column: "Closing" or "Mass Layoff"."""
+    value = " ".join((text or "").split()).casefold()
+    return {"closing": "closure", "mass layoff": "mass_layoff"}.get(value, "unknown")
+
+
+def _location(row: dict) -> str | None:
+    """City and county as the agency listed them, for place resolution.
+
+    The row's street address is kept only in source_details with an
+    unverified role; it may be a mailing address. An address outside Iowa
+    names no Iowa place, so it yields no location.
+    """
+    state = (row.get("address_state_text") or "").strip().upper()
+    if state and state != "IA":
+        return None
+    city = " ".join((row.get("city_text") or "").split())
+    county = " ".join((row.get("county_text") or "").split())
+    if county and not county.casefold().endswith(" county"):
+        county = f"{county} County"
+    return ", ".join(part for part in (city, county) if part) or None
+
+
 def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, str]]:
     """Admit uniquely identified ordinary rows; retain amendment and site questions.
 
@@ -317,12 +340,13 @@ def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, s
                    "city_text": row["city_text"], "county_text": row["county_text"],
                    "address_state_text": row["address_state_text"]}
         rec = {"state": "IA", "employer_name": row["company_text"].strip(),
-               "location": None,
+               "location": _location(row),
                "notice_date": row["notice_date"], "notice_date_precision": "day",
                "notice_date_basis": "reported", "effective_date": row["effective_date"],
                "effective_date_precision": "day", "effective_date_basis": "reported",
                "employees_affected": row["workers_reported"] or None,
-               "layoff_type": "unknown", "is_temporary": None, "is_amendment": 0,
+               "layoff_type": _layoff_type(row["notice_type_text"]),
+               "is_temporary": None, "is_amendment": 0,
                "source_url": row["source_url"], "source_notice_id": pointer,
                "source_identity": identity, "source_details": json.dumps(details, sort_keys=True),
                "raw_extra": json.dumps(row["raw_cells"], ensure_ascii=False, default=str),

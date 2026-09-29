@@ -134,6 +134,12 @@ def scrape(states, cadence, include_unverified, smoke, use_cache, workdir, db_pa
                     states=quality_states, require_volta=False,
                 )
                 click.echo(f"quality evidence: {quality_report}")
+        # Same derived-address policy as the offline rebuild, over all states,
+        # so a live database and a replay agree on every site_address.
+        from warnlive.enrich.site_address import apply as apply_site_addresses
+
+        site_report = apply_site_addresses(conn)
+        click.echo(f"site addresses: {site_report['changed']} changed")
         # The regression gate runs before anything is written to data/: a
         # failed gate must leave no bad exports, health report or DB dump
         # sitting in the working tree looking legitimate. CI runs
@@ -589,75 +595,17 @@ def il_effective_dates(
 @click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
 @click.option("--dry-run", is_flag=True, help="Report what would change without writing.")
 def surface_addresses(db_path: Path, dry_run: bool) -> None:
-    """Fill notices.site_address from data we already hold.
+    """Recompute site_address under the documented address-role policy.
 
-    Lifts street addresses out of raw_extra fields the normalizers never
-    mapped (PA, KY, AZ, IA, GA, ME, VT, KS, MI, DE) and copies them from
-    location where that column already is a street address (IL, MD, NC,
-    LA, CT). Rejects values naming a different state (portal rows
-    sometimes carry corporate HQ addresses). site_address is a plain
-    enrichment column — no version bump, safe to re-run.
+    The same pass runs after every scrape and in the offline rebuild; see
+    warnlive.enrich.site_address for which source fields count as a site.
     """
-    import json as json_mod
-
-    from warnlive.enrich.site_address import (
-        LOCATION_IS_ADDRESS, RAW_ADDRESS_KEYS, clean_address)
+    from warnlive.enrich.site_address import apply
 
     conn = db_mod.connect(db_path)
     db_mod.init_db(conn)
-
-    for state, keys in sorted(RAW_ADDRESS_KEYS.items()):
-        rows = conn.execute(
-            """SELECT n.id, v.fields_json FROM notices n
-               JOIN notice_versions v
-                 ON v.notice_id = n.id AND v.version = n.current_version
-               WHERE n.state = ? AND n.site_address IS NULL""",
-            (state,),
-        ).fetchall()
-        filled = rejected = 0
-        for row in rows:
-            raw = json_mod.loads(
-                json_mod.loads(row["fields_json"]).get("raw_extra") or "{}")
-            value = next((raw[k] for k in keys if raw.get(k)), None)
-            addr = clean_address(value, state)
-            if addr is None:
-                if value and str(value).strip():
-                    rejected += 1
-                continue
-            filled += 1
-            if not dry_run:
-                conn.execute(
-                    "UPDATE notices SET site_address = ? WHERE id = ?",
-                    (addr, row["id"]),
-                )
-        click.echo(f"{state}: raw fields -> {filled} filled, {rejected} rejected "
-                   f"(of {len(rows)})")
-
-    for state in sorted(LOCATION_IS_ADDRESS):
-        rows = conn.execute(
-            """SELECT id, location FROM notices
-               WHERE state = ? AND site_address IS NULL AND location IS NOT NULL""",
-            (state,),
-        ).fetchall()
-        filled = 0
-        for row in rows:
-            addr = clean_address(row["location"], state)
-            if addr is None:
-                continue
-            filled += 1
-            if not dry_run:
-                conn.execute(
-                    "UPDATE notices SET site_address = ? WHERE id = ?",
-                    (addr, row["id"]),
-                )
-        click.echo(f"{state}: location column -> {filled} filled (of {len(rows)})")
-
-    if not dry_run:
-        conn.commit()
-    total = conn.execute(
-        "SELECT COUNT(*) FROM notices WHERE site_address IS NOT NULL").fetchone()[0]
-    click.echo(f"site_address populated on {total} notices"
-               + (" (dry run: unchanged)" if dry_run else ""))
+    report = apply(conn, dry_run=dry_run)
+    click.echo(json.dumps(report, indent=1, sort_keys=True))
 
 
 @cli.command("ca-addresses")
@@ -684,89 +632,6 @@ def ca_addresses(workdir: Path, db_path: Path, dry_run: bool) -> None:
     conn.close()
     if dry_run:
         source.close()
-
-
-@cli.command("ny-addresses")
-@click.option("--workdir", type=click.Path(path_type=Path), default=DEFAULT_WORKDIR)
-@click.option("--db", "db_path", type=click.Path(path_type=Path), default=db_mod.DEFAULT_DB_PATH)
-@click.option("--dry-run", is_flag=True, help="Report what would change without writing.")
-def ny_addresses(workdir: Path, db_path: Path, dry_run: bool) -> None:
-    """Fill NY site_address from the DOL Tableau WARN dataset (per-year CSV).
-
-    Matches on folded employer name + notice date (±3 days), using the
-    stored city or the record's start date to disambiguate multi-site
-    filings; skips notices whose candidates still disagree.
-    """
-    import datetime as dt_mod
-
-    from warnlive.enrich import ny_address
-    from warnlive.normalize.engine import _fold
-
-    from difflib import SequenceMatcher
-
-    records = ny_address.collect_records(Path(workdir) / "cache" / "ny_reports")
-    by_name: dict[str, list] = {}
-    by_date: dict[str, list] = {}
-    for rec in records:
-        by_name.setdefault(_fold(rec.company), []).append(rec)
-        by_date.setdefault(rec.notice_date, []).append(rec)
-    click.echo(f"parsed {len(records)} NY Tableau rows")
-
-    conn = db_mod.connect(db_path)
-    db_mod.init_db(conn)
-    rows = conn.execute(
-        """SELECT id, employer_name, location, notice_date, effective_date
-           FROM notices
-           WHERE state = 'NY' AND site_address IS NULL
-             AND notice_date IS NOT NULL""",
-    ).fetchall()
-
-    filled = ambiguous = unmatched = 0
-    for row in rows:
-        nd = dt_mod.date.fromisoformat(row["notice_date"])
-        fold = _fold(row["employer_name"])
-        pool = by_name.get(fold, [])
-        matches = [c for c in pool
-                   if abs((dt_mod.date.fromisoformat(c.notice_date) - nd).days) <= 3]
-        if not matches:
-            # exact name, wider window (register logs some notices weeks off)
-            matches = [c for c in pool
-                       if abs((dt_mod.date.fromisoformat(c.notice_date) - nd).days) <= 30]
-        if not matches:
-            # near-identical name in the same few days — punctuation and
-            # suffix drift ("d/b/a", "(2008-W323)") between the two registers
-            cands = []
-            for d in range(-3, 4):
-                cands.extend(by_date.get((nd + dt_mod.timedelta(days=d)).isoformat(), []))
-            matches = [c for c in cands
-                       if SequenceMatcher(None, fold, _fold(c.company)).ratio() >= 0.8]
-        if len({c.address.lower() for c in matches}) > 1:
-            city = (row["location"] or "").split(",")[0].strip().lower()
-            if city:
-                near = [c for c in matches if city in c.address.lower()]
-                matches = near or matches
-            if len({c.address.lower() for c in matches}) > 1 and row["effective_date"]:
-                near = [c for c in matches if c.start_date == row["effective_date"]]
-                matches = near or matches
-        if not matches:
-            unmatched += 1
-            continue
-        if len({c.address.lower() for c in matches}) > 1:
-            ambiguous += 1
-            continue
-        filled += 1
-        if not dry_run:
-            conn.execute(
-                "UPDATE notices SET site_address = ? WHERE id = ?",
-                (matches[0].address, row["id"]),
-            )
-    if not dry_run:
-        conn.commit()
-    label = "would fill" if dry_run else "filled"
-    click.echo(
-        f"NY: {label} {filled}, ambiguous {ambiguous}, unmatched {unmatched} "
-        f"(of {len(rows)} address-less NY notices)"
-    )
 
 
 @cli.command("edgar-refresh")

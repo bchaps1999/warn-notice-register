@@ -40,7 +40,7 @@ def _setup(monkeypatch, tmp_path: Path, *, cached: bool, failed_rows: int = 0):
         monkeypatch.setattr(pipeline.fetch, "fetch_state", lambda *_: raw)
     monkeypatch.setattr(
         pipeline.engine, "normalize_file",
-        lambda *_: NormalizeResult(
+        lambda *_, **__: NormalizeResult(
             state="CT", records=[_record()], raw_rows=1 + failed_rows,
             failed_rows=failed_rows,
         ),
@@ -94,7 +94,7 @@ def test_live_ambiguous_ia_rows_are_excluded_and_audited(monkeypatch, tmp_path):
              "source_notice_id": "source-2", "prepared_row": 3}
     monkeypatch.setattr(
         pipeline.engine, "normalize_file",
-        lambda *_: NormalizeResult(state="IA", records=[first, second, clear], raw_rows=3),
+        lambda *_, **__: NormalizeResult(state="IA", records=[first, second, clear], raw_rows=3),
     )
     report = pipeline.run_states(conn, None, [_config("ia")], tmp_path)
     outcome = report.outcomes[0]
@@ -135,7 +135,7 @@ def test_collision_holds_only_its_key_group_and_degrades_state(monkeypatch, tmp_
           "raw_record_hash": "ny-hash"}
     monkeypatch.setattr(
         pipeline.engine, "normalize_file",
-        lambda postal, *_: NormalizeResult(
+        lambda postal, *_, **__: NormalizeResult(
             state=postal.upper(),
             records=[changed, fresh] if postal == "ct" else [ny],
             raw_rows=2 if postal == "ct" else 1,
@@ -242,7 +242,7 @@ def test_live_kansas_later_same_day_id_is_held_against_database(monkeypatch, tmp
     monkeypatch.setattr(pipeline, "load_ks_hold_policy", lambda *_: (set(), set()))
     monkeypatch.setattr(
         pipeline.engine, "normalize_file",
-        lambda *_: NormalizeResult(state="KS", records=[later], raw_rows=1),
+        lambda *_, **__: NormalizeResult(state="KS", records=[later], raw_rows=1),
     )
     outcome = pipeline._run_one(
         _config("ks"), conn, raw.parent, tmp_path / "cache", True, True,
@@ -274,7 +274,7 @@ def test_live_kansas_new_hold_blocks_existing_canonical_row(monkeypatch, tmp_pat
                 "employer_name": "Other", "raw_record_hash": "clear-hash"}
     monkeypatch.setattr(
         pipeline.engine, "normalize_file",
-        lambda *_: NormalizeResult(state="KS", records=[incoming], raw_rows=1),
+        lambda *_, **__: NormalizeResult(state="KS", records=[incoming], raw_rows=1),
     )
     outcome = pipeline._run_one(
         replace(_config("ks"), source="custom"), conn, data_dir,
@@ -312,7 +312,7 @@ def test_kansas_prior_hold_blocks_later_clean_capture(monkeypatch, tmp_path):
                 "employer_name": "Other", "raw_record_hash": "clear-hash"}
     monkeypatch.setattr(
         pipeline.engine, "normalize_file",
-        lambda *_: NormalizeResult(state="KS", records=[incoming], raw_rows=1),
+        lambda *_, **__: NormalizeResult(state="KS", records=[incoming], raw_rows=1),
     )
     outcome = pipeline._run_one(
         replace(_config("ks"), source="custom"), conn, data_dir,
@@ -351,7 +351,7 @@ def test_illinois_source_key_candidate_accepts_live_revision(monkeypatch, tmp_pa
     revised = {**first, "employer_name": "Revised", "raw_record_hash": "hash-2"}
     monkeypatch.setattr(
         pipeline.engine, "normalize_file",
-        lambda *_: NormalizeResult(state="IL", records=[revised], raw_rows=1),
+        lambda *_, **__: NormalizeResult(state="IL", records=[revised], raw_rows=1),
     )
     result = pipeline._run_one(
         _config("il"), conn, raw.parent, tmp_path / "cache", False, False,

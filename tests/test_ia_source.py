@@ -1,5 +1,6 @@
 """Official Iowa observations and conservative event decisions."""
 
+import json
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -118,3 +119,23 @@ def test_iowa_projection_does_not_depend_on_source_iteration_order():
     assert {(row["source_row"], row["reason"]) for row in held} == {
         (row["source_row"], row["reason"]) for row in reversed_held}
     assert related == reversed_related
+
+
+def test_iowa_notice_type_and_listed_city_county_are_projected():
+    rows = extract(SOURCE) + extract_historical(SOURCE)
+    admitted, _, _, _ = project(rows)
+    types = {}
+    for rec in admitted:
+        text = " ".join(json.loads(rec["source_details"])["notice_type_text"].split())
+        types.setdefault(text, set()).add(rec["layoff_type"])
+    assert types["Closing"] == {"closure"}
+    assert types["Mass Layoff"] == {"mass_layoff"}
+    assert types["Hyvee"] == {"unknown"}
+    salon = next(rec for rec in admitted if rec["employer_name"] == "Salon Luce, LC")
+    assert salon["location"] == "Davenport, Scott County"
+    # A listed address outside Iowa names no Iowa place.
+    for rec in admitted:
+        details = json.loads(rec["source_details"])
+        if (details["address_state_text"] or "").strip() not in ("", "IA"):
+            assert rec["location"] is None
+    assert sum(rec["location"] is not None for rec in admitted) == 396

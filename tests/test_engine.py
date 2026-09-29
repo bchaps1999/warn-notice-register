@@ -14,13 +14,18 @@ FIXTURES = Path(__file__).parent / "fixtures" / "raw"
 def test_normalize_ct_fixture():
     result = normalize_file("ct", FIXTURES, "https://example.gov/ct")
     assert result.raw_rows == 3
-    # One row has a hopeless date not in CT's correction table -> counted failure
-    assert result.failed_rows == 1
-    assert len(result.records) == 2
-    assert len(result.failures) == 1
-    assert result.failures[0]["prepared_row"] == 3
-    assert "Gamma Logistics" in result.failures[0]["raw_extra"]
-    assert result.failures[0]["source_row_sha256"]
+    # A hopeless notice date is an optional field: blanked, row kept, noted.
+    assert result.failed_rows == 0
+    assert len(result.records) == 3
+    gamma = result.records[2]
+    assert gamma["employer_name"] == "Gamma Logistics"
+    assert gamma["prepared_row"] == 3
+    assert gamma["notice_date"] is None
+    assert gamma["effective_date"] == "2026-09-01"
+    note = json.loads(gamma["source_details"])["parse_notes"][0]
+    assert note["field"] == "notice_date"
+    assert note["source_text"] == "totally not a date"
+    assert note["action"] == "blanked"
 
     rec = result.records[0]
     assert rec["state"] == "CT"
@@ -50,8 +55,8 @@ def test_verify_state_on_fixture():
     assert by_name["fetch_ok"] == "pass"
     # Fixture has 3 rows, far below CT's min_rows threshold -> fail
     assert by_name["row_count"] == "fail"
-    # 1/3 rows failed parse -> above 10% threshold -> fail
-    assert by_name["parse_failures"] == "fail"
+    # The unreadable date no longer fails its row
+    assert by_name["parse_failures"] == "pass"
     assert verification.verdict == "failed"
 
 

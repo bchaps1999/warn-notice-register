@@ -20,8 +20,11 @@ def test_ri_ranges_do_not_turn_phase_lists_into_continuous_ends(tmp_path):
 
     result = normalize_file("ri", tmp_path, "https://dlt.ri.gov/employers/worker-adjustment-and-retraining-notification-warn")
     assert result.raw_rows == 126
-    assert result.failed_rows == 1  # Existing source parser failure is unchanged.
-    assert len({row["dedupe_key"] for row in result.records}) == 125
+    # ASM GLOBAL's unreadable WARN Date ("5/4/204") blanks that date only.
+    assert result.failed_rows == 0
+    assert len({row["dedupe_key"] for row in result.records}) == 126
+    asm = next(row for row in result.records if row["employer_name"] == "ASM GLOBAL")
+    assert asm["notice_date"] is None
 
     by_name = {row["employer_name"]: row for row in result.records}
     nmc = by_name["NMC"]

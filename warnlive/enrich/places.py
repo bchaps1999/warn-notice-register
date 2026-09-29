@@ -44,6 +44,9 @@ from warnlive.normalize.engine import filed_address
 logger = logging.getLogger("warnlive")
 
 PATH = Path("data/reference/places.csv.gz")
+# Named communities that are not Census places — Los Angeles neighbourhoods,
+# New York City boroughs — mapped by hand to the place that contains them.
+ALIAS_PATH = Path("data/reference/place_aliases.csv")
 FIELDS = [
     "state", "kind", "key", "name",
     "place_fips", "county_fips", "county_name", "lat", "lon", "incorporated",
@@ -437,7 +440,7 @@ def refresh(out_path: Path = PATH) -> int:
 class Resolver:
     """Resolves a filed location string to a Census place and county."""
 
-    def __init__(self, path: Path = PATH) -> None:
+    def __init__(self, path: Path = PATH, alias_path: Path = ALIAS_PATH) -> None:
         self.places: dict[tuple[str, str], list[dict]] = {}
         self.counties: dict[tuple[str, str], list[dict]] = {}
         self.subdivisions: dict[tuple[str, str], list[dict]] = {}
@@ -453,6 +456,56 @@ class Resolver:
         self._cache: dict[tuple[str, str], dict] = {}
         # Why each unresolved string failed, for deterministic diagnostics.
         self.refusals: dict[tuple[str, str], str] = {}
+        self.aliases: dict[tuple[str, str], dict] = self._load_aliases(alias_path)
+
+    def _load_aliases(self, alias_path: Path) -> dict[tuple[str, str], dict]:
+        """Community name -> a place record carrying the community's county.
+
+        A community is not a Census place: Chatsworth is part of Los Angeles
+        city and Brooklyn is New York city's Kings County. The table names
+        the containing place and county; both must exist, exactly once, in
+        the roster this resolver loaded, or the alias is ignored. An alias
+        never shadows a real place of the same name — it is consulted only
+        where the roster has none. ``point`` says whose interior point the
+        coordinates are: the place's, or (for a borough, which is a county)
+        the county's, since New York city's point lies in Brooklyn.
+        """
+        aliases: dict[tuple[str, str], dict] = {}
+        if not alias_path or not Path(alias_path).exists():
+            return aliases
+        with open(alias_path, newline="") as fh:
+            for row in csv.DictReader(fh):
+                state = row["state"].strip().upper()
+                key = fold(row["alias"])
+                places = [p for p in self.places.get((state, fold(row["place_name"])), [])
+                          if p["name"] == row["place_name"].strip()]
+                counties = [c for c in self.counties.get((state, fold(row["county_name"])), [])
+                            if c["county_name"] == row["county_name"].strip()]
+                if not key or len(places) != 1 or len(counties) != 1:
+                    continue
+                if self.places.get((state, key)):
+                    continue
+                place, county = places[0], counties[0]
+                point = county if row.get("point", "").strip() == "county" else place
+                aliases[(state, key)] = {
+                    **place,
+                    "county_name": county["county_name"],
+                    "county_fips": county["county_fips"],
+                    "lat": point["lat"], "lon": point["lon"],
+                    "alias": row["alias"].strip(),
+                    "zip3": tuple((row.get("zip3") or "").split()),
+                }
+        return aliases
+
+    def _alias(self, state: str, key: str, location: str) -> dict | None:
+        """The alias record for a key, unless the string's ZIP contradicts it."""
+        alias = self.aliases.get((state, key))
+        if alias is None:
+            return None
+        zips = _ZIP.findall(location)
+        if alias["zip3"] and zips and not any(z[:3] in alias["zip3"] for z in zips):
+            return None
+        return alias
 
     def _keys(self, state: str, location: str) -> list[tuple[str, str]]:
         """The candidate (folded name, kind) pairs inside a location string."""
@@ -642,6 +695,9 @@ class Resolver:
             if kind == "county" or (key in county_keys and len(keys) > 1):
                 continue
             candidates = self.places.get((state, key), [])
+            if not candidates:
+                alias = self._alias(state, key, location)
+                candidates = [alias] if alias else []
             if county and len(candidates) > 1:
                 narrowed = [
                     c for c in candidates
@@ -656,7 +712,9 @@ class Resolver:
                 if len(municipal) == 1:
                     candidates = municipal
             if len(candidates) == 1:
-                found[candidates[0]["place_fips"]] = candidates[0]
+                # Two boroughs are two sites, though both are New York city.
+                found[(candidates[0]["place_fips"], candidates[0]["county_fips"])
+                      if candidates[0].get("alias") else candidates[0]["place_fips"]] = candidates[0]
                 place_keys.add(key)
             elif len(candidates) > 1:
                 ambiguous = True
@@ -668,6 +726,30 @@ class Resolver:
                 if len(shared) == 1 and not agreed:
                     agreed = candidates[0]
 
+        # A community alias names one part of a city. Where the string also
+        # names the city itself, another of its communities, or a county
+        # other than the alias's own ("New York/Bronx", "Kings/Bronx/
+        # Richmond"), the filing is in that city but its county is not
+        # established — "New York" may be the city or Manhattan.
+        if any(p.get("alias") for p in found.values()):
+            parents = {p["place_fips"] for p in found.values()}
+            named = {
+                rows[0]["county_fips"] for key, _ in keys
+                for rows in [self.counties.get((state, key), [])]
+                if len(rows) == 1 and key not in place_keys
+            }
+            alias_counties = {p["county_fips"] for p in found.values()}
+            if len(parents) == 1 and (len(found) > 1 or named - alias_counties):
+                place = next(iter(found.values()))
+                point = self.places.get((state, fold(place["name"])), [place])
+                point = next((p for p in point if p["place_fips"] == place["place_fips"]), place)
+                out.update(
+                    place_name=place["name"], place_fips=place["place_fips"],
+                    latitude=point["lat"] or None, longitude=point["lon"] or None,
+                    geo_basis="place_alias",
+                )
+                return out
+
         if len(found) == 1:
             place = next(iter(found.values()))
             # A county the state named in its own segment outranks the one
@@ -677,12 +759,17 @@ class Resolver:
             # not in, a Tyler County that Tyler is not in, and Iowa City is
             # in Johnson County rather than Iowa County.
             filed = county if county and county["key"] not in place_keys else None
+            if place.get("alias") and filed and fold(filed["name"]) == fold(place["name"]):
+                # "Brooklyn, New York": the second segment is the city's (or
+                # state's) name, not a county filing against the borough.
+                filed = None
             out.update(
                 place_name=place["name"], place_fips=place["place_fips"],
                 county_name=(filed or {}).get("county_name") or place["county_name"],
                 county_fips=(filed or {}).get("county_fips") or place["county_fips"],
                 latitude=place["lat"] or None, longitude=place["lon"] or None,
-                geo_basis="place+county" if filed else "place",
+                geo_basis=("place_alias" if place.get("alias")
+                           else "place+county" if filed else "place"),
             )
             return out
 
@@ -730,6 +817,9 @@ class Resolver:
         # asked about the trailing words.
         for key in self._address_tails(state, location):
             candidates = self.places.get((state, key), [])
+            if not candidates:
+                alias = self._alias(state, key, location)
+                candidates = [alias] if alias else []
             if len(candidates) > 1:
                 municipal = [c for c in candidates if c["incorporated"]]
                 candidates = municipal if len(municipal) == 1 else candidates
@@ -740,7 +830,7 @@ class Resolver:
                     county_name=place["county_name"],
                     county_fips=place["county_fips"],
                     latitude=place["lat"] or None, longitude=place["lon"] or None,
-                    geo_basis="address",
+                    geo_basis="place_alias" if place.get("alias") else "address",
                 )
                 return out
 

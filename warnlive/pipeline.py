@@ -183,7 +183,9 @@ def _run_one(
             from warnlive.migrate.source_bundle import validate_agency_raw_file
 
             validate_agency_raw_file(postal, raw_path)
-            norm = engine.normalize_file(postal, raw_path.parent, cfg.source_url)
+            norm = engine.normalize_file(
+                postal, raw_path.parent, cfg.source_url, observed_at=now_utc()[:10],
+            )
             outcome.raw_rows = norm.raw_rows
             outcome.normalized_rows = len(norm.records)
         except Exception as e:  # noqa: BLE001
@@ -273,7 +275,7 @@ def _run_one(
             "eligible_rows": len(norm.records),
             "excluded_rows": len(excluded) + norm.failed_rows,
             "exclusions": excluded + [
-                {"reason": "parse_failure", **failure}
+                {"reason": failure.get("hold_reason") or "parse_failure", **failure}
                 for failure in norm.failures
             ],
         }

@@ -1,0 +1,95 @@
+state,alias,place_name,county_name,point,zip3,note
+CA,Arleta,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Canoga Park,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Canyon Country,Santa Clarita city,Los Angeles County,place,913,Santa Clarita community
+CA,Chatsworth,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Eagle Rock,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Encino,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Foothill Ranch,Lake Forest city,Orange County,place,926,Lake Forest community
+CA,Granada Hills,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Harbor City,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Highland Park,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Hollywood,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,La Jolla,San Diego city,San Diego County,place,920 921,San Diego city community
+CA,Lakeview Terrace,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Mira Loma,Jurupa Valley city,Riverside County,place,917,Jurupa Valley community (incorporated 2011)
+CA,Mira Mesa,San Diego city,San Diego County,place,920 921,San Diego city community
+CA,Newbury Park,Thousand Oaks city,Ventura County,place,913,Thousand Oaks community
+CA,Newhall,Santa Clarita city,Los Angeles County,place,913,Santa Clarita community
+CA,North Hills,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,North Hollywood,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Northridge,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Pacoima,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Panorama City,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Playa Vista,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Playa del Rey,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Porter Ranch,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Rancho Bernardo,San Diego city,San Diego County,place,920 921,San Diego city community
+CA,Reseda,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,San Pedro,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,San Ysidro,San Diego city,San Diego County,place,920 921,San Diego city community
+CA,Saugus,Santa Clarita city,Los Angeles County,place,913,Santa Clarita community
+CA,Sherman Oaks,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Studio City,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Sun Valley,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Sunland,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Sylmar,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Tarzana,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Toluca Lake,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Tujunga,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Valencia,Santa Clarita city,Los Angeles County,place,913,Santa Clarita community
+CA,Valley Village,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Van Nuys,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Venice,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,West Hills,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Westchester,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Wilmington,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Winnetka,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+CA,Woodland Hills,Los Angeles city,Los Angeles County,place,900 902 904 907 910 913 914 916,Los Angeles city community
+NY,Arverne,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Astoria,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Bayside,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Bronx,New York city,Bronx County,county,104,New York City borough
+NY,Brooklyn,New York city,Kings County,county,112,New York City borough
+NY,Cambria Heights,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,College Point,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Corona,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Douglaston,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,East Elmhurst,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Elmhurst,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Far Rockaway,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Flushing,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Forest Hills,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Fresh Meadows,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Glen Oaks,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Hollis,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Howard Beach,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Jackson Heights,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Jamaica,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Kew Gardens,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Laurelton,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Little Neck,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Long Island City,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Manhattan,New York city,New York County,county,100 101 102,New York City borough
+NY,Maspeth,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Middle Village,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Oakland Gardens,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Ozone Park,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Queens,New York city,Queens County,county,110 111 113 114 116,New York City borough
+NY,Queens Village,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Rego Park,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Richmond Hill,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Ridgewood,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Rockaway Beach,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Rockaway Park,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Rosedale,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Saint Albans,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,South Ozone Park,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,South Richmond Hill,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Springfield Gardens,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Staten Island,New York city,Richmond County,county,103,New York City borough
+NY,Sunnyside,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,The Bronx,New York city,Bronx County,county,104,New York City borough
+NY,Whitestone,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Woodhaven,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+NY,Woodside,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)

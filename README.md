@@ -56,15 +56,31 @@ navigation; `industry`, `naics`, `naics_basis`, `naics_level`, `sic`, and
 `parent_cik`, and `identity_source` are optional identity annotations, not
 proof of ownership at the filing date. `place_name`, `place_fips`,
 `county_name`, `county_fips`, `latitude`, `longitude`, and `geo_basis` are
-optional resolved geography; `site_address` is the reported worksite address
-when supported. `notice_date_precision` and `notice_date_basis` qualify the
+optional resolved geography (see [Where a notice happened](#where-a-notice-happened)).
+`site_address` is a street address the source establishes as the layoff site,
+and `site_address_basis` says how: `quality_evidence` (a pinned official
+report row or labeled agency site field, CA/NC/MD), `labeled_site_field` (the
+agency column itself names the site: Illinois IEBS `Location Address`, the New
+York dashboard's `Impacted Site Address`, Georgia's `First Location Address`
+on a one-location filing, South Carolina's worksite `address`), or
+`filed_county_consistent` (Pennsylvania's unlabeled `addressfull`, kept only
+when it resolves to the county the agency filed separately); `unverified`
+marks a stored value no current rule reproduces. Values that name
+another state, list several addresses, or carry no house number are left out.
+Addresses whose role the source does not label and that no independent filed
+place can check — Florida's company cell, Idaho's address block, the
+America's JobLink portals (AZ, KS, ME, VT, MI, DE) and Missouri's company
+address — stay in `raw_extra` and are not exported as sites; see
+`warnlive/enrich/site_address.py` for the full policy. `notice_date_precision` and `notice_date_basis` qualify the
 legal notice date; `effective_date_precision`, `effective_date_basis`,
 `effective_date_end`, `effective_date_end_precision`, and
 `effective_date_end_basis` qualify reported action dates and intervals.
 `source_identity` and `source_details` preserve source-specific identity and
 structured facts. `affected_site_address`, `affected_site_city`, and
-`site_role` are supported affected-place projections;
-`employer_mailing_address` is separate from them. `employer_name_verbatim`
+`site_role` are supported affected-place projections of attached quality
+evidence only, so they are stricter and sparser than `site_address`;
+`employer_mailing_address` is separate from them and is filled only where a
+source labels a mailing address. `employer_name_verbatim`
 retains a fuller name from an original document when available. `letter_date`,
 `agency_received_date`, `agency_notification_date`, and
 `agency_processed_date` keep those events apart
@@ -301,6 +317,31 @@ A location that names its own state, and names a different one, resolves
 to nothing: reading "2323 KENNEDY DRIVE JANESVILLE, WI 53547" against
 Illinois would place the layoff in the Janesville Illinois has, which is a
 wrong answer given confidently rather than a missing one.
+
+Some communities people file from are not Census places: Chatsworth and
+Van Nuys are part of Los Angeles city, Newbury Park of Thousand Oaks, and
+Brooklyn is New York city's Kings County. `data/reference/place_aliases.csv`
+maps a short, reviewed list of them to the containing place and county. An
+alias never overrides a real place of the same name, and a ZIP in the string
+from outside the alias's ZIP prefixes vetoes it. Such rows carry
+`geo_basis=place_alias`. A string naming several boroughs, or a borough
+alongside "New York", resolves to New York city with no county.
+
+`latitude` and `longitude` are never geocoded addresses. They are the Census
+Gazetteer interior point of the resolved place, or of the county when only a
+county resolved (`county`, `county:filed`, `subdivision`) and for a New York
+borough alias (whose county is more specific than the city); they are blank
+when several places in one county were named. `geo_basis`
+records how the place was read: `place` from the location text; `address`
+when the city was taken from the trailing words of a street address (the
+point is still the city's, not the address's); `place+county` when the filing
+also named a county; `place_alias` from the alias table; a `:filed` suffix
+when the state's own city/county columns supplied it and `:name` when an
+address typed into the employer name did. With `place+county` the filed
+county wins over the place's roster county; for a city that spans counties
+(Atlanta in Clayton or DeKalb, Carrollton TX in Dallas) the point is still
+the city's single interior point and can lie in a different county than
+`county_name`. Use `county_fips` for county joins, not the point.
 
 Locations that the Census roster and source fields cannot place retain
 the filed `location` text and leave derived place and county fields blank.

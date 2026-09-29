@@ -184,6 +184,18 @@ def extract(state: str, raw: dict, rec: dict) -> dict:
                 }]
             result["notice_date"] = None
 
+    elif state == "HI" and not raw.get("source_kind"):
+        from warnlive.normalize.custom.hi import legacy_marker
+
+        marked = legacy_marker(raw)
+        if marked:
+            # The employer came from the starred Date line; two amendments
+            # with the same line differ only in their linked document.
+            details["employer_basis"] = "hi_legacy_starred_date_line_v1"
+            details["amendment_marker"] = marked["marker"]
+            details["marker_source_text"] = marked["source_text"]
+            details["source_artifact"] = (raw.get("PDF url") or "").strip() or None
+
     elif state == "SC":
         artifact = (raw.get("source") or "").strip()
         ordinal = (raw.get("source_row") or "").strip()
@@ -333,6 +345,34 @@ def extract(state: str, raw: dict, rec: dict) -> dict:
             "precision": "day" if received else "unknown", "basis": "reported",
         }]
         result["notice_date"] = None
+        from warnlive.normalize.custom.nv import shifted
+
+        if shifted(raw):
+            # Earlier releases keyed these rows on the shifted cells; keep
+            # that identity while publishing the realigned fields.
+            details["column_realignment"] = "nv_three_date_layout_v1"
+            # The capture lost this column's label; its cell sits under
+            # "Effective Date" in raw_extra. Not treated as any legal date.
+            details["unlabeled_second_date_text"] = raw.get("Effective Date") or None
+            details["legacy_key_fields"] = {
+                "employer_name": raw.get("Employer") or None,
+                "location": ", ".join(
+                    part for part in (raw.get("City", ""), raw.get("County", "")) if part
+                ) or None,
+            }
+
+    elif state == "MS" and "company" in raw:
+        from warnlive.normalize.custom.ms import split_row
+
+        if split_row(raw):
+            details["employer_location_split"] = {
+                "rule": "ms_company_city_county_v1",
+                "source_field": "company", "source_text": raw.get("company"),
+            }
+            details["legacy_key_fields"] = {
+                "employer_name": (raw.get("company") or "").strip() or None,
+                "location": (raw.get("county") or "").strip() or None,
+            }
 
     elif state == "WA" and "Received Date" in raw:
         # ESD defines Received Date as the day the agency received the WARN
@@ -521,9 +561,15 @@ def extract(state: str, raw: dict, rec: dict) -> dict:
                     if start and end and start <= end:
                         result["effective_date_end"] = end
                     if state == "PA":
-                            # The upstream manual correction table contains stale
-                            # starts for otherwise unambiguous reported intervals.
-                        result["effective_date"] = start
+                        # The upstream manual correction table contains stale
+                        # starts for otherwise unambiguous reported intervals.
+                        # An unreadable start ("2/30/2025") keeps the existing
+                        # value; a reversed range is flagged, not published.
+                        if start and (not end or start <= end):
+                            result["effective_date"] = start
+                        elif start and end:
+                            details["effective_date_status"] = "reversed_range_review"
+                            details["effective_date_source_text"] = source_text
 
     if state == "NJ" and details.get("effective_date_interpretation") == "list_or_phases":
         components = [item["date"] for item in details.get("dates", [])

@@ -148,12 +148,12 @@ def build(
                     from warnlive.migrate.source_bundle import validate_agency_raw_file
 
                     validate_agency_raw_file(postal, source_path)
-                    norm = normalize_file(postal, source_dir, cfg.source_url)
+                    norm = normalize_file(postal, source_dir, cfg.source_url, observed_at=now[:10])
                     entry.update(raw_rows=norm.raw_rows, parsed_rows=len(norm.records),
                                  parse_failures=norm.failed_rows)
                     if exceptions is not None:
                         pending_exceptions.extend(
-                            _raw_exception(origin, "parse_failure", failure)
+                            _raw_exception(origin, failure.get("hold_reason") or "parse_failure", failure)
                             for failure in norm.failures
                         )
                     if postal in {"ga", "ia", "il", "ks", "nj"}:

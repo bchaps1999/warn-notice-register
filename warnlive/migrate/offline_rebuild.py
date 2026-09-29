@@ -119,13 +119,18 @@ def _backfill_raw(
         postal = source.stem
         if postal in {"ga", "sc"} or postal not in registry:
             continue
-        norm = normalize_file(postal, raw_dir, registry[postal].source_url)
+        norm = normalize_file(
+            postal, raw_dir, registry[postal].source_url, observed_at=observed_at,
+        )
         report["files"] += 1
         report["raw_rows"] += norm.raw_rows
         report["parse_failures"] += norm.failed_rows
         if exceptions is not None:
             exceptions.extend(
-                _exception(f"backfill/raw/{postal}.csv", "parse_failure", failure)
+                _exception(
+                    f"backfill/raw/{postal}.csv",
+                    failure.get("hold_reason") or "parse_failure", failure,
+                )
                 for failure in norm.failures
             )
         by_key: dict[str, list[dict]] = defaultdict(list)
@@ -1026,6 +1031,11 @@ def rebuild(
                 quality_report = apply_quality_evidence(
                     conn, quality_evidence_dir, observed_at,
                 )
+            # Same derived-address pass the live scrape runs after quality
+            # evidence, so both paths apply one address-role policy.
+            from warnlive.enrich.site_address import apply as apply_site_addresses
+
+            site_address_report = apply_site_addresses(conn)
             link_report = links_mod.rebuild(conn)
             observation_report = None
             if source_only:
@@ -1136,6 +1146,7 @@ def rebuild(
                 "il_effective_repair": il_repair,
                 "tx_annual_date_evidence": tx_evidence,
                 "quality_evidence": quality_report,
+                "site_address_surface": site_address_report,
                 "link_rebuild": link_report,
                 "fingerprints": _fingerprints(conn),
                 "states": _metrics(conn),

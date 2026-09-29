@@ -2,9 +2,17 @@
 
 Wraps Big Local News's warn-transformer per-state Transformer classes
 (Apache-2.0), but transforms row-by-row with error capture instead of their
-all-or-nothing transform(): upstream raises KeyError on any date/jobs value
-missing from its manual correction tables, which for us must degrade into a
-counted parse failure, not a crash.
+all-or-nothing transform(). Upstream raises KeyError on any date/jobs value
+missing from its manual correction tables. Those fields are optional, so an
+unparseable date or worker count is blanked, the row is kept, and a
+``parse_notes`` entry in ``source_details`` records the source cell; the raw
+row stays in ``raw_extra``. Any other failure is a counted parse failure.
+
+Upstream correction tables are audited per cell (see ``corrections``): a
+correction that does not match a date written in its cell is replaced by the
+cell's own date or null, never kept as a guess. The future-date sanity check
+is pinned to the run's observed date so replays do not depend on the day
+they run. Input: ``{postal}.csv`` in a raw directory. No network access.
 """
 
 from __future__ import annotations
@@ -14,8 +22,12 @@ import html
 import json
 import re
 from dataclasses import dataclass, field
+from datetime import date, datetime
 from importlib import import_module
 from pathlib import Path
+
+from warnlive.normalize.corrections import sanitized_corrections
+from warnlive.normalize.nonnotice import employer_hold_reason, non_notice_reason
 
 
 @dataclass
@@ -26,10 +38,16 @@ class NormalizeResult:
     failed_rows: int = 0
     failure_examples: list[str] = field(default_factory=list)
     failures: list[dict] = field(default_factory=list)
+    # Rows that are not notices (header/total rows, agency test entries).
+    # They are also counted in failed_rows/failures, with a ``hold_reason``,
+    # so every caller's row accounting stays complete; they are left out of
+    # failure_rate because they are not parser failures.
+    held_rows: int = 0
 
     @property
     def failure_rate(self) -> float:
-        return self.failed_rows / self.raw_rows if self.raw_rows else 0.0
+        failed = self.failed_rows - self.held_rows
+        return failed / self.raw_rows if self.raw_rows else 0.0
 
 
 def get_transformer_class(postal: str):
@@ -42,25 +60,45 @@ def get_transformer_class(postal: str):
     return mod.Transformer
 
 
-def normalize_file(postal: str, input_dir: Path, source_url: str | None) -> NormalizeResult:
-    """Normalize input_dir/{postal}.csv into canonical records."""
+def normalize_file(
+    postal: str, input_dir: Path, source_url: str | None,
+    observed_at: str | date | None = None,
+) -> NormalizeResult:
+    """Normalize input_dir/{postal}.csv into canonical records.
+
+    ``observed_at`` (YYYY-MM-DD, default today) is the day the source was
+    captured. It anchors upstream's "too far in the future" date check so a
+    replay of a dated capture gives the same result on any day.
+    """
     postal = postal.lower()
+    observed = _observed_date(observed_at)
     transformer = get_transformer_class(postal)(Path(input_dir))
+    guard = _FieldGuard(transformer, observed)
     result = NormalizeResult(state=postal.upper())
 
     rows = transformer.prep_row_list(transformer.raw_data)
     result.raw_rows = len(rows)
 
     for prepared_row, row in enumerate(rows, start=1):
+        non_notice = non_notice_reason(postal.upper(), row)
+        if non_notice:
+            _record_failure(result, row, prepared_row, f"non_notice_row: {non_notice}",
+                            hold_reason=non_notice)
+            continue
         try:
-            data = transformer.transform_row(row)
+            data, notes = guard.transform_row(row)
             validated = transformer.schema().load(data)
-            rec = _to_canonical(validated, row, source_url)
+            rec = _to_canonical(validated, row, source_url, parse_notes=notes)
         except Exception as e:  # noqa: BLE001 — any bad row becomes a counted failure
             _record_failure(result, row, prepared_row, f"{type(e).__name__}: {e}")
             continue
         if rec["employer_name"] is None:
             _record_failure(result, row, prepared_row, "row has no employer name")
+            continue
+        held = employer_hold_reason(rec["employer_name"])
+        if held:
+            _record_failure(result, row, prepared_row, f"non_notice_row: {held}",
+                            hold_reason=held)
             continue
         # This is an ordinal in the transformer's prepared row list, not a
         # physical CSV line number (quoted fields can span several lines).
@@ -71,6 +109,7 @@ def normalize_file(postal: str, input_dir: Path, source_url: str | None) -> Norm
 
 def _record_failure(
     result: NormalizeResult, row: dict, prepared_row: int, error: str,
+    hold_reason: str | None = None,
 ) -> None:
     raw_extra = json.dumps(
         {(k if k is not None else "_restkey"): v for k, v in row.items()},
@@ -84,9 +123,147 @@ def _record_failure(
         "source_row_sha256": hashlib.sha256(raw_extra.encode()).hexdigest(),
         "raw_extra": raw_extra, "error": error,
     })
+    if hold_reason:
+        result.held_rows += 1
+        result.failures[-1]["hold_reason"] = hold_reason
 
 
-def _to_canonical(validated: dict, raw_row: dict, source_url: str | None) -> dict:
+def _observed_date(value: str | date | None) -> date:
+    if value is None:
+        return date.today()
+    if isinstance(value, datetime):
+        return value.date()
+    if isinstance(value, date):
+        return value
+    return date.fromisoformat(str(value)[:10])
+
+
+class _AuditedCorrections(dict):
+    """An upstream correction table whose lookups are recorded."""
+
+    def __init__(self, table: dict, decisions: dict, log: list):
+        super().__init__(table)
+        self.decisions = decisions
+        self.log = log
+
+    def __getitem__(self, key):
+        value = super().__getitem__(key)  # a missing key raises as upstream expects
+        decision = self.decisions.get(key)
+        if decision is not None:
+            self.log.append(("correction", key, decision))
+        return value
+
+
+class _FieldGuard:
+    """Run upstream transform_row with optional fields made non-fatal.
+
+    * transform_date/transform_jobs errors (upstream raises KeyError for a
+      value missing from its correction table) blank that field;
+    * the date correction table is replaced by the audited one;
+    * the future-date window is anchored to the observed day.
+
+    Returns the transformed dict and parse notes naming the source cells.
+    """
+
+    def __init__(self, transformer, observed: date):
+        self.transformer = transformer
+        cls = type(transformer)
+        self.upstream_corrections = cls.date_corrections
+        table, decisions = sanitized_corrections(cls, observed)
+        self.log: list = []
+        self.corrections = _AuditedCorrections(table, decisions, self.log)
+        self.changed = {key for key, d in decisions.items() if d.used != d.upstream}
+        transformer.date_corrections = self.corrections
+        # schema.transform_date compares against datetime.today() plus
+        # max_future_days; shift the allowance so the limit is the observed
+        # day plus the transformer's own allowance, whatever day this runs.
+        transformer.max_future_days = (
+            cls.max_future_days + (observed - date.today()).days
+        )
+        self._date = transformer.transform_date
+        self._jobs = transformer.transform_jobs
+        transformer.transform_date = self._guard_date
+        transformer.transform_jobs = self._guard_jobs
+
+    def _guard_date(self, value):
+        start = len(self.log)
+        try:
+            return self._date(value)
+        except (KeyError, ValueError, TypeError, AssertionError, AttributeError) as e:
+            # Upstream checks the year of a correction it assumes is a date,
+            # so an audited null correction surfaces here as AttributeError;
+            # its correction note already says why the field is empty.
+            if not any(kind == "correction" for kind, _, _ in self.log[start:]):
+                self.log.append(("unparseable_date", value, type(e).__name__))
+            return None
+
+    def _guard_jobs(self, value):
+        try:
+            return self._jobs(value)
+        except (KeyError, ValueError, TypeError, AssertionError) as e:
+            self.log.append(("unparseable_jobs", value, type(e).__name__))
+            return None
+
+    def _raw(self, row: dict, name: str):
+        method = self.transformer.fields.get(name)
+        if method is None:
+            return None
+        try:
+            value = self.transformer.get_raw_value(row, method)
+        except Exception:  # noqa: BLE001 — a missing column is not a note
+            return None
+        return value.strip() if isinstance(value, str) else value
+
+    def transform_row(self, row: dict) -> tuple[dict, list[dict]]:
+        self.log.clear()
+        data = self.transformer.transform_row(row)
+        notes = self._notes(row, data)
+        if any(kind == "correction" and key in self.changed for kind, key, _ in self.log):
+            # Keep upstream's row hash (source_notice_id) stable: it is the
+            # BLN identifier other tables refer to. Only the audited values
+            # are published.
+            self.transformer.date_corrections = self.upstream_corrections
+            try:
+                data["hash_id"] = self.transformer.transform_row(row)["hash_id"]
+            except Exception:  # noqa: BLE001 — upstream would have dropped it
+                pass
+            finally:
+                self.transformer.date_corrections = self.corrections
+        return data, notes
+
+    def _notes(self, row: dict, data: dict) -> list[dict]:
+        notes: list[dict] = []
+        fields = {name: self._raw(row, name)
+                  for name in ("notice_date", "effective_date", "jobs")}
+        for kind, value, extra in self.log:
+            text = value.strip() if isinstance(value, str) else value
+            names = [name for name, raw in fields.items()
+                     if raw == text and (name == "jobs") == (kind == "unparseable_jobs")]
+            for name in names or [None]:
+                if kind == "correction":
+                    d = extra
+                    if d.action in ("keep", "keep_null", "keep_linked_document") \
+                            and d.precision != "month":
+                        continue  # upstream value stands; nothing to record
+                    notes.append({
+                        "field": name, "source_text": value,
+                        "rule": "upstream_date_correction_audit_v1",
+                        "action": d.action, "reason": d.reason,
+                        "upstream_value": d.upstream.isoformat() if d.upstream else None,
+                        "value": d.used.isoformat() if d.used else None,
+                        "precision": d.precision,
+                    })
+                else:
+                    notes.append({
+                        "field": name, "source_text": value,
+                        "rule": "unparseable_optional_field_v1",
+                        "action": "blanked", "reason": kind, "error": extra,
+                    })
+        return notes
+
+
+def _to_canonical(validated: dict, raw_row: dict, source_url: str | None,
+                  parse_notes: list[dict] | None = None) -> dict:
     state = validated["postal_code"].upper()
     notice_date = _iso(validated.get("notice_date"))
     is_closure = validated.get("is_closure")
@@ -122,6 +299,8 @@ def _to_canonical(validated: dict, raw_row: dict, source_url: str | None) -> dic
     from warnlive.normalize.details import extract
 
     rec.update(extract(state, raw_row, rec))
+    if parse_notes:
+        _apply_parse_notes(rec, parse_notes)
     if state == "NJ":
         # NJ publishes no filing ID or notice date. Keep distinct raw table
         # observations distinct; a changed row is a new observation until a
@@ -142,6 +321,35 @@ def _to_canonical(validated: dict, raw_row: dict, source_url: str | None) -> dic
     return rec
 
 
+def _apply_parse_notes(rec: dict, notes: list[dict]) -> None:
+    """Record blanked or audited fields in source_details.
+
+    A notice date whose upstream correction was rejected keeps the upstream
+    value as its internal key date (as the date-role fixes do), so an
+    existing notice keeps its identity; a notice date that could not be read
+    at all keys on its source text instead of colliding with undated rows.
+    """
+    details = json.loads(rec.get("source_details") or "{}")
+    details.setdefault("parse_notes", []).extend(notes)
+    for note in notes:
+        name = note.get("field")
+        if name not in ("notice_date", "effective_date"):
+            continue
+        if note.get("precision") == "month" and rec.get(name) == note.get("value"):
+            rec[f"{name}_precision"] = "month"
+            rec[f"{name}_basis"] = "reported"
+        if name != "notice_date":
+            continue
+        if note["rule"] == "upstream_date_correction_audit_v1" and \
+                note["upstream_value"] != note["value"]:
+            details["upstream_notice_key_date"] = note["upstream_value"]
+        elif note["rule"] == "unparseable_optional_field_v1":
+            details["notice_key_source_text"] = note["source_text"]
+    if "upstream_notice_key_date" in details and "legacy_notice_key_date" in details:
+        details["legacy_notice_key_date"] = details["upstream_notice_key_date"]
+    rec["source_details"] = json.dumps(details, sort_keys=True, ensure_ascii=False)
+
+
 def _dedupe_key(rec: dict) -> str:
     # These sources provide filing/row identity stronger than employer +
     # notice date + place. GA often omits a notice date, historical SC reports
@@ -156,8 +364,12 @@ def _dedupe_key(rec: dict) -> str:
     # date while clearing the falsely labeled legal notice day. This avoids
     # collapsing unrelated observations during the date-role correction.
     key_date = rec["notice_date"]
+    details = json.loads(rec.get("source_details") or "{}")
+    if "upstream_notice_key_date" in details:
+        key_date = details["upstream_notice_key_date"]
+    elif details.get("notice_key_source_text"):
+        key_date = f"text:{details['notice_key_source_text'].strip()}"
     if rec["state"] in {"KY", "MA", "NV", "WA", "MN", "WI", "FL"}:
-        details = json.loads(rec.get("source_details") or "{}")
         if rec["state"] in {"WI", "FL"}:
             # This is exactly the old transformed date, even if a malformed
             # source cell fails the stricter typed-date parser.
@@ -167,12 +379,15 @@ def _dedupe_key(rec: dict) -> str:
         else:
             key_date = (details.get("agency_received_date") or
                         details.get("legacy_notice_key_date") or key_date)
+    # A row whose employer/location columns were corrected (NV column
+    # shift, MS site split) keeps the key its filed cells always had.
+    legacy = details.get("legacy_key_fields") or {}
     parts = "|".join(
         [
             rec["state"],
-            _fold(rec["employer_name"]),
+            _fold(legacy.get("employer_name", rec["employer_name"])),
             key_date or "",
-            _fold(rec["location"]),
+            _fold(legacy.get("location", rec["location"])),
         ]
     )
     return hashlib.sha1(parts.encode("utf-8")).hexdigest()
@@ -191,6 +406,7 @@ _JUNK_VALUES = {"", ".", "-", "n/a", "na", "none", "unknown", "tbd"}
 
 
 _TAG = re.compile(r"<[a-zA-Z/!][^>]*>")
+_LEADING_TAGS = re.compile(r"^(?:\s*<[a-zA-Z/!][^>]*>)+")
 
 
 def _clean_text(value: str | None) -> str | None:
@@ -204,7 +420,9 @@ def _clean_text(value: str | None) -> str | None:
     if value is None:
         return None
     if _TAG.search(value):
-        value = value.split("<", 1)[0]
+        # A name wrapped in markup ("<b>Gamma Inc</b>") keeps its text; only
+        # what follows the name's first closing tag or break is chrome.
+        value = _LEADING_TAGS.sub("", value).split("<", 1)[0]
     v = html.unescape(value)
     v = _WS.sub(" ", v.replace("\xa0", " ")).strip()
     return None if v.lower() in _JUNK_VALUES else v

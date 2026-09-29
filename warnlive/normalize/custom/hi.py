@@ -1,4 +1,12 @@
-"""Hawaii legacy five-column rows and the WDD detail-page extension."""
+"""Hawaii legacy five-column rows and the WDD detail-page extension.
+
+The legacy WDC list prints amendments as a starred line in the Date column
+with the Company column empty: "*Hawaiian Airlines Amended September 16,
+2020", "* Correction to FOH Hospitality Inc.". ``legacy_marker`` reads the
+employer and the amendment wording from that line; the date in it is the
+upstream-corrected notice date. A line that names no employer ("*Errata to
+Amended WARN") is left unparsed.
+"""
 
 from __future__ import annotations
 
@@ -9,16 +17,49 @@ from warn_transformer.transformers.hi import Transformer as LegacyTransformer
 _DAY = re.compile(r"\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}\b", re.I)
 _TOTAL = re.compile(r"\bTotal employees statewide:\s*([\d,]+)\b", re.I)
 _AFFECTED = re.compile(r"\bEmployees affected by partial closing:\s*([\d,]+)\b", re.I)
+_MARKED = re.compile(
+    r"^\*+\s*(?:(?P<fix>correction|errata)\s+to\s+(?P<target>.+?)"
+    r"|(?P<company>.+?)\s+(?P<marker>second\s+amended|amended|amendment(?:\s*#\s*\d+)?"
+    r"|updated?|supplement)\b.*?)\s*$",
+    re.I | re.S,
+)
+
+
+def legacy_marker(row: dict) -> dict | None:
+    """Employer and amendment wording from a starred legacy Date cell."""
+    if row.get("source_kind") or (row.get("Company") or "").strip():
+        return None
+    text = " ".join((row.get("Date") or "").split())
+    match = _MARKED.match(text)
+    if not match:
+        return None
+    if match.group("fix"):
+        company, marker = match.group("target"), f"{match.group('fix')} to"
+    else:
+        company, marker = match.group("company"), match.group("marker")
+    company = company.strip(" ,")
+    if re.fullmatch(r"(?i)amended\s+warn(?:\s+notice)?", company):
+        return None  # names a document, not an employer
+    return {"company": company, "marker": " ".join(marker.lower().split()),
+            "source_text": text}
+
+
+def _company(row: dict) -> str:
+    marked = legacy_marker(row)
+    return marked["company"] if marked else row.get("Company", "")
 
 
 class Transformer(LegacyTransformer):
     fields = dict(
-        company="Company",
+        company=_company,
         notice_date="Date",
         location="location",
         jobs=lambda row: _wdd_total(row) if row.get("source_kind") == "wdd_detail" else row.get("jobs", ""),
         effective_date=lambda row: _wdd_effective(row) if row.get("source_kind") == "wdd_detail" else "",
     )
+
+    def check_if_amendment(self, row: dict) -> bool:
+        return legacy_marker(row) is not None or super().check_if_amendment(row)
 
     def transform_date(self, value: str) -> str | None:
         if not value:

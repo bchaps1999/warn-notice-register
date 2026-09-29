@@ -11,12 +11,15 @@ from __future__ import annotations
 import json
 from datetime import date
 
+from warnlive.enrich.site_address import basis as site_address_basis
+
 FIELDS = (
     "affected_site_address", "affected_site_city", "site_role",
     "employer_mailing_address",
     "employer_name_verbatim", "letter_date", "agency_received_date",
     "agency_notification_date", "agency_processed_date",
     "source_record_urls", "source_locators", "source_status", "timing_qc",
+    "site_address_basis",
 )
 
 _AFFECTED_ROLES = {"affected_worksite", "remote_worker_location"}
@@ -78,6 +81,30 @@ def display_location(row: dict) -> str | None:
     return row.get("location")
 
 
+def resolve_geo(resolver, row: dict, fields_json: str | dict | None = None) -> dict:
+    """Place and county for one notice; the CSV export and the site share it.
+
+    A row with typed site evidence resolves the affected site (or nothing,
+    for a known mailing city or an ambiguous site).  When the site's address
+    names a community the Census roster lacks, the county printed on the same
+    agency report row still places it (``county:filed``).  Every other row
+    resolves its listing location, then the state's own city/county columns,
+    then an address typed into the employer name.
+    """
+    state = row.get("state")
+    quality = _quality(row)
+    if (quality.get("sites") or quality.get("location_role") == "employer_mailing"
+            or quality.get("status") == "site_address_ambiguous"):
+        got = resolver.resolve(state, geo_location(row))
+        site = affected_site(row)
+        if not got.get("geo_basis") and site and (site.get("county") or site.get("city")):
+            got = resolver.resolve(state, None, {"raw_extra": {
+                "city": site.get("city") or "", "county": site.get("county") or "",
+            }})
+        return got
+    return resolver.resolve(state, row.get("location"), fields_json, row.get("employer_name"))
+
+
 def project(row: dict) -> dict[str, str | None]:
     details = _details(row.get("source_details"))
     quality = _quality(row)
@@ -130,4 +157,5 @@ def project(row: dict) -> dict[str, str | None]:
                            if locators else None,
         "source_status": quality.get("status"),
         "timing_qc": timing,
+        "site_address_basis": site_address_basis(row),
     }

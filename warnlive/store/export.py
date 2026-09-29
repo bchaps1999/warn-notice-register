@@ -107,7 +107,7 @@ def export_csvs(
     from warnlive.enrich.annotate import FIELDS as IDENTITY_COLUMNS, Annotator
     from warnlive.enrich.places import RESULT_FIELDS as PLACE_COLUMNS, Resolver
     from warnlive.enrich.notice_quality import (
-        FIELDS as QUALITY_COLUMNS, _quality, geo_location, project,
+        FIELDS as QUALITY_COLUMNS, project, resolve_geo,
     )
 
     annotator = Annotator()
@@ -127,12 +127,7 @@ def export_csvs(
             r[1], r[date_idx] or r[eff_idx], r["fields_json"],
             state=r[0], location=r[loc_idx],
         )
-        quality = _quality(row)
-        if (quality.get("sites") or quality.get("location_role") == "employer_mailing"
-                or quality.get("status") == "site_address_ambiguous"):
-            extra.update(resolver.resolve(r[0], geo_location(row)))
-        else:
-            extra.update(resolver.resolve(r[0], r[loc_idx], r["fields_json"], r[1]))
+        extra.update(resolve_geo(resolver, row, r["fields_json"]))
         extra.update(project(row))
         return (
             r[0], r[1],

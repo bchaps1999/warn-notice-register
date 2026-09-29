@@ -111,7 +111,7 @@ def build_site(
     # the detail shards via dict(n), and CIK presence into FLAG_PUBLIC.
     from warnlive.enrich.annotate import Annotator
     from warnlive.enrich.places import Resolver
-    from warnlive.enrich.notice_quality import _quality, geo_location, project
+    from warnlive.enrich.notice_quality import project, resolve_geo
 
     annotator = Annotator()
     annotator.prime(conn)
@@ -127,14 +127,7 @@ def build_site(
                 state=n["state"], location=n.get("location"),
             )
         )
-        quality = _quality(n)
-        if (quality.get("sites") or quality.get("location_role") == "employer_mailing"
-                or quality.get("status") == "site_address_ambiguous"):
-            n.update(resolver.resolve(n["state"], geo_location(n)))
-        else:
-            n.update(resolver.resolve(
-                n["state"], n.get("location"), fields_json, n["employer_name"]
-            ))
+        n.update(resolve_geo(resolver, n, fields_json))
         n.update(project(n))
     linked_ids = {
         r["notice_id"] for r in conn.execute("SELECT DISTINCT notice_id FROM notice_links")
