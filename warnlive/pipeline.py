@@ -375,7 +375,7 @@ def _run_one(
             # Absence is evidence only from a complete, current source snapshot.
             # Cache runs, backfills, and partly unparseable files cannot support it.
             complete_live = (
-                fetched_live and norm.failed_rows == 0 and not excluded
+                fetched_live and norm.failed_rows - norm.held_rows == 0 and not excluded
                 and trigger != "backfill" and postal not in {"ga", "sc", "ks"}
             )
             if complete_live:

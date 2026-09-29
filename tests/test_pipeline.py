@@ -359,3 +359,22 @@ def test_illinois_source_key_candidate_accepts_live_revision(monkeypatch, tmp_pa
     assert result.verdict == "ok"
     assert result.updated == 1
     assert conn.execute("SELECT COUNT(*) FROM notices WHERE state='IL'").fetchone()[0] == 1
+
+
+def test_held_non_notice_rows_do_not_disable_absence_tracking(monkeypatch, tmp_path):
+    conn, raw = _setup(monkeypatch, tmp_path, cached=False)
+    pipeline.dedupe.ingest(conn, [{**_record(), "dedupe_key": "old", "raw_record_hash": "old"}], "2026-01-01")
+    monkeypatch.setattr(
+        pipeline.engine, "normalize_file",
+        lambda *_, **__: NormalizeResult(
+            state="CT", records=[_record()], raw_rows=2, failed_rows=1, held_rows=1,
+            failures=[{"row": 2, "hold_reason": "apparent_agency_test_record"}],
+        ),
+    )
+    result = pipeline._run_one(_config(), conn, raw.parent, tmp_path / "cache", False, False)
+    assert result.verdict == "ok"
+    assert result.checks["ingest"]["absence_frozen"] is True
+    assert {row["reason"] for row in result.checks["admission"]["exclusions"]} == {
+        "apparent_agency_test_record"
+    }
+    assert conn.execute("SELECT last_seen FROM notices WHERE dedupe_key='old'").fetchone()[0] is not None

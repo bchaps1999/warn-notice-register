@@ -242,9 +242,11 @@ class _FieldGuard:
             for name in names or [None]:
                 if kind == "correction":
                     d = extra
-                    if d.action in ("keep", "keep_null", "keep_linked_document") \
-                            and d.precision != "month":
-                        continue  # upstream value stands; nothing to record
+                    # An unchanged upstream value needs no note, except one
+                    # transcribed from a linked document: the date is not in
+                    # the cell, and a reader must be able to tell.
+                    if d.action in ("keep", "keep_null") and d.precision != "month":
+                        continue
                     notes.append({
                         "field": name, "source_text": value,
                         "rule": "upstream_date_correction_audit_v1",

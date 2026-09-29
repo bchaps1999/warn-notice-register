@@ -27,6 +27,13 @@ _TRAILING = re.compile(r"^(?P<head>.*\S)\s*\(\s*(?P<county>[^()]+?)\s*\)\s*$", r
 _STATUS = re.compile(r"\s+(?:city|town|village|county|cdp)$", re.I)
 
 
+_NAME_FRAGMENTS = frozenset({
+    "inc", "llc", "corp", "corporation", "co", "company", "ltd", "lp", "llp",
+    "incorporated", "chaininc", "solutions", "system", "systems", "services",
+    "group", "holdings",
+})
+
+
 def _fold(name: str) -> str:
     text = re.sub(r"\bst\.?(?=\s)", "saint", name.lower())
     return re.sub(r"[^a-z0-9]+", "", text)
@@ -62,6 +69,11 @@ def split_company_place(company: str | None) -> tuple[str, str] | None:
         if _fold(city) in places:
             employer = " ".join(words[:-size]).rstrip(" ,-–—")
             if not any(ch.isalpha() for ch in employer):
+                return None
+            # A PDF line break can leave only the name's tail ("Inc.",
+            # "Solutions") on this line; splitting it off would publish that
+            # fragment as the employer, so keep the filed cell whole.
+            if _fold(employer) in _NAME_FRAGMENTS:
                 return None
             return employer, f"{city} ({county})"
     return None

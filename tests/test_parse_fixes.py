@@ -326,3 +326,23 @@ def test_agency_test_records_are_held():
     assert non_notice_reason("CA", {"company": "Testarossa Winery", "city": "Los Gatos"}) is None
     assert non_notice_reason("IL", {"IEBS Id": "1", "Location Name": "ABC Manufacturing LLC",
                                     "Location Address": "1 Main St"}) is None
+
+
+def test_hi_undated_starred_lines_from_different_letters_stay_separate(tmp_path):
+    _write(tmp_path, "hi", ["Company", "Date", "PDF url", "location", "jobs"], [
+        ["", "*Hawaiian Airlines Amendment",
+         "https://labor.hawaii.gov/wdc/files/2021/02/WARN-2021.02.02-HAWAIIAN-AIR-AMENDMENT.pdf", "", ""],
+        ["", "*Hawaiian Airlines Amendment",
+         "https://labor.hawaii.gov/wdc/files/2021/03/WARN-2021.03.18-Hawaiian-Airlines-Amended.pdf", "", ""],
+    ])
+    first, second = normalize_file("hi", tmp_path, None, observed_at="2026-09-24").records
+    assert first["notice_date"] is None and second["notice_date"] is None
+    assert first["dedupe_key"] != second["dedupe_key"]
+
+
+def test_ms_split_keeps_cell_whole_when_only_a_name_fragment_remains():
+    from warnlive.normalize.custom.ms import split_company_place
+
+    assert split_company_place("Inc. Gulfport (Harrison)") is None
+    assert split_company_place("Milwaukee Tool Clinton (Hinds)") == (
+        "Milwaukee Tool", "Clinton (Hinds)")

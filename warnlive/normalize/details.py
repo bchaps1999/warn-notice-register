@@ -195,6 +195,10 @@ def extract(state: str, raw: dict, rec: dict) -> dict:
             details["amendment_marker"] = marked["marker"]
             details["marker_source_text"] = marked["source_text"]
             details["source_artifact"] = (raw.get("PDF url") or "").strip() or None
+            # Without a date, employer alone would merge distinct amendment
+            # letters into one notice; the linked PDF is the filing identity.
+            if not result.get("notice_date") and details["source_artifact"]:
+                details["notice_key_source_text"] = details["source_artifact"]
 
     elif state == "SC":
         artifact = (raw.get("source") or "").strip()

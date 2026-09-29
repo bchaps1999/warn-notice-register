@@ -116,7 +116,8 @@ def verify_state(
     result.add(
         "parse_failures",
         norm.failure_rate <= PARSE_FAILURE_MAX,
-        f"{norm.failed_rows}/{norm.raw_rows} rows failed to normalize"
+        f"{norm.failed_rows - norm.held_rows}/{norm.raw_rows} rows failed to normalize"
+        + (f" ({norm.held_rows} held as non-notice rows)" if norm.held_rows else "")
         + (f"; e.g. {norm.failure_examples[0]}" if norm.failure_examples else ""),
     )
     n = len(norm.records)
