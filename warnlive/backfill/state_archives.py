@@ -8,7 +8,10 @@ state-published document.
 
 Sources here (found 2026-07-26; see docs / plan notes):
   WI: DWD WORKnet annual "Plant Closing / Mass Layoff (PCML) log" .xls
-      files, 1996-2015. Clean one-file-per-year spreadsheets.
+      files, 1996-2015. Clean one-file-per-year spreadsheets. 2016-2019
+      come from DWD's own static year pages (dwd.wisconsin.gov/
+      dislocatedworker/warn/YYYY/default.htm, live when verified
+      2026-09-29), cached with a url/retrieved_at/sha256 sidecar.
   FL: predecessor app floridajobs.org/react/warn.asp?year=YYYY, yearly HTML
       tables 1997-2015 (1997 has its own page name).
   CA: EDD yearly WARN report PDFs (eddwarncn{YY}.pdf and sorted variants),
@@ -23,13 +26,15 @@ overlap with live data cannot mint near-duplicates.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 import re
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from time import sleep
+from urllib import parse as urllib_parse
 
 import xlrd
 from bs4 import BeautifulSoup
@@ -297,6 +302,146 @@ def fetch_wi(cache_dir: Path) -> list[dict]:
             )
             n += 1
         logger.info("WI %s: %d archive rows", year, n)
+    records.extend(fetch_wi_dwd(cache_dir))
+    return records
+
+
+# DWD's own static year pages cover the gap between the last WORKnet PCML
+# log (2015) and the live roster (2020+, Google Sheets). The upstream
+# scraper requests ``default.htm?year=YYYY`` for these years, which serves
+# the current page without tables, so these notices never reached the raw
+# capture. The table columns are the live roster's, so rows are normalized
+# with the live WI transformer and keep its date-role and key rules.
+WI_DWD_URL = "https://dwd.wisconsin.gov/dislocatedworker/warn/{year}/default.htm"
+WI_DWD_YEARS = range(2016, 2020)
+_WI_DWD_FIELDS = (
+    ("Company", "Company"), ("City", "City"), ("AffectedWorkers", "Affected Workers"),
+    ("NoticeRcvd", "Notice Received"),
+    ("NoticeType", "Original Notice Type / Update Type"),
+    ("LayoffBeginDate", "Layoff Begin Date"), ("NAICSDescription", "NAICS Description"),
+    ("County", "County"), ("WorkforceDevelopmentArea", "Workforce Development Area"),
+)
+_WI_DWD_PROVENANCE = (
+    "dwd_year_page", "dwd_month_heading", "dwd_row_id", "dwd_notice_pdf",
+    "dwd_updated_cells", "dwd_page_row",
+)
+
+
+def parse_wi_dwd_page(html: str, page_url: str, year: int) -> tuple[list[dict], int]:
+    """Notice rows from a DWD year page, and the count of update-pointer rows.
+
+    Only tables whose header carries the ``NoticeRcvd`` column are notice
+    tables. The two-column "Updates to Previously Filed Notices" tables only
+    point at an existing row (``#rowid``) with a reason code; revisions
+    themselves appear as ``- Revision N`` rows in the notice tables. Cells
+    are read by their ``headers`` attribute; html5lib closes the page's
+    unterminated Layoff Begin Date cells. Cells DWD highlights as updated
+    (``updatedInfo``) are listed in ``dwd_updated_cells``.
+    """
+    soup = BeautifulSoup(html, "html5lib")
+    rows: list[dict] = []
+    pointers = 0
+    for table in soup.find_all("table"):
+        header_ids = [th.get("id") for th in table.find_all("th")]
+        body_rows = [tr for tr in table.find_all("tr") if tr.find("td")]
+        if "NoticeRcvd" not in header_ids:
+            pointers += len(body_rows)
+            continue
+        heading = table.find_previous("h2")
+        for tr in body_rows:
+            cells = {}
+            updated = []
+            for td in tr.find_all("td"):
+                key = (td.get("headers") or [None])[0]
+                if key is None:
+                    continue
+                cells[key] = " ".join(td.get_text(" ").split())
+                if "updatedInfo" in (td.get("class") or []):
+                    updated.append(key)
+            missing = [key for key, _ in _WI_DWD_FIELDS if key not in cells]
+            if missing:
+                raise ValueError(f"WI {year}: notice row missing cells {missing}")
+            if "updatedInfo" in (tr.get("class") or []):
+                updated.insert(0, "row")
+            link = tr.find("a", href=True)
+            raw = {name: cells[key] for key, name in _WI_DWD_FIELDS}
+            raw.update({
+                "dwd_year_page": page_url,
+                "dwd_month_heading": " ".join(heading.get_text(" ").split()) if heading else "",
+                "dwd_row_id": tr.get("id") or "",
+                "dwd_notice_pdf": urllib_parse.urljoin(page_url, link["href"]) if link else "",
+                "dwd_updated_cells": ";".join(updated),
+                "dwd_page_row": str(len(rows) + 1),
+            })
+            rows.append(raw)
+    return rows, pointers
+
+
+def _wi_dwd_capture(year: int, cache_dir: Path) -> tuple[bytes | None, dict]:
+    """Cache-first DWD year page with a url/retrieved_at/sha256 sidecar."""
+    url = WI_DWD_URL.format(year=year)
+    dest = cache_dir / "archives" / "wi" / f"dwd-{year}.htm"
+    meta_path = dest.with_name(dest.name + ".json")
+    fresh = not dest.exists()
+    content = _download(url, dest)
+    if content is None:
+        return None, {}
+    if b'id="NoticeRcvd"' not in content or f"{year} WARN Notices".encode() not in content:
+        logger.warning("WI %s: DWD page lacks the notice table; not cached", year)
+        dest.unlink(missing_ok=True)
+        return None, {}
+    sha = hashlib.sha256(content).hexdigest()
+    if fresh or not meta_path.exists():
+        meta = {"url": url, "sha256": sha,
+                "retrieved_at": (datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+                                 if fresh else None)}
+        meta_path.write_text(json.dumps(meta, indent=2, sort_keys=True) + "\n")
+        dest.with_name(dest.name + ".url").write_text(url)
+    meta = json.loads(meta_path.read_text())
+    if meta.get("sha256") != sha:
+        raise ValueError(f"WI {year}: cached DWD page does not match its recorded sha256")
+    return content, meta
+
+
+def fetch_wi_dwd(cache_dir: Path) -> list[dict]:
+    """Canonical records from DWD's 2016-2019 year pages."""
+    import csv
+    import tempfile
+
+    from warnlive.normalize.engine import normalize_file
+
+    records: list[dict] = []
+    for year in WI_DWD_YEARS:
+        content, meta = _wi_dwd_capture(year, cache_dir)
+        if content is None:
+            logger.warning("WI %s: no DWD year page available", year)
+            continue
+        url = meta["url"]
+        rows, pointers = parse_wi_dwd_page(content.decode("utf-8", "replace"), url, year)
+        observed = (meta.get("retrieved_at") or f"{year + 1}-12-31")[:10]
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(Path(tmp) / "wi.csv", "w", newline="") as fh:
+                writer = csv.DictWriter(
+                    fh, fieldnames=[name for _, name in _WI_DWD_FIELDS] + list(_WI_DWD_PROVENANCE),
+                )
+                writer.writeheader()
+                writer.writerows(rows)
+            result = normalize_file("wi", Path(tmp), url, observed_at=observed)
+        for rec in result.records:
+            rec.pop("prepared_row", None)
+            details = json.loads(rec.get("source_details") or "{}")
+            details["source_capture"] = {
+                "url": url, "sha256": meta["sha256"], "retrieved_at": meta.get("retrieved_at"),
+            }
+            rec["source_details"] = json.dumps(details, sort_keys=True, ensure_ascii=False)
+            rec["raw_record_hash"] = _record_hash(rec)
+            records.append(rec)
+        for failure in result.failures:
+            logger.warning("WI %s DWD row not normalized: %s", year, failure["error"])
+        logger.info(
+            "WI %s: %d DWD page rows, %d normalized, %d failed, %d update pointers",
+            year, len(rows), len(result.records), result.failed_rows, pointers,
+        )
     return records
 
 

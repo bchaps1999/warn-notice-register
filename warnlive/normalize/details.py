@@ -200,6 +200,11 @@ def extract(state: str, raw: dict, rec: dict) -> dict:
             if not result.get("notice_date") and details["source_artifact"]:
                 details["notice_key_source_text"] = details["source_artifact"]
 
+    elif state == "WV":
+        # Each summary entry or linked notice PDF is its own filing; undated
+        # documents for one employer must not merge on the legacy key.
+        result["source_identity"] = (raw.get("source_identity") or "").strip() or None
+
     elif state == "SC":
         artifact = (raw.get("source") or "").strip()
         ordinal = (raw.get("source_row") or "").strip()

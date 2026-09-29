@@ -359,7 +359,7 @@ def _dedupe_key(rec: dict) -> str:
     # Keep legacy keys for ID-less rows and other states; only a fresh build
     # may adopt changed keys until old notices are migrated or archived.
     source_identity = rec.get("source_identity")
-    if rec["state"] in {"GA", "SC", "IL", "KS", "NJ"} and source_identity:
+    if rec["state"] in {"GA", "SC", "IL", "KS", "NJ", "WV"} and source_identity:
         return hashlib.sha1(f"{rec['state']}|source|{source_identity}".encode()).hexdigest()
     # Some source rows exposed agency receipt/notification (or, in MN, even
     # a layoff-start fallback) as notice_date. Keep their old internal key

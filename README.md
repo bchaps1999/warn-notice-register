@@ -95,9 +95,10 @@ The [date-precision expansion](docs/date-precision-automation-2026-09-24.md)
 describes the automatic source-cell checks and remaining unassessed dates.
 
 Caveats: jurisdictions disagree about what counts as a notice, how amendments
-are reported, and how employees are counted. Arkansas, New Hampshire,
-West Virginia, and Wyoming have no supported notice-level source in this
-register; Puerto Rico is likewise absent. Coverage per jurisdiction starts
+are reported, and how employees are counted. Arkansas, New Hampshire, and
+Wyoming have no supported notice-level source in this register; Puerto Rico
+is likewise absent. West Virginia's official WorkForce WV listing has an
+unverified collector, and its notices are not yet in the register. Coverage per jurisdiction starts
 at whatever supported source history is available; see
 `data/health/status.json` for the collection snapshot.
 

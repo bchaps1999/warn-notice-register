@@ -10,9 +10,9 @@ def test_registry_loads_and_validates():
     reg = load_registry()
     assert len(reg.all()) == 52  # 50 states + DC + PR
     manual = [c for c in reg.all() if c.source == "manual"]
-    assert sorted(c.postal for c in manual) == ["ar", "nh", "pr", "wv", "wy"]
+    assert sorted(c.postal for c in manual) == ["ar", "nh", "pr", "wy"]
     custom = [c for c in reg.all() if c.source == "custom"]
-    assert sorted(c.postal for c in custom) == ["ks", "ma", "mn", "nc", "nv", "sc"]
+    assert sorted(c.postal for c in custom) == ["ks", "ma", "mn", "nc", "nv", "sc", "wv"]
     assert reg["il"].freshness_field == "source_details.agency_reported_date"
     assert reg["pa"].freshness_field == "effective_date"
     assert reg["ct"].freshness_field == "notice_date"

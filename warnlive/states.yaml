@@ -1,4 +1,4 @@
-# WARN state registry — one entry per jurisdiction (47 portal + 5 records-request).
+# WARN state registry — one entry per jurisdiction (48 portal + 4 records-request).
 # Seeded from docs/WARN_State_Portal_Catalog.xlsx.
 #
 # Fields:
@@ -684,16 +684,26 @@ wa:
 
 wv:
   name: West Virginia
-  source: manual
-  status: manual_only
-  tier: null
-  cadence: null
+  source: custom
+  status: unverified
+  tier: medium
+  cadence: weekly
   needs_browser: false
-  min_rows: 0
+  min_rows: 40
   staleness_days: null
-  expected_columns: null
-  source_url: null
-  notes: "No consistent public list; FOIA-based."
+  expected_columns: [record_kind, source_identity, company, address, region, county, notice_date, projected_date, action, affected, entry_note, bold_fields, listing_section, listing_title, listing_title_date, revision_marker, document_role, source_url, source_sha256, source_page, source_row]
+  source_url: https://workforcewv.org/businesses/layoffs-downsizing/warn-listing/
+  notes: >-
+    2026-09-29: official WorkForce West Virginia WARN listing verified (formerly
+    manual_only, "No consistent public list; FOIA-based"). Links one agency summary
+    PDF (Date of Notice/Projected Date/County/Number Affected, 1/1/22-1/3/25; 24
+    entries) plus per-notice PDFs 2021-2026 that are mostly image scans, so those
+    rows carry only the agency link label (employer text, label date of unstated
+    role kept as listing_title_date, no notice_date). Label-dated documents inside
+    the summary window go to wv.listing_review.csv (28 held), not wv.csv.
+    Live fetch 2026-09-29: 58 raw rows (24 summary, 34 documents), 0 failures.
+    Before activation: WV needs source-identity dedupe (three undated Greenbrier
+    Minerals documents share one legacy key) and a user decision on label-only rows.
 
 wi:
   name: Wisconsin
@@ -707,7 +717,7 @@ wi:
   freshness_field: source_details.agency_received_date
   expected_columns: [Company, City, Affected Workers, Notice Received, Original Notice Type / Update Type, Layoff Begin Date, NAICS Description, CountyWorkforce Development Area]
   source_url: https://dwd.wisconsin.gov/dislocatedworker/warn/
-  notes: "Per-year HTML backed by Google Sheets API. Upstream issue #718."
+  notes: "Per-year HTML backed by Google Sheets API. Upstream issue #718. 2026-09-29: upstream requests default.htm?year=2016-2019, which serves no tables; DWD's static /YYYY/default.htm pages (321 rows) are read by backfill/state_archives.fetch_wi_dwd instead."
 
 wy:
   name: Wyoming
