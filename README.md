@@ -139,6 +139,20 @@ fetch (per state)  ->  normalize  ->  verify  ->  ingest (SQLite)  ->  export
 - **Registry**: `warnlive/states.yaml` is the single source of truth for each
   state's adapter, thresholds, cadence, and human-controlled status
   (`unverified` → `active` / `broken`). Only active states enter exports.
+- **Entries**: one notice is one entry the agency lists. Where a source has a
+  filing ID (OR `WARN#`, NY Control Number, IL IEBS, KS), the filing is the
+  notice and its itemized sites or phases are listed inside it. Where it has
+  none, each listed row is a notice, and rows of one filing share
+  `source_details.filing_group` and a `sibling_entry` link. A state's
+  `same_key_policy: distinct_rows` keeps distinct rows of one document that
+  share a legacy key as separate entries instead of versions; see
+  `docs/rebuild-contract.md`.
+- **Source observations**: source rows that are not admitted as notices but
+  are worth publishing appear in `source_observations.csv` with a status:
+  `identity_unresolved` (e.g. Missouri rapid-response log rows) or
+  `not_in_agency_warn_report` (Nebraska rows from NDOL's general
+  layoff/closure report that are absent from its WARN report; this does not
+  establish that an event was not a WARN event).
 
 Both BLN projects are Apache-2.0; this project builds on their work with
 gratitude.
