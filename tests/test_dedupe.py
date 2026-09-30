@@ -239,3 +239,13 @@ def test_last_seen_freezes_on_disappearance_and_thaws_on_return(conn):
         "SELECT last_seen FROM notices WHERE dedupe_key='key-2'"
     ).fetchone()
     assert row["last_seen"] is None
+
+
+def test_revision_keys_version_a_filing_whose_date_moved(conn):
+    """A filing ID (e.g. one NY Control Number) makes a moved date a revision."""
+    rows = [record(), record(effective_date="2026-12-01", raw_record_hash="hash-2")]
+    with pytest.raises(CollisionError):
+        ingest(conn, rows, "2026-07-01")
+    stats = ingest(conn, rows, "2026-07-01", revision_keys={"key-1"})
+    assert (stats.new, stats.updated) == (1, 1)
+    assert conn.execute("SELECT effective_date FROM notices").fetchone()[0] == "2026-12-01"

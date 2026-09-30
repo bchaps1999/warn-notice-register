@@ -8,7 +8,7 @@ import re
 from collections import Counter
 from pathlib import Path
 
-from warnlive.migrate.ny_source import read_artifacts
+from warnlive.migrate.ny_source import dashboard_type_fields, read_artifacts
 from warnlive.normalize.engine import _record_hash
 
 
@@ -60,6 +60,8 @@ def project(directory: Path) -> tuple[list[dict], list[dict], dict]:
                          "raw_extra": _json(row)})
             continue
         identity = f"NY:dashboard-observation:{row['row_sha256']}"
+        layoff_type, is_temporary, type_evidence = dashboard_type_fields(
+            row["event_type"], row["permanence"])
         details = {"origin": row["artifact"], "source_row": row["source_row_id"],
                    "source_row_sha256": row["row_sha256"],
                    "source_artifact_sha256": row["artifact_sha256"],
@@ -73,6 +75,7 @@ def project(directory: Path) -> tuple[list[dict], list[dict], dict]:
                    "permanence_text": row["permanence"],
                    "reason_text": row["reason"],
                    "county_text": row["county"],
+                   "type_evidence": type_evidence,
                    "raw_cells": row["raw_cells"]}
         rec = {"state": "NY", "employer_name": company,
                "location": row["address"].strip(),
@@ -80,8 +83,8 @@ def project(directory: Path) -> tuple[list[dict], list[dict], dict]:
                "notice_date_precision": "day", "notice_date_basis": "reported",
                "effective_date": row["effective_date"],
                "effective_date_precision": "day", "effective_date_basis": "reported",
-               "employees_affected": int(workers_text), "layoff_type": "unknown",
-               "is_temporary": None, "is_amendment": 0,
+               "employees_affected": int(workers_text), "layoff_type": layoff_type,
+               "is_temporary": is_temporary, "is_amendment": 0,
                "source_url": row["source_url"],
                "source_notice_id": row["source_row_id"],
                "source_identity": identity, "source_details": _json(details),

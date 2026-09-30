@@ -1,4 +1,13 @@
-"""Persist official source observations and their conservative admission decisions."""
+"""Persist official source observations and their conservative admission decisions.
+
+Statuses: ``admitted`` (linked to a notice), ``event_unresolved``,
+``rescinded``, ``annotation``, ``identity_unresolved`` (e.g. Missouri
+rapid-response rows: the workbook does not establish a WARN filing per row),
+and ``not_in_agency_warn_report`` (e.g. Nebraska layoff/closure-report rows:
+the agency lists them outside its WARN report; this says where the row is
+listed, not that the event is shown to be non-WARN). Only ``admitted`` rows
+link a notice. Writes the ``source_observations`` table; no network access.
+"""
 
 from __future__ import annotations
 
@@ -7,7 +16,10 @@ import json
 import sqlite3
 from collections.abc import Mapping
 
-_STATUSES = {"admitted", "event_unresolved", "rescinded", "annotation", "identity_unresolved"}
+_STATUSES = {"admitted", "event_unresolved", "rescinded", "annotation", "identity_unresolved",
+             "not_in_agency_warn_report"}
+# Official artifact directories (agency/<dir>/...) whose rows are retained here.
+_ARTIFACT_STATES = {"ia": "IA", "ky": "KY", "la": "LA", "mo_historical": "MO", "ne": "NE"}
 
 
 def _json(value: object) -> str:
@@ -62,9 +74,9 @@ def store_observations(conn: sqlite3.Connection, rows: list[dict],
             status, notice_id = _admission(admission[row["source_row"]])
             artifact = row["source_artifact"]
             parts = artifact.split("/")
-            if len(parts) < 3 or parts[0] != "agency" or parts[1].upper() not in {"IA", "KY", "LA"}:
+            if len(parts) < 3 or parts[0] != "agency" or parts[1].lower() not in _ARTIFACT_STATES:
                 raise ValueError(f"unexpected official source artifact: {artifact}")
-            state = parts[1].upper()
+            state = _ARTIFACT_STATES[parts[1].lower()]
             kind = row.get("kind", "notice")
             if (kind == "annotation") != (status == "annotation"):
                 raise ValueError("annotation admission status mismatch")

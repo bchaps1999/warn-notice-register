@@ -151,6 +151,25 @@ _TYPE_COLUMNS: dict[str, tuple[str, dict[str, str]]] = {
 _TEMPORARY_VALUES: dict[str, tuple[str, dict[str, int]]] = {
     "MI": ("action", {"temporary layoff": 1, "permanent layoff": 0}),
 }
+# Coded type columns, read from each agency's own published legend (retrieved
+# 2026-09-30; see docs/fl-address-and-type-codes-2026-09-30.md).  The two
+# numeric legends are reversed: DC 1 = layoff, 2 = closure; MD 1 = plant
+# closure, 2 = mass layoff.
+_CODE_TYPE_FIELDS = {"DC": "Code Type", "MD": "Type",
+                     "WI": "Original Notice Type / Update Type"}
+_CODE_LEGEND_URLS = {
+    "DC": "https://does.dc.gov/page/industry-closings-and-layoffs-warn-notifications",
+    "MD": "https://labor.maryland.gov/employment/warn2022.shtml",
+    "WI": "https://dwd.wisconsin.gov/dislocatedworker/warn/",
+}
+_DC_CODES = {"1": "mass_layoff", "2": "closure"}
+_MD_CODES = {"1": "closure", "2": "mass_layoff"}
+# Maryland's free-text type from 2023: only these exact phrases are read.
+_MD_PHRASES = {"mass layoff": "mass_layoff", "mass layoff - no recall": "mass_layoff",
+               "plant closure": "closure"}
+_MD_LEADING_CODE = re.compile(r"^([12])(?!\d)")
+_WI_ORIGINAL = {"CL": "closure", "WR": "mass_layoff"}
+_WI_UPDATES = ("AW", "LS", "OC", "RN")
 _CO_LOSS_FIELDS = (("permanent", "permanent_job_losses"),
                    ("temporary", "temporary_job_losses"),
                    ("furloughs", "furloughs"))
@@ -159,6 +178,66 @@ _CO_LOSS_FIELDS = (("permanent", "permanent_job_losses"),
 def _count(value) -> int | None:
     text = str(value or "").strip().replace(",", "")
     return int(text) if text.isdigit() else None
+
+
+def _add_type_code_evidence(state: str, raw: dict, rec: dict, result: dict,
+                            details: dict) -> None:
+    """layoff_type (and MD is_temporary) from DC, MD and WI type codes.
+
+    Only the agency's published legend is applied. A coded cell overrides the
+    engine's keyword reading of that same cell; a phrase-only MD cell fills
+    the field only where the engine left it unknown.  The raw cell and the legend URL are recorded in
+    source_details.  A Wisconsin cell listing both CL and WR stays unknown;
+    its update tokens (AW, LS, OC, RN) are recorded but change nothing, and a
+    rescission (RN) does not change admission.
+    """
+    field = _CODE_TYPE_FIELDS[state]
+    text = str(raw.get(field) or "").strip()
+    if not text:
+        return
+    norm = " ".join(text.casefold().split())
+    mapped = code = None
+    temporary = None
+    if state == "DC":
+        code = norm if norm in _DC_CODES else None
+        mapped = _DC_CODES.get(norm)
+    elif state == "MD":
+        lead = _MD_LEADING_CODE.match(norm)
+        if lead:
+            code = lead.group(1)
+            mapped = _MD_CODES[code]
+            if re.search(r"\btemporary\b", norm):
+                temporary = 1
+        else:
+            mapped = _MD_PHRASES.get(norm)
+            code = text if mapped else None
+    else:
+        tokens = [t.strip().upper() for t in text.split(",") if t.strip()]
+        updates = [t for t in tokens if t in _WI_UPDATES]
+        if updates:
+            details["update_types"] = updates
+            details["update_types_legend_url"] = _CODE_LEGEND_URLS["WI"]
+        originals = {t for t in tokens if t in _WI_ORIGINAL}
+        if len(originals) == 1:
+            code = next(iter(originals))
+            mapped = _WI_ORIGINAL[code]
+    evidence = {"rule": "source_type_code_v1", "source_field": field,
+                "source_text": text, "type_code": code,
+                "type_code_legend_url": _CODE_LEGEND_URLS[state]}
+    # A published legend code is the agency's own classification, so it
+    # outranks the engine's keyword reading of the same cell ("2 (Possibly
+    # turning into a closure)" is code 2, a mass layoff). A phrase-only cell
+    # just fills an unknown value.
+    coded = state != "MD" or _MD_LEADING_CODE.match(norm) is not None
+    previous = rec.get("layoff_type")
+    if mapped and (previous == "unknown" or (coded and previous != mapped)):
+        result["layoff_type"] = mapped
+        if previous not in (None, "unknown", mapped):
+            evidence = {**evidence, "replaced_keyword_reading": previous}
+        details["layoff_type_evidence"] = evidence
+    if temporary is not None and rec.get("is_temporary") is None:
+        result["is_temporary"] = temporary
+        details["temporary_evidence"] = evidence
 
 
 def _add_source_type_evidence(state: str, raw: dict, rec: dict, result: dict,
@@ -171,6 +250,8 @@ def _add_source_type_evidence(state: str, raw: dict, rec: dict, result: dict,
     """
     if not isinstance(raw, dict):
         return
+    if state in _CODE_TYPE_FIELDS:
+        _add_type_code_evidence(state, raw, rec, result, details)
     if state in _TYPE_COLUMNS and rec.get("layoff_type") == "unknown":
         field, mapping = _TYPE_COLUMNS[state]
         text = str(raw.get(field) or "").strip()
@@ -438,7 +519,10 @@ def extract(state: str, raw: dict, rec: dict) -> dict:
             "precision": "day" if received else "unknown", "basis": "reported",
         }]
         result["notice_date"] = None
-        from warnlive.normalize.custom.nv import shifted
+        from warnlive.normalize.custom.nv import shifted, transcription_details
+
+        # Rows transcribed from the scanned 2021 list name their evidence.
+        details.update(transcription_details(raw))
 
         if shifted(raw):
             # Earlier releases keyed these rows on the shifted cells; keep
@@ -455,17 +539,26 @@ def extract(state: str, raw: dict, rec: dict) -> dict:
             }
 
     elif state == "MS" and "company" in raw:
-        from warnlive.normalize.custom.ms import split_row
+        from warnlive.normalize.custom.ms import filed_company, spill_details, split_row
 
+        details.update(spill_details(raw))
         if split_row(raw):
             details["employer_location_split"] = {
                 "rule": "ms_company_city_county_v1",
-                "source_field": "company", "source_text": raw.get("company"),
+                "source_field": "company", "source_text": filed_company(raw),
             }
+        if split_row(raw) or filed_company(raw) != (raw.get("company") or ""):
             details["legacy_key_fields"] = {
                 "employer_name": (raw.get("company") or "").strip() or None,
                 "location": (raw.get("county") or "").strip() or None,
             }
+
+    elif state == "NE" and "source_report" in raw:
+        # Which NDOL report the row came from (WARN report or the general
+        # layoff/closure report), with its page, row and notice document.
+        from warnlive.normalize.custom.ne import source_details as ne_source_details
+
+        details.update(ne_source_details(raw))
 
     elif state == "WA" and "Received Date" in raw:
         # ESD defines Received Date as the day the agency received the WARN

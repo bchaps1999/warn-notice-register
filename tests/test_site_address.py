@@ -126,9 +126,40 @@ def test_numbered_roads_and_floors_are_not_second_addresses(value, several):
     assert site_address._several_addresses(value) is several
 
 
-def test_unlabeled_company_address_is_counted_but_not_exported():
-    raw = {"Company Name": "Delta Apparel, Inc. \n404 Duval Street\n\nKEY WEST, FL, 33040"}
-    got = site_address.derive(_row("FL", raw, "KEY WEST"))
+def _fl(cell):
+    return site_address.derive(_row("FL", {"Company Name": cell}, "KEY WEST"))
+
+
+def test_florida_in_state_street_line_is_the_site():
+    got = _fl("Delta Apparel, Inc. \n404 Duval Street\n\nKEY WEST, FL, 33040")
+    assert got.address == "404 Duval Street, KEY WEST, FL 33040"
+    assert got.basis == "fl_company_cell_in_state"
+    # Street quadrants and state-named streets are not other states.
+    assert _fl("Sodexo \nPalm Bay Hospital\n1425 Malabar Road NE\nPALM BAY, FL, 32907").address
+    assert _fl("Hotel \n944 Washington Avenue\n\nMIAMI BEACH, FL, 33139").address
+
+
+@pytest.mark.parametrize("cell, reason", [
+    ("C2 Technologies \n7601 Lewinsville Road, Suite 200 in McLean, Virginia\n\nOCALA, FL, 34470",
+     "names_another_state"),
+    ("Conduent \n100 Campus Drive, Suite 200 Florham Park, NJ 07932\n\nTAMPA, FL, 33315",
+     "names_another_state"),
+    ("Volta \n155 De Haro Street San Francisco, CA 941033\n\nMIAMI, FL, 33109",
+     "names_another_state"),
+    ("Alutiiq \n2580 Hwy 98\n\nTYNDALL AFB, FL, 23403", "zip_not_florida"),
+    ("Hilton \n14100 Bonnet Creek Lane\n14200 Bonnet Creek Lane\nORLANDO, FL, 32821",
+     "multiple_addresses_in_field"),
+    ("Firm \nOrlando International Airport\n\nORLANDO, FL, 32827", "no_address_in_field"),
+    ("Ace \nRemote workers, 12 Main St\n\nTAMPA, FL, 33619", "not_a_street_address"),
+])
+def test_florida_cells_that_are_not_one_in_state_street_are_rejected(cell, reason):
+    got = _fl(cell)
+    assert got.address is None
+    assert got.reason == reason
+
+
+def test_florida_older_mixed_case_layout_is_counted_but_not_exported():
+    got = _fl("Transitions Optical, Inc.\n9251 Belcher Road\nPinellas Park, FL 33782")
     assert got.address is None
     assert got.reason == "not_surfaced_unlabeled_role"
 
@@ -163,9 +194,10 @@ def test_apply_is_idempotent_and_leaves_quality_rows_alone(tmp_path):
     conn.commit()
     report = site_address.apply(conn, resolver=object())
     got = dict(conn.execute("SELECT dedupe_key, site_address FROM notices").fetchall())
-    assert got == {"ny": "303 Louisiana Avenue Brooklyn, NY, 11207", "fl": None,
+    assert got == {"ny": "303 Louisiana Avenue Brooklyn, NY, 11207",
+                   "fl": "404 Duval Street, KEY WEST, FL 33040",
                    "ca": "1 Report Row", "ga": None}
-    assert report["states"]["FL"] == {"rejected:not_surfaced_unlabeled_role": 1}
+    assert report["states"]["FL"] == {"changed": 1, "surfaced": 1}
     assert report["states"]["CA"] == {"left_to_quality_evidence": 1}
     assert site_address.apply(conn, resolver=object())["changed"] == 0
 
@@ -177,6 +209,8 @@ def test_basis_names_where_an_exported_site_address_came_from():
                                "source_details": json.dumps(quality)}) == "quality_evidence"
     assert site_address.basis({"state": "IL", "site_address": "1 Main St"}) == "labeled_site_field"
     assert site_address.basis({"state": "PA", "site_address": "1 Main St"}) == "filed_county_consistent"
+    assert site_address.basis({"state": "FL", "site_address": "1 Main St"}) == \
+        "fl_company_cell_in_state"
     assert site_address.basis({"state": "AZ", "site_address": "1 Main St"}) == "unverified"
     assert site_address.basis({"state": "IL", "site_address": None}) is None
     assert project({"state": "IL", "site_address": "1 Main St"})["site_address_basis"] == \

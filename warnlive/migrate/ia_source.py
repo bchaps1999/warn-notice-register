@@ -2,7 +2,14 @@
 
 An Excel row is an evidence pointer, not necessarily an additive layoff. Some
 rows describe phases; others amend dates or worker counts. A source row is
-admitted only where its event identity is unambiguous.
+admitted only where its event identity is unambiguous: rows of one
+employer/notice/layoff date at distinct street addresses are admitted as
+separate entries sharing ``source_details.filing_group``, and an amendment
+with exactly one earlier admitted notice at the same employer and street
+address becomes that notice's next version (``is_amendment=1``).
+
+Input: the pinned ``agency/ia`` workbook and historical PDF. Output: records,
+held rows with reasons, and a source-row relation map. No network access.
 """
 
 from __future__ import annotations
@@ -18,7 +25,7 @@ import pdfplumber
 from openpyxl import load_workbook
 
 from warnlive.normalize.engine import _fold, _record_hash
-from warnlive.normalize.revisions import classify_idless_events
+from warnlive.normalize.revisions import Disposition, classify_idless_events
 
 HEADERS = (
     "Company", "Street Address", "City", "County", "State", "ZIP",
@@ -249,6 +256,139 @@ def _location(row: dict) -> str | None:
     return ", ".join(part for part in (city, county) if part) or None
 
 
+def _distinct_sites(rows: list[dict]) -> list[list[dict]] | None:
+    """One family's rows as distinct street-address sites, or None.
+
+    Rows sharing an address are one site only when no artifact lists that
+    address twice and every capture agrees on city and workers; the
+    structured event log is preferred over the printed PDF. A blank address,
+    a repeated address, or a disagreement leaves the family unresolved.
+    """
+    by_address: dict[str, list[dict]] = defaultdict(list)
+    for row in rows:
+        address = _fold(row["street_address_text"])
+        if not address:
+            return None
+        by_address[address].append(row)
+    if len(by_address) < 2:
+        return None
+    sites = []
+    for address in sorted(by_address):
+        captures = by_address[address]
+        artifacts = Counter(row["source_artifact"] for row in captures)
+        if (any(count > 1 for count in artifacts.values())
+                or len({(row["workers_reported"], _fold(row["city_text"]))
+                        for row in captures}) != 1):
+            return None
+        sites.append(sorted(captures, key=lambda row: (
+            row["source_artifact"] != "agency/ia/event-log.xlsx", row["source_row"])))
+    return sites
+
+
+def _filing_order(row: dict) -> tuple:
+    ordinal = re.search(r"(\d+)$", row["source_row"])
+    return (row["notice_date"] or "", row["effective_date"] or "",
+            row["source_artifact"] != "agency/ia/event-log.xlsx",
+            int(ordinal.group(1)) if ordinal else 0, row["source_row"])
+
+
+def _amendment_parents(rows: list[dict], status: dict[str, str],
+                       admitted: dict[str, dict]) -> dict[str, tuple[str, str]]:
+    """Each amendment's decision: ("version", parent pointer), ("duplicate",
+    parent pointer) for a second capture of a versioned amendment, or
+    ("held", reason).
+
+    The parent is the unique admitted row with the same folded employer and
+    street address whose notice date is on or before the amendment's. An
+    identical amendment printed in both artifacts is one amendment. A version
+    moving the action date is still that notice's revision: the row declares
+    itself an amendment and has exactly one parent at its site, so the
+    rebuild exempts the parent's key from the 45-day collision check.
+    """
+    parents_by_site: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    for row in admitted.values():
+        parents_by_site[(_fold(row["company_text"]), _fold(row["street_address_text"]))].append(row)
+    pending = [row for row in rows if status[row["source_row"]] == "amendment_without_verified_parent"]
+    result: dict[str, str] = {}
+    captures: dict[tuple, list[dict]] = defaultdict(list)
+    for row in pending:
+        captures[(_fold(row["company_text"]), _fold(row["street_address_text"]),
+                  row["notice_date"], row["effective_date"], row["workers_reported"])].append(row)
+    chosen: dict[str, dict] = {}
+    for key, group in captures.items():
+        group.sort(key=_filing_order)
+        for row in group[1:]:
+            # Resolved below once the kept capture's outcome is known.
+            chosen[row["source_row"]] = group[0]
+    accepted: dict[str, list[str]] = defaultdict(list)
+    for row in sorted(pending, key=_filing_order):
+        pointer = row["source_row"]
+        if pointer in chosen:
+            continue
+        address = _fold(row["street_address_text"])
+        if row.get("layout_issues") or not row["notice_date"] or not row["effective_date"] or not address:
+            result[pointer] = "amendment_without_verified_parent"
+            continue
+        parents = [parent for parent in parents_by_site.get((_fold(row["company_text"]), address), [])
+                   if parent["notice_date"] <= row["notice_date"]]
+        if len(parents) != 1:
+            result[pointer] = ("amendment_parent_ambiguous" if parents
+                               else "amendment_without_verified_parent")
+            continue
+        parent = parents[0]["source_row"]
+        # A declared amendment with one parent at its exact site is that
+        # filing's revision even when it moves the action date past the
+        # 45-day collision window: ingest exempts its key (revision_keys).
+        accepted[parent].append(row["effective_date"])
+        result[pointer] = parent
+    decisions: dict[str, tuple[str, str]] = {
+        pointer: ("version", outcome) if outcome in admitted else ("held", outcome)
+        for pointer, outcome in result.items()}
+    for pointer, kept in chosen.items():
+        outcome = result[kept["source_row"]]
+        # A second capture of a versioned amendment points at the notice.
+        decisions[pointer] = (("duplicate", outcome) if outcome in admitted
+                              else ("held", outcome))
+    return decisions
+
+
+def _amendment_version(row: dict, parent: dict) -> dict:
+    """The parent notice's next version, carrying the amendment's reported
+    layoff date and worker count; the parent's filing identity, notice date,
+    location and type stay. An "Additional Employees" amendment keeps the
+    parent's count and date, because the source does not say whether its
+    figures are incremental or a new total. The amendment row itself is in
+    source_details."""
+    details = json.loads(parent["source_details"])
+    details["amendment"] = {
+        "source_artifact": row["source_artifact"], "source_row": row["source_row"],
+        "source_row_sha256": row["source_row_sha256"],
+        "parent_basis": "same_folded_employer_and_street_address_earlier_notice",
+        "revision_basis": "declared_amendment_unique_parent_site",
+        "notice_type_text": row["notice_type_text"],
+        "amendment_notice_date": row["notice_date"],
+        "reported_layoff_date": row["effective_date"],
+        "reported_workers": row["workers_reported"],
+        "raw_cells": row["raw_cells"]}
+    # An "Additional Employees" amendment reports a count and date without
+    # saying whether they are the added workers only or a restated total, so
+    # the parent's count and date stand and the amendment's are kept above.
+    additional = "additional" in str(row.get("notice_type_text") or "").casefold()
+    if additional:
+        details["amendment"]["applied_to_notice"] = False
+        details["amendment"]["not_applied_reason"] = (
+            "additional_employees_count_meaning_unstated")
+    rec = {**parent,
+           "effective_date": parent["effective_date"] if additional else row["effective_date"],
+           "employees_affected": (parent["employees_affected"] if additional
+                                  else row["workers_reported"] or None),
+           "is_amendment": 1,
+           "source_details": json.dumps(details, sort_keys=True),
+           "raw_extra": json.dumps(row["raw_cells"], ensure_ascii=False, default=str)}
+    rec["raw_record_hash"] = _record_hash(rec)
+    return rec
+
+
 def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, str]]:
     """Admit uniquely identified ordinary rows; retain amendment and site questions.
 
@@ -266,6 +406,7 @@ def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, s
     status: dict[str, str] = {}
     related: dict[str, str] = {}
     candidates: list[dict] = []
+    filing_groups: dict[str, dict] = {}
     for group in families.values():
         ordinary = [row for row in group if not _is_amendment(row["notice_type_text"])]
         for row in group:
@@ -280,8 +421,25 @@ def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, s
         cities = {_fold(row["city_text"]) for row in ordinary}
         addresses = {_fold(row["street_address_text"]) for row in ordinary}
         if len(workers) > 1 or len(cities) > 1 or len(addresses) > 1:
-            for row in ordinary:
-                status[row["source_row"]] = "site_phase_or_worker_allocation_unresolved"
+            sites = _distinct_sites(ordinary)
+            if sites is None:
+                for row in ordinary:
+                    status[row["source_row"]] = "site_phase_or_worker_allocation_unresolved"
+                continue
+            # Each listed street address is its own entry of one filing.
+            first = ordinary[0]
+            group_id = "IA:agency-filing-group:" + hashlib.sha1("|".join((
+                _fold(first["company_text"]), first["notice_date"] or "",
+                first["effective_date"] or "")).encode()).hexdigest()
+            for captures in sites:
+                preferred = captures[0]
+                candidates.append(preferred)
+                filing_groups[preferred["source_row"]] = {
+                    "id": group_id, "rows": len(sites),
+                    "basis": "same_employer_notice_and_layoff_date_distinct_addresses"}
+                for row in captures[1:]:
+                    status[row["source_row"]] = "duplicate_agency_capture"
+                    related[row["source_row"]] = preferred["source_row"]
             continue
         if ordinary:
             # Prefer the structured, current agency log when a historical PDF
@@ -301,15 +459,32 @@ def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, s
                     status[row["source_row"]] = "duplicate_agency_capture"
                     related[row["source_row"]] = preferred["source_row"]
 
-    decisions = classify_idless_events(
-        candidates, row_key=lambda row: row["source_row"],
-        employer=lambda row: _fold(row["company_text"]),
-        site=lambda row: _fold(row["street_address_text"] or row["city_text"]),
-        action=lambda row: row["effective_date"],
-        notice=lambda row: row["notice_date"],
-        content=lambda row: json.dumps((row["notice_date"], row["effective_date"],
-                                        row["workers_reported"])),
-    )
+    def classify(events: list[dict]) -> dict:
+        return classify_idless_events(
+            events, row_key=lambda row: row["source_row"],
+            employer=lambda row: _fold(row["company_text"]),
+            site=lambda row: _fold(row["street_address_text"] or row["city_text"]),
+            action=lambda row: row["effective_date"],
+            notice=lambda row: row["notice_date"],
+            content=lambda row: json.dumps((row["notice_date"], row["effective_date"],
+                                            row["workers_reported"])),
+        )
+
+    # Single-site events are decided on their own, so admitting a filing's
+    # listed sites can never demote one of them. A site entry sharing an
+    # employer/site event date with a single-site row is held instead.
+    def signatures(row: dict) -> set[tuple]:
+        firm, site = _fold(row["company_text"]), _fold(row["street_address_text"] or row["city_text"])
+        return {(firm, site, "notice", row["notice_date"]), (firm, site, "action", row["effective_date"])}
+
+    singles = [row for row in candidates if row["source_row"] not in filing_groups]
+    entries = [row for row in candidates if row["source_row"] in filing_groups]
+    decisions = classify(singles)
+    taken = set().union(*(signatures(row) for row in singles)) if singles else set()
+    overlapping = [row for row in entries if signatures(row) & taken]
+    for row in overlapping:
+        decisions[row["source_row"]] = Disposition("unresolved", "possible_revision_same_event")
+    decisions.update(classify([row for row in entries if row not in overlapping]))
     for pointer, decision in decisions.items():
         status[pointer] = ("admitted" if decision.kind == "notice" else
                            "possible_revision_same_event" if decision.kind == "unresolved" else
@@ -317,12 +492,23 @@ def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, s
         if decision.related_row:
             related[pointer] = decision.related_row
     records, held = [], []
+    admitted_rows = {row["source_row"]: row for row in rows if status[row["source_row"]] == "admitted"}
+    amendments = _amendment_parents(rows, status, admitted_rows)
+    for pointer, (kind, value) in amendments.items():
+        if kind == "held":
+            status[pointer] = value
+            continue
+        status[pointer] = "amendment_version" if kind == "version" else "duplicate_agency_capture"
+        related[pointer] = value
+    by_pointer: dict[str, dict] = {}
     for row in rows:
         pointer = row["source_row"]
         reason = status[pointer]
         row["disposition"] = reason
         if pointer in related:
             row["related_source_row"] = related[pointer]
+        if reason == "amendment_version":
+            continue
         if reason != "admitted":
             held.append({"origin": row["source_artifact"], "state": "IA", "reason": reason,
                          "source_row": pointer, "source_row_sha256": row["source_row_sha256"],
@@ -339,6 +525,8 @@ def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, s
                    "address_role": "unverified", "street_address_text": row["street_address_text"],
                    "city_text": row["city_text"], "county_text": row["county_text"],
                    "address_state_text": row["address_state_text"]}
+        if pointer in filing_groups:
+            details["filing_group"] = filing_groups[pointer]
         rec = {"state": "IA", "employer_name": row["company_text"].strip(),
                "location": _location(row),
                "notice_date": row["notice_date"], "notice_date_precision": "day",
@@ -353,7 +541,19 @@ def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, s
                "dedupe_key": hashlib.sha1(identity.encode()).hexdigest()}
         rec["raw_record_hash"] = _record_hash(rec)
         records.append(rec)
+        by_pointer[pointer] = rec
+    # Amendments follow their parent notice as later versions, in filing order.
+    rows_by_pointer = {row["source_row"]: row for row in rows}
+    versions = []
+    for pointer in sorted((p for p, reason in status.items() if reason == "amendment_version"),
+                          key=lambda p: _filing_order(rows_by_pointer[p])):
+        versions.append(_amendment_version(rows_by_pointer[pointer], by_pointer[related[pointer]]))
+    records.extend(versions)
     if len(records) + len(held) != len(rows):
         raise ValueError("Iowa source row accounting mismatch")
-    return records, held, {"source_rows": len(rows), "admitted": len(records),
+    return records, held, {"source_rows": len(rows), "admitted": len(records) - len(versions),
+                           "amendment_versions": len(versions),
+                           "admitted_filing_group_rows": sum(
+                               "filing_group" in json.loads(rec["source_details"])
+                               for rec in records if not rec["is_amendment"]),
                            "held": len(held), "hold_reasons": dict(Counter(x["reason"] for x in held))}, related

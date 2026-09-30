@@ -194,6 +194,46 @@ def test_multisite_total_is_not_assigned_to_the_first_county():
     }]
 
 
+def test_itemized_filing_counts_each_listed_site_in_its_own_county():
+    rows = [
+        {"county_fips": None, "county_name": None, "state": "OR",
+         "employees_affected": 60,
+         "source_details": json.dumps({"worker_allocation": "itemized", "sites": [
+             {"location": "Portland", "workers": 40}, {"location": "Gresham", "workers": 5},
+             {"location": "Bend", "workers": 12}, {"location": None, "workers": 3}]}),
+         "site_counties": [
+             {"county_fips": "41051", "county_name": "Multnomah", "workers": 40},
+             {"county_fips": "41051", "county_name": "Multnomah", "workers": 5},
+             {"county_fips": "41017", "county_name": "Deschutes", "workers": 12},
+             {"county_fips": None, "county_name": None, "workers": 3}]},
+        {"county_fips": "41051", "county_name": "Multnomah", "state": "OR",
+         "employees_affected": 7, "source_details": None},
+    ]
+    assert _county_series(rows) == [
+        {"fips": "41051", "county": "Multnomah", "state": "OR", "notices": 2, "workers": 52},
+        {"fips": "41017", "county": "Deschutes", "state": "OR", "notices": 1, "workers": 12},
+    ]
+
+
+def test_site_build_places_itemized_oregon_sites_by_county(conn, tmp_path):
+    from warnlive.normalize.engine import _record_hash
+
+    rec = record(1, state="OR", location=None, employees_affected=52,
+                 source_details=json.dumps({"worker_allocation": "itemized", "sites": [
+                     {"location": "Portland", "workers": 40},
+                     {"location": "Bend", "workers": 12}]}))
+    rec["raw_record_hash"] = _record_hash(rec)
+    ingest(conn, [rec], "2026-07-01")
+    out = tmp_path / "out"
+    build_site(conn, load_registry(), out, as_of="2026-09-01")
+    counties = {c["county"]: (c["notices"], c["workers"])
+                for c in json.loads((out / "states/or.json").read_text())["counties"]}
+    assert counties == {"Multnomah County": (1, 40), "Deschutes County": (1, 12)}
+    key = rec["dedupe_key"]
+    detail = json.loads((out / "notices" / f"{key[:2]}.json").read_text())[key]
+    assert "site_counties" not in detail
+
+
 def test_historical_nj_month_is_not_displayed_as_known_day(conn, tmp_path):
     ingest(conn, [record(1, state="NJ", notice_date="2026-01-01")], "2026-07-01")
     out = tmp_path / "out"

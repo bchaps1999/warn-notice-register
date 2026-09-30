@@ -1,0 +1,21 @@
+image_row,Received Date,Effective Date,Type,Affected Total,Employer,City,County,Notification,transcription_basis,interim_pdf_row,transcription_note
+r01,1/12/2021,3/31/2021,Closure,33,Food Source,Reno,Washoe,,ocr+manual,interim_row_1,
+r02,1/14/2021,12/4/2020,Layoff,2,Wyndham Vacation-Desert Blue,Las Vegas,Clark,,ocr+manual,interim_row_2,interim PDF prints 'Wyndham Vacation - Desert Blue' (spaced hyphen); scan value kept
+r03,1/14/2021,12/18/2020,Layoff,4,Wyndham Vacation-Grand Desert,Las Vegas,Clark,,ocr+manual,interim_row_3,interim PDF prints 'Wyndham Vacation - Grand Desert'; scan value kept
+r04,1/14/2021,12/4/2020,Layoff,23,Wyndham Vacation-Harrah's,Las Vegas,Clark,,ocr+manual,interim_row_4,interim PDF prints 'Wyndham Vacation - Harrahs'; scan value kept
+r05,1/26/2021,1/7/2021,Layoff,13,Vegas Golden Knight/Henderson Silver,Las Vegas,Clark,,ocr+manual,,
+r06,1/26/2021,4/1/2021,Closure,242,Sykes Corporation,Las Vegas,Clark,,ocr+manual,interim_row_5,
+r07,2/3/2021,1/27/2021,Layoff,10,"A & B Precision Metals, Inc.",Reno,Washoe,,ocr+manual,,tesseract read 'A&B'; the image shows spaces: 'A & B'
+r08,2/10/2021,2/12/2021,Layoff,45,Silverton Casino,Las Vegas,Clark,,ocr+manual,interim_row_6,"interim PDF prints employer 'Silverton Casino, LLC' and Notice Date 4/16/2021; scan value kept"
+r09,2/24/2021,3/1/2021,Layoff,10,"Fry's Electronics, Inc.",Las Vegas,Clark,,ocr+manual,,
+r10,4/26/2021,4/28/2021,Layoff,7,ART Asset Adjusters,Las Vegas,Clark,,ocr+manual,,
+r11,4/26/2021,4/28/2021,Layoff,2,ART Asset Adjusters,Sparks,Washoe,,ocr+manual,,
+r12,5/24/2021,6/15/2021,Closure,99,Aerion Supersonic LLC,Reno,Washoe,,ocr+manual,,
+r13,7/29/2021,7/31/2021,Layoff,95,T&T BLV - Buca di Beppo Italian Restaurant,Las Vegas,Clark,,ocr+manual,,
+r14,8/1/2021,8/24/2021,Layoff,100,Southern NV Culinary & Bartenders,Las Vegas,Clark,,ocr+manual,,
+r15,9/1/2021,10/1/2021,Layoff,176,Renown,Reno,Washoe,,ocr+manual,,
+r16,11/10/2021,11/10/2021,Layoff,60,Hycroft Mining,Winnemucca,Humboldt,,ocr+manual,,
+r17,11/22/2021,12/20/2021,Closure,116,West Hills Behavorial Hospital,Reno,Washoe,,ocr+manual,,'Behavorial' is spelled so in the image; kept as filed
+r18,12/16/2021,12/13/2021,Closure,50,Central Freight Lines,Las Vegas,Clark,,ocr+manual,,
+r19,12/16/2021,12/13/2021,Closure,50,Central Freight Lines,Reno,Washoe,,ocr+manual,,
+r20,12/16/2021,12/17/2021,Layoff,61,Monitronics International/Brinks Home,Las Vegas,Clark,,ocr+manual,,

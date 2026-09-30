@@ -20,7 +20,10 @@ Sources here (found 2026-07-26; see docs / plan notes):
       dedupe key falls back to the effective date.
   NE: NDOL's own WARN page as captured 2025-03-23 (pinned capture), for
       2020-2022 notices the agency page stopped listing in 2025; the year
-      endpoints the upstream scraper reads end in 2020.
+      endpoints the upstream scraper reads end in 2020. The 2010-2019 year
+      endpoints themselves (WARNReportData and LayoffAndClosureReportData)
+      are captured and tagged by report here for the NE collector
+      (fetch.patches.ne), with a url/retrieved_at/sha256 sidecar each.
 
 Ingestion uses the same strict month-gap rule as the BLN gap-fill: a row
 only enters months where the state currently has zero notices, so archive
@@ -43,7 +46,7 @@ import xlrd
 from bs4 import BeautifulSoup
 
 from warnlive.enrich.industry import _NAICS_SECTORS
-from warnlive.normalize.engine import _clean_text, _dedupe_key, _record_hash
+from warnlive.normalize.engine import _clean_text, _dedupe_key, _fold, _record_hash
 
 logger = logging.getLogger("warnlive")
 
@@ -468,7 +471,12 @@ NE_DOL_YEARS = range(2020, 2023)
 _NE_DOL_HEADER = ["Date", "Company", "Jobs Affected", "Location"]
 # The live collector's raw columns (warn-scraper ne.py).
 _NE_RAW_COLUMNS = ["Date", "Company", "Type", "Jobs Affected", "City", "Location"]
-_NE_DOL_PROVENANCE = ("ndol_notice_link", "ndol_page_row")
+# Raw CSV columns written by the NE collector (fetch.patches.ne) and the
+# 2020-2022 backfill: upstream's columns plus report provenance.
+NE_RAW_FIELDS = _NE_RAW_COLUMNS + [
+    "source_report", "ndol_source_page", "ndol_page_row", "ndol_notice_link",
+    "ndol_matched_warn_row",
+]
 
 
 def parse_ne_dol_page(html: str, page_url: str) -> list[dict]:
@@ -502,6 +510,18 @@ def parse_ne_dol_page(html: str, page_url: str) -> list[dict]:
             "page_row": len(rows) + 1,
         })
     return rows
+
+
+def ne_page_raw_row(row: dict, page_url: str) -> dict:
+    """A WARN page row in the collector's raw columns. The page has no City
+    or Type column; its place is the Location cell."""
+    date, company, jobs, location = row["cells"]
+    return {
+        "Date": date, "Company": company, "Type": "", "Jobs Affected": jobs,
+        "City": "", "Location": location, "source_report": "warn_report",
+        "ndol_source_page": page_url, "ndol_page_row": str(row["page_row"]),
+        "ndol_notice_link": row["link"], "ndol_matched_warn_row": "",
+    }
 
 
 def _ne_row_year(cells: list[str]) -> int | None:
@@ -560,15 +580,10 @@ def fetch_ne_dol(cache_dir: Path) -> list[dict]:
                 f"{NE_DOL_TIMESTAMP[6:8]}")[:10]
     with tempfile.TemporaryDirectory() as tmp:
         with open(Path(tmp) / "ne.csv", "w", newline="") as fh:
-            writer = csv.DictWriter(fh, fieldnames=_NE_RAW_COLUMNS + list(_NE_DOL_PROVENANCE))
+            writer = csv.DictWriter(fh, fieldnames=NE_RAW_FIELDS)
             writer.writeheader()
             for row in in_scope:
-                date, company, jobs, location = row["cells"]
-                writer.writerow({
-                    "Date": date, "Company": company, "Type": "",
-                    "Jobs Affected": jobs, "City": "", "Location": location,
-                    "ndol_notice_link": row["link"], "ndol_page_row": str(row["page_row"]),
-                })
+                writer.writerow(ne_page_raw_row(row, NE_DOL_CAPTURE))
         result = normalize_file("ne", Path(tmp), NE_DOL_CAPTURE, observed_at=observed)
     records = []
     for rec in result.records:
@@ -584,9 +599,10 @@ def fetch_ne_dol(cache_dir: Path) -> list[dict]:
         records.append(rec)
     for failure in result.failures:
         logger.warning("NE NDOL row not normalized: %s", failure["error"])
-    # The NE transformer keys on City, which this page (like the live one)
-    # leaves blank, so two sites of one employer filed the same day share a
-    # key. Ingesting both would fold one notice into the other; hold the
+    # The page has no City column; its site is the Location cell, which
+    # the NE transformer keys on when City is blank (so the two Hayneedle
+    # 2020-01-23 sites stay distinct). Rows that still share a key with
+    # different content would fold one notice into the other; hold the
     # group instead of choosing.
     hashes: dict[str, set[str]] = {}
     for rec in records:
@@ -607,6 +623,162 @@ def fetch_ne_dol(cache_dir: Path) -> list[dict]:
         len(held), result.failed_rows, len(rows) - len(in_scope),
     )
     return records
+
+
+# NDOL's 2010-2019 year endpoints, which warn-scraper's ne.py reads. Each
+# year has two reports: WARNReportData (the WARN report) and
+# LayoffAndClosureReportData, NDOL's general layoff/closure report (bank
+# branches, restaurants, small closures; about 190 rows a year). Upstream
+# appends both to one CSV, so the register could not tell them apart. Each
+# page is cached with a url/retrieved_at/sha256 sidecar; every row is
+# tagged with its report, and a layoff/closure row that repeats a WARN
+# report row (same employer and date) records that row. Only WARN report
+# rows are notices; normalize.custom.ne names the hold for the others.
+NE_REPORT_URLS = {
+    "warn_report": "https://dol.nebraska.gov/LayoffServices/WARNReportData/?year={year}",
+    "layoff_closure_report": (
+        "https://dol.nebraska.gov/LayoffServices/LayoffAndClosureReportData/?year={year}"
+    ),
+}
+NE_REPORT_YEARS = range(2010, 2020)
+_NE_REPORT_HEADERS = {
+    "warn_report": ["Date", "Company", "Jobs Affected", "City", "Location"],
+    "layoff_closure_report": ["Date", "Company", "Type", "Jobs Affected", "City", "Location"],
+}
+_NE_REPORT_TITLES = {
+    "warn_report": "WARN Report", "layoff_closure_report": "Layoff and Closures Report",
+}
+
+
+def parse_ne_report(html: str, report: str, year: int) -> list[dict]:
+    """Rows of one NDOL year report, read as warn-scraper ne.py reads them.
+
+    Cells are ``td.text.strip()`` under html.parser, keyed by the report's
+    own header row, so raw values match upstream's CSV. The report title,
+    year line and header must be the expected ones, and every row must fill
+    the header; anything else is an error rather than a silent zero.
+    """
+    header = _NE_REPORT_HEADERS[report]
+    soup = BeautifulSoup(html, "html.parser")
+    tables = soup.find_all("table")
+    if not tables:
+        raise ValueError(f"NE {report} {year}: no table")
+    table = tables[0]
+    head_rows = [
+        [" ".join(th.get_text(" ").split()) for th in tr.find_all("th")]
+        for tr in table.find_all("tr") if tr.find("th") and not tr.find("td")
+    ]
+    if not head_rows or head_rows[0][:1] != [_NE_REPORT_TITLES[report]]:
+        raise ValueError(f"NE {report} {year}: unexpected report title {head_rows[:1]}")
+    # An empty year is a two-row table: title and "No events to display."
+    if head_rows[1:] == [["No events to display."]] and not table.find("td"):
+        return []
+    if not any(cells and cells[0].startswith(f"{year} Events") for cells in head_rows):
+        raise ValueError(f"NE {report} {year}: page is not for {year}")
+    if header not in head_rows:
+        raise ValueError(f"NE {report} {year}: unexpected columns {head_rows}")
+    rows = []
+    for tr in table.find_all("tr"):
+        tds = tr.find_all("td")
+        if not tds:
+            continue
+        cells = [td.text.strip() for td in tds]
+        if len(cells) == 1 and "no events" in cells[0].lower():
+            continue
+        if len(cells) != len(header):
+            raise ValueError(f"NE {report} {year}: row does not fill the header: {cells!r}")
+        rows.append(dict(zip(header, cells)) | {"page_row": len(rows) + 1})
+    return rows
+
+
+def ne_report_capture(report: str, year: int, cache_dir: Path) -> tuple[bytes, dict]:
+    """Cache-first NDOL year report with a url/retrieved_at/sha256 sidecar.
+
+    Raises when the page cannot be fetched or is not the expected report:
+    a missing year must not look like a year without notices.
+    """
+    url = NE_REPORT_URLS[report].format(year=year)
+    dest = cache_dir / "archives" / "ne" / f"{report}-{year}.html"
+    meta_path = dest.with_name(dest.name + ".json")
+    fresh = not dest.exists()
+    content = _download(url, dest)
+    if content is None:
+        raise ValueError(f"NE {report} {year}: fetch failed ({url})")
+    if (_NE_REPORT_TITLES[report].encode() not in content
+            or (f"{year} Events".encode() not in content
+                and b"No events to display." not in content)):
+        dest.unlink(missing_ok=True)
+        raise ValueError(f"NE {report} {year}: not the NDOL report page; not cached")
+    sha = hashlib.sha256(content).hexdigest()
+    if fresh or not meta_path.exists():
+        meta = {"url": url, "report": report, "year": year, "sha256": sha,
+                "retrieved_at": (datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+                                 if fresh else None)}
+        meta_path.write_text(json.dumps(meta, indent=2, sort_keys=True) + "\n")
+        dest.with_name(dest.name + ".url").write_text(url)
+    meta = json.loads(meta_path.read_text())
+    if meta.get("sha256") != sha:
+        raise ValueError(f"NE {report} {year}: cached page does not match its recorded sha256")
+    return content, meta
+
+
+def _ne_date(value: str) -> str | None:
+    text = " ".join((value or "").split())
+    for fmt in ("%m/%d/%Y", "%m/%d/%y"):
+        try:
+            return datetime.strptime(text, fmt).date().isoformat()
+        except ValueError:
+            continue
+    return None
+
+
+def ne_report_rows(cache_dir: Path) -> tuple[list[dict], dict]:
+    """Tagged raw rows for 2010-2019, in upstream's order, and a count report.
+
+    A layoff/closure row matches a WARN report row when both the folded
+    employer name and the parsed date are equal; it records every matching
+    WARN row as ``warn_report:<year>:<page row>``. The match is recorded,
+    never used to admit the layoff/closure row.
+    """
+    pages: dict[tuple[str, int], tuple[list[dict], dict]] = {}
+    for year in NE_REPORT_YEARS:
+        for report in NE_REPORT_URLS:
+            content, meta = ne_report_capture(report, year, cache_dir)
+            rows = parse_ne_report(content.decode("utf-8", "replace"), report, year)
+            pages[(report, year)] = (rows, meta)
+    warn_index: dict[tuple[str, str], list[str]] = {}
+    for year in NE_REPORT_YEARS:
+        for row in pages[("warn_report", year)][0]:
+            day = _ne_date(row["Date"])
+            if day:
+                warn_index.setdefault((_fold(row["Company"]), day), []).append(
+                    f"warn_report:{year}:{row['page_row']}"
+                )
+    out: list[dict] = []
+    report_counts: dict[str, dict] = {}
+    for year in NE_REPORT_YEARS:
+        counts = report_counts.setdefault(str(year), {})
+        for report in NE_REPORT_URLS:
+            rows, meta = pages[(report, year)]
+            counts[report] = len(rows)
+            counts[f"{report}_sha256"] = meta["sha256"]
+            matched = 0
+            for row in rows:
+                match = ""
+                if report == "layoff_closure_report":
+                    day = _ne_date(row["Date"])
+                    match = ";".join(warn_index.get((_fold(row["Company"]), day), [])) \
+                        if day else ""
+                    matched += bool(match)
+                out.append({
+                    **{name: row.get(name, "") for name in _NE_RAW_COLUMNS},
+                    "source_report": report, "ndol_source_page": meta["url"],
+                    "ndol_page_row": str(row["page_row"]), "ndol_notice_link": "",
+                    "ndol_matched_warn_row": match,
+                })
+            if report == "layoff_closure_report":
+                counts["layoff_closure_report_matching_warn_row"] = matched
+    return out, report_counts
 
 
 # --- Florida -----------------------------------------------------------------

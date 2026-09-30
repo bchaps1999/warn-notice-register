@@ -1,6 +1,6 @@
 """Deterministic, source-derived worksite addresses for notices.site_address.
 
-Address role policy (site_address_surface_v3)
+Address role policy (site_address_surface_v4)
 ---------------------------------------------
 ``site_address`` holds a street address only when the source establishes
 that the address is where the reported layoff happens.  An address is
@@ -25,6 +25,21 @@ exported as ``site_address`` under exactly one of these bases:
     against the Census roster, to the same county the agency filed in its
     own independent ``county`` column.
 
+``fl_company_cell_in_state``
+    Florida's ``Company Name`` cell is the company name, its street line(s)
+    and a final uppercase ``CITY, FL, ZIP`` line.  The column does not label
+    the street line's role, but a sampled check against the agency's notice
+    letters found the in-state street line to be the affected worksite in
+    every decidable case, and the out-of-state street line to be the
+    headquarters or reporting office (see
+    docs/fl-address-and-type-codes-2026-09-30.md).  The street line(s) plus
+    the final city line are therefore accepted only when the street lines
+    name no other state, no non-Florida ZIP, and pass the shape checks
+    below.  A cell whose street line is out of state is rejected
+    (``names_another_state``), never re-labeled.  The notice's ``location``
+    is itself derived from this cell, so the value is a source fact about
+    the filing, not an independent geocode.
+
 Every accepted value must also look like one street address (a house
 number, no P.O. box, no "multiple/various" text, not two concatenated
 street addresses) and must not name another state.  An Illinois row whose
@@ -42,8 +57,8 @@ in raw_extra.  ``apply`` counts these as ``surfaced_after_name_prefix``.
 
 Addresses whose role the source does not label, and for which no
 independent filed place exists to check them against, are *not* exported:
-Florida's company cell (name plus address, from which ``location`` is
-itself derived), Idaho's ``Address``/``City`` block, the America's JobLink
+Florida cells that do not have the three-part layout above (the older
+inline "name street city, FL zip" form), Idaho's ``Address``/``City`` block, the America's JobLink
 portals' ``address`` (AZ, KS, ME, VT, MI, DE — Kansas documents these as
 sometimes the employer's out-of-state contact), and Missouri's company
 ``Address``.  They remain in raw_extra; ``apply`` counts them as
@@ -69,12 +84,13 @@ import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 
-RULE = "site_address_surface_v3"
+RULE = "site_address_surface_v4"
 
 # Basis values exported as site_address_basis.
 BASIS_QUALITY = "quality_evidence"
 BASIS_LABELED = "labeled_site_field"
 BASIS_COUNTY = "filed_county_consistent"
+BASIS_FL_CELL = "fl_company_cell_in_state"
 BASIS_UNVERIFIED = "unverified"
 
 # States whose site_address belongs to the pinned quality-evidence pass.
@@ -86,12 +102,13 @@ SURFACE_STATES: dict[str, str] = {
     "GA": BASIS_LABELED,
     "SC": BASIS_LABELED,
     "PA": BASIS_COUNTY,
+    "FL": BASIS_FL_CELL,
 }
 # state -> raw field holding an address whose role the source does not label
 # and which has no independent filed place to check it against.  Counted,
 # never exported.
 UNLABELED_ADDRESS_FIELDS: dict[str, tuple[str, ...]] = {
-    "FL": ("Company Name", "COMPANY NAME"),
+    "FL": ("Company Name", "COMPANY NAME"),  # inline / non-standard cells only
     "ID": ("Address",),
     "AZ": ("address",),
     "KS": ("address",),
@@ -198,7 +215,7 @@ _NY_DASHBOARD_WIDTH = 12
 _NY_SITE_CELL = 4
 
 
-def clean_address(value: str | None, state: str) -> str | None:
+def clean_address(value: str | None, state: str, *, check_state: bool = True) -> str | None:
     """Return a usable street address, or None.
 
     Accepts a value that looks like a street address and does not name a
@@ -215,7 +232,7 @@ def clean_address(value: str | None, state: str) -> str | None:
     # the whole string would reject street names like "Washington Ave".
     tail = text.rsplit(",", 1)[-1] if "," in text else " ".join(text.split()[-3:])
     for abbrev, name in _STATE_NAMES.items():
-        if abbrev == state:
+        if abbrev == state or not check_state:
             continue
         if re.search(rf"\b{abbrev}\b(?=[\s,.]|\d|$)", tail) or \
                 re.search(rf"\b{name}\b", tail, re.I):
@@ -365,7 +382,7 @@ def _prefix_blocked(text: str) -> bool:
 
 
 def _checked(value: str, state: str, basis: str, field: str, *,
-             prefixed: bool | None = None) -> Decision:
+             prefixed: bool | None = None, check_state: bool = True) -> Decision:
     """Common shape checks for any candidate address.
 
     A leading venue name is stripped here unless the caller already handled
@@ -383,7 +400,7 @@ def _checked(value: str, state: str, basis: str, field: str, *,
     else:
         street, prefix = text, ("stripped by caller" if prefixed else None)
     probe = _word_number_ok(street) or street
-    cleaned = clean_address(probe, state)
+    cleaned = clean_address(probe, state, check_state=check_state)
     if cleaned is None:
         if _STREETISH.search(probe) and not _JUNK.search(probe):
             return Decision(None, None, "names_another_state", field)
@@ -481,6 +498,62 @@ def _pennsylvania(raw: object, resolver) -> Decision:
     return checked
 
 
+_FL_FINAL_LINE = re.compile(
+    r"^(?P<city>[A-Z][A-Z .'\-&/]*[A-Z.]),\s*FL,?\s+(?P<zip>\d{5})(?:-\d{4})?$")
+_FL_ZIP = re.compile(r"^3[2-4]\d{3}$")
+
+
+def _other_state_in(text: str) -> bool:
+    """Whether street text names a state other than Florida: state + ZIP, a
+    ", XX" abbreviation, or a state name ending a comma-separated part."""
+    for match in re.finditer(r"\b([A-Z]{2})\s+\d{5,}", text):
+        if match.group(1) != "FL":
+            return True
+    parts = [part.strip(" .;") for part in text.split(",")]
+    for index, part in enumerate(parts):
+        for abbrev, name in _STATE_NAMES.items():
+            if abbrev == "FL":
+                continue
+            if (index and part == abbrev) or re.search(rf"\b{name}$", part, re.I):
+                return True
+    return False
+
+
+def _florida(raw: object) -> Decision | None:
+    """Decision for a Florida three-part company cell, or None when the cell
+    has another layout (left to the unlabeled-role count)."""
+    field = next((f for f in ("Company Name", "COMPANY NAME")
+                  if isinstance(raw, dict) and raw.get(f)), None)
+    if field is None:
+        return None
+    lines = [line.strip() for line in str(raw[field]).split("\n") if line.strip()]
+    if len(lines) < 3:
+        return None
+    final = _FL_FINAL_LINE.match(lines[-1])
+    if not final:
+        return None
+    street_lines = lines[1:-1]
+    street = _WS.sub(" ", " ".join(street_lines)).strip(" ,;")
+    if not street_lines or not re.search(r"\d", street):
+        return Decision(None, None, "no_address_in_field", field)
+    if not _FL_ZIP.match(final["zip"]):
+        return Decision(None, None, "zip_not_florida", field)
+    if any(_other_state_in(line) for line in street_lines) or _other_state_in(street):
+        return Decision(None, None, "names_another_state", field)
+    # The other-state check above replaces clean_address's tail test, which
+    # misreads street names and quadrants ("Washington Avenue", "Road NE").
+    checked = _checked(street, "FL", BASIS_FL_CELL, field, check_state=False)
+    if checked.address is None:
+        return checked
+    # A street line that already carries its own city and state ("..., Delray
+    # Beach Florida") is kept as filed, without the cell's city appended.
+    if re.search(r"\bFlorida\b|\bFL\b", checked.address, re.I):
+        return checked
+    city = final["city"].strip()
+    return Decision(f"{checked.address}, {city}, FL {final['zip']}", BASIS_FL_CELL,
+                    checked.reason, field)
+
+
 def derive(row, resolver=None) -> Decision:
     """The policy decision for one notice row (a mapping with state,
     location, fields_json).  Quality-evidence rows are not decided here."""
@@ -496,6 +569,10 @@ def derive(row, resolver=None) -> Decision:
         return _south_carolina(raw)
     if state == "PA":
         return _pennsylvania(raw, resolver)
+    if state == "FL":
+        decision = _florida(raw)
+        if decision is not None:
+            return decision
     fields = UNLABELED_ADDRESS_FIELDS.get(state)
     if fields and isinstance(raw, dict):
         for field in fields:

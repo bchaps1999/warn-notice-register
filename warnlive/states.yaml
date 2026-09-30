@@ -14,6 +14,8 @@
 #   min_rows: verification threshold on all-time raw rows
 #   staleness_days: max age of newest configured source date before freshness warns; null = archival/annual source
 #   freshness_field: notice_date (default) | effective_date | source_details.<validated agency date>
+#   same_key_policy: versions (default) | distinct_rows — distinct rows of one document that share a
+#     legacy dedupe_key stay separate entries instead of folding into versions (normalize/entries.py)
 #   fetch_budget_minutes: wall-clock cap on one live fetch (default 45, pipeline.DEFAULT_FETCH_BUDGET_MINUTES); past it the state fails and the run continues
 #   expected_columns: raw CSV header snapshot; null until first verified fetch
 #   notes: quirks, upstream issue links
@@ -82,6 +84,7 @@ ca:
   expected_columns: [notice_date, effective_date, received_date, company, city, num_employees, layoff_or_closure, county, address, source_file]
   source_url: https://edd.ca.gov/en/Jobs_and_Training/Layoff_Services_WARN
   notes: "Current-year Excel + historical PDFs; layout varies year to year."
+  same_key_policy: distinct_rows
 
 co:
   name: Colorado
@@ -278,7 +281,7 @@ la:
   staleness_days: null
   expected_columns: null
   source_url: https://www.laworks.net/Downloads/Downloads_WFD.asp
-  notes: "Annual PDF per year. Fetch BROKEN without ZYTE_API_KEY (upstream #753/#783 route via Zyte); held rows export. Revisit if a key is added."
+  notes: "Annual PDF per year. Upstream fetch routes via the paid Zyte proxy (upstream #753/#783), which this project does not use; fetch broken; held rows export."
 
 ma:
   name: Massachusetts
@@ -292,7 +295,7 @@ ma:
   freshness_field: source_details.agency_received_date
   expected_columns: [RECEIVED, EMPLOYER, CITY/TOWN, REGION, DATE(S) OF LAYOFFS, "# EMPLOYEES IMPACTED"]
   source_url: https://www.mass.gov/info-details/worker-adjustment-and-retraining-notification-act-warn-layoff-and-closure-updates
-  notes: "NOT in warn-scraper (PR #787 in flight upstream). Weekly HTML/PDF regional reports."
+  notes: "Fiscal-year workbooks + weekly CSV on mass.gov (Akamai; has refused GitHub runners with 403). Optional Internet Archive fallback via WARNLIVE_MA_ARCHIVE_FALLBACK; provenance in raw/ma.fetch_manifest.json."
 
 md:
   name: Maryland
@@ -333,6 +336,7 @@ mi:
   expected_columns: [company, link, address, county, action, reason, date_start, jobs, extras, titles, city, date_close, includes]
   source_url: https://www.michigan.gov/leo/bureaus-agencies/wd/data-public-notices/warn-notices
   notes: "Sitecore (sxa) search API returns JSON."
+  same_key_policy: distinct_rows
 
 mn:
   name: Minnesota
@@ -399,9 +403,10 @@ ne:
   needs_browser: false
   min_rows: 20
   staleness_days: 180
-  expected_columns: [Date, Company, Type, Jobs Affected, City, Location]
+  expected_columns: [Date, Company, Type, Jobs Affected, City, Location, source_report, ndol_source_page, ndol_page_row, ndol_notice_link, ndol_matched_warn_row]
   source_url: https://dol.nebraska.gov/ReemploymentServices/LayoffServices/LayoffsAndDownsizingWARN
-  notes: "Year-parameterized HTML data endpoints. 2026-09-29: the live page lists 2023+ only and the upstream year endpoints stop at 2019 (WARNReportData has 19 rows for 2020 and none for 2021+). 2020-2022 come from a pinned 2025-03-23 Wayback capture of the NDOL WARN page (backfill/state_archives.fetch_ne_dol: 29 rows, 2 same-day Hayneedle sites held because the transformer keys on the blank City column). Caution: upstream also appends LayoffAndClosureReportData for 2010-2019 (about 190 closure/layoff rows a year, many plainly non-WARN), which is why pre-2020 counts are 10x later years."
+  notes: "Year-parameterized HTML data endpoints. 2026-09-29: the live page lists 2023+ only and the upstream year endpoints stop at 2019 (WARNReportData has 19 rows for 2020 and none for 2021+). 2020-2022 come from a pinned 2025-03-23 Wayback capture of the NDOL WARN page (backfill/state_archives.fetch_ne_dol: 29 rows, 2 same-day Hayneedle sites held because the transformer keys on the blank City column). Caution: upstream also appends LayoffAndClosureReportData for 2010-2019 (about 190 closure/layoff rows a year, many plainly non-WARN), which is why pre-2020 counts are 10x later years. 2026-09-30: the collector is now fetch/patches/ne.py; rows are tagged with the report they came from (source_report); NDOL layoff/closure-report rows are held as ne_layoff_closure_report_not_warn; location uses Location when City is blank."
+  same_key_policy: distinct_rows
 
 nv:
   name: Nevada
@@ -413,9 +418,9 @@ nv:
   min_rows: 50
   staleness_days: 90
   freshness_field: source_details.agency_received_date
-  expected_columns: [Received Date, Effective Date, Type, Affected Total, Employer, City, County, Notification]
+  expected_columns: [Received Date, Effective Date, Type, Affected Total, Employer, City, County, Notification, transcription_basis, transcription_source]
   source_url: https://detr.nv.gov/Page/WARN
-  notes: "NOT in warn-scraper. Master PDF list mixing WARN and non-WARN. 2021 gap (checked 2026-09-29): the only full-year 2021 list, Content/Media/WARN_2021.pdf (Word export 2021-12-21, sha256 9f3dadcd...), is a single scanned image of 20 rows with no WARN/Non-WARN column, so the collector reads nothing from it. The one 2021 register row (Rawhide Mine, received 2021-12-26) comes from a later master PDF. A text-bearing interim list, cms.detr.nv.gov/Content/Media/2021_updated_210222.pdf (Wayback 20240302153413, updated 2021-02-22), covers 6 Jan-Feb 2021 rows; the May 2021 interim (2021_updated_210524.pdf) was not archived. Not OCRed or backfilled pending a decision."
+  notes: "NOT in warn-scraper. Master PDF list mixing WARN and non-WARN. 2021 gap (checked 2026-09-29): the only full-year 2021 list, Content/Media/WARN_2021.pdf (Word export 2021-12-21, sha256 9f3dadcd...), is a single scanned image of 20 rows with no WARN/Non-WARN column, so the collector reads nothing from it. The one 2021 register row (Rawhide Mine, received 2021-12-26) comes from a later master PDF. A text-bearing interim list, cms.detr.nv.gov/Content/Media/2021_updated_210222.pdf (Wayback 20240302153413, updated 2021-02-22), covers 6 Jan-Feb 2021 rows; the May 2021 interim (2021_updated_210524.pdf) was not archived. Not OCRed or backfilled pending a decision. 2026-09-30: 2021 rows now come from the transcription of the scanned list at data/source_snapshots/2026-09-30-nv-2021-transcription (verification in progress)."
 
 nh:
   name: New Hampshire
@@ -549,6 +554,7 @@ pa:
   expected_columns: [company, addressfull, county, jobs, date_effective, closure_or_layoff]
   source_url: https://www.pa.gov/agencies/dli/programs-services/workforce-development-home/warn-requirements/warn-notices
   notes: "HTML tables; recently migrated to pa.gov domain."
+  same_key_policy: distinct_rows
 
 pr:
   name: Puerto Rico

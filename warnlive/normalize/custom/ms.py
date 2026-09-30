@@ -7,7 +7,15 @@ carries the site and ``county`` is empty on most rows. When the cell ends in
 Mississippi place name, the employer is the text before the city and the
 location is "<City> (<County>)" as filed. Otherwise the cell is left whole.
 
-The raw cell stays in raw_extra; details.extract records the split and the
+Some quarterly PDFs draw the date column too wide, so the PDF parser puts
+the leading words of the next cell into the date cell: "4/17/2026  Aramark"
+with company "Services, Inc", or "6/15/2026  WARN – Due" with reason
+"Businesses Circumstances...". When a date cell is a date followed by text
+that is not another date, the date is read from the leading token and the
+spilled text is put back in front of the next cell (company after the notice
+date). The company then goes through the site split above.
+
+The raw cells stay in raw_extra; details.extract records the split and the
 legacy key fields so existing notices keep their dedupe identity. Reads the
 Census place roster in data/reference/places.csv.gz; no network access.
 """
@@ -79,17 +87,62 @@ def split_company_place(company: str | None) -> tuple[str, str] | None:
     return None
 
 
+_SPILL = re.compile(r"^\s*(?P<date>\d{1,2}/\d{1,2}/\d{2,4})\s+(?P<spill>\S.*?)\s*$", re.S)
+_DATE_ONLY = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}")
+
+
+def date_spill(value: str | None) -> tuple[str, str] | None:
+    """(date, spilled text) for a date cell carrying the next cell's words.
+
+    A second date ("08/31/2023 09/01/2023") is not a spill.
+    """
+    match = _SPILL.match(value or "")
+    if not match or _DATE_ONLY.fullmatch(match.group("spill")):
+        return None
+    if not any(ch.isalpha() for ch in match.group("spill")):
+        return None
+    return match.group("date"), " ".join(match.group("spill").split())
+
+
+def filed_company(row: dict) -> str:
+    """The company cell with any words spilled into the notice-date cell."""
+    company = row.get("company") or ""
+    spill = date_spill(row.get("date_notice"))
+    if not spill:
+        return company
+    return " ".join(f"{spill[1]} {company}".split())
+
+
+def spill_details(row: dict) -> dict:
+    """source_details naming the date cells whose spill was put back."""
+    fields = {}
+    for date_field, next_field in (("date_notice", "company"), ("date_effective", "reason")):
+        spill = date_spill(row.get(date_field))
+        if spill:
+            fields[date_field] = {"source_text": row.get(date_field),
+                                  "date_text": spill[0], "spill_to": next_field}
+    return {"date_cell_spill": {"rule": "ms_date_cell_spill_v1", "fields": fields}} \
+        if fields else {}
+
+
+def _date_cell(name: str):
+    def read(row: dict) -> str:
+        spill = date_spill(row.get(name))
+        return spill[0] if spill else row.get(name, "")
+    return read
+
+
 def split_row(row: dict) -> tuple[str, str] | None:
     """The split for a scraped row; rows with their own county column
     (newer reports) are left as filed."""
     if (row.get("county") or "").strip():
         return None
-    return split_company_place(row.get("company"))
+    return split_company_place(filed_company(row))
 
 
 def _company(row: dict) -> str:
     split = split_row(row)
-    return split[0] if split else row.get("company", "")
+    return split[0] if split else filed_company(row)
 
 
 def _location(row: dict) -> str:
@@ -100,4 +153,6 @@ def _location(row: dict) -> str:
 class Transformer(UpstreamTransformer):
     """Transform Mississippi raw data for consolidation."""
 
-    fields = dict(UpstreamTransformer.fields, company=_company, location=_location)
+    fields = dict(UpstreamTransformer.fields, company=_company, location=_location,
+                  notice_date=_date_cell("date_notice"),
+                  effective_date=_date_cell("date_effective"))

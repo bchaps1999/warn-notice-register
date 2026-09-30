@@ -9,6 +9,10 @@ captures zipped those rows onto the usual header, so every later cell sits
 one column right: Employer holds the worker count, City the employer, County
 the city and Notification the county. ``realign`` reads such a row by
 position; the raw row stays in raw_extra unchanged.
+
+Rows the collector read from a recorded transcription of a scanned PDF
+(2021) carry ``transcription_basis`` and ``transcription_source``;
+``transcription_details`` names them for ``details.extract``.
 """
 
 from __future__ import annotations
@@ -18,6 +22,17 @@ import re
 from warn_transformer.schema import BaseTransformer
 
 _DATE = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}")
+
+
+def transcription_details(row: dict) -> dict:
+    """source_details for a transcribed row; empty for PDF-text rows."""
+    basis = (row.get("transcription_basis") or "").strip()
+    if not basis:
+        return {}
+    return {"transcription": {
+        "basis": basis, "source": (row.get("transcription_source") or "").strip(),
+        "rule": "nv_scanned_list_transcription_v1",
+    }}
 
 
 def shifted(row: dict) -> bool:

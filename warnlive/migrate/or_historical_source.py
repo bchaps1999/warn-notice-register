@@ -1,4 +1,10 @@
-"""Agency-sent Oregon historical WARN list, preserved by Big Local News."""
+"""Agency-sent Oregon historical WARN list, preserved by Big Local News.
+
+Input: the pinned ``agency/or_historical`` workbook and the WARN numbers in
+the newer captures. Output: one record per admitted WARN number (itemized
+``sites``/``phases`` for a number listing several) and held rows with
+reasons. No network access.
+"""
 
 from __future__ import annotations
 
@@ -13,9 +19,9 @@ from pathlib import Path
 
 from openpyxl import load_workbook
 
-from warnlive.migrate.or_source import HEADERS
+from warnlive.migrate.or_source import (HEADERS, ITEMIZED_EVIDENCE, filing_record,
+                                        row_complete, single_record)
 from warnlive.migrate.source_bundle import _entry, verify
-from warnlive.normalize.engine import _record_hash
 from warnlive.normalize.revisions import classify_agency_ids
 
 ARTIFACT = "or_warnlist_july_2021.xlsx"
@@ -84,7 +90,12 @@ def read_artifacts(directory: Path) -> tuple[list[dict], dict]:
 
 
 def project(directory: Path, existing_ids: set[str] | None = None) -> tuple[list[dict], list[dict], dict]:
-    """Admit complete unique WARN numbers absent from both newer captures."""
+    """Admit complete WARN numbers absent from both newer captures.
+
+    A number listed once is its notice; one listing several sites or phases
+    is one filing notice with itemized ``sites``/``phases`` (see
+    ``or_source.filing_record``). Conflicting rows stay held.
+    """
     rows, manifest = read_artifacts(directory)
     existing = existing_ids or set()
     def pointer(row: dict) -> str:
@@ -97,27 +108,72 @@ def project(directory: Path, existing_ids: set[str] | None = None) -> tuple[list
         action=lambda r: str(r["raw"]["Layoff Date"] or "")[:10] or None,
         revision=lambda r: False, content=lambda r: _json(r["raw"]),
     )
-    records, held = [], []
+    items: dict[str, dict] = {}
+    groups: dict[str, list[dict]] = {}
     for row in rows:
         raw = row["raw"]
         ident = str(raw["WARN#"] or "").strip()
-        employer = str(raw["Company Name"] or "").strip()
         try:
             received = _day(raw["Received Date"])
             effective = _day(raw["Layoff Date"])
         except ValueError:
             received = effective = None
-        workers = raw["Laid Off"]
+        items[pointer(row)] = {
+            "source_row": pointer(row), "source_row_sha256": row["source_row_sha256"],
+            "raw": raw, "received": received, "effective": effective,
+            "workers": raw["Laid Off"],
+            "complete": row_complete(ident, str(raw["Company Name"] or "").strip(),
+                                     received, effective, raw["Laid Off"])}
+        groups.setdefault(ident, []).append(row)
+
+    def details_for(evidence: str, identity_basis: str, received: str) -> dict:
+        return {"origin": f"{PREFIX}/{ARTIFACT}",
+                "source_workbook_sha256": manifest["sha256"],
+                "provenance_url": manifest["provenance_url"],
+                "identity_basis": identity_basis,
+                "disposition": "notice", "disposition_evidence": evidence,
+                "agency_received_date": received,
+                "date_roles": {"Received Date": "agency_receipt",
+                               "Layoff Date": "reported_action"}}
+
+    filings: dict[str, dict] = {}
+    for ident, group_rows in groups.items():
+        evidence = {decisions[pointer(row)].evidence for row in group_rows}
+        members = [items[pointer(row)] for row in group_rows]
+        if (len(group_rows) > 1 and ident.isdigit() and ident not in existing
+                and ident not in UNRESOLVED_EMPLOYER_IDS
+                and len(evidence) == 1 and next(iter(evidence)) in ITEMIZED_EVIDENCE
+                and all(member["complete"] for member in members)
+                and len({member["received"] for member in members}) == 1):
+            name = next(iter(evidence))
+            filings[ident] = filing_record(
+                ident, members, ITEMIZED_EVIDENCE[name],
+                details_for(name, "agency_warn_number_filing", members[0]["received"]),
+                manifest["source_url"])
+
+    records, held = [], []
+    admitted_rows = 0
+    for row in rows:
+        raw = row["raw"]
+        ident = str(raw["WARN#"] or "").strip()
+        employer = str(raw["Company Name"] or "").strip()
+        entry = items[pointer(row)]
+        received = entry["received"]
         decision = decisions[pointer(row)]
-        complete = (ident.isdigit() and employer and received and effective
-                    and isinstance(workers, (int, float)) and not isinstance(workers, bool)
-                    and workers > 0 and int(workers) == workers)
+        if ident in filings:
+            admitted_rows += 1
+            if row is groups[ident][0]:
+                records.append(filings[ident])
+            continue
         reason = ("missing_warn_number" if not ident.isdigit() else
                   "newer_agency_capture_overlap" if ident in existing else
                   "duplicate_agency_capture" if decision.kind == "duplicate_capture" else
+                  "itemized_filing_incomplete" if decision.kind == "unresolved"
+                  and decision.evidence in ITEMIZED_EVIDENCE
+                  and ident not in UNRESOLVED_EMPLOYER_IDS else
                   "multi_site_or_phase_identity_unresolved" if decision.kind == "unresolved" else
                   "unresolved_employer_in_source" if ident in UNRESOLVED_EMPLOYER_IDS else
-                  "incomplete_historical_row" if not complete else None)
+                  "incomplete_historical_row" if not entry["complete"] or not employer else None)
         source_pointer = pointer(row)
         if reason:
             held.append({"origin": f"{PREFIX}/{ARTIFACT}", "state": "OR",
@@ -132,31 +188,17 @@ def project(directory: Path, existing_ids: set[str] | None = None) -> tuple[list
                          "notice_year": received[:4] if received else None,
                          "raw_extra": _json(raw)})
             continue
-        details = {"origin": f"{PREFIX}/{ARTIFACT}", "source_row": source_pointer,
+        details = {**details_for(decision.evidence, "singleton_agency_warn_number", received),
+                   "source_row": source_pointer,
                    "source_row_sha256": row["source_row_sha256"],
-                   "source_workbook_sha256": manifest["sha256"],
-                   "provenance_url": manifest["provenance_url"],
-                   "identity_basis": "singleton_agency_warn_number",
-                   "disposition": decision.kind, "disposition_evidence": decision.evidence,
-                   "agency_received_date": received,
-                   "date_roles": {"Received Date": "agency_receipt",
-                                  "Layoff Date": "reported_action"},
-                   "raw_cells": raw}
-        record = {"state": "OR", "employer_name": employer,
-                  "location": str(raw["Location"] or "").strip() or None,
-                  "notice_date": None, "effective_date": effective,
-                  "effective_date_precision": "day", "effective_date_basis": "reported",
-                  "employees_affected": int(workers), "layoff_type": "unknown",
-                  "is_temporary": None, "is_amendment": 0,
-                  "source_url": manifest["source_url"], "source_notice_id": ident,
-                  "source_identity": f"OR:agency:{ident}",
-                  "source_details": _json(details), "raw_extra": _json(raw),
-                  "dedupe_key": hashlib.sha1(f"OR|agency|{ident}".encode()).hexdigest()}
-        record["raw_record_hash"] = _record_hash(record)
-        records.append(record)
-    if len(records) + len(held) != len(rows):
+                   "disposition": decision.kind, "raw_cells": raw}
+        records.append(single_record(ident, entry, details, manifest["source_url"]))
+        admitted_rows += 1
+    if admitted_rows + len(held) != len(rows):
         raise ValueError("Oregon historical source accounting mismatch")
     return records, held, {"source_rows": len(rows), "admitted": len(records),
+                           "admitted_rows": admitted_rows,
+                           "itemized_filings": len(filings),
                            "held": len(held),
                            "hold_reasons": dict(Counter(item["reason"] for item in held)),
                            "duplicate_captures": sum(x.get("disposition") == "duplicate_capture" for x in held)}

@@ -95,7 +95,7 @@ def test_source_only_archive_screens_employer_overlap_not_statewide_month(
         monkeypatch.setitem(state_archives.FETCHERS, state, lambda _cache: [])
     captured = []
 
-    def collect(_conn, groups, _observed_at):
+    def collect(_conn, groups, _observed_at, _revision_keys=frozenset()):
         captured.extend(groups.values())
         return {"new": sum(map(len, groups.values())), "updated": 0,
                 "unchanged": 0, "coalesced": 0,
@@ -142,7 +142,7 @@ def test_florida_archive_overlap_uses_notice_month_when_range_is_parsed(
     monkeypatch.setattr(offline_rebuild, "_cached_ny", lambda _cache: [])
     captured = []
 
-    def collect(_conn, groups, _observed_at):
+    def collect(_conn, groups, _observed_at, _revision_keys=frozenset()):
         captured.extend(row for rows in groups.values() for row in rows)
         return {"new": len(captured), "updated": 0, "unchanged": 0,
                 "coalesced": 0, "suspected_collisions": 0}
@@ -658,3 +658,59 @@ def test_rebuild_fingerprints_exclude_observation_metadata():
     assert _fingerprints(FixedRows()) == {
         "notices": expected, "versions": expected, "links": expected,
     }
+
+
+def test_archive_entries_phases_and_control_numbers_are_accounted(tmp_path, monkeypatch):
+    """CA entries, WI phases and updates, and NY control numbers all ingest."""
+    from warnlive.backfill import state_archives
+    from warnlive.migrate import offline_rebuild
+    from warnlive.normalize.engine import _dedupe_key, _record_hash
+    from warnlive.store import db as db_mod
+
+    def rec(state, employer, effective, workers, *, notice=None, details=None,
+            raw=None, amendment=0):
+        row = {"state": state, "employer_name": employer, "location": "Town",
+               "notice_date": notice, "effective_date": effective,
+               "employees_affected": workers, "layoff_type": "closure",
+               "is_temporary": None, "is_amendment": amendment,
+               "source_url": f"archive://{state}", "source_notice_id": None,
+               "source_details": json.dumps(details, sort_keys=True) if details else None,
+               "raw_extra": json.dumps(raw or {"w": workers})}
+        row["dedupe_key"] = _dedupe_key(dict(row, notice_date=notice or effective))
+        row["raw_record_hash"] = _record_hash(row)
+        return row
+
+    def wi(received, effective, workers, amendment=0):
+        return rec("WI", "Hostess", effective, workers, amendment=amendment,
+                   details={"agency_received_date": received,
+                            "legacy_notice_key_date": received})
+
+    ca = [rec("CA", "Abbott", "2014-11-12", n) for n in (9, 41, 53, 41)]
+    wi_rows = [wi("2012-05-07", "2012-07-04", 13), wi("2012-05-07", "2012-06-01", 2),
+               wi("2013-01-02", "2013-03-01", 50), wi("2013-02-02", "2013-03-01", 50, 1)]
+    ny = [rec("NY", "ConAgra", day, 395, notice="2014-03-20",
+              raw={"Control Number": "2013-0291", "wayback_id": page})
+          for day, page in (("2015-05-24", "4522"), ("2015-02-28", "4709"),
+                            ("2015-05-24", "4977"))]
+    monkeypatch.setitem(state_archives.FETCHERS, "CA", lambda _cache: ca)
+    monkeypatch.setitem(state_archives.FETCHERS, "WI", lambda _cache: wi_rows)
+    monkeypatch.setattr(offline_rebuild, "_cached_ny", lambda _cache: ny)
+    conn = db_mod.connect(tmp_path / "c.sqlite")
+    db_mod.init_db(conn)
+    exceptions = []
+    report = _cached_agencies(conn, tmp_path, None, {}, "2026-09-29", exceptions,
+                              states=("CA", "WI", "NY"))
+    assert {s: report[s]["unaccounted_rows"] for s in report} == {"CA": 0, "WI": 0, "NY": 0}
+    counts = dict(conn.execute("SELECT state, COUNT(*) FROM notices GROUP BY state").fetchall())
+    assert counts == {"CA": 3, "WI": 2, "NY": 1}
+    assert report["WI"]["phase_rows_folded"] == 1 and report["WI"]["updated"] == 1
+    assert report["NY"]["updated"] == 1 and report["NY"]["coalesced_identical_rows"] == 1
+    phase = conn.execute(
+        "SELECT employees_affected, effective_date, effective_date_end FROM notices "
+        "WHERE state='WI' AND dedupe_key=?", (wi_rows[0]["dedupe_key"],)).fetchone()
+    assert tuple(phase) == (15, "2012-06-01", "2012-07-04")
+    assert sorted(item["reason"] for item in exceptions) == [
+        "coalesced_same_key_content", "coalesced_same_key_content", "folded_into_filing_phases",
+    ]
+    ny_current = conn.execute("SELECT current_version, effective_date FROM notices WHERE state='NY'").fetchone()
+    assert tuple(ny_current) == (2, "2015-05-24")

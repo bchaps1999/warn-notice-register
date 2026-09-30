@@ -59,6 +59,53 @@ def test_labeled_type_columns(state, raw, layoff_type, temporary):
         assert evidence["source_text"] == next(iter(raw.values()))
 
 
+@pytest.mark.parametrize("state, field, cell, layoff_type, temporary", [
+    ("DC", "Code Type", "1", "mass_layoff", None),
+    ("DC", "Code Type", "2", "closure", None),
+    ("DC", "Code Type", "3", None, None),
+    # Maryland's numeric legend is the reverse of DC's.
+    ("MD", "Type", "1", "closure", None),
+    ("MD", "Type", "2", "mass_layoff", None),
+    ("MD", "Type", "2 Temporary", "mass_layoff", 1),
+    ("MD", "Type", "1 *Note-This is an update to the WARN", "closure", None),
+    ("MD", "Type", "12", None, None),
+    ("MD", "Type", "Mass Layoff - No Recall", "mass_layoff", None),
+    ("MD", "Type", "Plant Closure", "closure", None),
+    ("MD", "Type", "Temporary Furlough", None, None),
+    ("MD", "Type", "Unsure at this time", None, None),
+    ("WI", "Original Notice Type / Update Type", "CL", "closure", None),
+    ("WI", "Original Notice Type / Update Type", "WR", "mass_layoff", None),
+    ("WI", "Original Notice Type / Update Type", "CL, AW, LS", "closure", None),
+    ("WI", "Original Notice Type / Update Type", "CL, WR", None, None),
+    ("WI", "Original Notice Type / Update Type", "Unknown", None, None),
+])
+def test_agency_type_legends(state, field, cell, layoff_type, temporary):
+    got = extract(state, {field: cell}, _rec())
+    assert got.get("layoff_type") == layoff_type
+    assert got.get("is_temporary") == temporary
+    if layoff_type:
+        evidence = json.loads(got["source_details"])["layoff_type_evidence"]
+        assert evidence["source_text"] == cell
+        assert evidence["type_code_legend_url"].startswith("https://")
+        assert evidence["type_code"]
+
+
+def test_wisconsin_update_tokens_are_recorded_without_changing_admission():
+    got = extract("WI", {"Original Notice Type / Update Type": "CL, AW, LS"}, _rec())
+    assert json.loads(got["source_details"])["update_types"] == ["AW", "LS"]
+    rescinded = extract("WI", {"Original Notice Type / Update Type": "WR, RN"}, _rec())
+    assert rescinded["layoff_type"] == "mass_layoff"
+    assert json.loads(rescinded["source_details"])["update_types"] == ["RN"]
+    both = extract("WI", {"Original Notice Type / Update Type": "CL, WR, OC"}, _rec())
+    assert "layoff_type" not in both
+    assert json.loads(both["source_details"])["update_types"] == ["OC"]
+
+
+def test_type_code_outranks_a_conflicting_engine_reading():
+    # The legend code is the agency's own classification of this notice.
+    assert extract("DC", {"Code Type": "1"}, _rec("closure"))["layoff_type"] == "mass_layoff"
+
+
 def test_type_column_never_overrides_the_engine():
     assert "layoff_type" not in extract("IN", {"Notice Type": "LO"}, _rec("closure"))
 
@@ -80,3 +127,15 @@ def test_iowa_typed_cells_yield_the_industry_column():
     # Another list layout (New York's dashboard cells) has no industry.
     ny = json.dumps({"raw_extra": json.dumps(["Acme", "2020-05-01"] + [""] * 10)})
     assert industry_from_fields_json(ny) == (None, None, None)
+
+
+def test_md_legend_code_outranks_keyword_reading_of_the_same_cell():
+    from warnlive.normalize.details import _add_type_code_evidence
+
+    result, details = {}, {}
+    _add_type_code_evidence(
+        "MD", {"Type": "2 (Possibly turning into a closure)"},
+        {"layoff_type": "closure"}, result, details,
+    )
+    assert result["layoff_type"] == "mass_layoff"
+    assert details["layoff_type_evidence"]["replaced_keyword_reading"] == "closure"

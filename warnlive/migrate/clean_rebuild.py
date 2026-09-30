@@ -18,6 +18,7 @@ from tempfile import TemporaryDirectory
 from warnlive.fetch.custom.sc import cached_csv
 from warnlive.normalize.engine import normalize_file
 from warnlive.normalize.admission import exclusion_reasons
+from warnlive.normalize.entries import prepare_batch
 from warnlive.registry import load_registry
 from warnlive.store import db as db_mod
 from warnlive.store.dedupe import ingest, split_collisions
@@ -177,6 +178,9 @@ def build(
                             record for record in norm.records
                             if record["dedupe_key"] not in conflicts
                         ])
+                    prepared, entry_report = prepare_batch(conn, postal, norm.records)
+                    norm = replace(norm, records=prepared)
+                    entry["entries"] = entry_report
                     safe_records, collision_holds, collision_keys = _quarantine_date_collisions(
                         conn, origin, norm.records,
                     )

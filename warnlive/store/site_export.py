@@ -129,6 +129,9 @@ def build_site(
         )
         n.update(resolve_geo(resolver, n, fields_json))
         n.update(project(n))
+        sites = _itemized_sites(n)
+        if sites:
+            n["site_counties"] = _site_counties(resolver, n["state"], sites)
     linked_ids = {
         r["notice_id"] for r in conn.execute("SELECT DISTINCT notice_id FROM notice_links")
     } | {
@@ -241,15 +244,65 @@ def _unallocated_multisite(n: dict) -> bool:
     )
 
 
+def _itemized_sites(n: dict) -> list[dict]:
+    """Listed sites of a filing notice that itemizes workers site by site.
+
+    A filing-unit notice (``worker_allocation: "itemized"``) totals the
+    agency's own per-site counts, so each site's count belongs to that
+    site's county, not the notice's.
+    """
+    payload = n.get("source_details")
+    try:
+        details = json.loads(payload) if payload else {}
+    except (TypeError, ValueError):
+        return []
+    if not isinstance(details, dict) or details.get("worker_allocation") != "itemized":
+        return []
+    sites = [site for site in details.get("sites") or [] if isinstance(site, dict)]
+    return sites if len(sites) > 1 else []
+
+
+def _site_counties(resolver, state: str, sites: list[dict]) -> list[dict]:
+    """Each itemized site's county (None when unresolved) and its workers."""
+    result = []
+    for site in sites:
+        place = resolver.resolve(state, site.get("location") or site.get("address"))
+        result.append({"county_fips": place.get("county_fips"),
+                       "county_name": place.get("county_name"),
+                       "workers": site.get("workers")})
+    return result
+
+
 def _county_series(rows, limit: int | None = None) -> list[dict]:
     """Notices and workers per county, for the maps and county tables.
 
     Notices whose location did not resolve are simply absent — a county map
     can only show what could be placed, and the share that could not is
-    reported separately rather than folded in as a zero.
+    reported separately rather than folded in as a zero. A filing notice
+    that itemizes its sites (``site_counties``) counts once in each county
+    it lists, with that county's own site workers.
     """
     agg: dict[str, dict] = {}
     for n in rows:
+        site_counties = n.get("site_counties")
+        if site_counties:
+            per_county: dict[str, dict] = {}
+            for site in site_counties:
+                fips = site.get("county_fips")
+                if not fips:
+                    continue
+                entry = per_county.setdefault(
+                    fips, {"county": site.get("county_name"), "workers": 0})
+                entry["workers"] += site.get("workers") or 0
+            for fips, site in per_county.items():
+                entry = agg.setdefault(
+                    fips,
+                    {"fips": fips, "county": site["county"], "state": n["state"],
+                     "notices": 0, "workers": 0},
+                )
+                entry["notices"] += 1
+                entry["workers"] += site["workers"]
+            continue
         if _unallocated_multisite(n):
             continue
         fips = n.get("county_fips")
@@ -748,6 +801,8 @@ def _build_detail_shards(conn, notices, out_dir: Path, prefix_len: int) -> int:
     for n in notices:
         rec = dict(n)
         rec.pop("id")
+        # Derived for the county series only; sites stay in source_details.
+        rec.pop("site_counties", None)
         rec["key"] = n["dedupe_key"][:prefix_len]
         rec["versions"] = versions.get(n["id"], [])
         rec["links"] = links.get(n["id"], [])

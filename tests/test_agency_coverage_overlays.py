@@ -12,7 +12,7 @@ SNAPSHOTS = Path(__file__).resolve().parents[1] / "data/source_snapshots"
 @pytest.mark.parametrize(
     ("project", "directory", "source_rows", "admitted", "held"),
     [
-        (or_source.project, "or", 678, 153, 525),
+        (or_source.project, "or", 678, 200, 340),
         (tn_source.project, "tn", 143, 140, 3),
         (ny_overlay.project, "ny", 758, 329, 429),
     ],
@@ -21,8 +21,11 @@ def test_pinned_source_row_accounting(project, directory, source_rows, admitted,
     records, exceptions, report = project(SNAPSHOTS / directory)
     assert {key: report[key] for key in ("source_rows", "admitted", "held")} == {
         "source_rows": source_rows, "admitted": admitted, "held": held}
-    assert len(records) == len({row["source_identity"] for row in records})
-    assert len(records) + len(exceptions) == source_rows
+    # Oregon admits a multi-row WARN number as one notice and a changed live
+    # capture as a later version of it; row accounting is by source row.
+    notices = len(records) - report.get("capture_versions", 0)
+    assert notices == len({row["source_identity"] for row in records})
+    assert report.get("admitted_rows", len(records)) + len(exceptions) == source_rows
     if directory in {"or", "tn"}:
         assert all(row["notice_date"] is None for row in records)
     else:

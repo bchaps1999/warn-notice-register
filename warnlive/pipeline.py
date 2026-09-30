@@ -20,7 +20,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from warnlive import fetch
-from warnlive.normalize import engine
+from warnlive.normalize import engine, entries
 from warnlive.normalize.engine import _dedupe_key
 from warnlive.normalize.admission import (
     exclusion_reasons, ks_ambiguity_reasons,
@@ -404,6 +404,11 @@ def _run_one(
         ).fetchone()
         try:
             conn.execute("SAVEPOINT state_ingest")
+            # Distinct rows of one document that share a key are separate
+            # entries (normalize/entries.py); the replay applies the same rules.
+            prepared, entry_report = entries.prepare_batch(conn, postal, norm.records)
+            norm = replace(norm, records=prepared)
+            outcome.checks["entries"] = entry_report
             # Hold key groups whose dates collide instead of failing the whole
             # state, exactly as the offline rebuild does; the held rows are
             # reported as exclusions and the state is degraded, not failed.

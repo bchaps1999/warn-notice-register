@@ -70,3 +70,14 @@ def test_upstream_states_have_transformers():
     for cfg in reg.all():
         if cfg.source in ("upstream", "patched"):
             assert get_transformer_class(cfg.postal), cfg.postal
+
+
+def test_registry_rejects_unknown_same_key_policy(tmp_path):
+    raw = {"ca": vars(load_registry()["ca"]).copy()}
+    del raw["ca"]["postal"]
+    assert raw["ca"]["same_key_policy"] == "distinct_rows"
+    raw["ca"]["same_key_policy"] = "merge"
+    path = tmp_path / "states.yaml"
+    path.write_text(yaml.safe_dump(raw))
+    with pytest.raises(ValueError, match="bad same_key_policy"):
+        load_registry(path)

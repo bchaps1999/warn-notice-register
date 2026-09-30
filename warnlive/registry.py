@@ -13,6 +13,10 @@ SOURCES = {"upstream", "patched", "custom", "manual"}
 STATUSES = {"unverified", "active", "broken", "manual_only", "archive"}
 TIERS = {"easy", "medium", "hard", None}
 CADENCES = {"daily", "weekly", None}
+# How rows of one source document that share a legacy dedupe_key are read:
+# `versions` folds them into one notice's versions (last wins); `distinct_rows`
+# keeps each distinct row as its own entry (warnlive/normalize/entries.py).
+SAME_KEY_POLICIES = {"versions", "distinct_rows"}
 FRESHNESS_FIELDS = {
     "notice_date", "effective_date",
     "source_details.agency_reported_date",
@@ -40,6 +44,7 @@ class StateConfig:
     # Wall-clock minutes a live fetch may run before the state is failed
     # and the run moves on; None = the pipeline default.
     fetch_budget_minutes: float | None = None
+    same_key_policy: str = "versions"
 
     @property
     def scrapable(self) -> bool:
@@ -108,6 +113,8 @@ def load_registry(path: Path | None = None) -> Registry:
             (cfg.status in STATUSES, f"bad status {cfg.status!r}"),
             (cfg.tier in TIERS, f"bad tier {cfg.tier!r}"),
             (cfg.cadence in CADENCES, f"bad cadence {cfg.cadence!r}"),
+            (cfg.same_key_policy in SAME_KEY_POLICIES,
+             f"bad same_key_policy {cfg.same_key_policy!r}"),
             (cfg.freshness_field in FRESHNESS_FIELDS,
              f"bad freshness_field {cfg.freshness_field!r}"),
             (

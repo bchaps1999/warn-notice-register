@@ -60,29 +60,54 @@ def test_ny_repeated_employers_and_optional_fields_are_admitted_with_revision_qu
     assert report["admitted_missing_action_date"] > 500
     assert report["admitted_missing_workers"] > 100
     assert report["hold_reasons"]["possible_revision_same_event"] > 0
-    assert report["held_multi_site_rows"] > 2000
+    assert report["admitted_filing_group_rows"] > 2000
+    assert 0 < report["held_multi_site_rows"] < 200
     assert all(row["disposition"] == "unresolved" for row in held)
     assert all(row["filing_group_sites"] > 1 and row["filing_group_rows"] >= row["filing_group_sites"]
                for row in held if row["reason"] == "multi_site_filing_identity_unresolved")
     assert all(json.loads(row["source_details"])["disposition"] == "notice" for row in records)
 
 
-def test_ny_same_filing_signature_across_sites_is_held_as_a_group():
-    _, held, _ = project_ny(NY)
+def test_ny_distinct_site_filing_groups_are_admitted_per_listed_site():
+    records, held, _ = project_ny(NY)
+    grouped: dict[str, list[dict]] = {}
+    for row in records:
+        group = json.loads(row["source_details"]).get("filing_group")
+        if group:
+            grouped.setdefault(group["id"], []).append(row)
+    largest = max(grouped.values(), key=len)
+    assert len(largest) > 100
+    # Each listed site is its own entry: its own address, key and count.
+    assert len({row["location"].casefold() for row in largest}) == len(largest)
+    assert len({row["dedupe_key"] for row in largest}) == len(largest)
+    assert all(json.loads(row["source_details"])["filing_group"]["rows"] >= len(members)
+               for members in grouped.values() for row in members)
+    # A group that repeats an address stays held as a whole.
     fanout = [row for row in held if row["reason"] == "multi_site_filing_identity_unresolved"]
     assert fanout
-    assert max(row["filing_group_rows"] for row in fanout) > 100
     assert all(row["disposition_evidence"] == "same_employer_notice_multiple_sites_or_phases"
                for row in fanout)
-    phased = [row for row in fanout if json.loads(row["raw_extra"])["company"] ==
-              "American Transit Inc." and row["notice_year"] == "2008"]
-    assert len(phased) >= 2
-    assert len({json.loads(row["raw_extra"])["effective_date"] for row in phased}) > 1
+    for row in fanout:
+        assert row["filing_group_rows"] > row["filing_group_sites"] or any(
+            not json.loads(other["raw_extra"])["address"].strip() for other in fanout
+            if json.loads(other["raw_extra"])["company"] == json.loads(row["raw_extra"])["company"])
+
+
+def test_ny_dashboard_type_cells_map_exact_values_only():
+    records, _, _ = project_ny(NY)
+    for row in records:
+        cells = json.loads(row["source_details"])["raw_cells"]
+        assert row["layoff_type"] == {"Closure": "closure", "Layoff": "mass_layoff"}.get(
+            cells[6].strip(), "unknown")
+        assert row["is_temporary"] == {"Permanent": 0, "Temporary": 1}.get(cells[7].strip())
+    assert {row["layoff_type"] for row in records} == {"closure", "mass_layoff", "unknown"}
+    assert {row["is_temporary"] for row in records} == {0, 1, None}
 
 
 def test_ny_historical_id_correspondence_survives_different_site_granularity():
     records, _, _ = project_ny(NY)
-    example = next(row for row in records if row["employees_affected"] and row["effective_date"])
+    example = next(row for row in records if row["employees_affected"] and row["effective_date"]
+                   and "filing_group" not in json.loads(row["source_details"]))
     county = json.loads(example["source_details"])["raw_cells"][5]
     prior = {"id": 42, "employer_name": example["employer_name"],
              "location": county, "notice_date": example["notice_date"],
@@ -96,8 +121,46 @@ def test_ny_historical_id_correspondence_survives_different_site_granularity():
     assert correspondence
     assert all("2008-W070" in row["existing_candidate_ids"] for row in correspondence)
     assert report["held_existing_notice_correspondence"] == len(correspondence)
+    # Without the notice's key the exact match cannot be versioned: held.
     assert any(row["disposition_evidence"] == "same_employer_notice_date_workers_county"
                for row in correspondence)
+    assert report["correspondence_versions"] == 0
+
+
+def test_ny_exact_correspondence_becomes_a_version_of_the_control_number_notice():
+    records, _, _ = project_ny(NY)
+    example = next(row for row in records if row["employees_affected"] and row["effective_date"]
+                   and "filing_group" not in json.loads(row["source_details"]))
+    county = json.loads(example["source_details"])["raw_cells"][5]
+    prior = {"id": 42, "dedupe_key": "k" * 40, "state": "NY",
+             "employer_name": example["employer_name"].upper(),
+             "location": county, "notice_date": example["notice_date"],
+             "effective_date": None, "employees_affected": example["employees_affected"],
+             "layoff_type": "closure", "is_temporary": None, "is_amendment": 0,
+             "source_url": "https://labor.ny.gov/app/warn/details.asp?id=1",
+             "source_notice_id": "2008-W070", "source_details": None}
+    reduced, held, report = project_ny(NY, existing_notices=[prior])
+    assert report["correspondence_versions"] == 1
+    assert report["admitted"] == len(reduced) - 1
+    assert len(reduced) + len(held) == len(read_artifacts(NY))
+    version = next(row for row in reduced if row["dedupe_key"] == prior["dedupe_key"])
+    assert version["source_notice_id"] == "2008-W070"
+    assert version["employer_name"] == prior["employer_name"]
+    assert version["location"] == county
+    assert version["layoff_type"] == "closure"
+    assert version["effective_date"] == example["effective_date"]
+    assert version["site_address"] == example["location"]
+    evidence = json.loads(version["source_details"])["ny_dashboard_correspondence"]
+    assert evidence["basis"] == "same_employer_notice_date_workers_county"
+    assert evidence["action_date_added"] is True
+    assert example["dedupe_key"] not in {row["dedupe_key"] for row in reduced}
+    # A notice that already has a different action date keeps it.
+    dated = {**prior, "effective_date": "1999-01-01"}
+    reduced, _, _ = project_ny(NY, existing_notices=[dated])
+    version = next(row for row in reduced if row["dedupe_key"] == prior["dedupe_key"])
+    assert version["effective_date"] == "1999-01-01"
+    assert json.loads(version["source_details"])["ny_dashboard_correspondence"][
+        "reported_action_date"] == example["effective_date"]
 
 
 def test_ny_annual_source_rejects_worker_cell_disagreement(tmp_path):

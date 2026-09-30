@@ -37,7 +37,7 @@ deduplicates and version-tracks notices, and commits the results here:
 | `notice_date` | Source-supported notice date when its role is known (ISO-8601 or null) |
 | `effective_date` | First layoff/closure date (ISO-8601) |
 | `employees_affected` | Reported headcount (null when the state omits it) |
-| `layoff_type` | `closure`, `mass_layoff`, or `unknown`, from the state's own type column (a coded column read by exact value, such as Indiana's LO, is recorded in `source_details.layoff_type_evidence`) |
+| `layoff_type` | `closure`, `mass_layoff`, or `unknown`, from the state's own type column (a coded column read by exact value, such as Indiana's LO, is recorded in `source_details.layoff_type_evidence`; the DC, Maryland and Wisconsin codes are read from each agency's published legend, with the raw code and legend URL in the same evidence, and Wisconsin's update tokens in `source_details.update_types`) |
 | `is_temporary` | 1 if the source reports it temporary, 0 if permanent, blank when unreported or mixed (Colorado: 1 only when temporary losses or furloughs are reported with no permanent loss; the counts are kept in `source_details.job_losses`) |
 | `is_amendment` | Source flagged this filing as amending an earlier one |
 | `is_amended` | We have observed more than one version of this notice |
@@ -67,14 +67,18 @@ agency column itself names the site: Illinois IEBS `Location Address`, the New
 York dashboard's `Impacted Site Address`, Georgia's `First Location Address`
 on a one-location filing, South Carolina's worksite `address`), or
 `filed_county_consistent` (Pennsylvania's unlabeled `addressfull`, kept only
-when it resolves to the county the agency filed separately); `unverified`
+when it resolves to the county the agency filed separately), or
+`fl_company_cell_in_state` (the street line of Florida's company cell, kept
+only when it names no other state or non-Florida ZIP; sampled against notice
+letters it was the affected site, while out-of-state street lines were the
+headquarters and are left out); `unverified`
 marks a stored value no current rule reproduces. Values that name
 another state, list several addresses, or carry no house number are left out.
 A venue or division name ahead of exactly one street address ("Bloomingdale's,
 1000 Third Avenue") is dropped and the street kept; a spelled-out number ("One
 Penn Plaza") counts as a house number; the full cell stays in `raw_extra`.
 Addresses whose role the source does not label and that no independent filed
-place can check — Florida's company cell, Idaho's address block, the
+place can check — Florida cells in the older inline layout, Idaho's address block, the
 America's JobLink portals (AZ, KS, ME, VT, MI, DE) and Missouri's company
 address — stay in `raw_extra` and are not exported as sites; see
 `warnlive/enrich/site_address.py` for the full policy. `notice_date_precision` and `notice_date_basis` qualify the
@@ -170,9 +174,30 @@ and deploy steps, so data that trips it never lands. Per-state checks guard a
 scrape against its source; this guards the database against itself.
 
 Scheduled runs: `.github/workflows/scrape-daily.yml` (high-volume states) and
-`scrape-weekly.yml` (full sweep, Sundays). Optional secret `ZYTE_API_KEY`
-enables the Zyte proxy for states behind aggressive bot protection (LA, TX
-fallback, MA fallback).
+`scrape-weekly.yml` (full sweep, Sundays). The pipeline uses no paid proxy.
+Texas's AWS WAF challenge is passed by headless Chrome on the runner.
+
+Massachusetts: mass.gov's Akamai front end has refused GitHub runners (HTTP
+403) while it serves ordinary clients on residential connections. When
+`WARNLIVE_MA_ARCHIVE_FALLBACK=1` is set, the collector replaces each refused
+file with its newest Internet Archive capture that returned 200. It records
+the origin, capture timestamps, and SHA-256 of every file in
+`workdir/raw/ma.fetch_manifest.json`. An archived file is only as current as
+its capture. To collect Massachusetts directly from mass.gov, run it from a
+network mass.gov accepts, with no scheduled scrape in progress:
+
+```bash
+git pull && warnlive unpack-db
+warnlive scrape ma --trigger manual --run-report workdir/reports/ma-local.json
+warnlive dupes && warnlive check-regressions --update-snapshot
+warnlive check-publication-gate workdir/reports/ma-local.json
+warnlive check-run-report workdir/reports/ma-local.json
+git add data/ && git commit -m "Local Massachusetts scrape $(date -u +%F)" && git push
+```
+
+Push immediately: a scheduled run that started from the older dump will
+refuse to push and must be re-run. The site picks up the data on the next
+scheduled run's deploy.
 
 ### Rebuild v1.1.0 from frozen agency sources
 

@@ -24,6 +24,24 @@ HEADERS = (
 )
 
 
+# Exact dashboard values of "Layoff or Closure?" and "Permanent or Temporary
+# Layoff?" (cells 6 and 7). Anything else (blank, "N/A") leaves the field
+# unknown; the source text is kept with the reading.
+_EVENT_TYPES = {"Closure": "closure", "Layoff": "mass_layoff"}
+_PERMANENCE = {"Permanent": 0, "Temporary": 1}
+
+
+def dashboard_type_fields(event_type: str, permanence: str) -> tuple[str, int | None, dict]:
+    """layoff_type, is_temporary and their evidence from the dashboard cells."""
+    event_type, permanence = event_type.strip(), permanence.strip()
+    layoff_type = _EVENT_TYPES.get(event_type, "unknown")
+    is_temporary = _PERMANENCE.get(permanence)
+    evidence = {"rule": "ny_dashboard_type_cells_v1",
+                "Layoff or Closure?": event_type,
+                "Permanent or Temporary Layoff?": permanence}
+    return layoff_type, is_temporary, evidence
+
+
 def _date(value: str, label: str, row_number: int) -> str | None:
     if not value:
         return None

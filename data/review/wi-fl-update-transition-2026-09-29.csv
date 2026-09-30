@@ -1,0 +1,49 @@
+state,retired_dedupe_key,surviving_dedupe_key,surviving_version,employer_name,location,update_received_date,parent_received_date,effective_date,employees_affected,layoff_type,basis
+WI,c396140b2d2a6ae60329a5279b7b11ac0814a060,00db638d0cdecc4f43027098bfe1b850228b6a71,2,Federal-Mogul Corporation,Schofield,2012-01-26,2012-01-23,2012-03-16,,closure,update_row_identical_content
+WI,95dbacbcf39b61c4b5bd724af3ef328f53c786e8,0192bbb7402b4893bfafbb9579410b9b52fafb3d,2,"Extendicare Holdings, Inc.",Milwaukee,2015-04-10,2015-02-26,2015-04-30,287,closure,update_row_identical_content
+WI,6ada5dc5cbe7940c46d588c277527c477f129a4b,02fe2b990bcdd16a1ea0955a236f83bcab44c0c7,2,"Borg Indak, Inc.",Delavan,2009-06-30,2009-01-28,2009-01-05,31,mass_layoff,update_row_identical_content
+WI,3f089609d25e89ffdbe0c3f58189a42086a3cfbb,0388002e5ea7d501be04642ff94a69106e0b14cb,2,Milwaukee Valve,Milwaukee,2002-08-19,2002-04-22,2003-03-28,97,mass_layoff,update_row_identical_content
+WI,db97c5f7bfe90bc8b68f802ea68978008d39c267,0427293acd0b62997bb18119cacdf92cb87b3db8,2,Federal-Mogul Corporation,Schofield,2012-04-19,2012-04-16,2012-05-11,,closure,update_row_identical_content
+WI,348a6ceb32cae4fd52912d9e62ce8016d2b11cd9,096d632c6991b144289b1e932410135e1cff5c84,2,Laidlaw,Milwaukee,2003-07-01,2003-05-29,2003-08-01,233,closure,update_row_identical_content
+WI,6192aa7285216ec67e40a651c452a42f4c1884c6,0d2da1a32b54e76c5271c96be89d29ad34e2a341,2,"OSI Support Services, Inc.",Brookfield,2005-09-15,2005-09-12,2005-11-13,101,closure,update_row_identical_content
+WI,3e8e7e218a20cd2cfd03f8e271fec03bf903c1d6,0d5e61109b023711afd70e65a945403bdd0e8fce,2,Powerbrace Corporation,Kenosha,2004-09-15,2004-09-10,2004-11-12,129,closure,update_row_identical_content
+WI,3a3cd522ca01d86c9f62be18e50d480dfc4505a2,0d5e61109b023711afd70e65a945403bdd0e8fce,3,Powerbrace Corporation,Kenosha,2004-10-19,2004-09-10,2004-11-12,129,closure,update_row_identical_content
+WI,1172d58f3ca40b8d64f0c74ddc3d7c5f0e08c9d5,145a492883424617eba27d737c6e5c039a9fb600,2,SJP Corporation,New London,2005-07-26,2005-07-19,2005-09-16,220,closure,update_row_identical_content
+WI,966948bdabe601551352feccd7f4df66447fbd84,1f0baa6585555a000dba1d9885f1bb1ef70fbbbe,2,CUNA Mutual Group,Madison,2007-09-28,2007-08-06,2007-10-07,60,mass_layoff,update_row_identical_content
+WI,c98487f01666ffdf38d602b2eaa1c3fed097f7e0,252d0c06f482c145b96105dbc3e21a1d206a4736,2,Hanover Direct,La Crosse,2005-06-17,2004-12-09,2005-06-30,110,closure,update_row_identical_content
+WI,85cf7c4600a1e8a1e0d490f8acba4ed18cb4e592,271c35587ac9caae91e6a628fc1270a96fc6701c,2,"Staples, Inc.",Oak Creek,2015-03-25,2015-02-09,2015-04-05,53,closure,update_row_identical_content
+WI,1175e92c001b77509fdd9c6fc90c8f88a0c84ecd,319436946e2180f83fbeb3f6b80a8640968d4812,2,Jansport,Appleton,2005-03-05,2004-12-03,2005-02-01,51,mass_layoff,update_row_identical_content
+WI,506f630601ab56d565e794d7c5e10952727907ce,354c7968bdb47f3932b67dc0fbcf061244f36eb6,2,CUNA Mutual Insurance Society,Madison,2005-12-21,2005-10-31,2006-01-06,63,mass_layoff,update_row_identical_content
+WI,7eeff7d1e3930105ed2e8f836e3acda1db9ca5b8,399284157a49927cef4e9822ad6a93d9ed2986ba,2,"JLG OmniQuip, Inc.",Port Washington,2003-09-26,2003-08-25,2003-10-24,211,closure,update_row_identical_content
+WI,45b851112fd0afc9f4a2b4cbeaee9825c749f6c2,3d6358f54f46216051e598474084687662d409d0,2,"Techline USA, LLC",Waunakee,2014-07-17,2014-06-02,2014-06-13,64,closure,update_row_identical_content
+WI,ccca50891b60262c2b88d552c0a2e96499b5565e,3f833d409ea3da9eb46a99fe77c89640fdf77855,2,NewPage Corporation,Whiting,2011-01-13,2010-12-13,2011-02-15,366,closure,update_row_identical_content
+WI,602f5118ab6f8ab4f4c30ba531a007a4e2b7ba5d,4432a6420856ac159eaa53f707130ecd38bf7993,2,Hanover Direct,La Crosse,2005-02-08,2004-11-10,2005-01-08,110,closure,update_row_identical_content
+WI,b48a7ac1784f682340be9dc1f1741a797cacf609,49c814a32cb1f6f567da5b461d0cbb4fb9334d16,2,Midas International,Hartford,2005-06-17,2005-05-20,2005-07-29,132,closure,update_row_identical_content
+WI,7298ddb54e94d2f92f61d160065c199f2d96720a,5ef5fa71151dca0ae68ed78ed099ddafe128c728,2,3M Touch Systems,Milwaukee,2007-03-08,2007-01-31,2007-04-01,84,closure,update_row_identical_content
+WI,3c6baeff414c82f9e11aac9c90cbdff75f4ed328,a2117027e2470ce479ac3685943930ba9632dc27,2,Sealed Air Corporation,Sturtevant,2015-02-12,2015-02-02,2015-04-03,300,closure,update_row_identical_content
+WI,7322fbd7c8bc2380f2ea61a2fa660bbc1f46fa6e,a2117027e2470ce479ac3685943930ba9632dc27,3,Sealed Air Corporation,Sturtevant,2015-02-20,2015-02-02,2015-04-03,300,closure,update_row_identical_content
+WI,6ded2aaffcbf0dc552b5102f6901055171986b2b,a2117027e2470ce479ac3685943930ba9632dc27,4,Sealed Air Corporation,Sturtevant,2015-04-22,2015-02-02,2015-04-03,300,closure,update_row_identical_content
+WI,b58342997c2e9fc5277ece3add06654a91927cef,a2117027e2470ce479ac3685943930ba9632dc27,5,Sealed Air Corporation,Sturtevant,2015-05-14,2015-02-02,2015-04-03,300,closure,update_row_identical_content
+WI,e98ca8c22d6a4211af7a3e605a768958442ac745,a494eff7f1d6352d862440f55c8d6a90f677f153,2,Harley-Davidson Motor Company,Wauwatosa,2009-09-08,2009-07-28,2009-09-25,398,mass_layoff,update_row_identical_content
+WI,c926d97d9829613d30e3020fb669142c57723d73,a7fd3ca5413f3de20cb661f592014b0eaf94c4f8,2,Buechel Stone Corporation,"Fond du Lac, Chilton,",2009-08-12,2009-06-17,2009-02-13,32,mass_layoff,update_row_identical_content
+WI,f781adcbb7a90f39c4ea6dfadb8c5b7abe06802a,a921617469668b8a9eeb07577310e04aa3abcec1,2,SJP Corporation,New London,2005-02-03,2005-01-19,2005-06-30,220,closure,update_row_identical_content
+WI,5e30d19690b5ea423c1fd180a3cbc5e4776083e7,a921617469668b8a9eeb07577310e04aa3abcec1,3,SJP Corporation,New London,2005-02-16,2005-01-19,2005-06-30,220,closure,update_row_identical_content
+WI,502ba9969cf659e3bd7eb205ae8d45c0d5bca554,a921617469668b8a9eeb07577310e04aa3abcec1,4,SJP Corporation,New London,2005-03-14,2005-01-19,2005-06-30,220,closure,update_row_identical_content
+WI,48fe4f7c663251ae01bd77e35dcf2dd31315f2ef,a921617469668b8a9eeb07577310e04aa3abcec1,5,SJP Corporation,New London,2005-03-18,2005-01-19,2005-06-30,220,closure,update_row_identical_content
+WI,a787a95c996ea6da603b26978aae78636aedf9c6,a921617469668b8a9eeb07577310e04aa3abcec1,6,SJP Corporation,New London,2005-03-22,2005-01-19,2005-06-30,220,closure,update_row_identical_content
+WI,a658d16b1c12229490f79a6b5e685d3b6795e3d9,a921617469668b8a9eeb07577310e04aa3abcec1,7,SJP Corporation,New London,2005-03-26,2005-01-19,2005-06-30,220,closure,update_row_identical_content
+WI,7066c5eec4af11cff6539e5ed33fe0581cc35eb9,a921617469668b8a9eeb07577310e04aa3abcec1,8,SJP Corporation,New London,2005-04-01,2005-01-19,2005-06-30,220,closure,update_row_identical_content
+WI,e279e990b0511e19f42286650fcaafb2fa5f4a09,a921617469668b8a9eeb07577310e04aa3abcec1,9,SJP Corporation,New London,2005-04-14,2005-01-19,2005-06-30,220,closure,update_row_identical_content
+WI,4c1d6e018f6031f6c8d05232558eeaf21ee09e58,a921617469668b8a9eeb07577310e04aa3abcec1,10,SJP Corporation,New London,2005-04-20,2005-01-19,2005-06-30,220,closure,update_row_identical_content
+WI,ff86cee793112fd3dc732a3551f2286627532892,a921617469668b8a9eeb07577310e04aa3abcec1,11,SJP Corporation,New London,2005-05-02,2005-01-19,2005-06-30,220,closure,update_row_identical_content
+WI,6497cd667fa47457994c59fa9a1550e277d2d1d3,a921617469668b8a9eeb07577310e04aa3abcec1,12,SJP Corporation,New London,2005-05-04,2005-01-19,2005-06-30,220,closure,update_row_identical_content
+WI,124be44d4d14c17a6c2c4f2a7f0fba6cc35454eb,a921617469668b8a9eeb07577310e04aa3abcec1,13,SJP Corporation,New London,2005-05-13,2005-01-19,2005-06-30,220,closure,update_row_identical_content
+WI,05cb2d107067a02843390767507478f74d64519a,a921617469668b8a9eeb07577310e04aa3abcec1,14,SJP Corporation,New London,2005-05-24,2005-01-19,2005-06-30,220,closure,update_row_identical_content
+WI,502013f738f1511ff1fce2452899a103cc00a6a6,aa698394bfaca7e7e1f9223bb168efa1edf1d9ee,2,Metso Minerals,Clintonville,2002-04-18,2002-04-10,2002-06-30,158,closure,update_row_identical_content
+WI,b682b3a80a1ba7d37ebec9072755321de5d2f0c2,ab454be034ea82e88552e1c89a6dc7a3d067f302,2,Admanco,Ripon,2003-10-31,2003-07-17,2003-09-19,83,mass_layoff,update_row_identical_content
+WI,aa700a5972a4cddeb2906c3c8c0632529037e855,b03572347abc37c66ca7dd3b8ed249e16dabc99a,2,Washington Mutual,Milwaukee,2004-11-03,2004-11-01,2004-12-31,78,mass_layoff,update_row_identical_content
+WI,7c649441e494304349835bb832a5dd61ad991c30,b39e93d5371b001b15e7f38fd862f21e5b29fb28,2,Federal-Mogul Corporation,Schofield,2011-09-26,2011-09-23,2011-10-20,,closure,update_row_identical_content
+WI,7120c92252d31a5963e2bfb643c0791f9f2af736,d246f6e2576ddea2f5ab68eb733d150b62e36559,2,Viasystems Milwaukee Inc,Oak Creek,2009-01-20,2008-12-23,2009-01-30,214,closure,update_row_identical_content
+WI,9e9d3de4d23f5a973173e67ef2c52f61279e0692,dac8d636f2e2c1cf957e6a2924f253ce3717f279,2,Morris Material Handling,Oak Creek,2002-05-23,2002-01-10,2002-03-13,61,closure,update_row_identical_content
+WI,61b93b8cdf217bc65ae04bd7f0b767a506e44c29,df60fd58471148630c12c60e74abd746533a9b13,2,Federal-Mogul Corporation,Schofield,2011-11-14,2011-11-11,2011-01-13,,closure,update_row_identical_content
+WI,d81bc9c2a0531506ac747feec1bc7f91aa2bf8aa,f74fdd6fe8d20f3c9ea7e338b8b34051df6c1954,2,Federal-Mogul Corporation,Schofield,2011-08-01,2011-07-05,,8,closure,update_row_identical_content

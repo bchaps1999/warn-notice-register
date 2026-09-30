@@ -1,0 +1,230 @@
+{
+  "description": "Nebraska DOL captures used to separate WARN report rows from layoff/closure report rows and to map NE keys (docs/ne-nv-ms-sources-2026-09-30.md). archives/ne mirrors the collector cache layout (backfill/cache/archives/ne).",
+  "files": [
+    {
+      "capture_timestamp": "20250323171358",
+      "document_type": "ndol_wayback_capture",
+      "original_url": "https://dol.nebraska.gov/ReemploymentServices/LayoffServices/LayoffsAndDownsizingWARN",
+      "path": "archives/ne/dol-warn-20250323171358.html",
+      "retrieved_at": "2026-09-30T01:42:03Z",
+      "sha256": "b34f73b98e9e34ff89e62970faccfc3e5372742b042a78f2ceb32219fef3482d",
+      "size": 69539,
+      "url": "https://web.archive.org/web/20250323171358id_/https://dol.nebraska.gov/ReemploymentServices/LayoffServices/LayoffsAndDownsizingWARN"
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/layoff_closure_report-2010.html",
+      "report": "layoff_closure_report",
+      "retrieved_at": "2026-09-30T01:40:31Z",
+      "sha256": "684e43d14a2836039179cf83f490415960d554869f5335ac8689578bd615e863",
+      "size": 286,
+      "url": "https://dol.nebraska.gov/LayoffServices/LayoffAndClosureReportData/?year=2010",
+      "year": 2010
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/layoff_closure_report-2011.html",
+      "report": "layoff_closure_report",
+      "retrieved_at": "2026-09-30T01:40:34Z",
+      "sha256": "2ed72d1040854be8bd9d8a1733cf512f81f01c7b7b7a45a68fe006928f3d9fc3",
+      "size": 26997,
+      "url": "https://dol.nebraska.gov/LayoffServices/LayoffAndClosureReportData/?year=2011",
+      "year": 2011
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/layoff_closure_report-2012.html",
+      "report": "layoff_closure_report",
+      "retrieved_at": "2026-09-30T01:40:36Z",
+      "sha256": "ac8e68ffd210f21178c47fb4fa915b9d5a4ccfe181d8b20b717c0c238a136e31",
+      "size": 29617,
+      "url": "https://dol.nebraska.gov/LayoffServices/LayoffAndClosureReportData/?year=2012",
+      "year": 2012
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/layoff_closure_report-2013.html",
+      "report": "layoff_closure_report",
+      "retrieved_at": "2026-09-30T01:40:39Z",
+      "sha256": "d77b1a6f53ecb7a063b528a27b82c4b61ec41a76c9db4101bef8b16253b65780",
+      "size": 26947,
+      "url": "https://dol.nebraska.gov/LayoffServices/LayoffAndClosureReportData/?year=2013",
+      "year": 2013
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/layoff_closure_report-2014.html",
+      "report": "layoff_closure_report",
+      "retrieved_at": "2026-09-30T01:40:42Z",
+      "sha256": "58834ab25fd22bc0699787c76085fd8bf9d20a05e6a5f7a091c803a5af0615d4",
+      "size": 24391,
+      "url": "https://dol.nebraska.gov/LayoffServices/LayoffAndClosureReportData/?year=2014",
+      "year": 2014
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/layoff_closure_report-2015.html",
+      "report": "layoff_closure_report",
+      "retrieved_at": "2026-09-30T01:40:44Z",
+      "sha256": "adc2c48aeca7c4d608bd62c2b7f034ead4c4dffc2ac9a6888e5b7ebadb961140",
+      "size": 67431,
+      "url": "https://dol.nebraska.gov/LayoffServices/LayoffAndClosureReportData/?year=2015",
+      "year": 2015
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/layoff_closure_report-2016.html",
+      "report": "layoff_closure_report",
+      "retrieved_at": "2026-09-30T01:40:47Z",
+      "sha256": "a24c3af651912786e174302142bcd503dd17772655b0865ff8ae84f4001944a7",
+      "size": 72547,
+      "url": "https://dol.nebraska.gov/LayoffServices/LayoffAndClosureReportData/?year=2016",
+      "year": 2016
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/layoff_closure_report-2017.html",
+      "report": "layoff_closure_report",
+      "retrieved_at": "2026-09-30T01:40:50Z",
+      "sha256": "d7527121c4c8373d48e8952eac9c2af830a75a114404d1e2c685639d0147c095",
+      "size": 83138,
+      "url": "https://dol.nebraska.gov/LayoffServices/LayoffAndClosureReportData/?year=2017",
+      "year": 2017
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/layoff_closure_report-2018.html",
+      "report": "layoff_closure_report",
+      "retrieved_at": "2026-09-30T01:40:54Z",
+      "sha256": "e405ab3184f7e1ae17c165596830c4f1872082878c981faa3e8e4baf5845422e",
+      "size": 87721,
+      "url": "https://dol.nebraska.gov/LayoffServices/LayoffAndClosureReportData/?year=2018",
+      "year": 2018
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/layoff_closure_report-2019.html",
+      "report": "layoff_closure_report",
+      "retrieved_at": "2026-09-30T01:40:57Z",
+      "sha256": "5e2a01081707ce74b915c88f8b910eb0ded4751deb869304ec7f8f9e38fed189",
+      "size": 127635,
+      "url": "https://dol.nebraska.gov/LayoffServices/LayoffAndClosureReportData/?year=2019",
+      "year": 2019
+    },
+    {
+      "document_type": "ndol_warn_page",
+      "path": "archives/ne/warn-page-20260930.html",
+      "retrieved_at": "2026-09-30T01:41:04Z",
+      "sha256": "1d4b004eb03146bf2c18776fa92b1a9696021c6b9f23d6edaf4759674d1bfc17",
+      "size": 63847,
+      "url": "https://dol.nebraska.gov/ReemploymentServices/LayoffServices/LayoffsAndDownsizingWARN"
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/warn_report-2010.html",
+      "report": "warn_report",
+      "retrieved_at": "2026-09-30T01:40:14Z",
+      "sha256": "f2e05738e52f4e27696fe4f06024a150b7cdd4a209557496749d791c188e3c3b",
+      "size": 4127,
+      "url": "https://dol.nebraska.gov/LayoffServices/WARNReportData/?year=2010",
+      "year": 2010
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/warn_report-2011.html",
+      "report": "warn_report",
+      "retrieved_at": "2026-09-30T01:40:32Z",
+      "sha256": "c2aeab114bbe2e1290c9523a71412410a4bf85427289784469ebafed377f3a12",
+      "size": 4690,
+      "url": "https://dol.nebraska.gov/LayoffServices/WARNReportData/?year=2011",
+      "year": 2011
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/warn_report-2012.html",
+      "report": "warn_report",
+      "retrieved_at": "2026-09-30T01:40:35Z",
+      "sha256": "3d65fe71d043c09ce04f3c92cdf354303f34fcea540b653f30e476070c215b60",
+      "size": 5816,
+      "url": "https://dol.nebraska.gov/LayoffServices/WARNReportData/?year=2012",
+      "year": 2012
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/warn_report-2013.html",
+      "report": "warn_report",
+      "retrieved_at": "2026-09-30T01:40:38Z",
+      "sha256": "0c9373364d674008e42b63e0fba27b84e232979ab1726f4b2c7918146f1688b7",
+      "size": 4667,
+      "url": "https://dol.nebraska.gov/LayoffServices/WARNReportData/?year=2013",
+      "year": 2013
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/warn_report-2014.html",
+      "report": "warn_report",
+      "retrieved_at": "2026-09-30T01:40:40Z",
+      "sha256": "96d32112501e6f13f41e428b950238c407bdaa1d401c5bb33e22424f205ee320",
+      "size": 4695,
+      "url": "https://dol.nebraska.gov/LayoffServices/WARNReportData/?year=2014",
+      "year": 2014
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/warn_report-2015.html",
+      "report": "warn_report",
+      "retrieved_at": "2026-09-30T01:40:43Z",
+      "sha256": "00d49f8ce8eaf51c294cdc846dcda8cbe6d83751e7d893278fc7280f7b7fbd1a",
+      "size": 9199,
+      "url": "https://dol.nebraska.gov/LayoffServices/WARNReportData/?year=2015",
+      "year": 2015
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/warn_report-2016.html",
+      "report": "warn_report",
+      "retrieved_at": "2026-09-30T01:40:46Z",
+      "sha256": "090d4ebe04c7ba7dacd92fe3575334f4e212bb9d9aeb39723b8a7545e561d17a",
+      "size": 3570,
+      "url": "https://dol.nebraska.gov/LayoffServices/WARNReportData/?year=2016",
+      "year": 2016
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/warn_report-2017.html",
+      "report": "warn_report",
+      "retrieved_at": "2026-09-30T01:40:48Z",
+      "sha256": "81a87a6e4836724f6ab8c6d06212c36d33f762914279936957b6538c79c770c8",
+      "size": 5252,
+      "url": "https://dol.nebraska.gov/LayoffServices/WARNReportData/?year=2017",
+      "year": 2017
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/warn_report-2018.html",
+      "report": "warn_report",
+      "retrieved_at": "2026-09-30T01:40:52Z",
+      "sha256": "207fa37077abb9059cddbf514a444b240f5c3c55613c7d8cede16a782dd36411",
+      "size": 4690,
+      "url": "https://dol.nebraska.gov/LayoffServices/WARNReportData/?year=2018",
+      "year": 2018
+    },
+    {
+      "document_type": "ndol_year_report",
+      "path": "archives/ne/warn_report-2019.html",
+      "report": "warn_report",
+      "retrieved_at": "2026-09-30T01:40:55Z",
+      "sha256": "44da40a80c3d8594e448b617e9d1618f72250e1cf935811f4eceb42956b31851",
+      "size": 10305,
+      "url": "https://dol.nebraska.gov/LayoffServices/WARNReportData/?year=2019",
+      "year": 2019
+    },
+    {
+      "document_type": "collector_raw_csv",
+      "path": "ne.csv",
+      "produced_by": "warnlive.fetch.patches.ne.scrape (uncommitted working tree on data-quality-fixes, 2026-09-30)",
+      "sha256": "babe7c489a1250b3dd3813a6434cc23bebe69962b842e793be28564c0156f612",
+      "size": 160190
+    }
+  ]
+}

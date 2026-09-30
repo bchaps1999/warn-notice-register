@@ -96,7 +96,8 @@ CREATE TABLE IF NOT EXISTS source_observations (
     raw_json TEXT NOT NULL,
     deterministic_json TEXT NOT NULL,
     admission_status TEXT NOT NULL CHECK (admission_status IN
-        ('admitted', 'event_unresolved', 'rescinded', 'annotation', 'identity_unresolved')),
+        ('admitted', 'event_unresolved', 'rescinded', 'annotation', 'identity_unresolved',
+         'not_in_agency_warn_report')),
     notice_id INTEGER REFERENCES notices(id),
     CHECK ((admission_status = 'admitted' AND notice_id IS NOT NULL) OR
            (admission_status <> 'admitted' AND notice_id IS NULL)),

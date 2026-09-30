@@ -8,6 +8,9 @@ A row is held here, with a named reason, only on explicit evidence:
   the totals row, whose total lands in County) reached the CSV with small
   integers or blanks in every column but County, and no employer or date.
   Real NC rows carry an 8-9 digit WARN number, dates and a name.
+* ``ne_layoff_closure_report_not_warn``: NE rows the collector tagged
+  ``source_report = layoff_closure_report``: NDOL's general layoff/closure
+  report (LayoffAndClosureReportData), not its WARN report.
 * ``apparent_agency_test_record``: rows listed in ``_TEST_RECORDS``. Each
   entry matches the source row's own cells exactly and cites why it is an
   agency test entry. This is not a name filter.
@@ -63,6 +66,14 @@ def non_notice_reason(state: str, row: dict) -> str | None:
         if all(_INTEGER.fullmatch(v.replace(",", "")) for v in others) \
                 and len(_cell(row, "Warn Number")) <= 4:
             return "nc_county_summary_count_row"
+    if state == "NE":
+        # Rows the NE collector tagged as NDOL's layoff/closure report, not
+        # its WARN report (normalize.custom.ne).
+        from warnlive.normalize.custom.ne import hold_reason
+
+        reason = hold_reason(row)
+        if reason:
+            return reason
     for rule_state, cells, _evidence in _TEST_RECORDS:
         if rule_state == state and all(_cell(row, k) == v for k, v in cells.items()):
             return "apparent_agency_test_record"

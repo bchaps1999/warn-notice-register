@@ -1,0 +1,92 @@
+{
+  "description": "Nevada DETR 2021 WARN list (scanned image, no text layer): source bytes, derived images, OCR first pass and cell-by-cell transcription (docs/ne-nv-ms-sources-2026-09-30.md). New evidence; not a modification of any earlier snapshot.",
+  "files": [
+    {
+      "path": "WARN_2021.pdf",
+      "size": 54412,
+      "sha256": "9f3dadcdcc42903fa1e3f31ffda793ca1b06e78d2e824bcf36ccb1a4b81daaa5",
+      "document_type": "agency_annual_list_scanned_image",
+      "url": "https://web.archive.org/web/20260615103757id_/https://detr.nv.gov/Content/Media/WARN_2021.pdf",
+      "original_url": "https://detr.nv.gov/Content/Media/WARN_2021.pdf",
+      "retrieved_at": "2026-09-30T01:47:48Z",
+      "custody_note": "Direct agency fetch on 2026-09-30 returned HTTP 403 (Akamai). These bytes are the Wayback capture of 2026-06-15; they are identical (same sha256) to the copy fetched directly from detr.nv.gov on 2026-07-16 (workdir/cache/nv/WARN_2021.pdf) and on 2026-09-29. PDF metadata: Word for Microsoft 365, created 2021-12-21; one page, one embedded 842x387 RGB image, no text layer."
+    },
+    {
+      "path": "2021_updated_210222.pdf",
+      "size": 84639,
+      "sha256": "662ded7774e47f7a33fbcff8a5c1bed05eb75fc7fb3022f8336a8bb588447046",
+      "document_type": "agency_interim_list_text_pdf",
+      "url": "https://web.archive.org/web/20240302153413id_/https://cms.detr.nv.gov/Content/Media/2021_updated_210222.pdf",
+      "original_url": "https://cms.detr.nv.gov/Content/Media/2021_updated_210222.pdf",
+      "retrieved_at": "2026-09-30T01:46:27Z",
+      "custody_note": "Text-bearing interim list 'Updated 2/22/2021', 6 rows; used only to cross-check the transcription."
+    },
+    {
+      "path": "images/WARN_2021-embedded-image.png",
+      "size": 34664,
+      "sha256": "24c992c12085bd0581b6985f6211fe6f9ee4a8390714d0201ac3d031fd251220",
+      "document_type": "derived_image",
+      "derived_from": "WARN_2021.pdf",
+      "method": "pdfimages 26.03.0 -png (lossless extraction of the page's only image)"
+    },
+    {
+      "path": "images/WARN_2021-rows-01-05-4x.png",
+      "size": 403393,
+      "sha256": "eb2b8b6359761211f0e237ca91dedbeb700f6417da2bca3d99ec09b2a66f51df",
+      "document_type": "derived_image",
+      "derived_from": "images/WARN_2021-embedded-image.png",
+      "method": "Pillow LANCZOS 4x upscale; red rNN labels in the left margin mark image rows (grid lines at y=58+16*(n-1) in the embedded image)"
+    },
+    {
+      "path": "images/WARN_2021-rows-06-10-4x.png",
+      "size": 367121,
+      "sha256": "81c5669e9d49a4cc6c3c2f071717ca1c9a5027c315f7f9bda8fea0f8ce1e0a8f",
+      "document_type": "derived_image",
+      "derived_from": "images/WARN_2021-embedded-image.png",
+      "method": "Pillow LANCZOS 4x upscale; red rNN labels in the left margin mark image rows (grid lines at y=58+16*(n-1) in the embedded image)"
+    },
+    {
+      "path": "images/WARN_2021-rows-11-15-4x.png",
+      "size": 383392,
+      "sha256": "d1fa4569a023960b144fe42cc61dc6e3f4ff3e62b8ec7e151e33032d1ace72dc",
+      "document_type": "derived_image",
+      "derived_from": "images/WARN_2021-embedded-image.png",
+      "method": "Pillow LANCZOS 4x upscale; red rNN labels in the left margin mark image rows (grid lines at y=58+16*(n-1) in the embedded image)"
+    },
+    {
+      "path": "images/WARN_2021-rows-16-20-4x.png",
+      "size": 376250,
+      "sha256": "1d79068f90d2b2a22836ec68acb62749634907529850aeb5fdbb60485053f786",
+      "document_type": "derived_image",
+      "derived_from": "images/WARN_2021-embedded-image.png",
+      "method": "Pillow LANCZOS 4x upscale; red rNN labels in the left margin mark image rows (grid lines at y=58+16*(n-1) in the embedded image)"
+    },
+    {
+      "path": "images/WARN_2021-rows-annotated-4x.png",
+      "size": 1638499,
+      "sha256": "19c9a277e1c71c9f439aa8c34155d0224e8a9043f0f4f2bff97e9840b817edcb",
+      "document_type": "derived_image",
+      "derived_from": "images/WARN_2021-embedded-image.png",
+      "method": "Pillow LANCZOS 4x upscale; red rNN labels in the left margin mark image rows (grid lines at y=58+16*(n-1) in the embedded image)"
+    },
+    {
+      "path": "ocr-tesseract-first-pass.txt",
+      "size": 1486,
+      "sha256": "370310a347690f194df4e2a8ff2e9efb8d07799f10cad38d6a25338f41d5cb8c",
+      "document_type": "derived_ocr",
+      "derived_from": "images/WARN_2021-embedded-image.png",
+      "method": "tesseract 5.5.0 --psm 6 on a 4x (sips) upscale"
+    },
+    {
+      "path": "nv-2021-transcription.csv",
+      "size": 2436,
+      "sha256": "333d7eae6488010c30974de68e7fc594dd7d7b3b031146e164364ae0b2495a85",
+      "document_type": "transcription",
+      "derived_from": "WARN_2021.pdf",
+      "transcriber": "Claude (claude-opus-5-5) agent in the warn-live session of 2026-09-30, reading the 4x row images; tesseract first pass",
+      "transcribed_at": "2026-09-30",
+      "method": "Every cell read from the 4x row images and compared with the OCR first pass (1 cell differed: r07 employer) and with the interim text PDF (6 rows; all dates, types, counts, cities and counties agree; 4 employer spellings differ, scan kept). Notification is blank: the scanned list has no WARN/Non-WARN column.",
+      "independent_verification": "pending"
+    }
+  ]
+}

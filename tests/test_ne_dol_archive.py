@@ -51,19 +51,22 @@ def test_other_table_shapes_are_refused():
         )
 
 
-def test_backfill_scopes_years_holds_same_key_sites_and_records_capture(
+def test_backfill_scopes_years_keys_sites_and_records_capture(
     tmp_path, monkeypatch,
 ):
     content = FIXTURE.read_bytes()
     monkeypatch.setattr(state_archives, "_download", _fake_download(content))
     records = state_archives.fetch_ne_dol(tmp_path)
     # ITC Federal (2024) is outside 2020-2022; the live collector owns it.
-    # The two Hayneedle sites share the City-based key and are held.
-    assert [(r["employer_name"], r["notice_date"]) for r in records] == [
-        ("Malco Products, SBC, Inc.", "2022-11-02"),
-        ("PSSI Food Safety Solutions: JBS USA", "2022-12-13"),
-        ("Packers Sanitation Services, Inc.", "2020-01-18"),
+    # The two Hayneedle sites are keyed on their filed Location cells.
+    assert [(r["employer_name"], r["notice_date"], r["location"]) for r in records] == [
+        ("Malco Products, SBC, Inc.", "2022-11-02", "DeWitt"),
+        ("PSSI Food Safety Solutions: JBS USA", "2022-12-13", "Grand Island"),
+        ("Hayneedle, Inc.", "2020-01-23", "Chalco Valley Parkway - Omaha"),
+        ("Hayneedle, Inc.", "2020-01-23", "West Dodge Road - Omaha"),
+        ("Packers Sanitation Services, Inc.", "2020-01-18", "Lincoln - Smithfield"),
     ]
+    assert len({r["dedupe_key"] for r in records}) == len(records)
     first = records[0]
     assert first["source_url"] == state_archives.NE_DOL_CAPTURE
     capture = json.loads(first["source_details"])["source_capture"]
@@ -72,6 +75,8 @@ def test_backfill_scopes_years_holds_same_key_sites_and_records_capture(
     assert capture["original_url"] == state_archives.NE_DOL_ORIGINAL
     raw = json.loads(first["raw_extra"])
     assert raw["ndol_page_row"] == "2"
+    assert raw["source_report"] == "warn_report"
+    assert raw["ndol_source_page"] == state_archives.NE_DOL_CAPTURE
     assert raw["Date"] == "12/19/2022\xa0\xa0\n\xa0 11/02/2022"
 
 

@@ -95,11 +95,19 @@ def test_iowa_projection_accounts_for_rows_and_keeps_uncertain_revisions_out():
     rows = extract(SOURCE) + extract_historical(SOURCE)
     admitted, held, report, related = project(rows)
     assert report["source_rows"] == 935
-    assert (len(admitted), len(held)) == (399, 536)
+    assert (len(admitted), len(held)) == (625, 310)
+    assert (report["admitted"], report["amendment_versions"]) == (560, 65)
+    assert report["admitted_filing_group_rows"] == 161
     assert len({item["source_row"] for item in held}) == len(held)
-    assert len({item["source_identity"] for item in admitted}) == len(admitted)
-    assert report["hold_reasons"]["amendment_without_verified_parent"] == 263
-    assert report["hold_reasons"]["duplicate_agency_capture"] == 61
+    notices = [item for item in admitted if not item["is_amendment"]]
+    assert len({item["source_identity"] for item in notices}) == len(notices)
+    assert report["hold_reasons"]["amendment_without_verified_parent"] == 110
+    assert report["hold_reasons"]["amendment_parent_ambiguous"] == 63
+    # Declared amendments with one parent site are versions even when they
+    # move the action date; their second captures are duplicates.
+    assert "amendment_action_date_outside_revision_window" not in report["hold_reasons"]
+    assert report["hold_reasons"]["site_phase_or_worker_allocation_unresolved"] == 3
+    assert report["hold_reasons"]["duplicate_agency_capture"] == 97
     assert all(item["source_notice_id"] not in related for item in admitted)
     assert all(item["related_source_row"] in {rec["source_notice_id"] for rec in admitted}
                for item in held if item["reason"] == "duplicate_agency_capture")
@@ -124,6 +132,7 @@ def test_iowa_projection_does_not_depend_on_source_iteration_order():
 def test_iowa_notice_type_and_listed_city_county_are_projected():
     rows = extract(SOURCE) + extract_historical(SOURCE)
     admitted, _, _, _ = project(rows)
+    admitted = [rec for rec in admitted if not rec["is_amendment"]]
     types = {}
     for rec in admitted:
         text = " ".join(json.loads(rec["source_details"])["notice_type_text"].split())
@@ -138,4 +147,54 @@ def test_iowa_notice_type_and_listed_city_county_are_projected():
         details = json.loads(rec["source_details"])
         if (details["address_state_text"] or "").strip() not in ("", "IA"):
             assert rec["location"] is None
-    assert sum(rec["location"] is not None for rec in admitted) == 396
+    assert sum(rec["location"] is not None for rec in admitted) == 557
+
+
+def test_iowa_distinct_address_sites_are_entries_of_one_filing_group():
+    rows = extract(SOURCE) + extract_historical(SOURCE)
+    admitted, held, _, related = project(rows)
+    groups = defaultdict(list)
+    for rec in admitted:
+        group = json.loads(rec["source_details"]).get("filing_group")
+        if group and not rec["is_amendment"]:
+            groups[group["id"]].append(rec)
+    assert groups
+    for members in groups.values():
+        streets = [json.loads(rec["source_details"])["street_address_text"].casefold().strip()
+                   for rec in members]
+        assert len(set(streets)) == len(streets)
+        assert len({(rec["employer_name"].casefold(), rec["notice_date"], rec["effective_date"])
+                    for rec in members}) == 1
+    # A site printed in both logs is one entry plus a duplicate capture.
+    pointers = {rec["source_notice_id"] for rec in admitted}
+    assert all(related[item["source_row"]] in pointers
+               for item in held if item["reason"] == "duplicate_agency_capture")
+
+
+def test_iowa_amendment_with_unique_parent_is_a_later_version():
+    rows = extract(SOURCE) + extract_historical(SOURCE)
+    admitted, held, _, related = project(rows)
+    notices = {rec["dedupe_key"]: rec for rec in admitted if not rec["is_amendment"]}
+    versions = [rec for rec in admitted if rec["is_amendment"]]
+    assert versions
+    by_row = {row["source_row"]: row for row in rows}
+    for version in versions:
+        parent = notices[version["dedupe_key"]]
+        amendment = json.loads(version["source_details"])["amendment"]
+        row = by_row[amendment["source_row"]]
+        assert related[row["source_row"]] == parent["source_notice_id"]
+        assert version["source_identity"] == parent["source_identity"]
+        assert version["notice_date"] == parent["notice_date"] <= row["notice_date"]
+        if "additional" in row["notice_type_text"].casefold():
+            # Incremental-or-total is unstated: the parent's figures stand.
+            assert amendment["applied_to_notice"] is False
+            assert (version["effective_date"], version["employees_affected"]) == (
+                parent["effective_date"], parent["employees_affected"])
+        else:
+            assert (version["effective_date"], version["employees_affected"]) == (
+                row["effective_date"], row["workers_reported"] or None)
+        assert " ".join(row["street_address_text"].casefold().split()) == " ".join(
+            json.loads(parent["source_details"])["street_address_text"].casefold().split())
+    # Versions follow their parent in the batch, so ingest makes them current.
+    order = [rec["dedupe_key"] for rec in admitted]
+    assert all(order.index(v["dedupe_key"]) < admitted.index(v) for v in versions)

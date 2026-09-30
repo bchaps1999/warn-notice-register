@@ -378,3 +378,46 @@ def test_held_non_notice_rows_do_not_disable_absence_tracking(monkeypatch, tmp_p
         "apparent_agency_test_record"
     }
     assert conn.execute("SELECT last_seen FROM notices WHERE dedupe_key='old'").fetchone()[0] is not None
+
+
+_MI_SAME_KEY_ROWS = """company,link,address,county,action,reason,date_start,jobs,extras,titles,city,date_close,includes
+"Flagstar Bank, N.A.",https://www.michigan.gov,,Oakland,Layoff,Restructuring,4/22/2025,424,,,"Troy, Michigan",,
+"Flagstar Bank, N.A.",https://www.michigan.gov,,Oakland,Layoff,Restructuring,6/8/2025,40,,,"Troy, Michigan",,
+"Flagstar Bank, N.A.",https://www.michigan.gov,,Oakland,Layoff,Restructuring,6/30/2025,12,,,"Troy, Michigan",,
+"Flagstar Bank, N.A.",https://www.michigan.gov,,Oakland,Layoff,Restructuring,6/30/2025,12,,,"Troy, Michigan",,
+Acme Tool,https://www.michigan.gov,,Kent,Closure,Closing,5/1/2025,80,,,Grand Rapids,,
+"""
+
+
+def test_live_scrape_and_replay_assign_identical_entry_keys(monkeypatch, tmp_path):
+    """Same-key rows of one document are entries on both ingest paths."""
+    from warnlive.migrate import clean_rebuild
+    from warnlive.registry import load_registry
+
+    raw_dir = tmp_path / "raw"
+    raw_dir.mkdir()
+    (raw_dir / "mi.csv").write_text(_MI_SAME_KEY_ROWS)
+    passing = lambda *_args, **_kwargs: VerificationResult(state="MI")  # noqa: E731
+    monkeypatch.setattr(pipeline.harness, "verify_state", passing)
+    monkeypatch.setattr(clean_rebuild, "verify_state", passing)
+    cfg = load_registry()["mi"]
+    assert cfg.same_key_policy == "distinct_rows"
+
+    live = db.connect(tmp_path / "live.sqlite")
+    db.init_db(live)
+    outcome = pipeline._run_one(cfg, live, raw_dir, tmp_path / "cache", False, True)
+    assert outcome.verdict == "ok", outcome.error
+    assert (outcome.new, outcome.updated) == (4, 0)
+    assert outcome.checks["entries"]["qualified_rows"] == 3
+
+    clean_rebuild.build(tmp_path / "replay.sqlite", raw_dir, tmp_path / "sc", {"mi"},
+                        observed_at="2026-09-24")
+    replay = db.connect(tmp_path / "replay.sqlite")
+    query = "SELECT dedupe_key, raw_record_hash FROM notices n JOIN notice_versions v " \
+            "ON v.notice_id = n.id ORDER BY 1"
+    assert [tuple(r) for r in live.execute(query)] == [tuple(r) for r in replay.execute(query)]
+    assert len({row[0] for row in live.execute(query)}) == 4
+
+    # A rerun of the live path is idempotent: every entry is re-observed.
+    again = pipeline._run_one(cfg, live, raw_dir, tmp_path / "cache", False, True)
+    assert (again.new, again.updated, again.unchanged) == (0, 0, 4)

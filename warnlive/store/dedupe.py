@@ -64,15 +64,24 @@ class CollisionError(ValueError):
         )
 
 
-def preflight_collisions(conn: sqlite3.Connection, records: list[dict]) -> None:
+def preflight_collisions(
+    conn: sqlite3.Connection, records: list[dict],
+    revision_keys: frozenset[str] | set[str] = frozenset(),
+) -> None:
     """Reject incompatible same-key dates before changing any notice.
 
     Compare distinct rows in the batch and new versions against *all* stored
     versions, since the current projection alone may hide an earlier action
     date. Reobserving an already stored version is safe and stays idempotent.
+
+    ``revision_keys`` are keys whose rows a source filing ID already ties to
+    one filing (e.g. one NY Control Number across detail pages): a moved
+    date there is that filing's revision, not two notices sharing a key.
     """
     by_key: dict[str, dict[str, dict]] = {}
     for rec in records:
+        if rec["dedupe_key"] in revision_keys:
+            continue
         by_key.setdefault(rec["dedupe_key"], {}).setdefault(rec["raw_record_hash"], rec)
 
     collisions: list[dict] = []
@@ -136,6 +145,7 @@ def ingest(
     observed_at: str,
     *,
     commit: bool = True,
+    revision_keys: frozenset[str] | set[str] = frozenset(),
 ) -> IngestStats:
     """Ingest normalized records for one state.
 
@@ -158,7 +168,7 @@ def ingest(
     amendment rows rather than editing — and goes through the update path,
     so the later values become the current version instead of being dropped.
     """
-    preflight_collisions(conn, records)
+    preflight_collisions(conn, records, revision_keys)
     stats = IngestStats()
     seen_in_batch: dict[str, str] = {}
     cur = conn.cursor()

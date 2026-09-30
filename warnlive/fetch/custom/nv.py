@@ -11,6 +11,7 @@ header into those columns, grouping lines by vertical position.
 from __future__ import annotations
 
 import csv
+import hashlib
 import logging
 import re
 from pathlib import Path
@@ -36,6 +37,14 @@ COLUMNS = [
     "County",
     "Notification",
 ]
+# Provenance columns, blank except on rows read from a recorded transcription.
+TRANSCRIPTION_COLUMNS = ["transcription_basis", "transcription_source"]
+_REPO = Path(__file__).resolve().parents[3]
+# sha256 of a scanned agency PDF -> its transcription (repo-relative path).
+TRANSCRIPTIONS = {
+    "9f3dadcdcc42903fa1e3f31ffda793ca1b06e78d2e824bcf36ccb1a4b81daaa5":
+        "data/source_snapshots/2026-09-30-nv-2021-transcription/nv-2021-transcription.csv",
+}
 LINE_TOLERANCE = 3  # points; chars within this vertical distance share a row
 
 
@@ -65,17 +74,43 @@ def scrape(
         r.raise_for_status()
         name = f"nv/{href.rsplit('/', 1)[-1]}"
         pdf_path = cache.write_binary(name, r.content)
-        rows.extend(parse_pdf(pdf_path))
+        parsed = parse_pdf(pdf_path)
+        if not parsed:
+            parsed = transcribed_rows(hashlib.sha256(r.content).hexdigest())
+            if parsed:
+                logger.info("NV %s: no text; %d rows from its transcription", href, len(parsed))
+        rows.extend(parsed)
 
     if not rows:
         raise ValueError("NV: parsed zero rows from PDFs")
 
     data_path = data_dir / "nv.csv"
     with open(data_path, "w", newline="") as fh:
-        writer = csv.DictWriter(fh, fieldnames=COLUMNS)
+        writer = csv.DictWriter(fh, fieldnames=COLUMNS + TRANSCRIPTION_COLUMNS)
         writer.writeheader()
         writer.writerows(rows)
     return data_path
+
+
+def transcribed_rows(pdf_sha256: str) -> list[dict]:
+    """Raw rows transcribed from the scanned PDF with this sha256, else [].
+
+    The scanned list has no WARN/Non-WARN column; as for the other
+    WARN-only yearly files, Notification is set to WARN.
+    """
+    relative = TRANSCRIPTIONS.get(pdf_sha256)
+    if relative is None:
+        return []
+    with open(_REPO / relative, newline="") as fh:
+        source = list(csv.DictReader(fh))
+    rows = []
+    for item in source:
+        row = {name: item[name] for name in COLUMNS}
+        row["Notification"] = row["Notification"] or "WARN"
+        row["transcription_basis"] = item["transcription_basis"]
+        row["transcription_source"] = f"{relative}#{item['image_row']}"
+        rows.append(row)
+    return rows
 
 
 def parse_pdf(path: Path) -> list[dict]:

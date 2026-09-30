@@ -25,6 +25,10 @@ from warnlive.enrich import il_effective
 from warnlive.migrate.clean_rebuild import build as build_raw
 from warnlive.migrate.source_bundle import extract
 from warnlive.normalize.engine import _fold, _record_hash, normalize_file
+from warnlive.normalize.entries import (
+    control_number_versions, fold_identical_updates, fold_phase_group,
+    prepare_batch, qualify_same_document_entries,
+)
 from warnlive.registry import load_registry
 from warnlive.store import db as db_mod
 from warnlive.store import links as links_mod
@@ -42,12 +46,13 @@ def _read_policy(path: Path) -> dict:
     return policy
 
 
-def _ingest_groups(conn, groups: dict[str, list[dict]], observed_at: str) -> dict:
+def _ingest_groups(conn, groups: dict[str, list[dict]], observed_at: str,
+                   revision_keys: set[str] = frozenset()) -> dict:
     added = updated = unchanged = coalesced = collisions = 0
     for state, records in sorted(groups.items()):
         if not records:
             continue
-        stats = ingest(conn, records, observed_at=observed_at)
+        stats = ingest(conn, records, observed_at=observed_at, revision_keys=revision_keys)
         added += stats.new
         updated += stats.updated
         unchanged += stats.unchanged
@@ -133,8 +138,9 @@ def _backfill_raw(
                 )
                 for failure in norm.failures
             )
+        prepared, _ = prepare_batch(conn, postal, norm.records)
         by_key: dict[str, list[dict]] = defaultdict(list)
-        for rec in norm.records:
+        for rec in prepared:
             by_key[rec["dedupe_key"]].append(rec)
         for key, rows in by_key.items():
             if postal in {"il", "ks", "nj"} and any(not row.get("source_identity") for row in rows):
@@ -264,10 +270,19 @@ def _cached_ny(cache: Path) -> list[dict]:
 def _cached_agencies(
     conn, cache: Path, accepted: set[str] | None, source_urls: dict[str, str],
     observed_at: str, exceptions: list[dict] | None = None,
+    states: tuple[str, ...] = ("WI", "FL", "CA", "MA", "OH", "NY"),
 ) -> dict:
+    """Admit frozen agency-archive rows; ``states`` narrows a targeted replay.
+
+    Entry rules (normalize/entries.py) run here exactly as in the live scrape:
+    distinct same-key rows of a ``distinct_rows`` state are separate entries;
+    NY detail pages sharing a Control Number are one filing's versions; WI
+    same-key rows are one filing's phases; WI/FL updates identical to an
+    earlier row are versions of it. Any other same-key conflict is held.
+    """
     seen = {row[0] for row in conn.execute("SELECT dedupe_key FROM notices")}
     report = {}
-    for state in ("WI", "FL", "CA", "MA", "OH", "NY"):
+    for state in states:
         # A statewide occupied month says nothing about whether two employers'
         # rows describe the same notice. Screen only a plausible employer/event
         # overlap; leave source-specific identity review to the projector.
@@ -294,11 +309,14 @@ def _cached_agencies(
                 state_archives, "_download", side_effect=_cached_only
             ):
                 records = state_archives.FETCHERS[state](cache)
+        records, entry_report = qualify_same_document_entries(conn, state, records)
         by_key: dict[str, list[dict]] = defaultdict(list)
         for rec in records:
             by_key[rec["dedupe_key"]].append(rec)
         eligible = []
+        revision_keys: set[str] = set()
         skipped = ambiguous = outside_policy = overlap = undated = coalesced = 0
+        phase_folded = 0
         for key, rows in by_key.items():
             if key in seen:
                 skipped += len(rows)
@@ -310,87 +328,221 @@ def _cached_agencies(
                         item.update({"match_basis": "canonical_key_only",
                                      "survivor_dedupe_key": key})
                         exceptions.append(item)
-            elif len({row["raw_record_hash"] for row in rows}) > 1:
-                ambiguous += len(rows)
-                if exceptions is not None:
-                    exceptions.extend(
-                        _exception(f"agency-cache:{state}", "conflicting_same_key", row)
-                        for row in rows
-                    )
-            elif accepted is not None and key not in accepted:
-                outside_policy += len(rows)
-            else:
-                rec = rows[0]
-                if accepted is None:
-                    # Florida's archive often reports a layoff interval months
-                    # after the filing. Use its notice month for overlap
-                    # screening so parsing that interval cannot make a
-                    # distinct notice disappear from the source-only replay.
-                    if state == "FL" and rec.get("notice_date"):
-                        dates = [rec["notice_date"]]
-                    else:
-                        dates = [rec.get(name) for name in ("notice_date", "effective_date")]
-                        if state in {"MA", "WI", "FL"}:
-                            detail = json.loads(rec.get("source_details") or "{}")
-                            dates.append(detail.get("agency_received_date") or
-                                         detail.get("agency_notification_date") or
-                                         detail.get("legacy_notice_key_date"))
-                    months = {value[:7] for value in dates if value}
-                    if not months:
-                        undated += len(rows)
-                        if exceptions is not None:
-                            exceptions.extend(
-                                _exception(f"agency-cache:{state}", "no_date", row)
-                                for row in rows
-                            )
-                        continue
-                    employer = _fold(rec.get("employer_name"))
-                    if any((employer, month) in occupied for month in months):
-                        overlap += len(rows)
-                        if exceptions is not None:
-                            exceptions.extend(
-                                _exception(f"agency-cache:{state}", "possible_employer_month_overlap", row)
-                                for row in rows
-                            )
-                        continue
-                    if state == "CA" and rec.get("source_url") == "cached://annual-pdf":
-                        artifact = _exception("agency-cache:CA", "included", rec).get(
-                            "bundle_artifact"
+                continue
+            group, phase_base = rows, None
+            if len({row["raw_record_hash"] for row in rows}) > 1:
+                held = rows
+                if state == "NY":
+                    group, held = control_number_versions(key, rows)
+                elif state == "WI":
+                    folded, phase_base = fold_phase_group(rows)
+                    group, held = [folded], []
+                if held:
+                    ambiguous += len(held)
+                    if exceptions is not None:
+                        exceptions.extend(
+                            _exception(f"agency-cache:{state}", "conflicting_same_key", row)
+                            for row in held
                         )
-                        if artifact:
-                            rec["source_details"] = json.dumps(
-                                {"source_artifact": artifact}, sort_keys=True
-                            )
-                            rec["source_url"] = None
-                            rec["raw_record_hash"] = _record_hash(rec)
-                elif key in source_urls:
-                    rec["source_url"] = source_urls[key]
-                    rec["raw_record_hash"] = _record_hash(rec)
-                eligible.append(rec)
-                coalesced += len(rows) - 1
-                if exceptions is not None:
-                    for row in rows[1:]:
+                    continue
+            if accepted is not None and key not in accepted:
+                outside_policy += len(rows)
+                continue
+            rec = group[0]
+            if accepted is None:
+                # Florida's archive often reports a layoff interval months
+                # after the filing. Use its notice month for overlap
+                # screening so parsing that interval cannot make a
+                # distinct notice disappear from the source-only replay.
+                if state == "FL" and rec.get("notice_date"):
+                    dates = [rec["notice_date"]]
+                else:
+                    dates = [rec.get(name) for name in ("notice_date", "effective_date")]
+                    if state in {"MA", "WI", "FL"}:
+                        detail = json.loads(rec.get("source_details") or "{}")
+                        dates.append(detail.get("agency_received_date") or
+                                     detail.get("agency_notification_date") or
+                                     detail.get("legacy_notice_key_date"))
+                months = {value[:7] for value in dates if value}
+                if not months:
+                    undated += len(rows)
+                    if exceptions is not None:
+                        exceptions.extend(
+                            _exception(f"agency-cache:{state}", "no_date", row)
+                            for row in rows
+                        )
+                    continue
+                employer = _fold(rec.get("employer_name"))
+                if any((employer, month) in occupied for month in months):
+                    overlap += len(rows)
+                    if exceptions is not None:
+                        exceptions.extend(
+                            _exception(f"agency-cache:{state}", "possible_employer_month_overlap", row)
+                            for row in rows
+                        )
+                    continue
+                if state == "CA":
+                    group = [_ca_artifact_record(row) for row in group]
+            elif key in source_urls:
+                group = [dict(row, source_url=source_urls[key]) for row in group]
+                for row in group:
+                    row["raw_record_hash"] = _record_hash(row)
+            # Identical rows coalesce into the first; distinct NY pages of one
+            # Control Number stay as that filing's versions in detail-id order.
+            survivors: dict[tuple[str, str], dict] = {}
+            for row in group:
+                ident = (row["dedupe_key"], row["raw_record_hash"])
+                if ident in survivors:
+                    coalesced += 1
+                    if exceptions is not None:
                         item = _exception(
                             f"agency-cache:{state}", "coalesced_same_key_content", row,
                         )
                         item["match_basis"] = "canonical_key_and_content"
-                        item["survivor_source_notice_id"] = rec.get("source_notice_id")
+                        item["survivor_source_notice_id"] = survivors[ident].get("source_notice_id")
                         exceptions.append(item)
-                seen.add(key)
-        stats = _ingest_groups(conn, {state: eligible}, observed_at)
+                    continue
+                survivors[ident] = row
+                eligible.append(row)
+            versioned = defaultdict(int)
+            for ident in survivors:
+                versioned[ident[0]] += 1
+            revision_keys.update(k for k, n in versioned.items() if n > 1)
+            if phase_base is not None:
+                # The folded notice stands for every distinct phase row; the
+                # rows other than its base are recorded as folded into it.
+                phase_rows: dict[str, dict] = {}
+                for row in rows:
+                    if row["raw_record_hash"] in phase_rows:
+                        reason = "coalesced_same_key_content"
+                        coalesced += 1
+                    elif row["raw_record_hash"] == phase_base:
+                        phase_rows[phase_base] = row
+                        continue
+                    else:
+                        phase_rows[row["raw_record_hash"]] = row
+                        reason = "folded_into_filing_phases"
+                        phase_folded += 1
+                    if exceptions is not None:
+                        item = _exception(f"agency-cache:{state}", reason, row)
+                        item["match_basis"] = "same_document_same_key_phase_rows"
+                        item["survivor_dedupe_key"] = key
+                        exceptions.append(item)
+            seen.update(ident[0] for ident in survivors)
+        # An update row identical to an earlier row becomes its next version.
+        eligible, update_report = fold_identical_updates(state, eligible)
+        stats = _ingest_groups(conn, {state: eligible}, observed_at, revision_keys)
         accounted = (
             skipped + ambiguous + outside_policy + overlap + undated + coalesced
-            + stats["new"] + stats["updated"] + stats["unchanged"]
+            + phase_folded + stats["new"] + stats["updated"] + stats["unchanged"]
             + stats["coalesced"]
         )
         report[state] = {"parsed": len(records), "already": skipped,
                          "outside_policy": outside_policy,
                          "ambiguous_rows": ambiguous,
                          "coalesced_identical_rows": coalesced,
+                         "phase_rows_folded": phase_folded,
                          "source_overlap_rows": overlap,
                          "undated_rows": undated,
+                         "entries": entry_report,
+                         "update_versions": update_report,
+                         "revision_keys": len(revision_keys),
                          "unaccounted_rows": len(records) - accounted, **stats}
     return report
+
+
+def _key_counts(records: list[dict]) -> dict[str, int]:
+    counts: dict[str, int] = defaultdict(int)
+    for rec in records:
+        counts[rec["dedupe_key"]] += 1
+    return counts
+
+
+def _ne_observations(exceptions: list[dict]) -> list[dict]:
+    """Observation rows for Nebraska rows held as outside NDOL's WARN report.
+
+    The tagged collector (fetch/patches/ne.py) names each row's report, year
+    page and page row; rows from an untagged capture are never held this way,
+    so a replay of an older bundle yields none. The ``Date`` cell keeps its
+    source text only: its legal role on the layoff/closure report is not
+    stated.
+    """
+    out = []
+    for item in exceptions:
+        if item.get("origin") != "raw/ne.csv" or item.get("reason") != "ne_layoff_closure_report_not_warn":
+            continue
+        raw = json.loads(item.get("raw_extra") or "{}")
+        report = raw.get("source_report")
+        page = raw.get("ndol_source_page") or ""
+        year = page.rsplit("year=", 1)[-1] if "year=" in page else None
+        if not report or not year or not str(raw.get("ndol_page_row") or "").strip():
+            raise ValueError(f"Nebraska held row lacks its report locator: {item.get('prepared_row')}")
+        artifact = f"agency/ne/{report}-{year}.html"
+        workers = str(raw.get("Jobs Affected") or "").replace(",", "").strip()
+        row = {
+            "source_artifact": artifact,
+            "source_row": f"{artifact}#row{str(raw['ndol_page_row']).strip()}",
+            "source_row_sha256": item["source_row_sha256"],
+            "kind": "notice",
+            "company_text": raw.get("Company"),
+            "workers_reported": int(workers) if workers.isdigit() else None,
+            "city_text": raw.get("City") or raw.get("Location"),
+            "source_report": report,
+            "ndol_source_page": page,
+            "ndol_matched_warn_row": raw.get("ndol_matched_warn_row") or None,
+            "hold_reason": item["reason"],
+            "raw": raw,
+        }
+        out.append({k: v for k, v in row.items() if v is not None})
+    return out
+
+
+def _mo_observations(records: list[dict], held: list[dict]) -> list[tuple[dict, str | None]]:
+    """Observation rows for every Missouri historical workbook row.
+
+    Pairs each row with the admitted notice's dedupe_key, or None for a held
+    row. Receipt and action dates keep their workbook roles; no row is given
+    a legal notice date.
+    """
+    out = []
+    for item, key in [(json.loads(rec["source_details"]), rec["dedupe_key"]) for rec in records] + [
+            (item, None) for item in held]:
+        raw = item.get("raw_fields") or json.loads(item.get("raw_extra") or "{}")
+        workers = raw.get("# Affected")
+        received, action = raw.get("Date Rec'd"), raw.get("Layoff or Closing Date")
+        row = {
+            "source_artifact": (item.get("origin") or "").split(":")[0],
+            "source_row": item["source_row"],
+            "source_row_sha256": item["source_row_sha256"],
+            "kind": "notice",
+            "company_text": raw.get("Company Name"),
+            "effective_date": action[:10] if isinstance(action, str) else None,
+            "workers_reported": workers if isinstance(workers, int)
+            and not isinstance(workers, bool) else None,
+            "street_address_text": raw.get("Address"),
+            "city_text": raw.get("Location(s)"),
+            "agency_received_date": received[:10] if isinstance(received, str) else None,
+            "hold_reason": item.get("reason"),
+            "raw": raw,
+        }
+        out.append(({k: v for k, v in row.items() if v is not None}, key))
+    return out
+
+
+def _ca_artifact_record(rec: dict) -> dict:
+    """Point a CA annual-PDF row at its bundle artifact, keeping its entry basis."""
+    if rec.get("source_url") != "cached://annual-pdf":
+        return rec
+    artifact = _exception("agency-cache:CA", "included", rec).get("bundle_artifact")
+    if not artifact:
+        return rec
+    details = {"source_artifact": artifact}
+    entry = json.loads(rec.get("source_details") or "{}").get("entry")
+    if entry:
+        details["entry"] = entry
+    out = dict(rec, source_details=json.dumps(details, sort_keys=True), source_url=None)
+    out["raw_record_hash"] = _record_hash(out)
+    return out
 
 
 def _bln_unresolved(
@@ -865,14 +1017,25 @@ def rebuild(
                     la_overlay.record(row) for row in la_source_rows
                     if row["kind"] == "notice" and row["source_row"] in la_overlay.EMPLOYERS
                 ]}, observed_at) if la_source_rows else {"new": 0}
-                ia_ingest = _ingest_groups(conn, {"IA": ia_records}, observed_at)
-                if ia_source_report is not None and ia_ingest["new"] != len(ia_records):
+                # A declared amendment with one parent site is that notice's
+                # revision even when it moves the action date (ia_source).
+                ia_revision_keys = {
+                    rec["dedupe_key"] for rec in ia_records
+                    if json.loads(rec.get("source_details") or "{}").get("amendment")
+                }
+                ia_ingest = _ingest_groups(conn, {"IA": ia_records}, observed_at, ia_revision_keys)
+                if ia_source_report is not None and ia_ingest["new"] != (
+                        len(ia_records) - ia_source_report["amendment_versions"]):
                     raise ValueError("Iowa source rows did not produce unique notices")
                 ky_ingest = _ingest_groups(conn, {"KY": ky_records}, observed_at)
                 if ky_source_report is not None and ky_ingest["new"] != len(ky_records):
                     raise ValueError("Kentucky agency rows did not produce unique notices")
-                or_ingest = _ingest_groups(conn, {"OR": or_records}, observed_at)
-                if or_source_report is not None and or_ingest["new"] != len(or_records):
+                # Later captures of one WARN# are that filing's versions.
+                or_revision_keys = {
+                    key for key, n in _key_counts(or_records).items() if n > 1}
+                or_ingest = _ingest_groups(conn, {"OR": or_records}, observed_at, or_revision_keys)
+                if or_source_report is not None and or_ingest["new"] != (
+                        len(or_records) - or_source_report["capture_versions"]):
                     raise ValueError("Oregon agency rows did not produce unique notices")
                 or_historical_report = None
                 or_historical_ingest = {"new": 0}
@@ -929,6 +1092,7 @@ def rebuild(
                 mo_annual_report = None
                 mo_annual_ingest = {"new": 0}
                 mo_historical_report = None
+                mo_observations: list[tuple[dict, str | None]] = []
                 mo_historical_ingest = {"new": 0}
                 if mo_annual_dir.is_dir() or mo_historical_dir.is_dir():
                     mo_existing_events = {
@@ -954,6 +1118,7 @@ def rebuild(
                         mo_records, mo_held, mo_historical_report = project_mo_historical(
                             mo_historical_dir, mo_existing_events)
                         exceptions.extend(mo_held)
+                        mo_observations = _mo_observations(mo_records, mo_held)
                         mo_historical_ingest = _ingest_groups(conn, {"MO": mo_records}, observed_at)
                         if mo_historical_ingest["new"] != len(mo_records):
                             raise ValueError("Missouri historical rows did not produce unique notices")
@@ -1003,14 +1168,21 @@ def rebuild(
                         if row["location"] and row["effective_date"] and row["employees_affected"] is not None
                     }
                     existing_ny_notices = [dict(row) for row in conn.execute(
-                        "SELECT id, employer_name, location, notice_date, effective_date, "
-                        "employees_affected, source_notice_id FROM notices WHERE state='NY'")]
+                        "SELECT * FROM notices WHERE state='NY'")]
                     ny_records, ny_held, ny_source_report = project_ny_annual(
                         ny_annual_dir, existing_ny, existing_ny_sites,
                         existing_notices=existing_ny_notices)
                     exceptions.extend(ny_held)
-                ny_ingest = _ingest_groups(conn, {"NY": ny_records}, observed_at)
-                if ny_source_report is not None and ny_ingest["new"] != len(ny_records):
+                # A dashboard row matching exactly one control-number notice
+                # (ny_annual_source) is that filing's version.
+                ny_revision_keys = {
+                    rec["dedupe_key"] for rec in ny_records
+                    if json.loads(rec.get("source_details") or "{}").get(
+                        "ny_dashboard_correspondence")
+                }
+                ny_ingest = _ingest_groups(conn, {"NY": ny_records}, observed_at, ny_revision_keys)
+                if ny_source_report is not None and ny_ingest["new"] != (
+                        len(ny_records) - ny_source_report.get("correspondence_versions", 0)):
                     raise ValueError("New York dashboard rows did not produce unique notices")
             tx_evidence = None
             tx_dir = source / "agency/tx"
@@ -1086,8 +1258,21 @@ def rebuild(
                         admission[pointer] = ("admitted", matches[0]["id"])
                     else:
                         raise ValueError(f"unclassified Louisiana observation: {pointer}")
+                for row, key in mo_observations:
+                    # Rapid-response rows stay held: the workbook does not
+                    # establish a WARN filing per row. They are retained as
+                    # observations whose notice identity is unresolved.
+                    if key is None:
+                        admission[row["source_row"]] = ("identity_unresolved", None)
+                    else:
+                        admission[row["source_row"]] = ("admitted", conn.execute(
+                            "SELECT id FROM notices WHERE dedupe_key = ?", (key,)).fetchone()[0])
+                ne_observations = _ne_observations(exceptions)
+                for row in ne_observations:
+                    admission[row["source_row"]] = ("not_in_agency_warn_report", None)
                 observation_report = store_observations(
-                    conn, ia_current_rows + ia_historical_rows + ky_source_rows + la_source_rows,
+                    conn, ia_current_rows + ia_historical_rows + ky_source_rows + la_source_rows
+                    + [row for row, _ in mo_observations] + ne_observations,
                     admission, source_bundle_sha256,
                 )
                 conn.commit()
