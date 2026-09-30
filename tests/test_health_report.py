@@ -81,3 +81,19 @@ def test_overdue_collection_issue_opens_and_closes_with_stale_ok_verdict(tmp_pat
     result = runner.invoke(cli_module.cli, ["report", "--db", str(db_path), "--gh-issues"])
     assert result.exit_code == 0, result.output
     assert any(args[1:4] == ["issue", "close", "42"] for args in commands)
+
+
+def test_rebuilt_database_is_described_as_rebuilt_not_never_collected(tmp_path):
+    conn = db.connect(tmp_path / "health.sqlite")
+    db.init_db(conn)
+    registry = Registry({"pa": replace(load_registry()["pa"], cadence="weekly")})
+    conn.execute(
+        "INSERT INTO runs (started_at, trigger) "
+        "VALUES ('2026-09-24T00:00:00Z', 'clean-rebuild-v1')"
+    )
+    conn.commit()
+    write_health(conn, registry, tmp_path / "health", today=date(2026, 9, 29))
+    report = (tmp_path / "health" / "health.md").read_text()
+    assert "rebuilt from a frozen source bundle on 2026-09-24" in report
+    assert "no live collection since the 2026-09-24 rebuild" in report
+    assert "no successful collection recorded" not in report

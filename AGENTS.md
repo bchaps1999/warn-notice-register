@@ -23,7 +23,7 @@ This repository publishes a source-backed WARN notice register. Read `README.md`
 
 - Keep Python pipeline changes in the relevant `warnlive/` module, checks in `tests/`, site code in `site/`, and operational workflows in `.github/workflows/`. Follow the existing organization rather than creating a new layout for a small change.
 - Keep module docstrings current: what the module does, its inputs and outputs, and any network access. Update them when behavior changes.
-- Replace, don't accumulate. When code is superseded, delete it in the same commit as its replacement, with its tests and README commands; Git history is the archive. Superseded notes worth keeping go to `docs/archive/` with a line explaining why; do not keep numbered drafts (`-v3`, `-v4`, ...) side by side in `docs/`.
+- Replace, don't accumulate. When code is superseded, delete it in the same commit as its replacement, with its tests and README commands; Git history is the archive. `docs/archive/` is local-only (gitignored), so remove a superseded tracked note with `git rm` and point any remaining links at its copy at a pinned commit on GitHub; do not keep numbered drafts (`-v3`, `-v4`, ...) side by side in `docs/`.
 - For a source, normalization, admission, dedupe, or export change, test the affected cases and check row accounting, stable identities, amendments, date meaning, exclusions, and state coverage as applicable. Compare resulting counts and fingerprints with the appropriate saved baseline; explain intentional differences.
 - For a release or publication change, run the relevant regression and source-replay checks described in `docs/rebuild-contract.md`, and verify the database, CSV exports, site payload, and release notes agree. Never present a candidate replay as the released dataset.
 - Record what actually ran for any candidate or release build in its dated note under `docs/`: exact command, code commit (commit first if the tree is dirty), bundle path and SHA-256, counts admitted and held by reason, checks and their outcomes, and unresolved problems. Record failed and abandoned attempts too. Do not silently rewrite an earlier note; add a correction.
@@ -49,4 +49,4 @@ Work runs on the user's laptop (16 GB RAM, limited disk). Run at most one full o
 
 ## Keeping these instructions current
 
-When a change in workflow, layout, or the user's standing guidance makes a statement here out of date, update this file in the same commit, record dated user guidance here, and tell the user it was recorded.
+This file is general guidance on how to work in the repository, not a log. When a change in workflow or layout makes a statement here out of date, update it in the same commit. Record specific data-policy decisions and their dates in the relevant dated note under `docs/` (candidate, release, or state note), not here.

@@ -24,7 +24,7 @@ The frozen current `raw/ma.csv` has 377 rows. Its `RECEIVED` column contains one
 
 There is a concrete current-row mismatch: the frozen GSK plc. row labels **July 16, 2025** `RECEIVED` and reports an October 4, 2025 to March 31, 2026 layoff range. The linked [agency-hosted GSK filing](https://www.mass.gov/doc/gskplc-07-16-2025-warn-notice/download) is dated **July 15, 2025**. That one-day difference confirms the received field cannot be treated as the filing's written notice date for this row. It is one verified example, not a Massachusetts-wide error rate or a claim about when every employee got notice.
 
-The v8 correction covers both source paths. It preserves all 550 old Massachusetts keys/source IDs, 58,197 workers, 528 effective starts, and 111 ends; it clears 546 receipt values from legal notice. The FY2020 archive's old receipt-month overlap boundary is retained. Two full replays and every generated output match; see the [v8 checkpoint](rebuild-progress.md) and [state table](date-eligibility-state-summary-2026-09-23-v8.csv).
+The v8 correction covers both source paths. It preserves all 550 old Massachusetts keys/source IDs, 58,197 workers, 528 effective starts, and 111 ends; it clears 546 receipt values from legal notice. The FY2020 archive's old receipt-month overlap boundary is retained. Two full replays and every generated output match; see the [v8 checkpoint](rebuild-progress.md) and [state table](https://github.com/bchaps1999/warn-notice-register/blob/9af83bd/docs/date-eligibility-state-summary-2026-09-23-v8.csv).
 
 ## Kentucky lineage boundary
 

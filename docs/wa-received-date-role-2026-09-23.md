@@ -43,7 +43,7 @@ records those BLN rows as source-identity unresolved. This preserves the
 observation-level boundary until their documents or filing identifiers can be
 reviewed. The inflated diagnostic build is not a candidate checkpoint. Two
 final source-only replays with the guard match at 1,459 Washington notices;
-the [v6 state summary](date-eligibility-state-summary-2026-09-23-v6.md)
+the [v6 state summary](https://github.com/bchaps1999/warn-notice-register/blob/9af83bd/docs/date-eligibility-state-summary-2026-09-23-v6.md)
 records the date-eligibility effects.
 
 The fixed-code diagnostic replay restores the 1,459 Washington notice count
