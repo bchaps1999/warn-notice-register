@@ -171,8 +171,10 @@ def _hold_recovered_duplicates(records: list[dict]) -> tuple[list[dict], dict[st
                     "dedupe_key": rec["dedupe_key"], "source_row": details["source_row"],
                     "basis": possible["basis"],
                     "fields_matched": candidate["fields_matched"]})
-            else:
+            elif key:
                 candidate["disposition"] = "kept_exact_version_target"
+            else:
+                candidate["disposition"] = "unkeyed_candidate_not_held"
         rec = dict(rec, source_details=_json(details))
         rec["raw_record_hash"] = _record_hash(rec)
         out.append(rec)
@@ -438,7 +440,8 @@ def project(directory: Path, existing_employers: set[str] | None = None,
         raise ValueError("NY annual source row accounting mismatch")
     records, held_filings = _hold_recovered_duplicates(records)
     return records, held, {
-                           "held_recovered_filings": held_filings,"source_rows": len(rows), "admitted": len(records) - versions,
+                           "held_recovered_filings": held_filings,
+                           "source_rows": len(rows), "admitted": len(records) - versions,
                            "correspondence_versions": versions,
                            "admitted_filing_group_rows": sum(
                                "filing_group" in json.loads(r["source_details"])

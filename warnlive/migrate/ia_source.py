@@ -367,14 +367,20 @@ def _amendment_version(row: dict, latest: dict) -> dict:
     Every amendment row is appended to ``source_details.amendments[]`` with
     its reported date, count, type and pointer; ``amendment`` names the
     newest. The row's layoff date replaces the notice's only for a "Change
-    in date" type, and its worker count only when its type states a restated
-    total. Otherwise the notice keeps its count and date. A notice with more
+    in date" type whose count is blank or equals the notice's (a smaller
+    count is a phase of the layoff), and its worker count only when its type
+    states a restated total. Otherwise the notice keeps its count and date. A notice with more
     than one amendment gets ``worker_allocation: "unresolved"``: the rows do
     not say how their counts combine. The filing identity, notice date,
     location and type stay the original notice's."""
     details = json.loads(latest["source_details"])
     type_text = str(row.get("notice_type_text") or "").casefold()
-    applies_date = any(marker in type_text for marker in _DATE_CHANGE_MARKERS)
+    date_change = any(marker in type_text for marker in _DATE_CHANGE_MARKERS)
+    # A date change moves the whole notice only when it covers the whole
+    # notice: a row reporting a different (smaller) count is a phase of the
+    # layoff (Tyson Perry: 32, 32, 5, 19 of 1,276), not a new bulk date.
+    reported, current = row["workers_reported"], latest.get("employees_affected")
+    applies_date = date_change and (not reported or reported == current)
     applies_count = (any(marker in type_text for marker in _RESTATED_TOTAL_MARKERS)
                      and bool(row["workers_reported"]))
     entry = {
@@ -391,6 +397,8 @@ def _amendment_version(row: dict, latest: dict) -> dict:
         "raw_cells": row["raw_cells"]}
     if not applies_count:
         entry["workers_not_applied_reason"] = "amendment_count_meaning_unstated"
+    if date_change and not applies_date:
+        entry["layoff_date_not_applied_reason"] = "date_change_covers_part_of_notice"
     details["amendment"] = entry
     details["amendments"] = details.get("amendments", []) + [
         {name: entry[name] for name in (

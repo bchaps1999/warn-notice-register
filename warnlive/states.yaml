@@ -19,6 +19,8 @@
 #   same_key_document_fields: raw fields naming the document a row came from, when one capture
 #     concatenates several documents; distinct_rows applies within one document only, and same-key
 #     rows of different documents stay versions (default: the whole capture is one document)
+#   same_key_document_order: oldest_first (default) | newest_first — the order in which the capture lists
+#     its documents, so a notice re-listed in several documents takes the newest listing as its current version
 #   fetch_budget_minutes: wall-clock cap on one live fetch (default 45, pipeline.DEFAULT_FETCH_BUDGET_MINUTES); past it the state fails and the run continues
 #   expected_columns: raw CSV header snapshot; null until first verified fetch
 #   notes: quirks, upstream issue links
@@ -89,6 +91,7 @@ ca:
   notes: "Current-year Excel + historical PDFs; layout varies year to year."
   same_key_policy: distinct_rows
   same_key_document_fields: [source_file, year_file]
+  same_key_document_order: newest_first # the collector lists the current workbook, then FY reports newest to oldest
 
 co:
   name: Colorado

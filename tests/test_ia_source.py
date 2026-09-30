@@ -189,7 +189,10 @@ def test_iowa_amendment_with_unique_parent_is_a_later_version():
         # total); the layoff date moves only for a "Change in date" type.
         assert version["employees_affected"] == parent["employees_affected"]
         assert amendment["workers_applied"] is False
-        if "change in date" in row["notice_type_text"].casefold():
+        # The layoff date moves only for a "Change in date" row that covers
+        # the whole notice (blank count or the notice's own count).
+        whole = not row["workers_reported"] or row["workers_reported"] == parent["employees_affected"]
+        if "change in date" in row["notice_type_text"].casefold() and whole:
             assert version["effective_date"] == row["effective_date"]
         else:
             assert amendment["layoff_date_applied"] is False
@@ -223,14 +226,19 @@ def test_iowa_amendments_chain_on_the_latest_version_without_resetting():
                 "notice_date": "2024-04-01", "effective_date": date,
                 "workers_reported": workers, "raw_cells": [pointer]}
 
-    first = _amendment_version(row("a1", "Amendment - Change in date", "2024-05-01", 19), parent)
+    # A date change for 19 of 1,276 workers is a phase, not a new bulk date.
+    phase = _amendment_version(row("a0", "Amendment - Change in date", "2024-04-15", 19), parent)
+    assert (phase["effective_date"], phase["employees_affected"]) == ("2024-03-11", 1276)
+    assert json.loads(phase["source_details"])["amendment"][
+        "layoff_date_not_applied_reason"] == "date_change_covers_part_of_notice"
+    first = _amendment_version(row("a1", "Amendment - Change in date", "2024-05-01", 1276), parent)
     assert (first["effective_date"], first["employees_affected"]) == ("2024-05-01", 1276)
     assert "worker_allocation" not in json.loads(first["source_details"])
     second = _amendment_version(row("a2", "Amendment - Additional Employees", "2024-06-01", 40), first)
     assert (second["effective_date"], second["employees_affected"]) == ("2024-05-01", 1276)
     details = json.loads(second["source_details"])
     assert [a["source_row"] for a in details["amendments"]] == ["a1", "a2"]
-    assert [a["reported_workers"] for a in details["amendments"]] == [19, 40]
+    assert [a["reported_workers"] for a in details["amendments"]] == [1276, 40]
     assert details["worker_allocation"] == "unresolved"
     assert details["amendment"]["source_row"] == "a2"
     third = _amendment_version(row("a3", "Amendment - revised total", None, 900), second)

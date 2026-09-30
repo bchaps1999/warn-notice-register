@@ -376,6 +376,50 @@ def fold_identical_updates(state: str, records: list[dict]) -> tuple[list[dict],
     return out, report
 
 
+def _document_orders() -> dict[str, str]:
+    from warnlive.registry import load_registry
+
+    return {cfg.postal.upper(): cfg.same_key_document_order
+            for cfg in load_registry().all()}
+
+
+def order_listings_oldest_first(
+    state: str, records: list[dict], order: str | None = None,
+    document_fields: tuple[str, ...] | None = None,
+) -> tuple[list[dict], int]:
+    """Put a key's listings from different documents in chronological order.
+
+    Ingest makes the last row of a key its current version. A capture that
+    lists its documents newest first (CA: the current workbook, then the
+    fiscal-year reports from newest to oldest) would otherwise publish the
+    oldest listing's figures. Only rows of keys listed in more than one
+    document move, and only among the positions those rows already hold;
+    rows of one document keep their relative order. Returns the records and
+    the number of keys reordered.
+    """
+    order = order or _document_orders().get(state.upper(), "oldest_first")
+    if order != "newest_first":
+        return records, 0
+    documents = [source_document(state, rec, document_fields) for rec in records]
+    first_seen: dict[str, int] = {}
+    for index, document in enumerate(documents):
+        first_seen.setdefault(document, index)
+    by_key: dict[str, list[int]] = defaultdict(list)
+    for index, rec in enumerate(records):
+        by_key[rec["dedupe_key"]].append(index)
+    out = list(records)
+    moved = 0
+    for indexes in by_key.values():
+        if len({documents[i] for i in indexes}) < 2:
+            continue
+        # Newest-first capture: a document seen later is older.
+        chronological = sorted(indexes, key=lambda i: -first_seen[documents[i]])
+        for position, index in zip(sorted(indexes), chronological):
+            out[position] = records[index]
+        moved += 1
+    return out, moved
+
+
 def prepare_batch(
     conn: sqlite3.Connection | None, state: str, records: list[dict],
 ) -> tuple[list[dict], dict]:
@@ -386,4 +430,6 @@ def prepare_batch(
     """
     records, updates = fold_identical_updates(state, records)
     records, entries = qualify_same_document_entries(conn, state, records)
-    return records, {**entries, "update_versions": updates}
+    records, reordered = order_listings_oldest_first(state, records)
+    return records, {**entries, "update_versions": updates,
+                     "chronologically_reordered_keys": reordered}

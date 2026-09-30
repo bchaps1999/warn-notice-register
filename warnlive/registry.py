@@ -50,6 +50,7 @@ class StateConfig:
     # fiscal-year reports). Distinct same-key rows are separate entries only
     # within one document; empty = the whole capture is one document.
     same_key_document_fields: list[str] | None = None
+    same_key_document_order: str = "oldest_first"
 
     @property
     def scrapable(self) -> bool:
@@ -125,6 +126,8 @@ def load_registry(path: Path | None = None) -> Registry:
                 and isinstance(cfg.same_key_document_fields, list)
                 and all(isinstance(f, str) and f for f in cfg.same_key_document_fields)),
              f"bad same_key_document_fields {cfg.same_key_document_fields!r}"),
+            (cfg.same_key_document_order in {"oldest_first", "newest_first"},
+             f"bad same_key_document_order {cfg.same_key_document_order!r}"),
             (cfg.freshness_field in FRESHNESS_FIELDS,
              f"bad freshness_field {cfg.freshness_field!r}"),
             (

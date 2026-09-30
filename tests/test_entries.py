@@ -189,3 +189,24 @@ def test_update_folding_leaves_originals_contentless_rows_and_other_states():
     out, report = entries.fold_identical_updates("WI", blank)
     assert out == blank and report["skipped_contentless_updates"] == 1
     assert entries.fold_identical_updates("CA", [first, _wi("2003-01-01", 1)])[1]["folded_rows"] == 0
+
+
+def test_newest_first_capture_makes_the_newest_listing_current(conn):
+    """CA's capture lists the current workbook, then FY reports newest to
+    oldest; the newest report's figures must be the current version
+    (Broadcom Irvine 2016-01-29: 689 in FY15-16, 771 in FY16-17)."""
+    rows = [_in_file(_rec(workers=771, effective="2016-01-29"), "fy16-17.pdf"),
+            _in_file(_rec(workers=689, effective="2016-01-29"), "fy15-16.pdf")]
+    out, report = entries.prepare_batch(conn, "CA", rows)
+    assert report["chronologically_reordered_keys"] == 1
+    assert [json.loads(r["raw_extra"])["source_file"] for r in out] == [
+        "fy15-16.pdf", "fy16-17.pdf"]
+    ingest(conn, out, "2026-09-30")
+    assert tuple(conn.execute(
+        "SELECT current_version, employees_affected FROM notices").fetchone()) == (2, 771)
+
+
+def test_oldest_first_states_keep_capture_order():
+    rows = [_in_file(_rec(workers=1), "b.pdf"), _in_file(_rec(workers=2), "a.pdf")]
+    out, moved = entries.order_listings_oldest_first("CA", rows, order="oldest_first")
+    assert out == rows and moved == 0
