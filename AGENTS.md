@@ -49,4 +49,4 @@ Work runs on the user's laptop (16 GB RAM, limited disk). Run at most one full o
 
 ## Keeping these instructions current
 
-When a change in workflow, layout, or the user's standing guidance makes a statement here out of date, update this file in the same commit, record dated user guidance here, and tell the user it was recorded.
+This file is general guidance on how to work in the repository, not a log. When a change in workflow or layout makes a statement here out of date, update it in the same commit. Record specific data-policy decisions and their dates in the relevant dated note under `docs/` (candidate, release, or state note), not here.
