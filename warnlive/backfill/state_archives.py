@@ -18,6 +18,9 @@ Sources here (found 2026-07-26; see docs / plan notes):
       2000-2014. Ruled-table PDFs listing company/location/jobs/layoff
       date — no notice date, so rows land with notice_date NULL and the
       dedupe key falls back to the effective date.
+  NE: NDOL's own WARN page as captured 2025-03-23 (pinned capture), for
+      2020-2022 notices the agency page stopped listing in 2025; the year
+      endpoints the upstream scraper reads end in 2020.
 
 Ingestion uses the same strict month-gap rule as the BLN gap-fill: a row
 only enters months where the state currently has zero notices, so archive
@@ -442,6 +445,167 @@ def fetch_wi_dwd(cache_dir: Path) -> list[dict]:
             "WI %s: %d DWD page rows, %d normalized, %d failed, %d update pointers",
             year, len(rows), len(result.records), result.failed_rows, pointers,
         )
+    return records
+
+
+# --- Nebraska ----------------------------------------------------------------
+
+# NDOL's WARN page listed every notice received from January 2020 until
+# about May 2025, when the page was cut back to 2023 onward. The year
+# endpoints the upstream scraper reads (WARNReportData/?year=YYYY) end in
+# 2020 and return "No events" for 2021+, so 2020-2022 notices survive only in
+# Internet Archive captures of the agency page itself. One capture is pinned
+# (not "newest"), so replays read the same bytes: its 2020-2022 rows were
+# identical in every capture from 2023-08-16 to 2025-03-23 (checked
+# 2026-09-29). Columns are the live page's, so rows are normalized with the
+# live NE transformer and keep the live collector's date meaning and keys.
+NE_DOL_ORIGINAL = (
+    "https://dol.nebraska.gov/ReemploymentServices/LayoffServices/LayoffsAndDownsizingWARN"
+)
+NE_DOL_TIMESTAMP = "20250323171358"
+NE_DOL_CAPTURE = f"https://web.archive.org/web/{NE_DOL_TIMESTAMP}id_/{NE_DOL_ORIGINAL}"
+NE_DOL_YEARS = range(2020, 2023)
+_NE_DOL_HEADER = ["Date", "Company", "Jobs Affected", "Location"]
+# The live collector's raw columns (warn-scraper ne.py).
+_NE_RAW_COLUMNS = ["Date", "Company", "Type", "Jobs Affected", "City", "Location"]
+_NE_DOL_PROVENANCE = ("ndol_notice_link", "ndol_page_row")
+
+
+def parse_ne_dol_page(html: str, page_url: str) -> list[dict]:
+    """Every data row of the WARN table, in page order.
+
+    Each row is {"cells": [...], "link": ..., "page_row": n}. Cells are read
+    exactly as the live collector reads this page (warn-scraper ne.py:
+    ``td.text.strip()`` under html5lib), so raw values, the transformer's
+    date corrections, and dedupe keys match live rows. The table is found by
+    its header row; any other table shape is an error rather than a silent
+    zero.
+    """
+    soup = BeautifulSoup(html, "html5lib")
+    tables = [
+        table for table in soup.find_all("table")
+        if (first := table.find("tr")) is not None
+        and [" ".join(td.get_text(" ").split()) for td in first.find_all(["td", "th"])]
+        == _NE_DOL_HEADER
+    ]
+    if len(tables) != 1:
+        raise ValueError(f"NE: expected one WARN table, found {len(tables)}")
+    rows = []
+    for tr in tables[0].find_all("tr")[1:]:
+        cells = [td.text.strip() for td in tr.find_all("td")]
+        if not any(cells):
+            continue
+        link = tr.find("a", href=True)
+        rows.append({
+            "cells": cells,
+            "link": urllib_parse.urljoin(NE_DOL_ORIGINAL, link["href"]) if link else "",
+            "page_row": len(rows) + 1,
+        })
+    return rows
+
+
+def _ne_row_year(cells: list[str]) -> int | None:
+    m = re.search(r"\b(?:19|20)\d{2}\b", cells[0]) if cells else None
+    return int(m.group(0)) if m else None
+
+
+def _ne_dol_capture(cache_dir: Path) -> tuple[bytes | None, dict]:
+    """Cache-first pinned capture with a url/sha256/retrieved_at sidecar."""
+    dest = cache_dir / "archives" / "ne" / f"dol-warn-{NE_DOL_TIMESTAMP}.html"
+    meta_path = dest.with_name(dest.name + ".json")
+    fresh = not dest.exists()
+    content = _download(NE_DOL_CAPTURE, dest)
+    if content is None:
+        return None, {}
+    if b"WARN Notices received by the State of" not in content:
+        logger.warning("NE: capture is not the NDOL WARN page; not cached")
+        dest.unlink(missing_ok=True)
+        return None, {}
+    sha = hashlib.sha256(content).hexdigest()
+    if fresh or not meta_path.exists():
+        meta = {
+            "url": NE_DOL_CAPTURE, "original_url": NE_DOL_ORIGINAL,
+            "capture_timestamp": NE_DOL_TIMESTAMP, "sha256": sha,
+            "retrieved_at": (datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+                             if fresh else None),
+        }
+        meta_path.write_text(json.dumps(meta, indent=2, sort_keys=True) + "\n")
+        dest.with_name(dest.name + ".url").write_text(NE_DOL_CAPTURE)
+    meta = json.loads(meta_path.read_text())
+    if meta.get("sha256") != sha:
+        raise ValueError("NE: cached NDOL capture does not match its recorded sha256")
+    return content, meta
+
+
+def fetch_ne_dol(cache_dir: Path) -> list[dict]:
+    """Canonical records for NDOL WARN page rows dated 2020-2022."""
+    import csv
+    import tempfile
+
+    from warnlive.normalize.engine import normalize_file
+
+    content, meta = _ne_dol_capture(cache_dir)
+    if content is None:
+        logger.warning("NE: pinned NDOL capture unavailable")
+        return []
+    rows = parse_ne_dol_page(content.decode("utf-8", "replace"), NE_DOL_CAPTURE)
+    in_scope = [row for row in rows if _ne_row_year(row["cells"]) in NE_DOL_YEARS]
+    malformed = [row for row in in_scope if len(row["cells"]) != len(_NE_DOL_HEADER)]
+    if malformed:
+        raise ValueError(
+            f"NE: {len(malformed)} in-scope rows lack the four page columns: "
+            + "; ".join(repr(row["cells"]) for row in malformed[:3])
+        )
+    observed = (meta.get("retrieved_at") or f"{NE_DOL_TIMESTAMP[:4]}-{NE_DOL_TIMESTAMP[4:6]}-"
+                f"{NE_DOL_TIMESTAMP[6:8]}")[:10]
+    with tempfile.TemporaryDirectory() as tmp:
+        with open(Path(tmp) / "ne.csv", "w", newline="") as fh:
+            writer = csv.DictWriter(fh, fieldnames=_NE_RAW_COLUMNS + list(_NE_DOL_PROVENANCE))
+            writer.writeheader()
+            for row in in_scope:
+                date, company, jobs, location = row["cells"]
+                writer.writerow({
+                    "Date": date, "Company": company, "Type": "",
+                    "Jobs Affected": jobs, "City": "", "Location": location,
+                    "ndol_notice_link": row["link"], "ndol_page_row": str(row["page_row"]),
+                })
+        result = normalize_file("ne", Path(tmp), NE_DOL_CAPTURE, observed_at=observed)
+    records = []
+    for rec in result.records:
+        rec.pop("prepared_row", None)
+        details = json.loads(rec.get("source_details") or "{}")
+        details["source_capture"] = {
+            "url": meta["url"], "original_url": meta["original_url"],
+            "capture_timestamp": meta["capture_timestamp"],
+            "sha256": meta["sha256"], "retrieved_at": meta.get("retrieved_at"),
+        }
+        rec["source_details"] = json.dumps(details, sort_keys=True, ensure_ascii=False)
+        rec["raw_record_hash"] = _record_hash(rec)
+        records.append(rec)
+    for failure in result.failures:
+        logger.warning("NE NDOL row not normalized: %s", failure["error"])
+    # The NE transformer keys on City, which this page (like the live one)
+    # leaves blank, so two sites of one employer filed the same day share a
+    # key. Ingesting both would fold one notice into the other; hold the
+    # group instead of choosing.
+    hashes: dict[str, set[str]] = {}
+    for rec in records:
+        hashes.setdefault(rec["dedupe_key"], set()).add(rec["raw_record_hash"])
+    held = [rec for rec in records if len(hashes[rec["dedupe_key"]]) > 1]
+    for rec in held:
+        logger.warning(
+            "NE NDOL row held (distinct rows share a key): %s %s %s",
+            rec.get("employer_name"), rec.get("notice_date"), rec.get("raw_extra"),
+        )
+    records = [rec for rec in records if len(hashes[rec["dedupe_key"]]) == 1]
+    logger.info(
+        "NE: %d page rows, %d dated 2020-2022, %d returned (%d without a "
+        "notice date), %d held as same-key conflicts, %d failed, %d outside "
+        "2020-2022",
+        len(rows), len(in_scope), len(records),
+        sum(1 for rec in records if not rec.get("notice_date")),
+        len(held), result.failed_rows, len(rows) - len(in_scope),
+    )
     return records
 
 
@@ -1268,7 +1432,7 @@ def _oh_date(value: str) -> str | None:
 
 
 FETCHERS = {"WI": fetch_wi, "FL": fetch_fl, "CA": fetch_ca, "MA": fetch_ma,
-            "NY": fetch_ny, "OH": fetch_oh}
+            "NY": fetch_ny, "OH": fetch_oh, "NE": fetch_ne_dol}
 
 
 def refresh_raw(conn: sqlite3.Connection, records: list[dict]) -> dict:

@@ -8,6 +8,7 @@ import {
   displayName,
   num,
   sectorLabel,
+  SITE_ADDRESS_BASIS_LABEL,
   STATE_NAMES,
   TYPE_LABEL,
 } from "../lib/format";
@@ -116,7 +117,14 @@ export function NoticeDetailPage() {
           <Row label="Location">{n.location ?? "—"}</Row>
         )}
         {n.site_address && !affectedSites.some((site) => site.address === n.site_address) && (
-          <Row label="Affected site address">{n.site_address}</Row>
+          <Row label="Reported site address">
+            {n.site_address}
+            {n.site_address_basis && SITE_ADDRESS_BASIS_LABEL[n.site_address_basis] && (
+              <span className="block text-xs text-ink-faint">
+                {SITE_ADDRESS_BASIS_LABEL[n.site_address_basis]}
+              </span>
+            )}
+          </Row>
         )}
         {affectedSites.map((site, i) => (
           <Row key={`${site.role}-${i}`} label={site.role === "remote_worker_location" ? "Affected worker location" : "Affected worksite"}>
@@ -140,7 +148,8 @@ export function NoticeDetailPage() {
             </Link>
             <span className="tabular text-xs text-ink-muted ml-2">
               FIPS {n.county_fips}
-              {n.geo_basis === "county" && " · county only"}
+              {(n.geo_basis === "county" || n.geo_basis?.startsWith("county_alias")) && " · county only"}
+              {n.geo_basis?.startsWith("place_typo") && " · filed name misspelled"}
               {n.geo_basis === "subdivision" && " · township"}
             </span>
           </Row>

@@ -136,6 +136,17 @@ export const NAICS_BASIS_LABEL: Record<string, string> = {
   employer: "from this employer's other notices",
 };
 
+/** How a reported site address is known to be the layoff site
+ *  (site_address_basis; see warnlive/enrich/site_address.py). */
+export const SITE_ADDRESS_BASIS_LABEL: Record<string, string> = {
+  quality_evidence: "From a pinned official report row or letter.",
+  labeled_site_field:
+    "From the agency column that names the affected site; not checked against a separate document.",
+  filed_county_consistent:
+    "From an address column the agency does not label as the site; kept because it lies in the county the agency filed.",
+  unverified: "Stored earlier; no current rule reproduces it.",
+};
+
 /** Whether a code describes the site that filed or the whole company. */
 export const NAICS_LEVEL_LABEL: Record<string, string> = {
   establishment: "this establishment",

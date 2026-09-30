@@ -1,0 +1,16 @@
+state,alias,place_name,county_name,point,zip3,note
+CA,Azuza,Azusa city,Los Angeles County,place,917,misspelling
+CA,Callistoga,Calistoga city,Napa County,place,945,misspelling
+CA,Charter Oaks,Charter Oak CDP,Los Angeles County,place,917,misspelling (plural)
+CA,Cost Mesa,Costa Mesa city,Orange County,place,926,misspelling
+CA,East Rancho Domingue,East Rancho Dominguez CDP,Los Angeles County,place,902,agency field truncated at 20 characters
+CA,Fulleron,Fullerton city,Orange County,place,928,misspelling
+CA,Guistine,Gustine city,Merced County,place,953,misspelling
+CA,Milipitas,Milpitas city,Santa Clara County,place,950,misspelling
+CA,Moonpark,Moorpark city,Ventura County,place,930,misspelling
+CA,Ponoma,Pomona city,Los Angeles County,place,917,misspelling
+CA,Rancho Santa Margari,Rancho Santa Margarita city,Orange County,place,926,agency field truncated at 20 characters
+CA,Rolling Hills Estate,Rolling Hills Estates city,Los Angeles County,place,902,misspelling (singular) / truncation
+CA,Santa Rose,Santa Rosa city,Sonoma County,place,954,misspelling
+CA,Solano Beach,Solana Beach city,San Diego County,place,920,misspelling (Solano County is unrelated)
+CA,Standford,Stanford CDP,Santa Clara County,place,943,misspelling

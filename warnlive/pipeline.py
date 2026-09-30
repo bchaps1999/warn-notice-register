@@ -9,8 +9,11 @@ from __future__ import annotations
 import json
 import hashlib
 import logging
+import signal
 import sqlite3
+import threading
 import traceback
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from dataclasses import replace
 from datetime import datetime, timezone
@@ -29,6 +32,52 @@ from warnlive.store import dedupe
 from warnlive.verify import harness
 
 logger = logging.getLogger("warnlive")
+
+# One slow host (GA once took 224-258 minutes of per-page retries) must not
+# consume the whole scheduled job and lose every other state's work.
+DEFAULT_FETCH_BUDGET_MINUTES = 45
+# If a collector swallows the budget exception anyway, raise it again.
+_BUDGET_REFIRE_SECONDS = 30
+
+
+class FetchBudgetExceeded(BaseException):
+    """A live fetch ran past its wall-clock budget.
+
+    A BaseException, like KeyboardInterrupt, so a collector's broad
+    ``except Exception`` retry-and-skip loop cannot swallow it.
+    """
+
+
+@contextmanager
+def _wall_clock_budget(seconds: float | None):
+    """Raise FetchBudgetExceeded in this thread once `seconds` elapse.
+
+    Uses SIGALRM, which interrupts blocking socket reads. Where that is not
+    available (non-POSIX, or not the main thread) the budget is not enforced
+    and a warning is logged rather than failing the state.
+    """
+    if not seconds or seconds <= 0:
+        yield
+        return
+    if not hasattr(signal, "setitimer") or threading.current_thread() is not threading.main_thread():
+        logger.warning("fetch budget not enforced outside the POSIX main thread")
+        yield
+        return
+
+    def expire(_signum, _frame):
+        raise FetchBudgetExceeded(seconds)
+
+    previous = signal.signal(signal.SIGALRM, expire)
+    signal.setitimer(signal.ITIMER_REAL, seconds, _BUDGET_REFIRE_SECONDS)
+    try:
+        yield
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, previous)
+
+
+def fetch_budget_minutes(cfg: StateConfig) -> float:
+    return cfg.fetch_budget_minutes or DEFAULT_FETCH_BUDGET_MINUTES
 
 
 @dataclass
@@ -166,12 +215,22 @@ def _run_one(
     fetched_live = False
 
     expected_raw = data_dir / f"{postal}.csv"
+    budget = fetch_budget_minutes(cfg)
     try:
         if use_cache and expected_raw.exists():
             raw_path = expected_raw
         else:
-            raw_path = fetch.fetch_state(postal, data_dir, cache_dir)
+            with _wall_clock_budget(budget * 60):
+                raw_path = fetch.fetch_state(postal, data_dir, cache_dir)
             fetched_live = True
+    except FetchBudgetExceeded:
+        raw_path = None
+        fetch_error = (
+            f"FetchBudgetExceeded: live fetch exceeded its {budget:g}-minute "
+            "wall-clock budget (states.yaml fetch_budget_minutes); state abandoned"
+        )
+        outcome.error = fetch_error
+        logger.error("fetch %s: %s", postal, fetch_error)
     except Exception as e:  # noqa: BLE001 — a state must never kill the run
         fetch_error = f"{type(e).__name__}: {e}"
         outcome.error = fetch_error

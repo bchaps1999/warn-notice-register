@@ -202,3 +202,75 @@ def test_quality_site_in_an_unlisted_community_is_placed_by_its_report_county(tm
     got = resolve_geo(resolver, row)
     assert got["county_fips"] == "06073"
     assert got["geo_basis"] == "county:filed"
+
+
+def _ny(cell):
+    row = list(NY_ROW)
+    row[4] = cell
+    return _row("NY", row, cell)
+
+
+@pytest.mark.parametrize("cell, expected", [
+    ("Bloomingdale’s, 1000 Third Avenue  New York, NY, 10022",
+     "1000 Third Avenue New York, NY, 10022"),
+    ("Walter Kerr Theatre, 218 West 48th Street  New York, NY, 10036",
+     "218 West 48th Street New York, NY, 10036"),
+    ("Brooklyn Navy Yard, Building 292, 63 Flushing Avenue  Brooklyn, NY, 11205",
+     "63 Flushing Avenue Brooklyn, NY, 11205"),
+    ("One World Financial Center, 200 Liberty Street  New York, NY, 10281",
+     "200 Liberty Street New York, NY, 10281"),
+])
+def test_venue_name_before_one_street_is_dropped(cell, expected):
+    got = site_address.derive(_ny(cell))
+    assert got.address == expected
+    assert got.reason == "accepted_after_name_prefix"
+
+
+@pytest.mark.parametrize("cell, expected", [
+    ("One Penn Plaza  New York, NY, 10119", "One Penn Plaza New York, NY, 10119"),
+    ("One Norden Lane  Huntington Station, NY, 11746",
+     "One Norden Lane Huntington Station, NY, 11746"),
+])
+def test_spelled_out_house_number_keeps_source_spelling(cell, expected):
+    got = site_address.derive(_ny(cell))
+    assert (got.address, got.reason) == (expected, "accepted")
+
+
+@pytest.mark.parametrize("cell", [
+    "JFK International Airport, Terminals 2 and 4  Jamaica, NY, 11430",
+    "JFK International Airport/Building 122  Jamaica, NY, 11430",
+    "JFK International Airport/Buildings: 122, 139, 143  Jamaica, NY, 11430",
+    "Route 9W  West Park, NY, 12493",
+    "Remote Employees  Albany, NY, 12208",
+    "Laurel Bank Avenue/ PO Box 26  Deposit, NY, 13754",
+    "c/o NAYA Express Inc. 688 Third Avenue  New York, NY, 10017",
+    "Holiday Inn 538 West 48th Street, Marriot Towne Suites, 38-42 11th Street  New York, NY, 10036",
+    "One Madison Avenue and Eleven Madison Avenue  New York, NY, 10010",
+    "One NYC location  New York, NY, 10001",
+    "Mile Post 366 East, NYS Thruway I-90 East  West Henrietta, NY, 14586",
+    "S 3701 McKinley Parkway  Buffalo, NY, 14219",
+])
+def test_prefix_stripping_still_rejects_units_lists_boxes_and_remote(cell):
+    assert site_address.derive(_ny(cell)).address is None
+
+
+def test_illinois_strips_the_name_from_the_address_component_only():
+    raw = {"Location Address": "Aon Center 200 E Randolph Dr ", "Location City": "Chicago",
+           "Location State": "IL", "Location Zipcode": "60601"}
+    got = site_address.derive(_row("IL", raw))
+    assert got.address == "200 E Randolph Dr Chicago, IL 60601"
+    assert got.reason == "accepted_after_name_prefix"
+    for cell in ("CNA Plaza 42 S", "PO BOX 8     7200 S MASON",
+                 "MIDWAY AIRPORT & OHARE INTRNL 5700 S CICERO & TERMINAL 2",
+                 "RT 4, 1300 N MARKET STREET", "JADER # 4 MINE"):
+        raw["Location Address"] = cell
+        assert site_address.derive(_row("IL", raw)).address is None, cell
+
+
+def test_notice_dated_after_first_observation_is_flagged_not_corrected():
+    row = {"state": "UT", "notice_date": "2026-10-30", "first_seen": "2026-09-24",
+           "notice_date_precision": "day", "notice_date_basis": "reported"}
+    assert project(row)["timing_qc"] == "notice_after_first_seen"
+    assert row["notice_date"] == "2026-10-30"
+    row["first_seen"] = "2026-11-02T06:00:00Z"
+    assert project(row)["timing_qc"] is None

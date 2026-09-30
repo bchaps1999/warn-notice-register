@@ -245,6 +245,25 @@ def industry_from_fields_json(
         raw = json.loads(json.loads(fields_json).get("raw_extra") or "{}")
     except (TypeError, ValueError):
         return None, None, None
+    if isinstance(raw, list):
+        raw = _typed_cells(raw)
     if not isinstance(raw, dict):
         return None, None, None
     return extract_industry(raw)
+
+
+def _typed_cells(cells: list) -> dict | None:
+    """A labeled row for a source whose raw_extra is a list of cells.
+
+    Iowa's workbook replay keeps each row as its twelve typed cells
+    ({"type", "value"}), in the order of warnlive.migrate.ia_source.HEADERS,
+    whose last column is "Industry" (an official NAICS sector name).  Other
+    list layouts carry no industry column and yield nothing.
+    """
+    from warnlive.migrate.ia_source import HEADERS
+
+    if (len(cells) != len(HEADERS)
+            or not all(isinstance(c, dict) and set(c) == {"type", "value"} for c in cells)):
+        return None
+    return {header: "" if cell["value"] is None else str(cell["value"])
+            for header, cell in zip(HEADERS, cells)}

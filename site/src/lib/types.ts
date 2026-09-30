@@ -232,6 +232,8 @@ export interface NoticeDetail {
   source_identity?: string | null;
   source_details?: string | null;
   site_address?: string | null;
+  site_address_basis?: string | null;
+  affected_site_address?: string | null;
   employees_affected: number | null;
   layoff_type: string;
   is_temporary: number | null;

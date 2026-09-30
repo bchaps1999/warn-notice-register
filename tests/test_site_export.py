@@ -232,3 +232,16 @@ def test_site_exports_effective_start_and_end_metadata(conn, tmp_path):
                 "day", "reported", "month", "inferred_from_month")
     summary, = json.loads((out / "states/ct.json").read_text())["recent"]
     assert summary["effective_date_end_precision"] == "month"
+
+
+def test_detail_shard_carries_site_address_basis(conn, tmp_path):
+    ingest(conn, [record(1, state="IL", location="1 Main St Peoria, IL 61602")], "2026-07-01")
+    conn.execute("UPDATE notices SET site_address = '1 Main St Peoria, IL 61602'")
+    conn.commit()
+    out = tmp_path / "out"
+    build_site(conn, load_registry(), out, as_of="2026-09-01")
+    key = record(1)["dedupe_key"]
+    detail = json.loads((out / "notices" / f"{key[:2]}.json").read_text())[key]
+    assert detail["site_address"] == "1 Main St Peoria, IL 61602"
+    assert detail["site_address_basis"] == "labeled_site_field"
+    assert detail["affected_site_address"] is None

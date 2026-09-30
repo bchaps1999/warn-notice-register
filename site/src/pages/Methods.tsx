@@ -233,8 +233,19 @@ export function Methods() {
         in Johnson — is placed by the city, not the coincidence.
       </p>
       <p className="text-sm font-serif text-ink-muted max-w-2xl leading-relaxed mt-3">
+        A notice shows a street address only when the source ties it to the
+        layoff site, and the notice page says how. An &ldquo;affected
+        worksite&rdquo; comes from a pinned official report row or letter. A
+        &ldquo;reported site address&rdquo; is weaker: it comes from an agency
+        column that names the site, or, for an unlabeled address column, from an
+        address that lies in the county the agency filed separately. Addresses
+        whose role the source leaves unclear, such as a company or contact
+        address, are not shown as sites.
+      </p>
+      <p className="text-sm font-serif text-ink-muted max-w-2xl leading-relaxed mt-3">
         Some filings name no place at all and never will. Kansas, Vermont, Maine
-        and Oklahoma file against workforce investment areas; other notices say
+        and Oklahoma file against workforce investment areas, each spanning
+        many counties, so no county is assigned from one; other notices say
         "statewide" or "various". These are absent from every map and county
         table rather than counted as zero, which is why a county map is a view
         of {pct(t.placed, t.notices)} of the register and not all of it.

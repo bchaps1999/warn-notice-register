@@ -14,6 +14,7 @@
 #   min_rows: verification threshold on all-time raw rows
 #   staleness_days: max age of newest configured source date before freshness warns; null = archival/annual source
 #   freshness_field: notice_date (default) | effective_date | source_details.<validated agency date>
+#   fetch_budget_minutes: wall-clock cap on one live fetch (default 45, pipeline.DEFAULT_FETCH_BUDGET_MINUTES); past it the state fails and the run continues
 #   expected_columns: raw CSV header snapshot; null until first verified fetch
 #   notes: quirks, upstream issue links
 
@@ -111,7 +112,7 @@ ct:
     affected_company, number_of_impacted_workers, layoff_locations, layoff_dates,
     closing_dates, union, union_address, title]
   source_url: https://dolpublicdocumentlibrary.ct.gov/CsblrCategory?prefix=%2Frapid_response%2Fwarn_documents
-  notes: "Paginated JSON endpoint. Live fetch returns current listings only (~30 rows); history via backfill."
+  notes: "Paginated JSON endpoint. Live fetch returns current listings only (~30 rows); history via backfill. 2026-09-29 check: collector returned all 26 listed documents, newest 2026-09-09 (after 2026-06-26); the 06-26..09-09 gap was the agency posting nothing, not a collector fault."
 
 dc:
   name: District of Columbia
@@ -248,9 +249,10 @@ ks:
   needs_browser: false
   min_rows: 700
   staleness_days: 180
+  fetch_budget_minutes: 90
   expected_columns: [employer, notice_date, number_of_employees_affected, warn_type, city, zip, lwib_area, address, record_number, detail_page_url]
   source_url: https://www.kansasworks.com/search/warn_lookups
-  notes: "Full WARN-filtered portal listing and details; same-employer/day rows held for event review."
+  notes: "Full WARN-filtered portal listing and details; same-employer/day rows held for event review. 2026-09-29 check: the portal sorted by notice date shows 2026-05-01 (First Student) as newest dated WARN listing, (the undated Eaton Corporation row that sorts above it is old record 64, already held for its missing date); 7 dated 2026 listings in all. The collector matches the portal; the portal is sparse, not the collector. The full capture (37 listing + ~910 detail pages at a 2 s pace) took about 34 minutes on 2026-09-29, hence the 90-minute fetch budget."
 
 ky:
   name: Kentucky
@@ -373,7 +375,7 @@ ms:
   staleness_days: 365
   expected_columns: [date_notice, company, workforce_area, event_number, naics, action_type, affected, date_effective, reason, blank_entry, city, county, _int_raw_fields, _int_accuracy, _int_pdf_filename, _int_page, _int_table_number, _int_data_items]
   source_url: https://mdes.ms.gov/information-center/warn-information/
-  notes: "PDFs only. Upstream issue #784 (PDF parsing)."
+  notes: "PDFs only. Upstream issue #784 (PDF parsing). Quarterly program-year PDFs; 2026-09-29 check: newest is Apr-Jun 2026 (posted 2026-06-29, 6 notices, latest 2026-05-11), matching the collector. The Jul-Sep 2026 PDF is not due before October. Two Apr-Jun 2026 rows (Aramark, Leggett & Platt) come out of pdfrodent with date and employer run together."
 
 mt:
   name: Montana
@@ -399,7 +401,7 @@ ne:
   staleness_days: 180
   expected_columns: [Date, Company, Type, Jobs Affected, City, Location]
   source_url: https://dol.nebraska.gov/ReemploymentServices/LayoffServices/LayoffsAndDownsizingWARN
-  notes: "Year-parameterized HTML data endpoints."
+  notes: "Year-parameterized HTML data endpoints. 2026-09-29: the live page lists 2023+ only and the upstream year endpoints stop at 2019 (WARNReportData has 19 rows for 2020 and none for 2021+). 2020-2022 come from a pinned 2025-03-23 Wayback capture of the NDOL WARN page (backfill/state_archives.fetch_ne_dol: 29 rows, 2 same-day Hayneedle sites held because the transformer keys on the blank City column). Caution: upstream also appends LayoffAndClosureReportData for 2010-2019 (about 190 closure/layoff rows a year, many plainly non-WARN), which is why pre-2020 counts are 10x later years."
 
 nv:
   name: Nevada
@@ -413,7 +415,7 @@ nv:
   freshness_field: source_details.agency_received_date
   expected_columns: [Received Date, Effective Date, Type, Affected Total, Employer, City, County, Notification]
   source_url: https://detr.nv.gov/Page/WARN
-  notes: "NOT in warn-scraper. Master PDF list mixing WARN and non-WARN."
+  notes: "NOT in warn-scraper. Master PDF list mixing WARN and non-WARN. 2021 gap (checked 2026-09-29): the only full-year 2021 list, Content/Media/WARN_2021.pdf (Word export 2021-12-21, sha256 9f3dadcd...), is a single scanned image of 20 rows with no WARN/Non-WARN column, so the collector reads nothing from it. The one 2021 register row (Rawhide Mine, received 2021-12-26) comes from a later master PDF. A text-bearing interim list, cms.detr.nv.gov/Content/Media/2021_updated_210222.pdf (Wayback 20240302153413, updated 2021-02-22), covers 6 Jan-Feb 2021 rows; the May 2021 interim (2021_updated_210524.pdf) was not archived. Not OCRed or backfilled pending a decision."
 
 nh:
   name: New Hampshire
@@ -453,7 +455,7 @@ nm:
   staleness_days: 365
   expected_columns: [NOTICE DATE, JOB SITE NAME, COUNTY NAME, WDA NAME, TOTAL LAYOFF NUMBER, LAYOFF DATE, RECEIVED DATE, CITY NAME]
   source_url: https://www.dws.state.nm.us/Rapid-Response
-  notes: "PDF report. Patched: site moved to dws.nm.gov (old host WAF-rejects and upstream writes 0 rows)."
+  notes: "PDF report. Patched: site moved to dws.nm.gov (old host WAF-rejects and upstream writes 0 rows). 2026-09-29 check: 2026_WARN.pdf was regenerated 2026-09-24 and only then listed the 2026-06-29 and 2026-09-15 notices; DWS posts months late, so the 365-day threshold stays. The 2025 PDF (modified 2025-09-10) ends at 2025-09-04: whether DWS received notices Sep-Dec 2025 is unknown."
 
 ny:
   name: New York
@@ -483,7 +485,7 @@ nc:
 
 nd:
   name: North Dakota
-  source: upstream
+  source: patched
   status: active
   tier: hard
   cadence: weekly
@@ -492,7 +494,7 @@ nd:
   staleness_days: null
   expected_columns: [Company Name, Location, WARN Dated, Date of Layoff/Closure, Number Laid Off/Affected, Notes]
   source_url: https://www.jobsnd.com/documents
-  notes: "Single cumulative PDF (2015-present). Scraper added upstream 2026."
+  notes: "Single cumulative PDF (2015-present). Scraper added upstream 2026. Patched 2026-09-29: rows from 2024 on lack the rule between WARN Dated and Date of Layoff, so upstream merged the two cells and lost 8 layoff dates; fetch/patches/nd.py re-reads those rows at the printed column edges (same dedupe keys). PDF last modified 2026-03-17, newest notice 2026-01-15: source quiet."
 
 oh:
   name: Ohio
@@ -575,7 +577,7 @@ ri:
   staleness_days: 180
   expected_columns: [WARN Date, Date Received, Company Name, Location of Layoffs, Number Affected, Effective Date, Closing Yes/No, Union Yes/No, Union Address]
   source_url: https://dlt.ri.gov/employers/worker-adjustment-and-retraining-notification-warn
-  notes: "Excel workbook(s)."
+  notes: "Excel workbook(s). 2026-09-29 check: the page links one 'Warn Report.xlsx' (workbook modified 2026-07-07); its newest WARN Date is 2026-06-26, matching the collector. Agency posts irregularly; source quiet, not broken."
 
 sc:
   name: South Carolina
@@ -666,7 +668,7 @@ vt:
   staleness_days: 180
   expected_columns: [employer, notice_date, number_of_employees_affected, warn_type, city, zip, lwib_area, address, record_number, detail_page_url]
   source_url: https://www.vermontjoblink.com/search/warn_lookups
-  notes: "AJLA job-center platform."
+  notes: "AJLA job-center platform. 2026-09-29 check: collector now returns a 2026-09-15 notice after 2026-06-17; the gap was the portal, not the collector."
 
 wa:
   name: Washington

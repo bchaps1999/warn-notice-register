@@ -97,10 +97,15 @@ def resolve_geo(resolver, row: dict, fields_json: str | dict | None = None) -> d
             or quality.get("status") == "site_address_ambiguous"):
         got = resolver.resolve(state, geo_location(row))
         site = affected_site(row)
-        if not got.get("geo_basis") and site and (site.get("county") or site.get("city")):
-            got = resolver.resolve(state, None, {"raw_extra": {
+        # A county-only alias read from the address is weaker than the
+        # county printed on the same report row.
+        if (got.get("geo_basis") in (None, "county_alias") and site
+                and (site.get("county") or site.get("city"))):
+            filed = resolver.resolve(state, None, {"raw_extra": {
                 "city": site.get("city") or "", "county": site.get("county") or "",
             }})
+            if filed.get("geo_basis"):
+                got = filed
         return got
     return resolver.resolve(state, row.get("location"), fields_json, row.get("employer_name"))
 
@@ -135,6 +140,12 @@ def project(row: dict) -> dict[str, str | None]:
         else:
             timing = ("negative" if days < 0 else "same_day" if days == 0
                       else "long_300" if days >= 300 else None)
+    # A notice date later than the day this pipeline first saw the listing
+    # cannot be when that listing's notice was given; the cell is kept as
+    # filed ("10/30/26" seen on 2026-09-24) and flagged, never corrected.
+    notice, seen = row.get("notice_date"), (row.get("first_seen") or "")[:10]
+    if notice and len(seen) == 10 and notice > seen:
+        timing = "notice_after_first_seen"
 
     return {
         "affected_site_address": site.get("address") if site else None,

@@ -1,6 +1,6 @@
 """Deterministic, source-derived worksite addresses for notices.site_address.
 
-Address role policy (site_address_surface_v2)
+Address role policy (site_address_surface_v3)
 ---------------------------------------------
 ``site_address`` holds a street address only when the source establishes
 that the address is where the reported layoff happens.  An address is
@@ -31,6 +31,15 @@ street addresses) and must not name another state.  An Illinois row whose
 labeled ``Location State`` is another state is rejected: it is an
 out-of-state location or mailing address, not an Illinois worksite.
 
+A labeled site cell that opens with a venue or division name ("Bloomingdale's,
+1000 Third Avenue", "Aon Center 200 E Randolph Dr") keeps only the street
+part, and only when exactly one house-numbered street follows the name; a
+number after a unit, terminal, route or box word does not count, and a name
+that says remote, P.O. box, care-of or multiple sites blocks it.  A
+spelled-out house number ("One Penn Plaza") counts when a street-type word
+follows, and is stored as the source spelled it.  The full cell always stays
+in raw_extra.  ``apply`` counts these as ``surfaced_after_name_prefix``.
+
 Addresses whose role the source does not label, and for which no
 independent filed place exists to check them against, are *not* exported:
 Florida's company cell (name plus address, from which ``location`` is
@@ -60,7 +69,7 @@ import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 
-RULE = "site_address_surface_v2"
+RULE = "site_address_surface_v3"
 
 # Basis values exported as site_address_basis.
 BASIS_QUALITY = "quality_evidence"
@@ -248,19 +257,141 @@ def _text(value) -> str:
     return _WS.sub(" ", str(value or "")).strip(" ,;")
 
 
-def _checked(value: str, state: str, basis: str, field: str) -> Decision:
-    """Common shape checks for any candidate address."""
+# A house number that can start the street part of a cell after a name
+# prefix: "Bloomingdale's, 1000 Third Avenue", "Bard College 30 Campus Road".
+# Only a plain number (optionally "12-14" or "12A") followed by a word; the
+# preceding character must end the name ("," ":" "/" "(" or a space).
+_HOUSE_START = re.compile(
+    r"(?:^|(?<=[\s,:/(]))(\d{1,6}(?:-\d{1,6})?[A-Za-z]?)\s+"
+    r"(?=[A-Za-z]|\d{1,3}(?:st|nd|rd|th)\b)", re.I)
+# "1300, 1400 and 1420 Chase Ave", "Terminals 2 and 4": a list of numbers.
+_NUMBER_LIST = re.compile(
+    r"\b\d{1,6}\s*(?:&|\band\b)\s*\d{1,6}\b|\b\d{1,6}\s*,\s*\d{1,6}\s*,\s*\d{1,6}\b", re.I)
+# Words after which a number is a unit, gate, road or box number, not a house
+# number: "Terminal 4 Jamaica", "Suite 300 Bannockburn", "Route 9W West Park".
+_NOT_HOUSE_BEFORE = _UNIT_WORDS | _ROAD_PREFIX | {
+    "terminal", "gate", "pier", "hangar", "dock", "door", "box", "code", "no",
+    "number", "level", "wing", "lot", "store", "site", "sites", "location",
+    "locations", "exit", "plant", "hall", "station", "route", "rt", "rte",
+    "highway", "hwy", "road", "rd", "rr", "ramp", "concourse", "dept",
+    "department", "division", "unit", "building", "bldg", "mile", "and", "&",
+    "terminals", "buildings", "bldgs", "units", "suites", "floors",
+    "hangars", "piers", "post", "milepost", "mp", "i", "exit",
+}
+# A name prefix that is itself a road, box, mailing or remote marker is not a
+# venue name: "RT 4, 1300 N Market Street", "Mailing Center ... 50 Industrial".
+_BAD_PREFIX = re.compile(
+    r"\bc/o\b|\b(?:RR|RT|RTE|Route|Highway|Hwy|Box|Mail\w*|Remote|Multiple|Various|"
+    r"Several|Corner|Intersection|Near|Between|Off)\b|\d+\s*(?:&|and)\s*$", re.I)
+# "One Penn Plaza", "Two North Riverside Plaza": a spelled-out house number.
+_NUMBER_WORDS = {"one": "1", "two": "2", "three": "3", "four": "4", "five": "5",
+                 "six": "6", "seven": "7", "eight": "8", "nine": "9", "ten": "10"}
+_WORD_NUMBER_START = re.compile(r"^(One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)\s+(?=[A-Za-z])", re.I)
+_STREET_WORD = re.compile(
+    r"\b(?:Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Boulevard|Blvd|Lane|Ln|Parkway|"
+    r"Pkwy|Way|Court|Ct|Circle|Cir|Place|Pl|Plaza|Center|Centre|Square|Sq|Park|"
+    r"Terrace|Ter|Highway|Hwy|Trail|Trl|Pike|Turnpike|Row|Walk|Loop)\b\.?", re.I)
+
+
+def _street_part(text: str) -> tuple[str, str | None]:
+    """The street address inside a labeled site cell, and the name before it.
+
+    Returns ``(text, None)`` when the cell already starts with a house
+    number.  A cell that opens with a venue or division name followed by
+    exactly one house-numbered street ("Walter Kerr Theatre, 218 West 48th
+    Street") yields the street part and the stripped name.  Zero or several
+    candidate house numbers, or a prefix that is itself a road, box, mailing
+    or remote marker, leave the cell unchanged, so the ordinary checks reject
+    it.  The full cell always stays in raw_extra.
+    """
+    if _STREETISH.search(text) or _NUMBER_LIST.search(text):
+        return text, None
+    # A spelled-out number opening the cell ("One Penn Plaza") is the house
+    # number unless the cell also gives one numbered street, which is then
+    # preferred ("One World Financial Center, 200 Liberty Street"; "Four
+    # Seasons Hotel, 99 Church St.").
+    starts = []
+    for match in _HOUSE_START.finditer(text):
+        raw_before = text[:match.start()].split()
+        before = text[:match.start()].rstrip(" ,:/(-").split()
+        word = re.split(r"[-/]", before[-1])[-1].strip(".#:,") if before else ""
+        # A unit/road word, a bare "#", or a bare number ("Dist. 60 2325")
+        # right before it: not a house number.
+        # "Marriot Towne Suites, 38-42 11th Street": a unit word closed by a
+        # comma is part of a name, so the number after it still counts.
+        if before and ((word.casefold() in _NOT_HOUSE_BEFORE
+                        and not raw_before[-1].endswith(","))
+                       or not word or raw_before[-1].isdigit()):
+            continue
+        starts.append(match.start())
+    if len(starts) != 1:
+        return text, None
+    prefix = text[:starts[0]].rstrip(" ,:/(-")
+    street = text[starts[0]:]
+    # A name, not a stray letter or grid coordinate ("S 3701", "10188E 2150N");
+    # one bare word needs a separator ("Broadway, 2085 Broadway", not
+    # "ROTUE 51 Payne Drive").
+    if (not re.search(r"[A-Za-z]{2,}", prefix) or _BAD_PREFIX.search(prefix)
+            or (len(prefix.split()) == 1
+                and not re.search(r"[,:/-]\s*$", text[:starts[0]]))):
+        return text, None
+    head = street.split("  ")[0]
+    # Two venues or streets joined ("5700 S Cicero & Terminal 2").
+    if re.search(r"&|\band\b", head, re.I):
+        return text, None
+    # A street name after the number, not "CNA Plaza 42 S".
+    words = re.findall(r"[A-Za-z]{3,}", head.split(",")[0])
+    if not [w for w in words if w.casefold() not in {"north", "south", "east", "west"}]:
+        return text, None
+    return street, prefix
+
+
+def _word_number_ok(text: str) -> str | None:
+    """"One Penn Plaza ..." as "1 Penn Plaza ..." for the shape checks, when
+    a street-type word follows ("One NYC location" is not an address) and
+    no second street is joined on ("One Madison Avenue and Eleven Madison
+    Avenue")."""
+    match = _WORD_NUMBER_START.match(text)
+    if not match or not _STREET_WORD.search(text[match.end():]):
+        return None
+    if re.search(r"&|\band\b", text.split("  ")[0], re.I):
+        return None
+    return _NUMBER_WORDS[match[1].casefold()] + " " + text[match.end():]
+
+
+def _prefix_blocked(text: str) -> bool:
+    """A cell whose name part says remote, P.O. box, multiple sites, etc."""
+    return bool(_JUNK.search(text) or re.search(r"\bremote\b", text, re.I))
+
+
+def _checked(value: str, state: str, basis: str, field: str, *,
+             prefixed: bool | None = None) -> Decision:
+    """Common shape checks for any candidate address.
+
+    A leading venue name is stripped here unless the caller already handled
+    it: ``prefixed`` True/False says whether the caller removed one (Illinois
+    strips its address component before composing it with the city)."""
     text = _text(value)
     if not text:
         return Decision(None, None, "no_address_in_field", field)
     if _several_addresses(str(value)):
         return Decision(None, None, "multiple_addresses_in_field", field)
-    cleaned = clean_address(text, state)
+    if prefixed is None:
+        street, prefix = _street_part(text)
+        if prefix is not None and _prefix_blocked(text):
+            return Decision(None, None, "not_a_street_address", field)
+    else:
+        street, prefix = text, ("stripped by caller" if prefixed else None)
+    probe = _word_number_ok(street) or street
+    cleaned = clean_address(probe, state)
     if cleaned is None:
-        if _STREETISH.search(text) and not _JUNK.search(text):
+        if _STREETISH.search(probe) and not _JUNK.search(probe):
             return Decision(None, None, "names_another_state", field)
         return Decision(None, None, "not_a_street_address", field)
-    return Decision(cleaned, basis, "accepted", field)
+    # The stored value keeps the source's own spelling ("One Penn Plaza").
+    cleaned = _text(street)
+    reason = "accepted_after_name_prefix" if prefix is not None else "accepted"
+    return Decision(cleaned, basis, reason, field)
 
 
 def _illinois(raw: object) -> Decision:
@@ -271,13 +402,22 @@ def _illinois(raw: object) -> Decision:
     if labeled_state and labeled_state not in {"IL", "ILLINOIS"}:
         return Decision(None, None, "labeled_location_state_not_il", field)
     # Composed from the labeled components in the listing's own order:
-    # "334 W North St Momence, IL 60954-1157".
+    # "334 W North St Momence, IL 60954-1157".  A venue name before the
+    # street ("Aon Center 200 E Randolph Dr") is dropped here, on the
+    # address component alone; the full cell stays in raw_extra.
     value = _text(raw.get(field))
+    if _several_addresses(value):
+        return Decision(None, None, "multiple_addresses_in_field", field)
+    street, prefix = _street_part(value)
+    if prefix is not None:
+        if _prefix_blocked(value):
+            return Decision(None, None, "not_a_street_address", field)
+        value = street
     city = _text(raw.get("Location City"))
     if city:
         value = f"{value} {city}"
     value = f"{value}, {' '.join(p for p in ('IL', _text(raw.get('Location Zipcode'))) if p)}"
-    return _checked(value, "IL", BASIS_LABELED, field)
+    return _checked(value, "IL", BASIS_LABELED, field, prefixed=prefix is not None)
 
 
 def _new_york(row, raw: object) -> Decision:
@@ -427,6 +567,8 @@ def apply(conn, *, states: set[str] | None = None, resolver=None,
         decision = derive(row, resolver)
         if decision.address:
             counts["surfaced"] += 1
+            if decision.reason == "accepted_after_name_prefix":
+                counts["surfaced_after_name_prefix"] += 1
         elif decision.reason not in {"no_policy_field", "no_labeled_site_field",
                                      "no_address_field", "no_address_in_field"}:
             counts[f"rejected:{decision.reason}"] += 1

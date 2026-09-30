@@ -37,6 +37,9 @@ class StateConfig:
     source_url: str | None
     notes: str = ""
     freshness_field: str = "notice_date"
+    # Wall-clock minutes a live fetch may run before the state is failed
+    # and the run moves on; None = the pipeline default.
+    fetch_budget_minutes: float | None = None
 
     @property
     def scrapable(self) -> bool:
@@ -107,6 +110,14 @@ def load_registry(path: Path | None = None) -> Registry:
             (cfg.cadence in CADENCES, f"bad cadence {cfg.cadence!r}"),
             (cfg.freshness_field in FRESHNESS_FIELDS,
              f"bad freshness_field {cfg.freshness_field!r}"),
+            (
+                cfg.fetch_budget_minutes is None or (
+                    isinstance(cfg.fetch_budget_minutes, (int, float))
+                    and not isinstance(cfg.fetch_budget_minutes, bool)
+                    and cfg.fetch_budget_minutes > 0
+                ),
+                f"bad fetch_budget_minutes {cfg.fetch_budget_minutes!r}",
+            ),
             (
                 (cfg.source == "manual") == (cfg.status == "manual_only"),
                 "manual source and manual_only status must go together",

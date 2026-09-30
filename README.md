@@ -37,8 +37,8 @@ deduplicates and version-tracks notices, and commits the results here:
 | `notice_date` | Source-supported notice date when its role is known (ISO-8601 or null) |
 | `effective_date` | First layoff/closure date (ISO-8601) |
 | `employees_affected` | Reported headcount (null when the state omits it) |
-| `layoff_type` | `closure`, `mass_layoff`, or `unknown` |
-| `is_temporary` | 1 if the state flagged it temporary, else 0/blank |
+| `layoff_type` | `closure`, `mass_layoff`, or `unknown`, from the state's own type column (a coded column read by exact value, such as Indiana's LO, is recorded in `source_details.layoff_type_evidence`) |
+| `is_temporary` | 1 if the source reports it temporary, 0 if permanent, blank when unreported or mixed (Colorado: 1 only when temporary losses or furloughs are reported with no permanent loss; the counts are kept in `source_details.job_losses`) |
 | `is_amendment` | Source flagged this filing as amending an earlier one |
 | `is_amended` | We have observed more than one version of this notice |
 | `current_version` | Latest version number (see `notice_versions` in SQLite for history) |
@@ -51,7 +51,10 @@ deduplicates and version-tracks notices, and commits the results here:
 Additional columns retain filed and derived facts: `normalized_name`,
 `canonical_name`, `canonical_basis`, and `employer_key` support employer
 navigation; `industry`, `naics`, `naics_basis`, `naics_level`, `sic`, and
-`sic_description` describe industry evidence; `cik`, `ticker`, `cik_match`,
+`sic_description` describe industry evidence (read at export time from each
+source's own NAICS, SIC or industry column, including the Industry cell of
+Iowa's workbook rows; California's EDD reports have no industry column, so
+its codes come only from the SEC, IRS or employer tiers); `cik`, `ticker`, `cik_match`,
 `ein`, `ntee`, `lei`, `wikidata_qid`, `wikidata_match`, `parent_company`,
 `parent_cik`, and `identity_source` are optional identity annotations, not
 proof of ownership at the filing date. `place_name`, `place_fips`,
@@ -67,6 +70,9 @@ on a one-location filing, South Carolina's worksite `address`), or
 when it resolves to the county the agency filed separately); `unverified`
 marks a stored value no current rule reproduces. Values that name
 another state, list several addresses, or carry no house number are left out.
+A venue or division name ahead of exactly one street address ("Bloomingdale's,
+1000 Third Avenue") is dropped and the street kept; a spelled-out number ("One
+Penn Plaza") counts as a house number; the full cell stays in `raw_extra`.
 Addresses whose role the source does not label and that no independent filed
 place can check — Florida's company cell, Idaho's address block, the
 America's JobLink portals (AZ, KS, ME, VT, MI, DE) and Missouri's company
@@ -88,7 +94,9 @@ from `notice_date`. `source_record_urls`, `source_locators`, and `source_status`
 identify attached official rows or letters and their adjudication; the
 state-level `source_url` remains the agency listing. `timing_qc` marks a
 source-supported negative, same-day, or 300-day-or-longer notice-to-action
-interval for review, without changing either date. Empty values mean the
+interval for review, without changing either date; `notice_after_first_seen`
+marks a notice date later than the day the listing was first observed (a
+source typo such as Utah's "10/30/26" seen on 2026-09-24), kept as filed. Empty values mean the
 corresponding fact is not established in this export. A blank site field does
 not establish that no site was reported or that the event had no physical site.
 The [date-precision expansion](docs/date-precision-automation-2026-09-24.md)
@@ -310,7 +318,18 @@ survivor, and never across a state line. A county the state filed in its
 own field settles a city name that repeats — but a single segment
 matching both a place and a county is a coincidence, not a filed county,
 which is why Houston resolves to Harris County rather than to the Houston
-County it is not in.
+County it is not in. A segment that says "County" ("Des Moines, Polk
+County") is read as the county even where the name is also a place (Polk
+City), and the city beside it is the site. A bare second name joined by a
+list separator (`/`, `&`, `and`, `;`) that is both a place and a county,
+and whose county is not the first place's, is a second site rather than a
+county, so "Prudhoe Bay/ Anchorage" and "Richmond & Lynchburg VA" resolve
+to nothing. Ohio writes one site as "City/County" ("Westerville/Delaware"),
+so there a single slash keeps the city-county reading and a second pair
+("Worthington/Franklin West Carrollton/Montgomery") is two sites. A comma
+does not trigger the rule, because states use it for a city and its county
+("Atlanta, Clayton"); a few comma lists of two cities ("Seattle, Spokane")
+still read the second as the county.
 
 States also file out-of-state addresses — a corporate headquarters rather
 than the worksite — and share city names with the states they file into.
@@ -326,17 +345,37 @@ maps a short, reviewed list of them to the containing place and county. An
 alias never overrides a real place of the same name, and a ZIP in the string
 from outside the alias's ZIP prefixes vetoes it. Such rows carry
 `geo_basis=place_alias`. A string naming several boroughs, or a borough
-alongside "New York", resolves to New York city with no county.
+alongside "New York", resolves to New York city with no county. A row of
+that table with a blank `place_name` is a county-only alias for a community
+or installation that is not a Census place and lies wholly in one county
+(Rancho Dominguez and Universal City in Los Angeles County, Moffett Field
+in Santa Clara County); it gives `geo_basis=county_alias`, the county's
+point and no `place_fips`, and a county the state filed in its own column
+outranks it. Names whose area spans counties (Edwards and China Lake as
+bases, Camp Roberts, Yosemite) or that name more than one community
+("Rancho", "South San", "Korbel") are left out.
+`data/reference/place_typos.csv` lists unambiguous misspellings and
+20-character truncations of a Census place ("PONOMA", "RANCHO SANTA
+MARGARI"); they resolve with `geo_basis=place_typo`.
+
+Kansas files most notices only against one of its five local workforce
+areas ("4 - Workforce Alliance"). Each area covers many counties, so the
+area does not establish a county and these notices stay unresolved; the
+area is not mapped to a county set. The few Kansas rows that do carry a
+city usually carry an out-of-state employer address, which the
+foreign-state rule refuses.
 
 `latitude` and `longitude` are never geocoded addresses. They are the Census
 Gazetteer interior point of the resolved place, or of the county when only a
-county resolved (`county`, `county:filed`, `subdivision`) and for a New York
+county resolved (`county`, `county:filed`, `county_alias`, `subdivision`) and for a New York
 borough alias (whose county is more specific than the city); they are blank
 when several places in one county were named. `geo_basis`
 records how the place was read: `place` from the location text; `address`
 when the city was taken from the trailing words of a street address (the
 point is still the city's, not the address's); `place+county` when the filing
-also named a county; `place_alias` from the alias table; a `:filed` suffix
+also named a county; `place_alias` from the alias table; `county_alias`
+from a county-only alias (county, no place); `place_typo` from the
+misspelling table; a `:filed` suffix
 when the state's own city/county columns supplied it and `:name` when an
 address typed into the employer name did. With `place+county` the filed
 county wins over the place's roster county; for a city that spans counties

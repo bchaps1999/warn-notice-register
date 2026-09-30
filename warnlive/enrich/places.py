@@ -47,6 +47,15 @@ PATH = Path("data/reference/places.csv.gz")
 # Named communities that are not Census places — Los Angeles neighbourhoods,
 # New York City boroughs — mapped by hand to the place that contains them.
 ALIAS_PATH = Path("data/reference/place_aliases.csv")
+# A row with a blank place_name is a county-only alias: a named community or
+# installation that is not a Census place and lies wholly in one county
+# (Rancho Dominguez, Universal City, Moffett Field).  It resolves to the county
+# alone, with geo_basis "county_alias" and no place_fips.
+#
+# Unambiguous misspellings and 20-character truncations of a Census place
+# ("PONOMA", "RANCHO SANTA MARGARI"), reviewed by hand.  They resolve to the
+# place with geo_basis "place_typo", so a corrected reading stays visible.
+TYPO_PATH = Path("data/reference/place_typos.csv")
 FIELDS = [
     "state", "kind", "key", "name",
     "place_fips", "county_fips", "county_name", "lat", "lon", "incorporated",
@@ -103,6 +112,26 @@ _UNIT = re.compile(
     re.IGNORECASE,
 )
 _SEGMENT = re.compile(r"[/,;()]|\s+-\s+|\s+&\s+|\s+\band\b\s+")
+_COUNTY_WORD = re.compile(r"\b(?:county|parish)\b", re.IGNORECASE)
+# A segment that is a county's name: "Polk County", "Sevier County TN" — not
+# a street ("9994 County Farm Rd") or a road ("County Road 12").
+_COUNTY_SEGMENT = re.compile(
+    r"^\s*[^\d\s][^\d]*?\s(?:county|parish)\.?(?:\s+[a-z]{2}\.?)?\s*$", re.IGNORECASE)
+# Separators that list sites ("Prudhoe Bay/ Anchorage", "Richmond &
+# Lynchburg"), unlike the comma or parenthesis a state puts between a city and
+# its county ("Atlanta, Clayton", "Cincinnati (Butler)").
+_LIST_SEP = re.compile(r"/|;|\s&\s|\band\b", re.IGNORECASE)
+# Ohio's listing writes one site as "City/County" ("Westerville/Delaware",
+# Westerville straddling Franklin and Delaware counties), so there a single
+# slash is the city-county form and only a second pair lists another site.
+_CITY_SLASH_COUNTY = {"OH"}
+
+
+def _lists_sites(state: str, location: str) -> bool:
+    """Whether a location string joins several sites with a list separator."""
+    if state in _CITY_SLASH_COUNTY and location.count("/") == 1:
+        return bool(_LIST_SEP.search(location.replace("/", " ")))
+    return bool(_LIST_SEP.search(location))
 # Looks like a street address: a house number, or a street-type word. Used
 # only to decide whether a segment may be mined for a trailing city name.
 #
@@ -440,7 +469,8 @@ def refresh(out_path: Path = PATH) -> int:
 class Resolver:
     """Resolves a filed location string to a Census place and county."""
 
-    def __init__(self, path: Path = PATH, alias_path: Path = ALIAS_PATH) -> None:
+    def __init__(self, path: Path = PATH, alias_path: Path = ALIAS_PATH,
+                 typo_path: Path | None = TYPO_PATH) -> None:
         self.places: dict[tuple[str, str], list[dict]] = {}
         self.counties: dict[tuple[str, str], list[dict]] = {}
         self.subdivisions: dict[tuple[str, str], list[dict]] = {}
@@ -457,8 +487,11 @@ class Resolver:
         # Why each unresolved string failed, for deterministic diagnostics.
         self.refusals: dict[tuple[str, str], str] = {}
         self.aliases: dict[tuple[str, str], dict] = self._load_aliases(alias_path)
+        for key, record in self._load_aliases(typo_path, typo=True).items():
+            self.aliases.setdefault(key, record)
 
-    def _load_aliases(self, alias_path: Path) -> dict[tuple[str, str], dict]:
+    def _load_aliases(self, alias_path: Path | None,
+                      typo: bool = False) -> dict[tuple[str, str], dict]:
         """Community name -> a place record carrying the community's county.
 
         A community is not a Census place: Chatsworth is part of Los Angeles
@@ -469,6 +502,9 @@ class Resolver:
         where the roster has none. ``point`` says whose interior point the
         coordinates are: the place's, or (for a borough, which is a county)
         the county's, since New York city's point lies in Brooklyn.
+
+        A blank ``place_name`` makes a county-only alias (see ALIAS_PATH);
+        ``typo`` marks the misspelling table, whose rows must name a place.
         """
         aliases: dict[tuple[str, str], dict] = {}
         if not alias_path or not Path(alias_path).exists():
@@ -477,13 +513,25 @@ class Resolver:
             for row in csv.DictReader(fh):
                 state = row["state"].strip().upper()
                 key = fold(row["alias"])
-                places = [p for p in self.places.get((state, fold(row["place_name"])), [])
-                          if p["name"] == row["place_name"].strip()]
+                place_name = (row.get("place_name") or "").strip()
                 counties = [c for c in self.counties.get((state, fold(row["county_name"])), [])
                             if c["county_name"] == row["county_name"].strip()]
-                if not key or len(places) != 1 or len(counties) != 1:
+                if not key or len(counties) != 1 or self.places.get((state, key)):
                     continue
-                if self.places.get((state, key)):
+                if not place_name:
+                    if typo:
+                        continue
+                    county = counties[0]
+                    aliases[(state, key)] = {
+                        **county, "name": county["county_name"], "place_fips": "",
+                        "incorporated": "", "alias": row["alias"].strip(),
+                        "county_only": True,
+                        "zip3": tuple((row.get("zip3") or "").split()),
+                    }
+                    continue
+                places = [p for p in self.places.get((state, fold(place_name)), [])
+                          if p["name"] == place_name]
+                if len(places) != 1:
                     continue
                 place, county = places[0], counties[0]
                 point = county if row.get("point", "").strip() == "county" else place
@@ -494,6 +542,7 @@ class Resolver:
                     "lat": point["lat"], "lon": point["lon"],
                     "alias": row["alias"].strip(),
                     "zip3": tuple((row.get("zip3") or "").split()),
+                    **({"typo": True} if typo else {}),
                 }
         return aliases
 
@@ -511,6 +560,9 @@ class Resolver:
         """The candidate (folded name, kind) pairs inside a location string."""
         keys = []
         for segment in _SEGMENT.split(location):
+            # "Des Moines, Polk County": a segment that says County is a
+            # county, even where the name is also a place (Polk City).
+            kind = "county" if _COUNTY_SEGMENT.match(segment or "") else ""
             segment = _UNIT.sub(" ", segment or "")
             # "1900 North Austin Avenue Chicago" — the city follows the street.
             # The address goes before the ZIP does: a five-digit house number
@@ -525,7 +577,9 @@ class Resolver:
             while words and words[-1].upper().replace(".", "") in _POSTAL:
                 words.pop()
             key = fold(" ".join(words))
-            if key:
+            if key and (kind != "county" or self.counties.get((state, key))):
+                keys.append((key, kind))
+            elif key:
                 keys.append((key, ""))
         return keys
 
@@ -601,7 +655,9 @@ class Resolver:
                 cached = self._resolve(state, location)
                 self._cache[(state, location)] = cached
             out = dict(cached)
-            if out["geo_basis"]:
+            # A county-only alias is the weakest reading of the string; a
+            # city or county the state filed in its own columns outranks it.
+            if out["geo_basis"] and out["geo_basis"] != "county_alias":
                 return out
 
         city, county = _filed_place(fields_json)
@@ -618,6 +674,9 @@ class Resolver:
             got = self._county_only(state, county)
             if got:
                 return got
+
+        if out["geo_basis"]:
+            return out
 
         # Last: the address some states append to the employer name.
         #
@@ -671,24 +730,36 @@ class Resolver:
 
         # A county named alongside the city is the strongest signal in the
         # string: it settles a city name that repeats within the state.
-        counties = {
-            rows[0]["county_fips"]: rows[0]
-            for key, _ in keys
-            for rows in [self.counties.get((state, key), [])]
-            if len(rows) == 1
-        }
+        # Segments that say "County" are the county; only without one is a
+        # bare name that matches a county read as the county.
+        explicit = {key for key, kind in keys if kind == "county"}
+        counties: dict[str, dict] = {}
+        for key, _ in keys:
+            rows = self.counties.get((state, key), [])
+            if key in explicit and len(rows) > 1:
+                # Virginia's Fairfax city and Fairfax County: the segment
+                # said County.
+                rows = [r for r in rows if _COUNTY_WORD.search(r["county_name"])]
+            elif key not in explicit and explicit and self.places.get((state, key)):
+                # Beside an explicit county, a bare name that is also a place
+                # is the place ("Des Moines, Polk County"); one that is only a
+                # county is another county ("Blount, Knox, and Sevier County").
+                continue
+            if len(rows) == 1:
+                counties[rows[0]["county_fips"]] = rows[0]
         county = next(iter(counties.values())) if len(counties) == 1 else None
 
         # A segment that named the county is context, not a rival place.
         # Ohio files "Cincinnati (Hamilton)" and Ohio also has a city called
         # Hamilton, so without this the string looks like two places at once.
-        county_keys = {
+        county_keys = explicit or {
             key for key, _ in keys
             if county and len(self.counties.get((state, key), [])) == 1
         }
 
         found: dict[str, dict] = {}
         place_keys: set[str] = set()
+        county_aliases: dict[str, dict] = {}  # county-only aliases named
         ambiguous = False
         agreed: dict | None = None  # rival place records that share a county
         for key, kind in keys:
@@ -697,6 +768,9 @@ class Resolver:
             candidates = self.places.get((state, key), [])
             if not candidates:
                 alias = self._alias(state, key, location)
+                if alias and alias.get("county_only"):
+                    county_aliases[alias["county_fips"]] = alias
+                    continue
                 candidates = [alias] if alias else []
             if county and len(candidates) > 1:
                 narrowed = [
@@ -750,6 +824,21 @@ class Resolver:
                 )
                 return out
 
+        if county_aliases and found:
+            # A place and a community outside the roster: two sites.  The
+            # county holds only if every one of them is in it.
+            shared = ({p["county_fips"] for p in found.values()}
+                      | set(county_aliases))
+            if len(shared) == 1 and "" not in shared:
+                settled = next(iter(county_aliases.values()))
+                out.update(county_name=settled["county_name"],
+                           county_fips=settled["county_fips"],
+                           latitude=settled["lat"] or None,
+                           longitude=settled["lon"] or None, geo_basis="county")
+                return out
+            self.refusals[(state, location)] = "a place and a county-only community named"
+            return out
+
         if len(found) == 1:
             place = next(iter(found.values()))
             # A county the state named in its own segment outranks the one
@@ -763,12 +852,22 @@ class Resolver:
                 # "Brooklyn, New York": the second segment is the city's (or
                 # state's) name, not a county filing against the borough.
                 filed = None
+            # "Prudhoe Bay/ Anchorage", "Richmond & Lynchburg VA": a bare
+            # second name that is a county *and* a place, and whose county is
+            # not the first place's, is a second site rather than the first
+            # site's county.  Neither place nor county is established.
+            if (filed and filed["key"] not in explicit and _lists_sites(state, location)
+                    and place["county_fips"] and filed["county_fips"] != place["county_fips"]
+                    and self.places.get((state, filed["key"]))):
+                self.refusals[(state, location)] = "two places named"
+                return out
             out.update(
                 place_name=place["name"], place_fips=place["place_fips"],
                 county_name=(filed or {}).get("county_name") or place["county_name"],
                 county_fips=(filed or {}).get("county_fips") or place["county_fips"],
                 latitude=place["lat"] or None, longitude=place["lon"] or None,
-                geo_basis=("place_alias" if place.get("alias")
+                geo_basis=("place_typo" if place.get("typo")
+                           else "place_alias" if place.get("alias")
                            else "place+county" if filed else "place"),
             )
             return out
@@ -786,13 +885,23 @@ class Resolver:
                 ),
                 None,
             )
-            settled = county or agreed or township
+            named_alias = (next(iter(county_aliases.values()))
+                           if len(county_aliases) == 1 else None)
+            if (len(county_aliases) > 1 or county and county_aliases
+                    and set(county_aliases) != {county["county_fips"]}):
+                # "Universal City, Orange County", or communities in two
+                # counties: the filing does not establish one.
+                self.refusals[(state, location)] = "county-only communities in several counties"
+                return out
+            settled = county or agreed or township or named_alias
             if settled:
                 out.update(
                     county_name=settled["county_name"],
                     county_fips=settled["county_fips"],
                     latitude=settled["lat"] or None, longitude=settled["lon"] or None,
-                    geo_basis="subdivision" if settled is township else "county",
+                    geo_basis=("subdivision" if settled is township
+                               else "county_alias" if settled is named_alias
+                               else "county"),
                 )
                 return out
 
@@ -819,7 +928,7 @@ class Resolver:
             candidates = self.places.get((state, key), [])
             if not candidates:
                 alias = self._alias(state, key, location)
-                candidates = [alias] if alias else []
+                candidates = [alias] if alias and not alias.get("county_only") else []
             if len(candidates) > 1:
                 municipal = [c for c in candidates if c["incorporated"]]
                 candidates = municipal if len(municipal) == 1 else candidates
@@ -830,7 +939,8 @@ class Resolver:
                     county_name=place["county_name"],
                     county_fips=place["county_fips"],
                     latitude=place["lat"] or None, longitude=place["lon"] or None,
-                    geo_basis="place_alias" if place.get("alias") else "address",
+                    geo_basis=("place_typo" if place.get("typo")
+                               else "place_alias" if place.get("alias") else "address"),
                 )
                 return out
 

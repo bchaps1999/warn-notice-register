@@ -93,3 +93,56 @@ NY,The Bronx,New York city,Bronx County,county,104,New York City borough
 NY,Whitestone,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
 NY,Woodhaven,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
 NY,Woodside,New York city,Queens County,county,110 111 113 114 116,Queens neighborhood (USPS city name)
+CA,Anaheim Hills,Anaheim city,Orange County,place,928,Anaheim community
+CA,Alviso,San Jose city,Santa Clara County,place,950,San Jose community
+CA,Bernardo Heights,San Diego city,San Diego County,place,921,San Diego city community (Rancho Bernardo)
+CA,Broderick,West Sacramento city,Yolo County,place,956,West Sacramento community
+CA,Century City,Los Angeles city,Los Angeles County,place,900,Los Angeles city community
+CA,Clairemont,San Diego city,San Diego County,place,921,San Diego city community
+CA,Corona del Mar,Newport Beach city,Orange County,place,926,Newport Beach community
+CA,Cucamonga,Rancho Cucamonga city,San Bernardino County,place,917,Merged into Rancho Cucamonga (1977)
+CA,Edwards Air Force Base,Edwards AFB CDP,Kern County,place,935,Census place of the same name spelled out
+CA,Edwards Air Force Ba,Edwards AFB CDP,Kern County,place,935,Census place of the same name; agency field truncated at 20 characters
+CA,Newport Coast,Newport Beach city,Orange County,place,926,Newport Beach community
+CA,Oakland Airport,Oakland city,Alameda County,place,946,Oakland International Airport is in Oakland city
+CA,Onizuka Air Station,Sunnyvale city,Santa Clara County,place,940,Former Air Force station in Sunnyvale
+CA,Pacific Palisades,Los Angeles city,Los Angeles County,place,902,Los Angeles city community
+CA,Paso Robles,El Paso de Robles (Paso Robles) city,San Luis Obispo County,place,934,Census name is El Paso de Robles
+CA,March AFB,March ARB CDP,Riverside County,place,925,Former name of March Air Reserve Base (Census place March ARB)
+CA,March Air Reserve Base,March ARB CDP,Riverside County,place,925,Census place March ARB spelled out
+CA,March Air Reserve Ba,March ARB CDP,Riverside County,place,925,Census place March ARB; agency field truncated at 20 characters
+CA,Redwood Shores,Redwood City city,San Mateo County,place,940,Redwood City community
+CA,West Los Angeles,Los Angeles city,Los Angeles County,place,900,Los Angeles city community
+CA,West Toluca Lake,Los Angeles city,Los Angeles County,place,916,Los Angeles city community (Toluca Lake)
+CA,Bassett,,Los Angeles County,county,,Unincorporated community; not a Census place
+CA,Big Sur,,Monterey County,county,,Unincorporated coastal community; not a Census place
+CA,Banta,,San Joaquin County,county,,Unincorporated community; not a Census place
+CA,Branscomb,,Mendocino County,county,,Unincorporated community; not a Census place
+CA,Camp Pendleton,,San Diego County,county,,Marine Corps base wholly in San Diego County; split between two Census places
+CA,Carlotta,,Humboldt County,county,,Unincorporated community; not a Census place
+CA,Carmel,,Monterey County,county,,Carmel-by-the-Sea or Carmel Valley; both in Monterey County
+CA,El Toro,,Orange County,county,,Former MCAS El Toro / El Toro community (Lake Forest or Irvine); both in Orange County
+CA,Helendale,,San Bernardino County,county,,Unincorporated community; not a Census place
+CA,Helm,,Fresno County,county,,Unincorporated community; not a Census place
+CA,Jolon,,Monterey County,county,,Unincorporated community; not a Census place
+CA,Landers,,San Bernardino County,county,,Unincorporated community; not a Census place
+CA,McClellan AFB,,Sacramento County,county,,Former Air Force base wholly in Sacramento County (now McClellan Park)
+CA,McClellan,,Sacramento County,county,,Former Air Force base wholly in Sacramento County (now McClellan Park)
+CA,Moffett Field,,Santa Clara County,county,,Federal airfield in unincorporated Santa Clara County
+CA,Montrose,,Los Angeles County,county,,Unincorporated community (La Crescenta-Montrose area)
+CA,Mountain Pass,,San Bernardino County,county,,Unincorporated community; not a Census place
+CA,Newberry Springs,,San Bernardino County,county,,Unincorporated community; not a Census place
+CA,Nipton,,San Bernardino County,county,,Unincorporated community; not a Census place
+CA,Olympic Valley,,Placer County,county,,Unincorporated community; not a Census place
+CA,Oro Grande,,San Bernardino County,county,,Unincorporated community; not a Census place
+CA,Point Mugu,,Ventura County,county,,Naval air station in unincorporated Ventura County
+CA,Rancho Dominguez,,Los Angeles County,county,,Unincorporated industrial area; not a Census place
+CA,Sequoia National Park,,Tulare County,county,,National park wholly in Tulare County
+CA,Sequoia National Par,,Tulare County,county,,National park wholly in Tulare County; agency field truncated at 20 characters
+CA,Tahoe City,,Placer County,county,,Unincorporated community; not a Census place
+CA,Terminal Island,,Los Angeles County,county,,Split between Los Angeles and Long Beach cities; both in Los Angeles County
+CA,Tollhouse,,Fresno County,county,,Unincorporated community; not a Census place
+CA,Travis AFB,,Solano County,county,,Air Force base wholly in Solano County
+CA,Universal City,,Los Angeles County,county,,Unincorporated area; not a Census place
+CA,Vernalis,,San Joaquin County,county,,Unincorporated community; not a Census place
+CA,Warner Springs,,San Diego County,county,,Unincorporated community; not a Census place

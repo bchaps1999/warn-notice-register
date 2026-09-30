@@ -132,6 +132,90 @@ def nj_effective_pair(value: str) -> tuple[str, str | None, str | None] | None:
     return ("list_or_phases" if match.group("join").lower() == "and" else "interval", start, end)
 
 
+# Source columns that state a notice's type in a form the generic raw-column
+# classifier (warnlive.normalize.engine._classify_from_raw) cannot read.
+# Each maps an exact source value; anything else stays as the engine left it.
+_TYPE_COLUMNS: dict[str, tuple[str, dict[str, str]]] = {
+    # Indiana's listing heads its date column "LO/CL Date": LO is a layoff,
+    # CL a closure (CL is already read by the engine).
+    "IN": ("Notice Type", {"lo": "mass_layoff", "l/o": "mass_layoff"}),
+    # Rhode Island's "Closing Yes/No": a WARN notice that is not a closing is
+    # a layoff.
+    "RI": ("Closing Yes/No", {"yes": "closure", "no": "mass_layoff"}),
+    # Michigan's "action" column.
+    "MI": ("action", {"layoff": "mass_layoff", "mass layoff": "mass_layoff",
+                      "permanent layoff": "mass_layoff",
+                      "temporary layoff": "mass_layoff"}),
+}
+# Michigan's "action" also says whether the layoff is temporary.
+_TEMPORARY_VALUES: dict[str, tuple[str, dict[str, int]]] = {
+    "MI": ("action", {"temporary layoff": 1, "permanent layoff": 0}),
+}
+_CO_LOSS_FIELDS = (("permanent", "permanent_job_losses"),
+                   ("temporary", "temporary_job_losses"),
+                   ("furloughs", "furloughs"))
+
+
+def _count(value) -> int | None:
+    text = str(value or "").strip().replace(",", "")
+    return int(text) if text.isdigit() else None
+
+
+def _add_source_type_evidence(state: str, raw: dict, rec: dict, result: dict,
+                              details: dict) -> None:
+    """layoff_type / is_temporary from a labeled source column.
+
+    Only exact, documented source values are read, and only where the engine
+    left the field unknown.  The column and its text go into source_details
+    so the reading can be checked against the row.
+    """
+    if not isinstance(raw, dict):
+        return
+    if state in _TYPE_COLUMNS and rec.get("layoff_type") == "unknown":
+        field, mapping = _TYPE_COLUMNS[state]
+        text = str(raw.get(field) or "").strip()
+        mapped = mapping.get(" ".join(text.casefold().split()))
+        if mapped:
+            result["layoff_type"] = mapped
+            details["layoff_type_evidence"] = {
+                "rule": "source_type_column_v1", "source_field": field,
+                "source_text": text}
+    if state in _TEMPORARY_VALUES and rec.get("is_temporary") is None:
+        field, mapping = _TEMPORARY_VALUES[state]
+        text = str(raw.get(field) or "").strip()
+        mapped = mapping.get(" ".join(text.casefold().split()))
+        if mapped is not None:
+            result["is_temporary"] = mapped
+            details["temporary_evidence"] = {
+                "rule": "source_type_column_v1", "source_field": field,
+                "source_text": text}
+    if state == "CO":
+        # Colorado reports permanent job losses, temporary job losses and
+        # furloughs in separate columns.  The notice is temporary only when
+        # it reports temporary losses or furloughs and no permanent loss; any
+        # permanent loss with none temporary makes it permanent; a mix, a
+        # non-numeric cell, or nothing reported leaves it unknown.
+        texts = {name: str(raw.get(field) or "").strip() for name, field in _CO_LOSS_FIELDS}
+        if not any(texts.values()):
+            return
+        counts = {name: _count(text) for name, text in texts.items()}
+        details["job_losses"] = {
+            "rule": "co_job_loss_columns_v1",
+            **{name: counts[name] for name in counts if texts[name]},
+            **({"source_text": {name: text for name, text in texts.items() if text}}
+               if any(texts[name] and counts[name] is None for name in texts) else {}),
+        }
+        if any(texts[name] and counts[name] is None for name in texts):
+            return
+        permanent = counts["permanent"] or 0
+        temporary = (counts["temporary"] or 0) + (counts["furloughs"] or 0)
+        if rec.get("is_temporary") is None:
+            if permanent == 0 and temporary > 0:
+                result["is_temporary"] = 1
+            elif permanent > 0 and temporary == 0:
+                result["is_temporary"] = 0
+
+
 def extract(state: str, raw: dict, rec: dict) -> dict:
     """Return optional canonical detail fields; omit unsupported guesses."""
     details: dict = {}
@@ -616,6 +700,7 @@ def extract(state: str, raw: dict, rec: dict) -> dict:
             details["effective_date_source_text"] = source_text
 
     _add_reported_day_evidence(state, raw, rec, result, details)
+    _add_source_type_evidence(state, raw, rec, result, details)
     if details:
         result["source_details"] = json.dumps(details, sort_keys=True, ensure_ascii=False)
     return result
