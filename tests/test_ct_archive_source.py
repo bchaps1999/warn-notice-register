@@ -85,3 +85,13 @@ def test_connecticut_archive_drift_fails_closed(tmp_path):
     (tmp_path / "manifest.json").write_text(json.dumps(manifest))
     with pytest.raises(ValueError, match="row count changed"):
         read_archive(tmp_path)
+
+
+def test_range_ends_past_the_capture_window_are_blanked():
+    records, _, report = _projected()
+    blanked = {(b["source_row"].rsplit(":", 1)[-1], b["field"], b["value"])
+               for b in report["implausible_dates_blanked"]}
+    # The 2012 page was captured 2012-12-20, so its window ends 2013-12-20.
+    assert blanked == {("12", "effective_date_end", "2014-12-26"),
+                       ("18", "effective_date_end", "2013-12-31")}
+    assert all(b["window"] == ["1988-01-01", "2013-12-20"] for b in report["implausible_dates_blanked"])

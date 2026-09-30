@@ -15,6 +15,9 @@ ID already in the build, an irregular ID, an ID listing several phases or
 changed content, and a row matching a current Ohio row's employer and
 received day are held. "Date Received" is the agency's receipt date, kept as
 ``agency_received_date``; no notice-letter date is set. No network access.
+
+Dates outside the live transformer's window (``archive_dates``) are blanked
+and reported under ``implausible_dates_blanked``.
 """
 
 from __future__ import annotations
@@ -26,6 +29,7 @@ import re
 from collections import Counter
 from pathlib import Path
 
+from warnlive.migrate import archive_dates
 from warnlive.migrate.oh_annual_source import ID, _action, _date
 from warnlive.normalize.engine import _record_hash
 from warnlive.normalize.revisions import classify_agency_ids
@@ -201,7 +205,9 @@ def project(directory: Path, existing_ids: set[str] | None = None,
         records.append(rec)
     if len(records) + len(held) != len(rows) or len({r["dedupe_key"] for r in records}) != len(records):
         raise ValueError("Ohio archive row accounting mismatch")
+    blanked = archive_dates.apply(records, "OH", directory)
     return records, held, {
+        "implausible_dates_blanked": blanked,
         "source_rows": len(rows), "distinct_notice_ids": len({r["id"] for r in rows if r["id"]}),
         "admitted": len(records), "held": len(held),
         "hold_reasons": dict(sorted(Counter(x["reason"] for x in held).items())),

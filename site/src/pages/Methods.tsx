@@ -258,7 +258,7 @@ export function Methods() {
         excluded. Apparent revisions are linked only when source evidence
         establishes the relationship. Download the{" "}
         <a
-          href="https://github.com/bchaps1999/warn-notice-register/blob/main/data/exports/warn_notices.csv"
+          href="https://github.com/bchaps1999/warn-notice-register/raw/main/data/exports/warn_notices.csv.gz"
           className="underline hover:text-ink"
           target="_blank" rel="noreferrer"
         >

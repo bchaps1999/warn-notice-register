@@ -1,4 +1,5 @@
 import csv
+import gzip
 
 from warnlive.store import db
 from warnlive.store.dedupe import ingest
@@ -18,7 +19,7 @@ def test_historical_nj_csv_marks_month_precision(tmp_path):
     }
     ingest(conn, [rec], "2026-07-01")
     export_csvs(conn, tmp_path / "exports", ["nj"])
-    with (tmp_path / "exports" / "warn_notices.csv").open(newline="") as fh:
+    with gzip.open(tmp_path / "exports" / "warn_notices.csv.gz", "rt", newline="") as fh:
         row = next(csv.DictReader(fh))
     assert row["notice_date_precision"] == "month"
     assert row["notice_date_basis"] == "inferred_year_from_effective_date"
@@ -45,9 +46,10 @@ def test_csv_exports_effective_start_and_end_metadata(tmp_path):
     rec["raw_record_hash"] = _record_hash(rec)
     ingest(conn, [rec], "2026-09-23")
     export_csvs(conn, tmp_path / "exports", ["ny"])
-    for path in (tmp_path / "exports/warn_notices.csv",
+    for path in (tmp_path / "exports/warn_notices.csv.gz",
                  tmp_path / "exports/states/ny.csv"):
-        with path.open(newline="") as fh:
+        opener = gzip.open if path.suffix == ".gz" else open
+        with opener(path, "rt", newline="") as fh:
             row = next(csv.DictReader(fh))
         assert (row["effective_date_precision"], row["effective_date_basis"],
                 row["effective_date_end_precision"], row["effective_date_end_basis"]) == (
@@ -72,7 +74,7 @@ def test_export_keeps_unadmitted_source_observation_separate(tmp_path):
     assert observation["notice_id"] == ""
     assert observation["notice_dedupe_key"] == ""
     assert counts[str(tmp_path / "exports" / "source_observations.csv")] == 1
-    with (tmp_path / "exports" / "warn_notices.csv").open(newline="") as fh:
+    with gzip.open(tmp_path / "exports" / "warn_notices.csv.gz", "rt", newline="") as fh:
         assert list(csv.DictReader(fh)) == []
     conn.execute("DELETE FROM source_observations")
     export_csvs(conn, tmp_path / "exports", ["ia"])

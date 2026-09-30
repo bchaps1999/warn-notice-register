@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import csv
+import gzip
+import io
 import sqlite3
 from pathlib import Path
 
@@ -68,8 +70,10 @@ def export_csvs(
     export_dir: Path,
     active_states: list[str],
 ) -> dict[str, int]:
-    """Write warn_notices.csv (active states only) and per-state CSVs.
+    """Write warn_notices.csv.gz (active states only) and per-state CSVs.
 
+    The national file is gzipped (with a zeroed header timestamp, so identical
+    rows give identical bytes) because it outgrew GitHub's 100 MB file limit.
     Rows are stably sorted so successive exports diff cleanly in git.
     Returns row counts per file written.
     """
@@ -136,10 +140,18 @@ def export_csvs(
         )
 
     def write(path: Path, rows: list[sqlite3.Row]) -> None:
-        with open(path, "w", newline="") as fh:
-            writer = csv.writer(fh)
-            writer.writerow(header)
-            writer.writerows([derived(r) for r in rows])
+        if path.suffix == ".gz":
+            with open(path, "wb") as raw, gzip.GzipFile(
+                filename="", mode="wb", fileobj=raw, mtime=0, compresslevel=9
+            ) as gz, io.TextIOWrapper(gz, encoding="utf-8", newline="") as fh:
+                writer = csv.writer(fh)
+                writer.writerow(header)
+                writer.writerows([derived(r) for r in rows])
+        else:
+            with open(path, "w", newline="") as fh:
+                writer = csv.writer(fh)
+                writer.writerow(header)
+                writer.writerows([derived(r) for r in rows])
         counts[str(path)] = len(rows)
 
     if active_upper:
@@ -147,7 +159,8 @@ def export_csvs(
         rows = fetch(f"state IN ({placeholders})", tuple(active_upper))
     else:
         rows = []
-    write(export_dir / "warn_notices.csv", rows)
+    (export_dir / "warn_notices.csv").unlink(missing_ok=True)  # pre-gzip name
+    write(export_dir / "warn_notices.csv.gz", rows)
 
     for state in active_upper:
         write(

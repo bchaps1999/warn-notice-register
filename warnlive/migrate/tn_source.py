@@ -8,6 +8,9 @@ Wayback captures of the reports page (2018-2021). A WARN number is the
 identity where the page gives one; a posting day is an agency posting date,
 and the report's ``Notice Date`` keeps an unverified role. No Big Local News
 rows and no network access.
+
+In ``project_archive``, dates outside the live transformer's window (``archive_dates``) are blanked
+and reported under ``implausible_dates_blanked``.
 """
 
 from __future__ import annotations
@@ -27,6 +30,7 @@ from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 
+from warnlive.migrate import archive_dates
 from warnlive.migrate.source_bundle import _entry, verify
 from warnlive.normalize.engine import _record_hash
 
@@ -533,7 +537,9 @@ def project_archive(directory: Path, known_numbers: set[str] | None = None
     total = len(data["report"]) + len(data["pages"])
     if len(records) + len(held) != total or len({r["dedupe_key"] for r in records}) != len(records):
         raise ValueError("Tennessee archive source row accounting mismatch")
+    blanked = archive_dates.apply(records, "TN", directory)
     return records, held, {
+        "implausible_dates_blanked": blanked,
         "source_rows": total, "report_rows": len(data["report"]),
         "page_records": len(data["pages"]), "admitted": len(records), "held": len(held),
         "admitted_report_rows": sum("report-by-month" in r["source_identity"] for r in records),

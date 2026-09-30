@@ -13,6 +13,9 @@ address role is inferred nor a reported worker total split across sites.
 mapping) to ``agency/la_archive``, the Wayback captures of the 2007-2024
 tables (data/source_snapshots/la/wayback-2026-09-30); rows carrying update or
 rescission markers and continuation rows are held. No network access.
+
+In ``project_archive``, dates outside the live transformer's window (``archive_dates``) are blanked
+and reported under ``implausible_dates_blanked``.
 """
 
 from __future__ import annotations
@@ -26,6 +29,7 @@ from pathlib import Path
 
 import pdfplumber
 
+from warnlive.migrate import archive_dates
 from warnlive.normalize.engine import _record_hash
 
 HEADERS = {
@@ -479,7 +483,9 @@ def project_archive(directory: Path, known_events: set[tuple] | None = None
         records.append(rec)
     if len(records) + len(held) != len(rows):
         raise ValueError("Louisiana archive row accounting mismatch")
+    blanked = archive_dates.apply(records, "LA", directory)
     return records, held, {
+        "implausible_dates_blanked": blanked,
         "source_rows": len(rows), "admitted": len(records), "held": len(held),
         "hold_reasons": dict(sorted(Counter(item["reason"] for item in held).items())),
         "admitted_workers": sum(r["employees_affected"] or 0 for r in records),

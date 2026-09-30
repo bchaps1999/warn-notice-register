@@ -15,6 +15,9 @@ applies the same rules to the archived IWD logs of 2005-2020
 Development's former site, via the Wayback Machine), after removing events
 printed in more than one archived log or listed in the current logs. No
 network access.
+
+In ``project_archive``, dates outside the live transformer's window (``archive_dates``) are blanked
+and reported under ``implausible_dates_blanked``.
 """
 
 from __future__ import annotations
@@ -29,6 +32,7 @@ from pathlib import Path
 import pdfplumber
 from openpyxl import load_workbook
 
+from warnlive.migrate import archive_dates
 from warnlive.normalize.engine import _fold, _record_hash
 from warnlive.normalize.revisions import Disposition, classify_idless_events
 
@@ -835,8 +839,10 @@ def project_archive(directory: Path, current_rows: list[dict]
     versions = sum(rec["is_amendment"] for rec in out_records)
     if len(out_records) + len(held) != len(rows):
         raise ValueError("Iowa archive row accounting mismatch")
+    blanked = archive_dates.apply(out_records, "IA", directory)
     notices = [rec for rec in out_records if not rec["is_amendment"]]
     return out_records, held, {
+        "implausible_dates_blanked": blanked,
         "source_rows": len(rows),
         "rows_by_file": dict(Counter(row["source_artifact"].rsplit("/", 1)[-1] for row in rows)),
         "admitted": len(notices), "amendment_versions": versions, "held": len(held),

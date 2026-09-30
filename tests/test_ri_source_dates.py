@@ -9,7 +9,7 @@ from pathlib import Path
 from warnlive.normalize.engine import normalize_file
 
 
-BUNDLE = Path(__file__).resolve().parents[1] / "data/source_snapshots/2026-09-30-v1.2-source-bundle.tar.gz"
+BUNDLE = Path(__file__).resolve().parents[1] / "data/source_snapshots/2026-09-30-v1.3-source-bundle.tar.gz"
 
 
 def test_ri_ranges_do_not_turn_phase_lists_into_continuous_ends(tmp_path):

@@ -11,7 +11,7 @@ from warnlive.backfill.state_archives import fetch_ma
 from warnlive.normalize.engine import _fold
 
 
-BUNDLE = Path(__file__).resolve().parents[1] / "data/source_snapshots/2026-09-30-v1.2-source-bundle.tar.gz"
+BUNDLE = Path(__file__).resolve().parents[1] / "data/source_snapshots/2026-09-30-v1.3-source-bundle.tar.gz"
 
 
 def test_ma_fy2020_workbook_receipt_keeps_old_key(tmp_path):

@@ -25,3 +25,6 @@ output/
 docs/archive/
 data/archive/retired-adjudication/
 data/archive/source-diagnostics/ny-dates/
+
+# The national export is tracked gzipped (the plain CSV exceeds 100 MB)
+data/exports/warn_notices.csv

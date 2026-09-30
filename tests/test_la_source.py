@@ -97,16 +97,16 @@ def test_historical_relationship_diagnostic_is_source_bound_and_unresolved():
                for evidence in groups["SafeSource"]["evidence"])
 
 
-V12_BUNDLE = SOURCE.parent / "2026-09-30-v1.2-source-bundle.tar.gz"
+RELEASE_BUNDLE = SOURCE.parent / "2026-09-30-v1.3-source-bundle.tar.gz"
 
 
 @pytest.fixture(scope="module")
 def v12_la(tmp_path_factory):
-    """The agency/la tables exactly as the v1.2 release replay reads them."""
+    """The agency/la tables exactly as the release replay reads them (unchanged since v1.2)."""
     import tarfile
 
     target = tmp_path_factory.mktemp("v12-la")
-    with tarfile.open(V12_BUNDLE, "r:gz") as archive:
+    with tarfile.open(RELEASE_BUNDLE, "r:gz") as archive:
         for name in ("manifest.json", "2025.pdf", "2026.pdf"):
             source = archive.extractfile(f"agency/la/{name}")
             assert source is not None

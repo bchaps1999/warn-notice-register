@@ -18,6 +18,9 @@ collector (``fetch/custom/job_portal.py``) runs capture and freeze;
 source bundle (offline rebuild) through the same staging and normalization,
 holding records the build already holds. A portal record number identifies a
 listing row, not necessarily an independent filing.
+
+In the replay projection, dates outside the live transformer's window (``archive_dates``) are blanked
+and reported under ``implausible_dates_blanked``.
 """
 
 from __future__ import annotations
@@ -41,6 +44,7 @@ from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
+from warnlive.migrate import archive_dates
 from warnlive.normalize import admission
 from warnlive.normalize.admission import ks_event_signature
 
@@ -580,6 +584,9 @@ def project(directory: Path, portal: Portal, known_record_numbers: set[str],
         "parse_failures": len(norm.failures),
         "held_after_normalizing": dict(sorted(reasons.items())),
         "admitted": len(records),
+        "implausible_dates_blanked": archive_dates.apply(
+            records, portal.postal, directory,
+            fallback=datetime.strptime(observed_at[:10], "%Y-%m-%d").date()),
     }
     if staged["listed"] != len(records) + len(held):
         raise ValueError(f"{portal.name} portal rows are not fully accounted for")

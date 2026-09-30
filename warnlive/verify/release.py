@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import filecmp
+import gzip
 import json
 import sqlite3
 import tempfile
@@ -58,6 +59,7 @@ def verify(db_path: Path, exports: Path, site_data: Path | None = None) -> dict:
             export_csvs(conn, expected_exports, publishable)
             export_links_csv(conn, expected_exports / "notice_links.csv")
             _compare_tree(expected_exports, exports, ".csv", "CSV export")
+            _compare_tree(expected_exports, exports, ".csv.gz", "CSV export")
 
             if site_data is not None:
                 site_data = Path(site_data)
@@ -68,7 +70,7 @@ def verify(db_path: Path, exports: Path, site_data: Path | None = None) -> dict:
                            built_at=meta["built_at"])
                 _compare_tree(expected_site, site_data, ".json", "site data")
 
-        with (exports / "warn_notices.csv").open(newline="") as handle:
+        with gzip.open(exports / "warn_notices.csv.gz", "rt", newline="") as handle:
             rows = list(csv.DictReader(handle))
         return {
             "notices": len(rows),

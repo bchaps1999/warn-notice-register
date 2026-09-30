@@ -15,6 +15,9 @@ notice on its page, not a legal notice date: it is kept as
 ``agency_posted_date`` and no canonical notice or action date is set. No
 listing for 2022 (after January) through 2023 was archived; that gap stays
 visible. No network access.
+
+Dates outside the live transformer's window (``archive_dates``) are blanked
+and reported under ``implausible_dates_blanked``.
 """
 
 from __future__ import annotations
@@ -29,6 +32,7 @@ from pathlib import Path
 
 from bs4 import BeautifulSoup
 
+from warnlive.migrate import archive_dates
 from warnlive.normalize.engine import _record_hash
 
 PREFIX = "agency/mi_archive"
@@ -269,7 +273,9 @@ def project(directory: Path, existing_events: set[tuple[str, int]] | None = None
         records.append(rec)
     if len(records) + len(held) != len(rows) or len({r["dedupe_key"] for r in records}) != len(records):
         raise ValueError("Michigan archive row accounting mismatch")
+    blanked = archive_dates.apply(records, "MI", directory)
     return records, held, {
+        "implausible_dates_blanked": blanked,
         "source_rows": len(rows), "admitted": len(records), "held": len(held),
         "hold_reasons": dict(sorted(Counter(item["reason"] for item in held).items())),
         "admitted_workers": sum(r["employees_affected"] or 0 for r in records),

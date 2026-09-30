@@ -1,14 +1,24 @@
 # Frozen source inputs
 
-The current v1.2.0 data release replays the [v1.2 source bundle](2026-09-30-v1.2-source-bundle.tar.gz) (SHA-256 `0414c3f55de71bd34993b260360eb5c4d8b8ab4dd626a9f72d623ec7e4f3026b`). The bundle holds 2026-09-30 captures where they keep every released notice, plus new archives for Wisconsin 2016–2019 and Nebraska. The release also relies on:
+The current v1.3.0 data release replays the [v1.3 source bundle](2026-09-30-v1.3-source-bundle.tar.gz) (SHA-256 `968ea8790aa49fd330b2f3173714e55bebf03a3831e65e0da3a094e62e983c84`) with `--or-historical-partial-rows`. The bundle is the v1.2 bundle, every member byte for byte, plus pinned agency directories added with `source_bundle add-agency`: `agency/{ky,tn,la,mi,ct,ia,oh}_archive` and `agency/{az,me,vt,de}_portal`, from these dated evidence paths (each with its `manifest.json`):
 
-- its [replay report](2026-09-30-v1.2-candidate-report.json);
-- its [exception ledger](2026-09-30-v1.2-candidate.exceptions.jsonl.gz);
-- its [release manifest](2026-09-30-v1.2.0-release-manifest.json);
+- [`ky/kcc-2026-09-30`](ky/kcc-2026-09-30/manifest.json), [`tn/wayback-2026-09-30`](tn/wayback-2026-09-30/manifest.json), [`la/wayback-2026-09-30`](la/wayback-2026-09-30/manifest.json), [`mi/wayback-2026-09-30`](mi/wayback-2026-09-30/manifest.json);
+- [`ct/wayback-2026-09-30`](ct/wayback-2026-09-30/manifest.json), [`ia/wayback-2026-09-30`](ia/wayback-2026-09-30/manifest.json), [`oh/wayback-2026-09-30`](oh/wayback-2026-09-30/manifest.json);
+- [`az/portal-2026-09-30`](az/portal-2026-09-30/manifest.json), [`me/portal-2026-09-30`](me/portal-2026-09-30/manifest.json), [`vt/portal-2026-09-30`](vt/portal-2026-09-30/manifest.json), [`de/portal-2026-09-30`](de/portal-2026-09-30/manifest.json).
+
+The release also relies on:
+
+- its [replay report](2026-09-30-v1.3-candidate-report.json);
+- its [exception ledger](2026-09-30-v1.3-candidate.exceptions.jsonl.gz);
+- its [release manifest](2026-09-30-v1.3.0-release-manifest.json), which also records the dated live run added to the replay;
 - the [Kansas portal evidence](2026-09-30-ks-portal-evidence.tar.gz);
 - the dated [Nebraska report](2026-09-30-ne-ndol-reports/manifest.json) and [Nevada 2021 transcription](2026-09-30-nv-2021-transcription/manifest.json) evidence.
 
-The [v1.2.0 release notes](../../docs/release-v1.2.0-2026-09-30.md) and [candidate record](../../docs/candidate-v1.2-2026-09-30.md) explain the totals and remaining limits.
+The [v1.3.0 release notes](../../docs/release-v1.3.0-2026-09-30.md) and [recovery record](../../docs/source-recovery-2026-09-30.md) explain the totals and remaining limits.
+
+## Historical v1.2.0 inputs
+
+v1.2.0 replayed the [v1.2 source bundle](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.2.0/2026-09-30-v1.2-source-bundle.tar.gz) (SHA-256 `0414c3f55de71bd34993b260360eb5c4d8b8ab4dd626a9f72d623ec7e4f3026b`) without `--or-historical-partial-rows`. Its [replay report](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.2.0/2026-09-30-v1.2-candidate-report.json), [exception ledger](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.2.0/2026-09-30-v1.2-candidate.exceptions.jsonl.gz) and [release manifest](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.2.0/2026-09-30-v1.2.0-release-manifest.json) are attached to the v1.2.0 GitHub release; the [candidate record](../../docs/candidate-v1.2-2026-09-30.md) and [release notes](../../docs/release-v1.2.0-2026-09-30.md) explain them. Its files were removed from the working tree after v1.3.0 and remain at [tag v1.2.0](https://github.com/bchaps1999/warn-notice-register/tree/v1.2.0/data/source_snapshots).
 
 ## Historical v1.1.x inputs
 
@@ -43,7 +53,7 @@ of this directory. Superseded candidate bundles, reports and exception ledgers,
 including the BLN-containing checkpoints
 `2026-09-23-ia-la-ny-first-transit-reviewed.tar.gz` and
 `2026-09-23-ia-la-ny-tx-annual-reviewed.tar.gz`, were removed from the working
-tree after v1.2.0. Release inputs are attached to their
+tree after v1.2.0 (the v1.2.0 release files after v1.3.0). Release inputs are attached to their
 [GitHub releases](https://github.com/bchaps1999/warn-notice-register/releases);
 every other file remains at
 [commit d919111](https://github.com/bchaps1999/warn-notice-register/tree/d919111/data/source_snapshots).

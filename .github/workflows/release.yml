@@ -3,7 +3,7 @@ name: Publish release
 on:
   push:
     tags:
-      - "v1.2.0"
+      - "v1.3.0"
 
 permissions:
   contents: write
@@ -20,8 +20,8 @@ jobs:
           import json
           from pathlib import Path
 
-          manifest = json.loads(Path('data/source_snapshots/2026-09-30-v1.2.0-release-manifest.json').read_text())
-          assert manifest['release'] == 'v1.2.0'
+          manifest = json.loads(Path('data/source_snapshots/2026-09-30-v1.3.0-release-manifest.json').read_text())
+          assert manifest['release'] == 'v1.3.0'
           for group in ('input_sha256', 'artifact_sha256'):
               for name, expected in manifest[group].items():
                   contents = Path(name).read_bytes()
@@ -40,11 +40,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            data/source_snapshots/2026-09-30-v1.2-source-bundle.tar.gz \
-            data/source_snapshots/2026-09-30-v1.2-candidate-report.json \
-            data/source_snapshots/2026-09-30-v1.2-candidate.exceptions.jsonl.gz \
-            data/source_snapshots/2026-09-30-v1.2.0-release-manifest.json \
+            data/source_snapshots/2026-09-30-v1.3-source-bundle.tar.gz \
+            data/source_snapshots/2026-09-30-v1.3-candidate-report.json \
+            data/source_snapshots/2026-09-30-v1.3-candidate.exceptions.jsonl.gz \
+            data/source_snapshots/2026-09-30-v1.3.0-release-manifest.json \
             data/warn.sql.gz \
             --verify-tag \
-            --title "WARN Notice Register ${GITHUB_REF_NAME} — entries, addresses, and recovered sources" \
-            --notes 'The source-backed register contains 80,703 admitted notices, 95,090 versions, and 8,205,189 reported affected workers. One notice is now one entry the agency lists; site addresses are restored with their basis; Nebraska layoff/closure-report rows move to source observations; Wisconsin 2016-2019, Nebraska 2020-2022 and Nevada 2021 are recovered from official sources. Every v1.1.1 notice key is present, retired or re-keyed through a published transition map, or held by a documented rule. The frozen source bundle, replay report, exception ledger, database dump, and hash manifest are attached. See docs/release-v1.2.0-2026-09-30.md at this tag.'
+            --title "WARN Notice Register ${GITHUB_REF_NAME} — recovered agency history" \
+            --notes 'The source-backed register contains 85,810 admitted notices, 100,268 versions, and 8,844,698 reported affected workers: a full replay of the dated v1.3 source bundle (85,688 notices) plus one dated live scrape of the daily states on 2026-09-30. History is recovered from official agency files and archived agency pages for Kentucky 1998-2025, Tennessee 2012-2021, Michigan 2014-2022, Louisiana 2007-2024, Connecticut 2009-2025, Iowa 2005-2018 and Ohio 2023-2025, from the Arizona, Maine, Vermont and Delaware job portals, and 45 Oregon historical rows missing only a date or count (4,985 notices in all). Every v1.2.0 notice is unchanged in the replay. The frozen source bundle, replay report, exception ledger, database dump, and hash manifest are attached. See docs/release-v1.3.0-2026-09-30.md at this tag.'

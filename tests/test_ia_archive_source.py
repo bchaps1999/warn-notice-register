@@ -101,3 +101,12 @@ def test_iowa_archive_drift_fails_closed(tmp_path):
     (tmp_path / name).write_bytes((tmp_path / name).read_bytes() + b"x")
     with pytest.raises(ValueError, match="checksum mismatch"):
         extract_archive(tmp_path)
+
+
+def test_layoff_date_before_the_minimum_year_is_blanked():
+    records, _, report = _projected()
+    gleason = next(r for r in records if r["source_details"].count("warn_20150812-20161227190458.pdf:p2:r8"))
+    assert gleason["notice_date"] == "2006-08-18" and gleason["effective_date"] is None
+    assert "10/20/1969" in gleason["raw_extra"]
+    assert [(b["field"], b["value"]) for b in report["implausible_dates_blanked"]] == [
+        ("effective_date", "1969-10-20")]

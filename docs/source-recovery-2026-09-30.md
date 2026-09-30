@@ -527,3 +527,177 @@ python -m warnlive.migrate.offline_rebuild \
   effective date and count under different names involves an archive row
   (the 21 remaining pairs are the released ones above).
 - Tests: `pytest tests/ -q` 672 passed, 1 skipped.
+
+## Final build, promoted as v1.3.0 (2026-09-30)
+
+**Status: release candidate for v1.3.0.** Code: `688ea9d` (`e299a5c` plus
+the archive date window below). Bundle: the job-portal bundle above, copied
+byte for byte to `data/source_snapshots/2026-09-30-v1.3-source-bundle.tar.gz`
+(SHA-256 `968ea8790aa49fd330b2f3173714e55bebf03a3831e65e0da3a094e62e983c84`,
+45,162,859 bytes, 2,174 files; `source_bundle verify` passed).
+
+### Failed first attempt: the regression gate
+
+A replay at the committed `e299a5c` reproduced the final candidate above
+exactly (counts, fingerprints, ledger `e9838342…`). The scheduled scrape path
+on a copy of it (same command as below, 18:42–18:56 UTC) ingested every daily
+state (13 of 13 ok or degraded) but `warnlive scrape` exited 1 at its
+regression gate, before writing exports: `date_bounds: dates outside
+1987-2028: KY last 2041-06-04`. The check is absolute, so it failed against a
+snapshot refreshed from the replay as well, and every scheduled scrape after
+release would have failed. The date is Kentucky's Cenveo tracking row (WARN
+2014 sheet row 10, received 2014-04-04), whose `Projected Dates` cell holds
+2041-06-04. That run was discarded.
+
+### Fix: the live date window in archive projections
+
+`migrate/archive_dates.py` applies the live transformer's window to every
+archive projection added in this recovery (`ky_source.project_archive`,
+`ia_source.project_archive`, `tn_source.project_archive`,
+`la_source.project_archive`, `mi_archive_source`, `ct_archive_source`,
+`oh_archive_source`, `job_portal_source.project`): a parsed date below the
+state's `minimum_year` (1988; KY 1997) or more than `max_future_days` (365)
+after the source artifact's capture day (from its `manifest.json`) is blanked,
+with its precision and basis; parsed date roles in `source_details` are
+removed; `source_details.parse_notes` records the value, window and capture
+day (rule `archive_date_plausibility_window_v1`, reason
+`implausible_date_blanked`); the source cell stays in `raw_extra` and
+`raw_fields`. Each projector reports `implausible_dates_blanked`. The v1.2
+inputs (`agency/ky`, `agency/tn`, the IA current logs and others) are not
+touched. Blanked values:
+
+| State | Source row | Field | Value | Window |
+|---|---|---|---|---|
+| KY | `tracking-form-1998-2016.xlsx` WARN 2014 row 10 (Cenveo) | `effective_date` and `source_details.projected_action_date` | 2041-06-04 | 1997-01-01..2027-09-30 |
+| IA | `warn_20150812-20161227190458.pdf:p2:r8` (Gleason Corporation, notice 2006-08-18) | `effective_date` | 1969-10-20 | 1988-01-01..2017-12-27 |
+| CT | `warn2012-20121220070027.htm` table row 12 (Northrop Grumman, from 2012-12-31) | `effective_date_end` | 2014-12-26 | 1988-01-01..2013-12-20 |
+| CT | `warn2012-20121220070027.htm` table row 18 (Océ North America, from 2012-12-31) | `effective_date_end` | 2013-12-31 | 1988-01-01..2013-12-20 |
+
+The two CT values are range ends on a page captured 2012-12-20; the rule
+blanks them as the live scrape would have on that day, although a phased
+layoff ending a year out is not implausible on its face. Their start dates
+stay. No TN, LA, MI, OH or portal date was blanked.
+
+### Replay
+
+```bash
+python -m warnlive.migrate.offline_rebuild \
+  --bundle data/source_snapshots/2026-09-30-v1.3-source-bundle.tar.gz \
+  --quality-evidence-dir data/source_snapshots/2026-09-24-quality-evidence \
+  --db <run>/replay.sqlite --observed-at 2026-09-30 --source-only \
+  --report <run>/report.json --exceptions <run>/exceptions.jsonl \
+  --or-historical-partial-rows
+# the same command again into a second directory
+```
+
+- Result: 85,688 notices, 100,136 versions, 1,992 links, 8,830,761 workers,
+  ledger 7,972 rows (SHA-256 `e9838342fef528e7cd9eb6204cc1bebf2897672461e04f3c5994c0b2e7009805`,
+  unchanged by the fix), integrity `ok`, 0 foreign-key errors.
+- Fingerprints: notices `c47dc469ab010d4f61cb2e3506aa26ad8461c0f4cae0b13237c8843f2ff73ea7`,
+  versions `55384c924e4f0445e23fd0436d7d4b73ebd845951119448692d401f5abb1da6b`,
+  links `cc06649a8f2a509cdff1c37bd879be9e450e939d05f8fe28d7cf3c975e035f27`.
+  The two replays matched and their ledgers were byte-identical.
+- The v1.2 bundle under this code, without the option, reproduced the v1.2.0
+  report's counts and fingerprints and its ledger (`16c5e516…5c7b`).
+- Released keys, against the v1.2.0 database (`git show 5ce24af:data/warn.sql.gz`):
+  80,703 present, 0 rows changed (every column but `id`), 0 version lists
+  changed, 0 links lost.
+- `check-regressions` against a snapshot built from this replay: OK, every
+  check passing (`date_bounds: all dates within 1987-2028`).
+- Artifacts: `2026-09-30-v1.3-candidate-report.json` (SHA-256
+  `f03b793d304c7d24c3fd162f49933b830b1a0d80e738176b17afde27c600a940`) and
+  `2026-09-30-v1.3-candidate.exceptions.jsonl.gz` (`gzip -n -9`, SHA-256
+  `2c3dc055f4224967a5f3b58ee2beb217eed047175bf60039a2cd21fb36fd5898`).
+
+### Dated live run added to the replay
+
+A copy of the replay database, with a health snapshot built from it, went
+through the steps of `scrape-daily.yml` in an isolated directory, 19:48–20:00
+UTC:
+
+```bash
+export WARNLIVE_MA_ARCHIVE_FALLBACK=1
+warnlive scrape --cadence daily --trigger manual --workdir <live>/workdir \
+  --db <live>/data/warn.sqlite --data-dir <live>/data \
+  --run-report <live>/workdir/reports/current-run.json
+warnlive dupes --db <live>/data/warn.sqlite --data-dir <live>/data
+warnlive check-regressions --update-snapshot --db <live>/data/warn.sqlite --data-dir <live>/data
+warnlive check-publication-gate --db <live>/data/warn.sqlite --data-dir <live>/data <live>/workdir/reports/current-run.json
+warnlive check-run-report <live>/workdir/reports/current-run.json
+```
+
+| State | Verdict | New | Updated |
+|---|---|---:|---:|
+| CA | degraded | 0 | 0 |
+| CO | ok | 0 | 0 |
+| FL | degraded | 2 | 0 |
+| IL | ok | 1 | 3 |
+| MA | ok | 18 | 0 |
+| MN | ok | 18 | 0 |
+| NC | degraded | 1 | 0 |
+| NJ | ok | 2 | 0 |
+| NV | ok | 0 | 0 |
+| NY | ok | 39 | 6 |
+| OH | ok | 16 | 0 |
+| TX | ok | 25 | 0 |
+| WA | degraded | 0 | 0 |
+
+- All five steps exited 0. The regression gate passed every check (85,688 →
+  85,810; possible duplicates +0 on 122 new notices); the publication and
+  run-report checks passed.
+- The 122 new notices are the 119 that the 2026-09-30 scheduled scrape
+  (`83caa66`) added to v1.2.0, matched by dedupe key, plus three listed
+  after it ran: FL AssistRx, LLC and Hancock Whitney, and NY Children's Home
+  of Poughkeepsie. No replay notice was removed.
+- Changed replay notices: `last_seen` set on 31,806 notices no longer on a
+  complete current listing (as the scheduled run set it on 31,570 v1.2.0
+  notices; the extra 236 are the Ohio archive notices), and new versions of
+  9 IL and NY notices (the same 9 as the scheduled run).
+- Published database: 85,810 notices, 100,268 versions, 1,992 links,
+  8,844,698 workers, 47 states, integrity `ok`, 0 foreign-key errors.
+
+A throwaway copy of that database also ran `warnlive scrape me vt de --trigger
+manual` (20:00–20:11 UTC) to exercise the portal hold code in `pipeline.py`:
+ME, VT and DE `ok`, 0 new, updated 3, 22 and 18 (released notices whose July
+row lacked a worker count), staging-held record IDs 17, 8 and 4, 0 CSV rows
+excluded, regression gate passed. Arizona was not run (about 28 minutes). It
+was not added to the release.
+
+### Outputs and checks
+
+```bash
+warnlive export --db <out>/data/warn.sqlite --data-dir <out>/data   # a copy of the live database
+warnlive build-site --db <out>/data/warn.sqlite --out <out>/site --as-of 2026-09-30
+```
+
+- `data/exports/*`, `data/warn.sql.gz` (SHA-256
+  `c73ff2f0e5c8513f88df5b60c747f392165c65b04a58df8bbff98ec29cc3e89b`) and
+  `data/health/{snapshot.json,health.md,status.json}` come from these
+  commands; the snapshot is the one `check-regressions --update-snapshot`
+  wrote after the live run.
+- The first push of this build was rejected: the national CSV was 105,566,913
+  bytes, over GitHub's 100 MB file limit. The exporter now writes
+  `warn_notices.csv.gz` (gzip level 9, zero mtime, no filename) instead, and
+  `verify.release` compares it byte for byte. Re-exporting the release DB gave
+  a file whose decompressed bytes equal the earlier plain CSV exactly; the
+  state CSVs, `notice_links.csv` and `source_observations.csv` were unchanged.
+- The national CSV (85,810 rows, 8,844,698 workers) equals the sum of the 47
+  state CSVs and the database, with identical dedupe keys. The site's
+  `meta.json` state totals are 85,810 notices; 568 site files.
+- `source_observations.csv`: the same 3,135 rows; only the bundle SHA-256 and
+  the internal `notice_id` (772 rows, row ids shift with the new archive
+  notices) changed.
+- Checks: `pytest tests/ -q` 681 passed, 1 skipped; `npm test --prefix site`
+  3 passed; `npm run build --prefix site` built (the usual chunk-size
+  warning), also with the release payload as `public/data`; the test.yml
+  release-replay comparison passed for the second replay against the
+  committed report and ledger; `release.yml`'s asset check passed against
+  the manifest; all workflow YAML loads under a duplicate-key-rejecting
+  loader.
+- Manifest: `2026-09-30-v1.3.0-release-manifest.json` pins inputs (bundle,
+  evidence manifests, transition maps) and artifacts, and records the replay
+  and the live run separately.
+- Not yet done: an independent review of the date window and of the live
+  run's additions. The v1.2.0 release files leave the working tree (they are
+  attached to the v1.2.0 GitHub release); test fixtures that read unchanged
+  bundle members now read the v1.3 bundle.

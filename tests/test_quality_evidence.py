@@ -1,4 +1,5 @@
 import csv
+import gzip
 import json
 
 from warnlive.enrich.notice_quality import geo_location, project
@@ -120,7 +121,7 @@ def test_nc_multi_address_and_foreign_city_are_held(tmp_path):
         assert geo_location(row) is None
         assert json.loads(row["source_details"])["quality_evidence"]["raw_site_text"] == address
     export_csvs(conn, tmp_path / "exports", ["nc"])
-    with (tmp_path / "exports/warn_notices.csv").open(newline="") as stream:
+    with gzip.open(tmp_path / "exports/warn_notices.csv.gz", "rt", newline="") as stream:
         exported = list(csv.DictReader(stream))
     assert all(not row["county_fips"] and not row["place_name"] for row in exported)
     out = tmp_path / "site"
@@ -161,7 +162,7 @@ def test_csv_and_site_use_verified_remote_city(tmp_path):
     _attach_volta(conn, DEFAULT_ROOT, verify(DEFAULT_ROOT), "2026-09-24",
                   {"WI"}, True)
     export_csvs(conn, tmp_path / "exports", ["wi"])
-    with (tmp_path / "exports/warn_notices.csv").open(newline="") as stream:
+    with gzip.open(tmp_path / "exports/warn_notices.csv.gz", "rt", newline="") as stream:
         exported = next(csv.DictReader(stream))
     assert exported["location"] == "San Francisco"
     assert exported["affected_site_city"] == "Lake Geneva"

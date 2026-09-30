@@ -17,6 +17,9 @@ A cell spanning several rows (2010) ties those rows to one filing through
 ``source_details.filing_group``; counts are not summed. Rows narrower than
 the header are admitted with only employer and dates: their other cells
 cannot be assigned to columns. No network access.
+
+Dates outside the live transformer's window (``archive_dates``) are blanked
+and reported under ``implausible_dates_blanked``.
 """
 
 from __future__ import annotations
@@ -30,6 +33,7 @@ from pathlib import Path
 
 from bs4 import BeautifulSoup
 
+from warnlive.migrate import archive_dates
 from warnlive.normalize.engine import _record_hash
 
 PREFIX = "agency/ct_archive"
@@ -330,7 +334,9 @@ def project(directory: Path, known_events: set[tuple[str, str]] | None = None
         records.append(rec)
     if len(records) + len(held) != len(rows) or len({r["dedupe_key"] for r in records}) != len(records):
         raise ValueError("Connecticut archive row accounting mismatch")
+    blanked = archive_dates.apply(records, "CT", directory)
     return records, held, {
+        "implausible_dates_blanked": blanked,
         "source_rows": len(rows), "admitted": len(records), "held": len(held),
         "hold_reasons": dict(sorted(Counter(item["reason"] for item in held).items())),
         "admitted_workers": sum(r["employees_affected"] or 0 for r in records),

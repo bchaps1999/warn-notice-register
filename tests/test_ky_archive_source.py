@@ -134,3 +134,15 @@ def test_archive_checksum_and_manifest_drift_fail_closed(tmp_path):
         read_archive(tmp_path)
     assert set(ARCHIVE_SHA256) == {item["file"] for item in json.loads(
         (ARCHIVE / "manifest.json").read_text())["artifacts"]}
+
+
+def test_projected_date_outside_the_live_window_is_blanked_and_kept_raw():
+    records, _, report = _project()
+    cenveo = next(r for r in records if r["source_details"].count("WARN 2014:row:10"))
+    details = json.loads(cenveo["source_details"])
+    assert cenveo["effective_date"] is None and cenveo["effective_date_precision"] is None
+    assert "projected_action_date" not in details
+    assert details["raw_fields"]["Projected Dates"] == "2041-06-04T00:00:00"
+    assert {n["reason"] for n in details["parse_notes"]} == {"implausible_date_blanked"}
+    assert [(b["field"], b["value"]) for b in report["implausible_dates_blanked"]] == [
+        ("effective_date", "2041-06-04"), ("source_details.projected_action_date", "2041-06-04")]

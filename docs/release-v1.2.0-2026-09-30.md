@@ -3,7 +3,7 @@
 v1.2.0 contains **80,703 admitted notices** (95,090 versions), reporting
 **8,205,189 affected workers**. v1.1.1 had 74,828 notices and 7,815,994
 workers. It is a full replay of a new dated
-[source bundle](../data/source_snapshots/2026-09-30-v1.2-source-bundle.tar.gz),
+[source bundle](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.2.0/2026-09-30-v1.2-source-bundle.tar.gz),
 built from fresh 2026-09-30 captures where they keep every released notice.
 The replay applies:
 
@@ -128,7 +128,7 @@ dedupe key. Every other v1.1.1 key is unchanged.
   through a transition map, or held by a documented non-notice rule. None is
   unexplained.
 - **Row accounting.** Every source row is admitted, versioned, or recorded in
-  the [exception ledger](../data/source_snapshots/2026-09-30-v1.2-candidate.exceptions.jsonl.gz)
+  the [exception ledger](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.2.0/2026-09-30-v1.2-candidate.exceptions.jsonl.gz)
   (5,702 rows, down from 9,668) with its reason.
 - **Determinism.** Two independent replays have identical fingerprints and
   byte-identical ledgers.

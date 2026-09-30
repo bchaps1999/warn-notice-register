@@ -8,6 +8,10 @@ a snapshot, not a complete annual inventory. Notice numbers, else notice
 document URLs, else the workbook row identify agency rows; ``Date Received``
 is an agency receipt day, while ``Projected Date(s)`` describes the planned
 action. No network access.
+
+The archive projection (``project_archive``) blanks dates outside the live
+transformer's window (``archive_dates``) and reports them under
+``implausible_dates_blanked``.
 """
 
 from __future__ import annotations
@@ -24,6 +28,7 @@ from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
+from warnlive.migrate import archive_dates
 from warnlive.migrate.source_bundle import _entry, verify
 from warnlive.normalize.engine import _record_hash
 
@@ -641,10 +646,12 @@ def project_archive(directory: Path, existing_ids: set[str] | None = None,
         records.append(record)
     if len(records) + len(held) != len(rows) or len({r["source_identity"] for r in records}) != len(records):
         raise ValueError("Kentucky archive row accounting mismatch")
+    blanked = archive_dates.apply(records, "KY", directory)
     by_file: dict[str, dict] = {}
     for row in rows:
         by_file.setdefault(row["file"], {"source_rows": 0})["source_rows"] += 1
     return records, held, {
+        "implausible_dates_blanked": blanked,
         "source_rows": len(rows), "admitted": len(records), "held": len(held),
         "rows_by_file": {name: item["source_rows"] for name, item in sorted(by_file.items())},
         "hold_reasons": dict(sorted(Counter(item["reason"] for item in held).items())),

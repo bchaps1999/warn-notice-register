@@ -38,8 +38,8 @@
   "AZ": {
     "name": "Arizona",
     "registry_status": "active",
-    "source": "upstream",
-    "notices": 189,
+    "source": "custom",
+    "notices": 720,
     "latest_verdict": null,
     "latest_run": null,
     "latest_error": null,
@@ -77,7 +77,7 @@
     "source": "upstream",
     "notices": 28493,
     "latest_verdict": "degraded",
-    "latest_run": "2026-09-30T15:38:38Z",
+    "latest_run": "2026-09-30T19:49:13Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -85,7 +85,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/raw/ca.csv"
+          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/ca.csv"
         },
         {
           "name": "row_count",
@@ -327,7 +327,7 @@
         "held_collision_rows": 10
       }
     },
-    "last_success": "2026-09-30T15:38:38Z",
+    "last_success": "2026-09-30T19:49:13Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -342,7 +342,7 @@
     "source": "upstream",
     "notices": 844,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T15:38:49Z",
+    "latest_run": "2026-09-30T19:49:20Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -350,7 +350,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/raw/co.csv"
+          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/co.csv"
         },
         {
           "name": "row_count",
@@ -413,7 +413,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T15:38:49Z",
+    "last_success": "2026-09-30T19:49:20Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -426,7 +426,7 @@
     "name": "Connecticut",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 28,
+    "notices": 518,
     "latest_verdict": null,
     "latest_run": null,
     "latest_error": null,
@@ -461,8 +461,8 @@
   "DE": {
     "name": "Delaware",
     "registry_status": "active",
-    "source": "upstream",
-    "notices": 46,
+    "source": "custom",
+    "notices": 90,
     "latest_verdict": null,
     "latest_run": null,
     "latest_error": null,
@@ -480,9 +480,9 @@
     "name": "Florida",
     "registry_status": "active",
     "source": "patched",
-    "notices": 5451,
+    "notices": 5453,
     "latest_verdict": "degraded",
-    "latest_run": "2026-09-30T15:46:44Z",
+    "latest_run": "2026-09-30T19:57:14Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -490,12 +490,12 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/raw/fl.csv"
+          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/fl.csv"
         },
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "3249 raw rows (min 500)"
+          "detail": "3251 raw rows (min 500)"
         },
         {
           "name": "schema_drift",
@@ -505,31 +505,31 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/3249 rows failed to normalize"
+          "detail": "0/3251 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "3249/3249 records have an employer name"
+          "detail": "3251/3251 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/3249 source_details.agency_notification_date values outside 1988..2026-10-30"
+          "detail": "0/3251 source_details.agency_notification_date values outside 1988..2026-10-30"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest source_details.agency_notification_date 2026-09-25 is 5d old (max 45d)"
+          "detail": "newest source_details.agency_notification_date 2026-09-30 is 0d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "445/3249 records share a dedupe key"
+          "detail": "445/3251 records share a dedupe key"
         }
       ],
       "admission": {
-        "eligible_rows": 3247,
+        "eligible_rows": 3249,
         "excluded_rows": 2,
         "exclusions": [
           {
@@ -586,7 +586,7 @@
         "held_collision_rows": 2
       }
     },
-    "last_success": "2026-09-30T15:46:44Z",
+    "last_success": "2026-09-30T19:57:14Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -655,7 +655,7 @@
     "source": "upstream",
     "notices": 4889,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T15:47:06Z",
+    "latest_run": "2026-09-30T19:57:36Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -663,7 +663,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/raw/il.csv"
+          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/il.csv"
         },
         {
           "name": "row_count",
@@ -745,7 +745,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T15:47:06Z",
+    "last_success": "2026-09-30T19:57:36Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -776,7 +776,7 @@
     "name": "Iowa",
     "registry_status": "archive",
     "source": "upstream",
-    "notices": 560,
+    "notices": 937,
     "latest_verdict": null,
     "latest_run": null,
     "latest_error": null,
@@ -812,7 +812,7 @@
     "name": "Kentucky",
     "registry_status": "archive",
     "source": "upstream",
-    "notices": 33,
+    "notices": 1183,
     "latest_verdict": null,
     "latest_run": null,
     "latest_error": null,
@@ -830,7 +830,7 @@
     "name": "Louisiana",
     "registry_status": "archive",
     "source": "upstream",
-    "notices": 31,
+    "notices": 575,
     "latest_verdict": null,
     "latest_run": null,
     "latest_error": null,
@@ -849,16 +849,16 @@
     "registry_status": "active",
     "source": "custom",
     "notices": 568,
-    "latest_verdict": "degraded",
-    "latest_run": "2026-09-30T15:47:47Z",
+    "latest_verdict": "ok",
+    "latest_run": "2026-09-30T19:57:37Z",
     "latest_error": null,
     "latest_checks": {
-      "verdict": "degraded",
+      "verdict": "ok",
       "checks": [
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/raw/ma.csv"
+          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/ma.csv"
         },
         {
           "name": "row_count",
@@ -903,8 +903,8 @@
       },
       "fetch_provenance": {
         "archive_fallback_enabled": true,
-        "archived_files": 1,
-        "fetched_at_utc": "2026-09-30T15:47:47Z",
+        "archived_files": 0,
+        "fetched_at_utc": "2026-09-30T19:57:37Z",
         "files": [
           {
             "live_status": 200,
@@ -921,16 +921,11 @@
             "source_url": "https://www.mass.gov/doc/fy22-warn-report/download"
           },
           {
-            "capture_timestamp": "20260904124131",
-            "capture_url": "https://web.archive.org/web/20260904124131id_/https://www.mass.gov/doc/fy23-warn-report/download",
-            "confirmed_through": "20260904124131",
-            "live_error": "HTTP 403",
-            "live_status": 403,
-            "origin": "internet_archive",
+            "live_status": 200,
+            "origin": "live",
             "sha256": "052ae5c89dd14183f11ce7be15f669a8d13415e0dfa562f4cb67f37e7f0bb807",
             "size": 36980,
-            "source_url": "https://www.mass.gov/doc/fy23-warn-report/download",
-            "wayback_digest": "7CJZ64A3J2S55UCNQNPZHHZTKXOOMOQ7"
+            "source_url": "https://www.mass.gov/doc/fy23-warn-report/download"
           },
           {
             "live_status": 200,
@@ -961,7 +956,7 @@
             "source_url": "https://www.mass.gov/files/csv/2026-09/WARN%20Report%20for%20the%20Week%20Ending%2009-25-2026.csv"
           }
         ],
-        "oldest_confirmed_capture": "20260904124131",
+        "oldest_confirmed_capture": null,
         "raw_sha256": "61903edc366b56ccd7eab09923cd4baf38ae0645a8021cf4accfe0a94caa3f3d",
         "state": "MA"
       },
@@ -985,12 +980,12 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T15:47:47Z",
+    "last_success": "2026-09-30T19:57:37Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
     "consecutive_failures": 0,
-    "consecutive_degraded": 1,
+    "consecutive_degraded": 0,
     "recommend_broken": false,
     "chronically_degraded": false
   },
@@ -1015,8 +1010,8 @@
   "ME": {
     "name": "Maine",
     "registry_status": "active",
-    "source": "upstream",
-    "notices": 9,
+    "source": "custom",
+    "notices": 77,
     "latest_verdict": null,
     "latest_run": null,
     "latest_error": null,
@@ -1034,7 +1029,7 @@
     "name": "Michigan",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 116,
+    "notices": 699,
     "latest_verdict": null,
     "latest_run": null,
     "latest_error": null,
@@ -1054,7 +1049,7 @@
     "source": "custom",
     "notices": 980,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T15:48:05Z",
+    "latest_run": "2026-09-30T19:57:46Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1062,7 +1057,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/raw/mn.csv"
+          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/mn.csv"
         },
         {
           "name": "row_count",
@@ -1125,7 +1120,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T15:48:05Z",
+    "last_success": "2026-09-30T19:57:46Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -1212,7 +1207,7 @@
     "source": "custom",
     "notices": 324,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T15:48:32Z",
+    "latest_run": "2026-09-30T19:58:07Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1220,7 +1215,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/raw/nv.csv"
+          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/nv.csv"
         },
         {
           "name": "row_count",
@@ -1283,7 +1278,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T15:48:32Z",
+    "last_success": "2026-09-30T19:58:07Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -1316,7 +1311,7 @@
     "source": "upstream",
     "notices": 2330,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T15:48:26Z",
+    "latest_run": "2026-09-30T19:57:58Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1324,7 +1319,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/raw/nj.csv"
+          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/nj.csv"
         },
         {
           "name": "row_count",
@@ -1805,7 +1800,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T15:48:26Z",
+    "last_success": "2026-09-30T19:57:58Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -1836,9 +1831,9 @@
     "name": "New York",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 8845,
+    "notices": 8846,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T15:48:35Z",
+    "latest_run": "2026-09-30T19:58:10Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1846,12 +1841,12 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/raw/ny.csv"
+          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/ny.csv"
         },
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "201 raw rows (min 100)"
+          "detail": "202 raw rows (min 100)"
         },
         {
           "name": "schema_drift",
@@ -1861,31 +1856,31 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/201 rows failed to normalize"
+          "detail": "0/202 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "201/201 records have an employer name"
+          "detail": "202/202 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/201 notice_date values outside 1988..2026-10-30"
+          "detail": "0/202 notice_date values outside 1988..2026-10-30"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-08-28 is 33d old (max 45d)"
+          "detail": "newest notice_date 2026-09-24 is 6d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "0/201 records share a dedupe key"
+          "detail": "0/202 records share a dedupe key"
         }
       ],
       "admission": {
-        "eligible_rows": 201,
+        "eligible_rows": 202,
         "excluded_rows": 0,
         "exclusions": []
       },
@@ -1909,7 +1904,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T15:48:35Z",
+    "last_success": "2026-09-30T19:58:10Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -1924,7 +1919,7 @@
     "source": "custom",
     "notices": 1199,
     "latest_verdict": "degraded",
-    "latest_run": "2026-09-30T15:48:24Z",
+    "latest_run": "2026-09-30T19:57:57Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -1932,7 +1927,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/raw/nc.csv"
+          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/nc.csv"
         },
         {
           "name": "row_count",
@@ -3832,7 +3827,7 @@
         "held_collision_rows": 6
       }
     },
-    "last_success": "2026-09-30T15:48:24Z",
+    "last_success": "2026-09-30T19:57:57Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -3863,9 +3858,9 @@
     "name": "Ohio",
     "registry_status": "active",
     "source": "patched",
-    "notices": 2454,
+    "notices": 2690,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T15:48:36Z",
+    "latest_run": "2026-09-30T19:58:11Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -3873,7 +3868,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/raw/oh.csv"
+          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/oh.csv"
         },
         {
           "name": "row_count",
@@ -3936,7 +3931,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T15:48:36Z",
+    "last_success": "2026-09-30T19:58:11Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -3967,7 +3962,7 @@
     "name": "Oregon",
     "registry_status": "archive",
     "source": "upstream",
-    "notices": 983,
+    "notices": 1028,
     "latest_verdict": null,
     "latest_run": null,
     "latest_error": null,
@@ -4075,7 +4070,7 @@
     "name": "Tennessee",
     "registry_status": "archive",
     "source": "upstream",
-    "notices": 231,
+    "notices": 1100,
     "latest_verdict": null,
     "latest_run": null,
     "latest_error": null,
@@ -4095,7 +4090,7 @@
     "source": "patched",
     "notices": 7355,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T15:49:05Z",
+    "latest_run": "2026-09-30T19:58:35Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -4103,7 +4098,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/raw/tx.csv"
+          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/tx.csv"
         },
         {
           "name": "row_count",
@@ -4166,7 +4161,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T15:49:05Z",
+    "last_success": "2026-09-30T19:58:35Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -4214,8 +4209,8 @@
   "VT": {
     "name": "Vermont",
     "registry_status": "active",
-    "source": "upstream",
-    "notices": 49,
+    "source": "custom",
+    "notices": 97,
     "latest_verdict": null,
     "latest_run": null,
     "latest_error": null,
@@ -4235,7 +4230,7 @@
     "source": "upstream",
     "notices": 1503,
     "latest_verdict": "degraded",
-    "latest_run": "2026-09-30T15:49:19Z",
+    "latest_run": "2026-09-30T19:58:53Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -4243,7 +4238,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "workdir/raw/wa.csv"
+          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/wa.csv"
         },
         {
           "name": "row_count",
@@ -4403,7 +4398,7 @@
         "held_collision_rows": 6
       }
     },
-    "last_success": "2026-09-30T15:49:19Z",
+    "last_success": "2026-09-30T19:58:53Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,

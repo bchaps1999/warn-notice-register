@@ -3,13 +3,15 @@
 A consolidated WARN Act notice dataset assembled from available state agency
 portals and archived source material. Coverage varies by state and period.
 
-**v1.2.0 data (September 30, 2026):** the source-backed release contains
-**80,703 admitted notices, 95,090 versions, and 8,205,189 reported affected
+**v1.3.0 data (September 30, 2026):** the source-backed release contains
+**85,810 admitted notices, 100,268 versions, and 8,844,698 reported affected
 workers**. The database dump and CSVs derive from a dated agency source
-bundle, replayed in full; scheduled scrapes add newer notices after that. The
-[release notes](docs/release-v1.2.0-2026-09-30.md) explain the entry unit,
-restored site addresses, the Nebraska report split, and the recovered
-sources. The [source evidence](data/source_snapshots/README.md)
+bundle, replayed in full (85,688 notices), plus one dated live scrape of the
+daily states that adds the notices listed after the bundle's frozen
+captures; scheduled scrapes add newer notices after that. The
+[release notes](docs/release-v1.3.0-2026-09-30.md) list the history recovered
+from official agency files and archived agency pages for twelve states. The
+[source evidence](data/source_snapshots/README.md)
 and [assembly contract](docs/rebuild-contract.md) define the replay checks.
 Counts are admitted source events, not an estimate of every WARN filing nationally.
 
@@ -22,13 +24,13 @@ normalizes each state's idiosyncratic format into one canonical schema,
 deduplicates and version-tracks notices, and commits the results here:
 
 - `data/warn.sql.gz` — the full database as a gzipped SQL dump (notices, versions, run telemetry); `warnlive unpack-db` restores the working sqlite file
-- `data/exports/warn_notices.csv` — one row per notice, all active states
+- `data/exports/warn_notices.csv.gz` — one row per notice, all active states (gzipped: the plain CSV exceeds GitHub's 100 MB file limit; `gunzip -k` restores it)
 - `data/exports/states/{xx}.csv` — per-state cuts
 - `data/exports/notice_links.csv` — source-backed relationships: `sibling_entry` links between entries of one listed filing
 - `data/exports/source_observations.csv` — 3,135 agency source rows with their admission status (admitted, `identity_unresolved`, `not_in_agency_warn_report`, and others); the separate exception ledger accounts for other held source rows
 - `data/health/health.md` — a dated per-state collection snapshot, not proof that every configured adapter is currently healthy
 
-## Data dictionary (`warn_notices.csv`)
+## Data dictionary (`warn_notices.csv.gz`)
 
 | Column | Meaning |
 |---|---|
@@ -222,37 +224,61 @@ Push immediately: a scheduled run that started from the older dump will
 refuse to push and must be re-run. The site picks up the data on the next
 scheduled run's deploy.
 
-### Rebuild v1.2.0 from frozen agency sources
+### Rebuild v1.3.0 from frozen agency sources
 
-The v1.2.0 release replays one dated bundle. Rebuild it in an isolated path
-and compare with the [release manifest](data/source_snapshots/2026-09-30-v1.2.0-release-manifest.json):
+The v1.3.0 release replays one dated bundle. Rebuild it in an isolated path
+and compare with the [release manifest](data/source_snapshots/2026-09-30-v1.3.0-release-manifest.json):
 
 ```bash
 python -m warnlive.migrate.source_bundle verify \
-  data/source_snapshots/2026-09-30-v1.2-source-bundle.tar.gz
+  data/source_snapshots/2026-09-30-v1.3-source-bundle.tar.gz
 python -m warnlive.migrate.offline_rebuild \
-  --bundle data/source_snapshots/2026-09-30-v1.2-source-bundle.tar.gz \
+  --bundle data/source_snapshots/2026-09-30-v1.3-source-bundle.tar.gz \
+  --quality-evidence-dir data/source_snapshots/2026-09-24-quality-evidence \
+  --db /tmp/warn-v1.3.sqlite --observed-at 2026-09-30 --source-only \
+  --or-historical-partial-rows \
+  --exceptions /tmp/warn-v1.3.exceptions.jsonl --report /tmp/warn-v1.3-report.json
+```
+
+`--or-historical-partial-rows` admits Oregon historical WARN numbers missing
+only a layoff date or worker count; the v1.3.0 replay uses it. The replay
+gives 85,688 notices; the published database adds the dated 2026-09-30 live
+run of the daily states recorded in the manifest (`live_run`), so its totals
+are higher.
+
+The [recovery record](docs/source-recovery-2026-09-30.md) documents how the
+bundle was assembled: the v1.2 bundle plus pinned agency directories added
+with `source_bundle add-agency`. The historical rebuilds below reproduce
+earlier releases with their release-code commits. Their bundles are no
+longer in the working tree: download each from its
+[GitHub release](https://github.com/bchaps1999/warn-notice-register/releases)
+and run the commands from a checkout of that release's tag (current code
+replays only agency-only bundles in the v1.2 layout and later, and rejects
+bundles holding Big Local News or old-database inputs).
+
+### Rebuild v1.2.0 from frozen agency sources
+
+The v1.2.0 release (80,703 notices) replays the
+[v1.2 source bundle](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.2.0/2026-09-30-v1.2-source-bundle.tar.gz)
+without `--or-historical-partial-rows`; compare with its
+[release manifest](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.2.0/2026-09-30-v1.2.0-release-manifest.json):
+
+```bash
+git checkout v1.2.0
+curl -LO https://github.com/bchaps1999/warn-notice-register/releases/download/v1.2.0/2026-09-30-v1.2-source-bundle.tar.gz
+python -m warnlive.migrate.offline_rebuild \
+  --bundle 2026-09-30-v1.2-source-bundle.tar.gz \
   --quality-evidence-dir data/source_snapshots/2026-09-24-quality-evidence \
   --db /tmp/warn-v1.2.sqlite --observed-at 2026-09-30 --source-only \
   --exceptions /tmp/warn-v1.2.exceptions.jsonl --report /tmp/warn-v1.2-report.json
 ```
 
-The release replay runs without `--or-historical-partial-rows`. That option
-admits Oregon historical WARN numbers missing only a layoff date or worker
-count ([recovery note](docs/source-recovery-2026-09-30.md)); it is for
-post-v1.2 candidates and changes the Oregon rows of any replay.
-
-The [candidate record](docs/candidate-v1.2-2026-09-30.md) documents how the
+The [candidate record](docs/candidate-v1.2-2026-09-30.md) documents how that
 bundle was assembled: fresh captures overlaid state by state onto the v1.1.1
 bundle, only where they keep every released notice, then new archives added
 with `source_bundle add-archives`. The [transition maps](data/review/) list
-the released keys that were retired or re-keyed. The historical rebuilds
-below reproduce earlier releases with their release-code commits. Their
-bundles are no longer in the working tree: download each from its
-[GitHub release](https://github.com/bchaps1999/warn-notice-register/releases)
-and run the commands from a checkout of that release's tag (current code
-replays only the v1.2 bundle's layout and rejects bundles holding Big Local
-News or old-database inputs).
+the released keys that were retired or re-keyed. Current code reproduces the
+v1.2.0 report and ledger from that bundle as well.
 
 ### Rebuild v1.1.0 from frozen agency sources
 
@@ -361,8 +387,9 @@ python -m warnlive.migrate.source_bundle add-agency STEP.tar.gz \
   --artifacts data/source_snapshots/ky/kcc-2026-09-30 --name ky_archive --out NEW.tar.gz
 ```
 
-The v1.2 candidate bundle was derived this way; its dated note in `docs/`
-records the overlay order and which fresh captures were kept frozen.
+The v1.2 and v1.3 bundles were derived this way; their dated notes in `docs/`
+record the overlay order, the added directories and which fresh captures
+were kept frozen.
 
 ### Employer identity and industry
 

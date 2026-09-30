@@ -1,4 +1,5 @@
 import csv
+import gzip
 import json
 
 import pytest
@@ -50,11 +51,12 @@ def published(tmp_path):
 
 
 def _change_csv(path, column, value):
-    with path.open(newline="") as handle:
+    opener = gzip.open if path.suffix == ".gz" else open
+    with opener(path, "rt", newline="") as handle:
         rows = list(csv.DictReader(handle))
         columns = list(rows[0])
     rows[0][column] = value
-    with path.open("w", newline="") as handle:
+    with opener(path, "wt", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns)
         writer.writeheader()
         writer.writerows(rows)
@@ -75,7 +77,7 @@ def test_release_reconciliation_accepts_matching_artifacts(published):
 ])
 def test_release_reconciliation_rejects_changed_national_fields(published, column, value):
     db_path, exports, site = published
-    _change_csv(exports / "warn_notices.csv", column, value)
+    _change_csv(exports / "warn_notices.csv.gz", column, value)
     with pytest.raises(ValueError, match="CSV export content"):
         verify(db_path, exports, site)
 

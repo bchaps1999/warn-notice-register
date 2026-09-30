@@ -1,0 +1,217 @@
+{
+  "artifact_sha256": {
+    "data/exports/warn_notices.csv.gz": {
+      "bytes": 13305820,
+      "sha256": "cda60500c7f8a64e24b52094dad7b3b956975c20327821307b5919d826953caa"
+    },
+    "data/health/snapshot.json": {
+      "bytes": 10725,
+      "sha256": "d3ad587a806709f3a4bde73c962055783ad99618e45510691ec0d063ee31ed8a"
+    },
+    "data/source_snapshots/2026-09-30-v1.3-candidate-report.json": {
+      "bytes": 563707,
+      "sha256": "f03b793d304c7d24c3fd162f49933b830b1a0d80e738176b17afde27c600a940"
+    },
+    "data/source_snapshots/2026-09-30-v1.3-candidate.exceptions.jsonl.gz": {
+      "bytes": 1094276,
+      "sha256": "2c3dc055f4224967a5f3b58ee2beb217eed047175bf60039a2cd21fb36fd5898"
+    },
+    "data/warn.sql.gz": {
+      "bytes": 23693689,
+      "sha256": "c73ff2f0e5c8513f88df5b60c747f392165c65b04a58df8bbff98ec29cc3e89b"
+    }
+  },
+  "build_date": "2026-09-30",
+  "checks": {
+    "archive_date_window": "5 values blanked (KY 2, IA 1, CT 2), listed in docs/source-recovery-2026-09-30.md; v1.2 bundle replay unchanged",
+    "exports_match_database": "pass: 85,810 national rows = sum of 47 state CSVs = database; workers 8,844,698",
+    "foreign_key_errors": 0,
+    "independent_review": "one pass over the combined recovery candidate; findings fixed in e299a5c; the archive date window (regression-gate failure found at release assembly) not yet independently reviewed",
+    "independent_source_replays": "pass: two replays with identical fingerprints and byte-identical exception ledgers",
+    "live_run": "pass: 13 daily states completed (9 ok, 4 degraded); regression gate, publication gate and run-report checks passed",
+    "python_tests": "681 passed, 1 skipped",
+    "regression_baseline": "refreshed from the release database after the live run; all checks pass",
+    "released_key_accounting": "pass: 0 unexplained of 80,703 v1.2.0 keys (all present with identical rows and versions in the replay)",
+    "site_build": "pass",
+    "site_tests": "3 passed",
+    "sqlite_integrity": "ok"
+  },
+  "code_commit": "688ea9d",
+  "counts": {
+    "exception_rows": 7972,
+    "links": 1992,
+    "notices": 85810,
+    "represented_states": 47,
+    "source_observations": 3135,
+    "versions": 100268,
+    "workers": 8844698
+  },
+  "exception_sha256": "e9838342fef528e7cd9eb6204cc1bebf2897672461e04f3c5994c0b2e7009805",
+  "fingerprints": {
+    "links": "cc06649a8f2a509cdff1c37bd879be9e450e939d05f8fe28d7cf3c975e035f27",
+    "notices": "c47dc469ab010d4f61cb2e3506aa26ad8461c0f4cae0b13237c8843f2ff73ea7",
+    "versions": "55384c924e4f0445e23fd0436d7d4b73ebd845951119448692d401f5abb1da6b"
+  },
+  "format": "warn-release-manifest-v2",
+  "input_sha256": {
+    "data/review/ne-key-transition-2026-09-30.csv": {
+      "bytes": 269187,
+      "sha256": "4f81b351530957b28efb017627e2cf952917f10eed46cb3b89b4e9cc12259d8b"
+    },
+    "data/review/ny-dashboard-correspondence-transition-2026-09-30.csv": {
+      "bytes": 9951,
+      "sha256": "0968f402b5fdce3dd0dd259a914e065cc6fbe6ff83696fce422db8361c982417"
+    },
+    "data/review/wi-fl-update-transition-2026-09-29.csv": {
+      "bytes": 9358,
+      "sha256": "2f67c2fb49ed3468a21ce2c58c6cac3c8a6599a086b7f48cf3c108c90bc3cf6e"
+    },
+    "data/source_snapshots/2026-09-24-quality-evidence/manifest.json": {
+      "bytes": 2945,
+      "sha256": "ba49ced716e02b1fb5663de29362bdf47b08c5b2adf5d0653a483c420faac8c0"
+    },
+    "data/source_snapshots/2026-09-30-ks-portal-evidence.tar.gz": {
+      "bytes": 470275,
+      "sha256": "424c32898ceaabcc1b5f91ac834ef0f8f12b3b3729b85c3c0e1506b9c9c1c0b6"
+    },
+    "data/source_snapshots/2026-09-30-ne-ndol-reports/manifest.json": {
+      "bytes": 9607,
+      "sha256": "982557d2bb555f402aaeaf643f953b11b7d904eab7144c524cc43e7ffdd0a54d"
+    },
+    "data/source_snapshots/2026-09-30-nv-2021-transcription/manifest.json": {
+      "bytes": 5257,
+      "sha256": "be6fe4e1e5180ce13a412145ca143642399e695ef972dcef768962411a03242c"
+    },
+    "data/source_snapshots/2026-09-30-v1.3-source-bundle.tar.gz": {
+      "bytes": 45162859,
+      "sha256": "968ea8790aa49fd330b2f3173714e55bebf03a3831e65e0da3a094e62e983c84"
+    },
+    "data/source_snapshots/az/portal-2026-09-30/manifest.json": {
+      "bytes": 1161,
+      "sha256": "4bdccb90c9dedce898c7adb821016b7991ecd2287bec581c344bd24049fd50ff"
+    },
+    "data/source_snapshots/ct/wayback-2026-09-30/manifest.json": {
+      "bytes": 11506,
+      "sha256": "45f5903d51ee478010b29e8c1ed7df200549d7839571cb193a32067567eb8b53"
+    },
+    "data/source_snapshots/de/portal-2026-09-30/manifest.json": {
+      "bytes": 1147,
+      "sha256": "9d284bf6c3e83cf022b9011d9b30a872c754ae6fcbbe12100d73e12690ac8721"
+    },
+    "data/source_snapshots/ia/wayback-2026-09-30/manifest.json": {
+      "bytes": 3212,
+      "sha256": "d302b7e0ce540ff6fa3fb5e1d80f60a75bfb7823e394f68714e5022f6b770f16"
+    },
+    "data/source_snapshots/ky/kcc-2026-09-30/manifest.json": {
+      "bytes": 3168,
+      "sha256": "06cc63242ecacbf9baf62f746beaee131c0a2ac627e5ef86d74fe9b51b56d29a"
+    },
+    "data/source_snapshots/la/wayback-2026-09-30/manifest.json": {
+      "bytes": 12643,
+      "sha256": "29d74a689dbd4ece45722447096879d82658a30d94b8998da8e6fbd0a3807ba4"
+    },
+    "data/source_snapshots/me/portal-2026-09-30/manifest.json": {
+      "bytes": 1140,
+      "sha256": "ee490268745c357b2872f015c1972ab8e4989587e10ad4c41a4536a1b5b60f03"
+    },
+    "data/source_snapshots/mi/wayback-2026-09-30/manifest.json": {
+      "bytes": 8775,
+      "sha256": "3185beeacfefc02f3c19ab99390a444d0e131e9c085a5557f31049ffe8db3115"
+    },
+    "data/source_snapshots/oh/wayback-2026-09-30/manifest.json": {
+      "bytes": 4157,
+      "sha256": "0656a495dfbb604dc36e9c33beabe234b4dbb815ab60d3cebab696b066379d09"
+    },
+    "data/source_snapshots/tn/wayback-2026-09-30/manifest.json": {
+      "bytes": 8736,
+      "sha256": "633f82b227866f607a3472bb252ccb2b5604d3f6c500d3ee8a690519a15be4bf"
+    },
+    "data/source_snapshots/vt/portal-2026-09-30/manifest.json": {
+      "bytes": 1156,
+      "sha256": "e37abc169da41d71335ef56f5ade0982b533403b79e120bb7406f6f77ac6e5fa"
+    }
+  },
+  "live_run": {
+    "command": "WARNLIVE_MA_ARCHIVE_FALLBACK=1 warnlive scrape --cadence daily --trigger manual --run-report <run>/current-run.json (isolated --workdir, --db, --data-dir); then warnlive dupes, check-regressions --update-snapshot, check-publication-gate, check-run-report",
+    "new_notices": 122,
+    "started_at": "2026-09-30T19:48:09Z",
+    "states": {
+      "CA": {
+        "new": 0,
+        "updated": 0,
+        "verdict": "degraded"
+      },
+      "CO": {
+        "new": 0,
+        "updated": 0,
+        "verdict": "ok"
+      },
+      "FL": {
+        "new": 2,
+        "updated": 0,
+        "verdict": "degraded"
+      },
+      "IL": {
+        "new": 1,
+        "updated": 3,
+        "verdict": "ok"
+      },
+      "MA": {
+        "new": 18,
+        "updated": 0,
+        "verdict": "ok"
+      },
+      "MN": {
+        "new": 18,
+        "updated": 0,
+        "verdict": "ok"
+      },
+      "NC": {
+        "new": 1,
+        "updated": 0,
+        "verdict": "degraded"
+      },
+      "NJ": {
+        "new": 2,
+        "updated": 0,
+        "verdict": "ok"
+      },
+      "NV": {
+        "new": 0,
+        "updated": 0,
+        "verdict": "ok"
+      },
+      "NY": {
+        "new": 39,
+        "updated": 6,
+        "verdict": "ok"
+      },
+      "OH": {
+        "new": 16,
+        "updated": 0,
+        "verdict": "ok"
+      },
+      "TX": {
+        "new": 25,
+        "updated": 0,
+        "verdict": "ok"
+      },
+      "WA": {
+        "new": 0,
+        "updated": 0,
+        "verdict": "degraded"
+      }
+    },
+    "updated_notices": 9
+  },
+  "release": "v1.3.0",
+  "replay": {
+    "command": "python -m warnlive.migrate.offline_rebuild --bundle data/source_snapshots/2026-09-30-v1.3-source-bundle.tar.gz --quality-evidence-dir data/source_snapshots/2026-09-24-quality-evidence --observed-at 2026-09-30 --source-only --or-historical-partial-rows",
+    "foreign_key_errors": 0,
+    "integrity": "ok",
+    "links": 1992,
+    "notices": 85688,
+    "versions": 100136,
+    "workers": 8830761
+  }
+}
