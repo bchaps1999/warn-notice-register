@@ -23,6 +23,10 @@ concurrency:
 jobs:
   scrape:
     runs-on: ubuntu-24.04
+    env:
+      # mass.gov refuses GitHub runners; MA falls back to each file's newest
+      # 200 Internet Archive capture and records it in ma.fetch_manifest.json.
+      WARNLIVE_MA_ARCHIVE_FALLBACK: "1"
     timeout-minutes: 120
     env:
       REQUESTED_STATES: ${{ inputs.states }}

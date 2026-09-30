@@ -359,3 +359,21 @@ def test_illinois_source_key_candidate_accepts_live_revision(monkeypatch, tmp_pa
     assert result.verdict == "ok"
     assert result.updated == 1
     assert conn.execute("SELECT COUNT(*) FROM notices WHERE state='IL'").fetchone()[0] == 1
+
+
+def test_archived_fetch_manifest_degrades_and_records_provenance(monkeypatch, tmp_path):
+    conn, raw = _setup(monkeypatch, tmp_path, cached=False)
+    manifest = {"raw_sha256": hashlib.sha256(raw.read_bytes()).hexdigest(),
+                "archived_files": 2, "oldest_confirmed_capture": "20260926000000"}
+    (raw.parent / "ct.fetch_manifest.json").write_text(json.dumps(manifest))
+    result = pipeline._run_one(_config(), conn, raw.parent, tmp_path / "cache", False, False)
+    assert result.verdict == "degraded"
+    assert result.checks["fetch_provenance"]["archived_files"] == 2
+
+
+def test_fetch_manifest_for_different_bytes_fails_the_state(monkeypatch, tmp_path):
+    conn, raw = _setup(monkeypatch, tmp_path, cached=False)
+    (raw.parent / "ct.fetch_manifest.json").write_text(json.dumps({"raw_sha256": "0" * 64}))
+    result = pipeline._run_one(_config(), conn, raw.parent, tmp_path / "cache", False, False)
+    assert result.verdict == "failed"
+    assert "manifest" in result.error
