@@ -31,8 +31,6 @@ jobs:
       - name: Unpack database
         run: .venv/bin/warnlive unpack-db
       - name: Scrape active daily states
-        env:
-          ZYTE_API_KEY: ${{ secrets.ZYTE_API_KEY }}
         run: .venv/bin/warnlive scrape --cadence daily --trigger scheduled --run-report workdir/reports/current-run.json
       - name: Detect revisions/duplicates
         run: .venv/bin/warnlive dupes

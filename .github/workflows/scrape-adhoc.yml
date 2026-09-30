@@ -40,8 +40,6 @@ jobs:
       - name: Unpack database
         run: .venv/bin/warnlive unpack-db
       - name: Scrape
-        env:
-          ZYTE_API_KEY: ${{ secrets.ZYTE_API_KEY }}
         run: |
           read -r -a states <<< "$REQUESTED_STATES"
           if (( ${#states[@]} == 0 )); then

@@ -276,7 +276,7 @@ la:
   staleness_days: null
   expected_columns: null
   source_url: https://www.laworks.net/Downloads/Downloads_WFD.asp
-  notes: "Annual PDF per year. Fetch BROKEN without ZYTE_API_KEY (upstream #753/#783 route via Zyte); held rows export. Revisit if a key is added."
+  notes: "Annual PDF per year. Upstream fetch routes via the paid Zyte proxy (upstream #753/#783), which this project does not use; fetch broken; held rows export."
 
 ma:
   name: Massachusetts

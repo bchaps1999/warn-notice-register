@@ -33,8 +33,6 @@ jobs:
       - name: Unpack database
         run: .venv/bin/warnlive unpack-db
       - name: Scrape all active states
-        env:
-          ZYTE_API_KEY: ${{ secrets.ZYTE_API_KEY }}
         run: .venv/bin/warnlive scrape --cadence weekly --trigger scheduled --run-report workdir/reports/current-run.json
       - name: Persist newly unresolved Kansas portal rows
         if: always()

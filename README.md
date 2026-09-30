@@ -151,9 +151,30 @@ and deploy steps, so data that trips it never lands. Per-state checks guard a
 scrape against its source; this guards the database against itself.
 
 Scheduled runs: `.github/workflows/scrape-daily.yml` (high-volume states) and
-`scrape-weekly.yml` (full sweep, Sundays). Optional secret `ZYTE_API_KEY`
-enables the Zyte proxy for states behind aggressive bot protection (LA, TX
-fallback, MA fallback).
+`scrape-weekly.yml` (full sweep, Sundays). The pipeline uses no paid proxy.
+Texas's AWS WAF challenge is passed by headless Chrome on the runner.
+
+Massachusetts: mass.gov's Akamai front end has refused GitHub runners (HTTP
+403) while it serves ordinary clients on residential connections. When
+`WARNLIVE_MA_ARCHIVE_FALLBACK=1` is set, the collector replaces each refused
+file with its newest Internet Archive capture that returned 200. It records
+the origin, capture timestamps, and SHA-256 of every file in
+`workdir/raw/ma.fetch_manifest.json`. An archived file is only as current as
+its capture. To collect Massachusetts directly from mass.gov, run it from a
+network mass.gov accepts, with no scheduled scrape in progress:
+
+```bash
+git pull && warnlive unpack-db
+warnlive scrape ma --trigger manual --run-report workdir/reports/ma-local.json
+warnlive dupes && warnlive check-regressions --update-snapshot
+warnlive check-publication-gate workdir/reports/ma-local.json
+warnlive check-run-report workdir/reports/ma-local.json
+git add data/ && git commit -m "Local Massachusetts scrape $(date -u +%F)" && git push
+```
+
+Push immediately: a scheduled run that started from the older dump will
+refuse to push and must be re-run. The site picks up the data on the next
+scheduled run's deploy.
 
 ### Rebuild v1.1.0 from frozen agency sources
 

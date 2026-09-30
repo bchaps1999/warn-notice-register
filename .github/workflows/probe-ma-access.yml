@@ -1,0 +1,100 @@
+name: Probe Massachusetts source access (diagnostic)
+
+# Read-only diagnostic: prints HTTP status codes for the mass.gov WARN index,
+# one fiscal-year workbook, and the current weekly CSV from a GitHub runner,
+# using ordinary clients, plus Internet Archive reachability. Writes nothing
+# to the repository.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: ./install.sh
+      - name: Runner egress
+        run: |
+          curl -sS --max-time 20 https://api.ipify.org && echo
+          dig +short www.mass.gov | tail -3
+      - name: curl (own user agent)
+        run: |
+          INDEX="https://www.mass.gov/info-details/worker-adjustment-and-retraining-notification-act-warn-layoff-and-closure-updates"
+          WORKBOOK="https://www.mass.gov/doc/fy26-warn-report-0/download"
+          for url in "$INDEX" "$WORKBOOK"; do
+            for proto in --http2 --http1.1; do
+              code=$(curl -sS $proto --max-time 60 -o /tmp/body -w "%{http_code} http%{http_version}" "$url" || echo "error")
+              ref=$(grep -o 'Reference ID: [^ <]*' /tmp/body | head -1)
+              echo "curl $proto $code ${ref} ${url}"
+            done
+          done
+          # Control: a browser User-Agent over curl's TLS stack. A 403 here
+          # alongside 200s above means Akamai checks UA/TLS consistency.
+          code=$(curl -sS --max-time 60 -o /dev/null -w "%{http_code}" \
+            -A "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36" "$INDEX" || echo error)
+          echo "curl browser-UA control $code"
+          echo "--- 403 response headers (if any):"
+          curl -sS --max-time 60 -o /dev/null -D - "$INDEX" | grep -i -E '^HTTP|x-reference-error|server|akamai' || true
+      - name: Python clients
+        run: |
+          .venv/bin/python - <<'EOF'
+          import niquests, requests
+          from bs4 import BeautifulSoup
+          from warnlive.fetch.custom import ma
+
+          def show(label, fn, url):
+              try:
+                  r = fn(url)
+                  version = getattr(r, "http_version", "")
+                  blocked = b"Not allowed | Mass Gov" in r.content[:4000]
+                  print(f"{label:28} {r.status_code} v{version} block_page={blocked} {url[-60:]}")
+                  return r
+              except Exception as exc:
+                  print(f"{label:28} ERROR {type(exc).__name__}: {exc}")
+
+          urls = [ma.INDEX_URL]
+          # Discover the current file URLs from the archived index if live fails.
+          r = show("requests", lambda u: requests.get(u, timeout=60), ma.INDEX_URL)
+          html = r.text if r is not None and r.status_code == 200 else ""
+          if not html:
+              cdx = ma._Fetcher(ma._new_session(), allow_archive=True)._cdx(ma.INDEX_URL)
+              ok = [row for row in cdx if row["statuscode"] == "200"]
+              if ok:
+                  ts = max(row["timestamp"] for row in ok)
+                  html = niquests.get(ma.WAYBACK_RAW.format(timestamp=ts, url=ma.INDEX_URL), timeout=60).text
+                  print(f"index taken from Internet Archive capture {ts}")
+          excel, csvs = ma._find_source_links(BeautifulSoup(html, "html.parser"))
+          urls += excel[-1:] + csvs[:1]
+
+          for url in urls:
+              show("requests", lambda u: requests.get(u, timeout=60), url)
+              show("niquests session h1/h2", lambda u: ma._new_session().get(u, headers={"Referer": ma.INDEX_URL}, timeout=60), url)
+              session = niquests.Session()  # HTTP/3 allowed: second call may use QUIC
+              show("niquests h3-allowed #1", lambda u: session.get(u, timeout=60), url)
+              show("niquests h3-allowed #2", lambda u: session.get(u, timeout=60), url)
+          EOF
+      - name: Internet Archive fallback (full collector)
+        env:
+          WARNLIVE_MA_ARCHIVE_FALLBACK: "1"
+        run: |
+          .venv/bin/python - <<'EOF'
+          import json
+          from pathlib import Path
+          from warnlive.fetch.custom import ma
+          path = ma.scrape(Path("/tmp/ma/raw"), Path("/tmp/ma/cache"))
+          manifest = json.loads(Path("/tmp/ma/raw/ma.fetch_manifest.json").read_text())
+          rows = sum(1 for _ in path.open()) - 1
+          print(f"rows={rows} archived_files={manifest['archived_files']} "
+                f"oldest_confirmed_capture={manifest['oldest_confirmed_capture']}")
+          for f in manifest["files"]:
+              print(f["origin"], f["live_status"], f.get("confirmed_through", ""), f["source_url"][-60:])
+          EOF
