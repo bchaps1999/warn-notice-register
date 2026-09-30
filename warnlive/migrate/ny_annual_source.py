@@ -16,17 +16,24 @@ import gzip
 import hashlib
 import io
 import json
+import re
 import tarfile
 from collections import Counter
 from pathlib import Path
 
-from warnlive.migrate.ny_overlay import _employer_group
 from warnlive.migrate.ny_source import HEADERS, _date, dashboard_type_fields
 from warnlive.migrate.source_bundle import _entry, verify
 from warnlive.normalize.engine import _record_hash
 from warnlive.normalize.revisions import classify_idless_events
 
 YEARS = tuple(range(2006, 2027))
+
+
+def _employer_group(name: str) -> str:
+    """Fold an employer name for grouping, collapsing obvious display aliases."""
+    name = re.sub(r"\([^)]*\)", " ", name.casefold())
+    name = re.sub(r"\b(?:incorporated|inc|llc|ltd|corp|corporation)\b", " ", name)
+    return re.sub(r"[^a-z0-9]+", " ", name).strip()
 
 
 def _json(value: object) -> str:

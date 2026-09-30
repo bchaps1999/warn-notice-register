@@ -1,12 +1,15 @@
 """Official Louisiana table extraction preserves evidence and uncertainties."""
 
+from collections import Counter
 from pathlib import Path
 import hashlib
 import json
 
 import pytest
 
-from warnlive.migrate.la_source import extract
+from warnlive.migrate.la_source import (
+    EMPLOYERS, HELD, extract, record, source_exceptions, validate_source_rows,
+)
 
 
 SOURCE = Path(__file__).resolve().parents[1] / "data/source_snapshots/la"
@@ -91,3 +94,54 @@ def test_historical_relationship_diagnostic_is_source_bound_and_unresolved():
             assert observation["workers_total"] == source_row["workers_total"]
     assert any(evidence["type"] == "arithmetic_equality"
                for evidence in groups["SafeSource"]["evidence"])
+
+
+V12_BUNDLE = SOURCE.parent / "2026-09-30-v1.2-source-bundle.tar.gz"
+
+
+@pytest.fixture(scope="module")
+def v12_la(tmp_path_factory):
+    """The agency/la tables exactly as the v1.2 release replay reads them."""
+    import tarfile
+
+    target = tmp_path_factory.mktemp("v12-la")
+    with tarfile.open(V12_BUNDLE, "r:gz") as archive:
+        for name in ("manifest.json", "2025.pdf", "2026.pdf"):
+            source = archive.extractfile(f"agency/la/{name}")
+            assert source is not None
+            (target / name).write_bytes(source.read())
+    return extract(target), target
+
+
+def test_reviewed_projection_is_pinned_to_the_release_table(v12_la, tmp_path):
+    rows, directory = v12_la
+    validate_source_rows(rows, directory)
+    (tmp_path / "manifest.json").write_bytes((directory / "manifest.json").read_bytes() + b"\n")
+    with pytest.raises(ValueError, match="manifest drift"):
+        validate_source_rows(rows, tmp_path)
+    with pytest.raises(ValueError, match="source rows drift"):
+        validate_source_rows(rows[:-1], directory)
+    with pytest.raises(ValueError, match="not accepted"):
+        record(next(row for row in rows if row["source_row"] in HELD))
+
+
+def test_official_projection_preserves_uncertain_dates_and_addresses(v12_la):
+    rows, _ = v12_la
+    records = {row["source_row"]: record(row) for row in rows
+               if row["kind"] == "notice" and row["source_row"] in EMPLOYERS}
+    assert len(records) == len({r["dedupe_key"] for r in records.values()}) == 31
+    assert records["2025.pdf:p1:r10"]["effective_date_end"] == "2025-12-31"
+    assert records["2025.pdf:p2:r16"]["notice_date"] is None
+    assert {records[f"2026.pdf:p1:r{n}"]["employees_affected"]
+            for n in (13, 14, 15)} == {172, 206, 216}
+    assert all(rec["location"] is None for rec in records.values())
+    assert all(rec["source_identity"] == f"LA:official:{key}" for key, rec in records.items())
+    mosaic = json.loads(records["2026.pdf:p1:r14"]["source_details"])
+    assert mosaic["worker_allocation"] == "unresolved"
+    assert len(mosaic["sites"]) == 2
+    assert all(site["workers"] is None for site in mosaic["sites"])
+    assert Counter(item["reason"] for item in source_exceptions(rows)) == {
+        "official_source_held_for_review": 6,
+        "official_source_rescinded": 1,
+        "official_source_annotation": 1,
+    }

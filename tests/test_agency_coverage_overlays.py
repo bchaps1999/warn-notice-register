@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from warnlive.migrate import ny_overlay, or_source, tn_source
+from warnlive.migrate import or_source, tn_source
 
 SNAPSHOTS = Path(__file__).resolve().parents[1] / "data/source_snapshots"
 
@@ -14,7 +14,6 @@ SNAPSHOTS = Path(__file__).resolve().parents[1] / "data/source_snapshots"
     [
         (or_source.project, "or", 678, 200, 340),
         (tn_source.project, "tn", 143, 140, 3),
-        (ny_overlay.project, "ny", 758, 329, 429),
     ],
 )
 def test_pinned_source_row_accounting(project, directory, source_rows, admitted, held):
@@ -26,10 +25,7 @@ def test_pinned_source_row_accounting(project, directory, source_rows, admitted,
     notices = len(records) - report.get("capture_versions", 0)
     assert notices == len({row["source_identity"] for row in records})
     assert report.get("admitted_rows", len(records)) + len(exceptions) == source_rows
-    if directory in {"or", "tn"}:
-        assert all(row["notice_date"] is None for row in records)
-    else:
-        assert all(row["notice_date"] for row in records)
+    assert all(row["notice_date"] is None for row in records)
 
 
 @pytest.mark.parametrize(("directory", "artifact", "reader"), [
@@ -48,17 +44,6 @@ def test_pinned_source_bytes_are_required(tmp_path, directory, artifact, reader)
     (target / artifact).write_bytes(content + b"x")
     with pytest.raises(ValueError, match="checksum mismatch"):
         reader(target)
-
-
-def test_ny_display_aliases_do_not_create_two_notices():
-    records, held, _ = ny_overlay.project(SNAPSHOTS / "ny")
-    hashes = {
-        "a9e94675326411fa9aecaee694e931a37c2da542ed4ecd339ac8f79f0d3ecbe9",
-        "896067ac393e9024d3b5f71abab93700665f9f459c5122889adb7d3643408850",
-    }
-    assert hashes <= {item["source_row_sha256"] for item in held}
-    assert all(not any(digest in item["source_identity"] for digest in hashes)
-               for item in records)
 
 
 def test_tn_archive_holds_reused_current_notice_number(tmp_path):

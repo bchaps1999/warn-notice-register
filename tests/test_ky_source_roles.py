@@ -9,7 +9,7 @@ from pathlib import Path
 from warnlive.normalize.engine import normalize_file
 
 
-BUNDLE = Path(__file__).resolve().parents[1] / "data/source_snapshots/2026-09-23-ia-la-ny-tx-annual-reviewed.tar.gz"
+BUNDLE = Path(__file__).resolve().parent / "fixtures/ky-tx-raw-2026-09-23/raw.tar.gz"
 
 
 def test_frozen_ky_received_dates_are_not_legal_notice(tmp_path):

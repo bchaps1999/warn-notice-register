@@ -29,7 +29,7 @@ do not mint extra notices. The projector reads revision markers even when
 they appear on PDF continuation lines.
 
 The staged bundle is
-[2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz](../data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz),
+[2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.0.0/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz),
 with SHA-256 `858d1493a86f2a8012f2ce50844b316ab36731ee4482987a93893baedc457de7`.
 It has 2,016 source files. The candidate is isolated; the checked-in public
 database and site have not been replaced.
@@ -38,8 +38,8 @@ The replay adds 854 Ohio notices and 114,314 reported affected workers to
 the Missouri candidate, yielding **71,490 notices**, **79,261 versions**,
 and **7,482,177 workers** overall. Ohio has **2,438** notices. Database
 integrity is `ok` with zero foreign-key errors. The
-[replay report](../data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1-report.json)
-and [11,888-row exception ledger](../data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.exceptions.jsonl.gz)
+[replay report](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.0.0/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1-report.json)
+and [11,888-row exception ledger](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.0.0/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.exceptions.jsonl.gz)
 preserve the full row accounting.
 Two isolated replays matched counts, notice and version fingerprints, the
 exception ledger SHA-256

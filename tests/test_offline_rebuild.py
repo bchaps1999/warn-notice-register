@@ -4,27 +4,15 @@ import hashlib
 import pytest
 
 from warnlive.migrate.offline_rebuild import (
-    _backfill_raw, _bln_unresolved, _cached_agencies, _cached_only, _exception, _fingerprints, _read_policy,
+    _cached_agencies, _cached_only, _exception, _fingerprints,
     _repair_il_from_cache, _verify_source_row_accounting, _write_exceptions, rebuild,
 )
-
-
-def test_offline_rebuild_requires_explicit_policy(tmp_path):
-    with pytest.raises(ValueError, match="no rebuild_policy"):
-        _read_policy(tmp_path / "missing.json")
-    policy = tmp_path / "rebuild_policy.json"
-    policy.write_text(json.dumps({"format": "wrong"}))
-    with pytest.raises(ValueError, match="unsupported"):
-        _read_policy(policy)
 
 
 def test_source_row_accounting_rejects_missing_exception():
     report = {
         "raw": {"AL": {"raw_rows": 2, "new": 1, "unaccounted_rows": 0}},
-        "backfill_raw": {"raw_rows": 0, "new": 0, "unaccounted_rows": 0},
         "cached_agencies": {},
-        "bln_accepted": {"total_rows": 0, "unaccounted_rows": 0},
-        "bln_conservative": {},
     }
     with pytest.raises(ValueError, match="source-row accounting mismatch"):
         _verify_source_row_accounting(report, [])
@@ -38,13 +26,7 @@ def test_source_row_accounting_rejects_missing_exception():
 def test_source_row_accounting_accepts_sc_coalescence():
     report = {
         "raw": {"SC": {"raw_rows": 2, "new": 1, "unaccounted_rows": 0}},
-        "backfill_raw": {"raw_rows": 0, "new": 0, "unaccounted_rows": 0},
         "cached_agencies": {},
-        "bln_accepted": {"total_rows": 2, "unaccounted_rows": 0},
-        "bln_conservative": {
-            "older": {"input_rows": 2, "official_overlay_excluded_rows": 0,
-                      "coalesced": 1},
-        },
     }
     summary = _verify_source_row_accounting(report, [
         {"origin": "cache/sc", "prepared_row": 2,
@@ -103,13 +85,12 @@ def test_source_only_archive_screens_employer_overlap_not_statewide_month(
 
     monkeypatch.setattr(offline_rebuild, "_ingest_groups", collect)
     exceptions = []
-    report = _cached_agencies(conn, tmp_path, None, {}, "2026-09-22", exceptions)
+    report = _cached_agencies(conn, tmp_path, "2026-09-22", exceptions)
     assert [row["dedupe_key"] for group in captured for row in group] == [
         "archive-a", "archive-b", "same-month-other-employer",
     ]
     assert report["WI"]["source_overlap_rows"] == 1
     assert report["WI"]["undated_rows"] == 1
-    assert report["WI"]["outside_policy"] == 0
     assert report["WI"]["coalesced_identical_rows"] == 0
     assert report["WI"]["unaccounted_rows"] == 0
     assert [item["reason"] for item in exceptions] == [
@@ -148,7 +129,7 @@ def test_florida_archive_overlap_uses_notice_month_when_range_is_parsed(
                 "coalesced": 0, "suspected_collisions": 0}
 
     monkeypatch.setattr(offline_rebuild, "_ingest_groups", collect)
-    report = _cached_agencies(conn, tmp_path, None, {}, "2026-09-22")
+    report = _cached_agencies(conn, tmp_path, "2026-09-22")
     assert captured == [archive]
     assert report["FL"]["source_overlap_rows"] == 0
 
@@ -183,7 +164,7 @@ def test_massachusetts_archive_overlap_keeps_received_month_after_role_change(
         "new": 0, "updated": 0, "unchanged": 0, "coalesced": 0,
         "suspected_collisions": 0,
     })
-    report = _cached_agencies(conn, tmp_path, None, {}, "2026-09-22")
+    report = _cached_agencies(conn, tmp_path, "2026-09-22")
     assert report["MA"]["source_overlap_rows"] == 1
     assert report["MA"]["new"] == 0
 
@@ -231,317 +212,6 @@ def test_exception_year_uses_only_explicit_notice_date():
     assert undated["notice_year"] is None
 
 
-def test_existing_backfill_row_has_row_level_exclusion(tmp_path):
-    from warnlive.normalize.engine import normalize_file
-    from warnlive.registry import load_registry
-    from warnlive.store import db
-    from warnlive.store.dedupe import ingest
-
-    source = tmp_path / "ks.csv"
-    source.write_text(
-        "employer,notice_date,number_of_employees_affected,warn_type,city,zip,"
-        "lwib_area,address,record_number,detail_page_url\n"
-        'Boeing Co.,"Nov 30, 1998",98,WARN,,,Area IV,,30,'
-        "https://www.kansasworks.com/search/warn_lookups/30\n"
-    )
-    normalized = normalize_file("ks", tmp_path, load_registry()["ks"].source_url)
-    assert len(normalized.records) == 1
-    with db.connect(tmp_path / "candidate.sqlite") as conn:
-        db.init_db(conn)
-        ingest(conn, normalized.records, "2026-09-22")
-        exceptions = []
-
-        report = _backfill_raw(conn, tmp_path, "2026-09-22", exceptions)
-
-        assert report["skipped_existing"] == 1
-        assert report["unaccounted_rows"] == 0
-        assert len(exceptions) == 1
-        item = exceptions[0]
-        assert item["reason"] == "matched_existing_key_not_admitted"
-        assert item["prepared_row"] == 1
-        assert item["match_basis"] == "canonical_key_only"
-        assert item["survivor_source_identity"] == "KS:30"
-        assert item["source_row_sha256"] == hashlib.sha256(
-            normalized.records[0]["raw_extra"].encode()
-        ).hexdigest()
-
-
-def test_repeated_backfill_content_has_row_level_disposition(tmp_path):
-    from warnlive.store import db
-
-    source = tmp_path / "ks.csv"
-    row = ('Boeing Co.,"Nov 30, 1998",98,WARN,,,Area IV,,30,'
-           'https://www.kansasworks.com/search/warn_lookups/30\n')
-    source.write_text(
-        "employer,notice_date,number_of_employees_affected,warn_type,city,zip,"
-        "lwib_area,address,record_number,detail_page_url\n" + row + row
-    )
-    with db.connect(tmp_path / "candidate.sqlite") as conn:
-        db.init_db(conn)
-        exceptions = []
-
-        report = _backfill_raw(conn, tmp_path, "2026-09-22", exceptions)
-
-        assert report["new"] == 1
-        assert report["coalesced_identical_rows"] == 1
-        assert report["unaccounted_rows"] == 0
-        assert len(exceptions) == 1
-        assert exceptions[0]["reason"] == "coalesced_same_key_content"
-        assert exceptions[0]["prepared_row"] == 2
-        assert exceptions[0]["survivor_prepared_row"] == 1
-
-
-def test_bln_exception_triage_does_not_auto_merge_same_signature(tmp_path):
-    import csv
-    import sqlite3
-
-    conn = sqlite3.connect(":memory:")
-    conn.execute(
-        "CREATE TABLE notices (state TEXT, notice_date TEXT, effective_date TEXT, "
-        "employer_name TEXT, employees_affected INTEGER, dedupe_key TEXT, location TEXT)"
-    )
-    conn.execute(
-        "INSERT INTO notices VALUES ('KS','2026-02-18',NULL,'Same Co',50,'source-key','Wichita')"
-    )
-    source = tmp_path / "bln.csv"
-    with source.open("w", newline="") as fh:
-        writer = csv.DictWriter(fh, fieldnames=[
-            "postal_code", "company", "location", "notice_date", "jobs",
-        ])
-        writer.writeheader()
-        writer.writerow({"postal_code": "KS", "company": "Same Co",
-                         "location": "Wichita", "notice_date": "2026-02-18", "jobs": "50"})
-        writer.writerow({"postal_code": "KS", "company": "Other Co",
-                         "location": "Wichita", "notice_date": "2026-02-18", "jobs": "50"})
-    exceptions = []
-    report = _bln_unresolved(conn, source, exceptions)
-    assert report["total_rows"] == 2
-    assert report["represented_by_key"] == 0
-    assert report["unaccounted_rows"] == 0
-    assert report["unresolved_rows"] == 2
-    assert report["triage"] == {
-        "no_exact_signature": 1, "one_exact_signature_same_location": 1,
-    }
-    assert exceptions[0]["candidate_keys"] == ["source-key"]
-    assert exceptions[1]["candidate_keys"] == []
-
-
-def test_bln_existing_key_is_explicitly_excluded(tmp_path):
-    import csv
-    import sqlite3
-
-    from warnlive.backfill import bln_integrated
-    from warnlive.registry import load_registry
-
-    row = {
-        "postal_code": "KS", "company": "Same Co", "location": "Wichita",
-        "notice_date": "2026-02-18", "jobs": "50", "hash_id": "source-row-id",
-    }
-    rec = bln_integrated.to_canonical(row, load_registry()["ks"].source_url)
-    conn = sqlite3.connect(":memory:")
-    conn.execute(
-        "CREATE TABLE notices (state TEXT, notice_date TEXT, effective_date TEXT, "
-        "employer_name TEXT, employees_affected INTEGER, dedupe_key TEXT, location TEXT)"
-    )
-    conn.execute(
-        "INSERT INTO notices VALUES (?,?,?,?,?,?,?)",
-        (rec["state"], rec["notice_date"], rec["effective_date"],
-         rec["employer_name"], rec["employees_affected"], rec["dedupe_key"],
-         rec["location"]),
-    )
-    source = tmp_path / "bln.csv"
-    with source.open("w", newline="") as fh:
-        writer = csv.DictWriter(fh, fieldnames=list(row))
-        writer.writeheader()
-        writer.writerow(row)
-    exceptions = []
-
-    report = _bln_unresolved(conn, source, exceptions)
-
-    assert report["represented_by_key"] == 1
-    assert report["unaccounted_rows"] == 0
-    assert len(exceptions) == 1
-    assert exceptions[0]["reason"] == "matched_existing_key_not_admitted"
-    assert exceptions[0]["source_row"] == 1
-    assert exceptions[0]["survivor_dedupe_key"] == rec["dedupe_key"]
-    assert exceptions[0]["match_basis"] == "canonical_key_only"
-    admitted_exceptions = []
-    _bln_unresolved(
-        conn, source, admitted_exceptions,
-        admitted_source_ids={"source-row-id"},
-    )
-    assert admitted_exceptions == []
-
-
-def test_selected_bln_coalesced_row_has_survivor_disposition(tmp_path, monkeypatch):
-    import csv
-
-    from warnlive.backfill import bln_integrated
-    from warnlive.migrate import offline_rebuild
-    from warnlive.registry import load_registry
-    from warnlive.store import db
-
-    rows = [
-        {"postal_code": "KS", "company": "Same Co", "location": "Wichita",
-         "notice_date": "2026-02-18", "jobs": "50", "hash_id": source_id}
-        for source_id in ("source-a", "source-b")
-    ]
-    source = tmp_path / "bln.csv"
-    with source.open("w", newline="") as fh:
-        writer = csv.DictWriter(fh, fieldnames=list(rows[0]))
-        writer.writeheader()
-        writer.writerows(rows)
-    recs = [bln_integrated.to_canonical(row, load_registry()["ks"].source_url)
-            for row in rows]
-    monkeypatch.setattr(bln_integrated, "older_rows_by_state",
-                        lambda *_args, **_kwargs: {"KS": recs})
-    monkeypatch.setattr(bln_integrated, "gap_rows_by_state",
-                        lambda *_args, **_kwargs: {})
-    selected = set()
-    coalesced = {}
-    exceptions = []
-
-    with db.connect(tmp_path / "candidate.sqlite") as conn:
-        db.init_db(conn)
-        report = offline_rebuild._bln_conservative(
-            conn, source, "2026-09-22", selected_source_ids=selected,
-            coalesced_source_ids=coalesced,
-        )
-        unresolved = _bln_unresolved(
-            conn, source, exceptions, admitted_source_ids=selected,
-            coalesced_source_ids=coalesced,
-        )
-
-    assert report["older"]["coalesced"] == 1
-    assert selected == {"source-a", "source-b"}
-    assert coalesced == {"source-b": "source-a"}
-    assert unresolved["represented_by_key"] == 2
-    assert unresolved["unaccounted_rows"] == 0
-    assert [(e["source_notice_id"], e["reason"], e.get("survivor_source_notice_id"))
-            for e in exceptions] == [
-                ("source-b", "coalesced_same_key_content", "source-a")
-            ]
-
-
-def test_illinois_bln_rows_cannot_enter_after_report_date_role_change(tmp_path, monkeypatch):
-    from warnlive.backfill import bln_integrated
-    from warnlive.migrate.offline_rebuild import _bln_conservative
-    from warnlive.store import db
-
-    called = []
-
-    def select(_source, _conn, _registry, *, states):
-        called.append(states)
-        assert "il" not in states
-        return {}
-
-    monkeypatch.setattr(bln_integrated, "older_rows_by_state", select)
-    monkeypatch.setattr(bln_integrated, "gap_rows_by_state", select)
-    conn = db.connect(tmp_path / "candidate.sqlite")
-    db.init_db(conn)
-    try:
-        report = _bln_conservative(conn, tmp_path / "bln.csv", "2026-09-23")
-    finally:
-        conn.close()
-    assert len(called) == 2
-    assert report["older"]["new"] == report["empty_months"]["new"] == 0
-
-
-def test_bln_superseded_and_identity_excluded_rows_are_accounted_for(tmp_path):
-    import csv
-    import sqlite3
-
-    conn = sqlite3.connect(":memory:")
-    conn.execute(
-        "CREATE TABLE notices (state TEXT, notice_date TEXT, effective_date TEXT, "
-        "employer_name TEXT, employees_affected INTEGER, dedupe_key TEXT, location TEXT)"
-    )
-    source = tmp_path / "bln.csv"
-    with source.open("w", newline="") as fh:
-        writer = csv.DictWriter(fh, fieldnames=[
-            "postal_code", "company", "notice_date", "is_superseded", "hash_id",
-        ])
-        writer.writeheader()
-        writer.writerow({"postal_code": "KS", "company": "Old Co",
-                         "notice_date": "2001-01-01", "is_superseded": "True",
-                         "hash_id": "old"})
-        writer.writerow({"postal_code": "IA", "company": "Phase Co",
-                         "notice_date": "2020-01-01", "is_superseded": "False",
-                         "hash_id": "phase"})
-        writer.writerow({"postal_code": "NJ", "company": "Posting Month Co",
-                         "notice_date": "2020-01-01", "is_superseded": "False",
-                         "hash_id": "posting-month"})
-        writer.writerow({"postal_code": "WA", "company": "Receipt Date Co",
-                         "notice_date": "2020-01-01", "is_superseded": "False",
-                         "hash_id": "agency-receipt"})
-        writer.writerow({"postal_code": "NV", "company": "Nevada Receipt Co",
-                         "notice_date": "2020-01-01", "is_superseded": "False",
-                         "hash_id": "nevada-receipt"})
-        writer.writerow({"postal_code": "MA", "company": "Massachusetts Receipt Co",
-                         "notice_date": "2020-01-01", "is_superseded": "False",
-                         "hash_id": "massachusetts-receipt"})
-        writer.writerow({"postal_code": "KY", "company": "Kentucky Receipt Co",
-                         "notice_date": "2020-01-01", "is_superseded": "False",
-                         "hash_id": "kentucky-receipt"})
-        writer.writerow({"postal_code": "IL", "company": "Illinois Report Co",
-                         "notice_date": "2020-01-01", "is_superseded": "False",
-                         "hash_id": "illinois-report"})
-    exceptions = []
-    report = _bln_unresolved(conn, source, exceptions)
-    assert report["superseded_rows"] == 1
-    assert report["identity_excluded_rows"] == 7
-    assert [item["reason"] for item in exceptions] == [
-        "superseded_source_row", "source_identity_unresolved",
-        "source_identity_unresolved", "source_identity_unresolved",
-        "source_identity_unresolved",
-        "source_identity_unresolved",
-        "source_identity_unresolved",
-        "source_identity_unresolved",
-    ]
-
-
-def test_source_only_bln_import_enforces_identity_quarantine(monkeypatch):
-    from warnlive.migrate import offline_rebuild
-
-    selected_states = []
-
-    def select(_source, _conn, _registry, *, states):
-        selected_states.append(set(states))
-        return {}
-
-    monkeypatch.setattr(offline_rebuild.bln_integrated, "older_rows_by_state", select)
-    monkeypatch.setattr(offline_rebuild.bln_integrated, "gap_rows_by_state", select)
-    report = offline_rebuild._bln_conservative(None, None, "2026-09-22")
-    assert len(selected_states) == 2
-    assert all(not {"ga", "sc", "ia", "nj", "ky", "ma", "nv", "wa"} & states for states in selected_states)
-    assert all("ks" in states for states in selected_states)
-    assert report["older"]["input_rows"] == report["empty_months"]["input_rows"] == 0
-
-
-def test_bln_older_backfill_never_ingests_superseded_rows(tmp_path):
-    import csv
-    import sqlite3
-    from warnlive.backfill.bln_integrated import older_rows_by_state
-    from warnlive.registry import load_registry
-
-    conn = sqlite3.connect(":memory:")
-    conn.row_factory = sqlite3.Row
-    conn.execute("CREATE TABLE notices (state TEXT, notice_date TEXT)")
-    conn.execute("INSERT INTO notices VALUES ('KS', '2020-01-01')")
-    source = tmp_path / "bln.csv"
-    with source.open("w", newline="") as fh:
-        writer = csv.DictWriter(fh, fieldnames=[
-            "postal_code", "company", "notice_date", "is_superseded",
-        ])
-        writer.writeheader()
-        writer.writerow({"postal_code": "KS", "company": "Old Co",
-                         "notice_date": "2000-01-01", "is_superseded": "True"})
-        writer.writerow({"postal_code": "KS", "company": "Current Co",
-                         "notice_date": "2001-01-01", "is_superseded": "False"})
-    result = older_rows_by_state(source, conn, load_registry(), states=["ks"])
-    assert [record["employer_name"] for record in result["KS"]] == ["Current Co"]
-
-
 def test_offline_rebuild_refuses_to_replace_existing_database(tmp_path):
     db = tmp_path / "current.sqlite"
     db.write_bytes(b"preserve")
@@ -555,6 +225,45 @@ def test_source_only_rejects_exception_path_equal_to_database(tmp_path):
     with pytest.raises(ValueError, match="must differ"):
         rebuild(tmp_path / "missing.tar.gz", db, "2026-09-22",
                 source_only=True, exceptions_path=db)
+    assert not db.exists()
+
+
+def _bundle(path, members: dict[str, bytes]):
+    import gzip
+    import io
+    import tarfile
+
+    from warnlive.migrate.source_bundle import _entry
+
+    manifest = {"format": "warn-source-bundle-v1", "admission_inputs": "agency-only-v1",
+                "files": [{"path": name, "size": len(data),
+                           "sha256": hashlib.sha256(data).hexdigest()}
+                          for name, data in sorted(members.items())]}
+    with path.open("xb") as raw, gzip.GzipFile(fileobj=raw, mode="wb", mtime=0) as zipped, \
+            tarfile.open(fileobj=zipped, mode="w") as archive:
+        meta = json.dumps(manifest).encode()
+        archive.addfile(_entry("manifest.json", meta), io.BytesIO(meta))
+        for name, data in sorted(members.items()):
+            archive.addfile(_entry(name, data), io.BytesIO(data))
+    return path
+
+
+def test_rebuild_rejects_big_local_news_bundle_with_pointer(tmp_path):
+    bundle = _bundle(tmp_path / "bln.tar.gz", {
+        "backfill/bln_integrated.csv": b"postal_code,company\nKS,Acme\n",
+        "raw/ks.csv": b"Company\nAcme\n",
+    })
+    db = tmp_path / "candidate.sqlite"
+    with pytest.raises(ValueError, match="backfill/bln_integrated.csv.*aa1e94c"):
+        rebuild(bundle, db, "2026-09-30")
+    assert not db.exists()
+
+
+def test_rebuild_rejects_dashboard_only_new_york_layout(tmp_path):
+    bundle = _bundle(tmp_path / "ny.tar.gz", {"agency/ny/manifest.json": b"{}"})
+    db = tmp_path / "candidate.sqlite"
+    with pytest.raises(ValueError, match="agency/ny without agency/ny_annual"):
+        rebuild(bundle, db, "2026-09-30")
     assert not db.exists()
 
 
@@ -698,7 +407,7 @@ def test_archive_entries_phases_and_control_numbers_are_accounted(tmp_path, monk
     conn = db_mod.connect(tmp_path / "c.sqlite")
     db_mod.init_db(conn)
     exceptions = []
-    report = _cached_agencies(conn, tmp_path, None, {}, "2026-09-29", exceptions,
+    report = _cached_agencies(conn, tmp_path, "2026-09-29", exceptions,
                               states=("CA", "WI", "NY"))
     assert {s: report[s]["unaccounted_rows"] for s in report} == {"CA": 0, "WI": 0, "NY": 0}
     counts = dict(conn.execute("SELECT state, COUNT(*) FROM notices GROUP BY state").fetchall())
@@ -751,7 +460,7 @@ def test_source_only_replay_admits_nebraska_2020_2022_archive_once(tmp_path, mon
 
     monkeypatch.setattr(offline_rebuild, "_ingest_groups", collect)
     exceptions = []
-    report = _cached_agencies(conn, tmp_path, None, {}, "2026-09-30", exceptions)
+    report = _cached_agencies(conn, tmp_path, "2026-09-30", exceptions)
     assert captured == ["new-2021"]
     assert report["NE"]["already"] == 1
     assert report["NE"]["source_overlap_rows"] == 1
@@ -770,5 +479,5 @@ def test_nebraska_archive_reader_is_cache_only(tmp_path):
         "CREATE TABLE notices (dedupe_key TEXT, state TEXT, employer_name TEXT, notice_date TEXT, "
         "effective_date TEXT, source_details TEXT)"
     )
-    report = _cached_agencies(conn, tmp_path, None, {}, "2026-09-30", [], states=("NE",))
+    report = _cached_agencies(conn, tmp_path, "2026-09-30", [], states=("NE",))
     assert report["NE"]["parsed"] == 0

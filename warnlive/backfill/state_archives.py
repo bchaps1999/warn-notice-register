@@ -25,7 +25,7 @@ Sources here (found 2026-07-26; see docs / plan notes):
       are captured and tagged by report here for the NE collector
       (fetch.patches.ne), with a url/retrieved_at/sha256 sidecar each.
 
-Ingestion uses the same strict month-gap rule as the BLN gap-fill: a row
+Ingestion uses a strict month-gap rule: a row
 only enters months where the state currently has zero notices, so archive
 overlap with live data cannot mint near-duplicates.
 """

@@ -24,6 +24,7 @@ The database, national/state CSVs, site data, source-observation export, and exc
 ## Rebuild and release checks
 
 - Pin dependency and reference versions, source bytes, code revision, and an explicit `--as-of` date for site output. Rebuild from a fresh checkout without network access after inputs are frozen.
+- `migrate/offline_rebuild.py` replays only agency-only bundles (`admission_inputs: agency-only-v1`). It rejects a bundle holding Big Local News or old-database inputs (`backfill/bln_integrated.csv`, `backfill/raw/`, `rebuild_policy.json`) or a New York dashboard table without `agency/ny_annual`; no release was built from either layout. The working tree keeps only the current release's bundle; an earlier release replays with its tag's code and the bundle attached to its GitHub release.
 - Check that every raw source row is represented as an admitted notice, a linked exact duplicate/version, or an explicit exclusion. Reject format drift, same-key disagreement, and source-hash mismatch rather than silently changing totals.
 - Run SQLite integrity and foreign-key checks; compare stable notice/version/link fingerprints, exception checksum, CSV tree, site tree, and state/source coverage between independent runs.
 - Compare a staged candidate with published data to expose lost coverage or changed interpretations. Matching old counts is diagnostic, not an acceptance criterion. Promote only a reproducible candidate whose exclusions and material deltas are reported; preserve the prior published artifacts for rollback.

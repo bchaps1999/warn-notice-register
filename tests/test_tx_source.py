@@ -17,7 +17,7 @@ from warnlive.store.dedupe import ingest
 
 ROOT = Path(__file__).resolve().parents[1]
 ARTIFACTS = ROOT / "data/source_snapshots/tx"
-BUNDLE = ROOT / "data/source_snapshots/2026-09-23-ia-la-ny-tx-annual-reviewed.tar.gz"
+BUNDLE = ROOT / "tests/fixtures/ky-tx-raw-2026-09-23/raw.tar.gz"
 
 
 @pytest.fixture(scope="module")

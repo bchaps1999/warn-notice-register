@@ -1,14 +1,15 @@
 """Freeze and verify the local source inputs needed for an offline rebuild.
 
 The bundle is an input archive, not a database backup.  It records the exact
-bytes of rolling raw CSVs, historical backfills, and cached agency artifacts
+bytes of rolling raw CSVs, frozen agency archives, and cached agency artifacts
 so a later rebuild is not dependent on whatever a state serves that day.
+Every bundle is agency-only (``admission_inputs: agency-only-v1``): no Big
+Local News table or old-database policy enters it.
 
-Commands: ``create`` (from a workdir), ``verify``, ``agency-only``,
-``overlay-raw`` (replace one state CSV in a frozen bundle), ``add-archives``
-(add new ``backfill/cache/archives`` files to a frozen bundle) and
-``extract``. Every derived bundle is a new file; none is modified in place.
-No network access.
+Commands: ``create`` (from a workdir), ``verify``, ``overlay-raw`` (replace
+one state CSV in a frozen bundle), ``add-archives`` (add new
+``backfill/cache/archives`` files to a frozen bundle) and ``extract``. Every
+derived bundle is a new file; none is modified in place. No network access.
 """
 
 from __future__ import annotations
@@ -21,7 +22,6 @@ import io
 import json
 import re
 import shutil
-import sqlite3
 import tarfile
 from pathlib import Path, PurePosixPath
 
@@ -91,35 +91,8 @@ def _entry(name: str, content: bytes) -> tarfile.TarInfo:
     return info
 
 
-def _rebuild_policy(db_path: Path) -> bytes:
-    """Freeze historic overlap decisions, not canonical notice payloads."""
-    if not db_path.is_file():
-        raise FileNotFoundError(f"baseline database missing: {db_path}")
-    conn = sqlite3.connect(f"file:{db_path.resolve()}?mode=ro", uri=True)
-    try:
-        keys: list[str] = []
-        source_urls: dict[str, str] = {}
-        states: dict[str, dict[str, int]] = {}
-        for key, state, url, jobs in conn.execute(
-            "SELECT dedupe_key, state, source_url, employees_affected "
-            "FROM notices ORDER BY dedupe_key"
-        ):
-            keys.append(key)
-            if state in {"CA", "NY"} and url:
-                source_urls[key] = url
-            item = states.setdefault(state, {"notices": 0, "workers": 0})
-            item["notices"] += 1
-            item["workers"] += jobs or 0
-    finally:
-        conn.close()
-    return (json.dumps({
-        "format": "warn-rebuild-policy-v1", "accepted_keys": keys,
-        "archive_source_urls": source_urls, "baseline_states": states,
-    }, sort_keys=True, separators=(",", ":")) + "\n").encode()
-
-
 def create(
-    workdir: Path, out_path: Path, policy_db: Path | None = None,
+    workdir: Path, out_path: Path,
     raw_overlay: Path | None = None,
     agency_artifacts: Path | None = None,
     ia_artifacts: Path | None = None,
@@ -127,8 +100,6 @@ def create(
     tx_artifacts: Path | None = None,
 ) -> dict:
     """Create a deterministic bundle; never overwrite an existing snapshot."""
-    if policy_db is not None:
-        raise ValueError("old-database overlap policy is retired for agency-only builds")
     workdir, out_path = Path(workdir), Path(out_path)
     if out_path.exists():
         raise FileExistsError(f"source bundle already exists: {out_path}")
@@ -391,142 +362,6 @@ def add_archives(bundle: Path, archives: Path, out_path: Path) -> dict:
     return _rewrite(bundle, manifest, additions, out_path)
 
 
-def agency_only(bundle: Path, out_path: Path) -> dict:
-    """Derive an immutable agency-input bundle from a verified older bundle."""
-    original = verify(bundle)
-    out_path = Path(out_path)
-    if out_path.exists():
-        raise FileExistsError(f"source bundle already exists: {out_path}")
-    overrides: dict[str, bytes] = {}
-    excluded = {
-        "backfill/bln_integrated.csv", "rebuild_policy.json",
-        "cache/ga/ga_historical.csv", "cache/tn/tn_historical.csv",
-        "raw/ia.csv", "raw/ky.csv", "raw/or.csv",
-    }
-    ny_manifest_path = "agency/ny/manifest.json"
-    with tarfile.open(bundle, mode="r:gz") as old:
-        ny_file = old.extractfile(ny_manifest_path) if ny_manifest_path in old.getnames() else None
-        if ny_file is not None:
-            ny_manifest = json.load(ny_file)
-            for key in ("reviewed_decisions", "reviewed_event_decisions"):
-                decision = ny_manifest.pop(key, None)
-                if decision is not None:
-                    excluded.add(f"agency/ny/{decision['path']}")
-            overrides[ny_manifest_path] = (
-                json.dumps(ny_manifest, sort_keys=True, indent=2) + "\n"
-            ).encode()
-        tx_manifest_path = "agency/tx/manifest.json"
-        if tx_manifest_path in old.getnames():
-            tx_manifest = json.load(old.extractfile(tx_manifest_path))
-            agency_rows = sum(item["data_rows"] for item in tx_manifest["artifacts"])
-            raw_rows = list(csv.reader(io.StringIO(
-                old.extractfile("raw/tx.csv").read().decode("utf-8-sig"), newline=""
-            )))
-            if len(raw_rows) <= agency_rows + 1 or any(
-                not row or not row[0].startswith("20") or int(row[0][:4]) < 2020
-                for row in raw_rows[1:agency_rows + 1]
-            ) or any(
-                not row or not row[0][:4].isdigit() or int(row[0][:4]) >= 2020
-                for row in raw_rows[agency_rows + 1:]
-            ):
-                raise ValueError("Texas agency/historical raw boundary changed")
-            output = io.StringIO(newline="")
-            csv.writer(output).writerows(raw_rows[:agency_rows + 1])
-            tx_csv = output.getvalue().encode()
-            overrides["raw/tx.csv"] = tx_csv
-            tx_manifest["raw_csv_bytes"] = len(tx_csv)
-            tx_manifest["raw_csv_sha256"] = hashlib.sha256(tx_csv).hexdigest()
-            overrides[tx_manifest_path] = (
-                json.dumps(tx_manifest, sort_keys=True, indent=2) + "\n"
-            ).encode()
-        if "raw/oh.csv" in old.getnames():
-            reader = csv.DictReader(io.StringIO(
-                old.extractfile("raw/oh.csv").read().decode("utf-8-sig"), newline=""
-            ))
-            rows = list(reader)
-            current = [row for row in rows if row.get("URL")]
-            if not current or len(current) == len(rows) or rows[:len(current)] != current:
-                raise ValueError("Ohio agency/historical raw boundary changed")
-            output = io.StringIO(newline="")
-            writer = csv.DictWriter(output, fieldnames=reader.fieldnames)
-            writer.writeheader()
-            writer.writerows(current)
-            overrides["raw/oh.csv"] = output.getvalue().encode()
-        for postal in ("ga", "tn"):
-            raw_path = f"raw/{postal}.csv"
-            history_path = f"cache/{postal}/{postal}_historical.csv"
-            if raw_path not in old.getnames():
-                continue
-            if history_path not in old.getnames():
-                raise ValueError(f"{postal.upper()} historical cache missing for boundary check")
-            raw_reader = csv.DictReader(io.StringIO(
-                old.extractfile(raw_path).read().decode("utf-8-sig"), newline=""
-            ))
-            raw_rows = list(raw_reader)
-            history_text = old.extractfile(history_path).read().decode("utf-8-sig")
-            historical = list(csv.DictReader(
-                history_text.splitlines() if postal == "tn"
-                else io.StringIO(history_text, newline="")
-            ))
-            cutoff = len(raw_rows) - len(historical)
-            if cutoff <= 0 or not historical:
-                raise ValueError(f"{postal.upper()} agency/historical raw boundary changed")
-            if postal == "tn":
-                matches = all(raw == old_row for raw, old_row in
-                              zip(raw_rows[cutoff:], historical, strict=True))
-            else:
-                columns = {
-                    "ID": "GA WARN ID", "Company Name": "Company Name",
-                    "City": "First Location Address", "ZIP": "Zip Code",
-                    "County": "County", "Est. Impact": "Total Number of Affected Employees",
-                    "LWDA": "LWDA", "Separation Date": "First Date of Separation",
-                }
-                matches = all(
-                    all(raw.get(output) == old_row.get(source)
-                        for source, output in columns.items())
-                    and all(not value for key, value in raw.items()
-                            if key not in columns.values())
-                    for raw, old_row in zip(raw_rows[cutoff:], historical, strict=True)
-                )
-            if not matches:
-                raise ValueError(f"{postal.upper()} historical rows differ from pinned cache")
-            output = io.StringIO(newline="")
-            writer = csv.DictWriter(output, fieldnames=raw_reader.fieldnames)
-            writer.writeheader()
-            writer.writerows(raw_rows[:cutoff])
-            overrides[raw_path] = output.getvalue().encode()
-    keep = [item for item in original["files"] if
-            item["path"] != "backfill/bln_integrated.csv"
-            and not item["path"].startswith("backfill/raw/")
-            and item["path"] not in excluded]
-    keep = [{**item, "size": len(overrides[item["path"]]),
-             "sha256": hashlib.sha256(overrides[item["path"]]).hexdigest()}
-            if item["path"] in overrides else item for item in keep]
-    manifest = {**original, "files": keep, "admission_inputs": "agency-only-v1"}
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        with tarfile.open(bundle, mode="r:gz") as old, out_path.open("xb") as raw, \
-                gzip.GzipFile(fileobj=raw, mode="wb", filename="", mtime=0) as zipped, \
-                tarfile.open(fileobj=zipped, mode="w") as new:
-            meta = (json.dumps(manifest, sort_keys=True, indent=2) + "\n").encode()
-            new.addfile(_entry("manifest.json", meta), io.BytesIO(meta))
-            for item in keep:
-                if item["path"] in overrides:
-                    data = overrides[item["path"]]
-                    new.addfile(_entry(item["path"], data), io.BytesIO(data))
-                    continue
-                source = old.extractfile(item["path"])
-                if source is None:
-                    raise ValueError(f"unreadable source: {item['path']}")
-                info = _entry(item["path"], b"")
-                info.size = item["size"]
-                new.addfile(info, source)
-    except BaseException:
-        out_path.unlink(missing_ok=True)
-        raise
-    return manifest
-
-
 def extract(bundle: Path, destination: Path) -> dict:
     """Verify first, then extract into a new directory without overwriting."""
     manifest = verify(bundle)
@@ -552,8 +387,6 @@ if __name__ == "__main__":
     make = sub.add_parser("create")
     make.add_argument("--workdir", type=Path, default=Path("workdir"))
     make.add_argument("--out", type=Path, required=True)
-    make.add_argument("--policy-db", type=Path,
-                      help="Freeze accepted historical keys and archive URLs from this DB")
     make.add_argument("--raw-overlay", type=Path,
                       help="Directory of freshly captured two-letter state CSVs to replace stale raw inputs")
     make.add_argument("--agency-artifacts", type=Path,
@@ -566,9 +399,6 @@ if __name__ == "__main__":
                       help="Verified Texas annual workbooks to include under agency/tx")
     check = sub.add_parser("verify")
     check.add_argument("bundle", type=Path)
-    agency = sub.add_parser("agency-only")
-    agency.add_argument("bundle", type=Path)
-    agency.add_argument("--out", type=Path, required=True)
     overlay = sub.add_parser("overlay-raw")
     overlay.add_argument("bundle", type=Path)
     overlay.add_argument("--raw-file", type=Path, required=True)
@@ -584,10 +414,9 @@ if __name__ == "__main__":
     unpack.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
     result = (
-        create(args.workdir, args.out, args.policy_db, args.raw_overlay,
+        create(args.workdir, args.out, args.raw_overlay,
                args.agency_artifacts, args.ia_artifacts,
                args.ny_artifacts, args.tx_artifacts) if args.command == "create"
-        else agency_only(args.bundle, args.out) if args.command == "agency-only"
         else overlay_raw_bundle(args.bundle, args.raw_file, args.out, args.evidence_archive)
         if args.command == "overlay-raw"
         else add_archives(args.bundle, args.archives, args.out) if args.command == "add-archives"

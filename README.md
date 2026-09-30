@@ -240,29 +240,36 @@ bundle was assembled: fresh captures overlaid state by state onto the v1.1.1
 bundle, only where they keep every released notice, then new archives added
 with `source_bundle add-archives`. The [transition maps](data/review/) list
 the released keys that were retired or re-keyed. The historical rebuilds
-below reproduce earlier releases with their release-code commits.
+below reproduce earlier releases with their release-code commits. Their
+bundles are no longer in the working tree: download each from its
+[GitHub release](https://github.com/bchaps1999/warn-notice-register/releases)
+and run the commands from a checkout of that release's tag (current code
+replays only the v1.2 bundle's layout and rejects bundles holding Big Local
+News or old-database inputs).
 
 ### Rebuild v1.1.0 from frozen agency sources
 
 The v1.1.0 release uses a frozen agency-only bundle with Kansas portal pages
 and Kentucky's pinned official CSV. Rebuild in an isolated path and compare
-the result with the [release manifest](data/source_snapshots/2026-09-24-ks-ky-review-release-manifest.json):
+the result with the [release manifest](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.1.0/2026-09-24-ks-ky-review-release-manifest.json):
 
 ```bash
+git checkout v1.1.0
+curl -LO https://github.com/bchaps1999/warn-notice-register/releases/download/v1.1.0/2026-09-24-strict-ks-ky-source-bundle.tar.gz
 python -m warnlive.migrate.source_bundle verify \
-  data/source_snapshots/2026-09-24-strict-ks-ky-source-bundle.tar.gz
+  2026-09-24-strict-ks-ky-source-bundle.tar.gz
 python -m warnlive.migrate.offline_rebuild \
-  --bundle data/source_snapshots/2026-09-24-strict-ks-ky-source-bundle.tar.gz \
+  --bundle 2026-09-24-strict-ks-ky-source-bundle.tar.gz \
   --db /tmp/warn-v1.1.sqlite --observed-at 2026-09-24 --source-only \
   --exceptions /tmp/warn-v1.1.exceptions.jsonl --report /tmp/warn-v1.1-report.json
 ```
 
-The [replay report](data/source_snapshots/2026-09-24-strict-ks-ky-candidate-report.json)
+The [replay report](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.1.0/2026-09-24-strict-ks-ky-candidate-report.json)
 and [release notes](docs/release-v1.1.0-2026-09-24.md) describe admitted and
 held rows. The two held Kentucky rows are source observations; the 76 held
 Kansas portal IDs are preserved in their companion source archive.
 
-To reproduce v1.1.1 in an isolated path, add
+To reproduce v1.1.1 in an isolated path, check out `v1.1.1` and add
 `--quality-evidence-dir data/source_snapshots/2026-09-24-quality-evidence`
 to the v1.1.0 replay command above.
 That dated directory pins the original Volta letters and California EDD
@@ -270,9 +277,9 @@ reports by URL and hash. The strict attachment pass preserves notice keys and
 agency listing text, attaches only unambiguous source rows, and reports held
 California address candidates by reason. An address in the EDD report is not
 automatically an affected site when its geography conflicts with the reported
-county. The [quality release report](data/source_snapshots/2026-09-25-quality-candidate-report.json)
+county. The [quality release report](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.1.1/2026-09-25-quality-candidate-report.json)
 records the reconciled replay and its held-row accounting. The
-[release manifest](data/source_snapshots/2026-09-25-quality-release-manifest.json)
+[release manifest](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.1.1/2026-09-25-quality-release-manifest.json)
 pins inputs, artifacts, counts, and validation results.
 
 The v1.1.1 release also separates Wisconsin's `Notice Received` and
@@ -291,10 +298,12 @@ data with expanded date-precision metadata, use the release-code commit
 `b941649` and rebuild into an isolated path:
 
 ```bash
+git checkout b941649
+curl -LO https://github.com/bchaps1999/warn-notice-register/releases/download/v1.0.1/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz
 python -m warnlive.migrate.source_bundle verify \
-  data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz
+  2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz
 python -m warnlive.migrate.offline_rebuild \
-  --bundle data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz \
+  --bundle 2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1.tar.gz \
   --db /tmp/warn-v1.sqlite --observed-at 2026-09-24 --source-only \
   --exceptions /tmp/warn-v1.exceptions.jsonl --report /tmp/warn-v1-report.json
 ```
@@ -303,7 +312,7 @@ The replay uses no network or model calls. It accounts for admitted,
 coalesced, and excluded source rows; an excluded observation is a conservative
 outcome for the available evidence. Compare its counts and content fingerprints
 to the [date-precision replay checkpoint](docs/date-precision-automation-2026-09-24.md).
-The older [v1 source report](data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1-report.json)
+The older [v1 source report](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.0.0/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-oh-v1-report.json)
 predates that metadata change and has different content fingerprints.
 
 Later revision-aware admission rules changed the result. Running

@@ -23,7 +23,7 @@ counterpart in the pinned raw CSV (2020: 1,209; 2021: 123; 2022: 86; 2023:
 2023-dated rows; workbook year must not be interpreted as notice year. The
 2026 cached workbook has 79 rows, three more than the older local
 `2026-twc.xlsx` copy. The v5 bundle pins the projected CSV but does not include
-the underlying workbooks. A new [v6 source bundle](../data/source_snapshots/2026-09-23-ia-la-ny-tx-annual-reviewed.tar.gz)
+the underlying workbooks. A new [v6 source bundle](https://github.com/bchaps1999/warn-notice-register/blob/d919111/data/source_snapshots/2026-09-23-ia-la-ny-tx-annual-reviewed.tar.gz)
 (SHA-256 `4f9ccb698ea9d035514bb2c18d65d3d39ad66a7a9001691544580379ed9dc752`)
 pins the seven annual workbook versions, source-page snapshot, manifest,
 original URLs, and row/header counts. The 2026 version in that bundle is the

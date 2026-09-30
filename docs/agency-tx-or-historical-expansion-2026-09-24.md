@@ -29,7 +29,7 @@ employer identity.
 
 ## Isolated candidate replay
 
-The [combined source bundle](../data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-v1.tar.gz)
+The [combined source bundle](https://github.com/bchaps1999/warn-notice-register/blob/d919111/data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-v1.tar.gz)
 contains 1,998 source files and has SHA-256
 `165aecaf766c9aa285d7649015284bd1707459f659dc99a83f5a69d8620d4833`.
 The corrected replay contains **70,324 notices**, **78,095 versions**, and
@@ -37,8 +37,8 @@ The corrected replay contains **70,324 notices**, **78,095 versions**, and
 candidate. Two isolated replays matched these counts, the notice and version
 fingerprints, and the exception ledger hash. Integrity is `ok` with zero
 foreign-key errors. The
-[full replay report](../data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-v1-report.json)
-and [10,558-row exception ledger](../data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-v1.exceptions.jsonl.gz)
+[full replay report](https://github.com/bchaps1999/warn-notice-register/blob/d919111/data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-v1-report.json)
+and [10,558-row exception ledger](https://github.com/bchaps1999/warn-notice-register/blob/d919111/data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-v1.exceptions.jsonl.gz)
 preserve source accounting and every held row. The notice-content fingerprint
 is `393d70e62a391e62656699e8e9e80a01823571b0b69b9d4408760c339ad1bcab`.
 

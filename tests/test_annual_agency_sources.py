@@ -9,7 +9,7 @@ import pytest
 
 from warnlive.migrate.ga_archive_source import project as project_ga
 from warnlive.migrate.ny_annual_source import project as project_ny, read_artifacts
-from warnlive.migrate.ny_overlay import _employer_group
+from warnlive.migrate.ny_annual_source import _employer_group
 from warnlive.normalize.engine import _record_hash
 
 

@@ -2,7 +2,7 @@
 
 This release promotes the frozen Kansas and Kentucky agency-source replay observed on 2026-09-24. The database contains **74,828 admitted notices, 82,241 versions, 7,815,994 reported affected workers, 1,009 source observations, and zero notice links**. Its 47 represented states are states with admitted records, not a count of jurisdictions with complete historical coverage.
 
-The [source bundle](../data/source_snapshots/2026-09-24-strict-ks-ky-source-bundle.tar.gz), [replay report](../data/source_snapshots/2026-09-24-strict-ks-ky-candidate-report.json), [exception ledger](../data/source_snapshots/2026-09-24-strict-ks-ky-candidate.exceptions.jsonl.gz), and [release manifest](../data/source_snapshots/2026-09-24-ks-ky-review-release-manifest.json) preserve the inputs, dispositions, and output hashes. The [system review](system-review-2026-09-24.md) records the policy decisions and unresolved source groups.
+The [source bundle](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.1.0/2026-09-24-strict-ks-ky-source-bundle.tar.gz), [replay report](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.1.0/2026-09-24-strict-ks-ky-candidate-report.json), [exception ledger](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.1.0/2026-09-24-strict-ks-ky-candidate.exceptions.jsonl.gz), and [release manifest](https://github.com/bchaps1999/warn-notice-register/releases/download/v1.1.0/2026-09-24-ks-ky-review-release-manifest.json) preserve the inputs, dispositions, and output hashes. The [system review](system-review-2026-09-24.md) records the policy decisions and unresolved source groups.
 
 | Measure | v1.0.1 | v1.1.0 | Change |
 | --- | ---: | ---: | ---: |

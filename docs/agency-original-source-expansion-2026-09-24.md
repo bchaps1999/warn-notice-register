@@ -1,7 +1,7 @@
 # Original-source coverage expansion, 2026-09-24
 
 This staged, unpublished candidate extends the [agency-only OR/TN/NY candidate](agency-coverage-expansion-2026-09-23.md). Its immutable input bundle is
-[`2026-09-24-agency-only-ny-ga-v1.tar.gz`](../data/source_snapshots/2026-09-24-agency-only-ny-ga-v1.tar.gz), SHA-256
+[`2026-09-24-agency-only-ny-ga-v1.tar.gz`](https://github.com/bchaps1999/warn-notice-register/blob/d919111/data/source_snapshots/2026-09-24-agency-only-ny-ga-v1.tar.gz), SHA-256
 `d57cecd49ee6fa3a0ea3cb16fbaf5768faee0982b186d078df8093fd660cd252`.
 It contains 1,994 files, preserving the earlier source files and adding direct
 annual [New York DOL dashboard exports](https://dol.ny.gov/warn-dashboard) and
@@ -34,8 +34,8 @@ notice and version fingerprints were
 and `34201faccf4cedcde5ca2acab480da9e0c62b0f667036b052cc82d9cebe740fc`.
 Two isolated replays with the same bundle and observation day produced these
 same counts, source accounting, and notice/version fingerprints. The
-[replay report](../data/source_snapshots/2026-09-24-agency-only-ny-ga-v1-report.json)
-records state/year coverage; its 10,188-row [compressed exception ledger](../data/source_snapshots/2026-09-24-agency-only-ny-ga-v1.exceptions.jsonl.gz)
+[replay report](https://github.com/bchaps1999/warn-notice-register/blob/d919111/data/source_snapshots/2026-09-24-agency-only-ny-ga-v1-report.json)
+records state/year coverage; its 10,188-row [compressed exception ledger](https://github.com/bchaps1999/warn-notice-register/blob/d919111/data/source_snapshots/2026-09-24-agency-only-ny-ga-v1.exceptions.jsonl.gz)
 decompresses to the SHA-256 stated in the report. The report's exception path
 is the original temporary replay location; the linked copy is preserved here.
 

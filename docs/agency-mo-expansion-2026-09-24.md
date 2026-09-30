@@ -20,7 +20,7 @@ observation pointer and raw fields. Every held row appears in the exception
 ledger. The reviewed Penske row has an unknown canonical action day because
 its comment says the original date moved forward without stating the new day.
 
-The [combined source bundle](../data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-v1.tar.gz)
+The [combined source bundle](https://github.com/bchaps1999/warn-notice-register/blob/d919111/data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-v1.tar.gz)
 has **2,007 files** and SHA-256
 `80dc5344f3cd126f81c59ae0ab103dbd687be5f80523bde63627ada2892be142`.
 The staged candidate contains **70,636 notices**, **78,407 versions**, and
@@ -29,8 +29,8 @@ to the prior candidate. Missouri now has **384** notices: 72 prior 2025–26
 rows, 295 annual-table rows, and 17 reviewed workbook rows. Its 15 missing
 action dates and 25 missing locations remain visible rather than imputed.
 Integrity is `ok` with zero foreign-key errors. The
-[replay report](../data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-v1-report.json)
-and [11,844-row exception ledger](../data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-v1.exceptions.jsonl.gz)
+[replay report](https://github.com/bchaps1999/warn-notice-register/blob/d919111/data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-v1-report.json)
+and [11,844-row exception ledger](https://github.com/bchaps1999/warn-notice-register/blob/d919111/data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-txhist-mo-v1.exceptions.jsonl.gz)
 preserve the audit trail.
 Two corrected isolated replays matched counts, notice and version
 fingerprints, the exception ledger SHA-256

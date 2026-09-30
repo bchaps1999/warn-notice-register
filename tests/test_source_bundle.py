@@ -1,6 +1,5 @@
 import hashlib
 import json
-import sqlite3
 from pathlib import Path
 
 import pytest
@@ -55,22 +54,6 @@ def test_source_bundle_refuses_overwrite_and_missing_required_input(tmp_path):
     (source / "raw").rmdir()
     with pytest.raises(FileNotFoundError):
         create(source, tmp_path / "missing.tar.gz")
-
-
-def test_source_bundle_rejects_old_database_overlap_policy(tmp_path):
-    source = tmp_path / "workdir"
-    _sources(source)
-    db_path = tmp_path / "baseline.sqlite"
-    conn = sqlite3.connect(db_path)
-    conn.execute("CREATE TABLE notices (dedupe_key TEXT, state TEXT, source_url TEXT, employees_affected INTEGER)")
-    conn.execute("INSERT INTO notices VALUES ('one', 'CA', 'https://archive/one', 12)")
-    conn.execute("INSERT INTO notices VALUES ('two', 'KS', 'https://example/two', NULL)")
-    conn.commit()
-    conn.close()
-    destination = tmp_path / "snapshot.tar.gz"
-    with pytest.raises(ValueError, match="overlap policy is retired"):
-        create(source, destination, db_path)
-    assert not destination.exists()
 
 
 def test_agency_raw_guard_rejects_embedded_historical_mirrors(tmp_path):

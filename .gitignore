@@ -25,7 +25,3 @@ output/
 docs/archive/
 data/archive/retired-adjudication/
 data/archive/source-diagnostics/ny-dates/
-
-# Superseded intermediate bundles without a published replay reference.
-data/source_snapshots/2026-09-24-agency-only-ny-annual-v1.tar.gz
-data/source_snapshots/2026-09-24-agency-only-ny-ga-orhist-v1.tar.gz
