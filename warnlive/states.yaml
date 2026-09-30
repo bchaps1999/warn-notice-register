@@ -181,15 +181,15 @@ ga:
 hi:
   name: Hawaii
   source: upstream
-  status: active
+  status: archive
   tier: hard
-  cadence: weekly
+  cadence: null
   needs_browser: false
   min_rows: 20
   staleness_days: 180
   expected_columns: [Company, Date, PDF url, location, jobs]
   source_url: https://labor.hawaii.gov/wdc/real-time-warn-updates/
-  notes: "HTML page linking PDFs; fragile, scraper falls back to Google cache."
+  notes: "HTML page linking PDFs. Paused 2026-09-30: the collector's current output re-keys every released row, so scheduled scrapes would duplicate notices until a key migration lands (docs/release-v1.2.0-2026-09-30.md)."
 
 id:
   name: Idaho
