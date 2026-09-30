@@ -39,21 +39,29 @@ def ks_ambiguity_reasons(records: list[dict], existing: list[dict],
     return reasons
 
 
-def load_ks_hold_policy(path: Path = KS_HOLDS_PATH) -> tuple[set[str], set[tuple[str, str]]]:
-    payload = json.loads(path.read_text())
-    if payload.get("source") != "kansasworks_warn_portal" or not isinstance(payload.get("held_ids"), list):
-        raise ValueError("invalid Kansas portal hold policy")
+def load_portal_hold_policy(path: Path, source: str, postal: str,
+                            name: str) -> tuple[set[str], set[tuple[str, str]]]:
+    """Held portal record IDs and employer/day signatures of one job portal."""
+    payload = json.loads(Path(path).read_text())
+    if payload.get("source") != source or not isinstance(payload.get("held_ids"), list):
+        raise ValueError(f"invalid {name} portal hold policy")
     ids = payload["held_ids"]
-    if len(ids) != len(set(ids)) or any(not re.fullmatch(r"KS:\d+", value) for value in ids):
-        raise ValueError("invalid Kansas portal held IDs")
+    pattern = rf"{re.escape(postal.upper())}:\d+"
+    if len(ids) != len(set(ids)) or any(
+            not isinstance(value, str) or not re.fullmatch(pattern, value) for value in ids):
+        raise ValueError(f"invalid {name} portal held IDs")
     signatures = payload.get("held_signatures")
     if not isinstance(signatures, list) or any(
         not isinstance(item, list) or len(item) != 2
         or not all(isinstance(part, str) and part for part in item)
         for item in signatures
     ):
-        raise ValueError("invalid Kansas portal held signatures")
+        raise ValueError(f"invalid {name} portal held signatures")
     return set(ids), {tuple(item) for item in signatures}
+
+
+def load_ks_hold_policy(path: Path = KS_HOLDS_PATH) -> tuple[set[str], set[tuple[str, str]]]:
+    return load_portal_hold_policy(path, "kansasworks_warn_portal", "ks", "Kansas")
 
 
 def persist_ks_hold_policy(current_path: Path,

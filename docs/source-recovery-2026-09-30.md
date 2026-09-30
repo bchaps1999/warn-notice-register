@@ -392,3 +392,138 @@ python -m warnlive.migrate.offline_rebuild --bundle <bundle> \
   not applied: it would block on released v1.2 groups).
 - DE record 40 (Hostess 2012) is reachable but unlisted and untyped; it is
   out of scope.
+
+## Independent review and final candidate (2026-09-30)
+
+**Status: isolated candidate, not released.** Code: working tree on `1899c79`
+(uncommitted at replay time). This section corrects the three candidate
+sections above; their tables stay as recorded.
+
+### What the review checked
+
+An independent review of the combined KY/TN/LA/MI, CT/IA/OH/OR and job-portal
+candidate re-derived row accounting per source, compared every released v1.2
+key with the candidate, searched the new notices for repeated events
+(same place, dates and count under different names), and traced a sample of
+admitted rows to their source cells. It found:
+
+1. **IA archive repeats under retyped names.** The 12-character name prefix
+   missed agency typos, so five events were admitted twice: `eiber` (Iowa
+   City, 2018-06-26, 23 workers, `WARN_20200420-2…xlsx:r222`) is the current
+   log's ACT, Inc. at the same address (2727 S. Scott Blvd, a v1.2 notice);
+   "Clipper Windposer" (Cedar Rapids 2012-10-16, 10), "IPSCO Tubulars Inc."
+   (Camanche 2015-05-06, 80), "Verizon Corporate Resporces G" (2015-07-16,
+   102) and "SSP America, Ic." (2017-04-28, 57) repeat rows of a newer
+   archived log.
+2. **KY tracking-sheet re-entries.** `duplicate_row_in_source` caught only
+   identical rows. BSC Acquisition (2001 r9/r12, 59), Atlantis Plastics
+   (2008 r28/r29, 152), Panasonic (2008 r34/r37, 51; projected
+   `09/30/2008 - 03/31/2009` against a 2008-09-30 date cell) and Appalachian
+   Fuels (2009 r59/r60) were each admitted twice.
+3. **Live/rebuild parity for the new portals.** The live pipeline read
+   `<postal>.hold_policy.json` for Kansas only.
+
+### Fixes
+
+- IA (`ia_source._same_event`): an archived row whose city, notice date,
+  layoff date and worker count all equal a newer archived log's row or a
+  current-log row is matched regardless of name. A newer-log match is a
+  `duplicate_agency_capture` (or `listing_differs_in_newer_archived_log` if
+  the amendment type differs); a current-log match is
+  `listed_in_current_ia_logs`, the reason the name match already used. The
+  held row's cells stay in the ledger with `related_source_row` pointing at
+  the kept row. The rule also matched 8 PDF amendment rows to their 2018
+  workbook copies ("Lennox" vs "Lennox Industries, Inc.", "Electrolux" vs
+  "Electrolux Home Products, Inc."); two of them (Lennox 2012-03-29 and
+  2013-02-28) had been admitted as versions 2 and 3 of the 2008 Lennox
+  notice from the older PDF while the newer workbook's copy was held without
+  a verified parent. They now follow the newest-log rule and are held.
+- KY (`ky_source._reentry_key`): a tracking-sheet row with the same
+  normalized employer, county, address, Date Received, projected date
+  (parsed start, else the cell text) and employee count as an earlier row is
+  held as `duplicate_row_in_source` with `differing_columns`, unless the two
+  rows name different affected occupations. Two "See ..." pointers to the
+  notice count as the same. So Kuhlman Electric (2009 r33/r35, "Senior
+  Engineer" / "Senior Administrative Assistant") and ArvinMeritor (2009
+  r54/r55, "See W.A.R.N." / "Production supervisor"), one worker each, stay
+  separate notices: a named occupation is a substantive difference, and the
+  source gives no evidence that either row repeats the other.
+- Portals (`pipeline._run_one`): for AZ, ME, VT and DE the live run now
+  requires the collector's current hold policy (on a live custom fetch),
+  checks its `raw_sha256` against the CSV, excludes any CSV row whose record
+  ID or employer/day matches a staging hold
+  (`reviewed_portal_event_identity_unresolved`), and lists the staging-held
+  record IDs under `admission.staging_held_ids` (Kansas too). Staging holds
+  are not CSV rows, so they are not counted in `excluded_rows`. The Kansas
+  reviewed/durable hold lists and publication block are unchanged and remain
+  Kansas-only. The rebuild's `record_in_earlier_capture` and
+  `same_key_as_admitted_notice` holds have no live counterpart (a live run
+  reads one capture and stores a same-key row as a version); the latter held
+  0 rows in this replay.
+
+### Notes the review asked to record
+
+- **Oregon historical rows cite a secondary-hosted agency file.** The 783
+  Oregon historical notices in v1.2 and the 45 partial rows admitted with
+  `--or-historical-partial-rows` come from the Oregon agency workbook hosted
+  on Big Local News's GitHub: an exact copy of an agency-supplied file (see
+  `docs/agency-tx-or-historical-expansion-2026-09-24.md`), not a file
+  fetched from an Oregon site.
+- **KY 2024 report rows 9 and 10 (PARSONS CORPORATION, Madison).** Both were
+  received 2024-11-04 with a 2025-01-16 projected date; row 9 (4 workers)
+  has no notice URL and is keyed by workbook row, row 10 (7 workers) by its
+  notice document. The counts differ, so both stay admitted; they may be one
+  filing.
+- **Unverified notice-date roles.** The TN month report's `Notice Date` and
+  the CT pages' `WARN Date` fill `notice_date` with no basis. In the TN
+  report, 313 of the 509 admitted rows have a Notice Date after the Received
+  Date (CT: 6 of 490 after the Rec'd date). Exclude these rows from strict
+  notice-timing cohorts until the roles are verified.
+- **Released IA repeats (not changed).** The same search over all IA notices
+  still finds 21 pairs, all between v1.2 released notices: 18 are typo or
+  truncation repeats between the current `event-log.xlsx` and `historical-2023.pdf`
+  (e.g. "Lennox Industries"/"Lennox Industires", 2022-12-20, 114), and 3 are
+  plausibly distinct (two MetaBank branch pairs, Conde Group / Integrated
+  Human Capital at 1 worker). Correcting them changes released keys and needs
+  its own reviewed migration.
+
+### Final candidate build and replay
+
+The fixes are projection-only; the bundle is the job-portal bundle above
+(`968ea8790aa49fd330b2f3173714e55bebf03a3831e65e0da3a094e62e983c84`, reused,
+not rebuilt).
+
+```bash
+python -m warnlive.migrate.offline_rebuild \
+  --bundle recovery-candidate-3/2026-09-30-recovery-job-portals-source-bundle.tar.gz \
+  --quality-evidence-dir data/source_snapshots/2026-09-24-quality-evidence \
+  --db <run>/candidate.sqlite --observed-at 2026-09-30 --source-only \
+  --report <run>/report.json --exceptions <run>/candidate.exceptions.jsonl \
+  --or-historical-partial-rows
+```
+
+- Held by the fixes (IDs in the previous candidate): IA 66192, 66269, 66270,
+  66271, 66431; KY 67769, 67940, 67946, 68033; versions 2 and 3 of IA 66371
+  (Lennox).
+- Result: 85,688 notices (−9), 100,136 versions (−11), 1,992 links
+  (unchanged), 8,830,761 workers (−534), ledger 7,972 rows (+11), integrity
+  `ok`, 0 foreign-key errors.
+- Row accounting: IA archive 1,054 rows = 377 notices + 61 versions + 616
+  held (duplicate capture 361, listed in current logs 132, amendment without
+  parent 64, amendment parent ambiguous 37, possible revision 6, differs in
+  newer log 5, layout/date 5, site/worker allocation 4, repeated event 2).
+  KY archive 1,227 rows = 1,150 admitted + 77 held (duplicate row 6, others
+  as before).
+- Fingerprints: notices `0059cf2f…388d`, versions `1f274df6…8c668`, links
+  `cc06649a…5f27`. Two independent replays matched, and their ledgers
+  (SHA-256 `e9838342fef528e7cd9eb6204cc1bebf2897672461e04f3c5994c0b2e7009805`)
+  were byte-identical.
+- Released keys: compared with the v1.2.0 database (`git show
+  5ce24af:data/warn.sql.gz`), all 80,703 keys are present with identical
+  notice rows (every column but `id`) and versions, and no link was lost.
+- The v1.2 bundle under this code without the option reproduced the v1.2
+  report's counts, fingerprints and ledger (5,702 rows, `16c5e516…5c7b`).
+- IA check: no pair of IA notices with the same location, notice date,
+  effective date and count under different names involves an archive row
+  (the 21 remaining pairs are the released ones above).
+- Tests: `pytest tests/ -q` 672 passed, 1 skipped.

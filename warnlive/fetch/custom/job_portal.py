@@ -7,6 +7,17 @@ access at a 2 s pace), freezes the pages into an evidence archive under
 the staged rows and ``data_dir/<postal>.hold_policy.json`` with the capture's
 holds. Rows held at staging (same employer and notice day, name variants,
 missing notice date, listing/detail disagreement) are absent from the CSV.
+
+The live pipeline (``pipeline._run_one``) reads that hold policy for every
+portal: it excludes any CSV row whose record ID or employer/day matches a held
+row and lists the held record IDs under ``admission.staging_held_ids`` in the
+run report. The offline rebuild's portal projection
+(``migrate.job_portal_source.project``) has two further holds with no live
+counterpart: ``record_in_earlier_capture`` (a record already read from the
+bundle's earlier ``raw/<postal>.csv``) and ``same_key_as_admitted_notice``. A
+live run reads one current capture and ingests a row whose key is already
+stored as that notice's next version, so neither situation arises as a hold;
+``same_key_as_admitted_notice`` held 0 rows in the 2026-09-30 recovery replay.
 """
 
 from __future__ import annotations

@@ -727,6 +727,20 @@ def _same_employer(a: str, b: str) -> bool:
     return bool(a and b) and (a == b or (min(len(a), len(b)) >= 12 and (a.startswith(b) or b.startswith(a))))
 
 
+def _same_event(a: dict, b: dict) -> bool:
+    """Same city, notice date, layoff date and worker count, whatever the name.
+
+    The agency retyped employer names between logs ("Clipper Windposer",
+    "SSP America, Ic.", "eiber" for ACT, Inc.), so a name comparison alone
+    misses repeats. All four facts must be present and equal.
+    """
+    return (bool(_alnum(a.get("city_text"))) and _alnum(a.get("city_text")) == _alnum(b.get("city_text"))
+            and a.get("notice_date") is not None and a.get("notice_date") == b.get("notice_date")
+            and a.get("effective_date") is not None and a.get("effective_date") == b.get("effective_date")
+            and a.get("workers_reported") is not None
+            and a.get("workers_reported") == b.get("workers_reported"))
+
+
 def project_archive(directory: Path, current_rows: list[dict]
                     ) -> tuple[list[dict], list[dict], dict]:
     """Project the archived logs with the event-log rules, never double counting.
@@ -735,7 +749,10 @@ def project_archive(directory: Path, current_rows: list[dict]
     (an exact repeat is a duplicate capture; a changed listing is held). An
     event also listed in the current logs (``current_rows``, admitted or
     held there) is held, as is an amendment that may belong to a current-log
-    notice. The remaining rows go through ``project``: its family, site and
+    notice. A listing matches another by employer name (equal, or a prefix of
+    at least 12 characters) and notice date, or, whatever the name, by equal
+    city, notice date, layoff date and worker count (``_same_event``), since
+    agency retyping leaves typos in names. The remaining rows go through ``project``: its family, site and
     amendment rules (``_amendment_version``) apply unchanged.
     """
     rows = extract_archive(directory)
@@ -749,7 +766,8 @@ def project_archive(directory: Path, current_rows: list[dict]
         log = row["source_artifact"].rsplit("/", 1)[-1]
         newer = [other for other in seen if rank[other["source_artifact"].rsplit("/", 1)[-1]] < rank[log]
                  and other["notice_date"] and other["notice_date"] == row["notice_date"]
-                 and _same_employer(other["company_text"], row["company_text"])]
+                 and (_same_employer(other["company_text"], row["company_text"])
+                      or _same_event(other, row))]
         twins = [other for other in newer if (other["source_row"], log) not in paired
                  and (other["effective_date"], other["workers_reported"], _is_amendment(other["notice_type_text"]))
                  == (row["effective_date"], row["workers_reported"], _is_amendment(row["notice_type_text"]))]
@@ -776,7 +794,8 @@ def project_archive(directory: Path, current_rows: list[dict]
     in_current: dict[str, str] = {}
     for row in kept:
         match = next((other for other in current_by_date.get(row["notice_date"], [])
-                      if _same_employer(other["company_text"], row["company_text"])), None)
+                      if _same_employer(other["company_text"], row["company_text"])), None) or next(
+            (other for other in current_by_date.get(row["notice_date"], []) if _same_event(other, row)), None)
         if match and _is_amendment(row["notice_type_text"]):
             # Not a parent of any other row, so it can leave before projection.
             pre_held[row["source_row"]] = ("listed_in_current_ia_logs", match["source_row"])

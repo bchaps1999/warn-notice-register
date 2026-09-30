@@ -475,6 +475,30 @@ def _archive_fields(row: dict) -> dict:
             "source": _text(raw.get("Source")) if "Source" in raw else None}
 
 
+def _occupations_match(a: object, b: object) -> bool:
+    """Equal occupation text, or both only a pointer to the notice ("See WARN").
+
+    A named occupation ("Senior Engineer") distinguishes one-worker listings
+    of one employer and day, so such rows are kept apart.
+    """
+    a, b = _text(a).casefold(), _text(b).casefold()
+    return a == b or (a.startswith("see ") and b.startswith("see "))
+
+
+def _reentry_key(row: dict, f: dict) -> str | None:
+    """The facts a re-typed tracking-sheet listing repeats; None off the sheet.
+
+    Employer, county, address, Date Received, projected action date (parsed
+    start, else the cell text) and employee count, normalized.
+    """
+    if row["file"] != TRACKING or not f["company"]:
+        return None
+    fold = lambda value: re.sub(r"[^a-z0-9]", "", str(value or "").casefold())  # noqa: E731
+    projected = f["projected"][0] or _text(row["raw"].get(f["projected_field"])).casefold()
+    return _json([fold(f["company"]), fold(f["county"]), fold(f["address"]), f["received"],
+                  projected, f["workers"]])
+
+
 def project_archive(directory: Path, existing_ids: set[str] | None = None,
                     existing_urls: set[str] | None = None) -> tuple[list[dict], list[dict], dict]:
     """Admit archive rows as notices; hold duplicates, amendments and non-WARN rows.
@@ -483,6 +507,12 @@ def project_archive(directory: Path, existing_ids: set[str] | None = None,
     document URLs of the Kentucky rows already in the build (agency/ky). An
     agency notice number is the identity where the source has one; otherwise
     the agency's notice document URL; otherwise the workbook row itself.
+
+    A tracking-sheet row that repeats an earlier row's employer, county,
+    address, Date Received, projected date and employee count (``_reentry_key``)
+    is a re-entry of that listing and is held as ``duplicate_row_in_source``
+    with the columns that differ, unless the rows name different affected
+    occupations (``_occupations_match``).
     """
     rows = read_archive(directory)
     existing_ids = {str(x) for x in existing_ids or ()}
@@ -494,14 +524,20 @@ def project_archive(directory: Path, existing_ids: set[str] | None = None,
     seen_urls: dict[str, str] = {}
     seen_ids: dict[str, str] = {}
     seen_content: dict[str, str] = {}
+    seen_reentry: dict[str, list[dict]] = {}
     records, held = [], []
     for row, f in fields:
         url = f["document_url"]
         document = SALESFORCE_DOC.fullmatch(url or "")
         # Two identical cell sets on one tracking sheet are one listing.
         content_key = _json([row["sheet"], row["raw"]]) if row["file"] == TRACKING else None
+        reentry_key = _reentry_key(row, f)
+        reentry_of = next((other for other in seen_reentry.get(reentry_key, [])
+                           if _occupations_match(other["raw"].get("Affected Occupations"),
+                                                 row["raw"].get("Affected Occupations"))), None)
         text = " ".join([f["company"], f["comment"]])
         related = None
+        differing = None
         if not f["company"]:
             reason = "missing_employer"
         elif OUT_OF_STATE_TEXT.search(f["county"] or ""):
@@ -528,6 +564,10 @@ def project_archive(directory: Path, existing_ids: set[str] | None = None,
             reason = "amendment_row_parent_unresolved"
         elif content_key is not None and content_key in seen_content:
             reason, related = "duplicate_row_in_source", seen_content[content_key]
+        elif reentry_of is not None:
+            reason, related = "duplicate_row_in_source", reentry_of["source_row"]
+            differing = sorted(head for head in set(reentry_of["raw"]) | set(row["raw"])
+                               if reentry_of["raw"].get(head) != row["raw"].get(head))
         else:
             reason = None
         if f["notice_id"]:
@@ -536,6 +576,8 @@ def project_archive(directory: Path, existing_ids: set[str] | None = None,
             seen_urls.setdefault(url, row["source_row"])
         if content_key is not None:
             seen_content.setdefault(content_key, row["source_row"])
+        if reentry_key is not None:
+            seen_reentry.setdefault(reentry_key, []).append(row)
         if reason:
             item = {"origin": row["source_artifact"], "state": "KY", "reason": reason,
                     "source_row": row["source_row"],
@@ -546,6 +588,8 @@ def project_archive(directory: Path, existing_ids: set[str] | None = None,
                                         "stored_numbers": row["stored_numbers"]})}
             if related:
                 item["related_source_row"] = related
+            if differing is not None:
+                item["differing_columns"] = differing
             held.append(item)
             continue
         if f["notice_id"]:

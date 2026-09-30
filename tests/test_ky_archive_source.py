@@ -29,10 +29,10 @@ def test_every_archive_row_is_admitted_or_held_with_a_reason():
     assert report["rows_by_file"] == {
         "tracking-form-1998-2016.xlsx": 799, "warn-report-2017-2025-02.xlsx": 368,
         "warn-report-2025.csv": 60}
-    assert (report["admitted"], report["held"]) == (1154, 73)
+    assert (report["admitted"], report["held"]) == (1150, 77)
     assert report["hold_reasons"] == {
         "agency_comment_rescinded": 1, "already_represented_ky_id": 4,
-        "amendment_row_parent_unresolved": 33, "duplicate_row_in_source": 2,
+        "amendment_row_parent_unresolved": 33, "duplicate_row_in_source": 6,
         "ky_tracking_source_not_warn": 12,
         "listed_in_ky_2025_report_with_notice_number": 11,
         "source_explicitly_out_of_state": 10,
@@ -47,7 +47,7 @@ def test_identities_prefer_agency_number_then_document_then_row():
     records, held, report = _project()
     assert report["admitted_by_identity_basis"] == {
         "agency_notice_document_url": 340, "agency_notice_number": 55,
-        "agency_workbook_row": 759}
+        "agency_workbook_row": 755}
     assert len({rec["source_identity"] for rec in records}) == len(records)
     assert len({rec["dedupe_key"] for rec in records}) == len(records)
     by_id = {rec["source_identity"]: rec for rec in records}
@@ -94,6 +94,30 @@ def test_amendments_rescissions_and_non_warn_rows_are_held():
     sources = {json.loads(item["raw_extra"])["cells"].get("Source") for item in held
                if item["reason"] == "ky_tracking_source_not_warn"}
     assert "Media" in sources and not any("WARN" in (s or "").upper() for s in sources)
+
+
+def test_tracking_sheet_reentries_are_held_with_their_differences():
+    _, held, _ = _project()
+    by_row = {item["source_row"].split(":sheet:")[-1]: item for item in held
+              if ":sheet:" in item["source_row"]}
+    expected = {
+        # Same listing retyped: "See WARN" vs "See Worker Layoff Report".
+        "WARN 2001:row:12": ("WARN 2001:row:9", "Affected Occupations"),
+        # Atlantis Plastics: industry code corrected on the second entry.
+        "WARN 2008:row:29": ("WARN 2008:row:28", "NAICS/SIC"),
+        # Panasonic: "09/30/2008 - 03/31/2009" vs a 2008-09-30 date cell.
+        "WARN 2008:row:37": ("WARN 2008:row:34", "Projected Dates"),
+        "WARN 2009:row:60": ("WARN 2009:row:59", "Workforce Area"),
+    }
+    for row, (earlier, column) in expected.items():
+        item = by_row[row]
+        assert item["reason"] == "duplicate_row_in_source"
+        assert item["related_source_row"].endswith(f":sheet:{earlier}")
+        assert column in item["differing_columns"]
+    # One-worker listings naming different occupations stay separate notices.
+    for row in ("WARN 2009:row:33", "WARN 2009:row:35",
+                "WARN 2009:row:54", "WARN 2009:row:55"):
+        assert row not in by_row
 
 
 def test_archive_checksum_and_manifest_drift_fail_closed(tmp_path):

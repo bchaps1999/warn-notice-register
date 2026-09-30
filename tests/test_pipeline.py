@@ -448,3 +448,56 @@ def test_job_portal_capture_does_not_freeze_absent_notices(monkeypatch, tmp_path
     assert result.verdict == "ok"
     assert result.checks["ingest"]["absence_frozen"] is False
     assert conn.execute("SELECT last_seen FROM notices WHERE dedupe_key='old'").fetchone()[0] is None
+
+
+def test_live_portal_staging_holds_are_applied_and_reported(monkeypatch, tmp_path):
+    conn, raw = _setup(monkeypatch, tmp_path, cached=False)
+    data_dir = tmp_path / "workdir" / "raw"
+    data_dir.mkdir(parents=True)
+    current = data_dir / "az.hold_policy.json"
+    current.write_text(json.dumps({
+        "source": "az_job_connection_warn_portal",
+        "held_ids": ["AZ:12", "AZ:3"],
+        "held_signatures": [["acme", "2026-01-01"]],
+        "raw_sha256": hashlib.sha256(raw.read_bytes()).hexdigest(),
+    }))
+    held = {**_record(), "state": "AZ", "dedupe_key": "held", "raw_record_hash": "held-hash"}
+    clear = {**held, "dedupe_key": "clear", "employer_name": "Other",
+             "raw_record_hash": "clear-hash"}
+    monkeypatch.setattr(
+        pipeline.engine, "normalize_file",
+        lambda *_, **__: NormalizeResult(state="AZ", records=[held, clear], raw_rows=2),
+    )
+    outcome = pipeline._run_one(
+        replace(_config("az"), source="custom"), conn, data_dir,
+        tmp_path / "cache", False, False,
+    )
+    admission = outcome.checks["admission"]
+    assert admission["staging_held_ids"] == ["AZ:3", "AZ:12"]
+    assert [(row["dedupe_key"], row["reason"]) for row in admission["exclusions"]] == [
+        ("held", "reviewed_portal_event_identity_unresolved")]
+    assert admission["eligible_rows"] == 1
+    assert [row[0] for row in conn.execute("SELECT dedupe_key FROM notices")] == ["clear"]
+
+
+def test_live_portal_hold_policy_must_match_raw_csv(monkeypatch, tmp_path):
+    conn, raw = _setup(monkeypatch, tmp_path, cached=False)
+    data_dir = tmp_path / "workdir" / "raw"
+    data_dir.mkdir(parents=True)
+    result = pipeline._run_one(
+        replace(_config("me"), source="custom"), conn, data_dir,
+        tmp_path / "cache", False, False,
+    )
+    assert result.verdict == "failed"
+    assert "omitted current hold policy" in result.error
+    (data_dir / "me.hold_policy.json").write_text(json.dumps({
+        "source": "maine_joblink_warn_portal", "held_ids": [], "held_signatures": [],
+        "raw_sha256": "stale",
+    }))
+    result = pipeline._run_one(
+        replace(_config("me"), source="custom"), conn, data_dir,
+        tmp_path / "cache", False, False,
+    )
+    assert result.verdict == "failed"
+    assert "does not match raw CSV" in result.error
+    assert conn.execute("SELECT COUNT(*) FROM notices").fetchone()[0] == 0

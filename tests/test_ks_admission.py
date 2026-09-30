@@ -72,3 +72,19 @@ def test_kansas_pair_hold_survives_later_singleton_capture(tmp_path):
         [_record("KS:999001", "later", "Acme", "2026-01-01")],
         [], ids, signatures,
     ) == {"later": "reviewed_portal_event_identity_unresolved"}
+
+
+def test_portal_hold_policy_checks_its_own_source_and_ids(tmp_path):
+    from warnlive.normalize.admission import load_portal_hold_policy
+
+    path = tmp_path / "holds.json"
+    path.write_text(json.dumps({"source": "vermont_joblink_warn_portal",
+                                "held_ids": ["VT:7"], "held_signatures": []}))
+    assert load_portal_hold_policy(path, "vermont_joblink_warn_portal", "vt", "Vermont") == (
+        {"VT:7"}, set())
+    with pytest.raises(ValueError, match="invalid Maine portal hold policy"):
+        load_portal_hold_policy(path, "maine_joblink_warn_portal", "me", "Maine")
+    path.write_text(json.dumps({"source": "vermont_joblink_warn_portal",
+                                "held_ids": ["KS:7"], "held_signatures": []}))
+    with pytest.raises(ValueError, match="held IDs"):
+        load_portal_hold_policy(path, "vermont_joblink_warn_portal", "vt", "Vermont")

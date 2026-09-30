@@ -26,7 +26,7 @@ from warnlive.normalize.engine import _dedupe_key
 from warnlive.normalize.admission import (
     exclusion_reasons, ks_ambiguity_reasons,
     ks_event_signature,
-    load_ks_hold_policy, persist_ks_hold_policy,
+    load_ks_hold_policy, load_portal_hold_policy, persist_ks_hold_policy,
 )
 from warnlive.registry import Registry, StateConfig
 from warnlive.store import dedupe
@@ -253,6 +253,8 @@ def _run_one(
             logger.debug("normalize %s failed:\n%s", postal, traceback.format_exc())
 
     excluded: list[dict] = []
+    # Record IDs the job-portal collector held at staging (absent from the CSV).
+    staging_held: set[str] | None = None
     if norm is not None:
         reasons = exclusion_reasons(postal, norm.records)
         if postal == "ks":
@@ -276,6 +278,7 @@ def _run_one(
                     if current.get("raw_sha256") != raw_digest:
                         raise ValueError("Kansas current hold policy does not match raw CSV")
                     current_ids, current_signatures = load_ks_hold_policy(current_path)
+                    staging_held = current_ids
                     held_ids |= current_ids
                     held_signatures |= current_signatures
                     if fetched_live and not smoke:
@@ -314,6 +317,32 @@ def _run_one(
                 outcome.error = f"Kansas admission policy: {e}"
                 outcome.checks = {"verdict": "failed", "admission": outcome.error}
                 return outcome
+        elif postal in job_portal_source.PORTALS:
+            # The other job portals apply their capture's staging holds the
+            # same way: a CSV row whose record ID or employer/day matches a
+            # held row is excluded and reported. Kansas alone keeps reviewed
+            # and durable hold lists and blocks publication on a conflict.
+            portal = job_portal_source.PORTALS[postal]
+            try:
+                current_path = data_dir / f"{postal}.hold_policy.json"
+                if fetched_live and cfg.source == "custom" and not current_path.is_file():
+                    raise ValueError(f"complete {portal.name} collector omitted current hold policy")
+                if current_path.is_file():
+                    current = json.loads(current_path.read_text())
+                    raw_digest = hashlib.sha256(raw_path.read_bytes()).hexdigest()
+                    if current.get("raw_sha256") != raw_digest:
+                        raise ValueError(f"{portal.name} current hold policy does not match raw CSV")
+                    held_ids, held_signatures = load_portal_hold_policy(
+                        current_path, portal.policy_source, postal, portal.name)
+                    staging_held = held_ids
+                    for key, reason in ks_ambiguity_reasons(
+                        norm.records, [], held_ids, held_signatures
+                    ).items():
+                        reasons.setdefault(key, reason)
+            except (OSError, ValueError) as e:
+                outcome.error = f"{portal.name} admission policy: {e}"
+                outcome.checks = {"verdict": "failed", "admission": outcome.error}
+                return outcome
         excluded = [
             {
                 "reason": reasons[record["dedupe_key"]],
@@ -339,6 +368,9 @@ def _run_one(
                 for failure in norm.failures
             ],
         }
+        if staging_held is not None:
+            outcome.checks["admission"]["staging_held_ids"] = sorted(
+                staging_held, key=lambda value: int(value.split(":", 1)[1]))
     outcome.verdict = verification.verdict
     # A collector that substitutes archived copies for refused files (MA's
     # Internet Archive fallback) writes a manifest; an archived capture is
