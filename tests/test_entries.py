@@ -32,9 +32,52 @@ def conn(tmp_path):
     return conn
 
 
-def test_registry_policies_cover_ca_pa_mi_only():
-    assert {s for s in ("CA", "PA", "MI", "NY", "WI", "TX")
-            if entries.same_key_policy(s) == "distinct_rows"} == {"CA", "PA", "MI"}
+def test_registry_policies_cover_ca_pa_mi_ne_only():
+    assert {s for s in ("CA", "PA", "MI", "NE", "NY", "WI", "TX")
+            if entries.same_key_policy(s) == "distinct_rows"} == {"CA", "PA", "MI", "NE"}
+
+
+def _in_file(rec, source_file):
+    rec = dict(rec, raw_extra=json.dumps({"w": rec["employees_affected"],
+                                          "source_file": source_file}))
+    rec["raw_record_hash"] = _record_hash(rec)
+    return rec
+
+
+def test_same_key_rows_in_two_fiscal_year_reports_are_one_notice_with_versions(conn):
+    """A notice re-listed with a corrected count in the next FY report is a
+    revision, not a second entry (Broadcom Irvine 2016-01-29: 689 then 771)."""
+    rows = [_in_file(_rec(workers=689, effective="2016-01-29"), "fy15-16.pdf"),
+            _in_file(_rec(workers=771, effective="2016-01-29"), "fy16-17.pdf")]
+    out, report = entries.qualify_same_document_entries(conn, "CA", rows)
+    assert [rec["dedupe_key"] for rec in out] == [rows[0]["dedupe_key"]] * 2
+    assert report["qualified_rows"] == 0 and report["cross_document_key_groups"] == 1
+    stats = ingest(conn, out, "2026-09-30")
+    assert (stats.new, stats.updated) == (1, 1)
+    [(versions, workers)] = conn.execute(
+        "SELECT current_version, employees_affected FROM notices").fetchall()
+    assert (versions, workers) == (2, 771)
+
+
+def test_same_key_rows_in_one_report_stay_two_entries_beside_another_report(conn):
+    rows = [_in_file(_rec(workers=19), "fy15-16.pdf"),
+            _in_file(_rec(workers=57), "fy16-17.pdf"),
+            _in_file(_rec(workers=58), "fy16-17.pdf")]
+    out, report = entries.qualify_same_document_entries(conn, "CA", rows)
+    keys = [rec["dedupe_key"] for rec in out]
+    assert keys[0] == keys[1] == rows[0]["dedupe_key"]
+    assert keys[2] == entries.entry_key(rows[0]["dedupe_key"], rows[2])
+    assert report["groups"] == 1 and report["qualified_rows"] == 1
+
+
+def test_source_document_uses_configured_fields_then_artifact():
+    rec = _rec()
+    assert entries.source_document("PA", rec) == ""
+    assert entries.source_document("CA", _in_file(rec, "a.pdf")) == "source_file=a.pdf"
+    annual = dict(rec, raw_extra=json.dumps({"year_file": 2014}))
+    assert entries.source_document("CA", annual) == "year_file=2014"
+    artifact = dict(rec, source_details=json.dumps({"source_artifact": "x/2014.pdf"}))
+    assert entries.source_document("CA", artifact) == "source_artifact=x/2014.pdf"
 
 
 def test_distinct_rows_get_entry_keys_and_first_keeps_legacy_key(conn):

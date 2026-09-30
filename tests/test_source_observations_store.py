@@ -130,10 +130,34 @@ def test_nebraska_layoff_closure_rows_are_observations_outside_the_warn_report(t
                    "raw_extra": json.dumps(raw)},
                   {"origin": "raw/ne.csv", "reason": "parse_failure", "raw_extra": "{}"}]
     [row] = _ne_observations(exceptions)
-    assert row["source_row"] == "agency/ne/layoff_closure_report-2014.html#row10"
+    assert row["source_artifact"] == "backfill/cache/archives/ne/layoff_closure_report-2014.html"
+    assert row["source_row"] == row["source_artifact"] + "#row10"
     assert (row["workers_reported"], row["ndol_matched_warn_row"]) == (78, "warn_report:2014:3")
     assert "notice_date" not in row
     store_observations(conn, [row], {row["source_row"]: ("not_in_agency_warn_report", None)},
                        "bundle")
     saved = conn.execute("SELECT state, admission_status, notice_id FROM source_observations").fetchone()
     assert tuple(saved) == ("NE", "not_in_agency_warn_report", None)
+
+
+def test_observation_pointers_must_name_bundle_members():
+    from warnlive.migrate.offline_rebuild import _check_observation_artifacts
+
+    rows = [{"source_artifact": "backfill/cache/archives/ne/warn_report-2014.html"},
+            {"source_artifact": "agency/la/2025.pdf"}]
+    _check_observation_artifacts(rows, {"agency/la/2025.pdf",
+                                        "backfill/cache/archives/ne/warn_report-2014.html"})
+    with pytest.raises(ValueError, match="not in the bundle"):
+        _check_observation_artifacts(rows, {"agency/la/2025.pdf"})
+
+
+def test_observation_store_rejects_unknown_artifact_paths(tmp_path):
+    conn = db.connect(tmp_path / "candidate.sqlite")
+    db.init_db(conn)
+    for artifact in ("agency/ne/layoff_closure_report-2014.html",
+                     "backfill/cache/archives/wi/dwd-2016.htm", "cache/archives/ne/x.html"):
+        row = {"source_artifact": artifact, "source_row": artifact + "#row1",
+               "source_row_sha256": "h", "kind": "notice"}
+        with pytest.raises(ValueError, match="unexpected official source artifact"):
+            store_observations(conn, [row], {row["source_row"]: ("identity_unresolved", None)},
+                               "bundle")

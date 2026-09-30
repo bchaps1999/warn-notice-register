@@ -86,3 +86,32 @@ def test_layoff_type_matches_the_live_mapping():
     assert or_source.type_fields("Temporary Layoff")[:2] == ("mass_layoff", 1)
     assert or_source.type_fields("Other")[:2] == ("unknown", None)
     assert or_source.type_fields(None) == ("unknown", None, None)
+
+
+def test_same_site_and_date_rows_of_one_warn_number_are_not_summed(monkeypatch, tmp_path):
+    """Two rows naming the same site and layoff date may be a count and its
+    restatement, so the filing's total is unknown. (WARN# 8617's 71 and 158
+    on 2023-10-20 are Bennett St. and Walker Rd, distinct sites: summed.)"""
+    base = {"WARN#": 1, "Received Date": "2023-08-21", "Layoff Type": "Permanent layoff",
+            "Company Name": "Acme", "Location": "Walker Rd"}
+    rows = [_row(4, {**base, "Layoff Date": "2023-10-20", "Laid Off": 71}),
+            _row(5, {**base, "Layoff Date": "2023-10-20", "Laid Off": 158}),
+            _row(6, {**base, "Layoff Date": "2024-01-12", "Laid Off": 62}),
+            _row(7, {**base, "Layoff Date": "2024-01-12", "Laid Off": 3})]
+    monkeypatch.setattr(or_source, "read_artifacts", lambda _: (rows, {"source_url": "u"}))
+    records, held, _ = or_source.project(tmp_path)
+    if not records:
+        # The identity classifier may hold such a number outright; then no
+        # total is published either.
+        assert len(held) == 4
+        records = [or_source.filing_record(
+            "1", [{"raw": row["raw"], "source_row": row["source_row"],
+                      "source_row_sha256": row["source_row_sha256"],
+                      "effective": row["raw"]["Layoff Date"], "workers": row["raw"]["Laid Off"]}
+                     for row in rows], "phases", {}, "u")]
+    [filing] = records
+    assert filing["employees_affected"] is None
+    details = json.loads(filing["source_details"])
+    assert details["worker_allocation"] == "unresolved"
+    assert [(g["effective_date"], g["workers"]) for g in details["same_site_date_rows"]] == [
+        ("2023-10-20", [71, 158]), ("2024-01-12", [62, 3])]

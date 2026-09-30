@@ -10,8 +10,12 @@ the agency's listed entry:
 
 - ``qualify_same_document_entries`` (states with ``same_key_policy:
   distinct_rows`` in states.yaml): in a key group with more than one distinct
-  row, one row keeps the legacy key and every other distinct row gets a
-  content-qualified key. Identical rows still coalesce.
+  row *of one document*, one row keeps the legacy key and every other
+  distinct row gets a content-qualified key. Identical rows still coalesce.
+  A capture that concatenates several documents (CA's raw file joins the
+  EDD fiscal-year reports) names each row's document in
+  ``same_key_document_fields``; same-key rows of different documents are a
+  notice re-listed over time and stay on the versions path.
 - ``fold_phase_group``: rows of one filing that itemize phases (Wisconsin's
   archived logs) become one notice with ``phases[]``, summed workers and the
   min/max action dates.
@@ -64,6 +68,30 @@ def same_key_policy(state: str) -> str:
     return _policies().get(state.upper(), "versions")
 
 
+@lru_cache(maxsize=1)
+def _document_fields() -> dict[str, tuple[str, ...]]:
+    from warnlive.registry import load_registry
+
+    return {cfg.postal.upper(): tuple(cfg.same_key_document_fields or ())
+            for cfg in load_registry().all()}
+
+
+def source_document(state: str, rec: dict, fields: tuple[str, ...] | None = None) -> str:
+    """The source document a row was listed in: the first non-blank
+    configured raw field, else ``source_details.source_artifact``; blank
+    when the state names none (the capture is one document)."""
+    fields = _document_fields().get(state.upper(), ()) if fields is None else fields
+    if not fields:
+        return ""
+    raw = _raw(rec)
+    for name in fields:
+        value = raw.get(name)
+        if value not in (None, ""):
+            return f"{name}={value}"
+    artifact = _details(rec).get("source_artifact")
+    return f"source_artifact={artifact}" if artifact else ""
+
+
 def _details(rec: dict) -> dict:
     return json.loads(rec.get("source_details") or "{}")
 
@@ -111,11 +139,14 @@ def _key_exists(conn: sqlite3.Connection | None, key: str) -> bool:
 
 def qualify_same_document_entries(
     conn: sqlite3.Connection | None, state: str, records: list[dict],
-    policy: str | None = None,
+    policy: str | None = None, document_fields: tuple[str, ...] | None = None,
 ) -> tuple[list[dict], dict]:
     """Give each distinct same-key row of one document its own entry key.
 
-    Only groups holding more than one distinct ``raw_record_hash`` change.
+    Rows are grouped by (``dedupe_key``, source document); only groups
+    holding more than one distinct ``raw_record_hash`` change. Same-key rows
+    of different documents are left alone, so ingest folds them into one
+    notice's versions (a re-listing with a corrected count).
     The row that keeps the legacy key is, in order of preference: the row
     whose hash is the stored notice's current version; a row matching any
     stored version; a row with the stored current version's discriminator;
@@ -125,14 +156,19 @@ def qualify_same_document_entries(
     """
     policy = policy or same_key_policy(state)
     report = {"policy": policy, "groups": 0, "qualified_rows": 0,
-              "qualified_keys": 0, "discriminator_collisions": 0}
+              "qualified_keys": 0, "discriminator_collisions": 0,
+              "cross_document_key_groups": 0}
     if policy != "distinct_rows":
         return records, report
-    groups: dict[str, list[int]] = defaultdict(list)
+    groups: dict[tuple[str, str], list[int]] = defaultdict(list)
     for index, rec in enumerate(records):
-        groups[rec["dedupe_key"]].append(index)
+        groups[(rec["dedupe_key"], source_document(state, rec, document_fields))].append(index)
+    documents_per_key: dict[str, int] = defaultdict(int)
+    for key, _document in groups:
+        documents_per_key[key] += 1
+    report["cross_document_key_groups"] = sum(n > 1 for n in documents_per_key.values())
     out = list(records)
-    for key, indexes in groups.items():
+    for (key, _document), indexes in groups.items():
         by_hash: dict[str, list[int]] = {}
         for index in indexes:
             by_hash.setdefault(records[index]["raw_record_hash"], []).append(index)

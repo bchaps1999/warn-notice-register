@@ -714,3 +714,61 @@ def test_archive_entries_phases_and_control_numbers_are_accounted(tmp_path, monk
     ]
     ny_current = conn.execute("SELECT current_version, effective_date FROM notices WHERE state='NY'").fetchone()
     assert tuple(ny_current) == (2, "2015-05-24")
+
+
+def test_source_only_replay_admits_nebraska_2020_2022_archive_once(tmp_path, monkeypatch):
+    """NE's pinned 2020-2022 page capture enters the replay as in the live
+    backfill; a row already present from raw/ne.csv is never admitted twice."""
+    import sqlite3
+    from warnlive.migrate import offline_rebuild
+    from warnlive.backfill import state_archives
+
+    conn = sqlite3.connect(":memory:")
+    conn.execute(
+        "CREATE TABLE notices (dedupe_key TEXT, state TEXT, employer_name TEXT, notice_date TEXT, "
+        "effective_date TEXT, source_details TEXT)"
+    )
+    conn.execute("INSERT INTO notices VALUES ('raw-key', 'NE', 'Acme', '2022-03-02', NULL, NULL)")
+    records = [
+        {"dedupe_key": "raw-key", "state": "NE", "employer_name": "Acme",
+         "notice_date": "2022-03-02", "raw_record_hash": "a", "source_url": "archive://a"},
+        {"dedupe_key": "same-employer-month", "state": "NE", "employer_name": "Acme",
+         "notice_date": "2022-03-20", "raw_record_hash": "b", "source_url": "archive://b"},
+        {"dedupe_key": "new-2021", "state": "NE", "employer_name": "Other Co",
+         "notice_date": "2021-06-01", "raw_record_hash": "c", "source_url": "archive://c"},
+    ]
+    assert "NE" in offline_rebuild._cached_agencies.__defaults__[-1]
+    monkeypatch.setitem(state_archives.FETCHERS, "NE", lambda _cache: records)
+    monkeypatch.setattr(offline_rebuild, "_cached_ny", lambda _cache: [])
+    for state in ("WI", "FL", "CA", "MA", "OH"):
+        monkeypatch.setitem(state_archives.FETCHERS, state, lambda _cache: [])
+    captured = []
+
+    def collect(_conn, groups, _observed_at, _revision_keys=frozenset()):
+        captured.extend(row["dedupe_key"] for group in groups.values() for row in group)
+        return {"new": sum(map(len, groups.values())), "updated": 0,
+                "unchanged": 0, "coalesced": 0, "suspected_collisions": 0}
+
+    monkeypatch.setattr(offline_rebuild, "_ingest_groups", collect)
+    exceptions = []
+    report = _cached_agencies(conn, tmp_path, None, {}, "2026-09-30", exceptions)
+    assert captured == ["new-2021"]
+    assert report["NE"]["already"] == 1
+    assert report["NE"]["source_overlap_rows"] == 1
+    assert report["NE"]["unaccounted_rows"] == 0
+    assert sorted(item["reason"] for item in exceptions) == [
+        "matched_existing_key_not_admitted", "possible_employer_month_overlap"]
+
+
+def test_nebraska_archive_reader_is_cache_only(tmp_path):
+    """Without the pinned capture in the bundle the NE archive yields nothing
+    and makes no request (an older bundle replays as before)."""
+    import sqlite3
+
+    conn = sqlite3.connect(":memory:")
+    conn.execute(
+        "CREATE TABLE notices (dedupe_key TEXT, state TEXT, employer_name TEXT, notice_date TEXT, "
+        "effective_date TEXT, source_details TEXT)"
+    )
+    report = _cached_agencies(conn, tmp_path, None, {}, "2026-09-30", [], states=("NE",))
+    assert report["NE"]["parsed"] == 0

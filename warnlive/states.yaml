@@ -16,6 +16,9 @@
 #   freshness_field: notice_date (default) | effective_date | source_details.<validated agency date>
 #   same_key_policy: versions (default) | distinct_rows — distinct rows of one document that share a
 #     legacy dedupe_key stay separate entries instead of folding into versions (normalize/entries.py)
+#   same_key_document_fields: raw fields naming the document a row came from, when one capture
+#     concatenates several documents; distinct_rows applies within one document only, and same-key
+#     rows of different documents stay versions (default: the whole capture is one document)
 #   fetch_budget_minutes: wall-clock cap on one live fetch (default 45, pipeline.DEFAULT_FETCH_BUDGET_MINUTES); past it the state fails and the run continues
 #   expected_columns: raw CSV header snapshot; null until first verified fetch
 #   notes: quirks, upstream issue links
@@ -85,6 +88,7 @@ ca:
   source_url: https://edd.ca.gov/en/Jobs_and_Training/Layoff_Services_WARN
   notes: "Current-year Excel + historical PDFs; layout varies year to year."
   same_key_policy: distinct_rows
+  same_key_document_fields: [source_file, year_file]
 
 co:
   name: Colorado
@@ -119,7 +123,7 @@ ct:
 
 dc:
   name: District of Columbia
-  source: upstream
+  source: patched
   status: active
   tier: medium
   cadence: weekly
@@ -128,7 +132,7 @@ dc:
   staleness_days: 180
   expected_columns: [Notice Date, Organization Name, Number toEmployees Affected, Effective Layoff Date, Code Type]
   source_url: https://does.dc.gov/page/industry-closings-and-layoffs-warn-notifications
-  notes: "HTML page per year; some years archived."
+  notes: "HTML page per year; some years archived. 2026-09-30: upstream dc.py failed (MissingSchema on '/page/rapid-response'): the page's first div.field-items now holds the sidebar's relative Rapid Response links and the year links sit in the body; the collector is now fetch/patches/dc.py, which finds year links by their text and resolves them against the DOES page."
 
 de:
   name: Delaware
@@ -407,6 +411,7 @@ ne:
   source_url: https://dol.nebraska.gov/ReemploymentServices/LayoffServices/LayoffsAndDownsizingWARN
   notes: "Year-parameterized HTML data endpoints. 2026-09-29: the live page lists 2023+ only and the upstream year endpoints stop at 2019 (WARNReportData has 19 rows for 2020 and none for 2021+). 2020-2022 come from a pinned 2025-03-23 Wayback capture of the NDOL WARN page (backfill/state_archives.fetch_ne_dol: 29 rows, 2 same-day Hayneedle sites held because the transformer keys on the blank City column). Caution: upstream also appends LayoffAndClosureReportData for 2010-2019 (about 190 closure/layoff rows a year, many plainly non-WARN), which is why pre-2020 counts are 10x later years. 2026-09-30: the collector is now fetch/patches/ne.py; rows are tagged with the report they came from (source_report); NDOL layoff/closure-report rows are held as ne_layoff_closure_report_not_warn; location uses Location when City is blank."
   same_key_policy: distinct_rows
+  same_key_document_fields: [ndol_source_page]
 
 nv:
   name: Nevada

@@ -300,6 +300,25 @@ run `warnlive scrape ca nj --smoke --workdir /path/to/fresh`, then create a
 *new* bundle with `source_bundle create --raw-overlay /path/to/fresh/raw` in
 addition to the arguments above. The manifest lists each overlaid state CSV.
 
+To derive a new bundle from a frozen one (which keeps its `agency/`
+artifacts), each command verifies its input, copies every other member byte
+for byte, writes a new file, and verifies it; none modifies a bundle in place:
+
+```bash
+# Replace one state capture (optionally pin companion evidence):
+python -m warnlive.migrate.source_bundle overlay-raw BASE.tar.gz \
+  --raw-file /path/to/fresh/raw/wa.csv --out STEP.tar.gz
+# Add new historical-archive captures. DIR is a collector cache root holding
+# archives/<state>/... files; each becomes backfill/cache/archives/<state>/...
+# An existing member is never replaced; the manifest lists the added paths
+# under archive_additions.
+python -m warnlive.migrate.source_bundle add-archives STEP.tar.gz \
+  --archives DIR --out NEW.tar.gz
+```
+
+The v1.2 candidate bundle was derived this way; its dated note in `docs/`
+records the overlay order and which fresh captures were kept frozen.
+
 ### Employer identity and industry
 
 Exports carry derived columns the database never stores — identity (SEC

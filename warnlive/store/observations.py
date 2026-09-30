@@ -18,8 +18,23 @@ from collections.abc import Mapping
 
 _STATUSES = {"admitted", "event_unresolved", "rescinded", "annotation", "identity_unresolved",
              "not_in_agency_warn_report"}
-# Official artifact directories (agency/<dir>/...) whose rows are retained here.
-_ARTIFACT_STATES = {"ia": "IA", "ky": "KY", "la": "LA", "mo_historical": "MO", "ne": "NE"}
+# Official artifact directories whose rows are retained here: agency
+# artifacts (agency/<dir>/...) and collector-cached agency pages
+# (backfill/cache/archives/<dir>/..., e.g. NDOL's year reports). Paths are
+# source-bundle member paths.
+_ARTIFACT_STATES = {"ia": "IA", "ky": "KY", "la": "LA", "mo_historical": "MO"}
+_ARCHIVE_STATES = {"ne": "NE"}
+_ARCHIVE_PREFIX = ("backfill", "cache", "archives")
+
+
+def _artifact_state(artifact: str) -> str:
+    parts = artifact.split("/")
+    if len(parts) >= 3 and parts[0] == "agency" and parts[1].lower() in _ARTIFACT_STATES:
+        return _ARTIFACT_STATES[parts[1].lower()]
+    if (len(parts) >= 5 and tuple(parts[:3]) == _ARCHIVE_PREFIX
+            and parts[3].lower() in _ARCHIVE_STATES):
+        return _ARCHIVE_STATES[parts[3].lower()]
+    raise ValueError(f"unexpected official source artifact: {artifact}")
 
 
 def _json(value: object) -> str:
@@ -73,10 +88,7 @@ def store_observations(conn: sqlite3.Connection, rows: list[dict],
         for row in rows:
             status, notice_id = _admission(admission[row["source_row"]])
             artifact = row["source_artifact"]
-            parts = artifact.split("/")
-            if len(parts) < 3 or parts[0] != "agency" or parts[1].lower() not in _ARTIFACT_STATES:
-                raise ValueError(f"unexpected official source artifact: {artifact}")
-            state = _ARTIFACT_STATES[parts[1].lower()]
+            state = _artifact_state(artifact)
             kind = row.get("kind", "notice")
             if (kind == "annotation") != (status == "annotation"):
                 raise ValueError("annotation admission status mismatch")

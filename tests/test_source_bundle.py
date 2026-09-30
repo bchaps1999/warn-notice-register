@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from warnlive.migrate.source_bundle import (
-    create, extract, overlay_raw_bundle, validate_agency_raw, verify,
+    add_archives, create, extract, overlay_raw_bundle, validate_agency_raw, verify,
 )
 
 
@@ -207,3 +207,99 @@ def test_source_bundle_includes_verified_new_york_dashboard(tmp_path):
     assert (unpacked / "agency/ny/filings/first-transit-2023-0298.pdf").read_bytes() == (
         ny / "filings/first-transit-2023-0298.pdf"
     ).read_bytes()
+
+
+def _members(bundle):
+    import tarfile
+
+    with tarfile.open(bundle, "r:gz") as archive:
+        return {m.name: archive.extractfile(m).read() for m in archive.getmembers()}
+
+
+def test_add_archives_copies_base_and_adds_only_new_archive_files(tmp_path):
+    source = tmp_path / "workdir"
+    _sources(source)
+    base = tmp_path / "base.tar.gz"
+    original = create(source, base)
+    additions = tmp_path / "additions"
+    for relative, content in {"archives/ne/warn_report-2014.html": b"<html>2014</html>",
+                              "archives/ne/warn_report-2014.html.json": b"{}\n",
+                              "archives/wi/dwd-2016.htm": b"<html>wi</html>"}.items():
+        path = additions / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(content)
+    out = tmp_path / "added.tar.gz"
+    manifest = add_archives(base, additions, out)
+    added = {"backfill/cache/archives/ne/warn_report-2014.html",
+             "backfill/cache/archives/ne/warn_report-2014.html.json",
+             "backfill/cache/archives/wi/dwd-2016.htm"}
+    assert manifest["archive_additions"] == sorted(added)
+    assert verify(out) == manifest
+    before, after = _members(base), _members(out)
+    assert set(after) - set(before) == added
+    # Every base member is copied byte for byte; only the manifest changes.
+    assert all(after[name] == content for name, content in before.items() if name != "manifest.json")
+    assert after["backfill/cache/archives/wi/dwd-2016.htm"] == b"<html>wi</html>"
+    assert [item["path"] for item in manifest["files"]] == sorted(
+        [item["path"] for item in original["files"]] + sorted(added))
+    # Deterministic: the same inputs give the same bytes.
+    again = tmp_path / "again.tar.gz"
+    add_archives(base, additions, again)
+    assert again.read_bytes() == out.read_bytes()
+    with pytest.raises(FileExistsError):
+        add_archives(base, additions, out)
+    # Additions accumulate in a later derivation and never replace a member.
+    more = tmp_path / "more"
+    (more / "archives/ne").mkdir(parents=True)
+    (more / "archives/ne/warn-page-20260930.html").write_bytes(b"page")
+    later = add_archives(out, more, tmp_path / "later.tar.gz")
+    assert len(later["archive_additions"]) == 4
+    with pytest.raises(ValueError, match="never replace"):
+        add_archives(out, additions, tmp_path / "replace.tar.gz")
+    assert not (tmp_path / "replace.tar.gz").exists()
+
+
+def test_add_archives_rejects_bad_inputs(tmp_path):
+    source = tmp_path / "workdir"
+    _sources(source)
+    base = tmp_path / "base.tar.gz"
+    create(source, base)
+    wrong = tmp_path / "wrong"
+    (wrong / "raw").mkdir(parents=True)
+    (wrong / "raw/al.csv").write_bytes(b"Company\n")
+    with pytest.raises(ValueError, match="not an archive cache file"):
+        add_archives(base, wrong, tmp_path / "a.tar.gz")
+    empty = tmp_path / "empty"
+    (empty / "archives").mkdir(parents=True)
+    with pytest.raises(ValueError, match="no archive files"):
+        add_archives(base, empty, tmp_path / "b.tar.gz")
+    linked = tmp_path / "linked"
+    (linked / "archives/ne").mkdir(parents=True)
+    (linked / "archives/ne/page.html").symlink_to(source / "raw/al.csv")
+    with pytest.raises(ValueError, match="symlink"):
+        add_archives(base, linked, tmp_path / "c.tar.gz")
+    corrupt = tmp_path / "corrupt.tar.gz"
+    corrupt.write_bytes(base.read_bytes()[:-40])
+    with pytest.raises(Exception):
+        add_archives(corrupt, tmp_path / "additions-none", tmp_path / "d.tar.gz")
+    assert not any((tmp_path / name).exists() for name in ("a.tar.gz", "b.tar.gz", "c.tar.gz", "d.tar.gz"))
+
+
+def test_add_archives_command_line(tmp_path):
+    import subprocess
+    import sys
+
+    source = tmp_path / "workdir"
+    _sources(source)
+    base = tmp_path / "base.tar.gz"
+    create(source, base)
+    additions = tmp_path / "additions"
+    (additions / "archives/ne").mkdir(parents=True)
+    (additions / "archives/ne/page.html").write_bytes(b"page")
+    out = tmp_path / "out.tar.gz"
+    result = subprocess.run(
+        [sys.executable, "-m", "warnlive.migrate.source_bundle", "add-archives", str(base),
+         "--archives", str(additions), "--out", str(out)],
+        capture_output=True, text=True, check=True, cwd=Path(__file__).resolve().parents[1])
+    assert json.loads(result.stdout)["files"] == 4
+    assert verify(out)["archive_additions"] == ["backfill/cache/archives/ne/page.html"]

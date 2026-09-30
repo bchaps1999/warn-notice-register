@@ -185,16 +185,53 @@ def test_iowa_amendment_with_unique_parent_is_a_later_version():
         assert related[row["source_row"]] == parent["source_notice_id"]
         assert version["source_identity"] == parent["source_identity"]
         assert version["notice_date"] == parent["notice_date"] <= row["notice_date"]
-        if "additional" in row["notice_type_text"].casefold():
-            # Incremental-or-total is unstated: the parent's figures stand.
-            assert amendment["applied_to_notice"] is False
-            assert (version["effective_date"], version["employees_affected"]) == (
-                parent["effective_date"], parent["employees_affected"])
+        # Counts are never applied (no event-log type states a restated
+        # total); the layoff date moves only for a "Change in date" type.
+        assert version["employees_affected"] == parent["employees_affected"]
+        assert amendment["workers_applied"] is False
+        if "change in date" in row["notice_type_text"].casefold():
+            assert version["effective_date"] == row["effective_date"]
         else:
-            assert (version["effective_date"], version["employees_affected"]) == (
-                row["effective_date"], row["workers_reported"] or None)
+            assert amendment["layoff_date_applied"] is False
+        chain = json.loads(version["source_details"])["amendments"]
+        assert chain[-1]["source_row"] == row["source_row"]
+        if len(chain) > 1:
+            assert json.loads(version["source_details"])["worker_allocation"] == "unresolved"
         assert " ".join(row["street_address_text"].casefold().split()) == " ".join(
             json.loads(parent["source_details"])["street_address_text"].casefold().split())
     # Versions follow their parent in the batch, so ingest makes them current.
     order = [rec["dedupe_key"] for rec in admitted]
     assert all(order.index(v["dedupe_key"]) < admitted.index(v) for v in versions)
+
+
+def test_iowa_amendments_chain_on_the_latest_version_without_resetting():
+    """Each amendment builds on the notice's latest version: a date change
+    survives a later amendment, and the counts of ambiguous amendment types
+    (e.g. Tyson 1,276 then 19) never replace the notice's count."""
+    from warnlive.migrate.ia_source import _amendment_version
+
+    from warnlive.store.dedupe import VERSIONED_FIELDS
+
+    parent = {**{field: None for field in VERSIONED_FIELDS},
+              "state": "IA", "employer_name": "Acme", "effective_date": "2024-03-11",
+              "employees_affected": 1276, "is_amendment": 0,
+              "source_details": json.dumps({"source_row": "p"}), "raw_extra": "[]"}
+
+    def row(pointer, type_text, date, workers):
+        return {"source_artifact": "agency/ia/event-log.xlsx", "source_row": pointer,
+                "source_row_sha256": pointer, "notice_type_text": type_text,
+                "notice_date": "2024-04-01", "effective_date": date,
+                "workers_reported": workers, "raw_cells": [pointer]}
+
+    first = _amendment_version(row("a1", "Amendment - Change in date", "2024-05-01", 19), parent)
+    assert (first["effective_date"], first["employees_affected"]) == ("2024-05-01", 1276)
+    assert "worker_allocation" not in json.loads(first["source_details"])
+    second = _amendment_version(row("a2", "Amendment - Additional Employees", "2024-06-01", 40), first)
+    assert (second["effective_date"], second["employees_affected"]) == ("2024-05-01", 1276)
+    details = json.loads(second["source_details"])
+    assert [a["source_row"] for a in details["amendments"]] == ["a1", "a2"]
+    assert [a["reported_workers"] for a in details["amendments"]] == [19, 40]
+    assert details["worker_allocation"] == "unresolved"
+    assert details["amendment"]["source_row"] == "a2"
+    third = _amendment_version(row("a3", "Amendment - revised total", None, 900), second)
+    assert third["employees_affected"] == 900

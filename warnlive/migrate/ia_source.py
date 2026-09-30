@@ -352,15 +352,32 @@ def _amendment_parents(rows: list[dict], status: dict[str, str],
     return decisions
 
 
-def _amendment_version(row: dict, parent: dict) -> dict:
-    """The parent notice's next version, carrying the amendment's reported
-    layoff date and worker count; the parent's filing identity, notice date,
-    location and type stay. An "Additional Employees" amendment keeps the
-    parent's count and date, because the source does not say whether its
-    figures are incremental or a new total. The amendment row itself is in
-    source_details."""
-    details = json.loads(parent["source_details"])
-    details["amendment"] = {
+# Amendment type text that states the row's count is the notice's restated
+# total. The event log's own types ("Amendment", "Additional Employees",
+# "Reduction in number laid off", "Change in date") do not say whether a
+# count is an increment, a reduction, a phase or a new total, so none of
+# them applies its count; a type naming a restated total would.
+_RESTATED_TOTAL_MARKERS = ("revised total", "restated total", "new total", "total revised")
+_DATE_CHANGE_MARKERS = ("change in date",)
+
+
+def _amendment_version(row: dict, latest: dict) -> dict:
+    """The notice's next version after ``latest`` (its current version).
+
+    Every amendment row is appended to ``source_details.amendments[]`` with
+    its reported date, count, type and pointer; ``amendment`` names the
+    newest. The row's layoff date replaces the notice's only for a "Change
+    in date" type, and its worker count only when its type states a restated
+    total. Otherwise the notice keeps its count and date. A notice with more
+    than one amendment gets ``worker_allocation: "unresolved"``: the rows do
+    not say how their counts combine. The filing identity, notice date,
+    location and type stay the original notice's."""
+    details = json.loads(latest["source_details"])
+    type_text = str(row.get("notice_type_text") or "").casefold()
+    applies_date = any(marker in type_text for marker in _DATE_CHANGE_MARKERS)
+    applies_count = (any(marker in type_text for marker in _RESTATED_TOTAL_MARKERS)
+                     and bool(row["workers_reported"]))
+    entry = {
         "source_artifact": row["source_artifact"], "source_row": row["source_row"],
         "source_row_sha256": row["source_row_sha256"],
         "parent_basis": "same_folded_employer_and_street_address_earlier_notice",
@@ -369,19 +386,24 @@ def _amendment_version(row: dict, parent: dict) -> dict:
         "amendment_notice_date": row["notice_date"],
         "reported_layoff_date": row["effective_date"],
         "reported_workers": row["workers_reported"],
+        "layoff_date_applied": applies_date,
+        "workers_applied": applies_count,
         "raw_cells": row["raw_cells"]}
-    # An "Additional Employees" amendment reports a count and date without
-    # saying whether they are the added workers only or a restated total, so
-    # the parent's count and date stand and the amendment's are kept above.
-    additional = "additional" in str(row.get("notice_type_text") or "").casefold()
-    if additional:
-        details["amendment"]["applied_to_notice"] = False
-        details["amendment"]["not_applied_reason"] = (
-            "additional_employees_count_meaning_unstated")
-    rec = {**parent,
-           "effective_date": parent["effective_date"] if additional else row["effective_date"],
-           "employees_affected": (parent["employees_affected"] if additional
-                                  else row["workers_reported"] or None),
+    if not applies_count:
+        entry["workers_not_applied_reason"] = "amendment_count_meaning_unstated"
+    details["amendment"] = entry
+    details["amendments"] = details.get("amendments", []) + [
+        {name: entry[name] for name in (
+            "source_row", "notice_type_text", "amendment_notice_date",
+            "reported_layoff_date", "reported_workers", "layoff_date_applied",
+            "workers_applied")}]
+    if len(details["amendments"]) > 1:
+        details["worker_allocation"] = "unresolved"
+    rec = {**latest,
+           "effective_date": (row["effective_date"] if applies_date and row["effective_date"]
+                              else latest["effective_date"]),
+           "employees_affected": (row["workers_reported"] if applies_count
+                                  else latest["employees_affected"]),
            "is_amendment": 1,
            "source_details": json.dumps(details, sort_keys=True),
            "raw_extra": json.dumps(row["raw_cells"], ensure_ascii=False, default=str)}
@@ -545,9 +567,13 @@ def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, s
     # Amendments follow their parent notice as later versions, in filing order.
     rows_by_pointer = {row["source_row"]: row for row in rows}
     versions = []
+    latest = dict(by_pointer)
     for pointer in sorted((p for p, reason in status.items() if reason == "amendment_version"),
                           key=lambda p: _filing_order(rows_by_pointer[p])):
-        versions.append(_amendment_version(rows_by_pointer[pointer], by_pointer[related[pointer]]))
+        # Each amendment builds on the notice's latest version, in source order.
+        version = _amendment_version(rows_by_pointer[pointer], latest[related[pointer]])
+        latest[related[pointer]] = version
+        versions.append(version)
     records.extend(versions)
     if len(records) + len(held) != len(rows):
         raise ValueError("Iowa source row accounting mismatch")

@@ -131,7 +131,12 @@ def filing_record(ident: str, items: list[dict], kind: str, details: dict,
     """One WARN number listing several sites or phases, as one filing notice.
 
     ``items`` are the number's rows in source order, each complete. Workers
-    are the sum of the agency's own itemized counts; the action date is the
+    are the sum of the agency's own itemized counts when every row is a
+    distinct site/date. Two rows with the same site (Company Name, which
+    often names a facility, and Location) and layoff date may be a
+    count and its restatement, so a filing with such a pair is not summed: ``employees_affected`` is
+    left unknown, ``worker_allocation`` is ``"unresolved"`` and the pairs are
+    listed. The action date is the
     earliest listed and the end the latest (``list_or_phases``). The employer
     is the first listed row's Company Name, which for some filings names a
     facility; every row's name and location stays in ``sites``/``phases``.
@@ -152,11 +157,25 @@ def filing_record(ident: str, items: list[dict], kind: str, details: dict,
     types = {type_fields(item["raw"]["Layoff Type"])[:2] for item in items}
     layoff_type, is_temporary = types.pop() if len(types) == 1 else ("unknown", None)
     texts = {entry["layoff_type_text"] for entry in entries}
+    by_site_date: dict[tuple, list[dict]] = {}
+    for entry in entries:
+        # A row's Company Name often names its facility, so the site is the
+        # name and the location together.
+        site = (entry["company_name"].casefold(), (entry["location"] or "").casefold())
+        by_site_date.setdefault((site, entry["effective_date"]), []).append(entry)
+    repeated = [group for group in by_site_date.values() if len(group) > 1]
     details = {**details, kind: entries,
-               "worker_allocation": "itemized",
-               "total_workers_basis": f"sum_of_listed_{kind}",
+               "worker_allocation": "unresolved" if repeated else "itemized",
+               "total_workers_basis": ("not_summed_same_site_and_date_rows" if repeated
+                                       else f"sum_of_listed_{kind}"),
                "employer_name_basis": "first_listed_row",
                "effective_date_interpretation": "list_or_phases"}
+    if repeated:
+        details["same_site_date_rows"] = [
+            {"company_name": group[0]["company_name"], "location": group[0]["location"],
+             "effective_date": group[0]["effective_date"],
+             "workers": [entry["workers"] for entry in group],
+             "source_rows": [entry["source_row"] for entry in group]} for group in repeated]
     if len(texts) == 1 and next(iter(texts)):
         details["type_evidence"] = type_fields(next(iter(texts)))[2]
     rec = {
@@ -164,7 +183,7 @@ def filing_record(ident: str, items: list[dict], kind: str, details: dict,
         "location": next(iter(locations.values())) if len(locations) == 1 else None,
         "notice_date": None, "effective_date": starts[0],
         "effective_date_precision": "day", "effective_date_basis": "reported",
-        "employees_affected": sum(entry["workers"] for entry in entries),
+        "employees_affected": None if repeated else sum(entry["workers"] for entry in entries),
         "layoff_type": layoff_type, "is_temporary": is_temporary, "is_amendment": 0,
         "source_url": source_url, "source_notice_id": ident,
         "source_identity": f"OR:agency:{ident}",

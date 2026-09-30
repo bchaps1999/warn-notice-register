@@ -270,9 +270,15 @@ def _cached_ny(cache: Path) -> list[dict]:
 def _cached_agencies(
     conn, cache: Path, accepted: set[str] | None, source_urls: dict[str, str],
     observed_at: str, exceptions: list[dict] | None = None,
-    states: tuple[str, ...] = ("WI", "FL", "CA", "MA", "OH", "NY"),
+    states: tuple[str, ...] = ("WI", "FL", "CA", "MA", "OH", "NY", "NE"),
 ) -> dict:
     """Admit frozen agency-archive rows; ``states`` narrows a targeted replay.
+
+    The archive fetchers are the ones the live ``backfill-archives`` command
+    runs (``state_archives.FETCHERS``), read cache-only. Nebraska's is the
+    pinned 2020-2022 NDOL page capture; raw/ne.csv covers 2010-2019 and 2023
+    onward, and an archive row whose key, or employer and month, is already
+    in the database is held rather than admitted a second time.
 
     Entry rules (normalize/entries.py) run here exactly as in the live scrape:
     distinct same-key rows of a ``distinct_rows`` state are separate entries;
@@ -458,14 +464,19 @@ def _key_counts(records: list[dict]) -> dict[str, int]:
     return counts
 
 
+# Where a source bundle keeps the NDOL year-report pages the NE collector
+# cached (fetch/patches/ne.py writes cache/archives/ne/{report}-{year}.html).
+NE_REPORT_ARTIFACT_DIR = "backfill/cache/archives/ne"
+
+
 def _ne_observations(exceptions: list[dict]) -> list[dict]:
     """Observation rows for Nebraska rows held as outside NDOL's WARN report.
 
     The tagged collector (fetch/patches/ne.py) names each row's report, year
     page and page row; rows from an untagged capture are never held this way,
-    so a replay of an older bundle yields none. The ``Date`` cell keeps its
-    source text only: its legal role on the layoff/closure report is not
-    stated.
+    so a replay of an older bundle yields none. The artifact is the cached
+    year-report page's bundle path. The ``Date`` cell keeps its source text
+    only: its legal role on the layoff/closure report is not stated.
     """
     out = []
     for item in exceptions:
@@ -477,7 +488,7 @@ def _ne_observations(exceptions: list[dict]) -> list[dict]:
         year = page.rsplit("year=", 1)[-1] if "year=" in page else None
         if not report or not year or not str(raw.get("ndol_page_row") or "").strip():
             raise ValueError(f"Nebraska held row lacks its report locator: {item.get('prepared_row')}")
-        artifact = f"agency/ne/{report}-{year}.html"
+        artifact = f"{NE_REPORT_ARTIFACT_DIR}/{report}-{year}.html"
         workers = str(raw.get("Jobs Affected") or "").replace(",", "").strip()
         row = {
             "source_artifact": artifact,
@@ -495,6 +506,13 @@ def _ne_observations(exceptions: list[dict]) -> list[dict]:
         }
         out.append({k: v for k, v in row.items() if v is not None})
     return out
+
+
+def _check_observation_artifacts(rows: list[dict], members: set[str]) -> None:
+    """Every observation must point at a file the source bundle holds."""
+    missing = sorted({row["source_artifact"] for row in rows} - members)
+    if missing:
+        raise ValueError(f"source observations name artifacts not in the bundle: {missing[:5]}")
 
 
 def _mo_observations(records: list[dict], held: list[dict]) -> list[tuple[dict, str | None]]:
@@ -1270,10 +1288,13 @@ def rebuild(
                 ne_observations = _ne_observations(exceptions)
                 for row in ne_observations:
                     admission[row["source_row"]] = ("not_in_agency_warn_report", None)
+                observation_rows = (
+                    ia_current_rows + ia_historical_rows + ky_source_rows + la_source_rows
+                    + [row for row, _ in mo_observations] + ne_observations)
+                _check_observation_artifacts(
+                    observation_rows, {item["path"] for item in manifest["files"]})
                 observation_report = store_observations(
-                    conn, ia_current_rows + ia_historical_rows + ky_source_rows + la_source_rows
-                    + [row for row, _ in mo_observations] + ne_observations,
-                    admission, source_bundle_sha256,
+                    conn, observation_rows, admission, source_bundle_sha256,
                 )
                 conn.commit()
             report = {

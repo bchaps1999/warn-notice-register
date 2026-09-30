@@ -103,6 +103,38 @@ def _filing_group_id(signature: tuple[str, str]) -> str:
     return f"NY:dashboard-filing-group:{digest}"
 
 
+def _resolved_from_conflicting_pages(prior: dict) -> bool:
+    """Whether a NY notice is a control-number filing rebuilt from detail
+    pages that shared one key with different content (entries
+    .control_number_versions): its pages are ordered as versions or split by
+    Control Number. Such a filing was itself held until that rule existed."""
+    details = json.loads(prior.get("source_details") or "{}")
+    return ((details.get("version_order") or {}).get("basis") == "agency_detail_id_order"
+            or (details.get("entry") or {}).get("basis") == "distinct_control_number")
+
+
+def _possible_correspondence(row: dict, candidates: list[dict], basis: str) -> dict:
+    """Record an inexact name/date correspondence for review, without merging."""
+    workers = row["workers"].replace(",", "").strip()
+    fields = []
+    for prior in candidates:
+        matched = ["employer_group"]
+        if prior.get("notice_date") == row["notice_date"]:
+            matched.append("notice_date")
+        if row["effective_date"] and prior.get("effective_date") == row["effective_date"]:
+            matched.append("action_date")
+        if workers.isdigit() and prior.get("employees_affected") == int(workers):
+            matched.append("workers")
+        if str(prior.get("location") or "").casefold().strip() == row["county"].casefold().strip():
+            matched.append("county")
+        fields.append({"dedupe_key": prior.get("dedupe_key"),
+                       "source_notice_id": prior.get("source_notice_id"),
+                       "fields_matched": matched})
+    return {"basis": basis,
+            "candidate_origin": "control_number_filing_resolved_from_conflicting_detail_pages",
+            "status": "unreviewed_not_merged", "candidates": fields}
+
+
 def _correspondence_version(row: dict, prior: dict) -> dict:
     """The dashboard row as a new version of one exactly matching notice.
 
@@ -158,6 +190,15 @@ def project(directory: Path, existing_employers: set[str] | None = None,
     create notices (``report["correspondence_versions"]``). This needs full
     notice rows (``dedupe_key`` and the canonical columns); a prior without a
     ``dedupe_key`` leaves the row held.
+
+    A looser correspondence (employer group and notice or action date) holds
+    the row as ``existing_notice_event_correspondence_unresolved``, except
+    when every candidate is a control-number filing rebuilt from conflicting
+    detail pages (``_resolved_from_conflicting_pages``). Those filings were
+    held before that entry rule, and the dashboard row was admitted as its own
+    notice; an inexact match to one is not evidence enough to withdraw it. The
+    row keeps its own entry and records the candidates in
+    ``source_details.possible_correspondence`` for review.
     """
     rows = read_artifacts(directory)
     # Names alone cannot identify a filing. Keep this parameter for callers;
@@ -254,8 +295,9 @@ def project(directory: Path, existing_employers: set[str] | None = None,
             continue
         if target is not None:
             correspondence = "same_notice_matched_by_several_dashboard_rows"
+        blocking = [prior for prior in candidates if not _resolved_from_conflicting_pages(prior)]
         reason = ("multi_site_filing_identity_unresolved" if multi_site else
-                  "existing_notice_event_correspondence_unresolved" if candidates else
+                  "existing_notice_event_correspondence_unresolved" if blocking else
                   "possible_revision_same_event" if decision.evidence == "possible_revision_same_event" else
                   "incomplete_dashboard_row" if decision.kind == "unresolved" else
                   "duplicate_dashboard_capture" if decision.kind == "duplicate_capture" else
@@ -298,6 +340,9 @@ def project(directory: Path, existing_employers: set[str] | None = None,
                                   "Date Layoff/Closure Starts": "reported_action"},
                    "type_evidence": type_evidence,
                    "raw_cells": row["raw_cells"]}
+        if candidates:
+            details["possible_correspondence"] = _possible_correspondence(
+                row, candidates, correspondence)
         if len(filing_group) > 1:
             details["filing_group"] = {
                 "id": _filing_group_id(signature),
@@ -328,6 +373,9 @@ def project(directory: Path, existing_employers: set[str] | None = None,
                            "held_existing_employer": 0,
                            "held_existing_notice_correspondence": sum(
                                x["reason"] == "existing_notice_event_correspondence_unresolved" for x in held),
+                           "admitted_with_possible_correspondence": sum(
+                               "possible_correspondence" in json.loads(r["source_details"])
+                               for r in records),
                            "held_multi_site_rows": sum(
                                x["reason"] == "multi_site_filing_identity_unresolved" for x in held),
                            "hold_reasons": dict(Counter(x["reason"] for x in held)),

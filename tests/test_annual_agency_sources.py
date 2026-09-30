@@ -197,3 +197,34 @@ def test_ga_archive_rejects_changed_pdf_bytes(tmp_path):
     path.write_bytes(path.read_bytes() + b"x")
     with pytest.raises(ValueError, match="checksum mismatch"):
         project_ga(tmp_path)
+
+
+def test_ny_inexact_match_to_recovered_control_number_filing_keeps_the_dashboard_notice():
+    """A loose name/date match to a filing rebuilt from conflicting detail pages
+    does not withdraw the dashboard row's own notice; the match is recorded.
+    The same loose match to an ordinary notice still holds the row."""
+    records, _, _ = project_ny(NY)
+    example = next(row for row in records if row["employees_affected"] and row["effective_date"]
+                   and "filing_group" not in json.loads(row["source_details"]))
+    base = {"id": 42, "dedupe_key": "k" * 40, "state": "NY",
+            "employer_name": example["employer_name"], "location": "Elsewhere County",
+            "notice_date": example["notice_date"], "effective_date": None,
+            "employees_affected": None, "source_notice_id": "2008-W070"}
+    for details in ({"version_order": {"basis": "agency_detail_id_order"}},
+                    {"entry": {"basis": "distinct_control_number", "control_number": "2008-W070"}}):
+        prior = {**base, "source_details": json.dumps(details)}
+        kept, held, report = project_ny(NY, existing_notices=[prior])
+        row = next(r for r in kept if r["dedupe_key"] == example["dedupe_key"])
+        possible = json.loads(row["source_details"])["possible_correspondence"]
+        assert possible["basis"] == "same_employer_notice_or_action_date"
+        assert possible["status"] == "unreviewed_not_merged"
+        assert possible["candidates"] == [{"dedupe_key": "k" * 40, "source_notice_id": "2008-W070",
+                                           "fields_matched": ["employer_group", "notice_date"]}]
+        assert report["correspondence_versions"] == 0
+        assert report["admitted_with_possible_correspondence"] >= 1
+        assert len(kept) + len(held) == len(read_artifacts(NY))
+    ordinary = {**base, "source_details": None}
+    reduced, held, _ = project_ny(NY, existing_notices=[ordinary])
+    assert example["dedupe_key"] not in {r["dedupe_key"] for r in reduced}
+    assert any(r["reason"] == "existing_notice_event_correspondence_unresolved"
+               and r["source_row"] == example["source_notice_id"] for r in held)

@@ -3,6 +3,12 @@
 The bundle is an input archive, not a database backup.  It records the exact
 bytes of rolling raw CSVs, historical backfills, and cached agency artifacts
 so a later rebuild is not dependent on whatever a state serves that day.
+
+Commands: ``create`` (from a workdir), ``verify``, ``agency-only``,
+``overlay-raw`` (replace one state CSV in a frozen bundle), ``add-archives``
+(add new ``backfill/cache/archives`` files to a frozen bundle) and
+``extract``. Every derived bundle is a new file; none is modified in place.
+No network access.
 """
 
 from __future__ import annotations
@@ -304,6 +310,14 @@ def overlay_raw_bundle(bundle: Path, raw_file: Path, out_path: Path,
             "raw_member": member_name,
             "raw_sha256": hashlib.sha256(replacement).hexdigest(),
         }
+    return _rewrite(bundle, manifest, {member_name: replacement}, out_path)
+
+
+def _rewrite(bundle: Path, manifest: dict, new_content: dict[str, bytes], out_path: Path) -> dict:
+    """Write ``manifest`` and its files deterministically (mtime 0, manifest
+    order): members named in ``new_content`` take those bytes, every other
+    member is copied from ``bundle`` byte for byte. Verifies the result and
+    removes a partial output on failure."""
     out_path.parent.mkdir(parents=True, exist_ok=True)
     try:
         with tarfile.open(bundle, mode="r:gz") as old, out_path.open("xb") as raw, \
@@ -313,8 +327,8 @@ def overlay_raw_bundle(bundle: Path, raw_file: Path, out_path: Path,
             new.addfile(_entry("manifest.json", meta), io.BytesIO(meta))
             for item in manifest["files"]:
                 name = item["path"]
-                if name == member_name:
-                    content = replacement
+                if name in new_content:
+                    content = new_content[name]
                 else:
                     source = old.extractfile(name)
                     if source is None:
@@ -325,6 +339,56 @@ def overlay_raw_bundle(bundle: Path, raw_file: Path, out_path: Path,
         out_path.unlink(missing_ok=True)
         raise
     return verify(out_path)
+
+
+ARCHIVE_PREFIX = "backfill/cache/"
+
+
+def add_archives(bundle: Path, archives: Path, out_path: Path) -> dict:
+    """Add new historical-archive cache files to a verified frozen bundle.
+
+    ``archives`` is a collector cache root holding ``archives/<state>/...``
+    (the layout ``backfill.state_archives`` and the NE collector write); each
+    file becomes ``backfill/cache/archives/<state>/...``. The base bundle is
+    verified, every base member is copied byte for byte, and only paths the
+    bundle does not already hold are added: an existing member is never
+    replaced. The manifest lists the files and, cumulatively, the added paths
+    under ``archive_additions``. The output is written deterministically and
+    verified. Overlay-raw cannot do this (it only replaces a raw CSV), and
+    create() rebuilds from a workdir, dropping the ``agency/`` artifacts.
+    """
+    bundle, archives, out_path = Path(bundle), Path(archives), Path(out_path)
+    if out_path.exists():
+        raise FileExistsError(f"source bundle already exists: {out_path}")
+    if archives.is_symlink() or not archives.is_dir():
+        raise ValueError(f"invalid archive directory: {archives}")
+    manifest = verify(bundle)
+    existing = {item["path"] for item in manifest["files"]}
+    additions: dict[str, bytes] = {}
+    for path in sorted(archives.rglob("*"), key=lambda p: p.as_posix()):
+        if path.is_symlink():
+            raise ValueError(f"source symlink is not allowed: {path}")
+        if not path.is_file():
+            continue
+        rel = path.relative_to(archives).as_posix()
+        parts = PurePosixPath(rel).parts
+        if len(parts) < 3 or parts[0] != "archives" or ".." in parts:
+            raise ValueError(f"not an archive cache file (archives/<state>/...): {rel}")
+        name = ARCHIVE_PREFIX + rel
+        if name in existing:
+            raise ValueError(f"bundle already has {name}; additions never replace a member")
+        additions[name] = path.read_bytes()
+    if not additions:
+        raise ValueError(f"no archive files to add under {archives}")
+    files = {item["path"]: item for item in json.loads(json.dumps(manifest["files"]))}
+    for name, content in additions.items():
+        files[name] = {"path": name, "size": len(content),
+                       "sha256": hashlib.sha256(content).hexdigest()}
+    manifest = json.loads(json.dumps(manifest))
+    manifest["files"] = [files[name] for name in sorted(files)]
+    manifest["archive_additions"] = sorted(
+        set(manifest.get("archive_additions", [])) | set(additions))
+    return _rewrite(bundle, manifest, additions, out_path)
 
 
 def agency_only(bundle: Path, out_path: Path) -> dict:
@@ -510,6 +574,11 @@ if __name__ == "__main__":
     overlay.add_argument("--raw-file", type=Path, required=True)
     overlay.add_argument("--out", type=Path, required=True)
     overlay.add_argument("--evidence-archive", type=Path)
+    archive_add = sub.add_parser("add-archives")
+    archive_add.add_argument("bundle", type=Path)
+    archive_add.add_argument("--archives", type=Path, required=True,
+                             help="Cache root holding archives/<state>/... files to add")
+    archive_add.add_argument("--out", type=Path, required=True)
     unpack = sub.add_parser("extract")
     unpack.add_argument("bundle", type=Path)
     unpack.add_argument("--out", type=Path, required=True)
@@ -521,6 +590,7 @@ if __name__ == "__main__":
         else agency_only(args.bundle, args.out) if args.command == "agency-only"
         else overlay_raw_bundle(args.bundle, args.raw_file, args.out, args.evidence_archive)
         if args.command == "overlay-raw"
+        else add_archives(args.bundle, args.archives, args.out) if args.command == "add-archives"
         else extract(args.bundle, args.out) if args.command == "extract"
         else verify(args.bundle)
     )

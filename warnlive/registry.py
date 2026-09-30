@@ -45,6 +45,11 @@ class StateConfig:
     # and the run moves on; None = the pipeline default.
     fetch_budget_minutes: float | None = None
     same_key_policy: str = "versions"
+    # raw_extra fields naming the source document a row was listed in, for
+    # distinct_rows states whose capture concatenates several documents (CA's
+    # fiscal-year reports). Distinct same-key rows are separate entries only
+    # within one document; empty = the whole capture is one document.
+    same_key_document_fields: list[str] | None = None
 
     @property
     def scrapable(self) -> bool:
@@ -115,6 +120,11 @@ def load_registry(path: Path | None = None) -> Registry:
             (cfg.cadence in CADENCES, f"bad cadence {cfg.cadence!r}"),
             (cfg.same_key_policy in SAME_KEY_POLICIES,
              f"bad same_key_policy {cfg.same_key_policy!r}"),
+            (not cfg.same_key_document_fields or (
+                cfg.same_key_policy == "distinct_rows"
+                and isinstance(cfg.same_key_document_fields, list)
+                and all(isinstance(f, str) and f for f in cfg.same_key_document_fields)),
+             f"bad same_key_document_fields {cfg.same_key_document_fields!r}"),
             (cfg.freshness_field in FRESHNESS_FIELDS,
              f"bad freshness_field {cfg.freshness_field!r}"),
             (
