@@ -199,11 +199,11 @@ Texas's AWS WAF challenge is passed by headless Chrome on the runner.
 
 Massachusetts: mass.gov's Akamai front end has refused GitHub runners (HTTP
 403) while it serves ordinary clients on residential connections. When
-`WARNLIVE_MA_ARCHIVE_FALLBACK=1` is set, the collector replaces each refused
+`WARNLIVE_MA_ARCHIVE_FALLBACK=1` is set, as the scrape workflows do, the collector replaces each refused
 file with its newest Internet Archive capture that returned 200. It records
 the origin, capture timestamps, and SHA-256 of every file in
 `workdir/raw/ma.fetch_manifest.json`. An archived file is only as current as
-its capture. To collect Massachusetts directly from mass.gov, run it from a
+its capture, so a run that used one marks Massachusetts degraded. To collect Massachusetts directly from mass.gov, run it from a
 network mass.gov accepts, with no scheduled scrape in progress:
 
 ```bash

@@ -421,3 +421,19 @@ def test_live_scrape_and_replay_assign_identical_entry_keys(monkeypatch, tmp_pat
     # A rerun of the live path is idempotent: every entry is re-observed.
     again = pipeline._run_one(cfg, live, raw_dir, tmp_path / "cache", False, True)
     assert (again.new, again.updated, again.unchanged) == (0, 0, 4)
+def test_archived_fetch_manifest_degrades_and_records_provenance(monkeypatch, tmp_path):
+    conn, raw = _setup(monkeypatch, tmp_path, cached=False)
+    manifest = {"raw_sha256": hashlib.sha256(raw.read_bytes()).hexdigest(),
+                "archived_files": 2, "oldest_confirmed_capture": "20260926000000"}
+    (raw.parent / "ct.fetch_manifest.json").write_text(json.dumps(manifest))
+    result = pipeline._run_one(_config(), conn, raw.parent, tmp_path / "cache", False, False)
+    assert result.verdict == "degraded"
+    assert result.checks["fetch_provenance"]["archived_files"] == 2
+
+
+def test_fetch_manifest_for_different_bytes_fails_the_state(monkeypatch, tmp_path):
+    conn, raw = _setup(monkeypatch, tmp_path, cached=False)
+    (raw.parent / "ct.fetch_manifest.json").write_text(json.dumps({"raw_sha256": "0" * 64}))
+    result = pipeline._run_one(_config(), conn, raw.parent, tmp_path / "cache", False, False)
+    assert result.verdict == "failed"
+    assert "manifest" in result.error

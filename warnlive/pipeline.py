@@ -339,6 +339,21 @@ def _run_one(
             ],
         }
     outcome.verdict = verification.verdict
+    # A collector that substitutes archived copies for refused files (MA's
+    # Internet Archive fallback) writes a manifest; an archived capture is
+    # only as current as its capture date, so the state is degraded, not ok.
+    manifest_path = data_dir / f"{postal}.fetch_manifest.json"
+    if fetched_live and raw_path is not None and manifest_path.is_file():
+        provenance = json.loads(manifest_path.read_text())
+        if provenance.get("raw_sha256") != hashlib.sha256(raw_path.read_bytes()).hexdigest():
+            outcome.verdict = "failed"
+            outcome.error = "fetch manifest does not match raw CSV"
+            outcome.checks["verdict"] = "failed"
+        else:
+            outcome.checks["fetch_provenance"] = provenance
+            if provenance.get("archived_files") and outcome.verdict == "ok":
+                outcome.verdict = "degraded"
+                outcome.checks["verdict"] = "degraded"
 
     # failed runs never ingest; degraded runs do (warn-level findings only)
     if conn is not None and not smoke and norm is not None and outcome.verdict != "failed":
