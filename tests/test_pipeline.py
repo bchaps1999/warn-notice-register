@@ -437,3 +437,14 @@ def test_fetch_manifest_for_different_bytes_fails_the_state(monkeypatch, tmp_pat
     result = pipeline._run_one(_config(), conn, raw.parent, tmp_path / "cache", False, False)
     assert result.verdict == "failed"
     assert "manifest" in result.error
+
+
+def test_job_portal_capture_does_not_freeze_absent_notices(monkeypatch, tmp_path):
+    # A portal CSV omits rows held at staging and non-WARN listings, so a
+    # released notice missing from it has not left the source.
+    conn, raw = _setup(monkeypatch, tmp_path, cached=False)
+    pipeline.dedupe.ingest(conn, [{**_record(), "dedupe_key": "old", "raw_record_hash": "old"}], "2026-01-01")
+    result = pipeline._run_one(_config("az"), conn, raw.parent, tmp_path / "cache", False, False)
+    assert result.verdict == "ok"
+    assert result.checks["ingest"]["absence_frozen"] is False
+    assert conn.execute("SELECT last_seen FROM notices WHERE dedupe_key='old'").fetchone()[0] is None

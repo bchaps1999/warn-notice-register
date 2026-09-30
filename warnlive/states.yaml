@@ -53,16 +53,17 @@ ak:
 
 az:
   name: Arizona
-  source: upstream
+  source: custom
   status: active
   tier: medium
   cadence: weekly
   needs_browser: false
-  min_rows: 100
+  min_rows: 200
   staleness_days: 120
+  fetch_budget_minutes: 75
   expected_columns: [employer, notice_date, number_of_employees_affected, warn_type, city, zip, lwib_area, address, record_number, detail_page_url]
   source_url: https://www.azjobconnection.gov/search/warn_lookups
-  notes: "AJLA job-center platform (shared with DE, KS, ME, VT)."
+  notes: "Job-portal platform shared with KS, ME, VT, DE (fetch/custom/job_portal.py): full WARN-filtered listing plus every detail page; same-employer/day rows held for event review, as in Kansas. Upstream's year search returns HTTP 400 (2026-09-30). The 2026-09-30 capture listed 767 WARN records (2010-2026): 31 listing + 767 detail pages at a 2 s pace took 28 minutes, hence the 75-minute budget. min_rows stays below the 208-row July capture that v1.2 replays."
 
 ar:
   name: Arkansas
@@ -139,16 +140,17 @@ dc:
 
 de:
   name: Delaware
-  source: upstream
+  source: custom
   status: active
   tier: medium
   cadence: weekly
   needs_browser: false
-  min_rows: 20
+  min_rows: 40
   staleness_days: 180
+  fetch_budget_minutes: 20
   expected_columns: [employer, notice_date, number_of_employees_affected, warn_type, city, zip, lwib_area, address, record_number, detail_page_url]
   source_url: https://joblink.delaware.gov/search/warn_lookups
-  notes: "AJLA job-center platform."
+  notes: "Job-portal platform (fetch/custom/job_portal.py): full WARN-filtered listing plus detail pages; same-employer/day rows held. The 2026-09-30 capture listed 80 WARN records (4 listing + 80 detail pages, 3 minutes). The collector reads only WARN-type records; the 14 released 'Non-WARN' rows from the July capture stay published and are not re-read. min_rows stays below the 46-row July capture that v1.2 replays."
 
 fl:
   name: Florida
@@ -262,7 +264,7 @@ ks:
   fetch_budget_minutes: 90
   expected_columns: [employer, notice_date, number_of_employees_affected, warn_type, city, zip, lwib_area, address, record_number, detail_page_url]
   source_url: https://www.kansasworks.com/search/warn_lookups
-  notes: "Full WARN-filtered portal listing and details; same-employer/day rows held for event review. 2026-09-29 check: the portal sorted by notice date shows 2026-05-01 (First Student) as newest dated WARN listing, (the undated Eaton Corporation row that sorts above it is old record 64, already held for its missing date); 7 dated 2026 listings in all. The collector matches the portal; the portal is sparse, not the collector. The full capture (37 listing + ~910 detail pages at a 2 s pace) took about 34 minutes on 2026-09-29, hence the 90-minute fetch budget."
+  notes: "Full WARN-filtered portal listing and details (fetch/custom/job_portal.py, shared with AZ, ME, VT, DE); same-employer/day rows held for event review. 2026-09-29 check: the portal sorted by notice date shows 2026-05-01 (First Student) as newest dated WARN listing, (the undated Eaton Corporation row that sorts above it is old record 64, already held for its missing date); 7 dated 2026 listings in all. The collector matches the portal; the portal is sparse, not the collector. The full capture (37 listing + ~910 detail pages at a 2 s pace) took about 34 minutes on 2026-09-29, hence the 90-minute fetch budget."
 
 ky:
   name: Kentucky
@@ -319,16 +321,17 @@ md:
 
 me:
   name: Maine
-  source: upstream
+  source: custom
   status: active
   tier: medium
   cadence: weekly
   needs_browser: false
   min_rows: 5
   staleness_days: 180
+  fetch_budget_minutes: 20
   expected_columns: [employer, notice_date, number_of_employees_affected, warn_type, city, zip, lwib_area, address, record_number, detail_page_url]
   source_url: https://joblink.maine.gov/search/warn_lookups
-  notes: "AJLA job-center platform."
+  notes: "Job-portal platform (fetch/custom/job_portal.py): full WARN-filtered listing plus detail pages; same-employer/day rows held. The 2026-09-30 capture listed 94 WARN records (4 listing + 94 detail pages, 4 minutes). min_rows stays below the 9-row July capture that v1.2 replays."
 
 mi:
   name: Michigan
@@ -673,16 +676,17 @@ va:
 
 vt:
   name: Vermont
-  source: upstream
+  source: custom
   status: active
   tier: medium
   cadence: weekly
   needs_browser: false
-  min_rows: 20
+  min_rows: 40
   staleness_days: 180
+  fetch_budget_minutes: 20
   expected_columns: [employer, notice_date, number_of_employees_affected, warn_type, city, zip, lwib_area, address, record_number, detail_page_url]
   source_url: https://www.vermontjoblink.com/search/warn_lookups
-  notes: "AJLA job-center platform. 2026-09-29 check: collector now returns a 2026-09-15 notice after 2026-06-17; the gap was the portal, not the collector."
+  notes: "Job-portal platform (fetch/custom/job_portal.py): full WARN-filtered listing plus detail pages; same-employer/day rows held. The 2026-09-30 capture listed 101 WARN records (5 listing + 101 detail pages, 4 minutes). 2026-09-29 check: a 2026-09-15 notice follows 2026-06-17; the gap was the portal, not the collector. min_rows stays below the 51-row July capture that v1.2 replays."
 
 wa:
   name: Washington

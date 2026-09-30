@@ -1,0 +1,27 @@
+{
+  "archive": "az-portal-evidence.tar.gz",
+  "archive_sha256": "58298c572998d571a14e1aefa47f6baa35f8f645f0efa373a7b196d6068f4406",
+  "capture": {
+    "base_url": "https://www.azjobconnection.gov",
+    "capture_end_utc": "2026-09-30T15:26:40Z",
+    "capture_start_utc": "2026-09-30T14:58:36Z",
+    "delay_seconds": 2.0,
+    "failures": [],
+    "listing_url": "https://www.azjobconnection.gov/search/warn_lookups?commit=Search&q%5Bnotice_eq%5D=true",
+    "note": "Pages fetched by a one-off capture script; inventory.json was rebuilt from the saved pages (no refetch) by job_portal_source.capture, and detail files were renamed to six-digit record numbers.",
+    "request_count": 798,
+    "retry_count": 0,
+    "user_agent": "WARN-register-source-audit/1.0 (slow public-page capture)"
+  },
+  "format": "job-portal-evidence-v1",
+  "source": "https://www.azjobconnection.gov/search/warn_lookups?commit=Search&q%5Bnotice_eq%5D=true",
+  "staging": {
+    "files": 804,
+    "held": 82,
+    "listed": 767,
+    "raw_sha256": "6f2f8d7fbfcea95257887f30279e2e4729e5d2a0c2fc5dafcdb65ed8974146a3",
+    "staged": 685,
+    "unparseable_worker_counts": 0
+  },
+  "state": "AZ"
+}

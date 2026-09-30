@@ -94,6 +94,10 @@ jobs:
           path: |
             workdir/raw/
             workdir/cache/ks/*.tar.gz
+            workdir/cache/az/*.tar.gz
+            workdir/cache/me/*.tar.gz
+            workdir/cache/vt/*.tar.gz
+            workdir/cache/de/*.tar.gz
             workdir/reports/current-run.json
           retention-days: 14
           if-no-files-found: ignore

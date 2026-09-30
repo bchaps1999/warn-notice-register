@@ -12,7 +12,8 @@ def test_registry_loads_and_validates():
     manual = [c for c in reg.all() if c.source == "manual"]
     assert sorted(c.postal for c in manual) == ["ar", "nh", "pr", "wy"]
     custom = [c for c in reg.all() if c.source == "custom"]
-    assert sorted(c.postal for c in custom) == ["ks", "ma", "mn", "nc", "nv", "sc", "wv"]
+    assert sorted(c.postal for c in custom) == [
+        "az", "de", "ks", "ma", "me", "mn", "nc", "nv", "sc", "vt", "wv"]
     assert reg["il"].freshness_field == "source_details.agency_reported_date"
     assert reg["pa"].freshness_field == "effective_date"
     assert reg["ct"].freshness_field == "notice_date"

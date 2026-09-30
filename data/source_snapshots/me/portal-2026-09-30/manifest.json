@@ -1,0 +1,27 @@
+{
+  "archive": "me-portal-evidence.tar.gz",
+  "archive_sha256": "f1e9dfb9c0bfb67481824e1539d7746367cc6428e6e84c3c31e0a7508164b0a9",
+  "capture": {
+    "base_url": "https://joblink.maine.gov",
+    "capture_end_utc": "2026-09-30T15:02:02Z",
+    "capture_start_utc": "2026-09-30T14:58:36Z",
+    "delay_seconds": 2.0,
+    "failures": [],
+    "listing_url": "https://joblink.maine.gov/search/warn_lookups?commit=Search&q%5Bnotice_eq%5D=true",
+    "note": "Pages fetched by a one-off capture script; inventory.json was rebuilt from the saved pages (no refetch) by job_portal_source.capture, and detail files were renamed to six-digit record numbers.",
+    "request_count": 98,
+    "retry_count": 0,
+    "user_agent": "WARN-register-source-audit/1.0 (slow public-page capture)"
+  },
+  "format": "job-portal-evidence-v1",
+  "source": "https://joblink.maine.gov/search/warn_lookups?commit=Search&q%5Bnotice_eq%5D=true",
+  "staging": {
+    "files": 104,
+    "held": 17,
+    "listed": 94,
+    "raw_sha256": "392752ab0c95cb403c428f7ddc1d8ca48ac5a61d2af2a56a8f9f56b202d39a8d",
+    "staged": 77,
+    "unparseable_worker_counts": 0
+  },
+  "state": "ME"
+}

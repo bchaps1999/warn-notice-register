@@ -1,4 +1,4 @@
-"""Complete KANSASWORKS WARN portal capture (see ``job_portal``)."""
+"""Complete Maine JobLink WARN portal capture (see ``job_portal``)."""
 
 from __future__ import annotations
 
@@ -8,4 +8,4 @@ from warnlive.fetch.custom.job_portal import scrape_portal
 
 
 def scrape(data_dir: Path, cache_dir: Path) -> Path:
-    return scrape_portal("ks", data_dir, cache_dir)
+    return scrape_portal("me", data_dir, cache_dir)

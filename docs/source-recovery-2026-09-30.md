@@ -251,3 +251,144 @@ python -m warnlive.migrate.offline_rebuild --bundle <bundle> \
   used, so late-2025 notices not on the live page may be missing.
 - OR: the current capture's 3 `incomplete_agency_row` holds are unchanged
   (that path mirrors the live scrape).
+
+## Arizona, Maine, Vermont and Delaware job portals (candidate, 2026-09-30)
+
+**Status: isolated candidate, not released.** Nothing in `data/exports`,
+`data/warn.sql.gz` or the site was written. Code: working tree on `9f3d700`
+(uncommitted at replay time).
+
+These four states use the same job-portal platform as Kansas. Upstream
+warn-scraper's year search now gets HTTP 400; only the WARN-filtered search
+(`/search/warn_lookups?commit=Search&q[notice_eq]=true&page=N`) works. v1.2
+replays their July upstream captures (AZ 208 rows/189 notices, ME 9, VT 51/49,
+DE 46, 14 of DE's typed "Non-WARN").
+
+### Code
+
+- `migrate/job_portal_source.py` generalizes the Kansas capture, staging and
+  freeze code over a `Portal` (base URL, labels); `migrate/ks_portal_source.py`
+  keeps the Kansas bindings. Re-staging the 2026-09-30 Kansas evidence with it
+  reproduces `ks.csv` (SHA-256 `35dd5b2f…fe23`), `holds.jsonl` and
+  `field_warnings.jsonl` byte for byte.
+- `fetch/custom/job_portal.py` is the live collector for KS, AZ, ME, VT and DE
+  (`fetch/custom/<postal>.py`); `states.yaml` switches AZ/ME/VT/DE to
+  `source: custom`. `min_rows` stays below each July capture that the v1.2
+  replay verifies (AZ 200, ME 5, VT 40, DE 40); fetch budgets AZ 75 minutes,
+  others 20.
+- `job_portal_source.project` replays a frozen capture pinned as
+  `agency/<postal>_portal`: it re-stages the HTML (the archived staged CSV and
+  holds must reproduce), normalizes the staged CSV exactly as the live scrape
+  does, and holds any record whose portal number is already in the bundle's
+  `raw/<postal>.csv` (`record_in_earlier_capture`, keeping any staging reason
+  as `staging_hold_reason`) or whose key is already admitted.
+- The live scrape no longer freezes absence for these states (as for KS):
+  their CSV omits held and non-WARN listings.
+
+### Identity and holds
+
+The four states keep the legacy key (state, employer, notice date, location).
+Every v1.2 row maps to a portal record number through `record_number` and
+`detail_page_url`, every released record is still listed except DE's 14
+Non-WARN rows (the collector reads WARN listings only), and no released
+record's key changes when read from the new capture. The released notices
+therefore stay on the July raw rows unchanged. Applying the Kansas event hold
+to the full capture instead would have removed 35 released AZ and 4 released
+VT notices (v1.2 published same-employer/day groups such as Hostess 2012,
+Life Care Centers 2015 and Intel 2016), and replacing `raw/de.csv` would have
+dropped the 14 Non-WARN notices.
+
+New records follow the Kansas staging holds: same employer and notice day,
+same-day name variants, missing notice date, listing/detail disagreement.
+
+### Evidence
+
+`data/source_snapshots/{az,me,vt,de}/portal-2026-09-30/`: `manifest.json`
+(capture times, request counts, no failures) and a `freeze_capture` archive of
+every listing and detail page with inventory, staged CSV, holds and
+provenance. The pages were fetched 2026-09-30 14:58–15:27 UTC at a 2 s pace;
+`inventory.json` was rebuilt from the saved pages without refetching.
+
+| State | Archive SHA-256 | Listed | Staged | Held at staging |
+|---|---|---:|---:|---:|
+| AZ | `58298c57…4406` | 767 | 685 | 82 |
+| ME | `f1e9dfb9…b0a9` | 94 | 77 | 17 |
+| VT | `c4dbfed9…5bc9` | 101 | 93 | 8 |
+| DE | `3255dc69…b92b` | 80 | 76 | 4 |
+
+### Row accounting
+
+| State | Listed | Admitted | Held by reason |
+|---|---:|---:|---|
+| AZ | 767 | 531 | in July capture 208 (54 of them also staging holds), same employer/day 26, name variant 2 |
+| ME | 94 | 68 | in July capture 9, same employer/day 17 |
+| VT | 101 | 48 | in July capture 51 (6 also staging holds), same employer/day 2 |
+| DE | 80 | 44 | in July capture 32, same employer/day 4 |
+
+Notices (workers) added, by notice year:
+
+| State | 1998–2004 | 2005–09 | 2010–14 | 2015–19 | 2020–24 | 2025 | 2026 |
+|---|---|---|---|---|---|---|---|
+| AZ | | | 76 (12,971) | 110 (13,972) | 303 (47,296) | 31 (7,686) | 11 (779) |
+| ME | | | 2 (693) | 15 (2,010) | 42 (3,916) | 7 (632) | 2 (156) |
+| VT | 6 (557) | 1 (189) | 5 (558) | 16 (1,446) | 14 (1,380) | 6 (361) | |
+| DE | | 19 (3,929) | 8 (2,567) | 8 (859) | 6 (965) | 2 (153) | 1 (106) |
+
+### Candidate build and replay
+
+```bash
+B=recovery-candidate-2/2026-09-30-recovery-ct-ia-oh-source-bundle.tar.gz  # sha 3b26d7fd…3b21
+python -m warnlive.migrate.source_bundle add-agency $B \
+  --artifacts data/source_snapshots/az/portal-2026-09-30 --name az_portal --out step-az.tar.gz
+# then de, me, vt (<st>_portal) -> 2026-09-30-recovery-job-portals-source-bundle.tar.gz
+python -m warnlive.migrate.offline_rebuild --bundle <bundle> \
+  --quality-evidence-dir data/source_snapshots/2026-09-24-quality-evidence \
+  --db <run>/candidate.sqlite --observed-at 2026-09-30 --source-only \
+  --report <run>/report.json --exceptions <run>/candidate.exceptions.jsonl \
+  --or-historical-partial-rows
+```
+
+- Bundle (session scratchpad, not committed): SHA-256
+  `968ea8790aa49fd330b2f3173714e55bebf03a3831e65e0da3a094e62e983c84`,
+  2,174 files, 122,818,457 source bytes.
+- Result: 85,697 notices (+691), 100,147 versions, 1,992 links (unchanged),
+  8,831,295 workers (+103,181), ledger 7,961 rows (+351), integrity `ok`,
+  0 foreign-key errors.
+- Fingerprints: notices `99ec1a1c…1e1a`, versions `08c90f29…421f`, links
+  `cc06649a…5f27`. Two independent replays matched, and their ledgers
+  (SHA-256 `1aa650b7…7453`) were byte-identical.
+- Released keys: all 80,703 v1.2.0 keys present with identical notice rows
+  and versions, no link lost (compared with a replay of the v1.2 bundle under
+  this code, which reproduced the v1.2 report's counts, fingerprints and
+  ledger byte for byte).
+- Live parity: `warnlive scrape me vt de az` with the new collectors against
+  a copy of the candidate database (isolated workdir and data dir; real
+  portal fetch 2026-09-30 13:15–13:53 UTC at a 2 s pace) returned `ok` for all
+  four with 0 new notices (updated AZ 98, ME 3, VT 22, DE 18). Its staged
+  CSVs were byte-identical to the frozen captures. The updates are released
+  notices whose July row had no worker count and whose detail page now has
+  one; the rebuild keeps the July rows, so the first live run after release
+  adds these versions.
+- Tests: `pytest tests/ -q` 667 passed, 1 skipped.
+
+### Unresolved and gaps
+
+- **Do not merge the `states.yaml` switch ahead of a release that adopts this
+  candidate.** On the current v1.2 database the same live run adds 691
+  notices and fails the scrape's regression gate (AZ and ME worker totals
+  grow more than 5x, AZ `no_jobs` changes), so the weekly scrape would stop
+  publishing until the baseline is re-recorded. The committed health
+  snapshot already fails against the local v1.2 database (total 80,822 →
+  80,703, MA 568 → 550) independently of this change.
+- Held: 28 AZ, 17 ME, 2 VT and 4 DE new records in same-employer/day groups
+  or name variants. The released v1.2 groups (Hostess, Life Care Centers,
+  Intel, and others) stay as published, folded by legacy key.
+- A later bundle that overlays `raw/<state>.csv` with the collector's staged
+  CSV would drop the released rows the staging holds (54 AZ, 6 VT) and DE's
+  14 Non-WARN rows; keep the July captures in the bundle.
+- The collector refetches every page weekly (AZ about 28 minutes); a
+  published notice later joined by a same-employer/day record stays
+  published while the new record is held (the Kansas durable-hold gate is
+  not applied: it would block on released v1.2 groups).
+- DE record 40 (Hostess 2012) is reachable but unlisted and untyped; it is
+  out of scope.

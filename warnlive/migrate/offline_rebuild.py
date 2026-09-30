@@ -759,6 +759,38 @@ def rebuild(
                 ct_archive_ingest = _ingest_groups(conn, {"CT": ct_archive_records}, observed_at)
                 if ct_archive_ingest["new"] != len(ct_archive_records):
                     raise ValueError("Connecticut archive rows did not produce unique notices")
+            job_portal_reports: dict[str, dict] = {}
+            for portal_postal in ("az", "de", "me", "vt"):
+                portal_dir = source / f"agency/{portal_postal}_portal"
+                if not portal_dir.is_dir():
+                    continue
+                from warnlive.migrate import job_portal_source
+                from warnlive.registry import load_registry
+
+                # A portal record already read from this bundle's earlier
+                # capture (raw/<state>.csv), or a key already admitted, is
+                # never admitted a second time from the full portal capture.
+                earlier_numbers: set[str] = set()
+                earlier_raw = source / f"raw/{portal_postal}.csv"
+                if earlier_raw.is_file():
+                    with earlier_raw.open(newline="", encoding="utf-8-sig") as stream:
+                        earlier_numbers = {
+                            (row.get("record_number") or "").strip()
+                            for row in csv.DictReader(stream)} - {""}
+                portal_records, portal_held, portal_report = job_portal_source.project(
+                    portal_dir, job_portal_source.PORTALS[portal_postal], earlier_numbers,
+                    {row[0] for row in conn.execute(
+                        "SELECT dedupe_key FROM notices WHERE state = ?",
+                        (portal_postal.upper(),))},
+                    load_registry()[portal_postal].source_url, observed_at)
+                exceptions.extend(portal_held)
+                portal_ingest = _ingest_groups(
+                    conn, {portal_postal.upper(): portal_records}, observed_at)
+                if portal_ingest["new"] != len(portal_records):
+                    raise ValueError(f"{portal_postal.upper()} portal rows did not produce "
+                                     "unique notices")
+                job_portal_reports[portal_postal.upper()] = {
+                    **portal_report, "ingested_rows": portal_ingest["new"]}
             ky_ingest = _ingest_groups(conn, {"KY": ky_records}, observed_at)
             if ky_source_report is not None and ky_ingest["new"] != len(ky_records):
                 raise ValueError("Kentucky agency rows did not produce unique notices")
@@ -1176,6 +1208,7 @@ def rebuild(
                 "ia_archive_source": ({**ia_archive_report,
                                        "ingested_rows": ia_archive_ingest["new"]}
                                       if ia_archive_report is not None else None),
+                "job_portal_sources": job_portal_reports or None,
                 "ct_archive_source": ({**ct_archive_report,
                                        "ingested_rows": ct_archive_ingest["new"]}
                                       if ct_archive_report is not None else None),

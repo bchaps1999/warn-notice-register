@@ -106,6 +106,10 @@ jobs:
           path: |
             workdir/reports/current-run.json
             workdir/cache/ks/*.tar.gz
+            workdir/cache/az/*.tar.gz
+            workdir/cache/me/*.tar.gz
+            workdir/cache/vt/*.tar.gz
+            workdir/cache/de/*.tar.gz
           retention-days: 14
           if-no-files-found: ignore
       - name: Check selected state outcomes

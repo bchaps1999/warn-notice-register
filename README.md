@@ -123,8 +123,10 @@ fetch (per state)  ->  normalize  ->  verify  ->  ingest (SQLite)  ->  export
 
 - **Fetch**: [biglocalnews/warn-scraper](https://github.com/biglocalnews/warn-scraper)
   per-state scrapers (SHA-pinned), with local overrides in
-  `warnlive/fetch/patches/` and adapters for states it lacks (MA, MN, NC, NV)
-  in `warnlive/fetch/custom/`.
+  `warnlive/fetch/patches/` and adapters for states it lacks or covers
+  incompletely in `warnlive/fetch/custom/` (MA, MN, NC, NV, and the
+  job-portal states KS, AZ, ME, VT, DE, which capture every WARN listing and
+  detail page through `job_portal.py`).
 - **Normalize**: wraps [biglocalnews/warn-transformer](https://github.com/biglocalnews/warn-transformer)
   per-state transformers row-by-row with error capture; custom transformers in
   `warnlive/normalize/custom/`. Unmapped raw columns are preserved as JSON.

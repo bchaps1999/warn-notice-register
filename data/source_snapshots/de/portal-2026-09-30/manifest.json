@@ -1,0 +1,27 @@
+{
+  "archive": "de-portal-evidence.tar.gz",
+  "archive_sha256": "3255dc69c6aa612b43d1b36e6f2d0b991cb2631b7ebbf2cac205b1c2b6ecb92b",
+  "capture": {
+    "base_url": "https://joblink.delaware.gov",
+    "capture_end_utc": "2026-09-30T15:01:33Z",
+    "capture_start_utc": "2026-09-30T14:58:36Z",
+    "delay_seconds": 2.0,
+    "failures": [],
+    "listing_url": "https://joblink.delaware.gov/search/warn_lookups?commit=Search&q%5Bnotice_eq%5D=true",
+    "note": "Pages fetched by a one-off capture script; inventory.json was rebuilt from the saved pages (no refetch) by job_portal_source.capture, and detail files were renamed to six-digit record numbers.",
+    "request_count": 84,
+    "retry_count": 0,
+    "user_agent": "WARN-register-source-audit/1.0 (slow public-page capture)"
+  },
+  "format": "job-portal-evidence-v1",
+  "source": "https://joblink.delaware.gov/search/warn_lookups?commit=Search&q%5Bnotice_eq%5D=true",
+  "staging": {
+    "files": 90,
+    "held": 4,
+    "listed": 80,
+    "raw_sha256": "e1d91e178a62123b5422083cdab4162d4da529a158469c3661651e11285a3d0c",
+    "staged": 76,
+    "unparseable_worker_counts": 0
+  },
+  "state": "DE"
+}

@@ -20,6 +20,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from warnlive import fetch
+from warnlive.migrate import job_portal_source
 from warnlive.normalize import engine, entries
 from warnlive.normalize.engine import _dedupe_key
 from warnlive.normalize.admission import (
@@ -453,9 +454,12 @@ def _run_one(
             stats = dedupe.ingest(conn, records, observed_at=now_utc()[:10], commit=False)
             # Absence is evidence only from a complete, current source snapshot.
             # Cache runs, backfills, and partly unparseable files cannot support it.
+            # A job-portal CSV omits rows held at staging and lists only one
+            # notice type, so a notice missing from it has not left the source.
             complete_live = (
                 fetched_live and norm.failed_rows - norm.held_rows == 0 and not excluded
-                and trigger != "backfill" and postal not in {"ga", "sc", "ks"}
+                and trigger != "backfill"
+                and postal not in {"ga", "sc"} | set(job_portal_source.PORTALS)
             )
             if complete_live:
                 # Held rows are still present in the source, so their stored
