@@ -530,7 +530,7 @@ python -m warnlive.migrate.offline_rebuild \
 
 ## Final build, promoted as v1.3.0 (2026-09-30)
 
-**Status: release candidate for v1.3.0.** Code: `688ea9d` (`e299a5c` plus
+**Status: release candidate for v1.3.0.** Code: `05253eb` (`e299a5c` plus
 the archive date window below). Bundle: the job-portal bundle above, copied
 byte for byte to `data/source_snapshots/2026-09-30-v1.3-source-bundle.tar.gz`
 (SHA-256 `968ea8790aa49fd330b2f3173714e55bebf03a3831e65e0da3a094e62e983c84`,

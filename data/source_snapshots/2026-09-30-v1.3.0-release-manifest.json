@@ -36,7 +36,7 @@
     "site_tests": "3 passed",
     "sqlite_integrity": "ok"
   },
-  "code_commit": "688ea9d",
+  "code_commit": "05253eb",
   "counts": {
     "exception_rows": 7972,
     "links": 1992,
