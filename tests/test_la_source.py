@@ -64,7 +64,8 @@ def test_la_source_rows_preserve_dates_status_and_location_roles():
 
 def test_la_source_rejects_tampered_pdf(tmp_path):
     for path in SOURCE.iterdir():
-        (tmp_path / path.name).write_bytes(path.read_bytes())
+        if path.is_file():  # skip dated evidence subdirectories
+            (tmp_path / path.name).write_bytes(path.read_bytes())
     (tmp_path / "2026.pdf").write_bytes(b"corrupt")
     with pytest.raises(ValueError, match="checksum mismatch"):
         extract(tmp_path)

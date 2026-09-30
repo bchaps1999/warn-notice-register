@@ -9,7 +9,10 @@ rebuild, and ``source_exceptions`` lists the annotation, rescinded and held
 rows for its exception ledger. The PDF is a table of reported notices, not a
 filing archive: two unresolved clusters stay out of active counts, and no
 address role is inferred nor a reported worker total split across sites.
-No network access.
+``read_archive``/``project_archive`` apply general rules (not a reviewed
+mapping) to ``agency/la_archive``, the Wayback captures of the 2007-2024
+tables (data/source_snapshots/la/wayback-2026-09-30); rows carrying update or
+rescission markers and continuation rows are held. No network access.
 """
 
 from __future__ import annotations
@@ -17,6 +20,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from collections import Counter
 from datetime import datetime
 from pathlib import Path
 
@@ -261,3 +265,224 @@ def source_exceptions(rows: list[dict]) -> list[dict]:
             "raw_extra": json.dumps(row, sort_keys=True, ensure_ascii=False),
         })
     return result
+
+
+# ---------------------------------------------------------------------------
+# Louisiana Wayback archive (agency/la_archive): the agency's annual
+# WarnNotices{YYYY}.pdf tables for 2007-2024 as archived by the Wayback
+# Machine (data/source_snapshots/la/wayback-2026-09-30). The live URLs return
+# 404. The 2024 capture is from August 2024 (partial year) and the 2019
+# capture from 2019-12-22.
+
+ARCHIVE_PREFIX = "agency/la_archive"
+ARCHIVE_FORMAT = "la-wayback-archive-v1"
+ARCHIVE_HEADER = ["CompanyName", "NoticeDate", "LayoffDate", "EmployeesAffected", "Industry"]
+DAY = re.compile(r"\d{1,2}/\d{1,2}/(?:\d{2}|\d{4})")
+SPAN = re.compile(r"(\d{1,2}/\d{1,2}/(?:\d{4}|\d{2}))\s*(?:[-–]|to)\s*(\d{1,2}/\d{1,2}/(?:\d{4}|\d{2}))",
+                  re.I)
+ADDRESS_LINE = re.compile(
+    r"^\s*(?:\d|P\.?\s*O\.?\s*Box\b|PO Box\b|One\s|Suite\b|Ste\.?\s)"
+    r"|,\s*(?:LA|Louisiana)\b|\b[A-Z]{2}\s*\d{5}\b|\bLA\d{5}\b", re.I)
+MARKER_LINE = re.compile(r"\bupdat|\brescind|\bWARN\s+Rescinded", re.I)
+
+
+def _archive_day(value: str) -> str | None:
+    value = " ".join((value or "").split())
+    if not DAY.fullmatch(value):
+        return None
+    try:
+        return _date(value)
+    except ValueError:
+        return None
+
+
+def _archive_span(value: str) -> tuple[str | None, str | None]:
+    text = " ".join((value or "").split())
+    single = _archive_day(text)
+    if single:
+        return single, None
+    match = SPAN.fullmatch(text)
+    if not match:
+        return None, None
+    start, end = _archive_day(match.group(1)), _archive_day(match.group(2))
+    if not start or not end or end < start:
+        return None, None
+    return start, end
+
+
+def _name_key(value: str) -> str:
+    return re.sub(r"[^a-z0-9]", "", (value or "").casefold())[:12]
+
+
+def split_company_cell(cell: str) -> tuple[str, str | None]:
+    """The employer lines before the first address or status line, and the rest."""
+    lines = [" ".join(line.split()) for line in (cell or "").split("\n")]
+    lines = [line for line in lines if line]
+    name: list[str] = []
+    for index, line in enumerate(lines):
+        if name and (ADDRESS_LINE.search(line) or MARKER_LINE.search(line)):
+            rest = "\n".join(lines[index:])
+            return " ".join(name), rest or None
+        name.append(line)
+    return " ".join(name), None
+
+
+def read_archive(directory: Path) -> list[dict]:
+    """Verify every pinned annual PDF and return each non-empty table row."""
+    directory = Path(directory)
+    manifest = json.loads((directory / "manifest.json").read_text())
+    specs = manifest.get("artifacts") or []
+    if (manifest.get("format") != ARCHIVE_FORMAT
+            or sorted(item.get("year") for item in specs) != list(range(2007, 2025))):
+        raise ValueError("unsupported Louisiana archive manifest")
+    rows = []
+    for spec in sorted(specs, key=lambda item: item["year"]):
+        name = spec["file"]
+        path = directory / name
+        if path.is_symlink() or not path.is_file() or not re.fullmatch(r"WarnNotices\d{4}-\d{14}\.pdf", name):
+            raise ValueError(f"invalid Louisiana archive artifact: {name}")
+        content = path.read_bytes()
+        digest = hashlib.sha256(content).hexdigest()
+        if len(content) != spec["bytes"] or digest != spec["sha256"]:
+            raise ValueError(f"Louisiana archive checksum mismatch: {name}")
+        count = 0
+        with pdfplumber.open(path) as pdf:
+            if len(pdf.pages) != spec["pages"]:
+                raise ValueError(f"Louisiana archive page count changed: {name}")
+            for page_number, page in enumerate(pdf.pages, start=1):
+                for table in page.extract_tables():
+                    for ordinal, cells in enumerate(table, start=1):
+                        cells = [cell or "" for cell in cells]
+                        if len(cells) != 5:
+                            raise ValueError(f"Louisiana archive row width changed: {name}:{page_number}")
+                        if ["".join(cell.split()) for cell in cells] == ARCHIVE_HEADER:
+                            continue
+                        if not any(cell.strip() for cell in cells):
+                            continue
+                        count += 1
+                        raw = json.dumps(cells, ensure_ascii=False, separators=(",", ":"))
+                        rows.append({
+                            "year": spec["year"], "file": name, "page": page_number,
+                            "table_row": ordinal, "cells": cells,
+                            "source_artifact": f"{ARCHIVE_PREFIX}/{name}",
+                            "source_pdf_sha256": digest,
+                            "source_row": (f"{ARCHIVE_PREFIX}/{name}:sha256:{digest}:"
+                                           f"page:{page_number}:table_row:{ordinal}"),
+                            "source_row_sha256": hashlib.sha256(raw.encode()).hexdigest(),
+                            "source_url": spec["wayback_url"],
+                        })
+        if count != spec["data_rows"]:
+            raise ValueError(f"Louisiana archive row count changed: {name}")
+    return rows
+
+
+def _json_cells(row: dict) -> str:
+    return json.dumps([row["file"], row["cells"]], ensure_ascii=False)
+
+
+def existing_events(rows: list[dict]) -> set[tuple]:
+    """(notice date, workers, employer key) of every agency/la table notice row."""
+    events = set()
+    for row in rows:
+        if row.get("kind") != "notice":
+            continue
+        company = row.get("company_text") or (row.get("company_and_address_text") or "").split("\n")[0]
+        events.add((row.get("notice_date"), row.get("workers_total"), _name_key(company)))
+    return events
+
+
+def project_archive(directory: Path, known_events: set[tuple] | None = None
+                    ) -> tuple[list[dict], list[dict], dict]:
+    """Admit complete archive rows; hold status, continuation and repeated rows.
+
+    A row carrying an update or rescission marker is held: the tables stack
+    later filings under the original without saying which values changed.
+    A row without its own employer or notice cell continues an earlier row
+    (a phase or wrapped address) and is held with a pointer to that row.
+    """
+    rows = read_archive(directory)
+    known_events = set(known_events or ())
+    records, held = [], []
+    admitted_events: dict[tuple, str] = {}
+    admitted_cells: dict[str, str] = {}
+    previous = None
+    for row in rows:
+        company_cell, notice_cell, layoff_cell, workers_cell, industry = row["cells"]
+        text = " ".join(row["cells"])
+        name, rest = split_company_cell(company_cell)
+        notice = _archive_day(notice_cell)
+        workers_text = " ".join(workers_cell.split()).replace(",", "")
+        workers = int(workers_text) if workers_text.isdigit() and int(workers_text) > 0 else None
+        event = (notice, workers, _name_key(name))
+        site_event = (*event, re.sub(r"[^a-z0-9]", "", (rest or "").casefold()))
+        related = None
+        if not company_cell.strip() or not any(c.strip() for c in row["cells"][1:]):
+            reason, related = "official_source_continuation_row", previous
+        elif re.search(r"\brescind", text, re.I):
+            reason = "official_source_rescinded"
+        elif re.search(r"\bupdat", text, re.I):
+            reason = "official_source_update_unresolved"
+        elif not name:
+            reason = "missing_employer"
+        elif notice and event in known_events:
+            reason = "already_represented_la_row"
+        elif _json_cells(row) in admitted_cells:
+            reason, related = "duplicate_row_in_source", admitted_cells[_json_cells(row)]
+        elif notice and site_event in admitted_events:
+            # The same employer, site, notice date and count in another
+            # year's table: a notice listed in two annual PDFs.
+            reason, related = "duplicate_listing_in_other_annual_pdf", admitted_events[site_event]
+        else:
+            reason = None
+        if company_cell.strip():
+            previous = row["source_row"]
+        if reason:
+            item = {"origin": row["source_artifact"], "state": "LA", "reason": reason,
+                    "source_row": row["source_row"],
+                    "source_row_sha256": row["source_row_sha256"],
+                    "source_url": row["source_url"],
+                    "notice_year": notice[:4] if notice else str(row["year"]),
+                    "raw_extra": json.dumps(row["cells"], ensure_ascii=False)}
+            if related:
+                item["related_source_row"] = related
+            held.append(item)
+            continue
+        if notice:
+            admitted_events.setdefault(site_event, row["source_row"])
+        admitted_cells.setdefault(_json_cells(row), row["source_row"])
+        start, end = _archive_span(layoff_cell)
+        identity = f"LA:archive:{row['year']}:p{row['page']}:r{row['table_row']}"
+        details = {
+            "origin": row["source_artifact"], "source_row": row["source_row"],
+            "source_row_sha256": row["source_row_sha256"],
+            "source_pdf_sha256": row["source_pdf_sha256"], "raw_cells": row["cells"],
+            "report_year": row["year"],
+            "employer_name_rule": "la_archive_lines_before_first_address_line_v1",
+            "company_and_address_text": company_cell, "address_text": rest,
+            "address_role": "unverified", "worker_allocation": "unverified",
+            "date_interpretation": "interval" if end else "single_date" if start else "unparsed",
+            "date_roles": {"Notice Date": "agency_table_notice_date",
+                           "Layoff Date": "reported_action"},
+            "industry_text": " ".join(industry.split()) or None,
+        }
+        rec = {
+            "state": "LA", "employer_name": name, "location": None, "notice_date": notice,
+            "effective_date": start, "effective_date_end": end,
+            "employees_affected": workers, "layoff_type": "unknown",
+            "is_temporary": None, "is_amendment": 0, "source_url": row["source_url"],
+            "source_notice_id": None, "source_identity": identity,
+            "source_details": json.dumps(details, sort_keys=True, ensure_ascii=False),
+            "raw_extra": json.dumps(row["cells"], ensure_ascii=False),
+            "dedupe_key": hashlib.sha1(f"LA|archive|{identity}".encode()).hexdigest(),
+        }
+        rec["raw_record_hash"] = _record_hash(rec)
+        records.append(rec)
+    if len(records) + len(held) != len(rows):
+        raise ValueError("Louisiana archive row accounting mismatch")
+    return records, held, {
+        "source_rows": len(rows), "admitted": len(records), "held": len(held),
+        "hold_reasons": dict(sorted(Counter(item["reason"] for item in held).items())),
+        "admitted_workers": sum(r["employees_affected"] or 0 for r in records),
+        "admitted_missing_workers": sum(r["employees_affected"] is None for r in records),
+        "admitted_missing_notice_date": sum(r["notice_date"] is None for r in records),
+    }

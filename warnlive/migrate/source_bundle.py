@@ -8,7 +8,8 @@ Local News table or old-database policy enters it.
 
 Commands: ``create`` (from a workdir), ``verify``, ``overlay-raw`` (replace
 one state CSV in a frozen bundle), ``add-archives`` (add new
-``backfill/cache/archives`` files to a frozen bundle) and ``extract``. Every
+``backfill/cache/archives`` files to a frozen bundle), ``add-agency`` (add a
+new pinned ``agency/<name>/`` artifact directory) and ``extract``. Every
 derived bundle is a new file; none is modified in place. No network access.
 """
 
@@ -362,6 +363,49 @@ def add_archives(bundle: Path, archives: Path, out_path: Path) -> dict:
     return _rewrite(bundle, manifest, additions, out_path)
 
 
+AGENCY_NAME = re.compile(r"[a-z]{2}_[a-z0-9_]+")
+
+
+def add_agency(bundle: Path, artifacts: Path, name: str, out_path: Path) -> dict:
+    """Add one new pinned agency artifact directory as ``agency/<name>/``.
+
+    ``artifacts`` is a flat directory (a dated ``data/source_snapshots`` path)
+    holding ``manifest.json`` and the files it pins. The base bundle is
+    verified and copied byte for byte; the call refuses a name the bundle
+    already holds, so an existing ``agency/`` table is never replaced or
+    extended. The state projector named by the offline rebuild validates the
+    manifest and checksums when it replays the bundle. The manifest records
+    the added directories, cumulatively, under ``agency_additions``.
+    """
+    bundle, artifacts, out_path = Path(bundle), Path(artifacts), Path(out_path)
+    if out_path.exists():
+        raise FileExistsError(f"source bundle already exists: {out_path}")
+    if not AGENCY_NAME.fullmatch(name):
+        raise ValueError(f"invalid agency artifact name: {name!r}")
+    if artifacts.is_symlink() or not artifacts.is_dir():
+        raise ValueError(f"invalid agency artifact directory: {artifacts}")
+    manifest = verify(bundle)
+    prefix = f"agency/{name}/"
+    if any(item["path"].startswith(prefix) for item in manifest["files"]):
+        raise ValueError(f"bundle already has {prefix}; additions never replace a member")
+    additions: dict[str, bytes] = {}
+    for path in sorted(artifacts.iterdir(), key=lambda p: p.name):
+        if path.is_symlink() or not path.is_file():
+            raise ValueError(f"agency artifacts must be regular files: {path}")
+        additions[prefix + path.name] = path.read_bytes()
+    if prefix + "manifest.json" not in additions:
+        raise ValueError(f"agency artifact directory lacks manifest.json: {artifacts}")
+    files = {item["path"]: item for item in json.loads(json.dumps(manifest["files"]))}
+    for member, content in additions.items():
+        files[member] = {"path": member, "size": len(content),
+                         "sha256": hashlib.sha256(content).hexdigest()}
+    manifest = json.loads(json.dumps(manifest))
+    manifest["files"] = [files[member] for member in sorted(files)]
+    manifest["agency_additions"] = sorted(
+        set(manifest.get("agency_additions", [])) | {prefix.rstrip("/")})
+    return _rewrite(bundle, manifest, additions, out_path)
+
+
 def extract(bundle: Path, destination: Path) -> dict:
     """Verify first, then extract into a new directory without overwriting."""
     manifest = verify(bundle)
@@ -409,6 +453,13 @@ if __name__ == "__main__":
     archive_add.add_argument("--archives", type=Path, required=True,
                              help="Cache root holding archives/<state>/... files to add")
     archive_add.add_argument("--out", type=Path, required=True)
+    agency_add = sub.add_parser("add-agency")
+    agency_add.add_argument("bundle", type=Path)
+    agency_add.add_argument("--artifacts", type=Path, required=True,
+                            help="Pinned directory holding manifest.json and its files")
+    agency_add.add_argument("--name", required=True,
+                            help="Bundle directory name under agency/ (e.g. ky_archive)")
+    agency_add.add_argument("--out", type=Path, required=True)
     unpack = sub.add_parser("extract")
     unpack.add_argument("bundle", type=Path)
     unpack.add_argument("--out", type=Path, required=True)
@@ -420,6 +471,8 @@ if __name__ == "__main__":
         else overlay_raw_bundle(args.bundle, args.raw_file, args.out, args.evidence_archive)
         if args.command == "overlay-raw"
         else add_archives(args.bundle, args.archives, args.out) if args.command == "add-archives"
+        else add_agency(args.bundle, args.artifacts, args.name, args.out)
+        if args.command == "add-agency"
         else extract(args.bundle, args.out) if args.command == "extract"
         else verify(args.bundle)
     )

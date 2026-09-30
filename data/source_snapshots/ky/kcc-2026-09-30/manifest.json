@@ -1,0 +1,87 @@
+{
+  "artifacts": [
+    {
+      "bytes": 175999,
+      "data_rows": 799,
+      "file": "tracking-form-1998-2016.xlsx",
+      "original_agency_url": "https://kcc.ky.gov/WARN%20notices/2017%20WARN%20docs/Kentucky%20%20WARN%20Report%20-Tracking%20Form%20%281998-2016%29.xlsx",
+      "retrieval": "downloaded live from kcc.ky.gov; time is the download file's modification time",
+      "retrieved_live_utc": "2026-09-30T14:50:05Z",
+      "sha256": "2411db199ba2eefc3b39659b74fc5c4b1775f9c013ad6478dcb6e7a665285c78",
+      "sheet_data_rows": {
+        "WARN 1998": 12,
+        "WARN 1999": 50,
+        "WARN 2000": 52,
+        "WARN 2001": 72,
+        "WARN 2002": 9,
+        "WARN 2003": 3,
+        "WARN 2004": 50,
+        "WARN 2005": 6,
+        "WARN 2006": 9,
+        "WARN 2007": 11,
+        "WARN 2008": 71,
+        "WARN 2009": 89,
+        "WARN 2010": 41,
+        "WARN 2011": 31,
+        "WARN 2012": 77,
+        "WARN 2013": 63,
+        "WARN 2014": 37,
+        "WARN 2015": 74,
+        "WARN 2016": 42
+      },
+      "wayback_timestamps_same_url": [
+        "20180604184737",
+        "20200607203509",
+        "20220607020946"
+      ],
+      "years": "1998-2016"
+    },
+    {
+      "bytes": 104990,
+      "data_rows": 368,
+      "file": "warn-report-2017-2025-02.xlsx",
+      "original_agency_url": "https://kcc.ky.gov/WARN%20notices/WARN%20Notices%202025/WARN%20Report%2002272025.xlsx",
+      "retrieval": "downloaded live from kcc.ky.gov; time is the download file's modification time",
+      "retrieved_live_utc": "2026-09-30T14:51:06Z",
+      "sha256": "8067e0bdf3358a081cdccd15ad5a18b04b09063720787a6adbfa858943c120f0",
+      "sheet_data_rows": {
+        "2017": 30,
+        "2018": 36,
+        "2019": 36,
+        "2020": 124,
+        "2021": 21,
+        "2022": 15,
+        "2023": 44,
+        "2024": 50,
+        "2025": 12
+      },
+      "wayback_timestamps_same_url": [
+        "20250305001447"
+      ],
+      "years": "2017-2025 (2025 sheet received 2025-01-03..2025-02-24)"
+    },
+    {
+      "bytes": 16094,
+      "data_rows": 60,
+      "file": "warn-report-2025.csv",
+      "original_agency_url": "https://kcc.ky.gov/WARN%20notices/WARN%20Notices%202025/WARN%20Report-2025-12-31-10-00-02.csv",
+      "retrieval": "downloaded live from kcc.ky.gov; time is the download file's modification time",
+      "retrieved_live_utc": "2026-09-30T14:51:07Z",
+      "sha256": "d7ae13baebd26f220a9b0d38dc08f3d26919225a0b63621cb05baaba32ba282b",
+      "wayback_timestamps_same_url": [
+        "20260106094327"
+      ],
+      "years": "2025 (Date Received 2025-01-03..2025-12-19)"
+    }
+  ],
+  "captured_on": "2026-09-30",
+  "date_roles": {
+    "Date Received": "agency_receipt",
+    "Projected Date(s)": "projected_action"
+  },
+  "format": "ky-agency-archive-v1",
+  "publisher": "Kentucky Career Center (Education and Labor Cabinet)",
+  "scope": "Agency WARN tracking workbook 1998-2016, WARN report workbook 2017 to Feb 2025 and the 2025 WARN report CSV, as linked from the agency news page on 2026-09-30. Complements agency/ky (2026 report). Not proof of complete coverage for any year.",
+  "source_page": "https://kcc.ky.gov/Pages/News.aspx",
+  "state": "KY"
+}

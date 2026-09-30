@@ -19,6 +19,7 @@ candidate is not promoted here.
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import io
 import json
@@ -690,6 +691,30 @@ def rebuild(
                 la_source.record(row) for row in la_source_rows
                 if row["kind"] == "notice" and row["source_row"] in la_source.EMPLOYERS
             ]}, observed_at) if la_source_rows else {"new": 0}
+            la_archive_report = None
+            la_archive_ingest = {"new": 0}
+            if (source / "agency/la_archive").is_dir():
+                la_archive_records, la_archive_held, la_archive_report = la_source.project_archive(
+                    source / "agency/la_archive", la_source.existing_events(la_source_rows))
+                exceptions.extend(la_archive_held)
+                la_archive_ingest = _ingest_groups(conn, {"LA": la_archive_records}, observed_at)
+                if la_archive_ingest["new"] != len(la_archive_records):
+                    raise ValueError("Louisiana archive rows did not produce unique notices")
+            mi_archive_report = None
+            mi_archive_ingest = {"new": 0}
+            if (source / "agency/mi_archive").is_dir():
+                from warnlive.migrate import mi_archive_source
+
+                mi_existing = {
+                    (mi_archive_source._employer_key(row["employer_name"]), row["employees_affected"])
+                    for row in conn.execute(
+                        "SELECT employer_name, employees_affected FROM notices WHERE state='MI'")}
+                mi_archive_records, mi_archive_held, mi_archive_report = mi_archive_source.project(
+                    source / "agency/mi_archive", mi_existing)
+                exceptions.extend(mi_archive_held)
+                mi_archive_ingest = _ingest_groups(conn, {"MI": mi_archive_records}, observed_at)
+                if mi_archive_ingest["new"] != len(mi_archive_records):
+                    raise ValueError("Michigan archive rows did not produce unique notices")
             # A declared amendment with one parent site is that notice's
             # revision even when it moves the action date (ia_source).
             ia_revision_keys = {
@@ -703,6 +728,28 @@ def rebuild(
             ky_ingest = _ingest_groups(conn, {"KY": ky_records}, observed_at)
             if ky_source_report is not None and ky_ingest["new"] != len(ky_records):
                 raise ValueError("Kentucky agency rows did not produce unique notices")
+            ky_archive_report = None
+            ky_archive_ingest = {"new": 0}
+            if (source / "agency/ky_archive").is_dir():
+                from warnlive.migrate.ky_source import project_archive as project_ky_archive
+
+                # Notice numbers and document URLs already in the build
+                # (admitted or held) are never admitted a second time.
+                ky_known_ids = {row["source_notice_id"] for row in ky_source_rows}
+                ky_known_urls = {row["document_url"] for row in ky_source_rows}
+                for row in conn.execute(
+                        "SELECT source_notice_id, source_details FROM notices WHERE state='KY'"):
+                    if row["source_notice_id"]:
+                        ky_known_ids.add(row["source_notice_id"])
+                    url = json.loads(row["source_details"] or "{}").get("source_document_url")
+                    if url:
+                        ky_known_urls.add(url)
+                ky_archive_records, ky_archive_held, ky_archive_report = project_ky_archive(
+                    source / "agency/ky_archive", ky_known_ids, ky_known_urls)
+                exceptions.extend(ky_archive_held)
+                ky_archive_ingest = _ingest_groups(conn, {"KY": ky_archive_records}, observed_at)
+                if ky_archive_ingest["new"] != len(ky_archive_records):
+                    raise ValueError("Kentucky archive rows did not produce unique notices")
             # Later captures of one WARN# are that filing's versions.
             or_revision_keys = {
                 key for key, n in _key_counts(or_records).items() if n > 1}
@@ -731,6 +778,28 @@ def rebuild(
             tn_ingest = _ingest_groups(conn, {"TN": tn_records}, observed_at)
             if tn_source_report is not None and tn_ingest["new"] != len(tn_records):
                 raise ValueError("Tennessee agency rows did not produce unique notices")
+            tn_archive_report = None
+            tn_archive_ingest = {"new": 0}
+            if (source / "agency/tn_archive").is_dir():
+                from warnlive.migrate.tn_source import (
+                    project_archive as project_tn_archive, read_artifacts as read_tn,
+                )
+
+                # WARN numbers of every current TN row, admitted or held.
+                tn_known = {row["source_notice_id"] for row in conn.execute(
+                    "SELECT source_notice_id FROM notices WHERE state='TN'")}
+                if (source / "agency/tn").is_dir():
+                    tn_known |= {row["fields"].get("Notice/Type", "")
+                                 for row in read_tn(source / "agency/tn")[0]}
+                if (source / "raw/tn.csv").is_file():
+                    with (source / "raw/tn.csv").open(newline="", encoding="utf-8-sig") as stream:
+                        tn_known |= {row.get("Notice ID") or "" for row in csv.DictReader(stream)}
+                tn_archive_records, tn_archive_held, tn_archive_report = project_tn_archive(
+                    source / "agency/tn_archive", tn_known)
+                exceptions.extend(tn_archive_held)
+                tn_archive_ingest = _ingest_groups(conn, {"TN": tn_archive_records}, observed_at)
+                if tn_archive_ingest["new"] != len(tn_archive_records):
+                    raise ValueError("Tennessee archive rows did not produce unique notices")
             tx_historical_report = None
             tx_historical_ingest = {"new": 0}
             if tx_historical_dir.is_dir():
@@ -990,6 +1059,12 @@ def rebuild(
                     "held_notice_rows": sum(row.get("source_row") in la_source.HELD
                                             for row in la_source_rows),
                 },
+                "la_archive_source": ({**la_archive_report,
+                                       "ingested_rows": la_archive_ingest["new"]}
+                                      if la_archive_report is not None else None),
+                "mi_archive_source": ({**mi_archive_report,
+                                       "ingested_rows": mi_archive_ingest["new"]}
+                                      if mi_archive_report is not None else None),
                 "ia_official_source": {
                     "current_event_log_rows": len(ia_current_rows),
                     "historical_log_rows": len(ia_historical_rows),
@@ -999,6 +1074,9 @@ def rebuild(
                 },
                 "ky_official_source": ({**ky_source_report, "ingested_rows": ky_ingest["new"]}
                                        if ky_source_report is not None else None),
+                "ky_archive_source": ({**ky_archive_report,
+                                       "ingested_rows": ky_archive_ingest["new"]}
+                                      if ky_archive_report is not None else None),
                 "or_official_source": ({**or_source_report, "ingested_rows": or_ingest["new"]}
                                        if or_source_report is not None else None),
                 "or_historical_source": ({**or_historical_report,
@@ -1018,6 +1096,9 @@ def rebuild(
                                      if oh_annual_report is not None else None),
                 "tn_official_source": ({**tn_source_report, "ingested_rows": tn_ingest["new"]}
                                        if tn_source_report is not None else None),
+                "tn_archive_source": ({**tn_archive_report,
+                                       "ingested_rows": tn_archive_ingest["new"]}
+                                      if tn_archive_report is not None else None),
                 "ny_official_source": ({**ny_source_report, "ingested_rows": ny_ingest["new"]}
                                        if ny_source_report is not None else None),
                 "ga_official_archive": ({**ga_source_report, "ingested_rows": ga_ingest["new"]}

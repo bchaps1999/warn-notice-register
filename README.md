@@ -346,6 +346,12 @@ python -m warnlive.migrate.source_bundle overlay-raw BASE.tar.gz \
 # under archive_additions.
 python -m warnlive.migrate.source_bundle add-archives STEP.tar.gz \
   --archives DIR --out NEW.tar.gz
+# Add a new pinned agency directory (a dated data/source_snapshots path with
+# its manifest.json) as agency/NAME/. The offline rebuild projects
+# agency/ky_archive, agency/tn_archive, agency/la_archive and agency/mi_archive;
+# an existing agency/NAME is never replaced.
+python -m warnlive.migrate.source_bundle add-agency STEP.tar.gz \
+  --artifacts data/source_snapshots/ky/kcc-2026-09-30 --name ky_archive --out NEW.tar.gz
 ```
 
 The v1.2 candidate bundle was derived this way; its dated note in `docs/`

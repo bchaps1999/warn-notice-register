@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from warnlive.migrate.source_bundle import (
-    add_archives, create, extract, overlay_raw_bundle, validate_agency_raw, verify,
+    add_agency, add_archives, create, extract, overlay_raw_bundle, validate_agency_raw, verify,
 )
 
 
@@ -286,3 +286,33 @@ def test_add_archives_command_line(tmp_path):
         capture_output=True, text=True, check=True, cwd=Path(__file__).resolve().parents[1])
     assert json.loads(result.stdout)["files"] == 4
     assert verify(out)["archive_additions"] == ["backfill/cache/archives/ne/page.html"]
+
+
+def test_add_agency_adds_a_new_pinned_directory_only(tmp_path):
+    source = tmp_path / "workdir"
+    _sources(source)
+    base = tmp_path / "base.tar.gz"
+    create(source, base)
+    artifacts = tmp_path / "ky-archive"
+    artifacts.mkdir()
+    (artifacts / "manifest.json").write_bytes(b'{"format": "fixture"}\n')
+    (artifacts / "report.csv").write_bytes(b"Company\nAcme\n")
+    out = tmp_path / "out.tar.gz"
+    manifest = add_agency(base, artifacts, "ky_archive", out)
+    assert manifest["agency_additions"] == ["agency/ky_archive"]
+    before, after = _members(base), _members(out)
+    assert set(after) - set(before) == {"agency/ky_archive/manifest.json",
+                                        "agency/ky_archive/report.csv"}
+    assert all(after[name] == content for name, content in before.items() if name != "manifest.json")
+    again = tmp_path / "again.tar.gz"
+    add_agency(base, artifacts, "ky_archive", again)
+    assert again.read_bytes() == out.read_bytes()
+    with pytest.raises(ValueError, match="never replace"):
+        add_agency(out, artifacts, "ky_archive", tmp_path / "twice.tar.gz")
+    with pytest.raises(ValueError, match="invalid agency artifact name"):
+        add_agency(base, artifacts, "../ky", tmp_path / "bad-name.tar.gz")
+    (artifacts / "manifest.json").unlink()
+    with pytest.raises(ValueError, match="lacks manifest.json"):
+        add_agency(base, artifacts, "tn_archive", tmp_path / "no-manifest.tar.gz")
+    assert not any((tmp_path / name).exists() for name in
+                   ("twice.tar.gz", "bad-name.tar.gz", "no-manifest.tar.gz"))
