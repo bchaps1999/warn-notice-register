@@ -235,6 +235,11 @@ python -m warnlive.migrate.offline_rebuild \
   --exceptions /tmp/warn-v1.2.exceptions.jsonl --report /tmp/warn-v1.2-report.json
 ```
 
+The release replay runs without `--or-historical-partial-rows`. That option
+admits Oregon historical WARN numbers missing only a layoff date or worker
+count ([recovery note](docs/source-recovery-2026-09-30.md)); it is for
+post-v1.2 candidates and changes the Oregon rows of any replay.
+
 The [candidate record](docs/candidate-v1.2-2026-09-30.md) documents how the
 bundle was assembled: fresh captures overlaid state by state onto the v1.1.1
 bundle, only where they keep every released notice, then new archives added
@@ -348,8 +353,8 @@ python -m warnlive.migrate.source_bundle add-archives STEP.tar.gz \
   --archives DIR --out NEW.tar.gz
 # Add a new pinned agency directory (a dated data/source_snapshots path with
 # its manifest.json) as agency/NAME/. The offline rebuild projects
-# agency/ky_archive, agency/tn_archive, agency/la_archive and agency/mi_archive;
-# an existing agency/NAME is never replaced.
+# agency/{ky,tn,la,mi,ct,ia,oh}_archive; an existing agency/NAME is never
+# replaced.
 python -m warnlive.migrate.source_bundle add-agency STEP.tar.gz \
   --artifacts data/source_snapshots/ky/kcc-2026-09-30 --name ky_archive --out NEW.tar.gz
 ```

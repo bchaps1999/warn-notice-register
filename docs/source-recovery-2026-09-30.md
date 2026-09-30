@@ -122,3 +122,132 @@ python -m warnlive.migrate.offline_rebuild --bundle <bundle> \
   was captured 2019-12-22.
 - MI: no archived agency listing covers February 2022 through 2023; 2021 has
   only 12 listings from two captures. The listing day is a posting date.
+
+## Connecticut, Iowa and Ohio archives; Oregon partial rows (candidate, 2026-09-30)
+
+**Status: isolated candidate, not released.** Nothing in `data/exports`,
+`data/warn.sql.gz` or the site was written. Code: working tree on `960932b`
+(uncommitted at replay time).
+
+### Evidence (new dated paths, each with `manifest.json`)
+
+| Path | Contents | Provenance |
+|---|---|---|
+| `data/source_snapshots/ct/wayback-2026-09-30/` | CT DOL "Listing of WARN Notices" pages `warnYYYY.htm`, 2010–2012 and 2014–2025 | Wayback `id_` captures; no capture exists for 2005–2009 or 2013 |
+| `data/source_snapshots/ia/wayback-2026-09-30/` | IWD `WARN_20200420-2.xlsx` (2015-04..2020-04), `WARN_20180503.xlsx` (2011-01..2018-05), `warn_20150812.pdf` (2005-07..2015-08) | Wayback captures of iowaworkforcedevelopment.gov; the 2018 workbook is byte-identical to the copy Big Local News hosts but is cited from IWD |
+| `data/source_snapshots/oh/wayback-2026-09-30/` | ODJFS 2023 and 2024 annual pages (captured 2025-06-06), current-year page captured 2024-12-28 and 2025-10-31 | Wayback `id_` captures |
+
+Every file's SHA-1 matched the CDX digest of its capture (CDX queried
+2026-09-30). Partial years: the CT 2012 page was captured 2012-12-20 and the
+2025 page 2025-07-04; the OH 2025 page lists notices received through late
+October 2025. The CT monthly 1998–2004 pages and per-notice PDFs were not
+fetched.
+
+### Rules
+
+- Projectors: new `ct_archive_source.project`, `ia_source.project_archive`,
+  new `oh_archive_source.project`, hooked into `offline_rebuild` for
+  `agency/{ct,ia,oh}_archive`. Replay-only, like the earlier archive tables.
+- CT: no notice ID, so the unit is the table row (`CT:archive:<year>:r<row>`).
+  The WARN Date fills `notice_date` with no precision or basis; the "Rec'd"
+  date is `agency_received_date` ("No Date"/"Not Dated" leaves `notice_date`
+  null). Layoff dates are a whole-cell date or an ordered range; counts are
+  whole-cell integers ("13 total: 2 CT residents" blanks the count). Rows
+  marked as updates or revisions (446, mostly Stanadyne's repeated
+  small-batch updates of 2010–2012) are held: the pages do not say what an
+  update changes. 2010 rowspan groups (Shaw's 8 sites, Electric Boat phases)
+  share `filing_group` and are not summed. Nine rows narrower than the
+  header (e.g. six Dollar Express rows, 2017) are admitted with employer and
+  dates only; their other cells cannot be assigned to columns.
+- IA: the archived rows go through the event-log rules (`project`, including
+  `_amendment_version`) after two removals: an event printed in more than
+  one archived log is cited from the newest log (an exact repeat is a
+  duplicate capture, a changed listing is held; the PDF cuts names at 30
+  characters, so names match on a prefix of at least 12 characters), and an
+  event also in the current logs (`agency/ia`, from 2018-06-18) is held, as
+  is an amendment whose parent may be a current-log notice. "Ammendment" now
+  counts as an amendment type (no current-log type is spelled so), and the
+  archive maps "Closure"/"Layoff" types.
+- OH: one notice per Notice ID with `classify_agency_ids` and the
+  `oh_annual_source` key (`OH|source|<id>`). IDs already read by the build
+  (admitted or held, including the 2022 table and the live page), irregular
+  IDs (`012-023-029`, `009-2-004`, `007-24/052`), phase/conflict groups and
+  update-only listings are held. Contact and link cells do not count as a
+  content change between captures.
+- OR (`--or-historical-partial-rows`, off by default): a singleton historical
+  WARN number missing only its layoff date or worker count is admitted with
+  that field null, per the rule that a missing optional fact does not
+  exclude an identifiable notice. Still held: 10 rows whose Company Name is
+  only a place or PO box (same defect as the six already pinned), WARN#
+  `0000`, and 0942/1004 (Amalgamated Sugar, two numbers on one received day,
+  possibly one filing entered twice). All 45 admitted rows lack a layoff
+  date; 32 also lack a count.
+
+### Row accounting
+
+| State | Source rows | Admitted | Held by reason |
+|---|---|---|---|
+| CT | 939 | 490 | update/revision 446, rescinded 1, continuation 1, duplicate row 1 |
+| IA | 1,054 (352 + 339 + 363) | 382 notices + 63 amendment versions | duplicate capture 349, listed in current logs 131, amendment without parent 69, amendment parent ambiguous 38, possible revision 6, differs in newer log 5, layout/date 5, site/worker allocation 4, repeated event 2 |
+| OH | 351 (246 Notice IDs) | 236 | duplicate capture 90, conflicting ID 13, update-only listing 4, invalid ID 4, superseding amendment 3, already in build 1 |
+| OR historical | 1,082 | 828 (+45) | as before except: incomplete 58 → 0; place-only employer 6 → 16, placeholder number 1, same employer and received day 2 |
+
+Notices (workers) added, by year (CT WARN date, IA notice date, OH and OR
+received date):
+
+| State | 1993–2004 | 2005–09 | 2010–14 | 2015–19 | 2020–24 | 2025 | unknown |
+|---|---|---|---|---|---|---|---|
+| CT | | 1 (155) | 170 (12,406) | 138 (11,155) | 169 (21,033) | 12 (567) | |
+| IA | | 137 (13,462) | 87 (10,605) | 158 (15,867) | | | |
+| OH | | | | | 165 (19,727) | 68 (7,281) | 3 (862) |
+| OR | 33 (3,254) | 9 (0) | 2 (0) | | 1 (0) | | |
+
+The six CT notices with no WARN date are banded by their received date.
+
+### Candidate build and replay
+
+```bash
+B=recovery-candidate/2026-09-30-recovery-ky-tn-la-mi-source-bundle.tar.gz  # sha 6d388cfa…f70c
+python -m warnlive.migrate.source_bundle add-agency $B \
+  --artifacts data/source_snapshots/ct/wayback-2026-09-30 --name ct_archive --out step-ct.tar.gz
+# then ia/wayback-2026-09-30 ia_archive, oh/wayback-2026-09-30 oh_archive
+#   -> 2026-09-30-recovery-ct-ia-oh-source-bundle.tar.gz
+python -m warnlive.migrate.offline_rebuild --bundle <bundle> \
+  --quality-evidence-dir data/source_snapshots/2026-09-24-quality-evidence \
+  --db <run>/candidate.sqlite --observed-at 2026-09-30 --source-only \
+  --report <run>/report.json --exceptions <run>/candidate.exceptions.jsonl \
+  --or-historical-partial-rows
+```
+
+- Bundle (session scratchpad, not committed): SHA-256
+  `3b26d7fd33c920560882127054645918438ef11f43f1785e024ae1382f633b21`,
+  2,166 files, 122,172,493 source bytes.
+- Result: 85,006 notices (+1,153 over the KY/TN/LA/MI candidate), 99,456
+  versions, 1,992 links (+23 `sibling_entry` from CT and IA filing groups),
+  8,728,114 workers, ledger 7,610 rows, integrity `ok`, 0 foreign-key errors.
+- Fingerprints: notices `1ab5b241…3508`, versions `fe198bda…bfd4`, links
+  `cc06649a…5f27`. Two independent replays matched, and their ledgers
+  (SHA-256 `b3f07794…fc4e`) were byte-identical.
+- Released keys: all 80,703 v1.2.0 keys present with identical notice rows and
+  versions, no link lost (compared with a replay of the v1.2 bundle under
+  this code).
+- The v1.2 bundle under this code without the option reproduced the v1.2
+  report's counts, fingerprints and ledger byte for byte (the CI check). With
+  `--or-historical-partial-rows` it gives 80,748 notices (+45, all Oregon),
+  95,135 versions, 8,208,443 workers, links unchanged; notices `b955c6c7…9fb`,
+  versions `0d979751…3b56`; the ledger differs only in 71 Oregon rows (58
+  removed, 13 added). The release-replay baseline must be re-recorded when a
+  release adopts the option.
+- Tests: `pytest tests/ -q` 656 passed, 1 skipped.
+
+### Unresolved and gaps
+
+- CT: 446 update rows held without linking to their originals; no pages for
+  2005–2009 or 2013; 2012 and 2025 partial; monthly 1998–2004 pages unused.
+- IA: amendment rows without a unique parent (107) stay held; 2019–2020
+  events come from the current logs only.
+- OH: 13 rows under IDs with conflicting content or phases (David's Bridal,
+  Crothall, Big Lots, INOAC) are held; captures after 2025-10-31 were not
+  used, so late-2025 notices not on the live page may be missing.
+- OR: the current capture's 3 `incomplete_agency_row` holds are unchanged
+  (that path mirrors the live scrape).

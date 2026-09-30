@@ -3,7 +3,10 @@
 Input: the pinned ``agency/or_historical`` workbook and the WARN numbers in
 the newer captures. Output: one record per admitted WARN number (itemized
 ``sites``/``phases`` for a number listing several) and held rows with
-reasons. No network access.
+reasons. With ``admit_partial_rows`` (the offline rebuild's
+``--or-historical-partial-rows``), a singleton WARN number lacking only its
+layoff date or worker count is admitted with those fields null instead of
+held; the v1.2 release replay runs without it. No network access.
 """
 
 from __future__ import annotations
@@ -22,6 +25,7 @@ from openpyxl import load_workbook
 from warnlive.migrate.or_source import (HEADERS, ITEMIZED_EVIDENCE, filing_record,
                                         row_complete, single_record)
 from warnlive.migrate.source_bundle import _entry, verify
+from warnlive.normalize.engine import _fold
 from warnlive.normalize.revisions import classify_agency_ids
 
 ARTIFACT = "or_warnlist_july_2021.xlsx"
@@ -29,6 +33,14 @@ PREFIX = "agency/or_historical"
 # These pinned rows put only a street/city in Company Name and have no location.
 # The employer cannot be recovered from this workbook alone.
 UNRESOLVED_EMPLOYER_IDS = {"0826", "0810", "0809", "0742", "0727", "0708"}
+# The same defect among rows that also lack a layoff date: Company Name holds
+# only a city, "city, OR", a pair of cities or a PO box, and Location is blank.
+# The v1.2 rule held them as incomplete; the partial-row rule holds them here.
+PARTIAL_ROW_UNRESOLVED_EMPLOYER_IDS = {
+    "0486", "0529", "0812", "0815", "0817", "0818", "0821", "0822", "0825", "0838"}
+# WARN# 0000 is a placeholder, not a filing number.
+PLACEHOLDER_IDS = {"0000"}
+PARTIAL_ROW_RULE = "or_historical_partial_row_v1"
 
 
 def _json(value: object) -> str:
@@ -89,12 +101,20 @@ def read_artifacts(directory: Path) -> tuple[list[dict], dict]:
     return rows, manifest
 
 
-def project(directory: Path, existing_ids: set[str] | None = None) -> tuple[list[dict], list[dict], dict]:
+def project(directory: Path, existing_ids: set[str] | None = None, *,
+            admit_partial_rows: bool = False) -> tuple[list[dict], list[dict], dict]:
     """Admit complete WARN numbers absent from both newer captures.
 
     A number listed once is its notice; one listing several sites or phases
     is one filing notice with itemized ``sites``/``phases`` (see
     ``or_source.filing_record``). Conflicting rows stay held.
+
+    ``admit_partial_rows`` admits a singleton number whose layoff date or
+    worker count is missing or unparseable, with that field null: the
+    WARN number, Company Name and Received Date identify the filing. It
+    still holds a placeholder number, a Company Name that is only a place,
+    and a partial row whose employer and received date match another row of
+    the list (possibly the same filing entered twice).
     """
     rows, manifest = read_artifacts(directory)
     existing = existing_ids or set()
@@ -125,6 +145,21 @@ def project(directory: Path, existing_ids: set[str] | None = None) -> tuple[list
             "complete": row_complete(ident, str(raw["Company Name"] or "").strip(),
                                      received, effective, raw["Laid Off"])}
         groups.setdefault(ident, []).append(row)
+    by_received: dict[str, list[tuple[str, set[str]]]] = {}
+    for pointer_key, entry in items.items():
+        if entry["received"]:
+            by_received.setdefault(entry["received"], []).append(
+                (pointer_key, set(_fold(str(entry["raw"]["Company Name"] or "")).split())))
+
+    def same_employer_row(pointer_key: str) -> str | None:
+        """Another row with this row's received date and employer words."""
+        entry = items[pointer_key]
+        words = set(_fold(str(entry["raw"]["Company Name"] or "")).split())
+        for other, other_words in by_received.get(entry["received"], []):
+            if other != pointer_key and words and other_words and (
+                    words <= other_words or other_words <= words):
+                return other
+        return None
 
     def details_for(evidence: str, identity_basis: str, received: str) -> dict:
         return {"origin": f"{PREFIX}/{ARTIFACT}",
@@ -152,7 +187,7 @@ def project(directory: Path, existing_ids: set[str] | None = None) -> tuple[list
                 manifest["source_url"])
 
     records, held = [], []
-    admitted_rows = 0
+    admitted_rows = partial_rows = 0
     for row in rows:
         raw = row["raw"]
         ident = str(raw["WARN#"] or "").strip()
@@ -175,13 +210,31 @@ def project(directory: Path, existing_ids: set[str] | None = None) -> tuple[list
                   "unresolved_employer_in_source" if ident in UNRESOLVED_EMPLOYER_IDS else
                   "incomplete_historical_row" if not entry["complete"] or not employer else None)
         source_pointer = pointer(row)
+        related = decision.related_row
+        partial = None
+        if (reason == "incomplete_historical_row" and admit_partial_rows
+                and decision.kind == "notice" and employer and received):
+            related = same_employer_row(source_pointer)
+            reason = ("placeholder_warn_number" if ident in PLACEHOLDER_IDS else
+                      "unresolved_employer_in_source"
+                      if ident in PARTIAL_ROW_UNRESOLVED_EMPLOYER_IDS else
+                      "partial_row_same_employer_and_received_date" if related else None)
+            workers = entry["workers"]
+            if reason is None:
+                valid = (isinstance(workers, (int, float)) and not isinstance(workers, bool)
+                         and workers > 0 and int(workers) == workers)
+                partial = {"rule": PARTIAL_ROW_RULE,
+                           "blank_fields": [name for name, missing in (
+                               ("Layoff Date", entry["effective"] is None),
+                               ("Laid Off", not valid)) if missing]}
+                entry = {**entry, "workers": workers if valid else None}
         if reason:
             held.append({"origin": f"{PREFIX}/{ARTIFACT}", "state": "OR",
                          "reason": reason, "source_row": source_pointer,
                          "disposition": "unresolved" if decision.kind == "notice" else decision.kind,
                          "preliminary_disposition": decision.kind,
                          "disposition_evidence": decision.evidence,
-                         "related_source_row": decision.related_row,
+                         "related_source_row": related,
                          "source_row_sha256": row["source_row_sha256"],
                          "source_notice_id": ident or None,
                          "source_url": manifest["source_url"],
@@ -192,6 +245,9 @@ def project(directory: Path, existing_ids: set[str] | None = None) -> tuple[list
                    "source_row": source_pointer,
                    "source_row_sha256": row["source_row_sha256"],
                    "disposition": decision.kind, "raw_cells": raw}
+        if partial:
+            details["partial_row"] = partial
+            partial_rows += 1
         records.append(single_record(ident, entry, details, manifest["source_url"]))
         admitted_rows += 1
     if admitted_rows + len(held) != len(rows):
@@ -199,6 +255,7 @@ def project(directory: Path, existing_ids: set[str] | None = None) -> tuple[list
     return records, held, {"source_rows": len(rows), "admitted": len(records),
                            "admitted_rows": admitted_rows,
                            "itemized_filings": len(filings),
+                           "partial_rows_admitted": partial_rows,
                            "held": len(held),
                            "hold_reasons": dict(Counter(item["reason"] for item in held)),
                            "duplicate_captures": sum(x.get("disposition") == "duplicate_capture" for x in held)}

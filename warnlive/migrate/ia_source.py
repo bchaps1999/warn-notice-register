@@ -9,7 +9,12 @@ with exactly one earlier admitted notice at the same employer and street
 address becomes that notice's next version (``is_amendment=1``).
 
 Input: the pinned ``agency/ia`` workbook and historical PDF. Output: records,
-held rows with reasons, and a source-row relation map. No network access.
+held rows with reasons, and a source-row relation map. ``project_archive``
+applies the same rules to the archived IWD logs of 2005-2020
+(``agency/ia_archive``: two workbooks and a PDF from Iowa Workforce
+Development's former site, via the Wayback Machine), after removing events
+printed in more than one archived log or listed in the current logs. No
+network access.
 """
 
 from __future__ import annotations
@@ -66,7 +71,8 @@ def _pdf_date(value: str) -> str | None:
 
 def _is_amendment(value: str) -> bool:
     text = value.casefold()
-    return any(marker in text for marker in ("amend", "additional employees", "change in"))
+    # "Ammendment" is a misspelling in the archived logs.
+    return any(marker in text for marker in ("amend", "ammend", "additional employees", "change in"))
 
 
 def extract(directory: Path) -> list[dict]:
@@ -419,7 +425,7 @@ def _amendment_version(row: dict, latest: dict) -> dict:
     return rec
 
 
-def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, str]]:
+def project(rows: list[dict], layoff_type=None) -> tuple[list[dict], list[dict], dict, dict[str, str]]:
     """Admit uniquely identified ordinary rows; retain amendment and site questions.
 
     The two agency artifacts overlap. A printed PDF row and an Excel row with
@@ -563,7 +569,7 @@ def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, s
                "notice_date_basis": "reported", "effective_date": row["effective_date"],
                "effective_date_precision": "day", "effective_date_basis": "reported",
                "employees_affected": row["workers_reported"] or None,
-               "layoff_type": _layoff_type(row["notice_type_text"]),
+               "layoff_type": (layoff_type or _layoff_type)(row["notice_type_text"]),
                "is_temporary": None, "is_amendment": 0,
                "source_url": row["source_url"], "source_notice_id": pointer,
                "source_identity": identity, "source_details": json.dumps(details, sort_keys=True),
@@ -591,3 +597,247 @@ def project(rows: list[dict]) -> tuple[list[dict], list[dict], dict, dict[str, s
                                "filing_group" in json.loads(rec["source_details"])
                                for rec in records if not rec["is_amendment"]),
                            "held": len(held), "hold_reasons": dict(Counter(x["reason"] for x in held))}, related
+
+
+# ---------------------------------------------------------------------------
+# Archived IWD WARN logs (``agency/ia_archive``), replay only.
+
+ARCHIVE_PREFIX = "agency/ia_archive"
+ARCHIVE_FORMAT = "ia-iwd-archive-v1"
+ARCHIVE_WORKBOOKS = {
+    "WARN_20200420-2-20210309153239.xlsx": ("WARN log for website", (
+        "Company", "Address Line 1", "City", "County", "St.", "ZIP", "Notice Type",
+        "Emp #", "Notice Date", "Layoff Date")),
+    "WARN_20180503-20210309152211.xlsx": ("WARN Log 7_12_17- 2", (
+        "Company", "Address Line 1", "City", "County", "State", "ZIP", "Notice Type",
+        "Emp #", "Notice Date", "Layoff Date")),
+}
+ARCHIVE_PDF = "warn_20150812-20161227190458.pdf"
+ARCHIVE_PDF_HEADER = ["Company", "Address", "City", "County", "State", "ZIP",
+                      "Type of Notice", "Employees Affected", "Notice Date", "Layoff Date"]
+# Newest log first: an event listed in several logs is cited from the newest.
+ARCHIVE_ORDER = (*ARCHIVE_WORKBOOKS, ARCHIVE_PDF)
+
+
+def _archive_date(value: object) -> str | None:
+    if isinstance(value, datetime):
+        return value.date().isoformat() if value.time() == datetime.min.time() else None
+    if isinstance(value, date):
+        return value.isoformat()
+    if isinstance(value, str) and PDF_DATE.fullmatch(value.strip()):
+        return _pdf_date(value.strip())
+    return None
+
+
+def _archive_row(name: str, pointer: str, digest: str, url: str, values: list,
+                 raw_cells: list) -> dict:
+    company, street, city, county, state, zipcode, notice_type, workers, notice, layoff = values
+    text = lambda value: " ".join(str(value).split()) if value is not None else ""  # noqa: E731
+    if isinstance(workers, str) and workers.strip().isdigit():
+        workers = int(workers.strip())
+    valid_workers = isinstance(workers, int) and not isinstance(workers, bool) and workers >= 0
+    # An unreadable count blanks the count and keeps the row.
+    issues = []
+    notice_date, effective_date = _archive_date(notice), _archive_date(layoff)
+    if notice_date is None:
+        issues.append("invalid_notice_date")
+    if effective_date is None:
+        issues.append("invalid_layoff_date")
+    raw = json.dumps(raw_cells, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    return {
+        "source_artifact": f"{ARCHIVE_PREFIX}/{name}", "source_row": pointer,
+        "source_row_sha256": hashlib.sha256(raw.encode()).hexdigest(),
+        "source_file_sha256": digest, "source_url": url, "raw_cells": raw_cells,
+        "layout_issues": issues,
+        "company_text": text(company), "street_address_text": text(street),
+        "city_text": text(city), "county_text": text(county),
+        "address_state_text": text(state), "postal_code_text": text(zipcode),
+        "address_role": "unverified", "notice_type_text": text(notice_type),
+        "workers_reported": workers if valid_workers else None,
+        "notice_date": notice_date, "effective_date": effective_date,
+    }
+
+
+def extract_archive(directory: Path) -> list[dict]:
+    """Every data row of the pinned archived IWD logs, newest log first."""
+    directory = Path(directory)
+    manifest = json.loads((directory / "manifest.json").read_text())
+    specs = {item.get("file"): item for item in manifest.get("artifacts") or []}
+    if manifest.get("format") != ARCHIVE_FORMAT or set(specs) != set(ARCHIVE_ORDER):
+        raise ValueError("unsupported Iowa archive manifest")
+    rows: list[dict] = []
+    for name in ARCHIVE_ORDER:
+        spec, path = specs[name], directory / name
+        if path.is_symlink() or not path.is_file():
+            raise ValueError(f"invalid Iowa archive artifact: {name}")
+        content = path.read_bytes()
+        digest = hashlib.sha256(content).hexdigest()
+        if len(content) != spec["bytes"] or digest != spec["sha256"]:
+            raise ValueError(f"Iowa archive checksum mismatch: {name}")
+        found = []
+        if name in ARCHIVE_WORKBOOKS:
+            sheet_name, header = ARCHIVE_WORKBOOKS[name]
+            book = load_workbook(path, read_only=True, data_only=True)
+            try:
+                if book.sheetnames != [sheet_name]:
+                    raise ValueError(f"Iowa archive sheet changed: {name}")
+                values = list(book[sheet_name].values)
+            finally:
+                book.close()
+            if tuple(values[0]) != header:
+                raise ValueError(f"Iowa archive header changed: {name}")
+            for ordinal, cells in enumerate(values[1:], start=2):
+                if all(cell is None or cell == "" for cell in cells):
+                    continue
+                if len(cells) != len(header):
+                    raise ValueError(f"Iowa archive row width changed: {name}:{ordinal}")
+                found.append(_archive_row(
+                    name, f"{ARCHIVE_PREFIX}/{name}:{sheet_name}:r{ordinal}", digest,
+                    spec["wayback_url"], list(cells), [_cell(value) for value in cells]))
+        else:
+            with pdfplumber.open(path) as pdf:
+                if len(pdf.pages) != spec["pages"]:
+                    raise ValueError(f"Iowa archive PDF page count changed: {name}")
+                for page_number, page in enumerate(pdf.pages, start=1):
+                    tables = page.extract_tables()
+                    if len(tables) != 1 or [" ".join((c or "").split()) for c in tables[0][0]] != ARCHIVE_PDF_HEADER:
+                        raise ValueError(f"Iowa archive PDF layout changed: {name}:{page_number}")
+                    for ordinal, cells in enumerate(tables[0][1:], start=2):
+                        if len(cells) != len(ARCHIVE_PDF_HEADER):
+                            raise ValueError(f"Iowa archive PDF row width changed: {name}:{page_number}")
+                        cells = [" ".join((cell or "").split()) for cell in cells]
+                        if not any(cells):
+                            continue
+                        found.append(_archive_row(
+                            name, f"{ARCHIVE_PREFIX}/{name}:p{page_number}:r{ordinal}", digest,
+                            spec["wayback_url"], cells, cells))
+        if len(found) != spec["data_rows"]:
+            raise ValueError(f"Iowa archive row count changed: {name}")
+        rows.extend(found)
+    return rows
+
+
+def _alnum(value: str | None) -> str:
+    return re.sub(r"[^a-z0-9]", "", (value or "").casefold())
+
+
+def _same_employer(a: str, b: str) -> bool:
+    """Equal names, or one a prefix of the other (the 2015 PDF cuts names at 30 characters)."""
+    a, b = _alnum(a), _alnum(b)
+    return bool(a and b) and (a == b or (min(len(a), len(b)) >= 12 and (a.startswith(b) or b.startswith(a))))
+
+
+def project_archive(directory: Path, current_rows: list[dict]
+                    ) -> tuple[list[dict], list[dict], dict]:
+    """Project the archived logs with the event-log rules, never double counting.
+
+    An event printed in more than one archived log is taken from the newest
+    (an exact repeat is a duplicate capture; a changed listing is held). An
+    event also listed in the current logs (``current_rows``, admitted or
+    held there) is held, as is an amendment that may belong to a current-log
+    notice. The remaining rows go through ``project``: its family, site and
+    amendment rules (``_amendment_version``) apply unchanged.
+    """
+    rows = extract_archive(directory)
+    rank = {name: index for index, name in enumerate(ARCHIVE_ORDER)}
+    pre_held: dict[str, tuple[str, str | None]] = {}
+    kept: list[dict] = []
+    seen: list[dict] = []
+    representative: dict[str, str] = {}
+    paired: set[tuple[str, str]] = set()  # (newer row, older log) pairs already used
+    for row in rows:
+        log = row["source_artifact"].rsplit("/", 1)[-1]
+        newer = [other for other in seen if rank[other["source_artifact"].rsplit("/", 1)[-1]] < rank[log]
+                 and other["notice_date"] and other["notice_date"] == row["notice_date"]
+                 and _same_employer(other["company_text"], row["company_text"])]
+        twins = [other for other in newer if (other["source_row"], log) not in paired
+                 and (other["effective_date"], other["workers_reported"], _is_amendment(other["notice_type_text"]))
+                 == (row["effective_date"], row["workers_reported"], _is_amendment(row["notice_type_text"]))]
+        twins.sort(key=lambda other: (_alnum(other["city_text"]) != _alnum(row["city_text"]),
+                                      rank[other["source_artifact"].rsplit("/", 1)[-1]]))
+        seen.append(row)
+        if twins:
+            paired.add((twins[0]["source_row"], log))
+            representative[row["source_row"]] = representative[twins[0]["source_row"]]
+            pre_held[row["source_row"]] = ("duplicate_agency_capture", representative[row["source_row"]])
+        elif newer:
+            representative[row["source_row"]] = row["source_row"]
+            pre_held[row["source_row"]] = ("listing_differs_in_newer_archived_log",
+                                           representative[newer[0]["source_row"]])
+        else:
+            representative[row["source_row"]] = row["source_row"]
+            kept.append(row)
+    current_by_date: dict[str, list[dict]] = defaultdict(list)
+    current_sites: dict[str, list[dict]] = defaultdict(list)
+    for row in current_rows:
+        if row.get("notice_date"):
+            current_by_date[row["notice_date"]].append(row)
+        current_sites[_alnum(row["street_address_text"])].append(row)
+    in_current: dict[str, str] = {}
+    for row in kept:
+        match = next((other for other in current_by_date.get(row["notice_date"], [])
+                      if _same_employer(other["company_text"], row["company_text"])), None)
+        if match and _is_amendment(row["notice_type_text"]):
+            # Not a parent of any other row, so it can leave before projection.
+            pre_held[row["source_row"]] = ("listed_in_current_ia_logs", match["source_row"])
+        elif match:
+            # Kept through projection (it may be an amendment's parent), then held.
+            in_current[row["source_row"]] = match["source_row"]
+        elif _is_amendment(row["notice_type_text"]):
+            parent = next((other for other in current_sites.get(_alnum(row["street_address_text"]), [])
+                           if _alnum(row["street_address_text"]) and other.get("notice_date")
+                           and row["notice_date"] and other["notice_date"] <= row["notice_date"]
+                           and _same_employer(other["company_text"], row["company_text"])), None)
+            if parent:
+                pre_held[row["source_row"]] = ("amendment_parent_may_be_in_current_ia_logs",
+                                               parent["source_row"])
+    projected_rows = [row for row in kept if row["source_row"] not in pre_held]
+    records, held, _, related = (project(projected_rows, _archive_layoff_type)
+                                 if projected_rows else ([], [], {}, {}))
+    by_pointer = {row["source_row"]: row for row in rows}
+    out_records: list[dict] = []
+    for rec in records:
+        details = json.loads(rec["source_details"])
+        pointer = details["source_row"]
+        if rec["is_amendment"]:
+            pointer = details["amendment"]["source_row"]
+            if related.get(pointer) in in_current:
+                held.append(_archive_held(by_pointer[pointer], "amendment_parent_listed_in_current_ia_logs",
+                                          in_current[related[pointer]]))
+                continue
+        elif pointer in in_current:
+            held.append(_archive_held(by_pointer[pointer], "listed_in_current_ia_logs", in_current[pointer]))
+            continue
+        out_records.append(rec)
+    for pointer, (reason, other) in pre_held.items():
+        held.append(_archive_held(by_pointer[pointer], reason, other))
+    order = {row["source_row"]: index for index, row in enumerate(rows)}
+    held.sort(key=lambda item: order[item["source_row"]])
+    versions = sum(rec["is_amendment"] for rec in out_records)
+    if len(out_records) + len(held) != len(rows):
+        raise ValueError("Iowa archive row accounting mismatch")
+    notices = [rec for rec in out_records if not rec["is_amendment"]]
+    return out_records, held, {
+        "source_rows": len(rows),
+        "rows_by_file": dict(Counter(row["source_artifact"].rsplit("/", 1)[-1] for row in rows)),
+        "admitted": len(notices), "amendment_versions": versions, "held": len(held),
+        "hold_reasons": dict(sorted(Counter(item["reason"] for item in held).items())),
+        "admitted_workers": sum(rec["employees_affected"] or 0 for rec in notices),
+        "admitted_filing_group_rows": sum(
+            "filing_group" in json.loads(rec["source_details"]) for rec in notices),
+    }
+
+
+def _archive_layoff_type(text: str | None) -> str:
+    """The archived logs' Notice Type, which also reads "Closure" or "Layoff"."""
+    value = " ".join((text or "").split()).casefold()
+    return {"closure": "closure", "layoff": "mass_layoff"}.get(value) or _layoff_type(text)
+
+
+def _archive_held(row: dict, reason: str, related: str | None) -> dict:
+    return {"origin": row["source_artifact"], "state": "IA", "reason": reason,
+            "source_row": row["source_row"], "source_row_sha256": row["source_row_sha256"],
+            "source_url": row["source_url"],
+            "notice_year": row["notice_date"][:4] if row["notice_date"] else None,
+            "related_source_row": related,
+            "raw_extra": json.dumps(row["raw_cells"], ensure_ascii=False, default=str)}

@@ -1,3 +1,4 @@
+import json
 import shutil
 from pathlib import Path
 
@@ -48,3 +49,36 @@ def test_historical_oregon_rejects_changed_workbook_bytes(tmp_path):
     path.write_bytes(path.read_bytes() + b"x")
     with pytest.raises(ValueError, match="checksum mismatch"):
         read_artifacts(tmp_path)
+
+
+def test_partial_rows_rule_admits_rows_missing_only_date_or_count():
+    admitted, held, report = project(HISTORICAL, _current_ids(), admit_partial_rows=True)
+    assert (len(admitted), len(held), report["partial_rows_admitted"]) == (828, 103, 45)
+    assert report["hold_reasons"] == {
+        "newer_agency_capture_overlap": 80,
+        "multi_site_or_phase_identity_unresolved": 2,
+        "duplicate_agency_capture": 1,
+        "unresolved_employer_in_source": 16,
+        "partial_row_same_employer_and_received_date": 2,
+        "placeholder_warn_number": 1,
+        "missing_warn_number": 1,
+    }
+    by_id = {row["source_notice_id"]: row for row in admitted}
+    # 1667 lists neither a layoff date nor a count; the filing is kept.
+    burley = by_id["1667"]
+    assert (burley["effective_date"], burley["effective_date_precision"],
+            burley["employees_affected"]) == (None, None, None)
+    assert json.loads(burley["source_details"])["partial_row"] == {
+        "rule": "or_historical_partial_row_v1", "blank_fields": ["Layoff Date", "Laid Off"]}
+    # 0593 has a count and Excel's zero-date sentinel for its layoff date.
+    assert (by_id["0593"]["employees_affected"], by_id["0593"]["effective_date"]) == (1600, None)
+    # A place-only Company Name, the placeholder number and the Amalgamated
+    # Sugar pair (two numbers, one received day) stay held.
+    reasons = {row["source_notice_id"]: row["reason"] for row in held}
+    assert reasons["0838"] == "unresolved_employer_in_source"
+    assert reasons["0000"] == "placeholder_warn_number"
+    assert reasons["0942"] == reasons["1004"] == "partial_row_same_employer_and_received_date"
+    # Rows admitted under both rules are identical.
+    before = {row["dedupe_key"]: row for row in project(HISTORICAL, _current_ids())[0]}
+    assert all(by_key == before[by_key["dedupe_key"]] for by_key in admitted
+               if by_key["dedupe_key"] in before)

@@ -14,6 +14,11 @@ is rejected: no release was built from one, and the code that replayed them
 was removed after v1.2.0 (last present at commit aa1e94c, before v1.0.0).
 Older release bundles replay from their own tags. No network access; the
 candidate is not promoted here.
+
+``--or-historical-partial-rows`` admits Oregon historical WARN numbers that
+lack only a layoff date or worker count (see ``or_historical_source``). It
+changes the replay, so the v1.2 release check runs without it; the report
+records the rules applied under ``admission_rules``.
 """
 
 from __future__ import annotations
@@ -577,6 +582,7 @@ def rebuild(
     compare_db: Path | None = None, *, source_only: bool = True,
     exceptions_path: Path | None = None,
     quality_evidence_dir: Path | None = None,
+    or_historical_partial_rows: bool = False,
 ) -> dict:
     if not source_only:
         raise ValueError("legacy overlap-policy rebuild retired; use --source-only")
@@ -725,6 +731,34 @@ def rebuild(
             if ia_source_report is not None and ia_ingest["new"] != (
                     len(ia_records) - ia_source_report["amendment_versions"]):
                 raise ValueError("Iowa source rows did not produce unique notices")
+            ia_archive_report = None
+            ia_archive_ingest = {"new": 0}
+            if (source / "agency/ia_archive").is_dir():
+                from warnlive.migrate import ia_source as ia_archive_source
+
+                # Every current-log row, admitted or held, is already an
+                # observation of this build; the archive never repeats one.
+                ia_archive_records, ia_archive_held, ia_archive_report = (
+                    ia_archive_source.project_archive(
+                        source / "agency/ia_archive", ia_current_rows + ia_historical_rows))
+                exceptions.extend(ia_archive_held)
+                ia_archive_revision_keys = {
+                    rec["dedupe_key"] for rec in ia_archive_records if rec["is_amendment"]}
+                ia_archive_ingest = _ingest_groups(
+                    conn, {"IA": ia_archive_records}, observed_at, ia_archive_revision_keys)
+                if ia_archive_ingest["new"] != ia_archive_report["admitted"]:
+                    raise ValueError("Iowa archive rows did not produce unique notices")
+            ct_archive_report = None
+            ct_archive_ingest = {"new": 0}
+            if (source / "agency/ct_archive").is_dir():
+                from warnlive.migrate import ct_archive_source
+
+                ct_archive_records, ct_archive_held, ct_archive_report = ct_archive_source.project(
+                    source / "agency/ct_archive", ct_archive_source.existing_events(conn))
+                exceptions.extend(ct_archive_held)
+                ct_archive_ingest = _ingest_groups(conn, {"CT": ct_archive_records}, observed_at)
+                if ct_archive_ingest["new"] != len(ct_archive_records):
+                    raise ValueError("Connecticut archive rows did not produce unique notices")
             ky_ingest = _ingest_groups(conn, {"KY": ky_records}, observed_at)
             if ky_source_report is not None and ky_ingest["new"] != len(ky_records):
                 raise ValueError("Kentucky agency rows did not produce unique notices")
@@ -768,7 +802,8 @@ def rebuild(
                 current_or_rows, _ = read_or_current(source / "agency/or")
                 current_or_ids = {str(row["raw"]["WARN#"] or "") for row in current_or_rows}
                 or_historical_records, or_historical_held, or_historical_report = (
-                    project_or_historical(or_historical_dir, current_or_ids)
+                    project_or_historical(or_historical_dir, current_or_ids,
+                                          admit_partial_rows=or_historical_partial_rows)
                 )
                 exceptions.extend(or_historical_held)
                 or_historical_ingest = _ingest_groups(
@@ -880,6 +915,46 @@ def rebuild(
                 oh_annual_ingest = _ingest_groups(conn, {"OH": oh_records}, observed_at)
                 if oh_annual_ingest["new"] != len(oh_records):
                     raise ValueError("Ohio annual rows did not produce unique notices")
+            oh_archive_report = None
+            oh_archive_ingest = {"new": 0}
+            if (source / "agency/oh_archive").is_dir():
+                from warnlive.migrate import oh_archive_source
+                from warnlive.migrate.oh_annual_source import ID as OH_ID, _date as oh_date
+
+                # Notice IDs the build has read (admitted or held), and the
+                # employer/received day of ID-less current page rows.
+                oh_known_ids, oh_known_events = set(), set()
+                for row in conn.execute(
+                        "SELECT employer_name, notice_date, source_identity FROM notices "
+                        "WHERE state='OH'"):
+                    if row["source_identity"]:
+                        oh_known_ids.add(row["source_identity"].removeprefix("OH:"))
+                    elif row["notice_date"]:
+                        oh_known_events.add((oh_archive_source.employer_key(row["employer_name"]),
+                                             row["notice_date"]))
+                if oh_annual_dir.is_dir():
+                    from warnlive.migrate.oh_annual_source import read_artifacts as read_oh_annual
+
+                    for row in read_oh_annual(oh_annual_dir)[0]:
+                        match = OH_ID.fullmatch(row["raw"]["notice_id"].strip().replace("‐", "-"))
+                        if match:
+                            oh_known_ids.add(match.group(1))
+                if (source / "raw/oh.csv").is_file():
+                    with (source / "raw/oh.csv").open(newline="", encoding="utf-8-sig") as stream:
+                        for row in csv.DictReader(stream):
+                            match = OH_ID.fullmatch((row.get("Notice ID") or "").strip())
+                            if match:
+                                oh_known_ids.add(match.group(1))
+                            received = oh_date(row.get("Date Received") or "")
+                            if received:
+                                oh_known_events.add((oh_archive_source.employer_key(
+                                    row.get("Company") or ""), received))
+                oh_archive_records, oh_archive_held, oh_archive_report = oh_archive_source.project(
+                    source / "agency/oh_archive", oh_known_ids, oh_known_events)
+                exceptions.extend(oh_archive_held)
+                oh_archive_ingest = _ingest_groups(conn, {"OH": oh_archive_records}, observed_at)
+                if oh_archive_ingest["new"] != len(oh_archive_records):
+                    raise ValueError("Ohio archive rows did not produce unique notices")
             ga_source_report = None
             ga_ingest = {"new": 0}
             if ga_archive_dir.is_dir():
@@ -1045,6 +1120,7 @@ def rebuild(
                 "source_bytes": sum(item["size"] for item in manifest["files"]),
                 "companion_evidence": manifest.get("companion_evidence"),
                 "policy": "agency-only-v1",
+                "admission_rules": {"or_historical_partial_rows": or_historical_partial_rows},
                 "raw": raw_report["states"],
                 "la_official_source": {
                     "table_rows": len(la_source_rows),
@@ -1094,6 +1170,15 @@ def rebuild(
                 "oh_annual_source": ({**oh_annual_report,
                                       "ingested_rows": oh_annual_ingest["new"]}
                                      if oh_annual_report is not None else None),
+                "oh_archive_source": ({**oh_archive_report,
+                                       "ingested_rows": oh_archive_ingest["new"]}
+                                      if oh_archive_report is not None else None),
+                "ia_archive_source": ({**ia_archive_report,
+                                       "ingested_rows": ia_archive_ingest["new"]}
+                                      if ia_archive_report is not None else None),
+                "ct_archive_source": ({**ct_archive_report,
+                                       "ingested_rows": ct_archive_ingest["new"]}
+                                      if ct_archive_report is not None else None),
                 "tn_official_source": ({**tn_source_report, "ingested_rows": tn_ingest["new"]}
                                        if tn_source_report is not None else None),
                 "tn_archive_source": ({**tn_archive_report,
@@ -1195,11 +1280,15 @@ if __name__ == "__main__":
     parser.add_argument("--quality-evidence-dir", type=Path,
                         help="Pinned supplemental official letters and agency reports")
     parser.add_argument("--report", type=Path)
+    parser.add_argument("--or-historical-partial-rows", action="store_true",
+                        help="Admit Oregon historical WARN numbers missing only a layoff "
+                             "date or worker count (not applied to the v1.2 release replay)")
     args = parser.parse_args()
     logger.setLevel(logging.ERROR)
     result = rebuild(args.bundle, args.db, args.observed_at, args.compare_db,
                      source_only=args.source_only, exceptions_path=args.exceptions,
-                     quality_evidence_dir=args.quality_evidence_dir)
+                     quality_evidence_dir=args.quality_evidence_dir,
+                     or_historical_partial_rows=args.or_historical_partial_rows)
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(result, sort_keys=True, indent=2) + "\n")

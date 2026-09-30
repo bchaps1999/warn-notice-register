@@ -1,0 +1,71 @@
+{
+  "artifacts": [
+    {
+      "bytes": 378819,
+      "capture_utc": "2025-06-06T03:53:51Z",
+      "captures_with_same_digest": 1,
+      "cdx_status": "200",
+      "data_rows": 85,
+      "file": "annual-2023-20250606035351.html",
+      "original_agency_url": "https://jfs.ohio.gov/job-services-and-unemployment/job-services/job-programs-and-services/submit-a-warn-notice/2023-Public-Notices-of-Layoffs-and-Closures",
+      "page": "2023 annual page",
+      "sha256": "60f93cebe49203f78e62c7aa6f3ab23989335cd4186efe1d3b172bf025acf0d8",
+      "wayback_digest_sha1_base32": "2E4HWXXGFFD3T2O2WGDGR6U2I5W5KH27",
+      "wayback_timestamp": "20250606035351",
+      "wayback_url": "https://web.archive.org/web/20250606035351id_/https://jfs.ohio.gov/job-services-and-unemployment/job-services/job-programs-and-services/submit-a-warn-notice/2023-Public-Notices-of-Layoffs-and-Closures"
+    },
+    {
+      "bytes": 382045,
+      "capture_utc": "2025-06-06T03:53:39Z",
+      "captures_with_same_digest": 1,
+      "cdx_status": "200",
+      "data_rows": 93,
+      "file": "annual-2024-20250606035339.html",
+      "original_agency_url": "https://jfs.ohio.gov/job-services-and-unemployment/job-services/job-programs-and-services/submit-a-warn-notice/2024-Public-Notices-of-Layoffs-and-Closures",
+      "page": "2024 annual page",
+      "sha256": "113fe5d78372a36959266a700e3f32ab972fc084f1a668591dcbf740812a8268",
+      "wayback_digest_sha1_base32": "LIFBBBRQ2OQ4WJVL6ETHLAPADQI2YIAN",
+      "wayback_timestamp": "20250606035339",
+      "wayback_url": "https://web.archive.org/web/20250606035339id_/https://jfs.ohio.gov/job-services-and-unemployment/job-services/job-programs-and-services/submit-a-warn-notice/2024-Public-Notices-of-Layoffs-and-Closures"
+    },
+    {
+      "bytes": 378741,
+      "capture_utc": "2024-12-28T09:25:51Z",
+      "captures_with_same_digest": 1,
+      "cdx_status": "200",
+      "data_rows": 95,
+      "file": "current-20241228092551.html",
+      "original_agency_url": "https://jfs.ohio.gov/job-services-and-unemployment/job-services/job-programs-and-services/submit-a-warn-notice/current-public-notices-of-layoffs-and-closures-sa",
+      "page": "current-year page (2024)",
+      "sha256": "97f01a1dfd3522a8fa8703a436cd5fb000c22c5b6286bb4edb00ed21d03b2f08",
+      "wayback_digest_sha1_base32": "C3CQ4CZE62MK2OJV2IQB63HCFSXR5SHM",
+      "wayback_timestamp": "20241228092551",
+      "wayback_url": "https://web.archive.org/web/20241228092551id_/https://jfs.ohio.gov/job-services-and-unemployment/job-services/job-programs-and-services/submit-a-warn-notice/current-public-notices-of-layoffs-and-closures-sa"
+    },
+    {
+      "bytes": 377148,
+      "capture_utc": "2025-10-31T19:09:28Z",
+      "captures_with_same_digest": 1,
+      "cdx_status": "200",
+      "data_rows": 78,
+      "file": "current-20251031190928.html",
+      "original_agency_url": "https://jfs.ohio.gov/job-services-and-unemployment/job-services/job-programs-and-services/submit-a-warn-notice/current-public-notices-of-layoffs-and-closures-sa",
+      "page": "current-year page (2025, partial)",
+      "sha256": "05a6c9ebc35a70435434ca46d547e7f31d5a938207bd86be6148261bf80553a1",
+      "wayback_digest_sha1_base32": "7Q42EPHPOLKFODOXPDZ4DL5U4Z6TVVQK",
+      "wayback_timestamp": "20251031190928",
+      "wayback_url": "https://web.archive.org/web/20251031190928id_/https://jfs.ohio.gov/job-services-and-unemployment/job-services/job-programs-and-services/submit-a-warn-notice/current-public-notices-of-layoffs-and-closures-sa"
+    }
+  ],
+  "cdx_queried": "2026-09-30",
+  "format": "oh-wayback-pages-v1",
+  "notes": [
+    "Each file is a Wayback id_ capture; its SHA-1 equals the CDX digest of that capture.",
+    "The table is the page's embedded js-placeholder-json-data block; a trailing blank row is not counted.",
+    "The 2025 current-year page was captured 2025-10-31: it lists notices received through late October 2025 only.",
+    "Two other captures of these pages (2023 page 2025-06-01; current page 2026-01-19 and 2026-05-05) were not used."
+  ],
+  "publisher": "Ohio Department of Job and Family Services",
+  "retrieved_utc_date": "2026-09-30",
+  "state": "OH"
+}

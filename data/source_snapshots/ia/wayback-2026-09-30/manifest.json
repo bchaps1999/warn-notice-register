@@ -1,0 +1,59 @@
+{
+  "artifacts": [
+    {
+      "bytes": 34931,
+      "capture_utc": "2021-03-09T15:32:39Z",
+      "captures_with_same_digest": 19,
+      "cdx_status": "200",
+      "coverage": "notice dates 2015-04-21..2020-04-15",
+      "data_rows": 352,
+      "file": "WARN_20200420-2-20210309153239.xlsx",
+      "linked_from": null,
+      "original_agency_url": "https://www.iowaworkforcedevelopment.gov/sites/search.iowaworkforcedevelopment.gov/files/documents/2018/WARN_20200420-2.xlsx",
+      "sha256": "f68996eb12cf60f3ca83782a70da882296439c7a21b52454654ebdc56386fcd0",
+      "wayback_digest_sha1_base32": "V24L5Y24W42PPCHPHGNSS4CFLTKAREBA",
+      "wayback_timestamp": "20210309153239",
+      "wayback_url": "https://web.archive.org/web/20210309153239id_/https://www.iowaworkforcedevelopment.gov/sites/search.iowaworkforcedevelopment.gov/files/documents/2018/WARN_20200420-2.xlsx"
+    },
+    {
+      "bytes": 36348,
+      "capture_utc": "2021-03-09T15:22:11Z",
+      "captures_with_same_digest": 28,
+      "cdx_status": "-",
+      "coverage": "notice dates 2011-01-13..2018-05-01; byte-identical to the copy Big Local News hosts, cited here from IWD",
+      "data_rows": 339,
+      "file": "WARN_20180503-20210309152211.xlsx",
+      "linked_from": "iowaworkforcedevelopment.gov/worker-adjustment-and-retraining-notification-act @20180521195525",
+      "original_agency_url": "https://www.iowaworkforcedevelopment.gov/sites/search.iowaworkforcedevelopment.gov/files/documents/2018/WARN_20180503.xlsx",
+      "sha256": "333d08c2ad68d93d11631aa9d7852f2549610eda4306afcfa792413ef70ef34f",
+      "wayback_digest_sha1_base32": "AS3OVWEH24X57HZEG6GHQ6LGTQVY3TMJ",
+      "wayback_timestamp": "20210309152211",
+      "wayback_url": "https://web.archive.org/web/20210309152211id_/https://www.iowaworkforcedevelopment.gov/sites/search.iowaworkforcedevelopment.gov/files/documents/2018/WARN_20180503.xlsx"
+    },
+    {
+      "bytes": 229078,
+      "capture_utc": "2016-12-27T19:04:58Z",
+      "captures_with_same_digest": 3,
+      "cdx_status": "200",
+      "coverage": "notice dates 2005-07-06..2015-08-10; company names are cut at 30 characters",
+      "data_rows": 363,
+      "file": "warn_20150812-20161227190458.pdf",
+      "linked_from": "IWD WARN page @20150902232854",
+      "original_agency_url": "https://www.iowaworkforcedevelopment.gov/sites/search.iowaworkforcedevelopment.gov/files/warn_20150812.pdf",
+      "pages": 9,
+      "sha256": "3383e92db3711b88125e6ad42246ea6dba076ab6c9c0d78d81b89821c22d5ae8",
+      "wayback_digest_sha1_base32": "QHL3M3KOTV3VNNRHHKPBUF3ZINL4HDLY",
+      "wayback_timestamp": "20161227190458",
+      "wayback_url": "https://web.archive.org/web/20161227190458id_/https://www.iowaworkforcedevelopment.gov/sites/search.iowaworkforcedevelopment.gov/files/warn_20150812.pdf"
+    }
+  ],
+  "cdx_queried": "2026-09-30",
+  "format": "ia-iwd-archive-v1",
+  "notes": [
+    "Each file is the Wayback id_ capture of the file on iowaworkforcedevelopment.gov; its SHA-1 equals the CDX digest.",
+    "The three logs overlap (2011-2015 and 2015-2018); the current IWD logs (agency/ia) start 2018-06-18."
+  ],
+  "publisher": "Iowa Workforce Development",
+  "retrieved_utc_date": "2026-09-30",
+  "state": "IA"
+}

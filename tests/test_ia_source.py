@@ -42,7 +42,8 @@ def test_iowa_source_accounts_for_rows_and_preserves_amendment_evidence():
 
 def test_iowa_source_rejects_tampered_workbook(tmp_path):
     for path in SOURCE.iterdir():
-        (tmp_path / path.name).write_bytes(path.read_bytes())
+        if path.is_file():  # wayback-2026-09-30/ holds the archived logs
+            (tmp_path / path.name).write_bytes(path.read_bytes())
     (tmp_path / "event-log.xlsx").write_bytes(b"corrupt")
     with pytest.raises(ValueError, match="checksum mismatch"):
         extract(tmp_path)

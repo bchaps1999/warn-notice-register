@@ -105,7 +105,11 @@ def row_complete(ident: str, employer: str, received: str | None,
 
 
 def single_record(ident: str, item: dict, details: dict, source_url: str) -> dict:
-    """One agency row as the notice for its WARN number."""
+    """One agency row as the notice for its WARN number.
+
+    A row admitted without an action date or worker count (the historical
+    list's partial-row rule) leaves those fields null.
+    """
     raw = item["raw"]
     layoff_type, is_temporary, type_evidence = type_fields(raw["Layoff Type"])
     if type_evidence:
@@ -114,8 +118,10 @@ def single_record(ident: str, item: dict, details: dict, source_url: str) -> dic
         "state": "OR", "employer_name": str(raw["Company Name"]).strip(),
         "location": str(raw["Location"] or "").strip() or None,
         "notice_date": None, "effective_date": item["effective"],
-        "effective_date_precision": "day", "effective_date_basis": "reported",
-        "employees_affected": int(item["workers"]), "layoff_type": layoff_type,
+        "effective_date_precision": "day" if item["effective"] else None,
+        "effective_date_basis": "reported" if item["effective"] else None,
+        "employees_affected": int(item["workers"]) if item["workers"] is not None else None,
+        "layoff_type": layoff_type,
         "is_temporary": is_temporary, "is_amendment": 0,
         "source_url": source_url, "source_notice_id": ident,
         "source_identity": f"OR:agency:{ident}",
