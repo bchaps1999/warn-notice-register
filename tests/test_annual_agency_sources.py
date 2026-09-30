@@ -10,6 +10,7 @@ import pytest
 from warnlive.migrate.ga_archive_source import project as project_ga
 from warnlive.migrate.ny_annual_source import project as project_ny, read_artifacts
 from warnlive.migrate.ny_overlay import _employer_group
+from warnlive.normalize.engine import _record_hash
 
 
 ROOT = Path(__file__).resolve().parents[1] / "data/source_snapshots"
@@ -218,8 +219,11 @@ def test_ny_inexact_match_to_recovered_control_number_filing_keeps_the_dashboard
         possible = json.loads(row["source_details"])["possible_correspondence"]
         assert possible["basis"] == "same_employer_notice_or_action_date"
         assert possible["status"] == "unreviewed_not_merged"
-        assert possible["candidates"] == [{"dedupe_key": "k" * 40, "source_notice_id": "2008-W070",
-                                           "fields_matched": ["employer_group", "notice_date"]}]
+        assert possible["candidates"] == [{
+            "dedupe_key": "k" * 40, "source_notice_id": "2008-W070",
+            "fields_matched": ["employer_group", "notice_date"],
+            "disposition": "held_possible_duplicate_of_admitted_notice"}]
+        assert list(report["held_recovered_filings"]) == ["k" * 40]
         assert report["correspondence_versions"] == 0
         assert report["admitted_with_possible_correspondence"] >= 1
         assert len(kept) + len(held) == len(read_artifacts(NY))
@@ -228,3 +232,62 @@ def test_ny_inexact_match_to_recovered_control_number_filing_keeps_the_dashboard
     assert example["dedupe_key"] not in {r["dedupe_key"] for r in reduced}
     assert any(r["reason"] == "existing_notice_event_correspondence_unresolved"
                and r["source_row"] == example["source_notice_id"] for r in held)
+
+
+def test_recovered_filing_matching_an_admitted_dashboard_row_is_held_and_both_sides_agree(tmp_path):
+    """The dashboard notice stays the single record; the recovered filing it
+    loosely matches is withdrawn, and each side names the other."""
+    from warnlive.migrate.ny_annual_source import HELD_RECOVERED_REASON, withdraw_held_filings
+    from warnlive.store import db
+    from warnlive.store.dedupe import ingest
+
+    records, _, _ = project_ny(NY)
+    example = next(row for row in records if row["employees_affected"] and row["effective_date"]
+                   and "filing_group" not in json.loads(row["source_details"]))
+    conn = db.connect(tmp_path / "c.sqlite")
+    db.init_db(conn)
+    filing = {"state": "NY", "employer_name": example["employer_name"],
+              "location": "Elsewhere County", "notice_date": example["notice_date"],
+              "effective_date": None, "employees_affected": 7, "layoff_type": "unknown",
+              "is_temporary": None, "is_amendment": 0, "source_url": "https://x/details.asp?id=1",
+              "source_notice_id": "2008-W070", "raw_extra": json.dumps({"page": 1}),
+              "source_details": json.dumps({"version_order": {"basis": "agency_detail_id_order"}})}
+    filing["dedupe_key"] = "f" * 40
+    second = dict(filing, employees_affected=9, raw_extra=json.dumps({"page": 2}))
+    for rec in (filing, second):
+        rec["raw_record_hash"] = _record_hash(rec)
+    ingest(conn, [filing, second], observed_at="2026-09-30")
+    priors = [dict(row) for row in conn.execute("SELECT * FROM notices")]
+    kept, _, report = project_ny(NY, existing_notices=priors)
+    dashboard = next(r for r in kept if r["dedupe_key"] == example["dedupe_key"])
+    [candidate] = json.loads(dashboard["source_details"])["possible_correspondence"]["candidates"]
+    assert candidate["dedupe_key"] == filing["dedupe_key"]
+    assert candidate["disposition"] == f"held_{HELD_RECOVERED_REASON}"
+    held = report["held_recovered_filings"]
+    assert list(held) == [filing["dedupe_key"]]
+    assert {d["dedupe_key"] for d in held[filing["dedupe_key"]]["dashboard_notices"]} == {
+        example["dedupe_key"]}
+    withdrawn = withdraw_held_filings(conn, held)
+    assert [rec["withdrawn_version"] for rec in withdrawn] == [1, 2]
+    assert all(rec["possible_duplicate_of"][0]["dedupe_key"] == example["dedupe_key"]
+               for rec in withdrawn)
+    assert conn.execute("SELECT COUNT(*) FROM notices").fetchone()[0] == 0
+    assert conn.execute("SELECT COUNT(*) FROM notice_versions").fetchone()[0] == 0
+
+
+def test_exact_version_target_and_unmatched_recovered_filings_are_kept():
+    records, _, _ = project_ny(NY)
+    example = next(row for row in records if row["employees_affected"] and row["effective_date"]
+                   and "filing_group" not in json.loads(row["source_details"]))
+    county = json.loads(example["source_details"])["raw_cells"][5]
+    recovered = json.dumps({"entry": {"basis": "distinct_control_number"}})
+    exact = {"id": 42, "dedupe_key": "k" * 40, "state": "NY",
+             "employer_name": example["employer_name"], "location": county,
+             "notice_date": example["notice_date"], "effective_date": None,
+             "employees_affected": example["employees_affected"], "layoff_type": "closure",
+             "is_temporary": None, "is_amendment": 0, "source_url": "u",
+             "source_notice_id": "2008-W070", "source_details": recovered}
+    unmatched = dict(exact, id=43, dedupe_key="u" * 40, employer_name="No Such Employer Ltd")
+    _, _, report = project_ny(NY, existing_notices=[exact, unmatched])
+    assert report["correspondence_versions"] == 1
+    assert report["held_recovered_filings"] == {}

@@ -3,8 +3,10 @@
 Input: the pinned ``agency/ny_annual`` CSVs and the NY notices already built.
 Output: dashboard-observation records (one per listed site; rows of one
 employer/notice-date filing carry ``source_details.filing_group``), new
-versions of exactly corresponding control-number notices, and held rows with
-reasons. No network access.
+versions of exactly corresponding control-number notices, held rows with
+reasons, and the recovered control-number filings to hold as possible
+duplicates of an admitted dashboard notice. ``withdraw_held_filings``
+removes those filings from a candidate database. No network access.
 """
 
 from __future__ import annotations
@@ -135,6 +137,73 @@ def _possible_correspondence(row: dict, candidates: list[dict], basis: str) -> d
             "status": "unreviewed_not_merged", "candidates": fields}
 
 
+HELD_RECOVERED_REASON = "possible_duplicate_of_admitted_notice"
+
+
+def _hold_recovered_duplicates(records: list[dict]) -> tuple[list[dict], dict[str, dict]]:
+    """Recovered control-number filings that may duplicate an admitted dashboard notice.
+
+    A filing rebuilt from conflicting detail pages that an admitted dashboard
+    row loosely corresponds to (``possible_correspondence``) is held: the
+    dashboard notice, admitted before that filing could be, stays the single
+    record. A filing that is the exact version target of a dashboard row is
+    kept (the version path). Returns the records with each such candidate
+    marked ``disposition: held_...`` and, per held filing key, the dashboard
+    keys and fields matched; the caller withdraws those filings.
+    """
+    version_targets = {rec["dedupe_key"] for rec in records
+                       if "ny_dashboard_correspondence" in json.loads(rec["source_details"])}
+    held: dict[str, dict] = {}
+    out = []
+    for rec in records:
+        details = json.loads(rec["source_details"])
+        possible = details.get("possible_correspondence")
+        if not possible or "ny_dashboard_correspondence" in details:
+            out.append(rec)
+            continue
+        for candidate in possible["candidates"]:
+            key = candidate["dedupe_key"]
+            if key and key not in version_targets:
+                candidate["disposition"] = f"held_{HELD_RECOVERED_REASON}"
+                entry = held.setdefault(key, {"source_notice_id": candidate["source_notice_id"],
+                                              "dashboard_notices": []})
+                entry["dashboard_notices"].append({
+                    "dedupe_key": rec["dedupe_key"], "source_row": details["source_row"],
+                    "basis": possible["basis"],
+                    "fields_matched": candidate["fields_matched"]})
+            else:
+                candidate["disposition"] = "kept_exact_version_target"
+        rec = dict(rec, source_details=_json(details))
+        rec["raw_record_hash"] = _record_hash(rec)
+        out.append(rec)
+    return out, dict(sorted(held.items()))
+
+
+def withdraw_held_filings(conn, held_filings: dict[str, dict]) -> list[dict]:
+    """Remove held recovered filings from a candidate database.
+
+    Returns one record per stored version (the page that version came
+    from), in version order, with the dashboard notices it may duplicate;
+    the caller records them as held source rows. Run before links or
+    observations reference notice ids."""
+    withdrawn = []
+    for key, evidence in held_filings.items():
+        notice = conn.execute("SELECT id FROM notices WHERE dedupe_key = ?", (key,)).fetchone()
+        if notice is None:
+            raise ValueError(f"held NY filing is not in the candidate: {key}")
+        notice_id = notice[0]
+        for version, raw_hash, fields in conn.execute(
+                "SELECT version, raw_record_hash, fields_json FROM notice_versions "
+                "WHERE notice_id = ? ORDER BY version", (notice_id,)).fetchall():
+            rec = json.loads(fields)
+            rec.update(dedupe_key=key, raw_record_hash=raw_hash, withdrawn_version=version,
+                       possible_duplicate_of=evidence["dashboard_notices"])
+            withdrawn.append(rec)
+        conn.execute("DELETE FROM notice_versions WHERE notice_id = ?", (notice_id,))
+        conn.execute("DELETE FROM notices WHERE id = ?", (notice_id,))
+    return withdrawn
+
+
 def _correspondence_version(row: dict, prior: dict) -> dict:
     """The dashboard row as a new version of one exactly matching notice.
 
@@ -198,7 +267,10 @@ def project(directory: Path, existing_employers: set[str] | None = None,
     held before that entry rule, and the dashboard row was admitted as its own
     notice; an inexact match to one is not evidence enough to withdraw it. The
     row keeps its own entry and records the candidates in
-    ``source_details.possible_correspondence`` for review.
+    ``source_details.possible_correspondence`` for review, and each such
+    filing (unless it is an exact version target) is reported in
+    ``report["held_recovered_filings"]`` for the caller to hold
+    (``withdraw_held_filings``): the dashboard notice stays the one record.
     """
     rows = read_artifacts(directory)
     # Names alone cannot identify a filing. Keep this parameter for callers;
@@ -364,7 +436,9 @@ def project(directory: Path, existing_employers: set[str] | None = None,
         records.append(rec)
     if len(records) + len(held) != len(rows):
         raise ValueError("NY annual source row accounting mismatch")
-    return records, held, {"source_rows": len(rows), "admitted": len(records) - versions,
+    records, held_filings = _hold_recovered_duplicates(records)
+    return records, held, {
+                           "held_recovered_filings": held_filings,"source_rows": len(rows), "admitted": len(records) - versions,
                            "correspondence_versions": versions,
                            "admitted_filing_group_rows": sum(
                                "filing_group" in json.loads(r["source_details"])

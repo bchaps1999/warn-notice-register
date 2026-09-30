@@ -1191,6 +1191,27 @@ def rebuild(
                         ny_annual_dir, existing_ny, existing_ny_sites,
                         existing_notices=existing_ny_notices)
                     exceptions.extend(ny_held)
+                    # A recovered control-number filing that may duplicate an
+                    # admitted dashboard notice is held; its pages leave the
+                    # archive layer's admitted rows for the ledger.
+                    from warnlive.migrate.ny_annual_source import (
+                        HELD_RECOVERED_REASON, withdraw_held_filings,
+                    )
+
+                    withdrawn = withdraw_held_filings(
+                        conn, ny_source_report["held_recovered_filings"])
+                    for rec in withdrawn:
+                        item = _exception("agency-cache:NY", HELD_RECOVERED_REASON, rec)
+                        item.update({"match_basis": "recovered_filing_loose_dashboard_correspondence",
+                                     "withdrawn_version": rec["withdrawn_version"],
+                                     "possible_duplicate_of": rec["possible_duplicate_of"]})
+                        exceptions.append(item)
+                    ny_archive = agencies["NY"]
+                    held_notices = len(ny_source_report["held_recovered_filings"])
+                    ny_archive["new"] -= held_notices
+                    ny_archive["updated"] -= len(withdrawn) - held_notices
+                    ny_archive["held_possible_duplicate_rows"] = len(withdrawn)
+                    ny_archive["held_possible_duplicate_filings"] = held_notices
                 # A dashboard row matching exactly one control-number notice
                 # (ny_annual_source) is that filing's version.
                 ny_revision_keys = {
