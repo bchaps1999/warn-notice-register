@@ -3,7 +3,7 @@ name: Publish release
 on:
   push:
     tags:
-      - "v1.1.1"
+      - "v1.2.0"
 
 permissions:
   contents: write
@@ -20,8 +20,8 @@ jobs:
           import json
           from pathlib import Path
 
-          manifest = json.loads(Path('data/source_snapshots/2026-09-25-quality-release-manifest.json').read_text())
-          assert manifest['release'] == 'v1.1.1'
+          manifest = json.loads(Path('data/source_snapshots/2026-09-30-v1.2.0-release-manifest.json').read_text())
+          assert manifest['release'] == 'v1.2.0'
           for group in ('input_sha256', 'artifact_sha256'):
               for name, expected in manifest[group].items():
                   contents = Path(name).read_bytes()
@@ -40,11 +40,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            data/source_snapshots/2026-09-24-strict-ks-ky-source-bundle.tar.gz \
-            data/source_snapshots/2026-09-25-quality-candidate-report.json \
-            data/source_snapshots/2026-09-25-quality-candidate.exceptions.jsonl.gz \
-            data/source_snapshots/2026-09-25-quality-release-manifest.json \
+            data/source_snapshots/2026-09-30-v1.2-source-bundle.tar.gz \
+            data/source_snapshots/2026-09-30-v1.2-candidate-report.json \
+            data/source_snapshots/2026-09-30-v1.2-candidate.exceptions.jsonl.gz \
+            data/source_snapshots/2026-09-30-v1.2.0-release-manifest.json \
             data/warn.sql.gz \
             --verify-tag \
-            --title "WARN Notice Register ${GITHUB_REF_NAME} — notice quality and provenance" \
-            --notes 'The source-backed register contains 74,828 admitted notices, 88,748 versions, and 7,815,994 reported affected workers. This release distinguishes affected sites from mailing addresses, separates agency dates from legal notice dates, and adds source locators and quality statuses. The frozen source bundle, replay report, exception ledger, database dump, and hash manifest are attached. See docs/release-v1.1.1-2026-09-25.md at this tag for corrections, reconciliation, and remaining source limits.'
+            --title "WARN Notice Register ${GITHUB_REF_NAME} — entries, addresses, and recovered sources" \
+            --notes 'The source-backed register contains 80,703 admitted notices, 95,090 versions, and 8,205,189 reported affected workers. One notice is now one entry the agency lists; site addresses are restored with their basis; Nebraska layoff/closure-report rows move to source observations; Wisconsin 2016-2019, Nebraska 2020-2022 and Nevada 2021 are recovered from official sources. Every v1.1.1 notice key is present, retired or re-keyed through a published transition map, or held by a documented rule. The frozen source bundle, replay report, exception ledger, database dump, and hash manifest are attached. See docs/release-v1.2.0-2026-09-30.md at this tag.'

@@ -3,12 +3,13 @@
 A consolidated WARN Act notice dataset assembled from available state agency
 portals and archived source material. Coverage varies by state and period.
 
-**v1.1.1 data (September 25, 2026):** the source-backed release contains
-**74,828 admitted notices, 88,748 versions, and 7,815,994 reported affected
-workers**. The database dump and CSVs derive from the pinned agency bundle and
-the dated notice-quality evidence; the site build derives from that database.
-The [release notes](docs/release-v1.1.1-2026-09-25.md) explain the address,
-date-role, and provenance corrections. The [source evidence](data/source_snapshots/README.md)
+**v1.2.0 data (September 30, 2026):** the source-backed release contains
+**80,703 admitted notices, 95,090 versions, and 8,205,189 reported affected
+workers**. The database dump and CSVs derive from a dated agency source
+bundle, replayed in full; scheduled scrapes add newer notices after that. The
+[release notes](docs/release-v1.2.0-2026-09-30.md) explain the entry unit,
+restored site addresses, the Nebraska report split, and the recovered
+sources. The [source evidence](data/source_snapshots/README.md)
 and [assembly contract](docs/rebuild-contract.md) define the replay checks.
 Counts are admitted source events, not an estimate of every WARN filing nationally.
 
@@ -23,8 +24,8 @@ deduplicates and version-tracks notices, and commits the results here:
 - `data/warn.sql.gz` — the full database as a gzipped SQL dump (notices, versions, run telemetry); `warnlive unpack-db` restores the working sqlite file
 - `data/exports/warn_notices.csv` — one row per notice, all active states
 - `data/exports/states/{xx}.csv` — per-state cuts
-- `data/exports/notice_links.csv` — source-backed relationships, when established; v1.1.1 has no notice links
-- `data/exports/source_observations.csv` — 1,009 verified agency observations, including 35 Kentucky rows, with admission or exclusion status; the separate exception ledger accounts for other held source rows
+- `data/exports/notice_links.csv` — source-backed relationships: `sibling_entry` links between entries of one listed filing
+- `data/exports/source_observations.csv` — 3,135 agency source rows with their admission status (admitted, `identity_unresolved`, `not_in_agency_warn_report`, and others); the separate exception ledger accounts for other held source rows
 - `data/health/health.md` — a dated per-state collection snapshot, not proof that every configured adapter is currently healthy
 
 ## Data dictionary (`warn_notices.csv`)
@@ -218,6 +219,28 @@ git add data/ && git commit -m "Local Massachusetts scrape $(date -u +%F)" && gi
 Push immediately: a scheduled run that started from the older dump will
 refuse to push and must be re-run. The site picks up the data on the next
 scheduled run's deploy.
+
+### Rebuild v1.2.0 from frozen agency sources
+
+The v1.2.0 release replays one dated bundle. Rebuild it in an isolated path
+and compare with the [release manifest](data/source_snapshots/2026-09-30-v1.2.0-release-manifest.json):
+
+```bash
+python -m warnlive.migrate.source_bundle verify \
+  data/source_snapshots/2026-09-30-v1.2-source-bundle.tar.gz
+python -m warnlive.migrate.offline_rebuild \
+  --bundle data/source_snapshots/2026-09-30-v1.2-source-bundle.tar.gz \
+  --quality-evidence-dir data/source_snapshots/2026-09-24-quality-evidence \
+  --db /tmp/warn-v1.2.sqlite --observed-at 2026-09-30 --source-only \
+  --exceptions /tmp/warn-v1.2.exceptions.jsonl --report /tmp/warn-v1.2-report.json
+```
+
+The [candidate record](docs/candidate-v1.2-2026-09-30.md) documents how the
+bundle was assembled: fresh captures overlaid state by state onto the v1.1.1
+bundle, only where they keep every released notice, then new archives added
+with `source_bundle add-archives`. The [transition maps](data/review/) list
+the released keys that were retired or re-keyed. The historical rebuilds
+below reproduce earlier releases with their release-code commits.
 
 ### Rebuild v1.1.0 from frozen agency sources
 

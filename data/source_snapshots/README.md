@@ -1,6 +1,18 @@
 # Frozen source inputs
 
-The current v1.1.0 data release uses the [strict Kansas and Kentucky source bundle](2026-09-24-strict-ks-ky-source-bundle.tar.gz). Its [replay report](2026-09-24-strict-ks-ky-candidate-report.json), [exception ledger](2026-09-24-strict-ks-ky-candidate.exceptions.jsonl.gz), and [release manifest](2026-09-24-ks-ky-review-release-manifest.json) preserve the candidate's source and output accounting. The [v1.1.0 release notes](../../docs/release-v1.1.0-2026-09-24.md) explain the admitted totals and remaining limits.
+The current v1.2.0 data release replays the [v1.2 source bundle](2026-09-30-v1.2-source-bundle.tar.gz) (SHA-256 `0414c3f55de71bd34993b260360eb5c4d8b8ab4dd626a9f72d623ec7e4f3026b`). The bundle holds 2026-09-30 captures where they keep every released notice, plus new archives for Wisconsin 2016–2019 and Nebraska. The release also relies on:
+
+- its [replay report](2026-09-30-v1.2-candidate-report.json);
+- its [exception ledger](2026-09-30-v1.2-candidate.exceptions.jsonl.gz);
+- its [release manifest](2026-09-30-v1.2.0-release-manifest.json);
+- the [Kansas portal evidence](2026-09-30-ks-portal-evidence.tar.gz);
+- the dated [Nebraska report](2026-09-30-ne-ndol-reports/manifest.json) and [Nevada 2021 transcription](2026-09-30-nv-2021-transcription/manifest.json) evidence.
+
+The [v1.2.0 release notes](../../docs/release-v1.2.0-2026-09-30.md) and [candidate record](../../docs/candidate-v1.2-2026-09-30.md) explain the totals and remaining limits.
+
+## Historical v1.1.x inputs
+
+v1.1.0 and v1.1.1 used the [strict Kansas and Kentucky source bundle](2026-09-24-strict-ks-ky-source-bundle.tar.gz). v1.1.0's [replay report](2026-09-24-strict-ks-ky-candidate-report.json), [exception ledger](2026-09-24-strict-ks-ky-candidate.exceptions.jsonl.gz), and [release manifest](2026-09-24-ks-ky-review-release-manifest.json) record that release's accounting. v1.1.1 added the [dated quality evidence](2026-09-24-quality-evidence/manifest.json), recorded in its [release manifest](2026-09-25-quality-release-manifest.json). Reproduce either with its release tag's code.
 
 ## Historical v1.0.0 input
 

@@ -1,56 +1,58 @@
 # WARN pipeline health
 
+The database was rebuilt from a frozen source bundle on 2026-09-30. Run history below covers live scrapes since then only.
+
 | State | Registry | Latest run | Verdict | Notices | Fail streak | Notes |
 |---|---|---|---|---|---|---|
-| AK | active | — | — — | 66 | 0 | **no successful collection recorded** |
-| AL | active | — | — — | 1031 | 0 | **no successful collection recorded** |
+| AK | active | — | — — | 66 | 0 | no live collection since the 2026-09-30 rebuild |
+| AL | active | — | — — | 1038 | 0 | no live collection since the 2026-09-30 rebuild |
 | AR | manual_only | — | — — | 0 | 0 |  |
-| AZ | active | — | — — | 189 | 0 | **no successful collection recorded** |
-| CA | active | — | — — | 25176 | 0 | **no successful collection recorded** |
-| CO | active | — | — — | 827 | 0 | **no successful collection recorded** |
-| CT | active | — | — — | 28 | 0 | **no successful collection recorded** |
-| DC | active | — | — — | 140 | 0 | **no successful collection recorded** |
-| DE | active | — | — — | 46 | 0 | **no successful collection recorded** |
-| FL | active | — | — — | 5435 | 0 | **no successful collection recorded** |
+| AZ | active | — | — — | 189 | 0 | no live collection since the 2026-09-30 rebuild |
+| CA | active | — | — — | 28493 | 0 | no live collection since the 2026-09-30 rebuild |
+| CO | active | — | — — | 844 | 0 | no live collection since the 2026-09-30 rebuild |
+| CT | active | — | — — | 28 | 0 | no live collection since the 2026-09-30 rebuild |
+| DC | active | — | — — | 149 | 0 | no live collection since the 2026-09-30 rebuild |
+| DE | active | — | — — | 46 | 0 | no live collection since the 2026-09-30 rebuild |
+| FL | active | — | — — | 5451 | 0 | no live collection since the 2026-09-30 rebuild |
 | GA | archive | — | — — | 934 | 0 |  |
-| HI | active | — | — — | 452 | 0 | **no successful collection recorded** |
-| IA | archive | — | — — | 399 | 0 |  |
-| ID | active | — | — — | 193 | 0 | **no successful collection recorded** |
-| IL | active | — | — — | 4890 | 0 | **no successful collection recorded** |
-| IN | active | — | — — | 1011 | 0 | **no successful collection recorded** |
-| KS | active | — | — — | 834 | 0 | **no successful collection recorded** |
+| HI | active | — | — — | 469 | 0 | no live collection since the 2026-09-30 rebuild |
+| IA | archive | — | — — | 560 | 0 |  |
+| ID | active | — | — — | 195 | 0 | no live collection since the 2026-09-30 rebuild |
+| IL | active | — | — — | 4888 | 0 | no live collection since the 2026-09-30 rebuild |
+| IN | active | — | — — | 1016 | 0 | no live collection since the 2026-09-30 rebuild |
+| KS | active | — | — — | 834 | 0 | no live collection since the 2026-09-30 rebuild |
 | KY | archive | — | — — | 33 | 0 |  |
 | LA | archive | — | — — | 31 | 0 |  |
-| MA | active | — | — — | 550 | 0 | **no successful collection recorded** |
-| MD | active | — | — — | 1398 | 0 | **no successful collection recorded** |
-| ME | active | — | — — | 9 | 0 | **no successful collection recorded** |
-| MI | active | — | — — | 100 | 0 | **no successful collection recorded** |
-| MN | active | — | — — | 962 | 0 | **no successful collection recorded** |
-| MO | active | — | — — | 384 | 0 | **no successful collection recorded** |
-| MS | active | — | — — | 142 | 0 | **no successful collection recorded** |
-| MT | active | — | — — | 42 | 0 | **no successful collection recorded** |
-| NC | active | — | — — | 1197 | 0 | **no successful collection recorded** |
-| ND | active | — | — — | 54 | 0 | **no successful collection recorded** |
-| NE | active | — | — — | 933 | 0 | **no successful collection recorded** |
+| MA | active | — | — — | 550 | 0 | no live collection since the 2026-09-30 rebuild |
+| MD | active | — | — — | 1398 | 0 | no live collection since the 2026-09-30 rebuild |
+| ME | active | — | — — | 9 | 0 | no live collection since the 2026-09-30 rebuild |
+| MI | active | — | — — | 116 | 0 | no live collection since the 2026-09-30 rebuild |
+| MN | active | — | — — | 962 | 0 | no live collection since the 2026-09-30 rebuild |
+| MO | active | — | — — | 384 | 0 | no live collection since the 2026-09-30 rebuild |
+| MS | active | — | — — | 142 | 0 | no live collection since the 2026-09-30 rebuild |
+| MT | active | — | — — | 44 | 0 | no live collection since the 2026-09-30 rebuild |
+| NC | active | — | — — | 1198 | 0 | no live collection since the 2026-09-30 rebuild |
+| ND | active | — | — — | 54 | 0 | no live collection since the 2026-09-30 rebuild |
+| NE | active | — | — — | 164 | 0 | no live collection since the 2026-09-30 rebuild |
 | NH | manual_only | — | — — | 0 | 0 |  |
-| NJ | active | — | — — | 2327 | 0 | **no successful collection recorded** |
-| NM | active | — | — — | 115 | 0 | **no successful collection recorded** |
-| NV | active | — | — — | 296 | 0 | **no successful collection recorded** |
-| NY | active | — | — — | 6315 | 0 | **no successful collection recorded** |
-| OH | active | — | — — | 2438 | 0 | **no successful collection recorded** |
-| OK | active | — | — — | 200 | 0 | **no successful collection recorded** |
-| OR | archive | — | — — | 877 | 0 |  |
-| PA | active | — | — — | 289 | 0 | **no successful collection recorded** |
+| NJ | active | — | — — | 2328 | 0 | no live collection since the 2026-09-30 rebuild |
+| NM | active | — | — — | 118 | 0 | no live collection since the 2026-09-30 rebuild |
+| NV | active | — | — — | 324 | 0 | no live collection since the 2026-09-30 rebuild |
+| NY | active | — | — — | 8807 | 0 | no live collection since the 2026-09-30 rebuild |
+| OH | active | — | — — | 2438 | 0 | no live collection since the 2026-09-30 rebuild |
+| OK | active | — | — — | 202 | 0 | no live collection since the 2026-09-30 rebuild |
+| OR | archive | — | — — | 983 | 0 |  |
+| PA | active | — | — — | 312 | 0 | no live collection since the 2026-09-30 rebuild |
 | PR | manual_only | — | — — | 0 | 0 |  |
-| RI | active | — | — — | 125 | 0 | **no successful collection recorded** |
-| SC | active | — | — — | 599 | 0 | **no successful collection recorded** |
-| SD | active | — | — — | 79 | 0 | **no successful collection recorded** |
+| RI | active | — | — — | 126 | 0 | no live collection since the 2026-09-30 rebuild |
+| SC | active | — | — — | 599 | 0 | no live collection since the 2026-09-30 rebuild |
+| SD | active | — | — — | 80 | 0 | no live collection since the 2026-09-30 rebuild |
 | TN | archive | — | — — | 231 | 0 |  |
-| TX | active | — | — — | 7330 | 0 | **no successful collection recorded** |
-| UT | active | — | — — | 280 | 0 | **no successful collection recorded** |
-| VA | active | — | — — | 1114 | 0 | **no successful collection recorded** |
-| VT | active | — | — — | 29 | 0 | **no successful collection recorded** |
-| WA | active | — | — — | 1456 | 0 | **no successful collection recorded** |
-| WI | active | — | — — | 3242 | 0 | **no successful collection recorded** |
-| WV | manual_only | — | — — | 0 | 0 |  |
+| TX | active | — | — — | 7330 | 0 | no live collection since the 2026-09-30 rebuild |
+| UT | active | — | — — | 283 | 0 | no live collection since the 2026-09-30 rebuild |
+| VA | active | — | — — | 1114 | 0 | no live collection since the 2026-09-30 rebuild |
+| VT | active | — | — — | 49 | 0 | no live collection since the 2026-09-30 rebuild |
+| WA | active | — | — — | 1503 | 0 | no live collection since the 2026-09-30 rebuild |
+| WI | active | — | — — | 3591 | 0 | no live collection since the 2026-09-30 rebuild |
+| WV | unverified | — | — — | 0 | 0 |  |
 | WY | manual_only | — | — — | 0 | 0 |  |
