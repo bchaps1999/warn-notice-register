@@ -77,7 +77,7 @@
     "source": "upstream",
     "notices": 28493,
     "latest_verdict": "degraded",
-    "latest_run": "2026-09-30T19:49:13Z",
+    "latest_run": "2026-10-01T16:02:05Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -85,7 +85,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/ca.csv"
+          "detail": "workdir/raw/ca.csv"
         },
         {
           "name": "row_count",
@@ -110,12 +110,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/17544 notice_date values outside 1988..2026-10-30"
+          "detail": "0/17544 notice_date values outside 1988..2026-10-31"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-09-28 is 2d old (max 45d)"
+          "detail": "newest notice_date 2026-09-28 is 3d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
@@ -327,12 +327,12 @@
         "held_collision_rows": 10
       }
     },
-    "last_success": "2026-09-30T19:49:13Z",
+    "last_success": "2026-10-01T16:02:05Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
     "consecutive_failures": 0,
-    "consecutive_degraded": 1,
+    "consecutive_degraded": 2,
     "recommend_broken": false,
     "chronically_degraded": false
   },
@@ -342,7 +342,7 @@
     "source": "upstream",
     "notices": 844,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T19:49:20Z",
+    "latest_run": "2026-10-01T16:02:27Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -350,7 +350,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/co.csv"
+          "detail": "workdir/raw/co.csv"
         },
         {
           "name": "row_count",
@@ -375,12 +375,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/860 notice_date values outside 1988..2026-10-30"
+          "detail": "0/860 notice_date values outside 1988..2026-10-31"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-09-25 is 5d old (max 60d)"
+          "detail": "newest notice_date 2026-09-25 is 6d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -413,7 +413,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T19:49:20Z",
+    "last_success": "2026-10-01T16:02:27Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -482,7 +482,7 @@
     "source": "patched",
     "notices": 5453,
     "latest_verdict": "degraded",
-    "latest_run": "2026-09-30T19:57:14Z",
+    "latest_run": "2026-10-01T16:12:14Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -490,7 +490,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/fl.csv"
+          "detail": "workdir/raw/fl.csv"
         },
         {
           "name": "row_count",
@@ -515,12 +515,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/3251 source_details.agency_notification_date values outside 1988..2026-10-30"
+          "detail": "0/3251 source_details.agency_notification_date values outside 1988..2026-10-31"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest source_details.agency_notification_date 2026-09-30 is 0d old (max 45d)"
+          "detail": "newest source_details.agency_notification_date 2026-09-30 is 1d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
@@ -586,12 +586,12 @@
         "held_collision_rows": 2
       }
     },
-    "last_success": "2026-09-30T19:57:14Z",
+    "last_success": "2026-10-01T16:12:14Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
     "consecutive_failures": 0,
-    "consecutive_degraded": 1,
+    "consecutive_degraded": 2,
     "recommend_broken": false,
     "chronically_degraded": false
   },
@@ -655,7 +655,7 @@
     "source": "upstream",
     "notices": 4889,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T19:57:36Z",
+    "latest_run": "2026-10-01T16:12:39Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -663,7 +663,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/il.csv"
+          "detail": "workdir/raw/il.csv"
         },
         {
           "name": "row_count",
@@ -688,12 +688,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "1/4889 source_details.agency_reported_date values outside 1988..2026-10-30"
+          "detail": "1/4889 source_details.agency_reported_date values outside 1988..2026-10-31"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest source_details.agency_reported_date 2026-09-25 is 5d old (max 60d)"
+          "detail": "newest source_details.agency_reported_date 2026-09-25 is 6d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -745,7 +745,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T19:57:36Z",
+    "last_success": "2026-10-01T16:12:39Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -850,7 +850,7 @@
     "source": "custom",
     "notices": 568,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T19:57:37Z",
+    "latest_run": "2026-10-01T16:12:40Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -858,7 +858,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/ma.csv"
+          "detail": "workdir/raw/ma.csv"
         },
         {
           "name": "row_count",
@@ -883,12 +883,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/389 source_details.agency_received_date values outside 1988..2026-10-30"
+          "detail": "0/389 source_details.agency_received_date values outside 1988..2026-10-31"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest source_details.agency_received_date 2026-09-25 is 5d old (max 30d)"
+          "detail": "newest source_details.agency_received_date 2026-09-25 is 6d old (max 30d)"
         },
         {
           "name": "dedupe_sanity",
@@ -904,13 +904,13 @@
       "fetch_provenance": {
         "archive_fallback_enabled": true,
         "archived_files": 0,
-        "fetched_at_utc": "2026-09-30T19:57:37Z",
+        "fetched_at_utc": "2026-10-01T16:12:39Z",
         "files": [
           {
             "live_status": 200,
             "origin": "live",
-            "sha256": "57e59d28dcd11c6b89739dad7f407fadf9c2ea2000c7c35f8f23aebbdae68429",
-            "size": 203346,
+            "sha256": "faa6dbe1d009080c0912ba26be9b92019b3af07ae1d96ee9afdad781e7257749",
+            "size": 203363,
             "source_url": "https://www.mass.gov/info-details/worker-adjustment-and-retraining-notification-act-warn-layoff-and-closure-updates"
           },
           {
@@ -980,7 +980,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T19:57:37Z",
+    "last_success": "2026-10-01T16:12:40Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -1049,7 +1049,7 @@
     "source": "custom",
     "notices": 980,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T19:57:46Z",
+    "latest_run": "2026-10-01T16:13:05Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1057,7 +1057,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/mn.csv"
+          "detail": "workdir/raw/mn.csv"
         },
         {
           "name": "row_count",
@@ -1087,7 +1087,7 @@
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest effective_date 2026-09-01 is 29d old (max 60d); 4 future action dates excluded"
+          "detail": "newest effective_date 2026-10-01 is 0d old (max 60d); 3 future action dates excluded"
         },
         {
           "name": "dedupe_sanity",
@@ -1120,7 +1120,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T19:57:46Z",
+    "last_success": "2026-10-01T16:13:05Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -1207,7 +1207,7 @@
     "source": "custom",
     "notices": 324,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T19:58:07Z",
+    "latest_run": "2026-10-01T16:13:41Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1215,7 +1215,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/nv.csv"
+          "detail": "workdir/raw/nv.csv"
         },
         {
           "name": "row_count",
@@ -1240,12 +1240,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/324 source_details.agency_received_date values outside 1988..2026-10-30"
+          "detail": "0/324 source_details.agency_received_date values outside 1988..2026-10-31"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest source_details.agency_received_date 2026-08-31 is 30d old (max 90d)"
+          "detail": "newest source_details.agency_received_date 2026-08-31 is 31d old (max 90d)"
         },
         {
           "name": "dedupe_sanity",
@@ -1278,7 +1278,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T19:58:07Z",
+    "last_success": "2026-10-01T16:13:41Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -1309,9 +1309,9 @@
     "name": "New Jersey",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 2330,
+    "notices": 2332,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T19:57:58Z",
+    "latest_run": "2026-10-01T16:13:35Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1319,7 +1319,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/nj.csv"
+          "detail": "workdir/raw/nj.csv"
         },
         {
           "name": "row_count",
@@ -1349,7 +1349,7 @@
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest effective_date 2026-09-30 is 0d old (max 60d); 27 future action dates excluded"
+          "detail": "newest effective_date 2026-10-01 is 0d old (max 60d); 24 future action dates excluded"
         },
         {
           "name": "dedupe_sanity",
@@ -1800,7 +1800,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T19:57:58Z",
+    "last_success": "2026-10-01T16:13:35Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -1833,7 +1833,7 @@
     "source": "upstream",
     "notices": 8846,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T19:58:10Z",
+    "latest_run": "2026-10-01T16:13:44Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1841,7 +1841,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/ny.csv"
+          "detail": "workdir/raw/ny.csv"
         },
         {
           "name": "row_count",
@@ -1866,12 +1866,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/202 notice_date values outside 1988..2026-10-30"
+          "detail": "0/202 notice_date values outside 1988..2026-10-31"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-09-24 is 6d old (max 45d)"
+          "detail": "newest notice_date 2026-09-24 is 7d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
@@ -1904,7 +1904,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T19:58:10Z",
+    "last_success": "2026-10-01T16:13:44Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -1919,7 +1919,7 @@
     "source": "custom",
     "notices": 1199,
     "latest_verdict": "degraded",
-    "latest_run": "2026-09-30T19:57:57Z",
+    "latest_run": "2026-10-01T16:13:34Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -1927,7 +1927,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/nc.csv"
+          "detail": "workdir/raw/nc.csv"
         },
         {
           "name": "row_count",
@@ -1952,12 +1952,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/1210 notice_date values outside 1988..2026-10-30"
+          "detail": "0/1210 notice_date values outside 1988..2026-10-31"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-09-28 is 2d old (max 90d)"
+          "detail": "newest notice_date 2026-09-28 is 3d old (max 90d)"
         },
         {
           "name": "dedupe_sanity",
@@ -3827,12 +3827,12 @@
         "held_collision_rows": 6
       }
     },
-    "last_success": "2026-09-30T19:57:57Z",
+    "last_success": "2026-10-01T16:13:34Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
     "consecutive_failures": 0,
-    "consecutive_degraded": 1,
+    "consecutive_degraded": 2,
     "recommend_broken": false,
     "chronically_degraded": false
   },
@@ -3860,7 +3860,7 @@
     "source": "patched",
     "notices": 2690,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T19:58:11Z",
+    "latest_run": "2026-10-01T16:13:44Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -3868,7 +3868,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/oh.csv"
+          "detail": "workdir/raw/oh.csv"
         },
         {
           "name": "row_count",
@@ -3893,12 +3893,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/69 notice_date values outside 1988..2026-10-30"
+          "detail": "0/69 notice_date values outside 1988..2026-10-31"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-09-24 is 6d old (max 60d)"
+          "detail": "newest notice_date 2026-09-24 is 7d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -3931,7 +3931,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T19:58:11Z",
+    "last_success": "2026-10-01T16:13:44Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -4090,7 +4090,7 @@
     "source": "patched",
     "notices": 7355,
     "latest_verdict": "ok",
-    "latest_run": "2026-09-30T19:58:35Z",
+    "latest_run": "2026-10-01T16:14:17Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -4098,7 +4098,7 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/tx.csv"
+          "detail": "workdir/raw/tx.csv"
         },
         {
           "name": "row_count",
@@ -4123,12 +4123,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/2500 notice_date values outside 1988..2026-10-30"
+          "detail": "0/2500 notice_date values outside 1988..2026-10-31"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-09-28 is 2d old (max 45d)"
+          "detail": "newest notice_date 2026-09-28 is 3d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
@@ -4161,7 +4161,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-09-30T19:58:35Z",
+    "last_success": "2026-10-01T16:14:17Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -4228,9 +4228,9 @@
     "name": "Washington",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 1503,
+    "notices": 1511,
     "latest_verdict": "degraded",
-    "latest_run": "2026-09-30T19:58:53Z",
+    "latest_run": "2026-10-01T16:14:29Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -4238,12 +4238,12 @@
         {
           "name": "fetch_ok",
           "outcome": "pass",
-          "detail": "/private/tmp/claude-501/-Users-brendanchapuis-Projects-warn-live/c4027595-f7c9-443b-957b-c7ba9b3127b7/scratchpad/release-v1.3/live2/workdir/raw/wa.csv"
+          "detail": "workdir/raw/wa.csv"
         },
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "1529 raw rows (min 200)"
+          "detail": "1537 raw rows (min 200)"
         },
         {
           "name": "schema_drift",
@@ -4253,36 +4253,36 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/1529 rows failed to normalize"
+          "detail": "0/1537 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "1529/1529 records have an employer name"
+          "detail": "1537/1537 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/1529 source_details.agency_received_date values outside 1988..2026-10-30"
+          "detail": "0/1537 source_details.agency_received_date values outside 1988..2026-10-31"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest source_details.agency_received_date 2026-09-28 is 2d old (max 60d)"
+          "detail": "newest source_details.agency_received_date 2026-09-28 is 3d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "23/1529 records share a dedupe key"
+          "detail": "23/1537 records share a dedupe key"
         }
       ],
       "admission": {
-        "eligible_rows": 1523,
+        "eligible_rows": 1531,
         "excluded_rows": 6,
         "exclusions": [
           {
             "reason": "suspected_same_key_collision",
-            "prepared_row": 499,
+            "prepared_row": 507,
             "dedupe_key": "b43e3c797a9d9b16cfced1437eb317ff4330e58e",
             "raw_record_hash": "9e5f6879411ff2137b106ac6620c36fc39872942",
             "source_url": "https://esd.wa.gov/about-employees/WARN",
@@ -4298,7 +4298,7 @@
           },
           {
             "reason": "suspected_same_key_collision",
-            "prepared_row": 500,
+            "prepared_row": 508,
             "dedupe_key": "b43e3c797a9d9b16cfced1437eb317ff4330e58e",
             "raw_record_hash": "de81111e5b7beba81a75957d81401aa73c1f6386",
             "source_url": "https://esd.wa.gov/about-employees/WARN",
@@ -4314,7 +4314,7 @@
           },
           {
             "reason": "suspected_same_key_collision",
-            "prepared_row": 505,
+            "prepared_row": 513,
             "dedupe_key": "c8d8667cda98cd6b285353e0aea364a0864d63c4",
             "raw_record_hash": "a623fc2adcc50115b2c412fb1cc19805e11cab97",
             "source_url": "https://esd.wa.gov/about-employees/WARN",
@@ -4330,7 +4330,7 @@
           },
           {
             "reason": "suspected_same_key_collision",
-            "prepared_row": 506,
+            "prepared_row": 514,
             "dedupe_key": "c8d8667cda98cd6b285353e0aea364a0864d63c4",
             "raw_record_hash": "e37fab7fffad850b7037e0d4fd1cbf6fc4935682",
             "source_url": "https://esd.wa.gov/about-employees/WARN",
@@ -4346,7 +4346,7 @@
           },
           {
             "reason": "suspected_same_key_collision",
-            "prepared_row": 539,
+            "prepared_row": 547,
             "dedupe_key": "7bbe1c445adac498c25e64434947c7bc930dc61e",
             "raw_record_hash": "d3699be8b48f1890da609b554ea7a0db344cec0c",
             "source_url": "https://esd.wa.gov/about-employees/WARN",
@@ -4362,7 +4362,7 @@
           },
           {
             "reason": "suspected_same_key_collision",
-            "prepared_row": 540,
+            "prepared_row": 548,
             "dedupe_key": "7bbe1c445adac498c25e64434947c7bc930dc61e",
             "raw_record_hash": "9f10c862813681256e6e168674c62a8abb9f2432",
             "source_url": "https://esd.wa.gov/about-employees/WARN",
@@ -4398,12 +4398,12 @@
         "held_collision_rows": 6
       }
     },
-    "last_success": "2026-09-30T19:58:53Z",
+    "last_success": "2026-10-01T16:14:29Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
     "consecutive_failures": 0,
-    "consecutive_degraded": 1,
+    "consecutive_degraded": 2,
     "recommend_broken": false,
     "chronically_degraded": false
   },

@@ -1,5 +1,5 @@
 {
- "notices": 85810,
+ "notices": 85820,
  "possible_duplicates": 0,
  "states": {
   "AK": {
@@ -351,16 +351,16 @@
    "workers": 25546
   },
   "NJ": {
-   "employers": 1937,
+   "employers": 1938,
    "first": "2004-02-24",
    "last": "2027-04-01",
    "max_workers": 16000,
    "no_jobs": 43,
    "no_location": 2,
-   "notices": 2330,
-   "undated": 2330,
+   "notices": 2332,
+   "undated": 2332,
    "unplaced": 253,
-   "workers": 350903
+   "workers": 351044
   },
   "NM": {
    "employers": 106,
@@ -543,16 +543,16 @@
    "workers": 6978
   },
   "WA": {
-   "employers": 1014,
+   "employers": 1021,
    "first": "2004-02-05",
    "last": "2026-12-31",
    "max_workers": 9266,
    "no_jobs": 1,
    "no_location": 1,
-   "notices": 1503,
-   "undated": 1503,
+   "notices": 1511,
+   "undated": 1511,
    "unplaced": 269,
-   "workers": 246858
+   "workers": 247708
   },
   "WI": {
    "employers": 2320,
@@ -567,5 +567,5 @@
    "workers": 325812
   }
  },
- "workers": 8844698
+ "workers": 8845689
 }
