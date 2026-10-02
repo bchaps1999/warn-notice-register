@@ -1,5 +1,5 @@
 {
- "notices": 85820,
+ "notices": 85860,
  "possible_duplicates": 0,
  "states": {
   "AK": {
@@ -39,16 +39,16 @@
    "workers": 91855
   },
   "CA": {
-   "employers": 16255,
+   "employers": 16286,
    "first": "2000-01-01",
-   "last": "2026-09-28",
+   "last": "2026-09-30",
    "max_workers": 11083,
    "no_jobs": 2,
    "no_location": 6327,
-   "notices": 28493,
+   "notices": 28528,
    "undated": 11722,
    "unplaced": 72,
-   "workers": 2331254
+   "workers": 2332380
   },
   "CO": {
    "employers": 724,
@@ -351,16 +351,16 @@
    "workers": 25546
   },
   "NJ": {
-   "employers": 1938,
+   "employers": 1939,
    "first": "2004-02-24",
    "last": "2027-04-01",
    "max_workers": 16000,
    "no_jobs": 43,
    "no_location": 2,
-   "notices": 2332,
-   "undated": 2332,
+   "notices": 2333,
+   "undated": 2333,
    "unplaced": 253,
-   "workers": 351044
+   "workers": 351119
   },
   "NM": {
    "employers": 106,
@@ -399,16 +399,16 @@
    "workers": 757595
   },
   "OH": {
-   "employers": 2271,
+   "employers": 2272,
    "first": "2001-01-09",
-   "last": "2026-09-24",
+   "last": "2026-10-01",
    "max_workers": 3360,
    "no_jobs": 23,
    "no_location": 32,
-   "notices": 2690,
+   "notices": 2691,
    "undated": 1091,
    "unplaced": 193,
-   "workers": 402406
+   "workers": 402497
   },
   "OK": {
    "employers": 170,
@@ -495,16 +495,16 @@
    "workers": 127166
   },
   "TX": {
-   "employers": 6255,
+   "employers": 6256,
    "first": "1999-01-04",
-   "last": "2026-09-28",
+   "last": "2026-09-30",
    "max_workers": 4500,
    "no_jobs": 27,
    "no_location": 0,
-   "notices": 7355,
+   "notices": 7356,
    "undated": 0,
    "unplaced": 0,
-   "workers": 699328
+   "workers": 699384
   },
   "UT": {
    "employers": 247,
@@ -543,16 +543,16 @@
    "workers": 6978
   },
   "WA": {
-   "employers": 1021,
+   "employers": 1023,
    "first": "2004-02-05",
    "last": "2026-12-31",
    "max_workers": 9266,
    "no_jobs": 1,
    "no_location": 1,
-   "notices": 1511,
-   "undated": 1511,
+   "notices": 1513,
+   "undated": 1513,
    "unplaced": 269,
-   "workers": 247708
+   "workers": 248093
   },
   "WI": {
    "employers": 2320,
@@ -567,5 +567,5 @@
    "workers": 325812
   }
  },
- "workers": 8845689
+ "workers": 8847422
 }
