@@ -77,7 +77,7 @@
     "source": "upstream",
     "notices": 28528,
     "latest_verdict": "degraded",
-    "latest_run": "2026-10-02T15:24:00Z",
+    "latest_run": "2026-10-03T14:10:16Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -110,12 +110,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/17578 notice_date values outside 1988..2026-11-01"
+          "detail": "0/17578 notice_date values outside 1988..2026-11-02"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-09-30 is 2d old (max 45d)"
+          "detail": "newest notice_date 2026-09-30 is 3d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
@@ -327,12 +327,12 @@
         "held_collision_rows": 10
       }
     },
-    "last_success": "2026-10-02T15:24:00Z",
+    "last_success": "2026-10-03T14:10:16Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
     "consecutive_failures": 0,
-    "consecutive_degraded": 3,
+    "consecutive_degraded": 4,
     "recommend_broken": false,
     "chronically_degraded": false
   },
@@ -342,7 +342,7 @@
     "source": "upstream",
     "notices": 844,
     "latest_verdict": "ok",
-    "latest_run": "2026-10-02T15:24:08Z",
+    "latest_run": "2026-10-03T14:10:23Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -375,12 +375,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/860 notice_date values outside 1988..2026-11-01"
+          "detail": "0/860 notice_date values outside 1988..2026-11-02"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-09-25 is 7d old (max 60d)"
+          "detail": "newest notice_date 2026-09-25 is 8d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -413,7 +413,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-10-02T15:24:08Z",
+    "last_success": "2026-10-03T14:10:23Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -480,9 +480,9 @@
     "name": "Florida",
     "registry_status": "active",
     "source": "patched",
-    "notices": 5453,
+    "notices": 5455,
     "latest_verdict": "degraded",
-    "latest_run": "2026-10-02T15:32:15Z",
+    "latest_run": "2026-10-03T14:18:02Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -495,7 +495,7 @@
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "3251 raw rows (min 500)"
+          "detail": "3253 raw rows (min 500)"
         },
         {
           "name": "schema_drift",
@@ -505,31 +505,31 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/3251 rows failed to normalize"
+          "detail": "0/3253 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "3251/3251 records have an employer name"
+          "detail": "3253/3253 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/3251 source_details.agency_notification_date values outside 1988..2026-11-01"
+          "detail": "0/3253 source_details.agency_notification_date values outside 1988..2026-11-02"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest source_details.agency_notification_date 2026-09-30 is 2d old (max 45d)"
+          "detail": "newest source_details.agency_notification_date 2026-10-02 is 1d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "445/3251 records share a dedupe key"
+          "detail": "445/3253 records share a dedupe key"
         }
       ],
       "admission": {
-        "eligible_rows": 3249,
+        "eligible_rows": 3251,
         "excluded_rows": 2,
         "exclusions": [
           {
@@ -586,12 +586,12 @@
         "held_collision_rows": 2
       }
     },
-    "last_success": "2026-10-02T15:32:15Z",
+    "last_success": "2026-10-03T14:18:02Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
     "consecutive_failures": 0,
-    "consecutive_degraded": 3,
+    "consecutive_degraded": 4,
     "recommend_broken": false,
     "chronically_degraded": false
   },
@@ -655,7 +655,7 @@
     "source": "upstream",
     "notices": 4889,
     "latest_verdict": "ok",
-    "latest_run": "2026-10-02T15:32:37Z",
+    "latest_run": "2026-10-03T14:18:24Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -688,12 +688,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "1/4889 source_details.agency_reported_date values outside 1988..2026-11-01"
+          "detail": "1/4889 source_details.agency_reported_date values outside 1988..2026-11-02"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest source_details.agency_reported_date 2026-09-25 is 7d old (max 60d)"
+          "detail": "newest source_details.agency_reported_date 2026-09-25 is 8d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -745,7 +745,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-10-02T15:32:37Z",
+    "last_success": "2026-10-03T14:18:24Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -849,11 +849,11 @@
     "registry_status": "active",
     "source": "custom",
     "notices": 568,
-    "latest_verdict": "degraded",
-    "latest_run": "2026-10-02T15:32:44Z",
+    "latest_verdict": "ok",
+    "latest_run": "2026-10-03T14:18:25Z",
     "latest_error": null,
     "latest_checks": {
-      "verdict": "degraded",
+      "verdict": "ok",
       "checks": [
         {
           "name": "fetch_ok",
@@ -883,12 +883,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/389 source_details.agency_received_date values outside 1988..2026-11-01"
+          "detail": "0/389 source_details.agency_received_date values outside 1988..2026-11-02"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest source_details.agency_received_date 2026-09-25 is 7d old (max 30d)"
+          "detail": "newest source_details.agency_received_date 2026-09-25 is 8d old (max 30d)"
         },
         {
           "name": "dedupe_sanity",
@@ -903,20 +903,15 @@
       },
       "fetch_provenance": {
         "archive_fallback_enabled": true,
-        "archived_files": 1,
-        "fetched_at_utc": "2026-10-02T15:32:44Z",
+        "archived_files": 0,
+        "fetched_at_utc": "2026-10-03T14:18:25Z",
         "files": [
           {
-            "capture_timestamp": "20261002004012",
-            "capture_url": "https://web.archive.org/web/20261002004012id_/https://www.mass.gov/info-details/worker-adjustment-and-retraining-notification-act-warn-layoff-and-closure-updates",
-            "confirmed_through": "20261002004012",
-            "live_error": "HTTP 403",
-            "live_status": 403,
-            "origin": "internet_archive",
-            "sha256": "faa6dbe1d009080c0912ba26be9b92019b3af07ae1d96ee9afdad781e7257749",
-            "size": 203363,
-            "source_url": "https://www.mass.gov/info-details/worker-adjustment-and-retraining-notification-act-warn-layoff-and-closure-updates",
-            "wayback_digest": "FXIYRKSD5J4XFXBM52SJKBARPWTRUQ4R"
+            "live_status": 200,
+            "origin": "live",
+            "sha256": "3841c6e208f2a4ebd651eb4a803a5a79c23594a03664213d899342fb6b6e2102",
+            "size": 203356,
+            "source_url": "https://www.mass.gov/info-details/worker-adjustment-and-retraining-notification-act-warn-layoff-and-closure-updates"
           },
           {
             "live_status": 200,
@@ -958,10 +953,10 @@
             "origin": "live",
             "sha256": "bc6d0137389c81eb6864fd77615ecb1974c81b5ddef9503cb0005370657512a4",
             "size": 2492,
-            "source_url": "https://www.mass.gov/files/csv/2026-09/WARN%20Report%20for%20the%20Week%20Ending%2009-25-2026.csv"
+            "source_url": "https://www.mass.gov/files/csv/2026-10/WARN%20Report%20for%20the%20Week%20Ending%2010-02-2026.csv"
           }
         ],
-        "oldest_confirmed_capture": "20261002004012",
+        "oldest_confirmed_capture": null,
         "raw_sha256": "61903edc366b56ccd7eab09923cd4baf38ae0645a8021cf4accfe0a94caa3f3d",
         "state": "MA"
       },
@@ -985,12 +980,12 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-10-02T15:32:44Z",
+    "last_success": "2026-10-03T14:18:25Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
     "consecutive_failures": 0,
-    "consecutive_degraded": 1,
+    "consecutive_degraded": 0,
     "recommend_broken": false,
     "chronically_degraded": false
   },
@@ -1054,7 +1049,7 @@
     "source": "custom",
     "notices": 980,
     "latest_verdict": "ok",
-    "latest_run": "2026-10-02T15:33:04Z",
+    "latest_run": "2026-10-03T14:18:42Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1092,7 +1087,7 @@
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest effective_date 2026-10-01 is 1d old (max 60d); 3 future action dates excluded"
+          "detail": "newest effective_date 2026-10-01 is 2d old (max 60d); 3 future action dates excluded"
         },
         {
           "name": "dedupe_sanity",
@@ -1125,7 +1120,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-10-02T15:33:04Z",
+    "last_success": "2026-10-03T14:18:42Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -1212,7 +1207,7 @@
     "source": "custom",
     "notices": 324,
     "latest_verdict": "ok",
-    "latest_run": "2026-10-02T15:33:37Z",
+    "latest_run": "2026-10-03T14:19:08Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1245,12 +1240,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/324 source_details.agency_received_date values outside 1988..2026-11-01"
+          "detail": "0/324 source_details.agency_received_date values outside 1988..2026-11-02"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest source_details.agency_received_date 2026-08-31 is 32d old (max 90d)"
+          "detail": "newest source_details.agency_received_date 2026-08-31 is 33d old (max 90d)"
         },
         {
           "name": "dedupe_sanity",
@@ -1283,7 +1278,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-10-02T15:33:37Z",
+    "last_success": "2026-10-03T14:19:08Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -1314,9 +1309,9 @@
     "name": "New Jersey",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 2333,
+    "notices": 2335,
     "latest_verdict": "ok",
-    "latest_run": "2026-10-02T15:33:30Z",
+    "latest_run": "2026-10-03T14:19:02Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1329,7 +1324,7 @@
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "2383 raw rows (min 1000)"
+          "detail": "2385 raw rows (min 1000)"
         },
         {
           "name": "schema_drift",
@@ -1339,156 +1334,44 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "1/2383 rows failed to normalize (1 held as non-notice rows); e.g. row has no employer name"
+          "detail": "1/2385 rows failed to normalize (1 held as non-notice rows); e.g. row has no employer name"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "2331/2331 records have an employer name"
+          "detail": "2333/2333 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/2319 effective_date values outside years >= 1988"
+          "detail": "0/2321 effective_date values outside years >= 1988"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest effective_date 2026-10-02 is 0d old (max 60d); 23 future action dates excluded"
+          "detail": "newest effective_date 2026-10-02 is 1d old (max 60d); 25 future action dates excluded"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "0/2331 records share a dedupe key"
+          "detail": "0/2333 records share a dedupe key"
         }
       ],
       "admission": {
-        "eligible_rows": 2331,
+        "eligible_rows": 2333,
         "excluded_rows": 52,
         "exclusions": [
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 112,
+            "prepared_row": 114,
             "dedupe_key": "29ec5714e8d80f94dba82f80cad50a77622de344",
             "raw_record_hash": "75079aedfbe9ed0cdd2b592240a6b49fb2c9f4c8",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
             "raw_extra": "{\"City\": \"Lawrence Twp\", \"Company\": \"Bristol Myers Squibb (BMS)\", \"Effective Date\": \"4/24/25, 7/3/25, 7/18/25, 7/31/25, 12/11/25\", \"Month Posted\": \"February\", \"Workforce Affected\": \"67\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 113,
-            "dedupe_key": "6fe10cd87ee6cf44cf354cd2a4a0bbbf70d61e47",
-            "raw_record_hash": "5c4fe4193b68d805ddf1d7268f23f4319554b5d6",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Hoboken\", \"Company\": \"Walmart\", \"Effective Date\": \"2025-06-13 00:00:00\", \"Month Posted\": \"February\", \"Workforce Affected\": \"481\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 114,
-            "dedupe_key": "29734c5b4c48e11d31a1ec9cb9ca5cb9821dd7c0",
-            "raw_record_hash": "247995097e4222759788d08282a89311c50e62b6",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Jersey City\", \"Company\": \"CWS (Church World Service, Inc.)\", \"Effective Date\": \"1/31/25 and 2/3/25\", \"Month Posted\": \"February\", \"Workforce Affected\": \"79\"}"
           },
           {
             "reason": "duplicate_source_observation",
             "prepared_row": 115,
-            "dedupe_key": "f376e19735a0ff7d542ab6aef4d646c60b3871d0",
-            "raw_record_hash": "fa962940468fffd517baa5e5780b3c20df6f6fa3",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Highland Park\", \"Company\": \"RCHP (Reformed Church of Highland Park Affordable Housing Corporation)\", \"Effective Date\": \"2025-02-10 00:00:00\", \"Month Posted\": \"February\", \"Workforce Affected\": \"195\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 116,
-            "dedupe_key": "11d0bc3bf14c8811636dfedee39c239148c3c684",
-            "raw_record_hash": "d865ab252a0d04bc2ad793bf806d1d4a56d33bf1",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Denville\", \"Company\": \"Planitroi\", \"Effective Date\": \"2025-02-11 00:00:00\", \"Month Posted\": \"February\", \"Workforce Affected\": \"100\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 117,
-            "dedupe_key": "200a3106aeb42e10928b3b44a5ccee1672fc6cd1",
-            "raw_record_hash": "1215c1702de11b4d991c6a17f058c80494dc7ed5",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"New Brunswick\", \"Company\": \"Boehringer Ingelheim Animal Health\", \"Effective Date\": \"6/30/25 - 12/31/25\", \"Month Posted\": \"February\", \"Workforce Affected\": \"90\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 118,
-            "dedupe_key": "1df7006f30cc4449f3e6323fdbd1fbf0c237c73f",
-            "raw_record_hash": "f7e911fa43e847691a4d7c710d1df5d4875bedac",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Jersey City\", \"Company\": \"JP Morgan Chase Bank\", \"Effective Date\": \"2025-05-05 00:00:00\", \"Month Posted\": \"February\", \"Workforce Affected\": \"121\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 119,
-            "dedupe_key": "df288012b2979400451e7046a061ac5c17e44948",
-            "raw_record_hash": "89df2ff5fd42fdea9ae255e0da51644fd8727d41",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Nutley\", \"Company\": \"Eisai\", \"Effective Date\": \"3/31/25, 4/7/25, 4/30/25, 5/30/25\", \"Month Posted\": \"February\", \"Workforce Affected\": \"57\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 120,
-            "dedupe_key": "eb7ff7fbe5983532ad0d18ff4e3a6528cd5fc086",
-            "raw_record_hash": "6714c77747dfa46b2147b2c1437fc0326abbbde5",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Jersey City\", \"Company\": \"BetMGM\", \"Effective Date\": \"2025-05-27 00:00:00\", \"Month Posted\": \"February\", \"Workforce Affected\": \"83\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 121,
-            "dedupe_key": "d794937ee36ef3dfc66a6bf0fe6fa7a53fd7b8d2",
-            "raw_record_hash": "ec94f62e6290c88b4aa978510452b3832dfed1bf",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Lawrence Twp\", \"Company\": \"Bristol Myers Squibb (BMS)\", \"Effective Date\": \"5/22/25, 6/6/25, 6/20/25, 8/1/25\", \"Month Posted\": \"February\", \"Workforce Affected\": \"223\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 122,
-            "dedupe_key": "eb29e2f404c6f45d2cefd3d235e3f02629bb26d0",
-            "raw_record_hash": "06b8e26d76b571d6087e1c45159cc58358cc8c64",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Company Location: Hudson, OH\\nAffected Employees: Atlantic, Bergen, Burlington, Camden, Gloucester, Mercer, Middlesex, Monmouth, Morris, and Ocean Counties\", \"Company\": \"JoAnn Stores Support Center\", \"Effective Date\": \"5/29/25 - 6/12/25\", \"Month Posted\": \"March\", \"Workforce Affected\": \"262\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 187,
-            "dedupe_key": "ad322add171369b30d16d96b123fd9a9b4e2ef8c",
-            "raw_record_hash": "b4248e2a3e07e45b45a2cded3ef4f469d0d1b649",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Atlantic City\", \"Company\": \"Club Wyndham Atlantic City Skyline\", \"Effective Date\": \"12/31/25 and 1/1/26\", \"Month Posted\": \"October\", \"Workforce Affected\": \"116\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 191,
-            "dedupe_key": "ad322add171369b30d16d96b123fd9a9b4e2ef8c",
-            "raw_record_hash": "b4248e2a3e07e45b45a2cded3ef4f469d0d1b649",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Atlantic City\", \"Company\": \"Club Wyndham Atlantic City Skyline\", \"Effective Date\": \"12/31/25 and 1/1/26\", \"Month Posted\": \"October\", \"Workforce Affected\": \"116\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 221,
-            "dedupe_key": "c822e752e534bc1994877521307c5a9fcf6ed75e",
-            "raw_record_hash": "3097fae00545e240df1341531674559ed1b5ca8d",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Milltown\", \"Company\": \"ACME Markets Inc.\", \"Effective Date\": \"2024-04-01 00:00:00\", \"Month Posted\": \"January\", \"Workforce Affected\": \"70\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 317,
-            "dedupe_key": "29ec5714e8d80f94dba82f80cad50a77622de344",
-            "raw_record_hash": "75079aedfbe9ed0cdd2b592240a6b49fb2c9f4c8",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Lawrence Twp\", \"Company\": \"Bristol Myers Squibb (BMS)\", \"Effective Date\": \"4/24/25, 7/3/25, 7/18/25, 7/31/25, 12/11/25\", \"Month Posted\": \"February\", \"Workforce Affected\": \"67\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 318,
             "dedupe_key": "6fe10cd87ee6cf44cf354cd2a4a0bbbf70d61e47",
             "raw_record_hash": "5c4fe4193b68d805ddf1d7268f23f4319554b5d6",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1496,7 +1379,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 319,
+            "prepared_row": 116,
             "dedupe_key": "29734c5b4c48e11d31a1ec9cb9ca5cb9821dd7c0",
             "raw_record_hash": "247995097e4222759788d08282a89311c50e62b6",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1504,7 +1387,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 320,
+            "prepared_row": 117,
             "dedupe_key": "f376e19735a0ff7d542ab6aef4d646c60b3871d0",
             "raw_record_hash": "fa962940468fffd517baa5e5780b3c20df6f6fa3",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1512,7 +1395,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 321,
+            "prepared_row": 118,
             "dedupe_key": "11d0bc3bf14c8811636dfedee39c239148c3c684",
             "raw_record_hash": "d865ab252a0d04bc2ad793bf806d1d4a56d33bf1",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1520,7 +1403,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 322,
+            "prepared_row": 119,
             "dedupe_key": "200a3106aeb42e10928b3b44a5ccee1672fc6cd1",
             "raw_record_hash": "1215c1702de11b4d991c6a17f058c80494dc7ed5",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1528,7 +1411,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 323,
+            "prepared_row": 120,
             "dedupe_key": "1df7006f30cc4449f3e6323fdbd1fbf0c237c73f",
             "raw_record_hash": "f7e911fa43e847691a4d7c710d1df5d4875bedac",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1536,7 +1419,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 324,
+            "prepared_row": 121,
             "dedupe_key": "df288012b2979400451e7046a061ac5c17e44948",
             "raw_record_hash": "89df2ff5fd42fdea9ae255e0da51644fd8727d41",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1544,7 +1427,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 325,
+            "prepared_row": 122,
             "dedupe_key": "eb7ff7fbe5983532ad0d18ff4e3a6528cd5fc086",
             "raw_record_hash": "6714c77747dfa46b2147b2c1437fc0326abbbde5",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1552,7 +1435,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 326,
+            "prepared_row": 123,
             "dedupe_key": "d794937ee36ef3dfc66a6bf0fe6fa7a53fd7b8d2",
             "raw_record_hash": "ec94f62e6290c88b4aa978510452b3832dfed1bf",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1560,7 +1443,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 327,
+            "prepared_row": 124,
             "dedupe_key": "eb29e2f404c6f45d2cefd3d235e3f02629bb26d0",
             "raw_record_hash": "06b8e26d76b571d6087e1c45159cc58358cc8c64",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1568,7 +1451,23 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 440,
+            "prepared_row": 189,
+            "dedupe_key": "ad322add171369b30d16d96b123fd9a9b4e2ef8c",
+            "raw_record_hash": "b4248e2a3e07e45b45a2cded3ef4f469d0d1b649",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Atlantic City\", \"Company\": \"Club Wyndham Atlantic City Skyline\", \"Effective Date\": \"12/31/25 and 1/1/26\", \"Month Posted\": \"October\", \"Workforce Affected\": \"116\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 193,
+            "dedupe_key": "ad322add171369b30d16d96b123fd9a9b4e2ef8c",
+            "raw_record_hash": "b4248e2a3e07e45b45a2cded3ef4f469d0d1b649",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Atlantic City\", \"Company\": \"Club Wyndham Atlantic City Skyline\", \"Effective Date\": \"12/31/25 and 1/1/26\", \"Month Posted\": \"October\", \"Workforce Affected\": \"116\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 223,
             "dedupe_key": "c822e752e534bc1994877521307c5a9fcf6ed75e",
             "raw_record_hash": "3097fae00545e240df1341531674559ed1b5ca8d",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1576,7 +1475,103 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1032,
+            "prepared_row": 319,
+            "dedupe_key": "29ec5714e8d80f94dba82f80cad50a77622de344",
+            "raw_record_hash": "75079aedfbe9ed0cdd2b592240a6b49fb2c9f4c8",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Lawrence Twp\", \"Company\": \"Bristol Myers Squibb (BMS)\", \"Effective Date\": \"4/24/25, 7/3/25, 7/18/25, 7/31/25, 12/11/25\", \"Month Posted\": \"February\", \"Workforce Affected\": \"67\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 320,
+            "dedupe_key": "6fe10cd87ee6cf44cf354cd2a4a0bbbf70d61e47",
+            "raw_record_hash": "5c4fe4193b68d805ddf1d7268f23f4319554b5d6",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Hoboken\", \"Company\": \"Walmart\", \"Effective Date\": \"2025-06-13 00:00:00\", \"Month Posted\": \"February\", \"Workforce Affected\": \"481\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 321,
+            "dedupe_key": "29734c5b4c48e11d31a1ec9cb9ca5cb9821dd7c0",
+            "raw_record_hash": "247995097e4222759788d08282a89311c50e62b6",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Jersey City\", \"Company\": \"CWS (Church World Service, Inc.)\", \"Effective Date\": \"1/31/25 and 2/3/25\", \"Month Posted\": \"February\", \"Workforce Affected\": \"79\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 322,
+            "dedupe_key": "f376e19735a0ff7d542ab6aef4d646c60b3871d0",
+            "raw_record_hash": "fa962940468fffd517baa5e5780b3c20df6f6fa3",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Highland Park\", \"Company\": \"RCHP (Reformed Church of Highland Park Affordable Housing Corporation)\", \"Effective Date\": \"2025-02-10 00:00:00\", \"Month Posted\": \"February\", \"Workforce Affected\": \"195\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 323,
+            "dedupe_key": "11d0bc3bf14c8811636dfedee39c239148c3c684",
+            "raw_record_hash": "d865ab252a0d04bc2ad793bf806d1d4a56d33bf1",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Denville\", \"Company\": \"Planitroi\", \"Effective Date\": \"2025-02-11 00:00:00\", \"Month Posted\": \"February\", \"Workforce Affected\": \"100\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 324,
+            "dedupe_key": "200a3106aeb42e10928b3b44a5ccee1672fc6cd1",
+            "raw_record_hash": "1215c1702de11b4d991c6a17f058c80494dc7ed5",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"New Brunswick\", \"Company\": \"Boehringer Ingelheim Animal Health\", \"Effective Date\": \"6/30/25 - 12/31/25\", \"Month Posted\": \"February\", \"Workforce Affected\": \"90\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 325,
+            "dedupe_key": "1df7006f30cc4449f3e6323fdbd1fbf0c237c73f",
+            "raw_record_hash": "f7e911fa43e847691a4d7c710d1df5d4875bedac",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Jersey City\", \"Company\": \"JP Morgan Chase Bank\", \"Effective Date\": \"2025-05-05 00:00:00\", \"Month Posted\": \"February\", \"Workforce Affected\": \"121\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 326,
+            "dedupe_key": "df288012b2979400451e7046a061ac5c17e44948",
+            "raw_record_hash": "89df2ff5fd42fdea9ae255e0da51644fd8727d41",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Nutley\", \"Company\": \"Eisai\", \"Effective Date\": \"3/31/25, 4/7/25, 4/30/25, 5/30/25\", \"Month Posted\": \"February\", \"Workforce Affected\": \"57\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 327,
+            "dedupe_key": "eb7ff7fbe5983532ad0d18ff4e3a6528cd5fc086",
+            "raw_record_hash": "6714c77747dfa46b2147b2c1437fc0326abbbde5",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Jersey City\", \"Company\": \"BetMGM\", \"Effective Date\": \"2025-05-27 00:00:00\", \"Month Posted\": \"February\", \"Workforce Affected\": \"83\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 328,
+            "dedupe_key": "d794937ee36ef3dfc66a6bf0fe6fa7a53fd7b8d2",
+            "raw_record_hash": "ec94f62e6290c88b4aa978510452b3832dfed1bf",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Lawrence Twp\", \"Company\": \"Bristol Myers Squibb (BMS)\", \"Effective Date\": \"5/22/25, 6/6/25, 6/20/25, 8/1/25\", \"Month Posted\": \"February\", \"Workforce Affected\": \"223\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 329,
+            "dedupe_key": "eb29e2f404c6f45d2cefd3d235e3f02629bb26d0",
+            "raw_record_hash": "06b8e26d76b571d6087e1c45159cc58358cc8c64",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Company Location: Hudson, OH\\nAffected Employees: Atlantic, Bergen, Burlington, Camden, Gloucester, Mercer, Middlesex, Monmouth, Morris, and Ocean Counties\", \"Company\": \"JoAnn Stores Support Center\", \"Effective Date\": \"5/29/25 - 6/12/25\", \"Month Posted\": \"March\", \"Workforce Affected\": \"262\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 442,
+            "dedupe_key": "c822e752e534bc1994877521307c5a9fcf6ed75e",
+            "raw_record_hash": "3097fae00545e240df1341531674559ed1b5ca8d",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Milltown\", \"Company\": \"ACME Markets Inc.\", \"Effective Date\": \"2024-04-01 00:00:00\", \"Month Posted\": \"January\", \"Workforce Affected\": \"70\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 1034,
             "dedupe_key": "b80b8d42ebeefa17fe5c5f34818bcd2144220520",
             "raw_record_hash": "b4ae78e7f41a9b2e6d785ab95c945a9f775a82ca",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1584,7 +1579,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1033,
+            "prepared_row": 1035,
             "dedupe_key": "03068445c197bf7a4e6dd20138a851d8e43e33d1",
             "raw_record_hash": "6914209e9b7c34b17efee9600b14dd1be249ce1d",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1592,7 +1587,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1090,
+            "prepared_row": 1092,
             "dedupe_key": "b80b8d42ebeefa17fe5c5f34818bcd2144220520",
             "raw_record_hash": "b4ae78e7f41a9b2e6d785ab95c945a9f775a82ca",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1600,7 +1595,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1091,
+            "prepared_row": 1093,
             "dedupe_key": "03068445c197bf7a4e6dd20138a851d8e43e33d1",
             "raw_record_hash": "6914209e9b7c34b17efee9600b14dd1be249ce1d",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1608,19 +1603,11 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1257,
+            "prepared_row": 1259,
             "dedupe_key": "bb4d282db3b5f42914c5481aebdbadadedc521b3",
             "raw_record_hash": "ce9d45ff0fed49f57eb0de44137b39a4c61ae741",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
             "raw_extra": "{\"City\": \"East Hanover\", \"Company\": \"Novartis Pharmaceuticals Corporation\", \"Effective Date\": \"2014-04-14 00:00:00\", \"Month Posted\": \"February\", \"Workforce Affected\": \"8\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 1258,
-            "dedupe_key": "6cc85f1147fa0aafdbc891987412fee2c8a0448f",
-            "raw_record_hash": "067a229c076741ef7af9ffa505fca3ba1acb0e6e",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"East Hanover\", \"Company\": \"Novartis Pharmaceuticals Corporation\", \"Effective Date\": \"2014-04-14 00:00:00\", \"Month Posted\": \"February\", \"Workforce Affected\": \"4\"}"
           },
           {
             "reason": "duplicate_source_observation",
@@ -1632,7 +1619,15 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1264,
+            "prepared_row": 1262,
+            "dedupe_key": "6cc85f1147fa0aafdbc891987412fee2c8a0448f",
+            "raw_record_hash": "067a229c076741ef7af9ffa505fca3ba1acb0e6e",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"East Hanover\", \"Company\": \"Novartis Pharmaceuticals Corporation\", \"Effective Date\": \"2014-04-14 00:00:00\", \"Month Posted\": \"February\", \"Workforce Affected\": \"4\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 1266,
             "dedupe_key": "bb4d282db3b5f42914c5481aebdbadadedc521b3",
             "raw_record_hash": "ce9d45ff0fed49f57eb0de44137b39a4c61ae741",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1640,7 +1635,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1278,
+            "prepared_row": 1280,
             "dedupe_key": "5804ca91cc664299c1dc09ec6085b9b531355322",
             "raw_record_hash": "a5c77c3f637e928af9afe543c01f26198fc2fd79",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1648,15 +1643,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1279,
-            "dedupe_key": "64269d92e3bbc1041e91891da2ffafb2075cad45",
-            "raw_record_hash": "3eeeafd55b4fae83e51826dfed65d242958e5a51",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"East Hanover\", \"Company\": \"Novartis Pharmaceuticals Corporation\", \"Effective Date\": \"2014-06-30 00:00:00\", \"Month Posted\": \"April\", \"Workforce Affected\": \"2\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 1280,
+            "prepared_row": 1281,
             "dedupe_key": "64269d92e3bbc1041e91891da2ffafb2075cad45",
             "raw_record_hash": "3eeeafd55b4fae83e51826dfed65d242958e5a51",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1665,26 +1652,26 @@
           {
             "reason": "duplicate_source_observation",
             "prepared_row": 1282,
+            "dedupe_key": "64269d92e3bbc1041e91891da2ffafb2075cad45",
+            "raw_record_hash": "3eeeafd55b4fae83e51826dfed65d242958e5a51",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"East Hanover\", \"Company\": \"Novartis Pharmaceuticals Corporation\", \"Effective Date\": \"2014-06-30 00:00:00\", \"Month Posted\": \"April\", \"Workforce Affected\": \"2\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 1284,
             "dedupe_key": "c2a7e05aff79606ba5181fcf8b28aef06d7c6da5",
             "raw_record_hash": "8a21f4e165d305e98d2c9ec3162009ce80253b03",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
             "raw_extra": "{\"City\": \"East Hanover\", \"Company\": \"Novartis Pharmaceuticals Corporation\", \"Effective Date\": \"2014-06-30 00:00:00\", \"Month Posted\": \"April\", \"Workforce Affected\": \"1\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
-            "prepared_row": 1283,
-            "dedupe_key": "5804ca91cc664299c1dc09ec6085b9b531355322",
-            "raw_record_hash": "a5c77c3f637e928af9afe543c01f26198fc2fd79",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"East Hanover\", \"Company\": \"Novartis Pharmaceuticals Corporation\", \"Effective Date\": \"2014-06-30 00:00:00\", \"Month Posted\": \"April\", \"Workforce Affected\": \"38\"}"
           },
           {
             "reason": "duplicate_source_observation",
             "prepared_row": 1285,
-            "dedupe_key": "c2a7e05aff79606ba5181fcf8b28aef06d7c6da5",
-            "raw_record_hash": "8a21f4e165d305e98d2c9ec3162009ce80253b03",
+            "dedupe_key": "5804ca91cc664299c1dc09ec6085b9b531355322",
+            "raw_record_hash": "a5c77c3f637e928af9afe543c01f26198fc2fd79",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"East Hanover\", \"Company\": \"Novartis Pharmaceuticals Corporation\", \"Effective Date\": \"2014-06-30 00:00:00\", \"Month Posted\": \"April\", \"Workforce Affected\": \"1\"}"
+            "raw_extra": "{\"City\": \"East Hanover\", \"Company\": \"Novartis Pharmaceuticals Corporation\", \"Effective Date\": \"2014-06-30 00:00:00\", \"Month Posted\": \"April\", \"Workforce Affected\": \"38\"}"
           },
           {
             "reason": "duplicate_source_observation",
@@ -1696,14 +1683,6 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1288,
-            "dedupe_key": "64269d92e3bbc1041e91891da2ffafb2075cad45",
-            "raw_record_hash": "3eeeafd55b4fae83e51826dfed65d242958e5a51",
-            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"East Hanover\", \"Company\": \"Novartis Pharmaceuticals Corporation\", \"Effective Date\": \"2014-06-30 00:00:00\", \"Month Posted\": \"April\", \"Workforce Affected\": \"2\"}"
-          },
-          {
-            "reason": "duplicate_source_observation",
             "prepared_row": 1289,
             "dedupe_key": "c2a7e05aff79606ba5181fcf8b28aef06d7c6da5",
             "raw_record_hash": "8a21f4e165d305e98d2c9ec3162009ce80253b03",
@@ -1712,19 +1691,19 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1383,
-            "dedupe_key": "f620ca01b517ce3ee455cc7af56508e71a0c5ec4",
-            "raw_record_hash": "223e903e9173ca9ce4f58b9214b773e756cd843d",
+            "prepared_row": 1290,
+            "dedupe_key": "64269d92e3bbc1041e91891da2ffafb2075cad45",
+            "raw_record_hash": "3eeeafd55b4fae83e51826dfed65d242958e5a51",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Paterson\", \"Company\": \"Concerned Parents for Head Start\", \"Effective Date\": \"2013-07-01 00:00:00\", \"Month Posted\": \"May\", \"Workforce Affected\": \"63\"}"
+            "raw_extra": "{\"City\": \"East Hanover\", \"Company\": \"Novartis Pharmaceuticals Corporation\", \"Effective Date\": \"2014-06-30 00:00:00\", \"Month Posted\": \"April\", \"Workforce Affected\": \"2\"}"
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1384,
-            "dedupe_key": "f620ca01b517ce3ee455cc7af56508e71a0c5ec4",
-            "raw_record_hash": "223e903e9173ca9ce4f58b9214b773e756cd843d",
+            "prepared_row": 1291,
+            "dedupe_key": "c2a7e05aff79606ba5181fcf8b28aef06d7c6da5",
+            "raw_record_hash": "8a21f4e165d305e98d2c9ec3162009ce80253b03",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
-            "raw_extra": "{\"City\": \"Paterson\", \"Company\": \"Concerned Parents for Head Start\", \"Effective Date\": \"2013-07-01 00:00:00\", \"Month Posted\": \"May\", \"Workforce Affected\": \"63\"}"
+            "raw_extra": "{\"City\": \"East Hanover\", \"Company\": \"Novartis Pharmaceuticals Corporation\", \"Effective Date\": \"2014-06-30 00:00:00\", \"Month Posted\": \"April\", \"Workforce Affected\": \"1\"}"
           },
           {
             "reason": "duplicate_source_observation",
@@ -1736,7 +1715,23 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1477,
+            "prepared_row": 1386,
+            "dedupe_key": "f620ca01b517ce3ee455cc7af56508e71a0c5ec4",
+            "raw_record_hash": "223e903e9173ca9ce4f58b9214b773e756cd843d",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Paterson\", \"Company\": \"Concerned Parents for Head Start\", \"Effective Date\": \"2013-07-01 00:00:00\", \"Month Posted\": \"May\", \"Workforce Affected\": \"63\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 1387,
+            "dedupe_key": "f620ca01b517ce3ee455cc7af56508e71a0c5ec4",
+            "raw_record_hash": "223e903e9173ca9ce4f58b9214b773e756cd843d",
+            "source_url": "https://www.nj.gov/labor/employer-services/warn/",
+            "raw_extra": "{\"City\": \"Paterson\", \"Company\": \"Concerned Parents for Head Start\", \"Effective Date\": \"2013-07-01 00:00:00\", \"Month Posted\": \"May\", \"Workforce Affected\": \"63\"}"
+          },
+          {
+            "reason": "duplicate_source_observation",
+            "prepared_row": 1479,
             "dedupe_key": "2293bc01e57da24c219745eaa5fab58132a4d71d",
             "raw_record_hash": "9b6c73bf5d57f9fdbb1940b4ea69a761e9a5d1db",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1744,7 +1739,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1478,
+            "prepared_row": 1480,
             "dedupe_key": "2293bc01e57da24c219745eaa5fab58132a4d71d",
             "raw_record_hash": "9b6c73bf5d57f9fdbb1940b4ea69a761e9a5d1db",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1752,7 +1747,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1585,
+            "prepared_row": 1587,
             "dedupe_key": "9ff4419391d43ee5d086a9ce6a05ace5df4407ae",
             "raw_record_hash": "015bb80a3536352f0758941f5a3bb14dfd13b5d7",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1760,7 +1755,7 @@
           },
           {
             "reason": "duplicate_source_observation",
-            "prepared_row": 1586,
+            "prepared_row": 1588,
             "dedupe_key": "9ff4419391d43ee5d086a9ce6a05ace5df4407ae",
             "raw_record_hash": "015bb80a3536352f0758941f5a3bb14dfd13b5d7",
             "source_url": "https://www.nj.gov/labor/employer-services/warn/",
@@ -1769,7 +1764,7 @@
           {
             "reason": "parse_failure",
             "state": "NJ",
-            "prepared_row": 303,
+            "prepared_row": 305,
             "source_row_sha256": "921602ad77cad5779ebca894916fd4e01c43c59f3914b4e47e90e55c945c45b7",
             "raw_extra": "{\"City\": \"\", \"Company\": \"\", \"Effective Date\": \"11/7/25,12/26/25,3/28/25\", \"Month Posted\": \"\", \"Workforce Affected\": \"\"}",
             "error": "row has no employer name"
@@ -1777,7 +1772,7 @@
           {
             "reason": "employer_name_has_no_letters_review",
             "state": "NJ",
-            "prepared_row": 649,
+            "prepared_row": 651,
             "source_row_sha256": "2c2d1608e13f3085b1e3bd620dda2938da486dd8e1ce55ed929f707581357ad9",
             "raw_extra": "{\"City\": \"Princeton junction\", \"Company\": \"1961\", \"Effective Date\": \"2020-03-20 00:00:00\", \"Month Posted\": \"June\", \"Workforce Affected\": \"0\"}",
             "error": "non_notice_row: employer_name_has_no_letters_review",
@@ -1805,7 +1800,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-10-02T15:33:30Z",
+    "last_success": "2026-10-03T14:19:02Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -1836,9 +1831,9 @@
     "name": "New York",
     "registry_status": "active",
     "source": "upstream",
-    "notices": 8846,
+    "notices": 8849,
     "latest_verdict": "ok",
-    "latest_run": "2026-10-02T15:33:40Z",
+    "latest_run": "2026-10-03T14:19:10Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -1851,7 +1846,7 @@
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "202 raw rows (min 100)"
+          "detail": "205 raw rows (min 100)"
         },
         {
           "name": "schema_drift",
@@ -1861,31 +1856,31 @@
         {
           "name": "parse_failures",
           "outcome": "pass",
-          "detail": "0/202 rows failed to normalize"
+          "detail": "0/205 rows failed to normalize"
         },
         {
           "name": "employer_coverage",
           "outcome": "pass",
-          "detail": "202/202 records have an employer name"
+          "detail": "205/205 records have an employer name"
         },
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/202 notice_date values outside 1988..2026-11-01"
+          "detail": "0/205 notice_date values outside 1988..2026-11-02"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-09-24 is 8d old (max 45d)"
+          "detail": "newest notice_date 2026-09-24 is 9d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
           "outcome": "pass",
-          "detail": "0/202 records share a dedupe key"
+          "detail": "0/205 records share a dedupe key"
         }
       ],
       "admission": {
-        "eligible_rows": 202,
+        "eligible_rows": 205,
         "excluded_rows": 0,
         "exclusions": []
       },
@@ -1909,7 +1904,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-10-02T15:33:40Z",
+    "last_success": "2026-10-03T14:19:10Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -1924,7 +1919,7 @@
     "source": "custom",
     "notices": 1199,
     "latest_verdict": "degraded",
-    "latest_run": "2026-10-02T15:33:29Z",
+    "latest_run": "2026-10-03T14:19:01Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -1957,12 +1952,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/1210 notice_date values outside 1988..2026-11-01"
+          "detail": "0/1210 notice_date values outside 1988..2026-11-02"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-09-28 is 4d old (max 90d)"
+          "detail": "newest notice_date 2026-09-28 is 5d old (max 90d)"
         },
         {
           "name": "dedupe_sanity",
@@ -3832,12 +3827,12 @@
         "held_collision_rows": 6
       }
     },
-    "last_success": "2026-10-02T15:33:29Z",
+    "last_success": "2026-10-03T14:19:01Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
     "consecutive_failures": 0,
-    "consecutive_degraded": 3,
+    "consecutive_degraded": 4,
     "recommend_broken": false,
     "chronically_degraded": false
   },
@@ -3864,11 +3859,11 @@
     "registry_status": "active",
     "source": "patched",
     "notices": 2691,
-    "latest_verdict": "ok",
-    "latest_run": "2026-10-02T15:33:41Z",
+    "latest_verdict": "failed",
+    "latest_run": "2026-10-03T14:19:10Z",
     "latest_error": null,
     "latest_checks": {
-      "verdict": "ok",
+      "verdict": "failed",
       "checks": [
         {
           "name": "fetch_ok",
@@ -3878,69 +3873,609 @@
         {
           "name": "row_count",
           "outcome": "pass",
-          "detail": "70 raw rows (min 40)"
+          "detail": "71 raw rows (min 40)"
         },
         {
           "name": "schema_drift",
-          "outcome": "pass",
-          "detail": "header matches snapshot"
+          "outcome": "fail",
+          "detail": "header drifted: missing=['Layoff Date(s)'], added=['Layoff Date']"
         },
         {
           "name": "parse_failures",
-          "outcome": "pass",
-          "detail": "0/70 rows failed to normalize"
+          "outcome": "fail",
+          "detail": "71/71 rows failed to normalize; e.g. KeyError: 'Layoff Date(s)'"
         },
         {
           "name": "employer_coverage",
-          "outcome": "pass",
-          "detail": "70/70 records have an employer name"
-        },
-        {
-          "name": "date_sanity",
-          "outcome": "pass",
-          "detail": "0/70 notice_date values outside 1988..2026-11-01"
+          "outcome": "fail",
+          "detail": "no records normalized"
         },
         {
           "name": "freshness",
-          "outcome": "pass",
-          "detail": "newest notice_date 2026-10-01 is 1d old (max 60d)"
-        },
-        {
-          "name": "dedupe_sanity",
-          "outcome": "pass",
-          "detail": "0/70 records share a dedupe key"
+          "outcome": "warn",
+          "detail": "no usable notice_date at or before 2026-10-03"
         }
       ],
       "admission": {
-        "eligible_rows": 70,
-        "excluded_rows": 0,
-        "exclusions": []
-      },
-      "entries": {
-        "policy": "versions",
-        "groups": 0,
-        "qualified_rows": 0,
-        "qualified_keys": 0,
-        "discriminator_collisions": 0,
-        "cross_document_key_groups": 0,
-        "update_versions": {
-          "folded_rows": 0,
-          "skipped_contentless_updates": 0
-        },
-        "chronologically_reordered_keys": 0
-      },
-      "ingest": {
-        "suspected_collisions": 0,
-        "absence_frozen": true,
-        "held_collision_keys": 0,
-        "held_collision_rows": 0
+        "eligible_rows": 0,
+        "excluded_rows": 71,
+        "exclusions": [
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 1,
+            "source_row_sha256": "bfbfd74949d237c574321c727ce50086e8ab71f79633681696972f65967c3710",
+            "raw_extra": "{\"City/County\": \"Fremont/Sandusky\", \"Company\": \"Pixelle Specialty Solutions Fremont\", \"Date Received\": \"10/2/2026\", \"Layoff Date\": \"12/1/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(920) 960-3489\", \"Potential Number Affected\": \"61\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/Pixelle_Specialty_Solutions_Fremont.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 2,
+            "source_row_sha256": "54fabab559753fba5eb04d5ccdb8443b1fc104c96bd6898afcd797ba4acdc7fe",
+            "raw_extra": "{\"City/County\": \"Middletown/Butler\", \"Company\": \"Packaging Corporation of America\", \"Date Received\": \"10/1/2026\", \"Layoff Date\": \"12/1/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(224) 268-6474\", \"Potential Number Affected\": \"91\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/Packaging_Corporation_of_America.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 3,
+            "source_row_sha256": "f603dd670c76be5d8051394360d81065e947699ba409cc41b99ec25211aba677",
+            "raw_extra": "{\"City/County\": \"Montpelier/Williams\", \"Company\": \"Powers and Sons, LLC\", \"Date Received\": \"9/24/2026\", \"Layoff Date\": \"12/7/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(419) 485-6355\", \"Potential Number Affected\": \"53\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/Powers_and_Sons.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 4,
+            "source_row_sha256": "44b792fe98e19a11813ee3d895e72cdd30dc3de98eb6d61da01ff13a11c2c23e",
+            "raw_extra": "{\"City/County\": \"Centerville/Montgomery\", \"Company\": \"Ardor Delivery Services\", \"Date Received\": \"9/24/2026\", \"Layoff Date\": \"11/26/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(937) 305-0105\", \"Potential Number Affected\": \"179\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/Ardor_Delivery_Services.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 5,
+            "source_row_sha256": "fdd67c79258abd300d9145cc6a6bf5f3c8098ec78ae96db3c9f8d55b939448f8",
+            "raw_extra": "{\"City/County\": \"Toledo/Lucas\", \"Company\": \"Michigan Sugar Company\", \"Date Received\": \"9/21/2026\", \"Layoff Date\": \"9/22/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(989) 778-0982\", \"Potential Number Affected\": \"7\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/Michigan_Sugar_Company.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 6,
+            "source_row_sha256": "4f74a9cba89070f39ce72e7b58ecaa225f2d02e2f52354812034c4b82c19d77e",
+            "raw_extra": "{\"City/County\": \"Toledo/Lucas\", \"Company\": \"Perstorp Polyols, Inc.\", \"Date Received\": \"9/14/2026\", \"Layoff Date\": \"11/2/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(419) 729-5448\", \"Potential Number Affected\": \"50\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/Perstorp_Polyols_Inc.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 7,
+            "source_row_sha256": "f8c55bb353f8f0c50b947a7e3e8998dc18a2b5d033854c3d724d0be60ab50acc",
+            "raw_extra": "{\"City/County\": \"Cincinnati/Hamilton\", \"Company\": \"UPDATE 2 Republic National Distributing Company\", \"Date Received\": \"9/11/2026\", \"Layoff Date\": \"9/29/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(531) 284-0595\", \"Potential Number Affected\": \"56\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/UPDATE_2_Republic_National_Distributing_Co.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 8,
+            "source_row_sha256": "c5877a038de09226ec885764450cadb9d51f834b25c1b9864acaecee336d9c59",
+            "raw_extra": "{\"City/County\": \"Parma/Cuyahoga\", \"Company\": \"Marc Glassman, Inc.\", \"Date Received\": \"9/11/2026\", \"Layoff Date\": \"11/10/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(216) 265-7700\", \"Potential Number Affected\": \"55\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/Update_Marc_Glassman_Inc..pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 9,
+            "source_row_sha256": "eca0e7fab9a6adea5706dd84e755bb40612bb684bd2633971487eef566814b1e",
+            "raw_extra": "{\"City/County\": \"Mount Orab/Brown\", \"Company\": \"PJ Trailer\", \"Date Received\": \"9/9/2026\", \"Layoff Date\": \"11/8/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(469) 607-2001\", \"Potential Number Affected\": \"116\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/PJ_Trailer.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 10,
+            "source_row_sha256": "8b0c5ba2ff2082a63fa184aa3700181ba5e29c2a09f5b4f05b66636cbcacff75",
+            "raw_extra": "{\"City/County\": \"Walbridge/Wood\", \"Company\": \"Cornerstone Building Brands\", \"Date Received\": \"8/27/2026\", \"Layoff Date\": \"12/1/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(330) 572-0447\", \"Potential Number Affected\": \"104\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/Cornerstone_Building_Brands.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 11,
+            "source_row_sha256": "aa9bb37a0c3749286a0bf71dad71200642510b8668f3d146eea6aff7d18c7ee9",
+            "raw_extra": "{\"City/County\": \"Upper Sandusky/Wyandot\", \"Company\": \"Insteel Wire Products Company\", \"Date Received\": \"8/21/2026\", \"Layoff Date\": \"10/20/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(336) 786-2141\", \"Potential Number Affected\": \"65\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/Insteel_Wire_Products_Company.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 12,
+            "source_row_sha256": "324e2220659077b962193887988425c62e225e5d5097d1ebb701c2d05b827df5",
+            "raw_extra": "{\"City/County\": \"West Chester/Butler\", \"Company\": \"Sodexo CTM, LLC\", \"Date Received\": \"8/6/2026\", \"Layoff Date\": \"10/1/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(772) 828-0908\", \"Potential Number Affected\": \"66\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/Sodexo_CTM_LLC.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 13,
+            "source_row_sha256": "9e88e5385de3d428764d2d5ee0687132af42d226de7b2ad7062f626f7ff01bee",
+            "raw_extra": "{\"City/County\": \"Cincinnati/Hamilton\", \"Company\": \"SDH Services West, LLC\", \"Date Received\": \"8/4/2026\", \"Layoff Date\": \"10/1/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(772) 828-0908\", \"Potential Number Affected\": \"488\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/SDH_Services_West_LLC.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 14,
+            "source_row_sha256": "2d4c9ea84ef43266489ec041734570af8655aebdf4b71d76c0268355931d058d",
+            "raw_extra": "{\"City/County\": \"Hamilton/Butler\", \"Company\": \"80 Acres Urban Agriculture, Inc.\", \"Date Received\": \"8/3/2026\", \"Layoff Date\": \"8/3/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(888) 574-1569\", \"Potential Number Affected\": \"145\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/80_Acres_Urban_Agriculture_Inc.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 15,
+            "source_row_sha256": "8d11c1b34dd69668e939ef34bc428d734310fb993ff4affe8c7ca128876583df",
+            "raw_extra": "{\"City/County\": \"Cincinnati/Hamilton\", \"Company\": \"Bridgeway Pointe\", \"Date Received\": \"7/30/2026\", \"Layoff Date\": \"10/31/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(513) 584-4420\", \"Potential Number Affected\": \"49\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/Bridgeway_Pointe.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 16,
+            "source_row_sha256": "147e633fd8d6c32caa7917c477ec21d3fefc6cd325cf97cc3028d7782544e8ff",
+            "raw_extra": "{\"City/County\": \"Mason/Warren\", \"Company\": \"UPDATE Down-Lite International Inc\", \"Date Received\": \"7/29/2026\", \"Layoff Date\": \"9/25/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(513) 229-6346\", \"Potential Number Affected\": \"164\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/UPDATE_Down-Lite_International_Inc.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 17,
+            "source_row_sha256": "70c4b1c4639085a325da65ffaa309bbbb9507431668a1115cc98b5e36c4107af",
+            "raw_extra": "{\"City/County\": \"Springfield/Clark\", \"Company\": \"International Motors, LLC\", \"Date Received\": \"7/28/2026\", \"Layoff Date\": \"10/2/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(331) 332-7735\", \"Potential Number Affected\": \"1341\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/International_Motors.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 18,
+            "source_row_sha256": "a62889dc4d166ea192c33f5fc34433337acfc19ff476b39eaa63ae391c3359d5",
+            "raw_extra": "{\"City/County\": \"Carlisle/Warren\", \"Company\": \"UPDATE Refresco Beverages US Inc\", \"Date Received\": \"7/14/2026\", \"Layoff Date\": \"6/24/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(862) 485-8986\", \"Potential Number Affected\": \"44\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/UPDATE_Refresco_Beverages_US_Inc.docx.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 19,
+            "source_row_sha256": "a3e4bf8426f11be25d4dd82c0aa5c8ae53b81072459f3585bbec78f54c8684d8",
+            "raw_extra": "{\"City/County\": \"Strongsville/Cuyahoga\", \"Company\": \"Notions Marketing\", \"Date Received\": \"7/6/2026\", \"Layoff Date\": \"6/28/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(616) 608-9946\", \"Potential Number Affected\": \"3\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/NotionsMarketing.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 20,
+            "source_row_sha256": "106613288b8614f3a735d8767539d7ece1ee3fd68cb1d5859e750d58e12ad40f",
+            "raw_extra": "{\"City/County\": \"Unknown/Unknown\", \"Company\": \"Conduent Commerical Solutions, LLC\", \"Date Received\": \"6/29/2026\", \"Layoff Date\": \"8/28/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(315) 404-9183\", \"Potential Number Affected\": \"16\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/Conduent_Commercial_Solutions_LLC.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 21,
+            "source_row_sha256": "ad45a9f5210ac6e65e2040e18cd6bf4ca85e22507a42fcdaf7cb0e476b12ab42",
+            "raw_extra": "{\"City/County\": \"Valley City/Medina\", \"Company\": \"Shiloh Industries\", \"Date Received\": \"6/29/2026\", \"Layoff Date\": \"8/30/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(330) 368-6352\", \"Potential Number Affected\": \"43\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/Shiloh_Industries.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 22,
+            "source_row_sha256": "c0532cd72a42d1237e27a1390e07601d4deb2e72ce67f958129242bcb8004202",
+            "raw_extra": "{\"City/County\": \"Groveport/Franklin\", \"Company\": \"A.O. Smith Corporation\", \"Date Received\": \"6/23/2026\", \"Layoff Date\": \"8/24/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(262) 622-8029\", \"Potential Number Affected\": \"92\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/jfs.ohio.gov/warn/WARN%202026/A.O.SmithCorporation.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 23,
+            "source_row_sha256": "5ecd0e7ddeafe2295ee0fa490a358c38b8d6128d772b66980eba12359c1777c4",
+            "raw_extra": "{\"City/County\": \"Hebron/Licking\", \"Company\": \"Schwebel Baking Company Hebron\", \"Date Received\": \"6/17/2026\", \"Layoff Date\": \"7/6/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(330) 783-2860\", \"Potential Number Affected\": \"110\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1781797067/jfs.ohio.gov/warn/WARN%202026/SchwebelBakingCompanyHebron.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 24,
+            "source_row_sha256": "562a8035ada20010a3ee59d9b39346e8aa68da78efc30f91bc359a2b00aa89d4",
+            "raw_extra": "{\"City/County\": \"Youngstown/Mahoning\", \"Company\": \"Schwebel Baking Company Youngstown\", \"Date Received\": \"6/17/2026\", \"Layoff Date\": \"7/6/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(330) 783-2860\", \"Potential Number Affected\": \"370\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1781797067/jfs.ohio.gov/warn/WARN%202026/SchwebelBakingCompanyYoungstown.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 25,
+            "source_row_sha256": "791e8ffba59f3bf1cbc55742403dc54cd7ebf13d4fe502bb65569dd83dafb737",
+            "raw_extra": "{\"City/County\": \"Unknown/Unknown\", \"Company\": \"Vestis Services, LLC\", \"Date Received\": \"6/16/2026\", \"Layoff Date\": \"9/13/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(818) 973-3704\", \"Potential Number Affected\": \"2\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1781789370/jfs.ohio.gov/warn/WARN%202026/VestisServicesLLC.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 26,
+            "source_row_sha256": "3dbe7b80f7256f66d41071df704da4905f5dbb7bf56176dcc0d77cfd64fd5246",
+            "raw_extra": "{\"City/County\": \"Dayton/Montgomery\", \"Company\": \"UPDATE Senior Resource Connection\", \"Date Received\": \"6/16/2026\", \"Layoff Date\": \"6/30/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(937) 223-8246\", \"Potential Number Affected\": \"190\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1781709566/jfs.ohio.gov/warn/WARN%202026/UPDATESeniorResourceConnection2.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 27,
+            "source_row_sha256": "bace3fbe405a9e27b85e772a4e3053202ec009b240d982157c152ebbd7052d54",
+            "raw_extra": "{\"City/County\": \"Mason/Warren\", \"Company\": \"Pioneer Cladding & Glazing Systems, Inc.\", \"Date Received\": \"6/10/2026\", \"Layoff Date\": \"8/9/2026\", \"Layoff/Closure\": \"Temp Layoff\", \"Phone Number\": \"(513) 583-2310\", \"Potential Number Affected\": \"43\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1781208658/jfs.ohio.gov/warn/WARN%202026/PioneerCladding_GlazingSystemsInc.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 28,
+            "source_row_sha256": "ced6af92dc52cd5d6b4f78c4697454e913db8f3c31dab3bf967228ef9ce3e1cf",
+            "raw_extra": "{\"City/County\": \"Unknown/Unknown\", \"Company\": \"JeniusBank SMBC Manubank\", \"Date Received\": \"6/8/2026\", \"Layoff Date\": \"8/3/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(646) 256-5895\", \"Potential Number Affected\": \"2\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1781208657/jfs.ohio.gov/warn/WARN%202026/JeniusBankSMBCManubank2.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 29,
+            "source_row_sha256": "0bcf2d3a7c063e0226ab8093fd866d2286e1de9591b476ce9c135de51d3592c5",
+            "raw_extra": "{\"City/County\": \"Hebron/Licking\", \"Company\": \" Wood Group USA Inc.\", \"Date Received\": \"5/29/2026\", \"Layoff Date\": \"7/26/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"No Number\", \"Potential Number Affected\": \"92\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1780058125/jfs.ohio.gov/warn/WARN%202026/WoodGroupUSAInc.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 30,
+            "source_row_sha256": "69589b25ddb76901ca2ee1a95e105c66116bdc918383dd7f1cddf09c62ccff35",
+            "raw_extra": "{\"City/County\": \"Cleveland/Cuyahoga\", \"Company\": \"UPDATE First Brands Group Cuyahoga 4\", \"Date Received\": \"5/1/2026\", \"Layoff Date\": \"2/27/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(833) 434-2557\", \"Potential Number Affected\": \"110\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1777656442/jfs.ohio.gov/warn/WARN%202026/UPDATEFirstBrandsCuyahoga4.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 31,
+            "source_row_sha256": "7600467ca72692588fe09490c5241285d22867ec75b004661f106124b3619787",
+            "raw_extra": "{\"City/County\": \"New Albany/Licking\", \"Company\": \"Milestone Technologies, Inc.\", \"Date Received\": \"4/29/2026\", \"Layoff Date\": \"6/28/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(510) 418-9370\", \"Potential Number Affected\": \"105\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1777650296/jfs.ohio.gov/warn/WARN%202026/MilestoneTechnologiesInc.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 32,
+            "source_row_sha256": "626a5a57245ea9fa5c0728cf0a5cc75befd3d2008536a86494785d8c7afe39ca",
+            "raw_extra": "{\"City/County\": \"Circleville/Pickaway\", \"Company\": \"Optalis Professional Services LLC\", \"Date Received\": \"4/29/2026\", \"Layoff Date\": \"6/30/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(248) 817-7640\", \"Potential Number Affected\": \"122\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1777576162/jfs.ohio.gov/warn/WARN%202026/OptalisProfessionalServicesLLCPickawayManor.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 33,
+            "source_row_sha256": "aa6a2da327363d09047223791deb67d70afd5a7a78fdcdbe173452f0470bb722",
+            "raw_extra": "{\"City/County\": \"West Jefferson/Madison\", \"Company\": \"UPDATE GXO Logistics Supply Chain, Inc\", \"Date Received\": \"4/28/2026\", \"Layoff Date\": \"5/2/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(909) 219-2122\", \"Potential Number Affected\": \"102\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1777477149/jfs.ohio.gov/warn/WARN%202026/UPDATEGXOLogisticsSupplyChainInc.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 34,
+            "source_row_sha256": "51ae6056402ee432a05ebc06dd3550e5afe4cbe0478eac3802181f411355bbd5",
+            "raw_extra": "{\"City/County\": \"Tiffin/Seneca\", \"Company\": \"UPDATE First Brands Group Seneca\", \"Date Received\": \"4/24/2026\", \"Layoff Date\": \"5/31/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(833) 434-2557\", \"Potential Number Affected\": \"407\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1777300906/jfs.ohio.gov/warn/WARN%202026/UPDATEFirstBrandsSeneca.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 35,
+            "source_row_sha256": "f4f85467150ac0494750403bdbd39b7abab75f834c16324deda478a19f5157d4",
+            "raw_extra": "{\"City/County\": \"Bowling Green/Wood\", \"Company\": \"UPDATE First Brands Group Wood\", \"Date Received\": \"4/24/2026\", \"Layoff Date\": \"5/31/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(833) 434-2557\", \"Potential Number Affected\": \"302\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1777300906/jfs.ohio.gov/warn/WARN%202026/UPDATEFirstBrandsWood.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 36,
+            "source_row_sha256": "3cecedcbff2458fe45dbc72398d805cff68b4a7b2a40db0ec5a444d6bcc61b68",
+            "raw_extra": "{\"City/County\": \"Mount Gilead/Morrow\", \"Company\": \"GridHawk\", \"Date Received\": \"4/22/2026\", \"Layoff Date\": \"4/22/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(219) 384-9071\", \"Potential Number Affected\": \"248\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1776886905/jfs.ohio.gov/warn/WARN%202026/GridHawk.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 37,
+            "source_row_sha256": "d11b8c3b826a37376e50f937bc0534e875ed1510d8a0b15c2dcb655921020fc5",
+            "raw_extra": "{\"City/County\": \"Grove City/Franklin\", \"Company\": \"Venture Solutions/Taylor Technology Services\", \"Date Received\": \"4/22/2026\", \"Layoff Date\": \"6/22/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(763) 381-9681\", \"Potential Number Affected\": \"60\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1776886905/jfs.ohio.gov/warn/WARN%202026/VentureSolutionsInc_TaylorTechnologyServices.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 38,
+            "source_row_sha256": "ffdd0f40df3c1ba479ebde6fa788409f247027002a46c8d0c028a51410914e4d",
+            "raw_extra": "{\"City/County\": \"Toledo/Lucas\", \"Company\": \"Advanced Specialty Hospitals of Toledo\", \"Date Received\": \"4/9/2026\", \"Layoff Date\": \"6/8/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(419) 381-0037\", \"Potential Number Affected\": \"116\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1775847051/jfs.ohio.gov/warn/WARN%202026/AdvancedSpecialtyHospitalsofToledo.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 39,
+            "source_row_sha256": "f7dff83ba405c849bf0001c9ffa4722de0a5cbbbc55713ed61bdfb4b6f35c9d0",
+            "raw_extra": "{\"City/County\": \"Eastlake/Lake\", \"Company\": \"Conn-Selmer, Inc\", \"Date Received\": \"4/9/2026\", \"Layoff Date\": \"6/30/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(574) 366-3369\", \"Potential Number Affected\": \"150\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1775760650/jfs.ohio.gov/warn/WARN%202026/ConnSelmerInc.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 40,
+            "source_row_sha256": "4a2af05f2c060c55e8e3c74db689e103fcbad8d24f07082ba435e41aa3faee74",
+            "raw_extra": "{\"City/County\": \"West Chester/Butler\", \"Company\": \"Panera\", \"Date Received\": \"3/27/2026\", \"Layoff Date\": \"5/20/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(314) 222-1494\", \"Potential Number Affected\": \"70\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1774647237/jfs.ohio.gov/warn/WARN%202026/Panera.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 41,
+            "source_row_sha256": "338c466273761b9492fc6c8582b51a5b833c8ca3abb0ccb435b8b8bf05711426",
+            "raw_extra": "{\"City/County\": \"Beachwood/Cuyahoga\", \"Company\": \"Louis Vuitton USA, Inc\", \"Date Received\": \"3/27/2026\", \"Layoff Date\": \"3/14/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(312) 273-8128\", \"Potential Number Affected\": \"11\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1774623516/jfs.ohio.gov/warn/WARN%202026/Louis-Vuitton-USA-Inc.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 42,
+            "source_row_sha256": "f6f842a457efac716bfeb256c03d9f6ca1cb7f24ce9c77e728ce12961580b303",
+            "raw_extra": "{\"City/County\": \"Hamilton/Butler\", \"Company\": \"Day & Ross USA, Inc\", \"Date Received\": \"3/25/2026\", \"Layoff Date\": \"5/30/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(586) 623-9950\", \"Potential Number Affected\": \"100\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1774539368/jfs.ohio.gov/warn/WARN%202026/Day_RossUSAInc.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 43,
+            "source_row_sha256": "e3db9020cbbca1ad23e83c2c8ba390508f25088dd94f79aafb1e7d67debfd137",
+            "raw_extra": "{\"City/County\": \"Trotwood/Montgomery\", \"Company\": \"Technicote Inc dba Beontag\", \"Date Received\": \"3/25/2026\", \"Layoff Date\": \"5/24/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(937) 620-0307\", \"Potential Number Affected\": \"53\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1774539368/jfs.ohio.gov/warn/WARN%202026/TechnicoteIncdbaBeontag.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 44,
+            "source_row_sha256": "8a5307734e8123e2bdd571d0b161b086f1c441a4cb83cca6ac6c290c30a751ac",
+            "raw_extra": "{\"City/County\": \"Etna/Licking\", \"Company\": \"Ten Sixty Logistics LLC\", \"Date Received\": \"3/19/2026\", \"Layoff Date\": \"3/31/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(220) 269-9871\", \"Potential Number Affected\": \"125\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1774022043/jfs.ohio.gov/warn/WARN%202026/Ten_Sixty_Logistics.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 45,
+            "source_row_sha256": "ab384dc2a17ff01d91b861b011ab1fd0fe7f8ba5f842dea7195626c055d698c4",
+            "raw_extra": "{\"City/County\": \"Cincinnatti/Hamilton\", \"Company\": \"Zenith Logistics Inc\", \"Date Received\": \"3/19/2026\", \"Layoff Date\": \"4/15/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(513) 967-4783\", \"Potential Number Affected\": \"225\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1773941927/jfs.ohio.gov/warn/WARN%202026/Zenith-Logistics-Inc.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 46,
+            "source_row_sha256": "4d8e03b46e00e009ed88ed89e06ff417e3570e4633e6912c03e3836b8755967f",
+            "raw_extra": "{\"City/County\": \"Sylvania/Lucas\", \"Company\": \"Lourdes University\", \"Date Received\": \"3/13/2026\", \"Layoff Date\": \"5/15/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(419) 824-3728\", \"Potential Number Affected\": \"387\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1773682957/jfs.ohio.gov/warn/WARN%202026/Lourdes_University.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 47,
+            "source_row_sha256": "0d6e8ae31872526202f47ea52ac39cbd490a103b1c371778224bdc096376aa6e",
+            "raw_extra": "{\"City/County\": \"Toledo/Lucas\", \"Company\": \"Boelter Companies, LLC\", \"Date Received\": \"3/10/2026\", \"Layoff Date\": \"5/11/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(419) 460-2764\", \"Potential Number Affected\": \"64\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1773165164/jfs.ohio.gov/warn/WARN%202026/BoelterCompaniesInc.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 48,
+            "source_row_sha256": "1ba4ba8e47cb1fc63536ce10fa4dda1f0c1b5cb9855adc88f443ce71d6a428a5",
+            "raw_extra": "{\"City/County\": \"Beachwood/Cuyahoga\", \"Company\": \"Saks & Company LLC Beachwood\", \"Date Received\": \"3/6/2026\", \"Layoff Date\": \"5/6/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"No Number\", \"Potential Number Affected\": \"70\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1773064650/jfs.ohio.gov/warn/WARN%202026/SaksCompanyLLCBeachwood.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 49,
+            "source_row_sha256": "690105d148163e192f0c19460553712d7a6ae8ff11aebcb07a33c740b3826ebe",
+            "raw_extra": "{\"City/County\": \"Galion/Crawford\", \"Company\": \"Lifetouch\", \"Date Received\": \"3/3/2026\", \"Layoff Date\": \"6/5/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(765) 741-3556\", \"Potential Number Affected\": \"88\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1772637791/jfs.ohio.gov/warn/WARN%202026/Lifetouch.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 50,
+            "source_row_sha256": "aab9d5060c43d0d00b728267e7547904ef34af0056919ac2449d5f30399e43d7",
+            "raw_extra": "{\"City/County\": \"Ashville/Pickaway\", \"Company\": \"GEODIS LLC\", \"Date Received\": \"3/3/2026\", \"Layoff Date\": \"4/28/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(740) 412-1481\", \"Potential Number Affected\": \"105\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1772637759/jfs.ohio.gov/warn/WARN%202026/GEODISLLC.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 51,
+            "source_row_sha256": "c355b75d95b123aad326f33df019d4e63025c83fbecf981174f157a2365daa48",
+            "raw_extra": "{\"City/County\": \"Greenville/Darke\", \"Company\": \"First Brands Group Darke\", \"Date Received\": \"2/27/2026\", \"Layoff Date\": \"4/30/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(833) 434-2557\", \"Potential Number Affected\": \"302\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1772219472/jfs.ohio.gov/warn/WARN%202026/FirstBrandsGroupDarke.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 52,
+            "source_row_sha256": "ad4f3d3bb761a85d961013eecaeef117cc3d3421d8a28ead91e74b1695918749",
+            "raw_extra": "{\"City/County\": \"Tipp City/Miami\", \"Company\": \"Meteor Creative, Inc\", \"Date Received\": \"2/24/2026\", \"Layoff Date\": \"4/24/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"No Number\", \"Potential Number Affected\": \"66\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1772033914/jfs.ohio.gov/warn/WARN%202026/MeteorCreativeInc.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 53,
+            "source_row_sha256": "0159e551c330d12f224f3551bab72f8cf30d5a56156f4d73e2308162e9c60e60",
+            "raw_extra": "{\"City/County\": \"Clyde/Sandusky\", \"Company\": \"Evergreen Recycling LLC\", \"Date Received\": \"2/24/2026\", \"Layoff Date\": \"2/24/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"No Number\", \"Potential Number Affected\": \"163\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1772053686/jfs.ohio.gov/warn/WARN%202026/Evergreen_RecyclingLLC.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 54,
+            "source_row_sha256": "022bdbeb4f92618328dc1123cc2c22174907641c5c0a340db91761d38ec3b689",
+            "raw_extra": "{\"City/County\": \"Cleveland/Cuyahoga\", \"Company\": \"First Brands Group Cuyahoga\", \"Date Received\": \"2/23/2026\", \"Layoff Date\": \"2/23/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(833) 434-2557\", \"Potential Number Affected\": \"146\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1771966685/jfs.ohio.gov/warn/WARN%202026/FirstBrandsGroup.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 55,
+            "source_row_sha256": "f2e776ae2cbdc72353d9b7ce0ff9c375067670ca78b10b3d81b063d0d62547a9",
+            "raw_extra": "{\"City/County\": \"Columbus/Franklin\", \"Company\": \"Parsec, LLC\", \"Date Received\": \"2/23/2026\", \"Layoff Date\": \"5/1/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(586) 707-5128\", \"Potential Number Affected\": \"115\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1771873177/jfs.ohio.gov/warn/WARN%202026/ParsecLLC.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 56,
+            "source_row_sha256": "2bd2a1dac229536d92595c5732a880a44629ebfac6db78870138225694d9c3df",
+            "raw_extra": "{\"City/County\": \"Cincinnatti/Hamilton\", \"Company\": \"Main Street Sports Group Cincinnati\", \"Date Received\": \"2/23/2026\", \"Layoff Date\": \"4/14/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(203) 216-1957\", \"Potential Number Affected\": \"8\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1771873177/jfs.ohio.gov/warn/WARN%202026/MainStreetSportsGroupCincinnati.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 57,
+            "source_row_sha256": "61b53d7f427b2d6bc394116adfd1794967fc8b32636615d686a26dccbe011ba8",
+            "raw_extra": "{\"City/County\": \"Unknown/Unknown\", \"Company\": \"Lowe's Companies\", \"Date Received\": \"2/16/2026\", \"Layoff Date\": \"4/19/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(704) 758-4112\", \"Potential Number Affected\": \"17\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1771342002/jfs.ohio.gov/warn/WARN%202026/LowesCompanies.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 58,
+            "source_row_sha256": "f5cf76e9aaa21b5e7458868d70f3e4d52f71fbff28aa8eac368ceb351715e49e",
+            "raw_extra": "{\"City/County\": \"Cleveland/Cuyahoga\", \"Company\": \"Main Street Sports Group Cleveland\", \"Date Received\": \"2/13/2026\", \"Layoff Date\": \"4/14/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(203) 216-1957\", \"Potential Number Affected\": \"27\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1771342002/jfs.ohio.gov/warn/WARN%202026/MainStreetSportsGroup.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 59,
+            "source_row_sha256": "08d7d7278680866d467c7f263c2505f9ffd4a5bcf52ce4a8af750269b5e509c5",
+            "raw_extra": "{\"City/County\": \"Columbus/Franklin\", \"Company\": \"Saks & Company LLC Columbus\", \"Date Received\": \"2/10/2026\", \"Layoff Date\": \"4/11/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(201) 658-3778\", \"Potential Number Affected\": \"41\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1770832754/jfs.ohio.gov/warn/WARN%202026/SaksCompanyLLC.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 60,
+            "source_row_sha256": "8c6e833dc5920182930c2a78d24ff9a09d6a90f5727587872be796825699a4d7",
+            "raw_extra": "{\"City/County\": \"Beavercreek/Greene\", \"Company\": \"Astrion\", \"Date Received\": \"2/9/2026\", \"Layoff Date\": \"5/31/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(276) 254-1004\", \"Potential Number Affected\": \"61\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1770735265/jfs.ohio.gov/warn/WARN%202026/Astrion.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 61,
+            "source_row_sha256": "31a49bcaac7816e93648d977b88e4d48cc3d9731026ea8443bb2b5ce41dd7525",
+            "raw_extra": "{\"City/County\": \"Seville/Medina\", \"Company\": \"First Financial Bancorp\", \"Date Received\": \"2/2/2026\", \"Layoff Date\": \"3/19/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(513) 979-5734\", \"Potential Number Affected\": \"56\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1770135498/jfs.ohio.gov/warn/WARN%202026/FirstFinancialBancorp.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 62,
+            "source_row_sha256": "6c5ab30917ce39eceb6d2f13c0d000167c6a1728434b6dbc693eaa4624ef323b",
+            "raw_extra": "{\"City/County\": \"Findlay/Hancock\", \"Company\": \"Goodyear Tire & Rubber Company\", \"Date Received\": \"1/30/2026\", \"Layoff Date\": \"3/31/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(419) 619-5581\", \"Potential Number Affected\": \"85\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1770048815/jfs.ohio.gov/warn/WARN%202026/GoodyearTireRubberCompany.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 63,
+            "source_row_sha256": "af2a09626673a5cb3603b4277d66397821ded1f58a6de7e52d2969f12c31c99d",
+            "raw_extra": "{\"City/County\": \"Oregon/Lucas\", \"Company\": \"Fresenius USA Manufacturing\", \"Date Received\": \"1/29/2026\", \"Layoff Date\": \"4/10/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(801) 719-7425\", \"Potential Number Affected\": \"54\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1769797238/jfs.ohio.gov/warn/WARN%202026/FreseniusUSAManufacturing.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 64,
+            "source_row_sha256": "a6f5d3be059856c0d9ed6b9920c4a48285a79ccd89bcdfe7736c5a6cf21ec04b",
+            "raw_extra": "{\"City/County\": \"Toledo/Lucas\", \"Company\": \"New Horizons Baking Company\", \"Date Received\": \"1/16/2026\", \"Layoff Date\": \"3/17/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(419) 660-4065\", \"Potential Number Affected\": \"68\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1768578139/jfs.ohio.gov/warn/WARN%202026/New-Horizon-Baking-Company.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 65,
+            "source_row_sha256": "5b1cfd4b7ce00cd978ede99fdc69bfb018e58dc0bf7c955262987ff91bee0325",
+            "raw_extra": "{\"City/County\": \"Martins Ferry/Belmont\", \"Company\": \"Turf Care Supply Corp.\", \"Date Received\": \"1/12/2026\", \"Layoff Date\": \"2/28/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(330) 558-0910\", \"Potential Number Affected\": \"46\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1768499755/jfs.ohio.gov/warn/WARN%202026/TurfCareSupplyCorp.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 66,
+            "source_row_sha256": "bad1291951e0cc250906e15e2ee1e59f4949db08e370c7b8680231cafb8d3ecf",
+            "raw_extra": "{\"City/County\": \"Unknown/Unknown\", \"Company\": \"Tessera Therapeutics, Inc\", \"Date Received\": \"1/12/2026\", \"Layoff Date\": \"3/8/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(860) 910-6030\", \"Potential Number Affected\": \"1\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1768335992/jfs.ohio.gov/warn/WARN%202026/TesseraTherapeuticsInc.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 67,
+            "source_row_sha256": "add7347de08f3e30e9e79917938321321c9230805f7b342a4b9f2af6298c4b9c",
+            "raw_extra": "{\"City/County\": \"Dayton/Greene\", \"Company\": \"Sumaria Systems, LLC\", \"Date Received\": \"1/12/2026\", \"Layoff Date\": \"1/26/2026\", \"Layoff/Closure\": \"Layoff\", \"Phone Number\": \"(937) 345-0866\", \"Potential Number Affected\": \"57\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1768249659/jfs.ohio.gov/warn/WARN%202026/SumariaSystemsLLCJFS00039.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 68,
+            "source_row_sha256": "3483c87296b411ae035179eafc2c2ae5d1b1e99b1133732f5c3cfdb254cc1fa1",
+            "raw_extra": "{\"City/County\": \"Unknown/Unknown\", \"Company\": \"JeniusBank SMBC Manubank\", \"Date Received\": \"1/8/2026\", \"Layoff Date\": \"3/10/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(646) 256-5895\", \"Potential Number Affected\": \"2\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1767988814/jfs.ohio.gov/warn/WARN%202026/JeniusBankManubankSMBC.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 69,
+            "source_row_sha256": "69451c946fd096edbc04f29d3545b2b069da367280dea14c8e7c56782b12e488",
+            "raw_extra": "{\"City/County\": \"Cincinnatti/Hamilton\", \"Company\": \"FTI Buyer LLC BIDFTA online actions\", \"Date Received\": \"1/8/2026\", \"Layoff Date\": \"3/6/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(513) 240-1513\", \"Potential Number Affected\": \"104\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1767975825/jfs.ohio.gov/warn/WARN%202026/FTIBuyerLLCBIDFTAonlineauctions.pdf\", \"Union\": \"N\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 70,
+            "source_row_sha256": "9cc6d64de126b01c24f6e93bea36901266dc943b320cc9760537fe6bbf42c3b8",
+            "raw_extra": "{\"City/County\": \"Columbus/Franklin\", \"Company\": \"Taikisha USA\", \"Date Received\": \"1/7/2026\", \"Layoff Date\": \"3/7/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(734) 637-8812\", \"Potential Number Affected\": \"81\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1767887433/jfs.ohio.gov/warn/WARN%202026/TaikishaUSA.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          },
+          {
+            "reason": "parse_failure",
+            "state": "OH",
+            "prepared_row": 71,
+            "source_row_sha256": "a4def689ceaf90b137394b6c045056b8ccd74a694702562a525d625f5e00ede9",
+            "raw_extra": "{\"City/County\": \"Cleveland/Cuyahoga\", \"Company\": \"Double Tree Cleveland \", \"Date Received\": \"1/6/2026\", \"Layoff Date\": \"1/28/2026\", \"Layoff/Closure\": \"Closure\", \"Phone Number\": \"(703) 389-2992\", \"Potential Number Affected\": \"66\", \"URL\": \"https://dam.assets.ohio.gov/image/upload/v1767803703/jfs.ohio.gov/warn/WARN%202026/DoubleTreeClevelandCrescentHotelsResorts.pdf\", \"Union\": \"Y/See WARN\"}",
+            "error": "KeyError: 'Layoff Date(s)'"
+          }
+        ]
       }
     },
     "last_success": "2026-10-02T15:33:41Z",
-    "last_success_age_days": 0,
+    "last_success_age_days": 1,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
-    "consecutive_failures": 0,
+    "consecutive_failures": 1,
     "consecutive_degraded": 0,
     "recommend_broken": false,
     "chronically_degraded": false
@@ -4095,7 +4630,7 @@
     "source": "patched",
     "notices": 7356,
     "latest_verdict": "ok",
-    "latest_run": "2026-10-02T15:34:33Z",
+    "latest_run": "2026-10-03T14:19:52Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "ok",
@@ -4128,12 +4663,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/2501 notice_date values outside 1988..2026-11-01"
+          "detail": "0/2501 notice_date values outside 1988..2026-11-02"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest notice_date 2026-09-30 is 2d old (max 45d)"
+          "detail": "newest notice_date 2026-09-30 is 3d old (max 45d)"
         },
         {
           "name": "dedupe_sanity",
@@ -4166,7 +4701,7 @@
         "held_collision_rows": 0
       }
     },
-    "last_success": "2026-10-02T15:34:33Z",
+    "last_success": "2026-10-03T14:19:52Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
@@ -4235,7 +4770,7 @@
     "source": "upstream",
     "notices": 1513,
     "latest_verdict": "degraded",
-    "latest_run": "2026-10-02T15:34:45Z",
+    "latest_run": "2026-10-03T14:20:06Z",
     "latest_error": null,
     "latest_checks": {
       "verdict": "degraded",
@@ -4268,12 +4803,12 @@
         {
           "name": "date_sanity",
           "outcome": "pass",
-          "detail": "0/1539 source_details.agency_received_date values outside 1988..2026-11-01"
+          "detail": "0/1539 source_details.agency_received_date values outside 1988..2026-11-02"
         },
         {
           "name": "freshness",
           "outcome": "pass",
-          "detail": "newest source_details.agency_received_date 2026-10-01 is 1d old (max 60d)"
+          "detail": "newest source_details.agency_received_date 2026-10-01 is 2d old (max 60d)"
         },
         {
           "name": "dedupe_sanity",
@@ -4403,12 +4938,12 @@
         "held_collision_rows": 6
       }
     },
-    "last_success": "2026-10-02T15:34:45Z",
+    "last_success": "2026-10-03T14:20:06Z",
     "last_success_age_days": 0,
     "last_success_max_age_days": 3,
     "last_success_overdue": false,
     "consecutive_failures": 0,
-    "consecutive_degraded": 3,
+    "consecutive_degraded": 4,
     "recommend_broken": false,
     "chronically_degraded": false
   },

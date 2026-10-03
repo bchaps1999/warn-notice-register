@@ -1,5 +1,5 @@
 {
- "notices": 85860,
+ "notices": 85867,
  "possible_duplicates": 0,
  "states": {
   "AK": {
@@ -99,16 +99,16 @@
    "workers": 12495
   },
   "FL": {
-   "employers": 4084,
+   "employers": 4085,
    "first": "1998-01-09",
    "last": "2026-12-01",
    "max_workers": 10903,
    "no_jobs": 0,
    "no_location": 2648,
-   "notices": 5453,
-   "undated": 2805,
+   "notices": 5455,
+   "undated": 2807,
    "unplaced": 188,
-   "workers": 639989
+   "workers": 640085
   },
   "GA": {
    "employers": 812,
@@ -351,16 +351,16 @@
    "workers": 25546
   },
   "NJ": {
-   "employers": 1939,
+   "employers": 1940,
    "first": "2004-02-24",
    "last": "2027-04-01",
    "max_workers": 16000,
    "no_jobs": 43,
    "no_location": 2,
-   "notices": 2333,
-   "undated": 2333,
+   "notices": 2335,
+   "undated": 2335,
    "unplaced": 253,
-   "workers": 351119
+   "workers": 351409
   },
   "NM": {
    "employers": 106,
@@ -387,16 +387,16 @@
    "workers": 44672
   },
   "NY": {
-   "employers": 6377,
+   "employers": 6380,
    "first": "2006-03-02",
    "last": "2026-09-24",
    "max_workers": 5191,
    "no_jobs": 279,
    "no_location": 3,
-   "notices": 8846,
+   "notices": 8849,
    "undated": 0,
    "unplaced": 438,
-   "workers": 757595
+   "workers": 757780
   },
   "OH": {
    "employers": 2272,
@@ -567,5 +567,5 @@
    "workers": 325812
   }
  },
- "workers": 8847422
+ "workers": 8847993
 }
